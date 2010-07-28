@@ -201,7 +201,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertType('array', $messages);
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertType('array', $messages['month']);
-        $this->assertEquals("'6abc ' contains characters which are not digits; but only digits are allowed", current($messages['month']));
+        $this->assertEquals("'6abc ' must contain only digits", current($messages['month']));
 
         $errors = $input->getErrors();
         $this->assertType('array', $errors);
@@ -290,8 +290,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('field2', 'field3'), array_keys($messages));
         $this->assertType('array', $messages['field2']);
         $this->assertType('array', $messages['field3']);
-        $this->assertEquals("'abc123' contains characters which are not digits; but only digits are allowed",
-            current($messages['field2']));
+        $this->assertEquals("'abc123' must contain only digits", current($messages['field2']));
         $this->assertEquals("'150' is not between '1' and '100', inclusively",
             current($messages['field3']));
     }
@@ -324,7 +323,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('field2a', 'field2b'), array_keys($messages));
         $this->assertType('array', $messages['field2a']);
         $this->assertType('array', $messages['field2b']);
-        $this->assertEquals("'abc123' contains characters which are not digits; but only digits are allowed",
+        $this->assertEquals("'abc123' must contain only digits",
             current($messages['field2a']));
         $this->assertEquals("'abc123' is not between '1' and '100', inclusively",
             current($messages['field2b']));
@@ -903,7 +902,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertType('array', $messages);
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(2, count($messages['month']));
-        $this->assertEquals("'13abc' contains characters which are not digits; but only digits are allowed", current($messages['month']));
+        $this->assertEquals("'13abc' must contain only digits", current($messages['month']));
         /**
          * @todo $this->assertEquals($betweenMesg, next($messages['month']));
          */
@@ -1208,7 +1207,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $messages = $input->getMessages();
         $this->assertType('array', $messages);
         $this->assertThat($messages, $this->arrayHasKey('field1'));
-        $this->assertEquals("'abc' contains characters which are not digits; but only digits are allowed", current($messages['field1']));
+        $this->assertEquals("'abc' must contain only digits", current($messages['field1']));
     }
 
     public function testGetPluginLoader()
@@ -1433,7 +1432,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $messages = $input->getMessages();
         $this->assertType('array', $messages);
         $this->assertThat($messages, $this->arrayHasKey('field1'));
-        $this->assertEquals("'abc' contains characters which are not digits; but only digits are allowed", current($messages['field1']));
+        $this->assertEquals("'abc' must contain only digits", current($messages['field1']));
     }
 
     public function testOptionPresence()
