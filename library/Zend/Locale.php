@@ -931,9 +931,7 @@ class Zend_Locale
     public static function getCache()
     {
         require_once 'Zend/Locale/Data.php';
-        $cache = Zend_Locale_Data::getCache();
-
-        return $cache;
+        return Zend_Locale_Data::getCache();
     }
 
     /**
@@ -973,12 +971,13 @@ class Zend_Locale
     /**
      * Clears all set cache data
      *
+     * @param string $tag Tag to clear when the default tag name is not used
      * @return void
      */
-    public static function clearCache()
+    public static function clearCache($tag = null)
     {
         require_once 'Zend/Locale/Data.php';
-        Zend_Locale_Data::clearCache();
+        Zend_Locale_Data::clearCache($tag);
     }
 
     /**

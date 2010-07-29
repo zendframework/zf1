@@ -61,6 +61,13 @@ class Zend_Locale_Data
     private static $_cache = null;
 
     /**
+     * Internal value to remember if cache supports tags
+     *
+     * @var boolean
+     */
+    private static $_cacheTags = false;
+
+    /**
      * Internal option, cache disabled
      *
      * @var    boolean
@@ -901,7 +908,11 @@ class Zend_Locale_Data
         }
 
         if (isset(self::$_cache)) {
-            self::$_cache->save( serialize($temp), $id);
+            if (self::$_cacheTags) {
+                self::$_cache->save( serialize($temp), $id, array('Zend_Locale'));
+            } else {
+                self::$_cache->save( serialize($temp), $id);
+            }
         }
 
         return $temp;
@@ -1404,7 +1415,11 @@ class Zend_Locale_Data
             $temp = current($temp);
         }
         if (isset(self::$_cache)) {
-            self::$_cache->save( serialize($temp), $id);
+            if (self::$_cacheTags) {
+                self::$_cache->save( serialize($temp), $id, array('Zend_Locale'));
+            } else {
+                self::$_cache->save( serialize($temp), $id);
+            }
         }
 
         return $temp;
@@ -1428,6 +1443,7 @@ class Zend_Locale_Data
     public static function setCache(Zend_Cache_Core $cache)
     {
         self::$_cache = $cache;
+        self::_getTagSupportForCache();
     }
 
     /**
@@ -1461,7 +1477,11 @@ class Zend_Locale_Data
      */
     public static function clearCache()
     {
-        self::$_cache->clean();
+        if (self::$_cacheTags) {
+            self::$_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Zend_Locale'));
+        } else {
+            self::$_cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+        }
     }
 
     /**
@@ -1472,5 +1492,23 @@ class Zend_Locale_Data
     public static function disableCache($flag)
     {
         self::$_cacheDisabled = (boolean) $flag;
+    }
+
+    /**
+     * Internal method to check if the given cache supports tags
+     *
+     * @param Zend_Cache $cache
+     */
+    private static function _getTagSupportForCache()
+    {
+        $backend = self::$_cache->getBackend();
+        if ($backend instanceof Zend_Cache_Backend_ExtendedInterface) {
+            $cacheOptions = $backend->getCapabilities();
+            self::$_cacheTags = $cacheOptions['tags'];
+        } else {
+            self::$_cacheTags = false;
+        }
+
+        return self::$_cacheTags;
     }
 }

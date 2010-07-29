@@ -274,6 +274,7 @@ class Zend_Date extends Zend_Date_DateObject
                             }
 
                             parent::$_cache = $value;
+                            parent::$_cacheTags = Zend_Date_DateObject::_getTagSupportForCache();
                             Zend_Locale_Data::setCache($value);
                         }
                         break;
