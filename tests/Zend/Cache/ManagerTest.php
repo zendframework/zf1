@@ -55,6 +55,18 @@ class Zend_Cache_ManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($manager->getCache('cache1') instanceof Zend_Cache_Core);
     }
 
+    /**
+     * @group ZF-10220
+     */
+    public function testGetAvialableCaches()
+    {
+        $manager = new Zend_Cache_Manager();
+        $caches  = $manager->getCaches();
+
+        $this->assertType('array', $caches);
+        $this->assertArrayHasKey('default', $caches);
+    }
+
     public function testLazyLoadsDefaultPageCache()
     {
         $manager = new Zend_Cache_Manager;
