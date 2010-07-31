@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21740 -->
+<!-- EN-Revision: 22466 -->
 <sect1 id="zend.http.client.advanced">
     <title>Zend_Http_Client - 高度な使用法</title>
 
@@ -17,7 +17,7 @@
             この際には同じリクエストメソッドを使用しなければなりません。
             しかし、ほとんどのクライアントはこの機能を実装しておらず、
             リダイレクトの際には常に GET メソッドを使用するようになっています。
-            デフォルトでは、Zend_Http_Client も同じように動作します。
+            デフォルトでは、<classname>Zend_Http_Client</classname> も同じように動作します。
             つまり、301 や 302 によるリダイレクト指示を受けると、
             GET パラメータや POST パラメータをすべてリセットした上で新しい場所に
             GET リクエストを送信します。この振る舞いを変更するには、設定パラメータ
@@ -42,7 +42,7 @@ $client->setConfig(array('strictredirects' => false));
     <sect2 id="zend.http.client.cookies">
         <title>クッキーの追加および持続的なクッキーの使用</title>
         <para>
-            Zend_Http_Client を使用すると、リクエストに簡単にクッキーを追加できます。
+            <classname>Zend_Http_Client</classname> を使用すると、リクエストに簡単にクッキーを追加できます。
             ヘッダを変更したりする必要はありません。クッキーを追加するには
             setCookie() メソッドを使用します。このメソッドにはいくつかの用法があります。
             <example id="zend.http.client.cookies.example-1">
@@ -60,11 +60,11 @@ $cookie = Zend_Http_Cookie::fromString('flavor=chocolate%20chips');
 $client->setCookie($cookie);
 ]]></programlisting>
             </example>
-            Zend_Http_Cookie オブジェクトについての詳細は
+            <classname>Zend_Http_Cookie</classname> オブジェクトについての詳細は
             <xref linkend="zend.http.cookies" /> を参照ください。
         </para>
         <para>
-            Zend_Http_Client は、クッキーの持続性 (stickiness) も提供しています。
+            <classname>Zend_Http_Client</classname> は、クッキーの持続性 (stickiness) も提供しています。
             送受信したクッキーをクライアントの内部で保持し、
             それ以降のリクエストで自動的に再送信します。
             これは、たとえばリモートサイトにログインして
@@ -90,7 +90,7 @@ $client->setUri('http://example.com/read_member_news.php');
 $client->request('GET');
 ]]></programlisting>
             </example>
-            Zend_Http_CookieJar クラスについての詳細は
+            <classname>Zend_Http_CookieJar</classname> クラスについての詳細は
             <xref linkend="zend.http.cookies.cookiejar" /> を参照ください。
         </para>
     </sect2>
@@ -148,13 +148,13 @@ $client->setHeaders(array(
             そしてオプションの三番目の引数がデータとなります。
             三番目のパラメータが <constant>NULL</constant> の場合は、
             最初のパラメータに指定したファイル名のファイルがあるものとみなされ、
-            Zend_Http_Client がそれを読み込んでアップロードしようとします。
+            <classname>Zend_Http_Client</classname> がそれを読み込んでアップロードしようとします。
             三番目のパラメータが <constant>NULL</constant> 以外の場合は、
             ファイル名は最初のパラメータを使用しますが実際の内容はディスク上に存在する必要がなくなります。
-            二番目のパラメータのフォーム名は常に必須です。HTML フォームでアップロードする場合、これは
+            二番目のパラメータのフォーム名は常に必須です。 <acronym>HTML</acronym> フォームでアップロードする場合、これは
             &gt;input&lt; タグの "name" 属性と等しくなります。
             四番目のオプションのパラメータは、ファイルの content-type です。
-            指定しなかった場合、Zend_Http_Client は、
+            指定しなかった場合、<classname>Zend_Http_Client</classname> は、
             ディスクから読み込んだファイルに対して mime_content_type
             関数を使用して content-type を判定します。
             いずれの場合でも、デフォルトの MIME 型は
@@ -194,7 +194,7 @@ $client->request('POST');
     <sect2 id="zend.http.client.raw_post_data">
         <title>生の POST データの送信</title>
         <para>
-            Zend_Http_Client で生の POST データを送信するには
+            <classname>Zend_Http_Client</classname> で生の POST データを送信するには
             setRawData() メソッドを使用します。このメソッドはふたつのパラメータを受け取ります。
             まず最初が、リクエスト本文で送信するデータです。
             二番目のパラメータはオプションで、データの content-type を指定します。
@@ -232,7 +232,7 @@ $client->setRawData($xml)->setEncType('text/xml')->request('POST');
     <sect2 id="zend.http.client.http_authentication">
         <title>HTTP 認証</title>
         <para>
-            現在 Zend_Http_Client がサポートしているのは、ベーシック <acronym>HTTP</acronym> 認証のみです。
+            現在 <classname>Zend_Http_Client</classname> がサポートしているのは、ベーシック <acronym>HTTP</acronym> 認証のみです。
             この機能を利用するには <methodname>setAuth()</methodname> メソッドを使用するか、
             あるいはユーザ名とパスワードを URI で指定します。
             <methodname>setAuth()</methodname> メソッドが受け取るパラメータは三つで、
@@ -305,6 +305,7 @@ $client->setUri('http://christer:secret@example.com');
         </para>
         <example id="zend.http.client.multiple_requests.example-1">
             <title>単一のクライアントによる連続したリクエストの実行</title>
+
             <programlisting language="php"><![CDATA[
 // まず、クライアントのインスタンスを作成します。
 $client = new Zend_Http_Client('http://www.example.com/fetchdata.php', array(
@@ -313,7 +314,7 @@ $client = new Zend_Http_Client('http://www.example.com/fetchdata.php', array(
 
 // セッションにクッキーが保存されていますか?
 if (isset($_SESSION['cookiejar']) &&
-    $_SESSION['cookiejar'] instanceof Zend_Http_CookieJar)) {
+    $_SESSION['cookiejar'] instanceof Zend_Http_CookieJar) {
 
     $client->setCookieJar($_SESSION['cookiejar']);
 } else {

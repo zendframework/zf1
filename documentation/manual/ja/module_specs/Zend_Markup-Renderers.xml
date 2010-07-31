@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20827 -->
+<!-- EN-Revision: 21992 -->
 <sect1 id="zend.markup.renderers">
     <title>Zend_Markup レンダラー</title>
  
@@ -10,13 +10,13 @@
     </para>
  
     <sect2 id="zend.markup.renderers.add">
-        <title>自作のタグの追加</title>
+        <title>自作のマークアップを追加</title>
  
         <para>
-            自作のタグを追加することによって、<classname>Zend_Markup</classname> レンダラーに
-            自作の機能の追加できます。 タグ構造とともに、
+            自作のマークアップを追加することによって、<classname>Zend_Markup</classname> レンダラーに
+            自作の機能の追加できます。 マークアップ構造とともに、
             あなたが望むいかなる機能も追加ができます。
-            簡潔なタグから複雑なタグ構造まで。 'foo' タグでの単純な例:
+            簡潔なマークアップから複雑なマークアップ構造まで。 'foo' マークアップでの単純な例:
         </para>
  
         <programlisting language="php"><![CDATA[
@@ -24,12 +24,12 @@
 // Zend_Markup_Renderer_Html のインスタンスを生成します。
 $bbcode = Zend_Markup::factory('Bbcode');
  
-// これは単純な 'foo' タグが作成されるでしょう
-// 第一引数は自身のタグ名を定義します。
-// 第二引数はタグの定数で定義された整数を引数に取ります。
-// 第三引数は、タグについて、タググループと(この例では)開始ならびに終了タグのように
+// これは単純な 'foo' マークアップを作成するでしょう
+// 第一引数は自身のマークアップ名を定義します。
+// 第二引数はマークアップの定数で定義された整数を引数に取ります。
+// 第三引数は、マークアップについて、マークアップグループと(この例では)開始ならびに終了マークアップのように
 // 他のことを配列にて定義します。
-$bbcode->addTag(
+$bbcode->addMarkup(
     'foo',
     Zend_Markup_Renderer_RendererAbstract::TYPE_REPLACE,
     array(
@@ -39,30 +39,29 @@ $bbcode->addTag(
     )
 );
  
-// これは 'my -bar-tag-baz-' と出力されるでしょう。
-echo $bbcode->render('my [foo]tag[/foo]');
+// これは 'my -bar-markup-baz-' と出力されるでしょう。
+echo $bbcode->render('my [foo]markup[/foo]');
 ]]></programlisting>
 
         <para>
-            あなたの作成したタグは、あなたのパーサーがタグ構造もサポートするときに
+            あなたの作成したマークアップは、あなたのパーサーがマークアップ構造もサポートするときに
             機能することに注意してください。現在、 BBCode はこれをサポートします。
-            Textile はカスタムタグをサポートしません。
+            Textile はカスタムマークアップをサポートしません。
         </para>
 
-        <!-- TODO : to be translated -->
         <para>
-            Some renderers (like the HTML renderer) also have support for a
-            'tag' parameter. This replaces the 'start' and 'end' parameters, and
-            it renders the tags including some default attributes and the
-            closing tag.
+            Some renderers (like the <acronym>HTML</acronym> renderer) also have support for a
+            'markup' parameter. This replaces the 'start' and 'end' parameters, and
+            it renders the markups including some default attributes and the
+            closing markup.
         </para>
 
         <sect3 id="zend.markup.renderers.add.callback">
-            <title>Add a callback tag</title>
+            <title>Add a callback markup</title>
 
             <para>
-                By adding a callback tag, you can do a lot more then just a
-                simple replace of the tags. For instance, you can change the
+                By adding a callback markup, you can do a lot more then just a
+                simple replace of the markups. For instance, you can change the
                 contents, use the parameters to influence the output etc.
             </para>
 
@@ -73,7 +72,8 @@ echo $bbcode->render('my [foo]tag[/foo]');
             </para>
 
             <programlisting language="php"><![CDATA[
-class My_Markup_Renderer_Html_Upper extends Zend_Markup_Renderer_TokenConverterInterface
+class My_Markup_Renderer_Html_Upper
+    implements Zend_Markup_Renderer_TokenConverterInterface
 {
 
     public function convert(Zend_Markup_Token $token, $text)
@@ -85,22 +85,22 @@ class My_Markup_Renderer_Html_Upper extends Zend_Markup_Renderer_TokenConverterI
 ]]></programlisting>
 
             <para>
-                Now you can add the 'upper' tag, with as callback, an instance
+                Now you can add the 'upper' markup, with as callback, an instance
                 of the <classname>My_Markup_Renderer_Html_Upper</classname>
                 class. A simple example:
             </para>
 
             <programlisting language="php"><![CDATA[
-// Creates instance of Zend_Markup_Renderer_Html,
-// with Zend_Markup_Parser_BbCode as its parser
+// Zend_Markup_Parser_BbCode をパーサーとして、
+// Zend_Markup_Renderer_Html のインスタンスを生成します。
 $bbcode = Zend_Markup::factory('Bbcode');
 
-// this will create a simple 'foo' tag
-// The first parameter defines the tag's name.
-// The second parameter takes an integer that defines the tags type.
+// これは単純な 'foo' マークアップを作成するでしょう
+// 第一引数は自身のマークアップ名を定義します。
+// 第二引数はマークアップ型を定義する整数を引数に取ります。
 // The third parameter is an array that defines other things about a
-// tag, like the tag's group, and (in this case) a start and end tag.
-$bbcode->addTag(
+// markup, like the markup's group, and (in this case) a start and end markup.
+$bbcode->addMarkup(
     'upper',
     Zend_Markup_Renderer_RendererAbstract::TYPE_REPLACE,
     array(
@@ -109,17 +109,17 @@ $bbcode->addTag(
     )
 );
 
-// now, this will output: 'my !up!TAG!up!'
-echo $bbcode->render('my [upper]tag[/upper]');
+// これは 'my !up!MARKUP!up!' と出力されるでしょう。
+echo $bbcode->render('my [upper]markup[/upper]');
 ]]></programlisting>
         </sect3>
     </sect2>
 
     <sect2 id="zend.markup.renderers.list">
-        <title>タグ一覧</title>
+        <title>マークアップ一覧</title>
 
-        <table id="zend.markup.renderers.list.tags">
-            <title>タグ一覧</title>
+        <table id="zend.markup.renderers.list.markups">
+            <title>マークアップ一覧</title>
 
             <tgroup cols="2" align="left" colsep="1" rowsep="1">
                 <thead>
