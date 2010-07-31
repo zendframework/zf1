@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 22585 -->
+<!-- EN-Revision: 22725 -->
 <sect1 id="zend.translate.additional">
 
     <title>翻訳用の追加機能</title>
@@ -174,6 +174,17 @@ $translate->addTranslation(
                             <emphasis>Untranslated message within '%locale%': %message%</emphasis>
                         </entry>
                     </row>
+
+                     <row>
+                        <entry>logPriority</entry>
+                        <entry>all</entry>
+                        <entry>The priority which is used to write the message into the log</entry>
+
+                        <entry>
+                            <emphasis>5</emphasis>
+                        </entry>
+                    </row>
+
                     <row>
                         <entry>logUntranslated</entry>
                         <entry>すべて</entry>
@@ -1157,6 +1168,37 @@ $translate->setOptions(
     array(
         'log'             => $log,
         'logMessage'      => "Missing '%message%' within locale '%locale%'",
+        'logUntranslated' => true
+    )
+);
+
+$translate->translate('unknown string');
+]]></programlisting>
+        </example>
+
+        <para>
+            Additionally you are also able to change the priority which is used to write the message
+            into the log. Per default the priority <emphasis>Zend_Log::NOTICE</emphasis> is used.
+            It equals with <emphasis>5</emphasis>. When you want to change the priority you can use
+            any of <classname>Zend_Log</classname>'s priorities. See the following example:
+        </para>
+
+        <example id="zend.translate.additional.logging.example3">
+            <title>Self defined log priority</title>
+
+            <programlisting language="php"><![CDATA[
+// Create a log instance
+$writer = new Zend_Log_Writer_Stream('/path/to/file.log');
+$log    = new Zend_Log($writer);
+
+$translate = new Zend_Translate(
+    array(
+        'adapter' => 'gettext',
+        'content' => $path,
+        'locale'  => 'de',
+        'log'             => $log,
+        'logMessage'      => "Missing '%message%' within locale '%locale%'",
+        'logPriority'     => Zend_Log::ALERT,
         'logUntranslated' => true
     )
 );
