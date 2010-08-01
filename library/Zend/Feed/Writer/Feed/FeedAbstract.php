@@ -49,6 +49,9 @@ require_once 'Zend/Feed/Writer/Renderer/Feed/Atom.php';
  */
 require_once 'Zend/Feed/Writer/Renderer/Feed/Rss.php';
 
+require_once 'Zend/Validate/EmailAddress.php';
+
+
 /**
  * @category   Zend
  * @package    Zend_Feed_Writer
@@ -300,11 +303,44 @@ class Zend_Feed_Writer_Feed_FeedAbstract
     public function setId($id)
     {
         if ((empty($id) || !is_string($id) || !Zend_Uri::check($id)) &&
-        !preg_match("#^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{1,31}:([a-zA-Z0-9\(\)\+\,\.\:\=\@\;\$\_\!\*\-]|%[0-9a-fA-F]{2})*#", $id)) {
+        !preg_match("#^urn:[a-zA-Z0-9][a-zA-Z0-9\-]{1,31}:([a-zA-Z0-9\(\)\+\,\.\:\=\@\;\$\_\!\*\-]|%[0-9a-fA-F]{2})*#", $id)
+        && !$this->_validateTagUri($id)) {
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception('Invalid parameter: parameter must be a non-empty string and valid URI/IRI');
         }
         $this->_data['id'] = $id;
+    }
+    
+    /**
+     * Validate a URI using the tag scheme (RFC 4151)
+     *
+     * @param string $id
+     * @return bool
+     */
+    protected function _validateTagUri($id)
+    {
+        if (preg_match('/^tag:(?<name>.*),(?<date>\d{4}-?\d{0,2}-?\d{0,2}):(?<specific>.*)(.*:)*$/', $id, $matches)) {
+            $dvalid = false;
+            $nvalid = false;
+            $date = $matches['date'];
+            $d6 = strtotime($date);
+            if ((strlen($date) == 4) && $date <= date('Y')) {
+                $dvalid = true;
+            } elseif ((strlen($date) == 7) && ($d6 < strtotime("now"))) {
+                $dvalid = true;
+            } elseif ((strlen($date) == 10) && ($d6 < strtotime("now"))) {
+                $dvalid = true;
+            }
+            $validator = new Zend_Validate_EmailAddress;
+            if ($validator->isValid($matches['name'])) {
+                $nvalid = true;
+            } else {
+                $nvalid = $validator->isValid('info@' . $matches['name']);
+            }
+            return $dvalid && $nvalid;
+
+        }
+        return false;
     }
 
     /**
