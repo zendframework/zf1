@@ -215,6 +215,24 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6', $entry->getId());
     }
+    
+    public function testEntryIdHasBeenSetUsingSimpleTagUri()
+    {
+        $this->_validEntry->setId('tag:example.org,2010:/foo/bar/');
+        $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
+        $feed = Zend_Feed_Reader::importString($renderer->render()->saveXml());
+        $entry = $feed->current();
+        $this->assertEquals('tag:example.org,2010:/foo/bar/', $entry->getId());
+    }
+    
+    public function testEntryIdHasBeenSetUsingComplexTagUri()
+    {
+        $this->_validEntry->setId('tag:diveintomark.org,2004-05-27:/archives/2004/05/27/howto-atom-linkblog');
+        $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
+        $feed = Zend_Feed_Reader::importString($renderer->render()->saveXml());
+        $entry = $feed->current();
+        $this->assertEquals('tag:diveintomark.org,2004-05-27:/archives/2004/05/27/howto-atom-linkblog', $entry->getId());
+    }
 
     public function testFeedIdDefaultIsUsedIfNotSetByHand()
     {
