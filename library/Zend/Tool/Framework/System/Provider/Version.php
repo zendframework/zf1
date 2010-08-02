@@ -56,7 +56,7 @@ class Zend_Tool_Framework_System_Provider_Version
      * Show Action
      *
      * @param string $mode The mode switch can be one of: major, minor, or mini (default)
-     * @param bool $nameincluded
+     * @param bool $nameIncluded
      */
     public function show($mode = self::MODE_MINI, $nameIncluded = true)
     {
