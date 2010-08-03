@@ -35,6 +35,11 @@ require_once 'Zend/Service/WindowsAzure/Storage.php';
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedKey.php';
 
 /**
+ * @see Zend_Service_WindowsAzure_Credentials_Exception
+ */
+require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
@@ -69,6 +74,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
 	 * @param boolean $forTableStorage Is the request for table storage?
 	 * @param string $resourceType Resource type
 	 * @param string $requiredPermission Required permission
+	 * @param mixed  $rawData Raw post data
 	 * @return array Array of headers
 	 */
 	public function signRequestHeaders(
@@ -78,8 +84,14 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
 		$headers = null,
 		$forTableStorage = false,
 		$resourceType = Zend_Service_WindowsAzure_Storage::RESOURCE_UNKNOWN,
-		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ
+		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ,
+		$rawData = null
 	) {
+		// Table storage?
+		if (!$forTableStorage) {
+			throw new Zend_Service_WindowsAzure_Credentials_Exception('The Windows Azure SDK for PHP does not support SharedKeyLite authentication on blob or queue storage. Use SharedKey authentication instead.');
+		}
+		
 		// Determine path
 		if ($this->_usePathStyleUri) {
 			$path = substr($path, strpos($path, '/'));
@@ -119,5 +131,36 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
     	
     	// Return headers
     	return $headers;
+	}
+	
+	/**
+	 * Prepare query string for signing
+	 * 
+	 * @param  string $value Original query string
+	 * @return string        Query string for signing
+	 */
+	protected function _prepareQueryStringForSigning($value)
+	{
+	    // Check for 'comp='
+	    if (strpos($value, 'comp=') === false) {
+	        // If not found, no query string needed
+	        return '';
+	    } else {
+	        // If found, make sure it is the only parameter being used      
+    		if (strlen($value) > 0 && strpos($value, '?') === 0) {
+    			$value = substr($value, 1);
+    		}
+    		
+    		// Split parts
+    		$queryParts = explode('&', $value);
+    		foreach ($queryParts as $queryPart) {
+    		    if (strpos($queryPart, 'comp=') !== false) {
+    		        return '?' . $queryPart;
+    		    }
+    		}
+
+    		// Should never happen...
+			return '';
+	    }
 	}
 }

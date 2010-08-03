@@ -37,29 +37,23 @@ require_once 'Zend/Service/WindowsAzure/Storage/StorageEntityAbstract.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * 
- * @property string  $Id              Id
- * @property string  $Name            Name
- * @property string  $Href            Href
- * @property string  $Updated         Updated
+ * @property int  $start   Page range start
+ * @property int  $end     Page range end
  */
-class Zend_Service_WindowsAzure_Storage_TableInstance
+class Zend_Service_WindowsAzure_Storage_PageRegionInstance
 	extends Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
 {
     /**
      * Constructor
      * 
-     * @param string  $id              Id
-     * @param string  $name            Name
-     * @param string  $href            Href
-     * @param string  $updated         Updated
+     * @param int  $start   Page range start
+     * @param int  $end     Page range end
      */
-    public function __construct($id, $name, $href, $updated) 
+    public function __construct($start = 0, $end = 0) 
     {	        
         $this->_data = array(
-            'id'               => $id,
-            'name'             => $name,
-            'href'             => $href,
-            'updated'          => $updated
+            'start'        => $start,
+            'end'             => $end
         );
     }
 }

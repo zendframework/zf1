@@ -113,7 +113,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 	    $this->_credentials = new Zend_Service_WindowsAzure_Credentials_SharedKeyLite($accountName, $accountKey, $this->_usePathStyleUri);
 	    
 	    // API version
-		$this->_apiVersion = '2009-04-14';
+		$this->_apiVersion = '2009-09-19';
 	}
 	
 	/**
@@ -129,7 +129,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		}
 			
 		// List tables
-        $tables = $this->listTables($tableName);
+        $tables = $this->listTables(); // 2009-09-19 does not support $this->listTables($tableName); all of a sudden...
         foreach ($tables as $table) {
             if ($table->Name == $tableName) {
                 return true;
@@ -149,10 +149,11 @@ class Zend_Service_WindowsAzure_Storage_Table
 	public function listTables($nextTableName = '')
 	{
 	    // Build query string
-	    $queryString = '';
+		$queryString = array();
 	    if ($nextTableName != '') {
-	        $queryString = '?NextTableName=' . $nextTableName;
+	        $queryString[] = 'NextTableName=' . $nextTableName;
 	    }
+	    $queryString = self::createQueryStringFromArray($queryString);
 	    
 		// Perform request
 		$response = $this->_performRequest('Tables', $queryString, Zend_Http_Client::GET, null, true);
@@ -297,7 +298,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		if ($tableName === '') {
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if ($entity === null) {
+		if (is_null($entity)) {
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
 		                     
@@ -367,7 +368,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		if ($tableName === '') {
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if ($entity === null) {
+		if (is_null($entity)) {
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
 		                     
@@ -503,7 +504,7 @@ class Zend_Service_WindowsAzure_Storage_Table
     	    
     		// Filter?
     		if ($filter !== '') {
-    		    $query[] = '$filter=' . rawurlencode($filter);
+    		    $query[] = '$filter=' . Zend_Service_WindowsAzure_Storage_TableEntityQuery::encodeQuery($filter);
     		}
     		    
     	    // Build queryString
@@ -523,7 +524,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		}
 		
 		// Add continuation querystring parameters?
-		if ($nextPartitionKey !== null && $nextRowKey !== null) {
+		if (!is_null($nextPartitionKey) && !is_null($nextRowKey)) {
 		    if ($queryString !== '') {
 		        $queryString .= '&';
 		    }
@@ -545,7 +546,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		} else {
 		    $response = $this->_performRequest($tableName, $queryString, Zend_Http_Client::GET, array(), true, null);
 		}
-		
+
 		if ($response->isSuccessful()) {
 		    // Parse result
 		    $result = $this->_parseResponse($response);
@@ -689,7 +690,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		if ($tableName === '') {
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if ($entity === null) {
+		if (is_null($entity)) {
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
 		                     
@@ -794,12 +795,12 @@ class Zend_Service_WindowsAzure_Storage_Table
 		    if ($azureValue->Type != '') {
 		        $value[] = ' m:type="' . $azureValue->Type . '"';
 		    }
-		    if ($azureValue->Value === null) {
+		    if (is_null($azureValue->Value)) {
 		        $value[] = ' m:null="true"'; 
 		    }
 		    $value[] = '>';
 		    
-		    if ($azureValue->Value !== null) {
+		    if (!is_null($azureValue->Value)) {
 		        if (strtolower($azureValue->Type) == 'edm.boolean') {
 		            $value[] = ($azureValue->Value == true ? '1' : '0');
 		        } else {
@@ -812,5 +813,45 @@ class Zend_Service_WindowsAzure_Storage_Table
 		}
 
 		return implode('', $azureRepresentation);
+	}
+	
+		/**
+	 * Perform request using Zend_Http_Client channel
+	 *
+	 * @param string $path Path
+	 * @param string $queryString Query string
+	 * @param string $httpVerb HTTP verb the request will use
+	 * @param array $headers x-ms headers to add
+	 * @param boolean $forTableStorage Is the request for table storage?
+	 * @param mixed $rawData Optional RAW HTTP data to be sent over the wire
+	 * @param string $resourceType Resource type
+	 * @param string $requiredPermission Required permission
+	 * @return Zend_Http_Response
+	 */
+	protected function _performRequest(
+		$path = '/',
+		$queryString = '',
+		$httpVerb = Zend_Http_Client::GET,
+		$headers = array(),
+		$forTableStorage = false,
+		$rawData = null,
+		$resourceType = Zend_Service_WindowsAzure_Storage::RESOURCE_UNKNOWN,
+		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ
+	) {
+		// Add headers
+		$headers['DataServiceVersion'] = '1.0;NetFx';
+		$headers['MaxDataServiceVersion'] = '1.0;NetFx';
+
+		// Perform request
+		return parent::_performRequest(
+			$path,
+			$queryString,
+			$httpVerb,
+			$headers,
+			$forTableStorage,
+			$rawData,
+			$resourceType,
+			$requiredPermission
+		);
 	}
 }

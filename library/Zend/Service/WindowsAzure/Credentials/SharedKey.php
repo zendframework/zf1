@@ -35,6 +35,11 @@ require_once 'Zend/Service/WindowsAzure/Storage.php';
 require_once 'Zend/Http/Client.php';
 
 /**
+ * @see Zend_Service_WindowsAzure_Credentials_Exception
+ */
+require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
@@ -69,6 +74,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 	 * @param boolean $forTableStorage Is the request for table storage?
 	 * @param string $resourceType Resource type
 	 * @param string $requiredPermission Required permission
+	 * @param mixed  $rawData Raw post data
 	 * @return array Array of headers
 	 */
 	public function signRequestHeaders(
@@ -78,10 +84,16 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 		$headers = null,
 		$forTableStorage = false,
 		$resourceType = Zend_Service_WindowsAzure_Storage::RESOURCE_UNKNOWN,
-		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ
+		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ,
+		$rawData = null
 	) {
 		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py
 
+		// Table storage?
+		if ($forTableStorage) {
+			throw new Zend_Service_WindowsAzure_Credentials_Exception('The Windows Azure SDK for PHP does not support SharedKey authentication on table storage. Use SharedKeyLite authentication instead.');
+		}
+		
 		// Determine path
 		if ($this->_usePathStyleUri) {
 			$path = substr($path, strpos($path, '/'));
@@ -103,7 +115,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 		}
 		
 		// Build canonicalized headers
-		if ($headers !== null) {
+		if (!is_null($headers)) {
 			foreach ($headers as $header => $value) {
 				if (is_bool($value)) {
 					$value = $value === true ? 'True' : 'False';
@@ -124,17 +136,38 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 		}
 		$canonicalizedResource .= $path;
 		if ($queryString !== '') {
-		    $canonicalizedResource .= $queryString;
+		    $queryStringItems = $this->_makeArrayOfQueryString($queryString);
+		    foreach ($queryStringItems as $key => $value) {
+		    	$canonicalizedResource .= "\n" . strtolower($key) . ':' . $value;
+		    }
+		}
+		
+		// Content-Length header
+		$contentLength = '';
+		if (strtoupper($httpVerb) != Zend_Http_Client::GET
+			 && strtoupper($httpVerb) != Zend_Http_Client::DELETE
+			 && strtoupper($httpVerb) != Zend_Http_Client::HEAD) {
+			$contentLength = 0;
+			
+			if (!is_null($rawData)) {
+				$contentLength = strlen($rawData);
+			}
 		}
 
 		// Create string to sign   
 		$stringToSign   = array();
-		$stringToSign[] = strtoupper($httpVerb); 	// VERB
-    	$stringToSign[] = "";						// Content-MD5
-    	$stringToSign[] = "";						// Content-Type
-    	$stringToSign[] = "";
-        // Date already in $canonicalizedHeaders
-    	// $stringToSign[] = self::PREFIX_STORAGE_HEADER . 'date:' . $requestDate; // Date
+		$stringToSign[] = strtoupper($httpVerb); 									// VERB
+    	$stringToSign[] = $this->_issetOr($headers, 'Content-Encoding', '');		// Content-Encoding
+    	$stringToSign[] = $this->_issetOr($headers, 'Content-Language', '');		// Content-Language
+    	$stringToSign[] = $contentLength; 											// Content-Length
+    	$stringToSign[] = $this->_issetOr($headers, 'Content-MD5', '');				// Content-MD5
+    	$stringToSign[] = $this->_issetOr($headers, 'Content-Type', '');			// Content-Type
+    	$stringToSign[] = "";														// Date
+    	$stringToSign[] = $this->_issetOr($headers, 'If-Modified-Since', '');		// If-Modified-Since
+    	$stringToSign[] = $this->_issetOr($headers, 'If-Match', '');				// If-Match
+    	$stringToSign[] = $this->_issetOr($headers, 'If-None-Match', '');			// If-None-Match
+    	$stringToSign[] = $this->_issetOr($headers, 'If-Unmodified-Since', '');		// If-Unmodified-Since
+    	$stringToSign[] = $this->_issetOr($headers, 'Range', '');					// Range
     	
     	if (!$forTableStorage && count($canonicalizedHeaders) > 0) {
     		$stringToSign[] = implode("\n", $canonicalizedHeaders); // Canonicalized headers

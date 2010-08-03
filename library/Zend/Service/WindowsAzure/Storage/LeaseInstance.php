@@ -37,29 +37,29 @@ require_once 'Zend/Service/WindowsAzure/Storage/StorageEntityAbstract.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * 
- * @property string  $Id              Id
+ * @property string  $Container       Container name
  * @property string  $Name            Name
- * @property string  $Href            Href
- * @property string  $Updated         Updated
+ * @property string  $LeaseId         Lease id
+ * @property string  $LeaseTime       Time remaining in the lease period, in seconds. This header is returned only for a successful request to break the lease. It provides an approximation as to when the lease period will expire.
  */
-class Zend_Service_WindowsAzure_Storage_TableInstance
+class Zend_Service_WindowsAzure_Storage_LeaseInstance
 	extends Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
 {
     /**
      * Constructor
      * 
-     * @param string  $id              Id
+     * @param string  $containerName   Container name
      * @param string  $name            Name
-     * @param string  $href            Href
-     * @param string  $updated         Updated
+     * @param string  $leaseId         Lease id
+     * @param string  $leaseTime       Time remaining in the lease period, in seconds. This header is returned only for a successful request to break the lease. It provides an approximation as to when the lease period will expire.
      */
-    public function __construct($id, $name, $href, $updated) 
+    public function __construct($containerName, $name, $leaseId, $leaseTime) 
     {	        
         $this->_data = array(
-            'id'               => $id,
+            'container'        => $containerName,
             'name'             => $name,
-            'href'             => $href,
-            'updated'          => $updated
+        	'leaseid'          => $leaseId,
+            'leasetime'        => $leaseTime
         );
     }
 }

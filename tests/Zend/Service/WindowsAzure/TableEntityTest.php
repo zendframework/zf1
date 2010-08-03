@@ -15,30 +15,30 @@
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage UnitTests
- * @version    $Id: BlobStorageTest.php 14561 2009-05-07 08:05:12Z unknown $
+ * @version    $Id$
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
- * @see Zend_Service_WindowsAzure_Storage_TableEntity 
- */
-require_once 'Zend/Service/WindowsAzure/Storage/TableEntity.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_TableEntityTest::main');
 }
 
 /**
+ * Test helpers
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../../TestConfiguration.php.dist';
+require_once 'PHPUnit/Framework/TestCase.php';
+
+/** Zend_Service_WindowsAzure_Storage_TableEntity */
+require_once 'Zend/Service/WindowsAzure/Storage/TableEntity.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage UnitTests
- * @version    $Id: BlobStorageTest.php 14561 2009-05-07 08:05:12Z unknown $
+ * @version    $Id$
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */

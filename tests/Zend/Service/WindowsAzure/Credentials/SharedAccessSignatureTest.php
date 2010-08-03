@@ -15,31 +15,30 @@
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage UnitTests
- * @version    $Id: SharedKeyCredentialsTest.php 22847 2009-06-24 06:51:14Z unknown $
+ * @version    $Id$
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
+
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_Credentials_SharedAccessSignatureTest::main');
+}
 
 /**
  * Test helpers
  */
 require_once dirname(__FILE__) . '/../../../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../../../TestConfiguration.php.dist';
+require_once 'PHPUnit/Framework/TestCase.php';
 
-/**
- * @see Zend_Service_WindowsAzure_Credentials_SharedAccessSignature 
- */
+/** Zend_Service_WindowsAzure_Credentials_SharedAccessSignature */
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedAccessSignature.php';
-
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_SharedAccessSignatureCredentialsTest::main');
-}
 
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage UnitTests
- * @version    $Id: SharedKeyCredentialsTest.php 22847 2009-06-24 06:51:14Z unknown $
+ * @version    $Id$
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */

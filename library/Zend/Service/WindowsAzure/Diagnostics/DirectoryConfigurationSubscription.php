@@ -14,52 +14,49 @@
  *
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
- * @subpackage Storage
+ * @subpackage Diagnostics
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
 /**
- * @see Zend_Service_WindowsAzure_Exception
+ * @see Zend_Service_WindowsAzure_Diagnostics_Exception
  */
-require_once 'Zend/Service/WindowsAzure/Exception.php';
+require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
 
 /**
- * @see Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
+ * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationObjectBaseAbstract
  */
-require_once 'Zend/Service/WindowsAzure/Storage/StorageEntityAbstract.php';
+require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationObjectBaseAbstract.php';
 
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
- * @subpackage Storage
+ * @subpackage Diagnostics
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * 
- * @property string  $Id              Id
- * @property string  $Name            Name
- * @property string  $Href            Href
- * @property string  $Updated         Updated
+ *
+ * @property	string	Path					Path
+ * @property	string	Container				Container
+ * @property	int		DirectoryQuotaInMB		Directory quota in MB
  */
-class Zend_Service_WindowsAzure_Storage_TableInstance
-	extends Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
+class Zend_Service_WindowsAzure_Diagnostics_DirectoryConfigurationSubscription
+	extends Zend_Service_WindowsAzure_Diagnostics_ConfigurationObjectBaseAbstract
 {
     /**
      * Constructor
      * 
-     * @param string  $id              Id
-     * @param string  $name            Name
-     * @param string  $href            Href
-     * @param string  $updated         Updated
-     */
-    public function __construct($id, $name, $href, $updated) 
+	 * @param	string	$path					Path
+	 * @param	string	$container				Container
+	 * @param	int		$directoryQuotaInMB		Directory quota in MB
+	 */
+    public function __construct($path, $container, $directoryQuotaInMB = 1024) 
     {	        
         $this->_data = array(
-            'id'               => $id,
-            'name'             => $name,
-            'href'             => $href,
-            'updated'          => $updated
+            'path'      			=> $path,
+            'container' 			=> $container,
+        	'directoryquotainmb' 	=> $directoryQuotaInMB
         );
     }
 }

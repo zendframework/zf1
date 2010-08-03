@@ -25,6 +25,11 @@
 require_once 'Zend/Http/Client.php';
 
 /**
+ * @see Zend_Service_WindowsAzure_Credentials_Exception
+ */
+require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
@@ -151,6 +156,7 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	 * @param boolean $forTableStorage Is the request for table storage?
 	 * @param string $resourceType Resource type
 	 * @param string $requiredPermission Required permission
+	 * @param mixed  $rawData Raw post data
 	 * @return array Array of headers
 	 */
 	abstract public function signRequestHeaders(
@@ -160,7 +166,8 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 		$headers = null,
 		$forTableStorage = false,
 		$resourceType = Zend_Service_WindowsAzure_Storage::RESOURCE_UNKNOWN,
-		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ
+		$requiredPermission = Zend_Service_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_READ,
+		$rawData = null
 	);
 	
 	
@@ -172,26 +179,66 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	 */
 	protected function _prepareQueryStringForSigning($value)
 	{
-	    // Check for 'comp='
-	    if (strpos($value, 'comp=') === false) {
-	        // If not found, no query string needed
-	        return '';
-	    } else {
-	        // If found, make sure it is the only parameter being used      
-    		if (strlen($value) > 0 && strpos($value, '?') === 0) {
-    			$value = substr($value, 1);
-    		}
-    		
-    		// Split parts
-    		$queryParts = explode('&', $value);
-    		foreach ($queryParts as $queryPart) {
-    		    if (strpos($queryPart, 'comp=') !== false) {
-    		        return '?' . $queryPart;
-    		    }
-    		}
-
-    		// Should never happen...
-			return '';
+	    // Return value
+	    $returnValue = array();
+	    
+	    // Prepare query string
+	    $queryParts = $this->_makeArrayOfQueryString($value);
+	    foreach ($queryParts as $key => $value) {
+	    	$returnValue[] = $key . '=' . $value;
 	    }
+	    
+	    // Return
+	    if (count($returnValue) > 0) {
+	    	return '?' . implode('&', $returnValue);
+	    } else {
+	    	return '';
+	    }
+	}
+	
+	/**
+	 * Make array of query string
+	 * 
+	 * @param  string $value Query string
+	 * @return array         Array of key/value pairs
+	 */
+	protected function _makeArrayOfQueryString($value)
+	{
+		// Returnvalue
+		$returnValue = array();
+		
+	    // Remove front ?     
+   		if (strlen($value) > 0 && strpos($value, '?') === 0) {
+    		$value = substr($value, 1);
+    	}
+    		
+    	// Split parts
+    	$queryParts = explode('&', $value);
+    	foreach ($queryParts as $queryPart) {
+    		$queryPart = explode('=', $queryPart, 2);
+    		
+    		if ($queryPart[0] != '') {
+    			$returnValue[ $queryPart[0] ] = isset($queryPart[1]) ? $queryPart[1] : '';
+    		}
+    	}
+    	
+    	// Sort
+    	ksort($returnValue);
+
+    	// Return
+		return $returnValue;
+	}
+	
+	/**
+	 * Returns an array value if the key is set, otherwide returns $valueIfNotSet
+	 * 
+	 * @param array $array
+	 * @param mixed $key
+	 * @param mixed $valueIfNotSet
+	 * @return mixed
+	 */
+	protected function _issetOr($array, $key, $valueIfNotSet)
+	{
+		return isset($array[$key]) ? $array[$key] : $valueIfNotSet;
 	}
 }

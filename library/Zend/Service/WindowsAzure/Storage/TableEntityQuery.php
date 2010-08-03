@@ -129,7 +129,7 @@ class Zend_Service_WindowsAzure_Storage_TableEntityQuery
 	{
 	    $condition = $this->_replaceOperators($condition);
 	    
-	    if ($value !== null) {
+	    if (!is_null($value)) {
 	        $condition = $this->_quoteInto($condition, $value);
 	    }
 	    
@@ -203,15 +203,15 @@ class Zend_Service_WindowsAzure_Storage_TableEntityQuery
 		$query = array();
 		if (count($this->_where) != 0) {
 		    $filter = implode('', $this->_where);
-			$query[] = '$filter=' . ($urlEncode ? urlencode($filter) : $filter);
+			$query[] = '$filter=' . ($urlEncode ? self::encodeQuery($filter) : $filter);
 		}
 		
 		if (count($this->_orderBy) != 0) {
 		    $orderBy = implode(',', $this->_orderBy);
-			$query[] = '$orderby=' . ($urlEncode ? urlencode($orderBy) : $orderBy);
+			$query[] = '$orderby=' . ($urlEncode ? self::encodeQuery($orderBy) : $orderBy);
 		}
 		
-		if ($this->_top !== null) {
+		if (!is_null($this->_top)) {
 			$query[] = '$top=' . $this->_top;
 		}
 		
@@ -234,15 +234,15 @@ class Zend_Service_WindowsAzure_Storage_TableEntityQuery
 	    if ($includeParentheses) {
 	        $identifier .= '(';
 	        
-	        if ($this->_partitionKey !== null) {
+	        if (!is_null($this->_partitionKey)) {
 	            $identifier .= 'PartitionKey=\'' . $this->_partitionKey . '\'';
 	        }
 	            
-	        if ($this->_partitionKey !== null && $this->_rowKey !== null) {
+	        if (!is_null($this->_partitionKey) && !is_null($this->_rowKey)) {
 	            $identifier .= ', ';
 	        }
 	            
-	        if ($this->_rowKey !== null) {
+	        if (!is_null($this->_rowKey)) {
 	            $identifier .= 'RowKey=\'' . $this->_rowKey . '\'';
 	        }
 	            
@@ -312,6 +312,30 @@ class Zend_Service_WindowsAzure_Storage_TableEntityQuery
 	    $text = str_replace('!',  'not', $text);
 	    
 	    return $text;
+	}
+	
+	/**
+	 * urlencode a query
+	 * 
+	 * @param string $query Query to encode
+	 * @return string Encoded query
+	 */
+	public static function encodeQuery($query)
+	{
+		$query = str_replace('/', '%2F', $query);
+		$query = str_replace('?', '%3F', $query);
+		$query = str_replace(':', '%3A', $query);
+		$query = str_replace('@', '%40', $query);
+		$query = str_replace('&', '%26', $query);
+		$query = str_replace('=', '%3D', $query);
+		$query = str_replace('+', '%2B', $query);
+		$query = str_replace(',', '%2C', $query);
+		$query = str_replace('$', '%24', $query);
+		
+		
+		$query = str_replace(' ', '%20', $query);
+		
+		return $query;
 	}
 	
 	/**

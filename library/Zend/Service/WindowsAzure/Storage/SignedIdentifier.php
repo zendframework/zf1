@@ -26,6 +26,11 @@
 require_once 'Zend/Service/WindowsAzure/Exception.php';
 
 /**
+ * @see Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
+ */
+require_once 'Zend/Service/WindowsAzure/Storage/StorageEntityAbstract.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage Storage
@@ -38,14 +43,8 @@ require_once 'Zend/Service/WindowsAzure/Exception.php';
  * @property string $Permissions  Signed permissions - read (r), write (w), delete (d) and list (l)
  */
 class Zend_Service_WindowsAzure_Storage_SignedIdentifier
+	extends Zend_Service_WindowsAzure_Storage_StorageEntityAbstract
 {
-    /**
-     * Data
-     * 
-     * @var array
-     */
-    protected $_data = null;
-    
     /**
      * Constructor
      * 
@@ -62,33 +61,5 @@ class Zend_Service_WindowsAzure_Storage_SignedIdentifier
             'expiry'       => $expiry,
             'permissions'  => $permissions
         );
-    }
-    
-    /**
-     * Magic overload for setting properties
-     * 
-     * @param string $name     Name of the property
-     * @param string $value    Value to set
-     */
-    public function __set($name, $value) {
-        if (array_key_exists(strtolower($name), $this->_data)) {
-            $this->_data[strtolower($name)] = $value;
-            return;
-        }
-
-        throw new Exception("Unknown property: " . $name);
-    }
-
-    /**
-     * Magic overload for getting properties
-     * 
-     * @param string $name     Name of the property
-     */
-    public function __get($name) {
-        if (array_key_exists(strtolower($name), $this->_data)) {
-            return $this->_data[strtolower($name)];
-        }
-
-        throw new Exception("Unknown property: " . $name);
     }
 }

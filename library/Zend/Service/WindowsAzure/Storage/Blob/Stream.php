@@ -90,7 +90,7 @@ class Zend_Service_WindowsAzure_Storage_Blob_Stream
      */
     protected function _getStorageClient($path = '')
     {
-        if ($this->_storageClient === null) {
+        if (is_null($this->_storageClient)) {
             $url = explode(':', $path);
             if (!$url) {
                 throw new Zend_Service_WindowsAzure_Exception('Could not parse path "' . $path . '".');
@@ -371,7 +371,7 @@ class Zend_Service_WindowsAzure_Storage_Blob_Stream
         } catch (Zend_Service_WindowsAzure_Exception $ex) {
             // Unexisting file...
         }
-        if ($info !== null) {
+        if (!is_null($info)) {
             $stat['size']  = $info->Size;
             $stat['atime'] = time();
         }     
@@ -456,7 +456,7 @@ class Zend_Service_WindowsAzure_Storage_Blob_Stream
         } catch (Zend_Service_WindowsAzure_Exception $ex) {
             // Unexisting file...
         }
-        if ($info !== null) {
+        if (!is_null($info)) {
             $stat['size']  = $info->Size;
             $stat['atime'] = time();
         } 
