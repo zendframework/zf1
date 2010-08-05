@@ -245,6 +245,15 @@ class Zend_Controller_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->_controller->getParam('bar', -1));
         $this->assertEquals(-1, $this->_controller->getParam('baz', -1));
     }
+	
+	/**
+     * @group ZF-9179
+     */
+	public function testGetParamForEmptyString()
+	{
+		$this->_controller->setParam('lang', '');
+		$this->assertEquals('en', $this->_controller->getParam('lang', 'en'));
+	}
 
     public function testGetParams()
     {
