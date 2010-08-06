@@ -117,6 +117,16 @@ class Zend_Pdf_ElementFactory implements Zend_Pdf_ElementFactory_Interface
 
 
     /**
+     * Get factory
+     *
+     * @return Zend_Pdf_ElementFactory_Interface
+     */
+    public function getFactory()
+    {
+        return $this;
+    }
+
+    /**
      * Factory generator
      *
      * @param integer $objCount

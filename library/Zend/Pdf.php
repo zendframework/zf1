@@ -47,6 +47,9 @@ require_once 'Zend/Pdf/Image.php';
 /** Zend_Pdf_Font */
 require_once 'Zend/Pdf/Font.php';
 
+/** Zend_Pdf_Resource_Extractor */
+require_once 'Zend/Pdf/Resource/Extractor.php';
+
 
 /** Internally used classes */
 require_once 'Zend/Pdf/Element.php';

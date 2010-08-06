@@ -77,6 +77,61 @@ abstract class Zend_Pdf_Resource
     }
 
     /**
+     * Clone page, extract it and dependent objects from the current document,
+     * so it can be used within other docs.
+     */
+    public function __clone()
+    {
+        $factory = Zend_Pdf_ElementFactory::createFactory(1);
+        $processed = array();
+
+        CLONE_MODE_FORCE_CLONING
+
+        // Clone dictionary object.
+        // Do it explicitly to prevent sharing page attributes between different
+        // results of clonePage() operation (other resources are still shared)
+        $dictionary = new Zend_Pdf_Element_Dictionary();
+        foreach ($this->_pageDictionary->getKeys() as $key) {
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory->getFactory(),
+                                                                        $processed,
+                                                                        Zend_Pdf_Element::CLONE_MODE_SKIP_PAGES);
+        }
+
+        $this->_pageDictionary = $factory->newObject($dictionary);
+        $this->_objFactory     = $factory;
+        $this->_attached       = false;
+        $this->_style          = null;
+        $this->_font           = null;
+    }
+
+    /**
+     * Clone page, extract it and dependent objects from the current document,
+     * so it can be used within other docs.
+     *
+     * @internal
+     * @param Zend_Pdf_ElementFactory_Interface $factory
+     * @param array $processed
+     * @return Zend_Pdf_Page
+     */
+    public function clonePage($factory, &$processed)
+    {
+        // Clone dictionary object.
+        // Do it explicitly to prevent sharing page attributes between different
+        // results of clonePage() operation (other resources are still shared)
+        $dictionary = new Zend_Pdf_Element_Dictionary();
+        foreach ($this->_pageDictionary->getKeys() as $key) {
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory->getFactory(),
+                                                                        $processed,
+                                                                        Zend_Pdf_Element::CLONE_MODE_SKIP_PAGES);
+        }
+
+        $clonedPage = new Zend_Pdf_Page($factory->newObject($dictionary), $factory);
+        $clonedPage->_attached = false;
+
+        return $clonedPage;
+    }
+
+    /**
      * Get resource.
      * Used to reference resource in an internal PDF data structures (resource dictionaries)
      *

@@ -30,6 +30,13 @@
 interface Zend_Pdf_ElementFactory_Interface
 {
     /**
+     * Get factory
+     *
+     * @return Zend_Pdf_ElementFactory_Interface
+     */
+    public function getFactory();
+
+    /**
      * Close factory and clean-up resources
      *
      * @internal

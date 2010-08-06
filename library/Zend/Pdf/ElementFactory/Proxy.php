@@ -57,6 +57,16 @@ class Zend_Pdf_ElementFactory_Proxy implements Zend_Pdf_ElementFactory_Interface
     }
 
     /**
+     * Get factory
+     *
+     * @return Zend_Pdf_ElementFactory_Interface
+     */
+    public function getFactory()
+    {
+        return $this->_factory->getFactory();
+    }
+
+    /**
      * Close factory and clean-up resources
      *
      * @internal

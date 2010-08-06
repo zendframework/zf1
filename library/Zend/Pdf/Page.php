@@ -185,7 +185,7 @@ class Zend_Pdf_Page
      *                   Zend_Pdf_ElementFactory_Interface $factory);
      * ---------------------------------------------------------
      *
-     * 2. Clone PDF page.
+     * 2. Make a copy of the PDF page.
      *    New page is created in the same context as source page. Object factory is shared.
      *    Thus it will be attached to the document, but need to be placed into Zend_Pdf::$pages array
      *    to be included into output.
@@ -215,18 +215,32 @@ class Zend_Pdf_Page
      */
     public function __construct($param1, $param2 = null, $param3 = null)
     {
-        if ($param1 instanceof Zend_Pdf_Element_Reference &&
-            $param1->getType() == Zend_Pdf_Element::TYPE_DICTIONARY &&
+        if (($param1 instanceof Zend_Pdf_Element_Reference ||
+             $param1 instanceof Zend_Pdf_Element_Object
+            ) &&
             $param2 instanceof Zend_Pdf_ElementFactory_Interface &&
             $param3 === null
            ) {
-            $this->_pageDictionary = $param1;
-            $this->_objFactory     = $param2;
-            $this->_attached       = true;
-            $this->_safeGS         = false;
+            switch ($param1->getType()) {
+                case Zend_Pdf_Element::TYPE_DICTIONARY:
+                    $this->_pageDictionary = $param1;
+                    $this->_objFactory     = $param2;
+                    $this->_attached       = true;
+                    $this->_safeGS         = false;
+                    return;
+                    break;
 
-            return;
+                case Zend_Pdf_Element::TYPE_NULL:
+                    $this->_objFactory = $param2;
+                    $pageWidth = $pageHeight = 0;
+                    break;
 
+                default:
+                    require_once 'Zend/Pdf/Exception.php';
+                    throw new Zend_Pdf_Exception('Unrecognized object type.');
+                    break;
+
+            }
         } else if ($param1 instanceof Zend_Pdf_Page && $param2 === null && $param3 === null) {
             // Clone existing page.
             // Let already existing content and resources to be shared between pages
@@ -337,17 +351,6 @@ class Zend_Pdf_Page
 
 
     /**
-     * Clone operator
-     *
-     * @throws Zend_Pdf_Exception
-     */
-    public function __clone()
-    {
-        require_once 'Zend/Pdf/Exception.php';
-        throw new Zend_Pdf_Exception('Cloning Zend_Pdf_Page object using \'clone\' keyword is not supported. Use \'new Zend_Pdf_Page($srcPage)\' syntax');
-    }
-
-    /**
      * Attach resource to the page
      *
      * @param string $type
@@ -406,6 +409,59 @@ class Zend_Pdf_Page
         }
 
         $this->_pageDictionary->Resources->ProcSet->items[] = new Zend_Pdf_Element_Name($procSetName);
+    }
+
+    /**
+     * Clone page, extract it and dependent objects from the current document,
+     * so it can be used within other docs.
+     */
+    public function __clone()
+    {
+        $factory = Zend_Pdf_ElementFactory::createFactory(1);
+        $processed = array();
+
+        // Clone dictionary object.
+        // Do it explicitly to prevent sharing page attributes between different
+        // results of clonePage() operation (other resources are still shared)
+        $dictionary = new Zend_Pdf_Element_Dictionary();
+        foreach ($this->_pageDictionary->getKeys() as $key) {
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory->getFactory(),
+                                                                        $processed,
+                                                                        Zend_Pdf_Element::CLONE_MODE_SKIP_PAGES);
+        }
+
+        $this->_pageDictionary = $factory->newObject($dictionary);
+        $this->_objFactory     = $factory;
+        $this->_attached       = false;
+        $this->_style          = null;
+        $this->_font           = null;
+    }
+
+    /**
+     * Clone page, extract it and dependent objects from the current document,
+     * so it can be used within other docs.
+     *
+     * @internal
+     * @param Zend_Pdf_ElementFactory_Interface $factory
+     * @param array $processed
+     * @return Zend_Pdf_Page
+     */
+    public function clonePage($factory, &$processed)
+    {
+        // Clone dictionary object.
+        // Do it explicitly to prevent sharing page attributes between different
+        // results of clonePage() operation (other resources are still shared)
+        $dictionary = new Zend_Pdf_Element_Dictionary();
+        foreach ($this->_pageDictionary->getKeys() as $key) {
+            $dictionary->$key = $this->_pageDictionary->$key->makeClone($factory->getFactory(),
+                                                                        $processed,
+                                                                        Zend_Pdf_Element::CLONE_MODE_SKIP_PAGES);
+        }
+
+        $clonedPage = new Zend_Pdf_Page($factory->newObject($dictionary), $factory);
+        $clonedPage->_attached = false;
+
+        return $clonedPage;
     }
 
     /**
@@ -497,21 +553,11 @@ class Zend_Pdf_Page
 
         if ($this->_attached) {
             require_once 'Zend/Pdf/Exception.php';
-            throw new Zend_Pdf_Exception('Page is attached to one documen, but rendered in context of another.');
-            /**
-             * @todo Page cloning must be implemented here instead of exception.
-             *       PDF objects (ex. fonts) can be shared between pages.
-             *       Thus all referenced objects, which can be modified, must be cloned recursively,
-             *       to avoid producing wrong object references in a context of source PDF.
-             */
-
-            //...
+            throw new Zend_Pdf_Exception('Page is attached to other documen. Use clone $page to get it context free.');
         } else {
             $objFactory->attach($this->_objFactory);
         }
     }
-
-
 
     /**
      * Set fill color.
@@ -1425,7 +1471,7 @@ class Zend_Pdf_Page
      * @param integer $fillType
      * @return Zend_Pdf_Page
      */
-    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius, 
+    public function drawRoundedRectangle($x1, $y1, $x2, $y2, $radius,
                                          $fillType = Zend_Pdf_Page::SHAPE_DRAW_FILL_AND_STROKE)
     {
 
@@ -1449,7 +1495,7 @@ class Zend_Pdf_Page
         $bottomRightY  = $y1;
         $bottomLeftX   = $x1;
         $bottomLeftY   = $y1;
-        
+
         //draw top side
         $x1Obj = new Zend_Pdf_Element_Numeric($topLeftX + $radius[0]);
         $y1Obj = new Zend_Pdf_Element_Numeric($topLeftY);
@@ -1459,7 +1505,7 @@ class Zend_Pdf_Page
         $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
 
         //draw top right corner if needed
-        if ($radius[1] != 0) {        
+        if ($radius[1] != 0) {
             $x1Obj = new Zend_Pdf_Element_Numeric($topRightX);
             $y1Obj = new Zend_Pdf_Element_Numeric($topRightY);
             $x2Obj = new Zend_Pdf_Element_Numeric($topRightX);
@@ -1478,7 +1524,7 @@ class Zend_Pdf_Page
         $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
 
         //draw bottom right corner if needed
-        if ($radius[2] != 0) {        
+        if ($radius[2] != 0) {
             $x1Obj = new Zend_Pdf_Element_Numeric($bottomRightX);
             $y1Obj = new Zend_Pdf_Element_Numeric($bottomRightY);
             $x2Obj = new Zend_Pdf_Element_Numeric($bottomRightX);
@@ -1497,7 +1543,7 @@ class Zend_Pdf_Page
         $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
 
         //draw bottom left corner if needed
-        if ($radius[3] != 0) {        
+        if ($radius[3] != 0) {
             $x1Obj = new Zend_Pdf_Element_Numeric($bottomLeftX);
             $y1Obj = new Zend_Pdf_Element_Numeric($bottomLeftY);
             $x2Obj = new Zend_Pdf_Element_Numeric($bottomLeftX);
@@ -1516,7 +1562,7 @@ class Zend_Pdf_Page
         $this->_contents .= $x1Obj->toString() . ' ' . $y1Obj->toString() . " l\n";
 
         //draw top left corner if needed
-        if ($radius[0] != 0) {        
+        if ($radius[0] != 0) {
             $x1Obj = new Zend_Pdf_Element_Numeric($topLeftX);
             $y1Obj = new Zend_Pdf_Element_Numeric($topLeftY);
             $x2Obj = new Zend_Pdf_Element_Numeric($topLeftX);
