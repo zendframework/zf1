@@ -602,6 +602,16 @@ class Zend_Filter_StripTagsTest extends PHPUnit_Framework_TestCase
         $expected = '<img width="10" height="10" src=\'wont_be_matched.jpg\'>';
         $this->assertEquals($expected, $filter->filter($input));
     }
+
+    /**
+     * @group ZF-10256
+     */
+    public function testNotClosedHtmlCommentAtEndOfString()
+    {
+        $input    = 'text<!-- not closed comment at the end';
+        $expected = 'text';
+        $this->assertEquals($expected, $this->_filter->filter($input));
+    }
 }
 
 // Call Zend_Filter_StripTagsTest::main() if this source file is executed directly.
