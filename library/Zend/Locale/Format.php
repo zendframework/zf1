@@ -194,7 +194,7 @@ class Zend_Locale_Format
     public static function convertNumerals($input, $from, $to = null)
     {
         if (!self::_getUniCodeSupport()) {
-            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+            trigger_error("Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core", E_USER_NOTICE);
         }
 
         $from   = strtolower($from);
@@ -502,7 +502,7 @@ class Zend_Locale_Format
     public static function isNumber($input, array $options = array())
     {
         if (!self::_getUniCodeSupport()) {
-            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+            trigger_error("Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core", E_USER_NOTICE);
         }
 
         $options = self::_checkOptions($options) + self::$_options;
@@ -766,7 +766,7 @@ class Zend_Locale_Format
     private static function _parseDate($date, $options)
     {
         if (!self::_getUniCodeSupport()) {
-            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+            trigger_error("Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core", E_USER_NOTICE);
         }
 
         $options = self::_checkOptions($options) + self::$_options;
