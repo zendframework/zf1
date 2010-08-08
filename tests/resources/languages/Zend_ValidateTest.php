@@ -50,6 +50,15 @@ class resources_languages_Zend_ValidateTest extends PHPUnit_Framework_TestCase
             throw new Exception('Language resource directory "'.$this->_langDir.'" not readable.');
         }
 
+        // Show only a specific translation?
+        $langs = 'all';
+        if (defined('TESTS_ZEND_RESOURCES_TRANSLATIONS')) {
+            $langs = strtolower(constant('TESTS_ZEND_RESOURCES_TRANSLATIONS'));
+            if ($langs == 'en' || !Zend_Locale::isLocale($langs, true, false)) {
+                $langs = 'all';
+            }
+        }
+
         // detect languages
         foreach (new DirectoryIterator($this->_langDir) as $entry) {
             if (!$entry->isDir()) {
@@ -63,7 +72,9 @@ class resources_languages_Zend_ValidateTest extends PHPUnit_Framework_TestCase
             }
 
             // add all languages for testIsLocale
-            $this->_languages[] = $fname;
+            if ($langs == 'all' || $langs == $fname || $fname == 'en') {
+                $this->_languages[] = $fname;
+            }
 
             // include Zend_Validate translation tables
             $translationFile = $entry->getPathname() . DIRECTORY_SEPARATOR . 'Zend_Validate.php';
@@ -73,7 +84,9 @@ class resources_languages_Zend_ValidateTest extends PHPUnit_Framework_TestCase
                     $this->fail("Invalid or empty translation table found for language '{$fname}'");
                 }
 
-                $this->_translations[$fname] = $translation;
+                if ($langs == 'all' || $langs == $fname || $fname == 'en') {
+                    $this->_translations[$fname] = $translation;
+                }
             }
         }
     }
