@@ -193,6 +193,10 @@ class Zend_Locale_Format
      */
     public static function convertNumerals($input, $from, $to = null)
     {
+        if (!self::_getUniCodeSupport()) {
+            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+        }
+
         $from   = strtolower($from);
         $source = Zend_Locale_Data::getContent('en', 'numberingsystem', $from);
         if (empty($source)) {
@@ -497,6 +501,10 @@ class Zend_Locale_Format
      */
     public static function isNumber($input, array $options = array())
     {
+        if (!self::_getUniCodeSupport()) {
+            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+        }
+
         $options = self::_checkOptions($options) + self::$_options;
 
         // Get correct signs for this locale
@@ -757,6 +765,10 @@ class Zend_Locale_Format
      */
     private static function _parseDate($date, $options)
     {
+        if (!self::_getUniCodeSupport()) {
+            throw new Zend_Locale_Exception('Sorry, your PCRE extension does not support UTF8 which is needed for the I18N core');
+        }
+
         $options = self::_checkOptions($options) + self::$_options;
         $test = array('h', 'H', 'm', 's', 'y', 'Y', 'M', 'd', 'D', 'E', 'S', 'l', 'B', 'I',
                        'X', 'r', 'U', 'G', 'w', 'e', 'a', 'A', 'Z', 'z', 'v');
@@ -1238,5 +1250,16 @@ class Zend_Locale_Format
             $options['date_format'] = self::getDateTimeFormat($options['locale']);
         }
         return self::_parseDate($datetime, $options);
+    }
+
+    /**
+     * Internal method to detect of Unicode supports UTF8
+     * which should be enabled within vanilla php installations
+     *
+     * @return boolean
+     */
+    protected static function _getUniCodeSupport()
+    {
+        return (@preg_match('/\pL/u', 'a')) ? true : false;
     }
 }
