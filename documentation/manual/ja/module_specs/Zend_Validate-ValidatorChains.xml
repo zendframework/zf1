@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20799 -->
+<!-- EN-Revision: 21829 -->
 <sect1 id="zend.validate.validator_chains">
 
     <title>バリデータチェイン</title>
@@ -11,8 +11,9 @@
             linkend="zend.validate.introduction">導入</link>
         で説明した例を解決するための方法を示すものです。
         ユーザ名が 6 文字から 12 文字までの英数字であるかどうかを検証します。
+    </para>
 
-        <programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // バリデータチェインを作成し、そこにバリデータを追加します
 $validatorChain = new Zend_Validate();
 $validatorChain->addValidator(
@@ -31,6 +32,7 @@ if ($validatorChain->isValid($username)) {
 }
 ]]></programlisting>
 
+    <para>
         バリデータは、<classname>Zend_Validate</classname> に追加した順に適用されます。
         上の例では、まずユーザ名の長さが 6 文字から 12 文字までの間であるかどうかを調べます。
         その後で、英数字のみであるかどうかだけを調べます。
@@ -50,16 +52,15 @@ if ($validatorChain->isValid($username)) {
         これにより、後に続く不要な検証や不適切な検証を行わずにすみます。
         上の例を次のように書き直すと、長さの検証に失敗した場合は
         英数字の検証を行わなくなります。
+    </para>
 
-        <programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $validatorChain->addValidator(
                     new Zend_Validate_StringLength(array('min' => 6,
                                                          'max' => 12)),
                     true)
                ->addValidator(new Zend_Validate_Alnum());
 ]]></programlisting>
-
-    </para>
 
     <para>
         <classname>Zend_Validate_Interface</classname> を実装したオブジェクトなら何でも、
