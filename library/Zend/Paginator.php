@@ -1012,7 +1012,7 @@ class Zend_Paginator implements Countable, IteratorAggregate
     protected function _getCacheInternalId()
     {
         return md5(serialize(array(
-            spl_object_hash($this->getAdapter()),
+            $this->getAdapter(),
             $this->getItemCountPerPage()
         )));
     }
