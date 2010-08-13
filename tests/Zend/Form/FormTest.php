@@ -4196,7 +4196,39 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('sub' => array('valid' => 1234)), $this->form->getValidValues($data));
     }
-        
+
+     /**
+     * @group ZF-9275
+     */
+    public function testElementTranslatorNotOverriddenbyGlobalTranslatorDuringValidation()
+    {
+        $translator = new Zend_Translate('array', array('foo' => 'bar'));
+        Zend_Registry::set('Zend_Translate', $translator);
+
+        $this->form->addElement('text', 'foo');
+        $this->form->isValid(array());
+
+        $received = $this->form->foo->hasTranslator();
+        $this->assertSame(false, $received);
+    }
+
+     /**
+     * @group ZF-9275
+     */
+    public function testZendValidateDefaultTranslatorOverridesZendTranslateDefaultTranslator()
+    {
+        $translate = new Zend_Translate('array', array('isEmpty' => 'translate'));
+        Zend_Registry::set('Zend_Translate', $translate);
+
+        $translateValidate = new Zend_Translate('array', array('isEmpty' => 'validate'));
+        Zend_Validate_Abstract::setDefaultTranslator($translateValidate);
+
+        $this->form->addElement('text', 'foo', array('required'=>1));
+        $this->form->isValid(array());
+
+        $this->assertSame(array('isEmpty' => 'validate'), $this->form->foo->getMessages());
+    }
+
     /**
      * @group ZF-9494
      */

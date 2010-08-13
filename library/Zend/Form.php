@@ -2222,7 +2222,8 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         }
         $context = $data;
         foreach ($this->getElements() as $key => $element) {
-            if (null !== $translator && !$element->hasTranslator()) {
+            if (null !== $translator && $this->hasTranslator()
+                    && !$element->hasTranslator()) {
                 $element->setTranslator($translator);
             }
             $check = $data;
