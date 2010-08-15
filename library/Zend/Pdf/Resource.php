@@ -85,8 +85,6 @@ abstract class Zend_Pdf_Resource
         $factory = Zend_Pdf_ElementFactory::createFactory(1);
         $processed = array();
 
-        //CLONE_MODE_FORCE_CLONING
-
         // Clone dictionary object.
         // Do it explicitly to prevent sharing page attributes between different
         // results of clonePage() operation (other resources are still shared)
