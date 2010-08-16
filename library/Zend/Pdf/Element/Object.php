@@ -265,16 +265,6 @@ class Zend_Pdf_Element_Object extends Zend_Pdf_Element
     }
 
     /**
-     * Return direct object
-     *
-     * @return Zend_Pdf_Element_Object
-     */
-    public function getElement()
-    {
-        return $this->_value;
-    }
-
-    /**
      * Clean up resources, used by object
      */
     public function cleanUp()
