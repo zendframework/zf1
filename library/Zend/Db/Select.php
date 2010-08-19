@@ -526,14 +526,14 @@ class Zend_Db_Select
      * appears. See {@link where()} for an example
      *
      * @param string $cond The HAVING condition.
-     * @param string|Zend_Db_Expr $val The value to quote into the condition.
+     * @param mixed    $value OPTIONAL The value to quote into the condition.
+     * @param constant $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
-    public function having($cond)
+    public function having($cond, $value = null, $type = null)
     {
-        if (func_num_args() > 1) {
-            $val = func_get_arg(1);
-            $cond = $this->_adapter->quoteInto($cond, $val);
+	    if ($value) {
+            $cond = $this->_adapter->quoteInto($cond, $value, $type);
         }
 
         if ($this->_parts[self::HAVING]) {
@@ -551,16 +551,16 @@ class Zend_Db_Select
      * Otherwise identical to orHaving().
      *
      * @param string $cond The HAVING condition.
-     * @param mixed  $val  The value to quote into the condition.
+     * @param mixed    $value OPTIONAL The value to quote into the condition.
+     * @param constant $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      *
      * @see having()
      */
-    public function orHaving($cond)
+    public function orHaving($cond, $value = null, $type = null)
     {
-        if (func_num_args() > 1) {
-            $val = func_get_arg(1);
-            $cond = $this->_adapter->quoteInto($cond, $val);
+        if ($value) {
+            $cond = $this->_adapter->quoteInto($cond, $value, $type);
         }
 
         if ($this->_parts[self::HAVING]) {
