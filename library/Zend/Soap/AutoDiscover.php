@@ -335,6 +335,7 @@ class Zend_Soap_AutoDiscover implements Zend_Server_Interface
      *
      * @param string $function Function Name
      * @param string $namespace Function namespace - Not Used
+     * @return Zend_Soap_AutoDiscover
      */
     public function addFunction($function, $namespace = '')
     {
@@ -370,6 +371,8 @@ class Zend_Soap_AutoDiscover implements Zend_Server_Interface
             $this->_addFunctionToWsdl($method, $wsdl, $port, $binding);
         }
         $this->_wsdl = $wsdl;
+
+        return $this;
     }
 
     /**
