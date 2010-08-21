@@ -44,7 +44,8 @@ class Zend_Gdata_Spreadsheets_ListFeedTest extends PHPUnit_Framework_TestCase
 
     public function testToAndFromString()
     {
-        $this->assertTrue(count($this->listFeed->entries) == 1);
+        $this->assertTrue(count($this->listFeed->entries) == 2);
+        $this->assertTrue($this->listFeed->entries->count() == 2);
         foreach($this->listFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Spreadsheets_ListEntry);
@@ -55,7 +56,8 @@ class Zend_Gdata_Spreadsheets_ListFeedTest extends PHPUnit_Framework_TestCase
         $doc->loadXML($this->listFeed->saveXML());
         $newListFeed->transferFromDom($doc->documentElement);
 
-        $this->assertTrue(count($newListFeed->entries) == 1);
+        $this->assertTrue(count($newListFeed->entries) == 2);
+        $this->assertTrue($newListFeed->entries->count() == 2);
         foreach($newListFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Spreadsheets_ListEntry);

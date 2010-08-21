@@ -44,7 +44,9 @@ class Zend_Gdata_Spreadsheets_CellFeedTest extends PHPUnit_Framework_TestCase
 
     public function testToAndFromString()
     {
-        $this->assertTrue(count($this->cellFeed->entries) == 1);
+        $this->assertTrue(count($this->cellFeed->entries) == 2);
+        $this->assertTrue($this->cellFeed->entries->count() == 2);
+
         foreach($this->cellFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Spreadsheets_CellEntry);
@@ -59,7 +61,9 @@ class Zend_Gdata_Spreadsheets_CellFeedTest extends PHPUnit_Framework_TestCase
         $doc->loadXML($this->cellFeed->saveXML());
         $newCellFeed->transferFromDom($doc->documentElement);
 
-        $this->assertTrue(count($newCellFeed->entries) == 1);
+        $this->assertTrue(count($newCellFeed->entries) == 2);
+        $this->assertTrue($newCellFeed->entries->count() == 2);
+
         foreach($newCellFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Spreadsheets_CellEntry);

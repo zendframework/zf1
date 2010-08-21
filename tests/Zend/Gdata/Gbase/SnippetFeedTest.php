@@ -44,7 +44,8 @@ class Zend_Gdata_Gbase_SnippetFeedTest extends PHPUnit_Framework_TestCase
 
     public function testToAndFromString()
     {
-        $this->assertEquals(count($this->snippetFeed->entries), 1);
+        $this->assertEquals(2, count($this->snippetFeed->entries));
+        $this->assertEquals(2, $this->snippetFeed->entries->count());
         foreach($this->snippetFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Gbase_SnippetEntry);
@@ -55,7 +56,8 @@ class Zend_Gdata_Gbase_SnippetFeedTest extends PHPUnit_Framework_TestCase
         $doc->loadXML($this->snippetFeed->saveXML());
         $newSnippetFeed->transferFromDom($doc->documentElement);
 
-        $this->assertEquals(count($newSnippetFeed->entries), 1);
+        $this->assertEquals(2, count($newSnippetFeed->entries));
+        $this->assertEquals(2, $newSnippetFeed->entries->count());
         foreach($newSnippetFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Gbase_SnippetEntry);

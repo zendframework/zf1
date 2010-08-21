@@ -266,4 +266,17 @@ class Zend_Gdata_App_FeedTest extends PHPUnit_Framework_TestCase
         $result = $feed->lookupNamespace($prefix, null, 1);
         $this->assertEquals($testString21, $result);
     }
+
+    /**
+     * @group ZF-10242
+     */
+    public function testCount()
+    {
+        $feed =  new Zend_Gdata_App_Feed();
+        $feed->addEntry('foo')
+             ->addEntry('bar');
+
+        $this->assertEquals(2, $feed->count());
+        $this->assertEquals(2, count($feed));
+    }
 }

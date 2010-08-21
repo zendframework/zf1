@@ -41,7 +41,7 @@ require_once 'Zend/Gdata/App/FeedSourceParent.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Gdata_App_Feed extends Zend_Gdata_App_FeedSourceParent
-        implements Iterator, ArrayAccess
+        implements Iterator, ArrayAccess, Countable
 {
 
     /**

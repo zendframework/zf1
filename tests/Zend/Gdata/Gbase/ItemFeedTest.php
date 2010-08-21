@@ -44,7 +44,8 @@ class Zend_Gdata_Gbase_ItemFeedTest extends PHPUnit_Framework_TestCase
 
     public function testToAndFromString()
     {
-        $this->assertEquals(count($this->itemFeed->entries), 1);
+        $this->assertEquals(2, count($this->itemFeed->entries));
+        $this->assertEquals(2, $this->itemFeed->entries->count());
         foreach($this->itemFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Gbase_ItemEntry);
@@ -55,7 +56,8 @@ class Zend_Gdata_Gbase_ItemFeedTest extends PHPUnit_Framework_TestCase
         $doc->loadXML($this->itemFeed->saveXML());
         $newItemFeed->transferFromDom($doc->documentElement);
 
-        $this->assertEquals(count($newItemFeed->entries), 1);
+        $this->assertEquals(2, count($newItemFeed->entries));
+        $this->assertEquals(2, $newItemFeed->entries->count());
         foreach($newItemFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Gbase_ItemEntry);

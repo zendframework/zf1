@@ -45,7 +45,8 @@ class Zend_Gdata_Docs_DocumentListFeedTest extends PHPUnit_Framework_TestCase
     public function testToAndFromString()
     {
         // There should be 2 entries in the feed.
-        $this->assertTrue(count($this->docFeed->entries) == 1);
+        $this->assertTrue(count($this->docFeed->entries) == 2);
+        $this->assertTrue($this->docFeed->entries->count() == 2);
         foreach($this->docFeed->entries as $entry)
         {
             $this->assertTrue($entry instanceof Zend_Gdata_Docs_DocumentListEntry);
