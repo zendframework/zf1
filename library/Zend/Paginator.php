@@ -79,6 +79,15 @@ class Zend_Paginator implements Countable, IteratorAggregate
     protected static $_defaultItemCountPerPage = 10;
 
     /**
+     * Default number of local pages (i.e., the number of discretes
+     * page numbers that will be displayed, including the current
+     * page number)
+     *
+     * @var int
+     */
+    protected static $_defaultPageRange = 10;
+
+    /**
      * Scrolling style plugin loader
      *
      * @var Zend_Loader_PluginLoader
@@ -154,7 +163,7 @@ class Zend_Paginator implements Countable, IteratorAggregate
      *
      * @var integer
      */
-    protected $_pageRange = 10;
+    protected $_pageRange = null;
 
     /**
      * Pages
@@ -373,6 +382,26 @@ class Zend_Paginator implements Countable, IteratorAggregate
     public static function setDefaultItemCountPerPage($count)
     {
         self::$_defaultItemCountPerPage = (int) $count;
+    }
+
+    /**
+     * Get the default page range
+     *
+     * @return int
+     */
+    public static function getDefaultPageRange()
+    {
+        return self::$_defaultPageRange;
+    }
+
+    /**
+     * Set the default page range
+     *
+     * @param int $count
+     */
+    public static function setDefaultPageRange($count)
+    {
+        self::$_defaultPageRange = (int) $count;
     }
 
     /**
@@ -788,6 +817,10 @@ class Zend_Paginator implements Countable, IteratorAggregate
      */
     public function getPageRange()
     {
+        if (null === $this->_pageRange) {
+            $this->_pageRange = self::getDefaultPageRange();
+        }
+
         return $this->_pageRange;
     }
 

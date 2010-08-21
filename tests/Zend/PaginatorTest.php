@@ -1018,6 +1018,25 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(isset($items[3]));
         $this->assertEquals(0, $items->key());
     }
+
+    /**
+     * @group ZF-9174
+     */
+    public function testSetDefaultPageRange()
+    {
+        Zend_Paginator::setConfig(new Zend_Config(array()));
+
+        $paginator = Zend_Paginator::factory(range(1, 10));
+        $this->assertEquals(10, $paginator->getPageRange());
+
+        Zend_Paginator::setDefaultPageRange(20);
+        $this->assertEquals(20, Zend_Paginator::getDefaultPageRange());
+
+        $paginator = Zend_Paginator::factory(range(1, 10));
+        $this->assertEquals(20, $paginator->getPageRange());
+
+        $this->_restorePaginatorDefaults();
+    }
 }
 
 class Zend_Paginator_TestArrayAggregate implements Zend_Paginator_AdapterAggregate
