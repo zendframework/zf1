@@ -20,16 +20,10 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_Diagnostics_ManagerTest::main');
-}
-
 /**
  * Test helpers
  */
 require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-require_once dirname(__FILE__) . '/../../../../TestConfiguration.php.dist';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /** Zend_Service_WindowsAzure_Storage_Blob */
 require_once 'Zend/Service/WindowsAzure/Storage/Blob.php';
@@ -50,17 +44,25 @@ require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationInstance.php';
  */
 class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framework_TestCase
 {
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite("Zend_Service_WindowsAzure_Diagnostics_ManagerTest");
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
+    protected static $uniqId = 0;
+    
+    protected function setup()
+    {
+        if (!TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
+            $this->markTestSkipped('Skipping Diagnostic tests, to enable set TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS to true in TestConfiguration.php');
+        }
+    }
+    
     /**
      * Test teardown
      */
     protected function tearDown()
     {
+        if ($this->status == PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED) {
+            return;
+        }
+        
         $storageClient = $this->createStorageInstance();
         for ($i = 1; $i <= self::$uniqId; $i++)
         {
@@ -85,8 +87,6 @@ class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framewor
         return $storageClient;
     }
     
-    protected static $uniqId = 0;
-    
     protected function generateName()
     {
         self::$uniqId++;
@@ -98,15 +98,13 @@ class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framewor
      */
     public function testManagerInitialize()
     {
-    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
-    		$controlContainer = $this->generateName();
-    		
-    		$storageClient = $this->createStorageInstance();
-            $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
-            
-            $result = $storageClient->containerExists($controlContainer);
-            $this->assertTrue($result);
-    	}
+		$controlContainer = $this->generateName();
+		
+		$storageClient = $this->createStorageInstance();
+        $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
+        
+        $result = $storageClient->containerExists($controlContainer);
+        $this->assertTrue($result);
     }
     
 	/**
@@ -114,17 +112,15 @@ class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framewor
      */
     public function testManagerDefaultConfiguration()
     {
-    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
-    		$controlContainer = $this->generateName();
-    		
-    		$storageClient = $this->createStorageInstance();
-            $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
-            
-            $configuration = $manager->getDefaultConfiguration();
-            $manager->setConfigurationForRoleInstance('test', $configuration);
-            
-            $this->assertEquals($configuration->toXml(), $manager->getConfigurationForRoleInstance('test')->toXml());
-    	}
+		$controlContainer = $this->generateName();
+		
+		$storageClient = $this->createStorageInstance();
+        $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
+        
+        $configuration = $manager->getDefaultConfiguration();
+        $manager->setConfigurationForRoleInstance('test', $configuration);
+        
+        $this->assertEquals($configuration->toXml(), $manager->getConfigurationForRoleInstance('test')->toXml());
     }
     
 	/**
@@ -132,31 +128,29 @@ class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framewor
      */
     public function testManagerCustomConfiguration()
     {
-    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
-    		$controlContainer = $this->generateName();
-    		
-    		$storageClient = $this->createStorageInstance();
-            $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
-            
-            $configuration = $manager->getDefaultConfiguration();
-			$configuration->DataSources->OverallQuotaInMB = 1;
-			$configuration->DataSources->Logs->BufferQuotaInMB = 1;
-			$configuration->DataSources->Logs->ScheduledTransferPeriodInMinutes = 1;
-			$configuration->DataSources->PerformanceCounters->BufferQuotaInMB = 1;
-			$configuration->DataSources->PerformanceCounters->ScheduledTransferPeriodInMinutes = 1;
-			$configuration->DataSources->DiagnosticInfrastructureLogs->BufferQuotaInMB = 1;
-			$configuration->DataSources->DiagnosticInfrastructureLogs->ScheduledTransferPeriodInMinutes = 1;
-			$configuration->DataSources->PerformanceCounters->addSubscription('\Processor(*)\% Processor Time', 1);
-			$configuration->DataSources->WindowsEventLog->addSubscription('System!*');
-			$configuration->DataSources->WindowsEventLog->addSubscription('Application!*');
-            $manager->setConfigurationForRoleInstance('test', $configuration);
-            
-            $result = $manager->getConfigurationForRoleInstance('test');
-            
-            $this->assertEquals($configuration->toXml(), $result->toXml());
-            $this->assertEquals(1, count($result->DataSources->PerformanceCounters->Subscriptions));
-            $this->assertEquals(2, count($result->DataSources->WindowsEventLog->Subscriptions));
-    	}
+		$controlContainer = $this->generateName();
+		
+		$storageClient = $this->createStorageInstance();
+        $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
+        
+        $configuration = $manager->getDefaultConfiguration();
+		$configuration->DataSources->OverallQuotaInMB = 1;
+		$configuration->DataSources->Logs->BufferQuotaInMB = 1;
+		$configuration->DataSources->Logs->ScheduledTransferPeriodInMinutes = 1;
+		$configuration->DataSources->PerformanceCounters->BufferQuotaInMB = 1;
+		$configuration->DataSources->PerformanceCounters->ScheduledTransferPeriodInMinutes = 1;
+		$configuration->DataSources->DiagnosticInfrastructureLogs->BufferQuotaInMB = 1;
+		$configuration->DataSources->DiagnosticInfrastructureLogs->ScheduledTransferPeriodInMinutes = 1;
+		$configuration->DataSources->PerformanceCounters->addSubscription('\Processor(*)\% Processor Time', 1);
+		$configuration->DataSources->WindowsEventLog->addSubscription('System!*');
+		$configuration->DataSources->WindowsEventLog->addSubscription('Application!*');
+        $manager->setConfigurationForRoleInstance('test', $configuration);
+        
+        $result = $manager->getConfigurationForRoleInstance('test');
+        
+        $this->assertEquals($configuration->toXml(), $result->toXml());
+        $this->assertEquals(1, count($result->DataSources->PerformanceCounters->Subscriptions));
+        $this->assertEquals(2, count($result->DataSources->WindowsEventLog->Subscriptions));
     }
     
 	/**
@@ -164,25 +158,18 @@ class Zend_Service_WindowsAzure_Diagnostics_ManagerTest extends PHPUnit_Framewor
      */
     public function testManagerConfigurationExists()
     {
-    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
-    		$controlContainer = $this->generateName();
-    		
-    		$storageClient = $this->createStorageInstance();
-            $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
-            
-            $result = $manager->configurationForRoleInstanceExists('test');
-            $this->assertFalse($result);
-            
-            $configuration = $manager->getDefaultConfiguration();
-            $manager->setConfigurationForRoleInstance('test', $configuration);
-            
-            $result = $manager->configurationForRoleInstanceExists('test');
-            $this->assertTrue($result);
-    	}
+		$controlContainer = $this->generateName();
+		
+		$storageClient = $this->createStorageInstance();
+        $manager = new Zend_Service_WindowsAzure_Diagnostics_Manager($storageClient, $controlContainer);
+        
+        $result = $manager->configurationForRoleInstanceExists('test');
+        $this->assertFalse($result);
+        
+        $configuration = $manager->getDefaultConfiguration();
+        $manager->setConfigurationForRoleInstance('test', $configuration);
+        
+        $result = $manager->configurationForRoleInstanceExists('test');
+        $this->assertTrue($result);
     }
-}
-
-// Call Zend_Service_WindowsAzure_Credentials_SharedKeyTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == "Zend_Service_WindowsAzure_Diagnostics_ManagerTest::main") {
-    Zend_Service_WindowsAzure_Diagnostics_ManagerTest::main();
 }

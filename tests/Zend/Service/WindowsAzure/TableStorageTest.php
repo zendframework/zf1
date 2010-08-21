@@ -20,16 +20,11 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_TableStorageTest::main');
-}
 
 /**
  * Test helpers
  */
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
-require_once dirname(__FILE__) . '/../../../TestConfiguration.php.dist';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /** Zend_Service_WindowsAzure_Storage_Table */
 require_once 'Zend/Service/WindowsAzure/Storage/Table.php';
@@ -44,16 +39,11 @@ require_once 'Zend/Service/WindowsAzure/Storage/Table.php';
  */
 class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestCase
 {
+    
+    protected static $uniqId = 0;
+    
     public function __construct()
     {
-    }
-    
-    public static function main()
-    {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $suite  = new PHPUnit_Framework_TestSuite("Zend_Service_WindowsAzure_TableStorageTest");
-            $result = PHPUnit_TextUI_TestRunner::run($suite);
-        }
     }
     
     /**
@@ -61,6 +51,9 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     protected function setUp()
     {
+        if (!TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
+            $this->markTestSkipped('This test case requires TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS to be enabled.');
+        }
     }
     
     /**
@@ -68,6 +61,9 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     protected function tearDown()
     {
+        if ($this->status == PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED) {
+            return;
+        }
         $storageClient = $this->createStorageInstance();
         for ($i = 1; $i <= self::$uniqId; $i++)
         {
@@ -91,8 +87,6 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
         return $storageClient;
     }
     
-    protected static $uniqId = 0;
-    
     protected function generateName()
     {
         self::$uniqId++;
@@ -104,17 +98,15 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testCreateTable()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            
-            $result = $storageClient->createTable($tableName);
-            $this->assertEquals($tableName, $result->Name);
-            
-            $result = $storageClient->listTables();
-            $this->assertEquals(1, count($result));
-            $this->assertEquals($tableName, $result[0]->Name);
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        
+        $result = $storageClient->createTable($tableName);
+        $this->assertEquals($tableName, $result->Name);
+        
+        $result = $storageClient->listTables();
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($tableName, $result[0]->Name);
     }
     
     /**
@@ -122,20 +114,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testTableExists()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName1 = $this->generateName();
-            $tableName2 = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            
-            $storageClient->createTable($tableName1);
-            $storageClient->createTable($tableName2);
+        $tableName1 = $this->generateName();
+        $tableName2 = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        
+        $storageClient->createTable($tableName1);
+        $storageClient->createTable($tableName2);
 
-            $result = $storageClient->tableExists($tableName2);
-            $this->assertTrue($result);
-            
-            $result = $storageClient->tableExists(md5(time()));
-            $this->assertFalse($result);
-        }
+        $result = $storageClient->tableExists($tableName2);
+        $this->assertTrue($result);
+        
+        $result = $storageClient->tableExists(md5(time()));
+        $this->assertFalse($result);
     }
     
     /**
@@ -143,19 +133,17 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testListTables()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName1 = $this->generateName();
-            $tableName2 = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            
-            $storageClient->createTable($tableName1);
-            $storageClient->createTable($tableName2);
+        $tableName1 = $this->generateName();
+        $tableName2 = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        
+        $storageClient->createTable($tableName1);
+        $storageClient->createTable($tableName2);
 
-            $result = $storageClient->listTables();
-            $this->assertEquals(2, count($result));
-            $this->assertEquals($tableName1, $result[0]->Name);
-            $this->assertEquals($tableName2, $result[1]->Name);
-        }
+        $result = $storageClient->listTables();
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($tableName1, $result[0]->Name);
+        $this->assertEquals($tableName2, $result[1]->Name);
     }
     
     /**
@@ -163,16 +151,14 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testDeleteTable()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            
-            $storageClient->createTable($tableName);
-            $storageClient->deleteTable($tableName);
-            
-            $result = $storageClient->listTables();
-            $this->assertEquals(0, count($result));
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        
+        $storageClient->createTable($tableName);
+        $storageClient->deleteTable($tableName);
+        
+        $result = $storageClient->listTables();
+        $this->assertEquals(0, count($result));
     }
     
     /**
@@ -180,20 +166,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testInsertEntity()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $result = $storageClient->insertEntity($tableName, $entity);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $result = $storageClient->insertEntity($tableName, $entity);
 
-            $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
-            $this->assertNotEquals('', $result->getEtag());
-            $this->assertEquals($entity, $result);
-        }
+        $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
+        $this->assertNotEquals('', $result->getEtag());
+        $this->assertEquals($entity, $result);
     }
     
     /**
@@ -201,21 +185,19 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testInsertEntity_Security_HtmlSpecialChars()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            $entity->FullName = 'XML <test>'; // this should work without breaking the XML
-            
-            $result = $storageClient->insertEntity($tableName, $entity);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        $entity->FullName = 'XML <test>'; // this should work without breaking the XML
+        
+        $result = $storageClient->insertEntity($tableName, $entity);
 
-            $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
-            $this->assertNotEquals('', $result->getEtag());
-            $this->assertEquals($entity, $result);
-        }
+        $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
+        $this->assertNotEquals('', $result->getEtag());
+        $this->assertEquals($entity, $result);
     }
     
     /**
@@ -223,20 +205,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testDeleteEntity_NoEtag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $result = $storageClient->insertEntity($tableName, $entity);
-            
-            $this->assertEquals($entity, $result);
-            
-            $storageClient->deleteEntity($tableName, $entity);
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $result = $storageClient->insertEntity($tableName, $entity);
+        
+        $this->assertEquals($entity, $result);
+        
+        $storageClient->deleteEntity($tableName, $entity);
     }
     
     /**
@@ -244,29 +224,27 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testDeleteEntity_Etag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $result = $storageClient->insertEntity($tableName, $entity);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $result = $storageClient->insertEntity($tableName, $entity);
 
-            $this->assertEquals($entity, $result);
+        $this->assertEquals($entity, $result);
 
-            // Set "old" etag
-            $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
-            
-            $exceptionThrown = false;
-            try {
-                $storageClient->deleteEntity($tableName, $entity, true);
-            } catch (Exception $ex) {
-                $exceptionThrown = true;
-            }
-            $this->assertTrue($exceptionThrown);
+        // Set "old" etag
+        $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
+        
+        $exceptionThrown = false;
+        try {
+            $storageClient->deleteEntity($tableName, $entity, true);
+        } catch (Exception $ex) {
+            $exceptionThrown = true;
         }
+        $this->assertTrue($exceptionThrown);
     }
     
     /**
@@ -274,19 +252,17 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntityById()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS)  {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            
-            $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey(), 'TSTest_TestEntity');
-            $this->assertEquals($entity, $result);
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        
+        $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey(), 'TSTest_TestEntity');
+        $this->assertEquals($entity, $result);
     }
     
     /**
@@ -294,21 +270,19 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntityById_Large()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS)  {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            $entity->setPartitionKey(str_repeat('a', 200));
-            $entity->setRowKey(str_repeat('a', 200));
-            
-            $storageClient->insertEntity($tableName, $entity);
-            
-            $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey(), 'TSTest_TestEntity');
-            $this->assertEquals($entity, $result);
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        $entity->setPartitionKey(str_repeat('a', 200));
+        $entity->setRowKey(str_repeat('a', 200));
+        
+        $storageClient->insertEntity($tableName, $entity);
+        
+        $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey(), 'TSTest_TestEntity');
+        $this->assertEquals($entity, $result);
     }
     
     /**
@@ -316,20 +290,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntityById_DynamicTableEntity()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS)  {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            
-            $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey());
-            $this->assertEquals($entity->FullName, $result->Name);
-            $this->assertType('Zend_Service_WindowsAzure_Storage_DynamicTableEntity', $result);
-        }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        
+        $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey());
+        $this->assertEquals($entity->FullName, $result->Name);
+        $this->assertType('Zend_Service_WindowsAzure_Storage_DynamicTableEntity', $result);
     }
     
     /**
@@ -337,24 +309,22 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testUpdateEntity_NoEtag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            $entity->Age = 0;
-            
-            $result = $storageClient->updateEntity($tableName, $entity);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        $entity->Age = 0;
+        
+        $result = $storageClient->updateEntity($tableName, $entity);
 
-            $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
-            $this->assertNotEquals('', $result->getEtag());
-            $this->assertEquals(0, $result->Age);
-            $this->assertEquals($entity, $result);
-        }
+        $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
+        $this->assertNotEquals('', $result->getEtag());
+        $this->assertEquals(0, $result->Age);
+        $this->assertEquals($entity, $result);
     }
     
     /**
@@ -362,28 +332,26 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testUpdateEntity_Etag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            $entity->Age = 0;
-            
-            // Set "old" etag
-            $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
-            
-            $exceptionThrown = false;
-            try {
-                $storageClient->updateEntity($tableName, $entity, true);
-            } catch (Exception $ex) {
-                $exceptionThrown = true;
-            }
-            $this->assertTrue($exceptionThrown);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        $entity->Age = 0;
+        
+        // Set "old" etag
+        $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
+        
+        $exceptionThrown = false;
+        try {
+            $storageClient->updateEntity($tableName, $entity, true);
+        } catch (Exception $ex) {
+            $exceptionThrown = true;
         }
+        $this->assertTrue($exceptionThrown);
     }
     
     /**
@@ -391,32 +359,30 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testMergeEntity_NoEtag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            
-            $dynamicEntity = new Zend_Service_WindowsAzure_Storage_DynamicTableEntity($entity->getPartitionKey(), $entity->getRowKey());
-            $dynamicEntity->Myproperty = 10;
-            $dynamicEntity->Otherproperty = "Test";
-            $dynamicEntity->Age = 0;
-            
-            $storageClient->mergeEntity($tableName, $dynamicEntity, false, array('Myproperty', 'Otherproperty')); // only update 'Myproperty' and 'Otherproperty'
-            
-            $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey());
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        
+        $dynamicEntity = new Zend_Service_WindowsAzure_Storage_DynamicTableEntity($entity->getPartitionKey(), $entity->getRowKey());
+        $dynamicEntity->Myproperty = 10;
+        $dynamicEntity->Otherproperty = "Test";
+        $dynamicEntity->Age = 0;
+        
+        $storageClient->mergeEntity($tableName, $dynamicEntity, false, array('Myproperty', 'Otherproperty')); // only update 'Myproperty' and 'Otherproperty'
+        
+        $result = $storageClient->retrieveEntityById($tableName, $entity->getPartitionKey(), $entity->getRowKey());
 
-            $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
-            $this->assertNotEquals('', $result->getEtag());
-            $this->assertNotEquals(0, $result->Age);
-            $this->assertEquals($entity->FullName, $result->Name);
-            $this->assertEquals($dynamicEntity->Myproperty, $result->Myproperty);
-            $this->assertEquals($dynamicEntity->Otherproperty, $result->Otherproperty);
-        }
+        $this->assertNotEquals('0001-01-01T00:00:00', $result->getTimestamp());
+        $this->assertNotEquals('', $result->getEtag());
+        $this->assertNotEquals(0, $result->Age);
+        $this->assertEquals($entity->FullName, $result->Name);
+        $this->assertEquals($dynamicEntity->Myproperty, $result->Myproperty);
+        $this->assertEquals($dynamicEntity->Otherproperty, $result->Otherproperty);
     }
     
     /**
@@ -424,32 +390,30 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testMergeEntity_Etag()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(1);
-            $entity = $entities[0];
-            
-            $storageClient->insertEntity($tableName, $entity);
-            
-            $dynamicEntity = new Zend_Service_WindowsAzure_Storage_DynamicTableEntity($entity->getPartitionKey(), $entity->getRowKey());
-            $dynamicEntity->Myproperty = 10;
-            $dynamicEntity->Otherproperty = "Test";
-            $dynamicEntity->Age = 0;
-            
-            // Set "old" etag
-            $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
-            
-            $exceptionThrown = false;
-            try {
-                $storageClient->mergeEntity($tableName, $dynamicEntity, true);
-            } catch (Exception $ex) {
-                $exceptionThrown = true;
-            }
-            $this->assertTrue($exceptionThrown);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(1);
+        $entity = $entities[0];
+        
+        $storageClient->insertEntity($tableName, $entity);
+        
+        $dynamicEntity = new Zend_Service_WindowsAzure_Storage_DynamicTableEntity($entity->getPartitionKey(), $entity->getRowKey());
+        $dynamicEntity->Myproperty = 10;
+        $dynamicEntity->Otherproperty = "Test";
+        $dynamicEntity->Age = 0;
+        
+        // Set "old" etag
+        $entity->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
+        
+        $exceptionThrown = false;
+        try {
+            $storageClient->mergeEntity($tableName, $dynamicEntity, true);
+        } catch (Exception $ex) {
+            $exceptionThrown = true;
         }
+        $this->assertTrue($exceptionThrown);
     }
     
     /**
@@ -457,20 +421,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_All()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(20);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities($tableName, 'TSTest_TestEntity');
-            $this->assertEquals(20, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(20);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        $result = $storageClient->retrieveEntities($tableName, 'TSTest_TestEntity');
+        $this->assertEquals(20, count($result));
     }
     
     /**
@@ -478,24 +440,22 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_All_DynamicTableEntity()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(20);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities($tableName);
-            $this->assertEquals(20, count($result));
-            
-            foreach ($result as $item)
-            {
-                $this->assertType('Zend_Service_WindowsAzure_Storage_DynamicTableEntity', $item);
-            }
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(20);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
+        }
+        
+        $result = $storageClient->retrieveEntities($tableName);
+        $this->assertEquals(20, count($result));
+        
+        foreach ($result as $item)
+        {
+            $this->assertType('Zend_Service_WindowsAzure_Storage_DynamicTableEntity', $item);
         }
     }
     
@@ -504,20 +464,18 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_Filtered()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(5);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities($tableName, 'PartitionKey eq \'' . $entities[0]->getPartitionKey() . '\' and RowKey eq \'' . $entities[0]->getRowKey() . '\'', 'TSTest_TestEntity');
-            $this->assertEquals(1, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(5);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        $result = $storageClient->retrieveEntities($tableName, 'PartitionKey eq \'' . $entities[0]->getPartitionKey() . '\' and RowKey eq \'' . $entities[0]->getRowKey() . '\'', 'TSTest_TestEntity');
+        $this->assertEquals(1, count($result));
     }
     
     /**
@@ -525,28 +483,26 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_Fluent1()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities(
-                $storageClient->select()
-                              ->from($tableName)
-                              ->where('Name eq ?', $entities[0]->FullName)
-                              ->andWhere('RowKey eq ?', $entities[0]->getRowKey()),
-                'TSTest_TestEntity'
-            );
-            
-            $this->assertEquals(1, count($result));
-            $this->assertEquals($entities[0], $result[0]);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        $result = $storageClient->retrieveEntities(
+            $storageClient->select()
+                          ->from($tableName)
+                          ->where('Name eq ?', $entities[0]->FullName)
+                          ->andWhere('RowKey eq ?', $entities[0]->getRowKey()),
+            'TSTest_TestEntity'
+        );
+        
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($entities[0], $result[0]);
     }
     
     /**
@@ -554,28 +510,26 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_Fluent2()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities(
-                $storageClient->select()
-                              ->from($tableName)
-                              ->where('Name eq ?', $entities[0]->FullName)
-                              ->andWhere('PartitionKey eq ?', $entities[0]->getPartitionKey()),
-                'TSTest_TestEntity'
-            );
-            
-            $this->assertEquals(1, count($result));
-            $this->assertEquals($entities[0], $result[0]);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        $result = $storageClient->retrieveEntities(
+            $storageClient->select()
+                          ->from($tableName)
+                          ->where('Name eq ?', $entities[0]->FullName)
+                          ->andWhere('PartitionKey eq ?', $entities[0]->getPartitionKey()),
+            'TSTest_TestEntity'
+        );
+        
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($entities[0], $result[0]);
     }
     
     /**
@@ -583,25 +537,23 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testRetrieveEntities_Fluent_Top()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            $result = $storageClient->retrieveEntities(
-                $storageClient->select()->top(4)
-                              ->from($tableName),
-                'TSTest_TestEntity'
-            );
-            
-            $this->assertEquals(4, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        $result = $storageClient->retrieveEntities(
+            $storageClient->select()->top(4)
+                          ->from($tableName),
+            'TSTest_TestEntity'
+        );
+        
+        $this->assertEquals(4, count($result));
     }
     
     /**
@@ -609,44 +561,42 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testBatchCommit_Success()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(20);
-            $entities1 = array_slice($entities, 0, 10);
-            $entities2 = array_slice($entities, 10, 10);
-            
-            // Insert entities
-            foreach ($entities1 as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            // Start batch
-            $batch = $storageClient->startBatch();
-            $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
-            
-            // Insert entities in batch
-            foreach ($entities2 as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            // Delete entities
-            foreach ($entities1 as $entity)
-            {
-                $storageClient->deleteEntity($tableName, $entity);
-            }
-            
-            // Commit
-            $batch->commit();
-            
-            // Verify
-            $result = $storageClient->retrieveEntities($tableName);
-            $this->assertEquals(10, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(20);
+        $entities1 = array_slice($entities, 0, 10);
+        $entities2 = array_slice($entities, 10, 10);
+        
+        // Insert entities
+        foreach ($entities1 as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        // Start batch
+        $batch = $storageClient->startBatch();
+        $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
+        
+        // Insert entities in batch
+        foreach ($entities2 as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
+        }
+        
+        // Delete entities
+        foreach ($entities1 as $entity)
+        {
+            $storageClient->deleteEntity($tableName, $entity);
+        }
+        
+        // Commit
+        $batch->commit();
+        
+        // Verify
+        $result = $storageClient->retrieveEntities($tableName);
+        $this->assertEquals(10, count($result));
     }
     
     /**
@@ -654,30 +604,28 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testBatchRollback_Success()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            
-            // Start batch
-            $batch = $storageClient->startBatch();
-            $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
-            
-            // Insert entities in batch
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            // Rollback
-            $batch->rollback();
-            
-            // Verify
-            $result = $storageClient->retrieveEntities($tableName);
-            $this->assertEquals(0, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        
+        // Start batch
+        $batch = $storageClient->startBatch();
+        $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
+        
+        // Insert entities in batch
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        // Rollback
+        $batch->rollback();
+        
+        // Verify
+        $result = $storageClient->retrieveEntities($tableName);
+        $this->assertEquals(0, count($result));
     }
     
     /**
@@ -685,42 +633,40 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testBatchCommit_FailUpdates()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            foreach ($entities as $entity)
-            {
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            // Make some entity updates with "old" etags
-            $entities[0]->Age = 0;
-            $entities[0]->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
-            $entities[1]->Age = 0;
-            $entities[1]->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
-            $entities[2]->Age = 0;
-            
-            // Start batch
-            $batch = $storageClient->startBatch();
-            $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
-            
-            // Update entities in batch
-            $storageClient->updateEntity($tableName, $entities[0], true);
-            $storageClient->updateEntity($tableName, $entities[1], true);
-            $storageClient->updateEntity($tableName, $entities[2], true);
-            
-            // Commit
-            $exceptionThrown = false;
-            try {
-                $batch->commit();
-            } catch (Exception $ex) {
-                $exceptionThrown = true;
-            }
-            $this->assertTrue($exceptionThrown);
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        foreach ($entities as $entity)
+        {
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        // Make some entity updates with "old" etags
+        $entities[0]->Age = 0;
+        $entities[0]->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
+        $entities[1]->Age = 0;
+        $entities[1]->setEtag('W/"datetime\'2009-05-27T12%3A15%3A15.3321531Z\'"');
+        $entities[2]->Age = 0;
+        
+        // Start batch
+        $batch = $storageClient->startBatch();
+        $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
+        
+        // Update entities in batch
+        $storageClient->updateEntity($tableName, $entities[0], true);
+        $storageClient->updateEntity($tableName, $entities[1], true);
+        $storageClient->updateEntity($tableName, $entities[2], true);
+        
+        // Commit
+        $exceptionThrown = false;
+        try {
+            $batch->commit();
+        } catch (Exception $ex) {
+            $exceptionThrown = true;
+        }
+        $this->assertTrue($exceptionThrown);
     }
     
     /**
@@ -728,37 +674,35 @@ class Zend_Service_WindowsAzure_TableStorageTest extends PHPUnit_Framework_TestC
      */
     public function testBatchCommit_FailPartition()
     {
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_TABLE_RUNTESTS) {
-            $tableName = $this->generateName();
-            $storageClient = $this->createStorageInstance();
-            $storageClient->createTable($tableName);
-            
-            $entities = $this->_generateEntities(10);
-            
-            // Start batch
-            $batch = $storageClient->startBatch();
-            $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
-            
-            // Insert entities in batch
-            foreach ($entities as $entity)
-            {
-                $entity->setPartitionKey('partition' . rand(1, 9));
-                $storageClient->insertEntity($tableName, $entity);
-            }
-            
-            // Commit
-            $exceptionThrown = false;
-            try {
-                $batch->commit();
-            } catch (Exception $ex) {
-                $exceptionThrown = true;
-            }
-            $this->assertTrue($exceptionThrown);
-            
-            // Verify
-            $result = $storageClient->retrieveEntities($tableName);
-            $this->assertEquals(0, count($result));
+        $tableName = $this->generateName();
+        $storageClient = $this->createStorageInstance();
+        $storageClient->createTable($tableName);
+        
+        $entities = $this->_generateEntities(10);
+        
+        // Start batch
+        $batch = $storageClient->startBatch();
+        $this->assertType('Zend_Service_WindowsAzure_Storage_Batch', $batch);
+        
+        // Insert entities in batch
+        foreach ($entities as $entity)
+        {
+            $entity->setPartitionKey('partition' . rand(1, 9));
+            $storageClient->insertEntity($tableName, $entity);
         }
+        
+        // Commit
+        $exceptionThrown = false;
+        try {
+            $batch->commit();
+        } catch (Exception $ex) {
+            $exceptionThrown = true;
+        }
+        $this->assertTrue($exceptionThrown);
+        
+        // Verify
+        $result = $storageClient->retrieveEntities($tableName);
+        $this->assertEquals(0, count($result));
     }
     
     /**
@@ -804,9 +748,4 @@ class TSTest_TestEntity extends Zend_Service_WindowsAzure_Storage_TableEntity
      * @azure Visible Edm.Boolean
      */
     public $Visible = false;
-}
-
-// Call Zend_Service_WindowsAzure_TableStorageTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == "Zend_Service_WindowsAzure_TableStorageTest::main") {
-    Zend_Service_WindowsAzure_TableStorageTest::main();
 }
