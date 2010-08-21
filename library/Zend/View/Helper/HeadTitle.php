@@ -104,7 +104,9 @@ class Zend_View_Helper_HeadTitle extends Zend_View_Helper_Placeholder_Container_
             require_once 'Zend/View/Exception.php';
             throw new Zend_View_Exception("You must use a valid attach order: 'PREPEND', 'APPEND' or 'SET'");
         }
+
         $this->_defaultAttachOrder = $setType;
+        return $this;
     }
 
     /**

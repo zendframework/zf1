@@ -238,6 +238,15 @@ class Zend_View_Helper_HeadTitleTest extends PHPUnit_Framework_TestCase
         $placeholder = $this->helper->headTitle('Bar');
         $this->assertContains('BarFoo', $placeholder->toString());
     }
+
+    /**
+     * @group ZF-10284
+     */
+    public function testReturnTypeDefaultAttachOrder()
+    {
+        $this->assertTrue($this->helper->setDefaultAttachOrder('PREPEND') instanceof  Zend_View_Helper_HeadTitle);
+        $this->assertEquals('PREPEND', $this->helper->getDefaultAttachOrder());
+    }
 }
 
 // Call Zend_View_Helper_HeadTitleTest::main() if this source file is executed directly.
