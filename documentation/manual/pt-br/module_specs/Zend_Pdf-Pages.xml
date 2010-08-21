@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 20872 -->
+<!-- EN-Revision: 22797 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.pdf.pages">
     <title>Trabalhando com Páginas</title>
@@ -22,17 +22,9 @@
             <classname>Zend_Pdf_Page</classname> diretamente ou chamando o método
             <methodname>Zend_Pdf::newPage()</methodname>, que retorna um objeto
             <classname>Zend_Pdf_Page</classname>. <methodname>Zend_Pdf::newPage()</methodname> cria
-            uma página já anexada à um documento. Páginas desanexadas não podem ser usadas com
-            múltiplos documentos <acronym>PDF</acronym>, mas elas possuem uma performance
-            relativamente maior.
-
-            <footnote>
-                <para>
-                    Esta é uma limitação da versão atual do Zend Framework. Esta limitação será
-                    eliminada nas versões futuras. Mas páginas desanexadas sempre terão um
-                    desempenho melhor no compartilhamento de páginas entre diversos documentos.
-                </para>
-            </footnote>
+            uma página já anexada à um documento. Páginas anexadas não podem ser usadas com outros
+            documentos <acronym>PDF</acronym> até que não esteja clonado. Veja a seção <link
+                linkend="zend.pdf.pages.cloning">Clonagem de página</link> para obter mais detalhes.
         </para>
 
         <para>
@@ -79,15 +71,15 @@ unset($pdf->pages[$id]);
     </sect2>
 
     <sect2 id="zend.pdf.pages.cloning">
-        <title>Clonagem de Página</title>
+        <title>Clonagem de página</title>
 
         <para>
-            Páginas <acronym>PDF</acronym> podem ser clonadas através da criação de um novo objeto
+            Páginas <acronym>PDF</acronym> podem ser duplicadas através da criação de um novo objeto
             <classname>Zend_Pdf_Page</classname> com uma página já existente como parâmetro:
         </para>
 
         <example id="zend.pdf.pages.example-2">
-            <title>Clonando páginas existentes</title>
+            <title>Duplicando páginas existentes</title>
 
             <programlisting language="php"><![CDATA[
 ...
@@ -96,11 +88,13 @@ $template = $pdf->pages[$templatePageIndex];
 ...
 // Adiciona nova página
 $page1 = new Zend_Pdf_Page($template);
+$page1->drawText('Algum texto...', $x, $y);
 $pdf->pages[] = $page1;
 ...
 
 // Adiciona outra página
 $page2 = new Zend_Pdf_Page($template);
+$page2->drawText('Outro texto...', $x, $y);
 $pdf->pages[] = $page2;
 ...
 
@@ -117,11 +111,60 @@ unset($pdf->pages[$templatePageIndex]);
 
         <caution>
             <para>
-                Importante! Uma página clonada compartilha alguns recursos do <acronym>PDF</acronym>
-                com uma página template, então ela só pode ser usada no mesmo documento como uma
-                página template. Um documento modificado pode ser salvo como um novo documento.
+                Importante! Uma página duplicada compartilha alguns recursos do
+                <acronym>PDF</acronym> com uma página template, então ela só pode ser usada no mesmo
+                documento como uma página template. Um documento modificado pode ser salvo como um
+                novo documento.
             </para>
         </caution>
+
+        <para>
+            <code>clone</code> operator may be used to create page which is not attached to any document.
+            It takes more time than duplicating page since it needs to copy all dependent objects
+            (used fonts, images and other resources), but it allows to use pages from different source
+            documents to create new one: 
+        </para>
+
+        <example id="zend.pdf.pages.example-3">
+            <title>Cloning existing page</title>
+
+            <programlisting language="php"><![CDATA[
+$page1 = clone $pdf1->pages[$templatePageIndex1];
+$page2 = clone $pdf2->pages[$templatePageIndex2];
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
+        
+        <para>
+            If several template pages are planned to be used as templates then it could be more efficient 
+            to utilize <classname>Zend_Pdf_Resource_Extractor</classname> class which gives an ability 
+            to share resources between cloned pages - fonts, images, etc. (otherwise new resource copy 
+            will be created for each cloned page):  
+        </para>
+
+        <example id="zend.pdf.pages.example-4">
+            <title>
+                Cloning existing page using <classname>Zend_Pdf_Resource_Extractor</classname> class
+            </title>
+
+            <programlisting language="php"><![CDATA[
+$extractor = new Zend_Pdf_Resource_Extractor();
+....
+$page1 = $extractor->clonePage($pdf->pages[$templatePageIndex1]);
+$page2 = $extractor->clonePage($pdf->pages[$templatePageIndex2]);
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
     </sect2>
 </sect1>
 <!--
