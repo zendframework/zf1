@@ -45,6 +45,13 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
     protected $_registry = null;
 
     /**
+     * Holds the manifest repository taken from the registry.
+     *
+     * @var Zend_Tool_Framework_Manifest_Repository
+     */
+      protected $_manifestRepository = null;
+
+    /**
      * @var Zend_Tool_Framework_Client_Request
      */
     protected $_request = null;
@@ -282,7 +289,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             'value'      => $consoleActionName,
             'clientName' => 'console'
             );
-        
+
         // is the action name valid?
         $actionMetadata = $this->_manifestRepository->getMetadata($actionSearchCriteria);
 
@@ -293,7 +300,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             $actionSearchCriteria['clientName'] = 'all';
             $actionMetadata = $this->_manifestRepository->getMetadata($actionSearchCriteria);
         }
-        
+
         // if no action, handle error
         if (!$actionMetadata) {
             require_once 'Zend/Tool/Framework/Client/Exception.php';
@@ -335,7 +342,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             'value'      => $consoleProviderName,
             'clientName' => 'console'
             );
-        
+
         // get the cli provider names from the manifest
         $providerMetadata = $this->_manifestRepository->getMetadata($providerSearchCriteria);
 
@@ -346,7 +353,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             $providerSearchCriteria['clientName'] = 'all';
             $providerMetadata = $this->_manifestRepository->getMetadata($providerSearchCriteria);
         }
-            
+
         if (!$providerMetadata) {
             require_once 'Zend/Tool/Framework/Client/Exception.php';
             throw new Zend_Tool_Framework_Client_Exception(
@@ -369,7 +376,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             'providerName' => $providerMetadata->getProviderName(),
             'clientName'   => 'console'
             );
-        
+
         $providerSpecialtyMetadata = $this->_manifestRepository->getMetadata($providerSpecialtySearchCriteria);
 
         if (!$providerSpecialtyMetadata) {
@@ -378,7 +385,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
             $providerSpecialtySearchCriteria['clientName'] = 'all';
             $providerSpecialtyMetadata = $this->_manifestRepository->getMetadata($providerSpecialtySearchCriteria);
         }
-        
+
         if (!$providerSpecialtyMetadata) {
             require_once 'Zend/Tool/Framework/Client/Exception.php';
             throw new Zend_Tool_Framework_Client_Exception(
