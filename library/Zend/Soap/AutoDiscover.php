@@ -327,7 +327,7 @@ class Zend_Soap_AutoDiscover implements Zend_Server_Interface
         }
         $this->_wsdl = $wsdl;
 
-        return this;
+        return $this;
     }
 
     /**
