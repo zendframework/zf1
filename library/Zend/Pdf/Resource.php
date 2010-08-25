@@ -66,13 +66,20 @@ abstract class Zend_Pdf_Resource
      */
     public function __construct($resource)
     {
+        if ($resource instanceof Zend_Pdf_Element_Object) {
+            $this->_objectFactory = $resource->getFactory();
+            $this->_resource      = $resource;
+
+            return;
+        }
+
         require_once 'Zend/Pdf/ElementFactory.php';
 
-        $this->_objectFactory     = Zend_Pdf_ElementFactory::createFactory(1);
+        $this->_objectFactory = Zend_Pdf_ElementFactory::createFactory(1);
         if ($resource instanceof Zend_Pdf_Element) {
-            $this->_resource      = $this->_objectFactory->newObject($resource);
+            $this->_resource  = $this->_objectFactory->newObject($resource);
         } else {
-            $this->_resource      = $this->_objectFactory->newStreamObject($resource);
+            $this->_resource  = $this->_objectFactory->newStreamObject($resource);
         }
     }
 
@@ -96,7 +103,7 @@ abstract class Zend_Pdf_Resource
         }
 
         $this->_pageDictionary = $factory->newObject($dictionary);
-        $this->_objFactory     = $factory;
+        $this->_objectFactory  = $factory;
         $this->_attached       = false;
         $this->_style          = null;
         $this->_font           = null;

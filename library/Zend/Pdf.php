@@ -50,6 +50,9 @@ require_once 'Zend/Pdf/Font.php';
 /** Zend_Pdf_Resource_Extractor */
 require_once 'Zend/Pdf/Resource/Extractor.php';
 
+/** Zend_Pdf_Canvas */
+require_once 'Zend/Pdf/Canvas.php';
+
 
 /** Internally used classes */
 require_once 'Zend/Pdf/Element.php';

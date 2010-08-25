@@ -292,4 +292,3 @@ class Zend_Pdf_Style
     }
 
 }
-
