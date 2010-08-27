@@ -150,7 +150,8 @@ abstract class Zend_Pdf_Canvas_Abstract implements Zend_Pdf_Canvas_Interface
             $this->scale($xScale, $yScale);
         }
 
-        $contentsToDraw = $canvas->_getContents();
+        $contentsToDraw = $canvas->getContents();
+        /** @todo implementation */
 
         $this->restoreGS();
 
