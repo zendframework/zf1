@@ -30,6 +30,46 @@
  */
 interface Zend_Pdf_Canvas_Interface
 {
+    /**
+     * Returns dictionaries of used resources.
+     *
+     * Used for canvas implementations interoperability
+     *
+     * Structure of the returned array:
+     * array(
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   ...
+     *   'ProcSet' => array()
+     * )
+     *
+     * where ProcSet array is a list of used procedure sets names (strings).
+     * Allowed procedure set names: 'PDF', 'Text', 'ImageB', 'ImageC', 'ImageI'
+     *
+     * @internal
+     * @return array
+     */
+    public function getResources();
+
+    /**
+     * Get drawing instructions stream
+     *
+     * It has to be returned as a PDF stream object to make it reusable.
+     *
+     * @internal
+     * @returns Zend_Pdf_Resource_ContentStream
+     */
+    public function getContents();
 
     /**
      * Return canvas height.
@@ -58,7 +98,7 @@ interface Zend_Pdf_Canvas_Interface
      * @param float $y2
      * @return Zend_Pdf_Canvas_Interface
      */
-    public function drawCanvas($canvas, $x1, $y1, $x2 = null, $y2 = null);
+    public function drawCanvas(Zend_Pdf_Canvas_Interface $canvas, $x1, $y1, $x2 = null, $y2 = null);
 
     /**
      * Set fill color.

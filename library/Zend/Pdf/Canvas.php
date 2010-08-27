@@ -34,6 +34,8 @@ class Zend_Pdf_Canvas extends Zend_Pdf_Canvas_Abstract
     /**
      * Canvas procedure sets.
      *
+     * Allowed values: 'PDF', 'Text', 'ImageB', 'ImageC', 'ImageI'.
+     *
      * @var array
      */
     protected $_procSet = array();
@@ -83,7 +85,8 @@ class Zend_Pdf_Canvas extends Zend_Pdf_Canvas_Abstract
      *
      * Method returns a name of the resource which can be used
      * as a resource reference within drawing instructions stream
-     * Allowed types: 'XObject' (image), 'Font', 'ExtGState'
+     * Allowed types: 'ExtGState', 'ColorSpace', 'Pattern', 'Shading',
+     * 'XObject', 'Font', 'Properties'
      *
      * @param string $type
      * @param Zend_Pdf_Resource $resource
@@ -93,7 +96,6 @@ class Zend_Pdf_Canvas extends Zend_Pdf_Canvas_Abstract
     {
         // Check, that resource is already attached to resource set.
         $resObject = $resource->getResource();
-
         foreach ($this->_resources[$type] as $resName => $collectedResObject) {
             if ($collectedResObject === $resObject) {
                 return $resName;
@@ -108,6 +110,54 @@ class Zend_Pdf_Canvas extends Zend_Pdf_Canvas_Abstract
         $this->_resources[$type][$newResName] = $resObject;
 
         return $newResName;
+    }
+
+    /**
+     * Returns dictionaries of used resources.
+     *
+     * Used for canvas implementations interoperability
+     *
+     * Structure of the returned array:
+     * array(
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   ...
+     *   'ProcSet' => array()
+     * )
+     *
+     * where ProcSet array is a list of used procedure sets names (strings).
+     * Allowed procedure set names: 'PDF', 'Text', 'ImageB', 'ImageC', 'ImageI'
+     *
+     * @internal
+     * @return array
+     */
+    public function getResources()
+    {
+        $this->_resources['ProcSet'] = array_keys($this->_procSet);
+        return $this->_resources;
+    }
+
+    /**
+     * Get drawing instructions stream
+     *
+     * It has to be returned as a PDF stream object to make it reusable.
+     *
+     * @internal
+     * @returns Zend_Pdf_Resource_ContentStream
+     */
+    public function getContents()
+    {
+        /** @todo implementation */
     }
 
     /**

@@ -47,7 +47,7 @@ class Zend_Pdf_Resource_GraphicsState extends Zend_Pdf_Resource
     /**
      * Object constructor.
      *
-     * @param Zend_Pdf_Element_Object
+     * @param Zend_Pdf_Element_Object $extGStateObject
      * @throws Zend_Pdf_Exception
      */
     public function __construct(Zend_Pdf_Element_Object $extGStateObject = null)

@@ -29,6 +29,7 @@ require_once 'Zend/Pdf/Element/Name.php';
 require_once 'Zend/Pdf/Element/Null.php';
 require_once 'Zend/Pdf/Element/Numeric.php';
 require_once 'Zend/Pdf/Element/String.php';
+require_once 'Zend/Pdf/Resource/Unified.php';
 
 require_once 'Zend/Pdf/Canvas/Abstract.php';
 
@@ -209,7 +210,7 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
 
             }
         } else if ($param1 instanceof Zend_Pdf_Page && $param2 === null && $param3 === null) {
-            // Clone existing page.
+            // Duplicate existing page.
             // Let already existing content and resources to be shared between pages
             // We don't give existing content modification functionality, so we don't need "deep copy"
             $this->_objFactory = $param1->_objFactory;
@@ -322,7 +323,8 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
      *
      * Method returns a name of the resource which can be used
      * as a resource reference within drawing instructions stream
-     * Allowed types: 'XObject' (image), 'Font', 'ExtGState'
+     * Allowed types: 'ExtGState', 'ColorSpace', 'Pattern', 'Shading',
+     * 'XObject', 'Font', 'Properties'
      *
      * @param string $type
      * @param Zend_Pdf_Resource $resource
@@ -380,6 +382,72 @@ class Zend_Pdf_Page extends Zend_Pdf_Canvas_Abstract
         }
 
         $this->_dictionary->Resources->ProcSet->items[] = new Zend_Pdf_Element_Name($procSetName);
+    }
+
+    /**
+     * Returns dictionaries of used resources.
+     *
+     * Used for canvas implementations interoperability
+     *
+     * Structure of the returned array:
+     * array(
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   <resTypeName> => array(
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      <resName> => <Zend_Pdf_Resource object>,
+     *                      ...
+     *                    ),
+     *   ...
+     *   'ProcSet' => array()
+     * )
+     *
+     * where ProcSet array is a list of used procedure sets names (strings).
+     * Allowed procedure set names: 'PDF', 'Text', 'ImageB', 'ImageC', 'ImageI'
+     *
+     * @internal
+     * @return array
+     */
+    public function getResources()
+    {
+        $resources = array();
+        $resDictionary = $this->_dictionary->Resources;
+
+        foreach ($resDictionary->getKeys() as $resType) {
+            $resources[$resType] = array();
+
+            if ($resType == 'ProcSet') {
+                foreach ($resDictionary->ProcSet->items as $procSetEntry) {
+                    $resources[$resType][] = $procSetEntry->value;
+                }
+            } else {
+                $resMap = $resDictionary->$resType;
+
+                foreach ($resMap->getKeys() as $resId) {
+                    $resources[$resType][$resId] =new Zend_Pdf_Resource_Unified($resMap->$resId);
+                }
+            }
+        }
+
+        return $resources;
+    }
+
+    /**
+     * Get drawing instructions stream
+     *
+     * It has to be returned as a PDF stream object to make it reusable.
+     *
+     * @internal
+     * @returns Zend_Pdf_Resource_ContentStream
+     */
+    public function getContents()
+    {
+        /** @todo implementation */
     }
 
     /**

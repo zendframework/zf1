@@ -92,7 +92,8 @@ abstract class Zend_Pdf_Canvas_Abstract implements Zend_Pdf_Canvas_Interface
      *
      * Method returns a name of the resource which can be used
      * as a resource reference within drawing instructions stream
-     * Allowed types: 'XObject' (image), 'Font', 'ExtGState'
+     * Allowed types: 'ExtGState', 'ColorSpace', 'Pattern', 'Shading',
+     * 'XObject', 'Font', 'Properties'
      *
      * @param string $type
      * @param Zend_Pdf_Resource $resource
@@ -113,9 +114,46 @@ abstract class Zend_Pdf_Canvas_Abstract implements Zend_Pdf_Canvas_Interface
      * @param float $y2
      * @return Zend_Pdf_Canvas_Interface
      */
-    public function drawCanvas($canvas, $x1, $y1, $x2 = null, $y2 = null)
+    public function drawCanvas(Zend_Pdf_Canvas_Interface $canvas, $x1, $y1, $x2 = null, $y2 = null)
     {
-        /** @todo implementation */
+        $this->saveGS();
+
+        $this->translate($x1, $y1);
+
+        if ($x2 === null) {
+            $with = $canvas->getWidth();
+        } else {
+            $with = $x2 - $x1;
+        }
+        if ($y2 === null) {
+            $height = $canvas->getHeight();
+        } else {
+            $height = $y2 - $y1;
+        }
+
+        $this->clipRectangle(0, 0, $with, $height);
+
+        if ($x2 !== null  ||  $y2 !== null) {
+            // Drawn canvas has to be scaled.
+            if ($x2 !== null) {
+                $xScale = $with/$canvas->getWidth();
+            } else {
+                $xScale = 1;
+            }
+
+            if ($y2 !== null) {
+                $yScale = $height/$canvas->getHeight();
+            } else {
+                $yScale = 1;
+            }
+
+            $this->scale($xScale, $yScale);
+        }
+
+        $contentsToDraw = $canvas->_getContents();
+
+        $this->restoreGS();
+
         return $this;
     }
 

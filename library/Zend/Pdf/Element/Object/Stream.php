@@ -298,7 +298,7 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
     {
         if ($property == 'dictionary') {
             /**
-             * If stream is note decoded yet, then store original decoding options (do it only once).
+             * If stream is not decoded yet, then store original decoding options (do it only once).
              */
             if (( !$this->_streamDecoded ) && ($this->_initialDictionaryData === null)) {
                 $this->_initialDictionaryData = $this->_extractDictionaryData();
