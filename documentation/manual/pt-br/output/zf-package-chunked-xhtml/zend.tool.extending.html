@@ -1,0 +1,957 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Extending Zend_Tool - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.tool.usage.cli.html">Using Zend_Tool On The Command Line</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.tool.html">Zend_Tool</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.tool.framework.html">Zend_Tool_Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.tool.extending" class="section"><div class="info"><h1 class="title">Extending Zend_Tool</h1></div>
+    
+
+    <div class="section" id="zend.tool.extending.overview" name="zend.tool.extending.overview"><div class="info"><h1 class="title">Overview of Zend_Tool</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Tool_Framework</span> is a framework for exposing common
+            functionalities such as the creation of project scaffolds, code
+            generation, search index generation, and much more. Functionality may be
+            written and exposed via <acronym class="acronym">PHP</acronym> classes dropped into the
+            <acronym class="acronym">PHP</acronym> <span class="property">include_path</span>, providing incredible
+            flexibility of implementation. The functionality may then be consumed by writing
+            implementation and/or protocol-specific clients -- such as console
+            clients, <acronym class="acronym">XML-RPC</acronym>, <acronym class="acronym">SOAP</acronym>, and much more.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Tool_Project</span> builds on and extends the capabilities of
+            <span class="classname">Zend_Tool_Framework</span> to that of managing a &quot;project&quot;. In general,
+            a &quot;project&quot; is a planned endeavor or an initiative. In the computer world, projects
+            generally are a collection of resources. These resources can be files, directories,
+            databases, schemas, images, styles, and more.
+        </p>
+    </div>
+
+    <div class="section" id="zend.tool.extending.zend-tool-framework" name="zend.tool.extending.zend-tool-framework"><div class="info"><h1 class="title">Zend_Tool_Framework Extensions</h1></div>
+        
+
+        <div class="section" id="zend.tool.extending.zend-tool-framework.architecture" name="zend.tool.extending.zend-tool-framework.architecture"><div class="info"><h1 class="title">Overall Architecture</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Tool_Framework</span> provides the following:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Common interfaces and abstracts</em> that allow
+                        developers to create functionality and capabilities that are
+                        dispatchable by tooling clients.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Base client functionality</em> and a concrete
+                        console implementation that connect external tools and
+                        interfaces to the <span class="classname">Zend_Tool_Framework</span>. The Console
+                        client may be used in <acronym class="acronym">CLI</acronym> environments such as unix
+                        shells and the Windows console.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">&quot;Provider&quot; and &quot;Manifest&quot; interfaces</em> that
+                        can be utilized by the tooling system. &quot;Providers&quot; represent the
+                        functional aspect of the framework, and define the actions that
+                        tooling clients may call. &quot;Manifests&quot; act as metadata registries
+                        that provide additional context for the various defined
+                        providers.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">An introspective loading system</em> that will
+                        scan the environment for providers and determine what is
+                        required to dispatch them.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">A standard set of system providers</em> that
+                        allow the system to report what the full capabilities of the
+                        system are as well as provide useful feedback. This also
+                        includes a comprehensive &quot;Help System&quot;.
+                    </p>
+                </li>
+            </ul>
+
+            <p class="para">
+                Definitions that you should be aware of through this manual with respect
+                to <span class="classname">Zend_Tool_Framework</span> include:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <span class="classname">Zend_Tool_Framework</span> - The framework which exposes
+                        tooling capabilities.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Tooling Client</em> - A developer tool that connects
+                        to and consumes <span class="classname">Zend_Tool_Framework</span>.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Client</em> - The subsystem of
+                        <span class="classname">Zend_Tool_Framework</span> that exposes an interface such
+                        that tooling clients can connect, query and execute commands.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Console Client / Command Line Interface /
+                        <var class="filename">zf.php</var></em> - The tooling client for the command
+                        line. </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Provider</em> - A subsystem and a collection of
+                        built-in functionality that the framework exports.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <em class="emphasis">Manifest</em> - A subsystem for defining,
+                        organizing, and disseminating provider requirement data.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="classname">Zend_Tool_Project</span> Provider - A set of providers
+                        specifically for creating and maintaining Zend Framework-based
+                        projects.
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" id="zend.tool.extending.zend-tool-framework.cli-client" name="zend.tool.extending.zend-tool-framework.cli-client"><div class="info"><h1 class="title">Understanding the CLI Client</h1></div>
+            
+
+            <p class="para">
+                The <acronym class="acronym">CLI</acronym>, or command line tool (internally known as the console
+                tool), is currently the primary interface for dispatching
+                <span class="classname">Zend_Tool</span> requests. With the <acronym class="acronym">CLI</acronym> tool,
+                developers can issue tooling requests inside the &quot;command line windows&quot;, also
+                commonly known as a &quot;terminal&quot; window. This environment is predominant in the *nix
+                environment, but also has a common implementation in windows with the
+                <var class="filename">cmd.exe</var>, console2 and also with the Cygwin project.
+            </p>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.cli-client.setup-general" name="zend.tool.extending.zend-tool-framework.cli-client.setup-general"><div class="info"><h1 class="title">Setting up the CLI tool</h1></div>
+                
+
+                <p class="para">
+                    To issue tooling requests via the command line client, you first
+                    need to set up the client so that your system can handle the &quot;zf&quot;
+                    command. The command line client, for all intents and purposes, is
+                    the <var class="filename">.sh</var> or <var class="filename">.bat</var> file that is provided
+                    with your Zend Framework distribution. In trunk, it can be found here:
+                    <a href="http://framework.zend.com/svn/framework/standard/trunk/bin/" class="link external">&raquo; http://framework.zend.com/svn/framework/standard/trunk/bin/</a>.
+                </p>
+
+                <p class="para">
+                    As you can see, there are 3 files in the <var class="filename">/bin/</var>
+                    directory: a <var class="filename">zf.php</var>, <var class="filename">zf.sh</var>, and
+                    <var class="filename">zf.bat</var>. The <var class="filename">zf.sh</var> and the
+                    <var class="filename">zf.bat</var> are the operating system specific client
+                    wrappers: <var class="filename">zf.sh</var> for the *nix environment, and
+                    <var class="filename">zf.bat</var> for the Win32 environment. These client wrappers are
+                    responsible for finding the proper <var class="filename">php.exe</var>, finding the
+                    <var class="filename">zf.php</var>, and passing on the client request. The
+                    <var class="filename">zf.php</var> is the responsible for handling understanding
+                    your environment, constructing the proper include_path, and passing
+                    what is provided on the command line to the proper library component
+                    for dispatching.
+                </p>
+
+                <p class="para">
+                    Ultimately, you want to ensure two things to make everything work
+                    regardless of the operating system you are on:
+                </p>
+
+                <ol type="1">
+                    <li class="listitem">
+                        <p class="para">
+                            <var class="filename">zf.sh/zf.bat</var> is reachable from your system
+                            path. This is the ability to call <strong class="command">zf</strong> from
+                            anywhere on your command line, regardless of what your
+                            current working directory is.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <var class="filename">ZendFramework/library</var> is in your
+                            <span class="property">include_path</span>.
+                        </p>
+                    </li>
+                </ol>
+
+                <blockquote><p><b class="note">Note</b>: 
+                    
+                        Note: while the above are the most ideal
+                        requirements, you can simply download Zend Framework and expect it
+                        to work as <var class="filename">./path/to/zf.php</var> some command.
+                    <br />
+                </p></blockquote>
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.cli-client.setup-starnix" name="zend.tool.extending.zend-tool-framework.cli-client.setup-starnix"><div class="info"><h1 class="title">Setting up the CLI tool on Unix-like Systems</h1></div>
+                
+
+                <p class="para">
+                    The most common setup in the *nix environment, is to copy the
+                    <var class="filename">zf.sh</var> and <var class="filename">zf.php</var> into the same
+                    directory as your <acronym class="acronym">PHP</acronym> binary. This can generally be found in
+                    one of the following places:
+                </p>
+
+                <div class="programlisting text"><div class="textcode"><div class="text" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">/usr/bin</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">/usr/local/bin</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">/usr/local/ZendServer/bin/</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">/Applications/ZendServer/bin/</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    To find out the location of your <acronym class="acronym">PHP</acronym> binary, you can execute
+                    &#039;which php&#039; on the command line. This will return the location of the
+                    <acronym class="acronym">PHP</acronym> binary you will be using to run <acronym class="acronym">PHP</acronym>
+                    scripts in this environment.
+                </p>
+
+                <p class="para">
+                    The next order of business is to ensure that Zend Framework
+                    library is set up correctly inside of the system <acronym class="acronym">PHP</acronym>
+                    <span class="property">include_path</span>. To find out where your
+                    <span class="property">include_path</span> is located, you can execute
+                    <strong class="command">php -i</strong> and look for the <span class="property">include_path</span>
+                    variable, or more succinctly, execute
+                    <strong class="command">php -i | grep include_path</strong>. Once you have found where
+                    your <span class="property">include_path</span> is located (this will generally be
+                    something like <var class="filename">/usr/lib/php</var>,
+                    <var class="filename">/usr/share/php</var>, <var class="filename">/usr/local/lib/php</var>, or
+                    similar), ensure that the contents of the <var class="filename">/library/</var>
+                    directory are put inside your <span class="property">include_path</span> specified
+                    directory.
+                </p>
+
+                <p class="para">
+                    Once you have done those two things, you should be able to issue a
+                    command and get back the proper response like this:
+                </p>
+
+                <p class="para">
+                    <div class="inlinemediaobject"><div class="imageobject"><a href="images/d481d625821a97b9a5eb2cec99dca50e-zend.tool.framework.cliversionunix.png"><img src="images/d481d625821a97b9a5eb2cec99dca50e-zend.tool.framework.cliversionunix.png" alt="zend.tool.framework.cliversionunix.png" width="450" height="247" /></a></div></div>
+                </p>
+
+                <p class="para">
+                    If you do not see this type of output, go back and check your setup
+                    to ensure you have all of the necessary pieces in the proper place.
+                </p>
+
+                <p class="para">
+                    There are a couple of alternative setups you might want to employ
+                    depending on your servers configuration, your level of access, or
+                    for other reasons.
+                </p>
+
+                <p class="para">
+                    <em class="emphasis">Alternative Setup</em> involves keeping the Zend
+                    Framework download together as is, and creating a link from a
+                    <b><tt>PATH</tt></b> location to the <var class="filename">zf.sh</var>. What this
+                    means is you can place the contents of the ZendFramework download into a
+                    location such as <var class="filename">/usr/local/share/ZendFramework</var>, or more
+                    locally like <var class="filename">/home/username/lib/ZendFramework</var>, and creating
+                    a symbolic link to the <var class="filename">zf.sh</var>.
+                </p>
+
+                <p class="para">
+                    Assuming you want to put the link inside <var class="filename">/usr/local/bin</var>
+                    (this could also work for placing the link inside
+                    <var class="filename">/home/username/bin/</var> for example) you would issue a
+                    command similar to this:
+                </p>
+
+                <div class="programlisting sh"><div class="shcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">ln -s /usr/local/share/ZendFramework/bin/zf.sh /usr/local/bin/zf</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"># OR (for example)</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">ln -s /home/username/lib/ZendFramework/bin/zf.sh /home/username/bin/zf</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This will create a link which you should be able to access globally
+                    on the command line.
+                </p>
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.cli-client.setup-windows" name="zend.tool.extending.zend-tool-framework.cli-client.setup-windows"><div class="info"><h1 class="title">Setting up the CLI tool on Windows</h1></div>
+                
+
+                <p class="para">
+                    The most common setup in the Windows Win32 environment, is to copy
+                    the <var class="filename">zf.bat</var> and <var class="filename">zf.php</var> into the same
+                    directory as your <acronym class="acronym">PHP</acronym> binary. This can generally be found in
+                    one of the following places:
+                </p>
+
+                <div class="programlisting text"><div class="textcode"><div class="text" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">C:\PHP</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">C:\Program Files\ZendServer\bin\</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">C:\WAMP\PHP\bin</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    You should be able to run <var class="filename">php.exe</var> on the command line.
+                    If you are not able to, first check the documentation that came with
+                    your <acronym class="acronym">PHP</acronym> distribution, or ensure that the path to
+                    <var class="filename">php.exe</var> is in your
+                    Windows <b><tt>PATH</tt></b> environment variable.
+                </p>
+
+                <p class="para">
+                    The next order of business is to ensure that Zend Framework
+                    library is set up correctly inside of the system <acronym class="acronym">PHP</acronym>
+                    <span class="property">include_path</span>. To find out where your
+                    <span class="property">include_path</span> is located, you can type
+                    <strong class="command">php -i</strong> and look for the <span class="property">include_path</span>
+                    variable, or more succinctly execute
+                    <strong class="command">php -i | grep include_path</strong> if you have Cygwin setup with
+                    grep available. Once you have found where your
+                    <span class="property">include_path</span> is located (this will generally be
+                    something like <var class="filename">C:\PHP\pear</var>,
+                    <var class="filename">C:\PHP\share</var>,
+                    <var class="filename">C:\Program%20Files\ZendServer\share</var> or similar), ensure
+                    that the contents of the library/ directory are put inside your
+                    <span class="property">include_path</span> specified directory.
+                </p>
+
+                <p class="para">
+                    Once you have done those two things, you should be able to issue a
+                    command and get back the proper response like this:
+                </p>
+
+                <p class="para">
+                    <div class="inlinemediaobject"><div class="imageobject"><a href="images/d481d625821a97b9a5eb2cec99dca50e-zend.tool.framework.cliversionwin32.png"><img src="images/d481d625821a97b9a5eb2cec99dca50e-zend.tool.framework.cliversionwin32.png" alt="zend.tool.framework.cliversionwin32.png" width="450" height="306" /></a></div></div>
+                </p>
+
+                <p class="para">
+                    If you do not see this type of output, go back and check your setup
+                    to ensure you have all of the necessary pieces in the proper place.
+                </p>
+
+                <p class="para">
+                    There are a couple of alternative setups you might want to employ
+                    depending on your server&#039;s configuration, your level of access, or
+                    for other reasons.
+                </p>
+
+                <p class="para">
+                    <em class="emphasis">Alternative Setup</em> involves keeping the Zend
+                    Framework download together as is, and altering both your system
+                    <b><tt>PATH</tt></b> as well as the <var class="filename">php.ini</var> file.
+                    In your user&#039;s environment, make sure to add
+                    <var class="filename">C:\Path\To\ZendFramework\bin</var>, so that your
+                    <var class="filename">zf.bat</var> file is executable. Also, alter the
+                    <var class="filename">php.ini</var> file to ensure that
+                    <var class="filename">C:\Path\To\ZendFramework\library</var> is in your
+                    <span class="property">include_path</span>.
+                </p>
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.cli-client.setup-othernotes" name="zend.tool.extending.zend-tool-framework.cli-client.setup-othernotes"><div class="info"><h1 class="title">Other Setup Considerations</h1></div>
+                
+
+                <p class="para">
+                    If for some reason you do not want Zend Framework library inside
+                    your <span class="property">include_path</span>, there is another option. There are
+                    two special environment variables that <var class="filename">zf.php</var> will
+                    utilize to determine the location of your Zend Framework
+                    installation.
+                </p>
+
+                <p class="para">
+                    The first is <b><tt>ZEND_TOOL_INCLUDE_PATH_PREPEND</tt></b>, which will
+                    prepend the value of this environment variable to the system
+                    (<var class="filename">php.ini</var>) <span class="property">include_path</span> before loading
+                    the client.
+                </p>
+
+                <p class="para">
+                    Alternatively, you might want to use
+                    <b><tt>ZEND_TOOL_INCLUDE_PATH</tt></b> to completely
+                    <em class="emphasis">replace</em> the system <span class="property">include_path</span>
+                    for one that makes sense specifically for the <strong class="command">zf</strong>
+                    command line tool.
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests" name="zend.tool.extending.zend-tool-framework.providers-and-manifests"><div class="info"><h1 class="title">Creating Providers</h1></div>
+            
+
+            <p class="para">
+                In general, a provider, on its own, is nothing more than the shell for a
+                developer to bundle up some capabilities they wish to dispatch with the
+                command line (or other) clients. It is an analogue to what a
+                &quot;controller&quot; is inside of your <acronym class="acronym">MVC</acronym> application.
+            </p>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.loading" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.loading"><div class="info"><h1 class="title">How Zend_Tool finds your Providers</h1></div>
+                
+
+                <p class="para">
+                    By default <span class="classname">Zend_Tool</span> uses the BasicLoader to find all
+                    the providers that you can run. It recursivly iterates all
+                    include path directories and opens all files that end
+                    with &quot;Manifest.php&quot; or &quot;Provider.php&quot;. All classes in these
+                    files are inspected if they implement either
+                    <span class="classname">Zend_Tool_Framework_Provider_Interface</span>
+                    or <span class="classname">Zend_Tool_Framework_Manifest_ProviderManifestable</span>.
+                    Instances of the provider interface make up for the real functionality
+                    and all their public methods are accessible as provider actions.
+                    The ProviderManifestable interface however requires the implementation of a
+                    method  <span class="methodname">getProviders()</span> which returns an array of
+                    instantiated provider interface instances.
+                </p>
+
+                <p class="para">
+                    The following naming rules apply on how you can access the providers
+                    that were found by the IncludePathLoader:
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            The last part of your classname split by underscore is used
+                            for the provider name, e.g. &quot;My_Provider_Hello&quot; leads to your
+                            provider being accessible by the name &quot;hello&quot;.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            If your provider has a method  <span class="methodname">getName()</span>
+                            it will be used instead of the previous method to determine
+                            the name.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            If your provider has &quot;Provider&quot; as prefix, e.g. it is called
+                            <span class="classname">My_HelloProvider</span> it will be stripped
+                            from the name so that the provider will be called &quot;hello&quot;.
+                        </p>
+                    </li>
+                </ul>
+
+                <blockquote><p><b class="note">Note</b>: 
+                    The IncludePathLoader does not follow symlinks, that means
+                    you cannot link provider functionality into your include paths,
+                    they have to be physically present in the include paths.<br />
+                </p></blockquote>
+
+                <div class="example"><div class="info"><p><b>Example #1 Exposing Your Providers with a Manifest</b></p></div>
+                    
+
+                    <div class="example-contents"><p>
+                        You can expose your providers to <span class="classname">Zend_Tool</span> by
+                        offering a manifest with a special filename ending with &quot;Manifest.php&quot;.
+                        A Provider Manifest is an implementation of the
+                        <span class="interface">Zend_Tool_Framework_Manifest_ProviderManifestable</span>
+                        and requires the  <span class="methodname">getProviders()</span> method to return
+                        an array of instantiated providers. In anticipation of our first
+                        own provider <span class="classname">My_Component_HelloProvider</span>
+                        we will create the following manifest:
+                    </p></div>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_Manifest</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; implements Zend_Tool_Framework_Manifest_ProviderManifestable</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getProviders<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">new</span> My_Component_HelloProvider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.basic" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.basic"><div class="info"><h1 class="title">Basic Instructions for Creating Providers</h1></div>
+                
+
+                <p class="para">
+                    As an example, if a developer wants to add the capability of showing
+                    the version of a datafile that his 3rd party component is working
+                    from, there is only one class the developer would need to implement.
+                    Assuming the component is called <span class="classname">My_Component</span>, he would
+                    create a class named <span class="classname">My_Component_HelloProvider</span> in a
+                    file named <var class="filename">HelloProvider.php</var> somewhere on the
+                    <span class="property">include_path</span>. This class would implement
+                    <span class="classname">Zend_Tool_Framework_Provider_Interface</span>, and the body of
+                    this file would only have to look like the following:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; implements Zend_Tool_Framework_Provider_Interface</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Hello from my provider!'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    Given that code above, and assuming the developer wishes to access
+                    this functionality through the console client, the call would look
+                    like this:
+                </p>
+
+                <div class="programlisting sh"><div class="shcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">% zf say hello</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Hello from my provider!</div></li></ol></div></div></div>
+
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.response" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.response"><div class="info"><h1 class="title">The response object</h1></div>
+                
+
+                <p class="para">
+                    As discussed in the architecture section <span class="classname">Zend_Tool</span> allows
+                    to hook different clients for using your <span class="classname">Zend_Tool</span>
+                    providers. To keep compliant with different clients you should use the response
+                    object to return messages from your providers instead of using
+                     <span class="methodname">echo()</span> or a similiar output mechanism. Rewritting our
+                    hello provider with this knowledge it looks like:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Tool_Framework_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getResponse</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">appendContent</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Hello from my provider!&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    As you can see one has to extend the
+                    <span class="classname">Zend_Tool_Framework_Provider_Abstract</span> to gain access to
+                    the Registry which holds the
+                    <span class="classname">Zend_Tool_Framework_Client_Response</span> instance.
+                </p>
+            </div>
+
+            <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced"><div class="info"><h1 class="title">Advanced Development Information</h1></div>
+                
+
+                <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.variables" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.variables"><div class="info"><h1 class="title">Passing Variables to a Provider</h1></div>
+                    
+
+                    <p class="para">
+                        The above &quot;Hello World&quot; example is great for simple commands, but
+                        what about something more advanced? As your scripting and tooling
+                        needs grow, you might find that you need the ability to accept
+                        variables. Much like function signatures have parameters, your
+                        tooling requests can also accept parameters.
+                    </p>
+
+                    <p class="para">
+                        Just as each tooling request can be isolated to a method within a
+                        class, the parameters of a tooling request can also be isolated in a
+                        very well known place. Parameters of the action methods of a
+                        provider can include the same parameters you want your client to
+                        utilize when calling that provider and action combination. For
+                        example, if you wanted to accept a name in the above example, you
+                        would probably do this in OO code:
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; implements Zend_Tool_Framework_Provider_Interface</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span> = <span style="color: #ff0000;">'Ralph'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Hello'</span> . <span style="color: #0000ff;">$name</span> . <span style="color: #ff0000;">', from my provider!'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <p class="para">
+                        The above example can then be called via the command line
+                        <strong class="command">zf say hello Joe</strong>. &quot;Joe&quot; will be supplied to the provider
+                        as a parameter of the method call. Also note, as you see that the
+                        parameter is optional, that means it is also optional on the command
+                        line, so that <strong class="command">zf say hello</strong> will still work, and default
+                        to the name &quot;Ralph&quot;.
+                    </p>
+                </div>
+
+                <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.prompt" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.prompt"><div class="info"><h1 class="title">Prompt the User for Input</h1></div>
+                    
+
+                    <p class="para">
+                        There are cases when the workflow of your provider requires
+                        to prompt the user for input. This can be done by requesting
+                        the client to ask for more the required input by calling:
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Tool_Framework_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span> = <span style="color: #ff0000;">'Ralph'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$nameResponse</span> = <span style="color: #0000ff;">$this</span>-&gt;_registry</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">getClient</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">promptInteractiveInput</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Whats your name?&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$name</span> = <span style="color: #0000ff;">$name</span>-&gt;<span style="color: #006600;">getContent</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Hello'</span> . <span style="color: #0000ff;">$name</span> . <span style="color: #ff0000;">', from my provider!'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <p class="para">
+                        This command throws an exception if the current client is not
+                        able to handle interactive requests. In case of the default Console Client
+                        however you will be asked to enter the name.
+                    </p>
+                </div>
+
+                <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.pretendable" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.pretendable"><div class="info"><h1 class="title">Pretending to execute a Provider Action</h1></div>
+                    
+
+                    <p class="para">
+                        Another interesting feature you might wish to implement is
+                        <em class="emphasis">pretendability</em>. Pretendabilty is the ability
+                        for your provider to &quot;pretend&quot; as if it is doing the requested
+                        action and provider combination and give the user as much
+                        information about what it <em class="emphasis">would</em> do without
+                        actually doing it. This might be an important notion when doing
+                        heavy database or filesystem modifications that the user might not
+                        otherwise want to do.
+                    </p>
+
+                    <p class="para">
+                        Pretendability is easy to implement. There are two parts to this
+                        feature: 1) marking the provider as having the ability to &quot;pretend&quot;,
+                        and 2) checking the request to ensure the current request was indeed
+                        asked to be &quot;pretended&quot;. This feature is demonstrated in the code
+                        sample below.
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span>&nbsp; &nbsp; Zend_Tool_Framework_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; implements Zend_Tool_Framework_Provider_Pretendable</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span> = <span style="color: #ff0000;">'Ralph'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">isPretend</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'I would say hello to '</span> . <span style="color: #0000ff;">$name</span> . <span style="color: #ff0000;">'.'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Hello'</span> . <span style="color: #0000ff;">$name</span> . <span style="color: #ff0000;">', from my provider!'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <p class="para">
+                        To run the provider in pretend mode just call:
+                    </p>
+
+                    <div class="programlisting sh"><div class="shcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">% zf --pretend say hello Ralph</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">I would say hello Ralph.</div></li></ol></div></div></div>
+
+                </div>
+
+                <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.verbosedebug" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.verbosedebug"><div class="info"><h1 class="title">Verbose and Debug modes</h1></div>
+                    
+
+                    <p class="para">
+                        You can also run your provider actions in &quot;verbose&quot; or &quot;debug&quot; modes.
+                        The semantics in regard to this actions have to be implemented by you
+                        in the context of your provider. You can access debug or verbose modes
+                        with:
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; implements Zend_Tool_Framework_Provider_Interface</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span> = <span style="color: #ff0000;">'Ralph'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">isVerbose</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Hello::say has been called<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">isDebug</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/syslog"><span style="color: #000066;">syslog</span></a><span style="color: #66cc66;">&#40;</span>LOG_INFO, <span style="color: #ff0000;">&quot;Hello::say has been called<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+                </div>
+
+                <div class="section" id="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.configstorage" name="zend.tool.extending.zend-tool-framework.providers-and-manifests.advanced.configstorage"><div class="info"><h1 class="title">Accessing User Config and Storage</h1></div>
+                    
+
+                    <p class="para">
+                        Using the Enviroment variable <span class="property">ZF_CONFIG_FILE</span> or the
+                        .zf.ini in your home directory you can inject configuration parameters into
+                        any <span class="classname">Zend_Tool</span> provider. Access to this configuration
+                        is available via the registry that is passed to your provider if you extend
+                        <span class="classname">Zend_Tool_Framework_Provider_Abstract</span>.
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Tool_Framework_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$username</span> = <span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getConfig</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">username</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span>!<a href="http://www.php.net/empty"><span style="color: #000066;">empty</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$username</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Hello $username!&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Hello!&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <p class="para">
+                        The returned configuration is of the type
+                        <span class="classname">Zend_Tool_Framework_Client_Config</span> but internally the
+                         <span class="methodname">__get()</span> and  <span class="methodname">__set()</span> magic
+                        methods proxy to a <span class="classname">Zend_Config</span> of the given
+                        configuration type.
+                    </p>
+
+                    <p class="para">
+                        The storage allows to save arbitrary data for later reference. This can be
+                        useful for batch processing tasks or for re-runs of your tasks. You can
+                        access the storage in a similar way like the configuration:
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Tool_Framework_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$aValue</span> = <span style="color: #0000ff;">$this</span>-&gt;_registry-&gt;<span style="color: #006600;">getStorage</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;myUsername&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Hello $aValue!&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <p class="para">
+                        The <acronym class="acronym">API</acronym> of the storage is very simple:
+                    </p>
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Zend_Tool_Framework_Client_Storage</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> setAdapter<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$adapter</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> isEnabled<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> put<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span>, <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> get<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span>, <span style="color: #0000ff;">$defaultValue</span>=<span style="color: #000000; font-weight: bold;">null</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> has<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> remove<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getStreamUri<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                    <div class="important"><b class="important">Important</b>
+                        <p class="para">
+                            When designing your providers that are config or storage aware remember
+                            to check if the required user-config or storage keys really exist for a
+                            user. You won&#039;t run into fatal errors when none of these are provided
+                            though, since empty ones are created upon request.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="zend.tool.extending.zend-tool-project" name="zend.tool.extending.zend-tool-project"><div class="info"><h1 class="title">Zend_Tool_Project Extensions</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Tool_Project</span> exposes a rich set of functionality and
+            capabilities that make the task of creating new providers, specficially those targetting
+            project easier and more manageable.
+        </p>
+
+        <div class="section" id="zend.tool.extending.zend-tool-project.architecture" name="zend.tool.extending.zend-tool-project.architecture"><div class="info"><h1 class="title">Overall Architecture</h1></div>
+            
+
+            <p class="para">
+                This same concept applies to Zend Framework projects. In Zend Framework projects,
+                you have controllers, actions, views, models, databases and so on and so forth. In
+                terms of <span class="classname">Zend_Tool</span>, we need a way to track these types of
+                resources - thus <span class="classname">Zend_Tool_Project</span>.
+            </p>
+
+            <p class="para">
+                <span class="classname">Zend_Tool_Project</span> is capable of tracking project resources
+                throughout the development of a project. So, for example, if in one command you
+                created a controller, and in the next command you wish to create an action within
+                that controller, <span class="classname">Zend_Tool_Project</span> is gonna have to
+                <em class="emphasis">know</em> about the controller file you created so that you can (in
+                the next action), be able to append that action to it. This is what keeps our
+                projects up to date and <em class="emphasis">stateful</em>.
+            </p>
+
+            <p class="para">
+                Another important point to understand about projects is that typically, resources
+                are organized in a hierarchical fashion. With that in mind,
+                <span class="classname">Zend_Tool_Project</span> is capable of serializing the current
+                project into a internal representation that allows it to keep track of not only
+                <em class="emphasis">what</em> resources are part of a project at any given time, but
+                also <em class="emphasis">where</em> they are in relation to one another.
+            </p>
+        </div>
+
+
+        <div class="section" id="zend.tool.extending.zend-tool-project.providers" name="zend.tool.extending.zend-tool-project.providers"><div class="info"><h1 class="title">Creating Providers</h1></div>
+            
+
+            <p class="para">
+                Project specific providers are created in the same fashion as plain framework
+                providers, with one exception: project providers must extend the
+                <span class="classname">Zend_Tool_Project_Provider_Abstract</span>. This class comes with
+                some significant functionality that helps developers load existing project, obtian
+                the profile object, and be able to search the profile, then later store any changes
+                to the current project profile.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Component_HelloProvider</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Tool_Project_Provider_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> say<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$profile</span> = <span style="color: #0000ff;">$this</span>-&gt;_loadExistingProfile<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">/* ... do project stuff here */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_storeProfile<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.tool.usage.cli.html">Using Zend_Tool On The Command Line</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.tool.html">Zend_Tool</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.tool.framework.html">Zend_Tool_Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.tool.html">Zend_Tool</a></li>
+  <li><a href="zend.tool.usage.cli.html">Using Zend_Tool On The Command Line</a></li>
+  <li class="active"><a href="zend.tool.extending.html">Extending Zend_Tool</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

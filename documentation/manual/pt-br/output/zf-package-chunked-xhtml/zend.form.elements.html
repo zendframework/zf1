@@ -1,0 +1,1778 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Creating Form Elements Using Zend_Form_Element - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.quickstart.html">Zend_Form Quick Start</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.form.elements" class="section"><div class="info"><h1 class="title">Creating Form Elements Using Zend_Form_Element</h1></div>
+    
+
+    <p class="para">
+        A form is made of elements that typically correspond to <acronym class="acronym">HTML</acronym> form
+        input. <span class="classname">Zend_Form_Element</span> encapsulates single form elements, with the
+        following areas of responsibility:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                validation (is submitted data valid?)
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem"><p class="para">capturing of validation error codes and messages</p></li>
+            </ul>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                filtering (how is the element escaped or normalized prior to
+                validation and/or for output?)
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">rendering (how is the element displayed?)</p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">metadata and attributes (what information further qualifies the element?)</p>
+        </li>
+    </ul>
+
+    <p class="para">
+        The base class, <span class="classname">Zend_Form_Element</span>, has reasonable defaults
+        for many cases, but it is best to extend the class for commonly used
+        special purpose elements. Additionally, Zend Framework ships with a
+        number of standard <acronym class="acronym">XHTML</acronym> elements; you can read about them <a href="zend.form.standardElements.html" class="link">in the Standard Elements
+            chapter</a>.
+    </p>
+
+    <div class="section" id="zend.form.elements.loaders" name="zend.form.elements.loaders"><div class="info"><h1 class="title">Plugin Loaders</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span> makes use of <a href="zend.loader.pluginloader.html" class="link">Zend_Loader_PluginLoader</a>
+            to allow developers to specify locations of alternate validators,
+            filters, and decorators. Each has its own plugin loader associated
+            with it, and general accessors are used to retrieve and modify
+            each.
+        </p>
+
+        <p class="para">
+            The following loader types are used with the various plugin loader
+            methods: &#039;validate&#039;, &#039;filter&#039;, and &#039;decorator&#039;. The type names are
+            case insensitive.
+        </p>
+
+        <p class="para">
+            The methods used to interact with plugin loaders are as follows:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setPluginLoader($loader, $type)</span>:
+                    <var class="varname">$loader</var> is the plugin loader object itself, while
+                    <var class="varname">$type</var> is one of the types specified above. This
+                    sets the plugin loader for the given type to the newly
+                    specified loader object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getPluginLoader($type)</span>: retrieves the plugin
+                    loader associated with <var class="varname">$type</var>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addPrefixPath($prefix, $path, $type = null)</span>: adds
+                    a prefix/path association to the loader specified by
+                    <var class="varname">$type</var>. If <var class="varname">$type</var> is
+                    <b><tt>NULL</tt></b>, it will attempt to add the path to all loaders, by
+                    appending the prefix with each of &quot;_Validate&quot;, &quot;_Filter&quot;, and &quot;_Decorator&quot;; and
+                    appending the path with &quot;Validate/&quot;, &quot;Filter/&quot;, and
+                    &quot;Decorator/&quot;. If you have all your extra form element classes
+                    under a common hierarchy, this is a convenience method for
+                    setting the base prefix for them.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addPrefixPaths(array $spec)</span>: allows you to add
+                    many paths at once to one or more plugin loaders. It expects
+                    each array item to be an array with the keys &#039;path&#039;, &#039;prefix&#039;,
+                    and &#039;type&#039;.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Custom validators, filters, and decorators are an easy way to share
+            functionality between forms and to encapsulate custom functionality.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Custom Label</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                One common use case for plugins is to provide replacements for
+                standard classes. For instance, if you want to provide a
+                different implementation of the &#039;Label&#039; decorator -- for
+                instance, to always append a colon -- you could create your own
+                &#039;Label&#039; decorator with your own class prefix, and then add it to
+                your prefix path.
+            </p></div>
+
+            <div class="example-contents"><p>
+                Let&#039;s start with a custom Label decorator. We&#039;ll give it the
+                class prefix &quot;My_Decorator&quot;, and the class itself will be in the
+                file &quot;My/Decorator/Label.php&quot;.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Decorator_Label <span style="color: #000000; font-weight: bold;">extends</span> Zend_Form_Decorator_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_placement</span> = <span style="color: #ff0000;">'PREPEND'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> render<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$content</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">null</span> === <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$content</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<a href="http://www.php.net/method_exists"><span style="color: #000066;">method_exists</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>, <span style="color: #ff0000;">'getLabel'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$content</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$label</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">':'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">null</span> === <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$view</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getView</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">renderLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$content</span>, <span style="color: #0000ff;">$label</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$label</span> = <span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">formLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #0000ff;">$label</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">renderLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$content</span>, <span style="color: #0000ff;">$label</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> renderLabel<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$content</span>, <span style="color: #0000ff;">$label</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$placement</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getPlacement</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$separator</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getSeparator</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">switch</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$placement</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">case</span> <span style="color: #ff0000;">'APPEND'</span>:</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$content</span> . <span style="color: #0000ff;">$separator</span> . <span style="color: #0000ff;">$label</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">case</span> <span style="color: #ff0000;">'PREPEND'</span>:</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">default</span>:</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$label</span> . <span style="color: #0000ff;">$separator</span> . <span style="color: #0000ff;">$content</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                Now we can tell the element to use this plugin path when looking
+                for decorators:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Decorator'</span>, <span style="color: #ff0000;">'My/Decorator/'</span>, <span style="color: #ff0000;">'decorator'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                Alternately, we can do that at the form level to ensure all
+                decorators use this path:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElementPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Decorator'</span>, <span style="color: #ff0000;">'My/Decorator/'</span>, <span style="color: #ff0000;">'decorator'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                After it added as in the example above, the &#039;My/Decorator/&#039; path will be searched
+                first to see if the decorator exists there when you add a decorator. As a result,
+                &#039;My_Decorator_Label&#039; will now be used when the &#039;Label&#039; decorator is requested.
+            </p></div>
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.elements.filters" name="zend.form.elements.filters"><div class="info"><h1 class="title">Filters</h1></div>
+        
+
+        <p class="para">
+            It&#039;s often useful and/or necessary to perform some normalization on
+            input prior to validation. For example, you may want to strip out
+            all <acronym class="acronym">HTML</acronym>, but run your validations on what remains to ensure the
+            submission is valid. Or you may want to trim empty space surrounding input so that a
+            StringLength validator will use the correct length of the input without counting leading
+            or trailing whitespace characters. These operations may be performed using
+            <span class="classname">Zend_Filter</span>. <span class="classname">Zend_Form_Element</span> has support
+            for filter chains, allowing you to specify multiple, sequential filters. Filtering
+            happens both during validation and when you retrieve the element value via
+             <span class="methodname">getValue()</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$filtered</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getValue</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Filters may be added to the chain in two ways:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    passing in a concrete filter instance
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    providing a short filter name
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Let&#039;s see some examples:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Concrete filter instance:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Filter_Alnum<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Short filter name:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Alnum'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'alnum'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Short names are typically the filter name minus the prefix. In the
+            default case, this will mean minus the &#039;Zend_Filter_&#039; prefix.
+            The first letter can be upper-cased or lower-cased.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Using Custom Filter Classes</b><br /></span>
+            
+
+            
+                If you have your own set of filter classes, you can tell
+                <span class="classname">Zend_Form_Element</span> about these using
+                 <span class="methodname">addPrefixPath()</span>. For instance, if you have
+                filters under the &#039;My_Filter&#039; prefix, you can tell
+                <span class="classname">Zend_Form_Element</span> about this as follows:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Filter'</span>, <span style="color: #ff0000;">'My/Filter/'</span>, <span style="color: #ff0000;">'filter'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                (Recall that the third argument indicates which plugin loader
+                on which to perform the action.)
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            If at any time you need the unfiltered value, use the
+             <span class="methodname">getUnfilteredValue()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$unfiltered</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getUnfilteredValue</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            For more information on filters, see the <a href="zend.filter.introduction.html" class="link">Zend_Filter
+                documentation</a>.
+        </p>
+
+        <p class="para">
+            Methods associated with filters include:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addFilter($nameOfFilter, array $options = null)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addFilters(array $filters)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setFilters(array $filters)</span> (overwrites all filters)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilter($name)</span> (retrieve a filter object by name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilters()</span> (retrieve all filters)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">removeFilter($name)</span> (remove filter by name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">clearFilters()</span> (remove all filters)
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.form.elements.validators" name="zend.form.elements.validators"><div class="info"><h1 class="title">Validators</h1></div>
+        
+
+        <p class="para">
+            If you subscribe to the security mantra of &quot;filter input, escape
+            output,&quot; you&#039;ll should use validator to filter input submitted with your form.
+            In <span class="classname">Zend_Form</span>, each element includes its own validator
+            chain, consisting of <span class="classname">Zend_Validate_*</span> validators.
+        </p>
+
+        <p class="para">
+            Validators may be added to the chain in two ways:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    passing in a concrete validator instance
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    providing a short validator name
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Let&#039;s see some examples:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Concrete validator instance:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Validate_Alnum<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Short validator name:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Alnum'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'alnum'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Short names are typically the validator name minus the prefix. In
+            the default case, this will mean minus the &#039;Zend_Validate_&#039; prefix.
+            As is the case with filters, the first letter can be upper-cased or lower-cased.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Using Custom Validator Classes</b><br /></span>
+            
+
+            
+                If you have your own set of validator classes, you can tell
+                <span class="classname">Zend_Form_Element</span> about these using
+                 <span class="methodname">addPrefixPath()</span>. For instance, if you have
+                validators under the &#039;My_Validator&#039; prefix, you can tell
+                <span class="classname">Zend_Form_Element</span> about this as follows:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Validator'</span>, <span style="color: #ff0000;">'My/Validator/'</span>, <span style="color: #ff0000;">'validate'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                (Recall that the third argument indicates which plugin loader
+                on which to perform the action.)
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            If failing a particular validation should prevent later validators
+            from firing, pass boolean <b><tt>TRUE</tt></b> as the second parameter:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'alnum'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If you are using a string name to add a validator, and the
+            validator class accepts arguments to the constructor, you may pass
+            these to the third parameter of  <span class="methodname">addValidator()</span> as an
+            array:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'StringLength'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">6</span>, <span style="color: #cc66cc;">20</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Arguments passed in this way should be in the order in which they
+            are defined in the constructor. The above example will instantiate
+            the <span class="classname">Zend_Validate_StringLenth</span> class with its
+            <var class="varname">$min</var> and <var class="varname">$max</var> parameters:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$validator</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Validate_StringLength<span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">6</span>, <span style="color: #cc66cc;">20</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Providing Custom Validator Error Messages</b><br /></span>
+            
+
+            
+                Some developers may wish to provide custom error messages for a
+                validator. The <var class="varname">$options</var> argument of the
+                 <span class="methodname">Zend_Form_Element::addValidator()</span> method allows you to do
+                so by providing the key &#039;messages&#039; and mapping it to an array of key/value pairs
+                for setting the message templates. You will need to know the
+                error codes of the various validation error types for the
+                particular validator.
+            <br />
+
+            
+                A better option is to use a <span class="classname">Zend_Translate_Adapter</span>
+                with your form. Error codes are automatically passed to the
+                adapter by the default Errors decorator; you can then specify
+                your own error message strings by setting up translations for
+                the various error codes of your validators.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            You can also set many validators at once, using
+             <span class="methodname">addValidators()</span>. The basic usage is to pass an array
+            of arrays, with each array containing 1 to 3 values, matching the
+            constructor of  <span class="methodname">addValidator()</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'NotEmpty'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'alnum'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'stringLength'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">6</span>, <span style="color: #cc66cc;">20</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If you want to be more verbose or explicit, you can use the array
+            keys &#039;validator&#039;, &#039;breakChainOnFailure&#039;, and &#039;options&#039;:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'validator'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'NotEmpty'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'breakChainOnFailure'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'validator'</span> =&gt; <span style="color: #ff0000;">'alnum'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'validator'</span> =&gt; <span style="color: #ff0000;">'stringLength'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'options'</span>&nbsp; &nbsp;=&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">6</span>, <span style="color: #cc66cc;">20</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This usage is good for illustrating how you could then configure
+            validators in a config file:
+        </p>
+
+        <div class="programlisting ini"><div class="inicode"><div class="ini" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.notempty.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;NotEmpty&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.notempty.<span style="color: #000099;">breakChainOnFailure </span>=<span style="color: #660066;"> true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.alnum.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;Alnum&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.strlen.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;StringLength&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.strlen.options.<span style="color: #000099;">min </span>=<span style="color: #660066;"> <span style="">6</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">element.validators.strlen.options.<span style="color: #000099;">max </span>=<span style="color: #660066;"> <span style="">20</span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Notice that every item has a key, whether or not it needs one; this
+            is a limitation of using configuration files -- but it also helps
+            make explicit what the arguments are for. Just remember that any
+            validator options must be specified in order.
+        </p>
+
+        <p class="para">
+            To validate an element, pass the value to
+             <span class="methodname">isValid()</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">isValid</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// valid</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// invalid</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Validation Operates On Filtered Values</b><br /></span>
+            
+
+            
+                 <span class="methodname">Zend_Form_Element::isValid()</span> filters values through
+                the provided filter chain prior to validation. See <a href="zend.form.elements.html#zend.form.elements.filters" class="link">the Filters
+                    section</a> for more information.
+            <br />
+        </p></blockquote>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Validation Context</b><br /></span>
+            
+
+            
+                 <span class="methodname">Zend_Form_Element::isValid()</span> supports an
+                additional argument, <var class="varname">$context</var>.
+                 <span class="methodname">Zend_Form::isValid()</span> passes the entire array of
+                data being processed to <var class="varname">$context</var> when validating a
+                form, and  <span class="methodname">Zend_Form_Element::isValid()</span>, in turn,
+                passes it to each validator. This means you can write
+                validators that are aware of data passed to other form
+                elements. As an example, consider a standard registration form
+                that has fields for both password and a password confirmation;
+                one validation would be that the two fields match. Such a
+                validator might look like the following:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Validate_PasswordConfirmation <span style="color: #000000; font-weight: bold;">extends</span> Zend_Validate_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; const NOT_MATCH = <span style="color: #ff0000;">'notMatch'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_messageTemplates</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; self::<span style="color: #006600;">NOT_MATCH</span> =&gt; <span style="color: #ff0000;">'Password confirmation does not match'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> isValid<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span>, <span style="color: #0000ff;">$context</span> = <span style="color: #000000; font-weight: bold;">null</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$value</span> = <span style="color: #66cc66;">&#40;</span>string<span style="color: #66cc66;">&#41;</span> <span style="color: #0000ff;">$value</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_setValue<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_array"><span style="color: #000066;">is_array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$context</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$context</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'password_confirm'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &amp;&amp; <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span> == <span style="color: #0000ff;">$context</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'password_confirm'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">true</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">elseif</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_string"><span style="color: #000066;">is_string</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$context</span><span style="color: #66cc66;">&#41;</span> &amp;&amp; <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span> == <span style="color: #0000ff;">$context</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">true</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_error<span style="color: #66cc66;">&#40;</span>self::<span style="color: #006600;">NOT_MATCH</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">false</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </p></blockquote>
+
+        <p class="para">
+            Validators are processed in order. Each validator is processed,
+            unless a validator created with a <b><tt>TRUE</tt></b>
+            <var class="varname">$breakChainOnFailure</var> value fails its validation. Be
+            sure to specify your validators in a reasonable order.
+        </p>
+
+        <p class="para">
+            After a failed validation, you can retrieve the error codes and
+            messages from the validator chain:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$errors</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getErrors</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$messages</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getMessages</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            (Note: error messages returned are an associative array of error
+            code / error message pairs.)
+        </p>
+
+        <p class="para">
+            In addition to validators, you can specify that an element is
+            required, using  <span class="methodname">setRequired($flag)</span>. By default, this
+            flag is <b><tt>FALSE</tt></b>. In combination with
+             <span class="methodname">setAllowEmpty($flag)</span> (<b><tt>TRUE</tt></b>
+            by default) and  <span class="methodname">setAutoInsertNotEmptyValidator($flag)</span>
+            (<b><tt>TRUE</tt></b> by default), the behavior of your validator chain
+            can be modified in a number of ways:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Using the defaults, validating an Element without passing a value, or
+                    passing an empty string for it, skips all validators and validates to
+                    <b><tt>TRUE</tt></b>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setAllowEmpty(false)</span> leaving the two other
+                    mentioned flags untouched, will validate against the validator chain
+                    you defined for this Element, regardless of the value passed
+                    to  <span class="methodname">isValid()</span>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setRequired(true)</span> leaving the two other
+                    mentioned flags untouched, will add a &#039;NotEmpty&#039; validator
+                    on top of the validator chain (if none was already set)), with the
+                    <var class="varname">$breakChainOnFailure</var> flag set. This behavior lends
+                    required flag semantic meaning: if no value is passed,
+                    we immediately invalidate the submission and notify the
+                    user, and prevent other validators from running on what we
+                    already know is invalid data.
+                </p>
+
+                <p class="para">
+                    If you do not want this behavior, you can turn it off by
+                    passing a <b><tt>FALSE</tt></b> value to
+                     <span class="methodname">setAutoInsertNotEmptyValidator($flag)</span>; this
+                    will prevent  <span class="methodname">isValid()</span> from placing the
+                    &#039;NotEmpty&#039; validator in the validator chain.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            For more information on validators, see the <a href="zend.validate.introduction.html" class="link">Zend_Validate
+                documentation</a>.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Using Zend_Form_Elements as general-purpose validators</b><br /></span>
+            
+
+            
+                <span class="classname">Zend_Form_Element</span> implements
+                <span class="classname">Zend_Validate_Interface</span>, meaning an element may
+                also be used as a validator in other, non-form related
+                validation chains.
+            <br />
+        </p></blockquote>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>When is an element detected as empty?</b><br /></span>
+            
+
+            
+                As mentioned the &#039;NotEmpty&#039; validator is used to detect if an element is empty
+                or not. But <span class="classname">Zend_Validate_NotEmpty</span> does, per default, not
+                work like <acronym class="acronym">PHP</acronym>&#039;s method  <span class="methodname">empty()</span>.
+            <br />
+
+            
+                This means when an element contains an integer <em class="emphasis">0</em> or an string
+                <em class="emphasis">&#039;0&#039;</em> then the element will be seen as not empty. If you want to
+                have a different behaviour you must create your own instance of
+                <span class="classname">Zend_Validate_NotEmpty</span>. There you can define the behaviour of
+                this validator. See <a href="zend.validate.set.notempty" class="link external">&raquo; Zend_Validate_NotEmpty</a> for details.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Methods associated with validation include:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setRequired($flag)</span> and
+                     <span class="methodname">isRequired()</span> allow you to set and retrieve the
+                    status of the &#039;required&#039; flag. When set to boolean <b><tt>TRUE</tt></b>,
+                    this flag requires that the element be in the data processed by
+                    <span class="classname">Zend_Form</span>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setAllowEmpty($flag)</span> and
+                     <span class="methodname">getAllowEmpty()</span> allow you to modify the
+                    behaviour of optional elements (i.e., elements where the
+                    required flag is <b><tt>FALSE</tt></b>). When the &#039;allow empty&#039; flag is
+                    <b><tt>TRUE</tt></b>, empty values will not be passed to the validator
+                    chain.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setAutoInsertNotEmptyValidator($flag)</span> allows
+                    you to specify whether or not a &#039;NotEmpty&#039; validator will be
+                    prepended to the validator chain when the element is
+                    required. By default, this flag is <b><tt>TRUE</tt></b>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addValidator($nameOrValidator, $breakChainOnFailure = false, array
+                        $options = null)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addValidators(array $validators)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setValidators(array $validators)</span> (overwrites all
+                    validators)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getValidator($name)</span> (retrieve a validator object by
+                    name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getValidators()</span> (retrieve all validators)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">removeValidator($name)</span> (remove validator by name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">clearValidators()</span> (remove all validators)
+                </p>
+            </li>
+        </ul>
+
+        <div class="section" id="zend.form.elements.validators.errors" name="zend.form.elements.validators.errors"><div class="info"><h1 class="title">Custom Error Messages</h1></div>
+            
+
+            <p class="para">
+                At times, you may want to specify one or more specific error
+                messages to use instead of the error messages generated by the
+                validators attached to your element. Additionally, at times you
+                may want to mark the element invalid yourself. As of 1.6.0, this
+                functionality is possible via the following methods.
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrorMessage($message)</span>: add an error message
+                        to display on form validation errors. You may call this more
+                        than once, and new messages are appended to the stack.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrorMessages(array $messages)</span>: add multiple
+                        error messages to display on form validation errors.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setErrorMessages(array $messages)</span>: add multiple
+                        error messages to display on form validation errors,
+                        overwriting all previously set error messages.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getErrorMessages()</span>: retrieve the list of
+                        custom error messages that have been defined.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearErrorMessages()</span>: remove all custom error
+                        messages that have been defined.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">markAsError()</span>: mark the element as having
+                        failed validation.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">hasErrors()</span>: determine whether the element has
+                        either failed validation or been marked as invalid.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addError($message)</span>: add a message to the custom
+                        error messages stack and flag the element as invalid.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrors(array $messages)</span>: add several
+                        messages to the custom error messages stack and flag the
+                        element as invalid.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setErrors(array $messages)</span>: overwrite the
+                        custom error messages stack with the provided messages and
+                        flag the element as invalid.
+                    </p>
+                </li>
+            </ul>
+
+            <p class="para">
+                All errors set in this fashion may be translated. Additionally,
+                you may insert the placeholder &quot;%value%&quot; to represent the
+                element value; this current element value will be substituted
+                when the error messages are retrieved.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.elements.decorators" name="zend.form.elements.decorators"><div class="info"><h1 class="title">Decorators</h1></div>
+        
+
+        <p class="para">
+            One particular pain point for many web developers is the creation
+            of the <acronym class="acronym">XHTML</acronym> forms themselves. For each element, the developer
+            needs to create markup for the element itself (typically a label)
+            and special markup for displaying
+            validation error messages. The more elements on the page, the less
+            trivial this task becomes.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span> tries to solve this issue through
+            the use of &quot;decorators&quot;. Decorators are simply classes that have
+            access to the element and a method for rendering content. For more
+            information on how decorators work, please see the section on <a href="zend.form.decorators.html" class="link">Zend_Form_Decorator</a>.
+        </p>
+
+        <p class="para">
+            The default decorators used by <span class="classname">Zend_Form_Element</span> are:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">ViewHelper</em>: specifies a view helper to use
+                    to render the element. The &#039;helper&#039; element attribute can be
+                    used to specify which view helper to use. By default,
+                    <span class="classname">Zend_Form_Element</span> specifies the &#039;formText&#039; view
+                    helper, but individual subclasses specify different helpers.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Errors</em>: appends error messages to the
+                    element using <span class="classname">Zend_View_Helper_FormErrors</span>. If none are
+                    present, nothing is appended.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Description</em>: appends the element
+                    description. If none is present, nothing is appended. By
+                    default, the description is rendered in a &lt;p&gt; tag with a
+                    class of &#039;description&#039;.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">HtmlTag</em>: wraps the element and errors in
+                    an <acronym class="acronym">HTML</acronym> &lt;dd&gt; tag.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Label</em>: prepends a label to the element
+                    using <span class="classname">Zend_View_Helper_FormLabel</span>, and wraps it in a
+                    &lt;dt&gt; tag. If no label is provided, just the definition term tag is
+                    rendered.
+                </p>
+            </li>
+        </ul>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Default Decorators Do Not Need to Be Loaded</b><br /></span>
+            
+
+            
+                By default, the default decorators are loaded during object
+                initialization. You can disable this by passing the
+                &#039;disableLoadDefaultDecorators&#039; option to the constructor:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'disableLoadDefaultDecorators'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                This option may be mixed with any other options you pass,
+                both as array options or in a <span class="classname">Zend_Config</span> object.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Since the order in which decorators are registered matters- the first
+            decorator registered is executed first- you will need to make
+            sure you register your decorators in an appropriate order, or
+            ensure that you set the placement options in a sane fashion. To
+            give an example, here is the code that registers the default
+            decorators:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">addDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewHelper'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Errors'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Description'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'p'</span>, <span style="color: #ff0000;">'class'</span> =&gt; <span style="color: #ff0000;">'description'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'dd'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Label'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'dt'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The initial content is created by the &#039;ViewHelper&#039; decorator, which
+            creates the form element itself. Next, the &#039;Errors&#039; decorator
+            fetches error messages from the element, and, if any are present,
+            passes them to the &#039;FormErrors&#039; view helper to render. If a
+            description is present, the &#039;Description&#039; decorator will append a
+            paragraph of class &#039;description&#039; containing the descriptive text to
+            the aggregated content. The next decorator, &#039;HtmlTag&#039;, wraps the
+            element, errors, and description in an <acronym class="acronym">HTML</acronym> &lt;dd&gt; tag.
+            Finally, the last decorator, &#039;label&#039;, retrieves the element&#039;s label
+            and passes it to the &#039;FormLabel&#039; view helper, wrapping it in an <acronym class="acronym">HTML</acronym>
+            &lt;dt&gt; tag; the value is prepended to the content by default.
+            The resulting output looks basically like this:
+        </p>
+
+        <div class="programlisting html"><div class="htmlcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;dt&gt;&lt;label for=&quot;foo&quot; class=&quot;optional&quot;&gt;Foo&lt;/label&gt;&lt;/dt&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;dd&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;input type=&quot;text&quot; name=&quot;foo&quot; id=&quot;foo&quot; value=&quot;123&quot; /&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;ul class=&quot;errors&quot;&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;&quot;123&quot; is not an alphanumeric value&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;p class=&quot;description&quot;&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; This is some descriptive text regarding the element.</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/p&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/dd&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            For more information on decorators, read the <a href="zend.form.decorators.html" class="link">Zend_Form_Decorator section</a>.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Using Multiple Decorators of the Same Type</b><br /></span>
+            
+
+            
+                Internally, <span class="classname">Zend_Form_Element</span> uses a decorator&#039;s
+                class as the lookup mechanism when retrieving decorators. As a
+                result, you cannot register multiple decorators of the same
+                type; subsequent decorators will simply overwrite those that
+                existed before.
+            <br />
+
+            
+                To get around this, you can use <em class="emphasis">aliases</em>.
+                Instead of passing a decorator or decorator name as the first
+                argument to  <span class="methodname">addDecorator()</span>, pass an array with a
+                single element, with the alias pointing to the decorator object
+                or name:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Alias to 'FooBar':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span> =&gt; <span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'div'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// And retrieve later:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$decorator</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                In the  <span class="methodname">addDecorators()</span> and
+                 <span class="methodname">setDecorators()</span> methods, you will need to pass
+                the &#039;decorator&#039; option in the array representing the decorator:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Add two 'HtmlTag' decorators, aliasing one to 'FooBar':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addDecorators</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'div'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'decorator'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span> =&gt; <span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'options'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'dd'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// And retrieve later:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$htmlTag</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$fooBar</span>&nbsp; = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </p></blockquote>
+
+        <p class="para">
+            Methods associated with decorators include:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addDecorator($nameOrDecorator, array $options = null)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addDecorators(array $decorators)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setDecorators(array $decorators)</span> (overwrites all
+                    decorators)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDecorator($name)</span> (retrieve a decorator object by
+                    name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDecorators()</span> (retrieve all decorators)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">removeDecorator($name)</span> (remove decorator by name)
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">clearDecorators()</span> (remove all decorators)
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span> also uses overloading to allow rendering
+            specific decorators.  <span class="methodname">__call()</span> will intercept methods
+            that lead with the text &#039;render&#039; and use the remainder of the method
+            name to lookup a decorator; if found, it will then render that
+            <em class="emphasis">single</em> decorator. Any arguments passed to the
+            method call will be used as content to pass to the decorator&#039;s
+             <span class="methodname">render()</span> method. As an example:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Render only the ViewHelper decorator:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">renderViewHelper</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Render only the HtmlTag decorator, passing in content:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">renderHtmlTag</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;This is the html tag content&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If the decorator does not exist, an exception is raised.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.elements.metadata" name="zend.form.elements.metadata"><div class="info"><h1 class="title">Metadata and Attributes</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span> handles a variety of attributes and
+            element metadata. Basic attributes include:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">name</em>: the element name. Uses the
+                     <span class="methodname">setName()</span> and  <span class="methodname">getName()</span>
+                    accessors.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">label</em>: the element label. Uses the
+                     <span class="methodname">setLabel()</span> and  <span class="methodname">getLabel()</span>
+                    accessors.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">order</em>: the index at which an element
+                    should appear in the form. Uses the  <span class="methodname">setOrder()</span> and
+                     <span class="methodname">getOrder()</span> accessors.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">value</em>: the current element value. Uses the
+                     <span class="methodname">setValue()</span> and  <span class="methodname">getValue()</span>
+                    accessors.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">description</em>: a description of the element;
+                    often used to provide tooltip or javascript contextual hinting
+                    describing the purpose of the element. Uses the
+                     <span class="methodname">setDescription()</span> and
+                     <span class="methodname">getDescription()</span> accessors.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">required</em>: flag indicating whether or not
+                    the element is required when performing form validation. Uses
+                    the  <span class="methodname">setRequired()</span> and
+                     <span class="methodname">getRequired()</span> accessors. This flag is
+                    <b><tt>FALSE</tt></b> by default.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">allowEmpty</em>: flag indicating whether or not
+                    a non-required (optional) element should attempt to validate
+                    empty values. If it is set to <b><tt>TRUE</tt></b> and the required flag is
+                    <b><tt>FALSE</tt></b>, empty values are not passed to the validator chain
+                    and are presumed <b><tt>TRUE</tt></b>. Uses the
+                     <span class="methodname">setAllowEmpty()</span> and
+                     <span class="methodname">getAllowEmpty()</span> accessors. This flag is
+                    <b><tt>TRUE</tt></b> by default.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">autoInsertNotEmptyValidator</em>: flag
+                    indicating whether or not to insert a &#039;NotEmpty&#039; validator when
+                    the element is required. By default, this flag is <b><tt>TRUE</tt></b>. Set
+                    the flag with  <span class="methodname">setAutoInsertNotEmptyValidator($flag)</span> and
+                    determine the value with
+                     <span class="methodname">autoInsertNotEmptyValidator()</span>.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Form elements may require additional metadata. For <acronym class="acronym">XHTML</acronym> form
+            elements, for instance, you may want to specify attributes such as
+            the class or id. To facilitate this are a set of accessors:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">setAttrib($name, $value)</em>: add an attribute
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">setAttribs(array $attribs)</em>: like
+                    addAttribs(), but overwrites
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">getAttrib($name)</em>: retrieve a single
+                    attribute value
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">getAttribs()</em>: retrieve all attributes as
+                    key/value pairs
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Most of the time, however, you can simply access them as object
+            properties, as <span class="classname">Zend_Form_Element</span> utilizes overloading
+            to facilitate access to them:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Equivalent to $element-&gt;setAttrib('class', 'text'):</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">class</span> = <span style="color: #ff0000;">'text;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #ff0000;"</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            By default, all attributes are passed to the view helper used by
+            the element during rendering, and rendered as <acronym class="acronym">HTML</acronym> attributes of
+            the element tag.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.elements.standard" name="zend.form.elements.standard"><div class="info"><h1 class="title">Standard Elements</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> ships with a number of standard elements; please read
+            the <a href="zend.form.standardElements.html" class="link">Standard Elements</a>
+            chapter for full details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.elements.methods" name="zend.form.elements.methods"><div class="info"><h1 class="title">Zend_Form_Element Methods</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span> has many, many methods. What follows
+            is a quick summary of their signatures, grouped by type:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">Configuration:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setOptions(array $options)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setConfig(Zend_Config $config)</span></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">I18n:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setTranslator(Zend_Translate_Adapter $translator
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getTranslator()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDisableTranslator($flag)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">translatorIsDisabled()</span></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Properties:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem"><p class="para"> <span class="methodname">setName($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getName()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setValue($value)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getValue()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getUnfilteredValue()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setLabel($label)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getLabel()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDescription($description)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getDescription()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setOrder($order)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getOrder()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setRequired($flag)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getRequired()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setAllowEmpty($flag)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getAllowEmpty()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setAutoInsertNotEmptyValidator($flag)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">autoInsertNotEmptyValidator()</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">setIgnore($flag)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getIgnore()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getType()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setAttrib($name, $value)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setAttribs(array $attribs)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getAttrib($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getAttribs()</span></p></li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Plugin loaders and paths:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setPluginLoader(Zend_Loader_PluginLoader_Interface $loader,
+                                $type)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getPluginLoader($type)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addPrefixPath($prefix, $path, $type = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addPrefixPaths(array $spec)</span></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Validation:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addValidator($validator, $breakChainOnFailure = false,
+                                $options = array())</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addValidators(array $validators)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setValidators(array $validators)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getValidator($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getValidators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">removeValidator($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">clearValidators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">isValid($value, $context = null)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getErrors()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getMessages()</span></p></li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Filters:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addFilter($filter, $options = array())</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addFilters(array $filters)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setFilters(array $filters)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getFilter($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getFilters()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">removeFilter($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">clearFilters()</span></p></li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Rendering:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setView(Zend_View_Interface $view = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getView()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addDecorator($decorator, $options = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addDecorators(array $decorators)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDecorators(array $decorators)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getDecorator($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getDecorators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">removeDecorator($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">clearDecorators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">render(Zend_View_Interface $view = null)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.form.elements.config" name="zend.form.elements.config"><div class="info"><h1 class="title">Configuration</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element</span>&#039;s constructor accepts either an
+            array of options or a <span class="classname">Zend_Config</span> object containing
+            options, and it can also be configured using either
+             <span class="methodname">setOptions()</span> or  <span class="methodname">setConfig()</span>. Generally
+            speaking, keys are named as follows:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    If &#039;set&#039; + key refers to a <span class="classname">Zend_Form_Element</span>
+                    method, then the value provided will be passed to that method.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Otherwise, the value will be used to set an attribute.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Exceptions to the rule include the following:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">prefixPath</span> will be passed to
+                     <span class="methodname">addPrefixPaths()</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The following setters cannot be set in this way:
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <span class="property">setAttrib</span> (though
+                            <span class="property">setAttribs</span> <em class="emphasis">will</em> work)
+                        </p>
+                    </li>
+
+                    <li class="listitem"><p class="para"><span class="property">setConfig</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setOptions</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setPluginLoader</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setTranslator</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setView</span></p></li>
+                </ul>
+            </li>
+        </ul>
+
+        <p class="para">
+            As an example, here is a config file that passes configuration for
+            every type of configurable data:
+        </p>
+
+        <div class="programlisting ini"><div class="inicode"><div class="ini" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000066; font-weight:bold;"><span style="">&#91;</span>element<span style="">&#93;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">name </span>= <span style="color: #933;">&quot;foo&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">value </span>= <span style="color: #933;">&quot;foobar&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">label </span>= <span style="color: #933;">&quot;Foo:&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">order </span>=<span style="color: #660066;"> <span style="">10</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">required </span>=<span style="color: #660066;"> true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">allowEmpty </span>=<span style="color: #660066;"> false</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">autoInsertNotEmptyValidator </span>=<span style="color: #660066;"> true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">description </span>= <span style="color: #933;">&quot;Foo elements are for examples&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">ignore </span>=<span style="color: #660066;"> false</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">attribs.<span style="color: #000099;">id </span>= <span style="color: #933;">&quot;foo&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">attribs.<span style="color: #000099;">class </span>= <span style="color: #933;">&quot;element&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #666666; font-style: italic;">; sets 'onclick' attribute</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">onclick </span>= <span style="color: #933;">&quot;autoComplete(this, '/form/autocomplete/element')&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">prefixPaths.decorator.<span style="color: #000099;">prefix </span>= <span style="color: #933;">&quot;My_Decorator&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">prefixPaths.decorator.<span style="color: #000099;">path </span>= <span style="color: #933;">&quot;My/Decorator/&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">disableTranslator </span>=<span style="color: #660066;"> <span style="">0</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">validators.required.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;NotEmpty&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">validators.required.<span style="color: #000099;">breakChainOnFailure </span>=<span style="color: #660066;"> true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">validators.alpha.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;alpha&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">validators.regex.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;regex&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">validators.regex.options.<span style="color: #000099;">pattern </span>= <span style="color: #933;">&quot;/^[A-F].*/$&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">filters.ucase.<span style="color: #000099;">filter </span>= <span style="color: #933;">&quot;StringToUpper&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.element.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;ViewHelper&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.element.options.<span style="color: #000099;">helper </span>= <span style="color: #933;">&quot;FormText&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.label.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;Label&quot;</span></div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.form.elements.custom" name="zend.form.elements.custom"><div class="info"><h1 class="title">Custom Elements</h1></div>
+        
+
+        <p class="para">
+            You can create your own custom elements by simply extending the
+            <span class="classname">Zend_Form_Element</span> class. Common reasons to do so
+            include:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Elements that share common validators and/or filters
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Elements that have custom decorator functionality
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            There are two methods typically used to extend an element:
+             <span class="methodname">init()</span>, which can be used to add custom initialization
+            logic to your element, and  <span class="methodname">loadDefaultDecorators()</span>,
+            which can be used to set a list of default decorators used by your
+            element.
+        </p>
+
+        <p class="para">
+            As an example, let&#039;s say that all text elements in a form you are
+            creating need to be filtered with <span class="classname">StringTrim</span>,
+            validated with a common regular expression, and that you want to
+            use a custom decorator you&#039;ve created for displaying them,
+            &#039;My_Decorator_TextItem&#039;. In addition, you have a number of standard
+            attributes, including &#039;size&#039;, &#039;maxLength&#039;, and &#039;class&#039; you wish to
+            specify. You could define an element to accomplish this as follows:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Element_Text <span style="color: #000000; font-weight: bold;">extends</span> Zend_Form_Element</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> init<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Decorator'</span>, <span style="color: #ff0000;">'My/Decorator/'</span>, <span style="color: #ff0000;">'decorator'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addFilters</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'StringTrim'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Regex'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/^[a-z0-9]{6,}$/i'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'TextItem'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'size'</span>, <span style="color: #cc66cc;">30</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'maxLength'</span>, <span style="color: #cc66cc;">45</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span>, <span style="color: #ff0000;">'text'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You could then inform your form object about the prefix path for
+            such elements, and start creating elements:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Element'</span>, <span style="color: #ff0000;">'My/Element/'</span>, <span style="color: #ff0000;">'element'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'text'</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The &#039;foo&#039; element will now be of type <span class="classname">My_Element_Text</span>,
+            and exhibit the behaviour you&#039;ve outlined.
+        </p>
+
+        <p class="para">
+            Another method you may want to override when extending
+            <span class="classname">Zend_Form_Element</span> is the
+             <span class="methodname">loadDefaultDecorators()</span> method. This method
+            conditionally loads a set of default decorators for your element;
+            you may wish to substitute your own decorators in your extending
+            class:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Element_Text <span style="color: #000000; font-weight: bold;">extends</span> Zend_Form_Element</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> loadDefaultDecorators<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewHelper'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'DisplayError'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Label'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'div'</span>, <span style="color: #ff0000;">'class'</span> =&gt; <span style="color: #ff0000;">'element'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            There are many ways to customize elements. Read the <acronym class="acronym">API</acronym>
+            documentation of <span class="classname">Zend_Form_Element</span> to learn about all of the
+            available methods.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.quickstart.html">Zend_Form Quick Start</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.form.html">Zend_Form</a></li>
+  <li><a href="zend.form.introduction.html">Zend_Form</a></li>
+  <li><a href="zend.form.quickstart.html">Zend_Form Quick Start</a></li>
+  <li class="active"><a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a></li>
+  <li><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></li>
+  <li><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></li>
+  <li><a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></li>
+  <li><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Text_Table - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.text.figlet.html">Zend_Text_Figlet</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.text.html">Zend_Text</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.timesync.html">Zend_TimeSync</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.text.table.introduction" class="section"><div class="info"><h1 class="title">Zend_Text_Table</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Text_Table</span> is a component to create text based tables
+        on the fly with different decorators. This can be helpful, if you either
+        want to send structured data in text emails, which are used to have
+        mono-spaced fonts, or to display table information in a CLI application.
+        <span class="classname">Zend_Text_Table</span> supports multi-line columns, colspan and
+        align as well.
+    </p>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Encoding</b><br /></span>
+        
+
+        
+            <span class="classname">Zend_Text_Table</span> expects your strings to be UTF-8 encoded
+            by default. If this is not the case, you can either supply the character
+            encoding as a parameter to the  <span class="methodname">constructor()</span> or the
+             <span class="methodname">setContent()</span> method of
+            <span class="classname">Zend_Text_Table_Column</span>. Alternatively if you have a different
+            encoding in the entire process, you can define the standard input charset with
+             <span class="methodname">Zend_Text_Table::setInputCharset($charset)</span>. In
+            case you need another output charset for the table, you can set
+            this with  <span class="methodname">Zend_Text_Table::setOutputCharset($charset)</span>.
+        <br />
+    </p></blockquote>
+
+    <p class="para">
+        A <span class="classname">Zend_Text_Table</span> object consists of rows, which contain
+        columns, represented by <span class="classname">Zend_Text_Table_Row</span> and
+        <span class="classname">Zend_Text_Table_Column</span>. When creating a table, you can
+        supply an array with options for the table. Those are:
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">columnWidths</span> (required): An array defining
+                    all columns width their widths in characters.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">decorator</span>: The decorator to use for the
+                    table borders. The default is <em class="emphasis">unicode</em>, but
+                    you may also specify <em class="emphasis">ascii</em> or give an instance
+                    of a custom decorator object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">padding</span>: The left and right padding withing
+                    the columns in characters. The default padding is zero.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">AutoSeparate</span>: The way how the rows are
+                    separated with horizontal lines. The default is a
+                    separation between all rows. This is defined as a bitmask
+                    containing one ore more of the following constants of
+                    <span class="classname">Zend_Text_Table</span>:
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para"><b><tt>Zend_Text_Table::AUTO_SEPARATE_NONE</tt></b></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"><b><tt>Zend_Text_Table::AUTO_SEPARATE_HEADER</tt></b></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"><b><tt>Zend_Text_Table::AUTO_SEPARATE_FOOTER</tt></b></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"><b><tt>Zend_Text_Table::AUTO_SEPARATE_ALL</tt></b></p>
+                        </li>
+                    </ul>
+
+                    Where header is always the first row, and the footer is
+                    always the last row.
+                </p>
+            </li>
+        </ul>
+    </p>
+
+    <p class="para">
+        Rows are simply added to the table by creating a new instance of
+        <span class="classname">Zend_Text_Table_Row</span>, and appending it to the table via the
+         <span class="methodname">appendRow()</span> method. Rows themselves have no options. You can also
+        give an array to directly to the  <span class="methodname">appendRow()</span> method, which then
+        will automatically converted to a row object, containing multiple column
+        objects.
+    </p>
+
+    <p class="para">
+        The same way you can add columns to the rows. Create a new instance of
+        <span class="classname">Zend_Text_Table_Column</span> and then either set the column
+        options in the constructor or later with the  <span class="methodname">set*()</span> methods.
+        The first parameter is the content of the column which may have
+        multiple lines, which in the best case are separated by just the
+        &#039;\n&#039; character. The second parameter defines the align, which
+        is &#039;left&#039; by default and can be one of the class constants of
+        <span class="classname">Zend_Text_Table_Column</span>:
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <b><tt>ALIGN_LEFT</tt></b>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <b><tt>ALIGN_CENTER</tt></b>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <b><tt>ALIGN_RIGHT</tt></b>
+                </p>
+            </li>
+        </ul>
+
+        The third parameter is the colspan of the column. For example, when you
+        choose &quot;2&quot; as colspan, the column will span over two columns of the table.
+        The last parameter defines the encoding of the content, which should be
+        supplied, if the content is neither ASCII nor UTF-8. To append the column
+        to the row, you simply call  <span class="methodname">appendColumn()</span> in your row object
+        with the column object as parameter. Alternatively you can directly
+        give a string to the  <span class="methodname">appendColumn()</span> method.
+    </p>
+
+    <p class="para">
+        To finally render the table, you can either use the  <span class="methodname">render()</span>
+        method of the table, or use the magic method  <span class="methodname">__toString()</span>
+        by doing <strong class="command">echo $table;</strong> or
+        <strong class="command">$tableString = (string) $table</strong>.
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #1 Using Zend_Text_Table</b></p></div>
+        
+
+        <div class="example-contents"><p>
+            This example illustrates the basic use of <span class="classname">Zend_Text_Table</span>
+            to create a simple table:
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$table</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Text_Table<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'columnWidths'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">10</span>, <span style="color: #cc66cc;">20</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Either simple</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$table</span>-&gt;<span style="color: #006600;">appendRow</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend'</span>, <span style="color: #ff0000;">'Framework'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Or verbose</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Text_Table_Row<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">appendColumn</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Text_Table_Column<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">appendColumn</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Text_Table_Column<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Framework'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$table</span>-&gt;<span style="color: #006600;">appendRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$row</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$table</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            This will result in the following output:
+        </p></div>
+
+        <div class="programlisting text"><div class="textcode"><div class="text" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">┌──────────┬────────────────────┐</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">│Zend&nbsp; &nbsp; &nbsp; │Framework&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;│</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">└──────────┴────────────────────┘</div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.text.figlet.html">Zend_Text_Figlet</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.text.html">Zend_Text</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.timesync.html">Zend_TimeSync</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.text.html">Zend_Text</a></li>
+  <li><a href="zend.text.figlet.html">Zend_Text_Figlet</a></li>
+  <li class="active"><a href="zend.text.table.introduction.html">Zend_Text_Table</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

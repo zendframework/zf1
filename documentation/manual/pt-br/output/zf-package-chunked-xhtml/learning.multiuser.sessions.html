@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Managing User Sessions In ZF - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.multiuser.intro.html">Building Multi-User Applications With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.multiuser.html">Iniciando com o Zend_Session, Zend_Auth, e Zend_Acl</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.multiuser.authentication.html">Authenticating Users in Zend Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="learning.multiuser.sessions" class="section"><div class="info"><h1 class="title">Managing User Sessions In ZF</h1></div>
+    
+
+    <div class="section" id="learning.multiuser.sessions.intro" name="learning.multiuser.sessions.intro"><div class="info"><h1 class="title">Introduction to Sessions</h1></div>
+        
+
+        <p class="para">
+            The success of the web is deeply rooted in the protocol that drives the web:
+            <acronym class="acronym">HTTP</acronym>. <acronym class="acronym">HTTP</acronym> over TCP is by its very nature
+            stateless, which means that inherently the web is also stateless. While this very aspect
+            is one of the dominating factors for why the web has become such a popular medium, it
+            also causes an interesting problem for developers that want to use the web as an
+            application platform.
+        </p>
+
+        <p class="para">
+            The act of interacting with a web application is typically defined by the sum
+            of all requests sent to a web server. Since there can be many consumers being served
+            simultaneously, the application must decide which requests belong to which consumer.
+            These requests are typically known as a &quot;session&quot;.
+        </p>
+
+        <p class="para">
+            In <acronym class="acronym">PHP</acronym>, the session problem is solved by the session extension which
+            utilizes some state tracking, typically cookies, and some form of local storage which is
+            exposed via the $_SESSION superglobal. In Zend Framework, the component
+            <span class="classname">Zend_Session</span> adds value to the <acronym class="acronym">PHP</acronym> session
+            extension making it easier to use and depend on inside object-oriented applications.
+        </p>
+    </div>
+
+    <div class="section" id="learning.multiuser.sessions.basic-usage" name="learning.multiuser.sessions.basic-usage"><div class="info"><h1 class="title">Basic Usage of Zend_Session</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Zend_Session</span> component is both a session manager as well as
+            an <acronym class="acronym">API</acronym> for storing data into a session object for long-term
+            persistence. The <span class="classname">Zend_Session</span> <acronym class="acronym">API</acronym> is for
+            managing the options and behavior of a session, like options, starting and stopping a
+            session, whereas <span class="classname">Zend_Session_Namespace</span> is the actual object used
+            to store data.
+        </p>
+
+        <p class="para">
+            While its generally good practice to start a session inside a bootstrap process, this
+            is generally not necessary as all sessions will be automatically started upon the first
+            creation of a <span class="classname">Zend_Session_Namespace</span> object.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Application</span> is capable of configuring
+            <span class="classname">Zend_Session</span> for you as part of the
+            <span class="classname">Zend_Application_Resource</span> system. To use this, assuming your
+            project uses <span class="classname">Zend_Application</span> to bootstrap, you would add the
+            following code to your application.ini file:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.save_path = APPLICATION_PATH <span style="color: #ff0000;">&quot;/../data/session&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.use_only_cookies = <span style="color: #000000; font-weight: bold;">true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.remember_me_seconds = <span style="color: #cc66cc;">864000</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            As you can see, the options passed in are the same options that you&#039;d expect to find
+            in the ext/session extension in <acronym class="acronym">PHP</acronym>. Those options setup the path
+            to the session files where data will be stored within the project. Since
+            <acronym class="acronym">INI</acronym> files can additionally use constants, the above will use the
+            APPLICATION_PATH constant and relatively point to a data session directory.
+        </p>
+
+        <p class="para">
+            Most Zend Framework components that use sessions need nothing more to use
+            <span class="classname">Zend_Session</span>. At this point, you an either use a component that
+            consumes <span class="classname">Zend_Session</span>, or start storing your own data inside a
+            session with <span class="classname">Zend_Session_Namespace</span>.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Session_Namespace</span> is a simple class that proxies data via an
+            easy to use <acronym class="acronym">API</acronym> into the <span class="classname">Zend_Session</span> managed
+            $_SESSION superglobal. The reason it is called
+            <span class="classname">Zend_Session_Namespace</span> is that it effectively namespaces the data
+            inside $_SESSION, thus allowing multiple components and objects to safely store and
+            retrieve data. In the following code, we&#039;ll explore how to build a simple session
+            incrementing counter, starting at 1000 and resetting itself after 1999.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$mysession</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'mysession'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$mysession</span>-&gt;<span style="color: #006600;">counter</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$mysession</span>-&gt;<span style="color: #006600;">counter</span> = <span style="color: #cc66cc;">1000</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$mysession</span>-&gt;<span style="color: #006600;">counter</span>++;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$mysession</span>-&gt;<span style="color: #006600;">counter</span> &gt; <span style="color: #cc66cc;">1999</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/unset"><span style="color: #000066;">unset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$mysession</span>-&gt;<span style="color: #006600;">counter</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            As you can see above, the session namespace object uses the magic __get, __set,
+            __isset, and __unset to allow you to seamlessly and fluently interact with the session.
+            The information stored in the above example is stored at
+            $_SESSION[&#039;mysession&#039;][&#039;counter&#039;].
+        </p>
+    </div>
+
+    <div class="section" id="learning.multiuser.sessions.advanced-usage" name="learning.multiuser.sessions.advanced-usage"><div class="info"><h1 class="title">Advanced Usage of Zend_Session</h1></div>
+        
+
+        <p class="para">
+            Additionally, if you wanted to use the DbTable
+            save handler for <span class="classname">Zend_Session</span>, you&#039;d add the following code to
+            your application.ini:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.<span style="color: #000000; font-weight: bold;">class</span> = <span style="color: #ff0000;">&quot;Zend_Session_SaveHandler_DbTable&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.name = <span style="color: #ff0000;">&quot;session&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primary.<a href="http://www.php.net/session_id"><span style="color: #000066;">session_id</span></a> = <span style="color: #ff0000;">&quot;session_id&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primary.save_path = <span style="color: #ff0000;">&quot;save_path&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primary.name = <span style="color: #ff0000;">&quot;name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primaryAssignment.sessionId = <span style="color: #ff0000;">&quot;sessionId&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primaryAssignment.sessionSavePath = <span style="color: #ff0000;">&quot;sessionSavePath&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.primaryAssignment.sessionName = <span style="color: #ff0000;">&quot;sessionName&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.modifiedColumn = <span style="color: #ff0000;">&quot;modified&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.dataColumn = <span style="color: #ff0000;">&quot;session_data&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">resources.session.saveHandler.options.lifetimeColumn = <span style="color: #ff0000;">&quot;lifetime&quot;</span></div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.multiuser.intro.html">Building Multi-User Applications With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.multiuser.html">Iniciando com o Zend_Session, Zend_Auth, e Zend_Acl</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.multiuser.authentication.html">Authenticating Users in Zend Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="learning.html">Conhecendo o Zend Framework</a></li>
+  <li class="header up"><a href="learning.multiuser.html">Iniciando com o Zend_Session, Zend_Auth, e Zend_Acl</a></li>
+  <li><a href="learning.multiuser.intro.html">Building Multi-User Applications With Zend Framework</a></li>
+  <li class="active"><a href="learning.multiuser.sessions.html">Managing User Sessions In ZF</a></li>
+  <li><a href="learning.multiuser.authentication.html">Authenticating Users in Zend Framework</a></li>
+  <li><a href="learning.multiuser.authorization.html">Building an Authorization System in Zend Framework</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

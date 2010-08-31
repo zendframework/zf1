@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Internationalization of Zend_Form - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.form.i18n" class="section"><div class="info"><h1 class="title">Internationalization of Zend_Form</h1></div>
+    
+
+    <p class="para">
+        Increasingly, developers need to tailor their content for multiple
+        languages and regions. <span class="classname">Zend_Form</span> aims to make such a task trivial,
+        and leverages functionality in both <a href="zend.translate.html" class="link">Zend_Translate</a> and <a href="zend.validate.html" class="link">Zend_Validate</a> to do so.
+    </p>
+
+    <p class="para">
+        By default, no internationalisation (I18n) is performed. To turn on I18n
+        features in <span class="classname">Zend_Form</span>, you will need to instantiate a
+        <span class="classname">Zend_Translate</span> object with an appropriate adapter, and
+        attach it to <span class="classname">Zend_Form</span> and/or <span class="classname">Zend_Validate</span>.
+        See the <a href="zend.translate.html" class="link">Zend_Translate
+            documentation</a> for more information on creating the translate
+        object and translation files
+    </p>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Translation Can Be Turned Off Per Item</b><br /></span>
+        
+
+        
+            You can disable translation for any form, element, display group, or
+            sub form by calling its  <span class="methodname">setDisableTranslator($flag)</span>
+            method or passing a <span class="property">disableTranslator</span> option to the
+            object. This can be useful when you want to selectively disable
+            translation for individual elements or sets of elements.
+        <br />
+    </p></blockquote>
+
+    <div class="section" id="zend.form.i18n.initialization" name="zend.form.i18n.initialization"><div class="info"><h1 class="title">Initializing I18n in Forms</h1></div>
+        
+
+        <p class="para">
+            In order to initialize I18n in forms, you will need either a
+            <span class="classname">Zend_Translate</span> object or a
+            <span class="classname">Zend_Translate_Adapter</span> object, as detailed in the
+            <span class="classname">Zend_Translate</span> documentation. Once you have a
+            translation object, you have several options:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Easiest:</em> add it to the registry. All I18n
+                    aware components of Zend Framework will autodiscover a translate
+                    object that is in the registry under the &#039;Zend_Translate&#039; key
+                    and use it to perform translation and/or localization:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// use the 'Zend_Translate' key; $translate is a Zend_Translate object:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend_Translate'</span>, <span style="color: #0000ff;">$translate</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This will be picked up by <span class="classname">Zend_Form</span>,
+                    <span class="classname">Zend_Validate</span>, and
+                    <span class="classname">Zend_View_Helper_Translate</span>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    If all you are worried about is translating validation error
+                    messages, you can register the translation object with
+                    <span class="classname">Zend_Validate_Abstract</span>:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Tell all validation classes to use a specific translate adapter:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Validate_Abstract::<span style="color: #006600;">setDefaultTranslator</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$translate</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Alternatively, you can attach to the <span class="classname">Zend_Form</span>
+                    object as a global translator. This has the side effect of also
+                    translating validation error messages:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Tell all form classes to use a specific translate adapter, as well</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// as use this adapter to translate validation error messages:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Form::<span style="color: #006600;">setDefaultTranslator</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$translate</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Finally, you can attach a translator to a specific form instance
+                    or to specific elements using their  <span class="methodname">setTranslator()</span>
+                    methods:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Tell *this* form instance to use a specific translate adapter; it</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// will also be used to translate validation error messages for all</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// elements:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setTranslator</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$translate</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Tell *this* element to use a specific translate adapter; it will</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// also be used to translate validation error messages for this</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// particular element:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setTranslator</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$translate</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.form.i18n.standard" name="zend.form.i18n.standard"><div class="info"><h1 class="title">Standard I18n Targets</h1></div>
+        
+
+        <p class="para">
+            Now that you&#039;ve attached a translation object to, what exactly can
+            you translate by default?
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Validation error messages.</em> Validation
+                    error messages may be translated. To do so, use the various
+                    error code constants from the <span class="classname">Zend_Validate</span>
+                    validation classes as the message IDs. For more information
+                    on these codes, see the <a href="zend.validate.html" class="link">Zend_Validate</a>
+                    documentation.
+                </p>
+
+                <p class="para">
+                    Alternately, as of 1.6.0, you may provide translation
+                    strings using the actual error messages as message
+                    identifiers. This is the preferred use case for 1.6.0 and
+                    up, as we will be deprecating translation of message keys in
+                    future releases.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Labels.</em> Element labels will be
+                    translated, if a translation exists.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Fieldset Legends.</em> Display groups and
+                    sub forms render in fieldsets by default. The Fieldset
+                    decorator attempts to translate the legend before rendering
+                    the fieldset.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Form and Element Descriptions.</em> All form
+                    types (element, form, display group, sub form) allow
+                    specifying an optional item description. The Description
+                    decorator can be used to render this, and by default will
+                    take the value and attempt to translate it.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Multi-option Values.</em> for the various
+                    items inheriting from <span class="classname">Zend_Form_Element_Multi</span>
+                    (including the MultiCheckbox, Multiselect, and Radio
+                    elements), the option values (not keys) will be translated
+                    if a translation is available; this means that the option
+                    labels presented to the user will be translated.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Submit and Button Labels.</em> The various
+                    Submit and Button elements (Button, Submit, and Reset) will
+                    translate the label displayed to the user.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.form.html">Zend_Form</a></li>
+  <li><a href="zend.form.introduction.html">Zend_Form</a></li>
+  <li><a href="zend.form.quickstart.html">Zend_Form Quick Start</a></li>
+  <li><a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a></li>
+  <li><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></li>
+  <li><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></li>
+  <li><a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></li>
+  <li class="active"><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></li>
+  <li><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

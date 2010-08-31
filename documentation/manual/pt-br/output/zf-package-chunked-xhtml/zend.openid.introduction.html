@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Introduction - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.openid.html">Zend_OpenId</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.openid.html">Zend_OpenId</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.openid.introduction" class="section"><div class="info"><h1 class="title">Introduction</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_OpenId</span> is a Zend Framework component that provides a
+        simple <acronym class="acronym">API</acronym> for building OpenID-enabled sites and identity providers.
+    </p>
+
+    <div class="section" id="zend.openid.introduction.what" name="zend.openid.introduction.what"><div class="info"><h1 class="title">What is OpenID?</h1></div>
+        
+
+        <p class="para">
+            OpenID is a set of protocols for user-centric digital identities.
+            These protocols allows users to create an identity online, using an identity
+            provider. This identity can be used on any site that supports OpenID.
+            Using OpenID-enabled sites, users do not need to remember traditional
+            authentication tokens such as usernames and passwords for each site. All OpenID-enabled
+            sites accept a single OpenID identity. This identity is typically a
+            <acronym class="acronym">URL</acronym>. It may be the <acronym class="acronym">URL</acronym> of the user&#039;s personal
+            page, blog or other resource that may provide additional information about them. That
+            mean a user needs just one identifier for all sites he or she uses. services. OpenID is
+            an open, decentralized, and free user-centric solution. Users may choose which OpenID
+            provider to use, or even create their own personal identity server. No central authority
+            is required to approve or register OpenID-enabled sites or identity providers.
+        </p>
+
+        <p class="para">
+            For more information about OpenID visit the <a href="http://www.openid.net/" class="link external">&raquo; OpenID
+                official site</a>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.openid.introduction.how" name="zend.openid.introduction.how"><div class="info"><h1 class="title">How Does it Work?</h1></div>
+        
+
+        <p class="para">
+            The purpose of the <span class="classname">Zend_OpenId</span> component is to
+            implement the OpenID authentication protocol as described in the following
+            sequence diagram:
+        </p>
+
+        <p class="para">
+            <div class="inlinemediaobject"><div class="imageobject"><a href="images/d481d625821a97b9a5eb2cec99dca50e-zend.openid.protocol.jpg"><img src="images/d481d625821a97b9a5eb2cec99dca50e-zend.openid.protocol.jpg" alt="zend.openid.protocol.jpg" width="450" height="281" /></a></div></div>
+        </p>
+
+        <ol type="1">
+            <li class="listitem">
+                <p class="para">
+                    Authentication is initiated by the end user, who passes their
+                    OpenID identifier to the OpenID consumer through a User-Agent.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID consumer performs normalization and discovery on the user-supplied
+                    identifier. Through this process, the consumer obtains the claimed identifier,
+                    the <acronym class="acronym">URL</acronym> of the OpenID provider and an OpenID protocol
+                    version.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID consumer establishes an optional association with the
+                    provider using Diffie-Hellman keys. As a result, both parties have
+                    a common &quot;shared secret&quot; that is used for signing and verification
+                    of the subsequent messages.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID consumer redirects the User-Agent to the <acronym class="acronym">URL</acronym> of
+                    the OpenID provider with an OpenID authentication request.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID provider checks if the User-Agent is already
+                    authenticated and, if not, offers to do so.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The end user enters the required password.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID provider checks if it is allowed to pass the user
+                    identity to the given consumer, and asks the user if necessary.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The user allows or disallows passing his identity.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID Provider redirects the User-Agent back to the OpenID
+                    consumer with an &quot;authentication approved&quot; or &quot;failed&quot; request.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    The OpenID consumer verifies the information received from the
+                    provider by using the shared secret it got in step 3 or by
+                    sending an additional direct request to the OpenID provider.
+                </p>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section" id="zend.openid.introduction.structure" name="zend.openid.introduction.structure"><div class="info"><h1 class="title">Zend_OpenId Structure</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_OpenId</span> consists of two sub-packages. The first one
+            is <span class="classname">Zend_OpenId_Consumer</span> for developing OpenID-enabled sites,
+            and the second is <span class="classname">Zend_OpenId_Provider</span> for developing OpenID
+            servers. They are completely independent of each other and may be used
+            separately.
+        </p>
+
+        <p class="para">
+            The only common code used by these sub-packages are the OpenID Simple
+            Registration Extension implemented by
+            <span class="classname">Zend_OpenId_Extension_Sreg</span> class and a set of utility
+            functions implemented by the <span class="classname">Zend_OpenId</span> class.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                <span class="classname">Zend_OpenId</span> takes advantage of the <a href="http://php.net/gmp" class="link external">&raquo; GMP extension</a>, where available. Consider
+                enabling the GMP extension for enhanced performance when using
+                <span class="classname">Zend_OpenId</span>.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.openid.introduction.standards" name="zend.openid.introduction.standards"><div class="info"><h1 class="title">Supported OpenID Standards</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Zend_OpenId</span> component supports the following
+            standards:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    OpenID Authentication protocol version 1.1
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    OpenID Authentication protocol version 2.0 draft 11
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    OpenID Simple Registration Extension version 1.0
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    OpenID Simple Registration Extension version 1.1 draft 1
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.openid.html">Zend_OpenId</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.openid.html">Zend_OpenId</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.openid.html">Zend_OpenId</a></li>
+  <li class="active"><a href="zend.openid.introduction.html">Introduction</a></li>
+  <li><a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a></li>
+  <li><a href="zend.openid.provider.html">Zend_OpenId_Provider</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

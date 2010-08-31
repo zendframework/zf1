@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Goals and Design - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.autoloading.intro.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.autoloading.html">Auto-carregamento no Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.autoloading.usage.html">Basic Autoloader Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="learning.autoloading.design" class="section"><div class="info"><h1 class="title">Goals and Design</h1></div>
+    
+
+    <div class="section" id="learning.autoloading.design.naming" name="learning.autoloading.design.naming"><div class="info"><h1 class="title">Class Naming Conventions</h1></div>
+        
+
+        <p class="para">
+            To understand autoloading in Zend Framework, first you need to understand the
+            relationship between class names and class files.
+        </p>
+
+        <p class="para">
+            Zend Framework has borrowed an idea from <a href="http://pear.php.net/" class="link external">&raquo; PEAR</a>,
+            whereby class names have a 1:1 relationship with the filesystem. Simply put, the
+            underscore character (&quot;_&quot;) is replaced by a directory separator in order to resolve
+            the path to the file, and then the suffix &quot;<var class="filename">.php</var>&quot; is added. For
+            example, the class &quot;<span class="classname">Foo_Bar_Baz</span>&quot; would correspond to
+            &quot;<var class="filename">Foo/Bar/Baz.php</var>&quot; on the filesystem. The assumption is also
+            that the classes may be resolved via <acronym class="acronym">PHP</acronym>&#039;s
+            <span class="property">include_path</span> setting, which allows both
+             <span class="methodname">include()</span> and  <span class="methodname">require()</span> to find
+            the filename via a relative path lookup on the <span class="property">include_path</span>.
+        </p>
+
+        <p class="para">
+            Additionally, per <acronym class="acronym">PEAR</acronym> as well as the <a href="http://php.net/userlandnaming.tips" class="link external">&raquo; PHP project</a>, we use and recommend
+            using a vendor or project prefix for your code. What this means is that all classes you
+            write will share a common class prefix; for example, all code in Zend Framework has the
+            prefix &quot;Zend_&quot;. This naming convention helps prevent naming collisions. Within Zend
+            Framework, we often refer to this as the &quot;namespace&quot; prefix; be careful not to confuse
+            it with <acronym class="acronym">PHP</acronym>&#039;s native namespace implementation.
+        </p>
+
+        <p class="para">
+            Zend Framework follows these simple rules internally, and our coding standards encourage
+            that you do so as well for all library code.
+        </p>
+    </div>
+
+    <div class="section" id="learning.autoloading.design.autoloader" name="learning.autoloading.design.autoloader"><div class="info"><h1 class="title">Autoloader Conventions and Design</h1></div>
+        
+
+        <p class="para">
+            Zend Framework&#039;s autoloading support, provided primarily via
+            <span class="classname">Zend_Loader_Autoloader</span>, has the following goals and design
+            elements:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Provide namespace matching</em>. If the class
+                    namespace prefix is not in a list of registered namespaces, return
+                    <b><tt>FALSE</tt></b> immediately. This allows for more optimistic
+                    matching, as well as fallback to other autoloaders.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Allow the autoloader to act as a fallback autoloader</em>.
+                    In the case where a team may be widely distributed, or using an undetermined
+                    set of namespace prefixes, the autoloader should still be configurable such
+                    that it will attempt to match any namespace prefix. It will be noted,
+                    however, that this practice is not recommended, as it can lead to
+                    unnecessary lookups.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Allow toggling error suppression</em>. We feel -- and the
+                    greater <acronym class="acronym">PHP</acronym> community does as well -- that error suppression
+                    is a bad idea. It&#039;s expensive, and it masks very real application problems.
+                    So, by default, it should be off. However, if a developer
+                    <em class="emphasis">insists</em> that it be on, we allow toggling it on.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Allow specifying custom callbacks for autoloading</em>.
+                    Some developers don&#039;t want to use
+                     <span class="methodname">Zend_Loader::loadClass()</span> for autoloading, but still
+                    want to make use of Zend Framework&#039;s mechanisms.
+                    <span class="classname">Zend_Loader_Autoloader</span> allows specyfing an alternate
+                    callback for autoloading.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">Allow manipulation of the <acronym class="acronym">SPL</acronym> autoload
+                    callback chain</em>. The purpose of this is to allow specifying
+                    additional autoloaders -- for instance, resource loaders for classes
+                    that don&#039;t have a 1:1 mapping to the filesystem -- to be registered before
+                    or after the primary Zend Framework autoloader.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.autoloading.intro.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.autoloading.html">Auto-carregamento no Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.autoloading.usage.html">Basic Autoloader Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="learning.html">Conhecendo o Zend Framework</a></li>
+  <li class="header up"><a href="learning.autoloading.html">Auto-carregamento no Zend Framework</a></li>
+  <li><a href="learning.autoloading.intro.html">Introduction</a></li>
+  <li class="active"><a href="learning.autoloading.design.html">Goals and Design</a></li>
+  <li><a href="learning.autoloading.usage.html">Basic Autoloader Usage</a></li>
+  <li><a href="learning.autoloading.resources.html">Resource Autoloading</a></li>
+  <li><a href="learning.autoloading.conclusion.html">Conclusion</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

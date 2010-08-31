@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Filters for Zend_File_Transfer - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.file.transfer.validators.html">Validators for Zend_File_Transfer</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.file.html">Zend_File</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.filter.html">Zend_Filter</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.file.transfer.filters" class="section"><div class="info"><h1 class="title">Filters for Zend_File_Transfer</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_File_Transfer</span> is delivered with several file related filters
+        which can be used to automate several tasks which are often done on files. Note that file
+        filters are applied after validation. Also file filters behave slightly different that other
+        filters. They will always return the file name and not the changed content (which would be a
+        bad idea when working on 1GB files). All filters which are provided with
+        <span class="classname">Zend_File_Transfer</span> can be found in the
+        <span class="classname">Zend_Filter</span> component and are named
+        <span class="classname">Zend_Filter_File_*</span>. The following filters are actually available:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                <span class="classname">Decrypt</span>: This filter can decrypt a encrypted file.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="classname">Encrypt</span>: This filter can encrypt a file.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="classname">LowerCase</span>: This filter can lowercase the content of a
+                textfile.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="classname">Rename</span>: This filter can rename files, change the location and
+                even force overwriting of existing files.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="classname">UpperCase</span>: This filter can uppercase the content of a
+                textfile.
+            </p>
+        </li>
+    </ul>
+
+    <div class="section" id="zend.file.transfer.filters.usage" name="zend.file.transfer.filters.usage"><div class="info"><h1 class="title">Using filters with Zend_File_Transfer</h1></div>
+        
+
+        <p class="para">
+            The usage of filters is quite simple. There are several methods for adding and
+            manipulating filters.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addFilter($filter, $options = null, $files =
+                        null)</span>: Adds the given filter to the filter
+                    stack (optionally only to the file(s) specified).
+                    <var class="varname">$filter</var> may be either an actual filter
+                    instance, or a short name specifying the filter type
+                    (e.g., &#039;Rename&#039;).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addFilters(array $filters, $files =
+                        null)</span>: Adds the given filters to the stack of
+                    filters. Each entry may be either a filter
+                    type/options pair, or an array with the key &#039;filter&#039;
+                    specifying the filter (all other options will be
+                    considered filter options for instantiation).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setFilters(array $filters, $files =
+                        null)</span>: Overwrites any existing filters with
+                    the filters specified. The filters should follow the
+                    syntax for  <span class="methodname">addFilters()</span>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">hasFilter($name)</span>: Indicates if a
+                    filter has been registered.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilter($name)</span>: Returns a previously
+                    registered filter.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilters($files = null)</span>: Returns
+                    registered filters; if <var class="varname">$files</var> is passed,
+                    returns filters for that particular file or set of
+                    files.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">removeFilter($name)</span>: Removes a previously
+                    registered filter.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">clearFilters()</span>: Clears all
+                    registered filters.
+                </p>
+            </li>
+        </ul>
+
+        <div class="example"><div class="info"><p><b>Example #1 Add filters to a file transfer</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a new destination path</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\p</span>icture<span style="color: #000099; font-weight: bold;">\u</span>ploads'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a new destination path and overwrites existing files</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'target'</span> =&gt; <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\p</span>icture<span style="color: #000099; font-weight: bold;">\u</span>ploads'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'overwrite'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="example"><div class="info"><p><b>Example #2 Limit filters to single files</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                 <span class="methodname">addFilter()</span>,  <span class="methodname">addFilters()</span>, and
+                 <span class="methodname">setFilters()</span> each accept a final
+                <var class="varname">$files</var> argument. This argument can be used to
+                specify a particular file or array of files on which to set the
+                given filter.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a new destination path and limits it only to 'file2'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\p</span>icture<span style="color: #000099; font-weight: bold;">\u</span>ploads'</span>, <span style="color: #ff0000;">'file2'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Generally you should simply use the  <span class="methodname">addFilters()</span> method, which
+            can be called multiple times.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Add multiple filters</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                Often it&#039;s simpler just to call  <span class="methodname">addFilter()</span> multiple times.
+                One call for each filter. This also increases the readability and makes your code
+                more maintainable. As all methods provide a fluent interface you can couple the
+                calls as shown below:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a filesize with 20000 bytes</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\p</span>icture<span style="color: #000099; font-weight: bold;">\n</span>ewjpg'</span>, <span style="color: #ff0000;">'file1'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\p</span>icture<span style="color: #000099; font-weight: bold;">\n</span>ewgif'</span>, <span style="color: #ff0000;">'file2'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note that even though setting the same filter
+                multiple times is allowed, doing so can lead to issues when using
+                different options for the same filter.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.file.transfer.filters.decrypt" name="zend.file.transfer.filters.decrypt"><div class="info"><h1 class="title">Decrypt filter</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Decrypt</span> filter allows to decrypt a encrypted file.
+        </p>
+
+        <p class="para">
+            This filter makes use of <span class="classname">Zend_Filter_Decrypt</span>. It supports the
+            <span class="classname">Mcrypt</span> and <span class="classname">OpenSSL</span> extensions from
+            <acronym class="acronym">PHP</acronym>. Please read the related section for details about how to set the
+            options for decryption and which options are supported.
+        </p>
+
+        <p class="para">
+            This filter supports one additional option which can be used to save the decrypted file
+            with another filename. Set the <span class="property">filename</span> option to change the
+            filename where the decrypted file will be stored. If you suppress this option, the
+            decrypted file will overwrite the original encrypted file.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Using the Decrypt filter with Mcrypt</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to decrypt the uploaded encrypted file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// with mcrypt and the key mykey</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Decrypt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'adapter'</span> =&gt; <span style="color: #ff0000;">'mcrypt'</span>, <span style="color: #ff0000;">'key'</span> =&gt; <span style="color: #ff0000;">'mykey'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="example"><div class="info"><p><b>Example #5 Using the Decrypt filter with OpenSSL</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to decrypt the uploaded encrypted file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// with openssl and the provided keys</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Decrypt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'adapter'</span> =&gt; <span style="color: #ff0000;">'openssl'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'private'</span> =&gt; <span style="color: #ff0000;">'/path/to/privatekey.pem'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'envelope'</span> =&gt; <span style="color: #ff0000;">'/path/to/envelopekey.pem'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.file.transfer.filters.encrypt" name="zend.file.transfer.filters.encrypt"><div class="info"><h1 class="title">Encrypt filter</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Encrypt</span> filter allows to encrypt a file.
+        </p>
+
+        <p class="para">
+            This filter makes use of <span class="classname">Zend_Filter_Encrypt</span>. It supports the
+            <span class="classname">Mcrypt</span> and <span class="classname">OpenSSL</span> extensions from
+            <acronym class="acronym">PHP</acronym>. Please read the related section for details about how to set the
+            options for encryption and which options are supported.
+        </p>
+
+        <p class="para">
+            This filter supports one additional option which can be used to save the encrypted file
+            with another filename. Set the <span class="property">filename</span> option to change the
+            filename where the encrypted file will be stored. If you suppress this option, the
+            encrypted file will overwrite the original file.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 Using the Encrypt filter with Mcrypt</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to encrypt the uploaded file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// with mcrypt and the key mykey</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Encrypt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'adapter'</span> =&gt; <span style="color: #ff0000;">'mcrypt'</span>, <span style="color: #ff0000;">'key'</span> =&gt; <span style="color: #ff0000;">'mykey'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="example"><div class="info"><p><b>Example #7 Using the Encrypt filter with OpenSSL</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to encrypt the uploaded file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// with openssl and the provided keys</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Encrypt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'adapter'</span> =&gt; <span style="color: #ff0000;">'openssl'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'public'</span> =&gt; <span style="color: #ff0000;">'/path/to/publickey.pem'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.file.transfer.filters.lowercase" name="zend.file.transfer.filters.lowercase"><div class="info"><h1 class="title">LowerCase filter</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">LowerCase</span> filter allows to change the content of a file to
+            lowercase. You should use this filter only on textfiles.
+        </p>
+
+        <p class="para">
+            At initiation you can give a string which will then be used as encoding. Or you can use
+            the  <span class="methodname">setEncoding()</span> method to set it afterwards.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #8 Using the LowerCase filter</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'MimeType'</span>, <span style="color: #ff0000;">'text'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to lowercase the uploaded textfile</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'LowerCase'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to lowercase the uploaded file but only for uploadfile1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'LowerCase'</span>, <span style="color: #000000; font-weight: bold;">null</span>, <span style="color: #ff0000;">'uploadfile1'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to lowercase with encoding set to ISO-8859-1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'LowerCase'</span>, <span style="color: #ff0000;">'ISO-8859-1'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note that due to the fact that the options for the LowerCase filter are optional,
+                you must give a <b><tt>NULL</tt></b> as second parameter (the options) when you
+                want to limit it to a single file element.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.file.transfer.filters.rename" name="zend.file.transfer.filters.rename"><div class="info"><h1 class="title">Rename filter</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Rename</span> filter allows to change the destination of the upload,
+            the filename and also to overwrite existing files. It supports the following options:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">source</span>: The name and destination of the old file which
+                    shall be renamed.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">target</span>: The new directory, or filename of the file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">overwrite</span>: Sets if the old file overwrites the new one if
+                    it already exists. The default value is <b><tt>FALSE</tt></b>.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Additionally you can also use the method  <span class="methodname">setFile()</span> to set
+            files, which erases all previous set,  <span class="methodname">addFile()</span> to add a new
+            file to existing ones, and  <span class="methodname">getFile()</span> to get all actually set
+            files. To simplify things, this filter understands several notations and that methods
+            and constructor understand the same notations.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #9 Using the Rename filter</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a new destination path for all files</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\m</span>ypics<span style="color: #000099; font-weight: bold;">\n</span>ew'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set a new destination path only for uploadfile1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>, <span style="color: #ff0000;">'C:<span style="color: #000099; font-weight: bold;">\m</span>ypics<span style="color: #000099; font-weight: bold;">\n</span>ewgifs'</span>, <span style="color: #ff0000;">'uploadfile1'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            You can use different notations. Below is a table where you will find a description and
+            the intention for the supported notations. Note that when you use the Adapter or the
+            Form Element you will not be able to use all described notations.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Different notations of the rename filter and their meaning</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>notation</th>
+                        <th>description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">
+                             <span class="methodname">addFile(&#039;C:\uploads&#039;)</span>
+                        </td>
+
+                        <td align="left">
+                            Specifies a new location for all files when the given string is a
+                            directory. Note that you will get an exception when the file already
+                            exists, see the overwriting parameter.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                             <span class="methodname">addFile(&#039;C:\uploads\file.ext&#039;)</span>
+                        </td>
+
+                        <td align="left">
+                            Specifies a new location and filename for all files when the given
+                            string is not detected as directory. Note that you will get an exception
+                            when the file already exists, see the overwriting parameter.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                             <span class="methodname">addFile(array(&#039;C:\uploads\file.ext&#039;, &#039;overwrite&#039; =&gt;
+                                true)</span>)
+                        </td>
+
+                        <td align="left">
+                            Specifies a new location and filename for all files when the given
+                            string is not detected as directory and overwrites an existing file with
+                            the same target name. Note, that you will get no notification that a
+                            file was overwritten.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                             <span class="methodname">addFile(array(&#039;source&#039; =&gt; &#039;C:\temp\uploads&#039;, &#039;target&#039; =&gt;
+                                &#039;C:\uploads&#039;)</span>)
+                        </td>
+
+                        <td align="left">
+                            Specifies a new location for all files in the old location when the
+                            given strings are detected as directory. Note that you will get an
+                            exception when the file already exists, see the overwriting parameter.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                            addFile(array(&#039;source&#039; =&gt; &#039;C:\temp\uploads&#039;, &#039;target&#039; =&gt; &#039;C:\uploads&#039;,
+                            &#039;overwrite&#039; =&gt; true))
+                        </td>
+
+                        <td align="left">
+                            Specifies a new location for all files in the old location when the
+                            given strings are detected as directory and overwrites and existing file
+                            with the same target name. Note, that you will get no notification that
+                            a file was overwritten.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.file.transfer.filters.uppercase" name="zend.file.transfer.filters.uppercase"><div class="info"><h1 class="title">UpperCase filter</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">UpperCase</span> filter allows to change the content of a file to
+            uppercase. You should use this filter only on textfiles.
+        </p>
+
+        <p class="para">
+            At initiation you can give a string which will then be used as encoding. Or you can use
+            the  <span class="methodname">setEncoding()</span> method to set it afterwards.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #10 Using the UpperCase filter</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'MimeType'</span>, <span style="color: #ff0000;">'text'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to uppercase the uploaded textfile</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'UpperCase'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to uppercase the uploaded file but only for uploadfile1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'UpperCase'</span>, <span style="color: #000000; font-weight: bold;">null</span>, <span style="color: #ff0000;">'uploadfile1'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Adds a filter to uppercase with encoding set to ISO-8859-1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'UpperCase'</span>, <span style="color: #ff0000;">'ISO-8859-1'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note that due to the fact that the options for the UpperCase filter are optional,
+                you must give a <b><tt>NULL</tt></b> as second parameter (the options) when you
+                want to limit it to a single file element.
+            <br />
+        </p></blockquote>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.file.transfer.validators.html">Validators for Zend_File_Transfer</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.file.html">Zend_File</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.filter.html">Zend_Filter</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.file.html">Zend_File</a></li>
+  <li><a href="zend.file.transfer.introduction.html">Zend_File_Transfer</a></li>
+  <li><a href="zend.file.transfer.validators.html">Validators for Zend_File_Transfer</a></li>
+  <li class="active"><a href="zend.file.transfer.filters.html">Filters for Zend_File_Transfer</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

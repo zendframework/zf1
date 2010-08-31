@@ -1,0 +1,701 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend Framework 1.7 - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.18.html">Zend Framework 1.8</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.16.html">Zend Framework 1.6</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="migration.17" class="section"><div class="info"><h1 class="title">Zend Framework 1.7</h1></div>
+    
+
+    <p class="para">
+        When upgrading from a previous release to Zend Framework 1.7 or higher you
+        should note the following migration notes.
+    </p>
+
+    <div class="section" id="migration.17.zend.controller" name="migration.17.zend.controller"><div class="info"><h1 class="title">Zend_Controller</h1></div>
+        
+
+        <div class="section" id="migration.17.zend.controller.dispatcher" name="migration.17.zend.controller.dispatcher"><div class="info"><h1 class="title">Dispatcher Interface Changes</h1></div>
+            
+
+            <p class="para">
+                Users brought to our attention the fact that
+                <span class="classname">Zend_Controller_Action_Helper_ViewRenderer</span> were
+                using a method of the dispatcher abstract class that was not in
+                the dispatcher interface. We have now added the following method to
+                ensure that custom dispatchers will continue to work with the
+                shipped implementations:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">formatModuleName()</span>: should be used to take a raw
+                        controller name, such as one that would be packaged inside a request
+                        object, and reformat it to a proper class name that a class extending
+                        <span class="classname">Zend_Controller_Action</span> would use
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="migration.17.zend.file.transfer" name="migration.17.zend.file.transfer"><div class="info"><h1 class="title">Zend_File_Transfer</h1></div>
+        
+
+        <div class="section" id="migration.17.zend.file.transfer.validators" name="migration.17.zend.file.transfer.validators"><div class="info"><h1 class="title">Changes when using filters and validators</h1></div>
+            
+
+            <p class="para">
+                As noted by users, the validators from <span class="classname">Zend_File_Transfer</span>
+                do not work in conjunction with <span class="classname">Zend_Config</span> due to the fact
+                that they have not used named arrays.
+            </p>
+
+            <p class="para">
+                Therefor, all filters and validators for <span class="classname">Zend_File_Transfer</span>
+                have been reworked. While the old signatures continue to work,
+                they have been marked as deprecated, and will emit a <acronym class="acronym">PHP</acronym> notice
+                asking you to fix them.
+            </p>
+
+            <p class="para">
+                The following list shows you the changes you will have to do for proper
+                usage of the parameters.
+            </p>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.rename" name="migration.17.zend.file.transfer.validators.rename"><div class="info"><h1 class="title">Filter: Rename</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Filter_File_Rename($oldfile, $newfile,
+                                $overwrite)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Filter_File_Rename($options)</span>
+                            where <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">source</em> equals to <var class="varname">$oldfile</var>,
+                            <em class="emphasis">target</em> equals to <var class="varname">$newfile</var>,
+                            <em class="emphasis">overwrite</em> equals to <var class="varname">$overwrite</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #1 Changes for the rename filter from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/oldfile'</span>, <span style="color: #ff0000;">'/path/to/newfile'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addFilter</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Rename'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'source'</span> =&gt; <span style="color: #ff0000;">'/path/to/oldfile'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'target'</span> =&gt; <span style="color: #ff0000;">'/path/to/newfile'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'overwrite'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.count" name="migration.17.zend.file.transfer.validators.count"><div class="info"><h1 class="title">Validator: Count</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Count($min, $max)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Count($options)</span>
+                            where <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">min</em> equals to <var class="varname">$min</var>,
+                            <em class="emphasis">max</em> equals to <var class="varname">$max</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #2 Changes for the count validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Count'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">2</span>, <span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Count'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'min'</span> =&gt; <span style="color: #cc66cc;">2</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'max'</span> =&gt; <span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.extension" name="migration.17.zend.file.transfer.validators.extension"><div class="info"><h1 class="title">Validator:Extension</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Extension($extension, $case)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Extension($options)</span> where
+                            <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">*</em> equals to <var class="varname">$extension</var> and can
+                            have any other key, <em class="emphasis">case</em> equals to
+                            <var class="varname">$case</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #3 Changes for the extension validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Extension'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'jpg,gif,bmp'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Extension'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'extension1'</span> =&gt; <span style="color: #ff0000;">'jpg,gif,bmp'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'case'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.filessize" name="migration.17.zend.file.transfer.validators.filessize"><div class="info"><h1 class="title">Validator: FilesSize</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_FilesSize($min, $max,
+                                $bytestring)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_FilesSize($options)</span> where
+                            <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">min</em> equals to <var class="varname">$min</var>,
+                            <em class="emphasis">max</em> equals to <var class="varname">$max</var>,
+                            <em class="emphasis">bytestring</em> equals to
+                            <var class="varname">$bytestring</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <p class="para">
+                    Additionally, the  <span class="methodname">useByteString()</span> method
+                    signature has changed. It can only be used to test if the
+                    validator is expecting to use byte strings in generated
+                    messages. To set the value of the flag, use the
+                     <span class="methodname">setUseByteString()</span> method.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #4 Changes for the filessize validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FilesSize'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">100</span>, <span style="color: #cc66cc;">10000</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FilesSize'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'min'</span> =&gt; <span style="color: #cc66cc;">100</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'max'</span> =&gt; <span style="color: #cc66cc;">10000</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bytestring'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">useByteString</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// set flag</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">setUseByteSting</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// set flag</span></div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.hash" name="migration.17.zend.file.transfer.validators.hash"><div class="info"><h1 class="title">Validator: Hash</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Hash($hash, $algorithm)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Hash($options)</span>
+                            where <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">*</em> equals to <var class="varname">$hash</var> and can have
+                            any other key, <em class="emphasis">algorithm</em> equals to
+                            <var class="varname">$algorithm</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #5 Changes for the hash validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Hash'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'12345'</span>, <span style="color: #ff0000;">'md5'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Hash'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'hash1'</span> =&gt; <span style="color: #ff0000;">'12345'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'algorithm'</span> =&gt; <span style="color: #ff0000;">'md5'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.imagesize" name="migration.17.zend.file.transfer.validators.imagesize"><div class="info"><h1 class="title">Validator: ImageSize</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_ImageSize($minwidth, $minheight,
+                                $maxwidth, $maxheight)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_FilesSize($options)</span> where
+                            <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">minwidth</em> equals to <var class="varname">$minwidth</var>,
+                            <em class="emphasis">maxwidth</em> equals to <var class="varname">$maxwidth</var>,
+                            <em class="emphasis">minheight</em> equals to <var class="varname">$minheight</var>,
+                            <em class="emphasis">maxheight</em> equals to <var class="varname">$maxheight</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #6 Changes for the imagesize validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ImageSize'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">10</span>, <span style="color: #cc66cc;">10</span>, <span style="color: #cc66cc;">100</span>, <span style="color: #cc66cc;">100</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ImageSize'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'minwidth'</span> =&gt; <span style="color: #cc66cc;">10</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'minheight'</span> =&gt; <span style="color: #cc66cc;">10</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'maxwidth'</span> =&gt; <span style="color: #cc66cc;">100</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'maxheight'</span> =&gt; <span style="color: #cc66cc;">100</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+
+            <div class="section" id="migration.17.zend.file.transfer.validators.size" name="migration.17.zend.file.transfer.validators.size"><div class="info"><h1 class="title">Validator: Size</h1></div>
+                
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Old method <acronym class="acronym">API</acronym>:
+                                 <span class="methodname">Zend_Validate_File_Size($min, $max,
+                                $bytestring)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            New method <acronym class="acronym">API</acronym>:
+                             <span class="methodname">Zend_Validate_File_Size($options)</span>
+                            where <var class="varname">$options</var> accepts the following array keys:
+                            <em class="emphasis">min</em> equals to <var class="varname">$min</var>,
+                            <em class="emphasis">max</em> equals to <var class="varname">$max</var>,
+                            <em class="emphasis">bytestring</em> equals to
+                            <var class="varname">$bytestring</var>.
+                        </p>
+                    </li>
+                </ul>
+
+                <div class="example"><div class="info"><p><b>Example #7 Changes for the size validator from 1.6 to 1.7</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">100</span>, <span style="color: #cc66cc;">10000</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$upload</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'min'</span> =&gt; <span style="color: #cc66cc;">100</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'max'</span> =&gt; <span style="color: #cc66cc;">10000</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bytestring'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="migration.17.zend.locale" name="migration.17.zend.locale"><div class="info"><h1 class="title">Zend_Locale</h1></div>
+        
+
+        <div class="section" id="migration.17.zend.locale.islocale" name="migration.17.zend.locale.islocale"><div class="info"><h1 class="title">Changes when using isLocale()</h1></div>
+            
+
+            <p class="para">
+                According to the coding standards  <span class="methodname">isLocale()</span> had to be
+                changed to return a boolean. In previous releases a string was returned on success.
+                For release 1.7 a compatibility mode has been added which allows to use the
+                old behaviour of a returned string, but it triggers a user warning to
+                mention you to change to the new behaviour. The rerouting which the old
+                behaviour of  <span class="methodname">isLocale()</span> could have done is no longer
+                neccessary as all I18n will now process a rerouting themself.
+            </p>
+
+            <p class="para">
+                To migrate your scripts to the new <acronym class="acronym">API</acronym>, simply use the method as
+                shown below.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #8 How to change isLocale() from 1.6 to 1.7</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span> = Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// do something</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// You should change the compatiblity mode to prevent user warnings</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// But you can do this in your bootstrap</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Locale::<span style="color: #0000ff;">$compatibilityMode</span> = <span style="color: #000000; font-weight: bold;">false</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                <div class="example-contents"><p>
+                    Note that you can use the second parameter to see if the locale is correct
+                    without processing a rerouting.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span> = Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// do something</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// You should change the compatiblity mode to prevent user warnings</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// But you can do this in your bootstrap</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Locale::<span style="color: #0000ff;">$compatibilityMode</span> = <span style="color: #000000; font-weight: bold;">false</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// no locale at all</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// original string is no locale but can be rerouted</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="migration.17.zend.locale.islocale.getdefault" name="migration.17.zend.locale.islocale.getdefault"><div class="info"><h1 class="title">Changes when using getDefault()</h1></div>
+            
+
+            <p class="para">
+                The meaning of the  <span class="methodname">getDefault()</span> method has been change due
+                to the fact that we integrated a framework locale which can be set with
+                 <span class="methodname">setDefault()</span>. It does no longer return the locale chain
+                but only the set framework locale.
+            </p>
+
+            <p class="para">
+                To migrate your scripts to the new <acronym class="acronym">API</acronym>, simply use the method as
+                shown below.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #9 How to change getDefault() from 1.6 to 1.7</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example for 1.6</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locales</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getDefault</span><span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">BROWSER</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Same example for 1.7</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// You should change the compatiblity mode to prevent user warnings</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// But you can do this in your bootstrap</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Locale::<span style="color: #0000ff;">$compatibilityMode</span> = <span style="color: #000000; font-weight: bold;">false</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = Zend_Locale::<span style="color: #006600;">getOrder</span><span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">BROWSER</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <div class="example-contents"><p>
+                    Note that the second parameter of the old  <span class="methodname">getDefault()</span>
+                    implementation is not available anymore, but the returned values are the same.
+                </p></div>
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    Per default the old behaviour is still active, but throws a user warning.
+                    When you have changed your code to the new behaviour you should also change
+                    the compatibility mode to <b><tt>FALSE</tt></b> so that no warning is
+                    thrown anymore.
+                <br />
+            </p></blockquote>
+        </div>
+    </div>
+
+    <div class="section" id="migration.17.zend.translate" name="migration.17.zend.translate"><div class="info"><h1 class="title">Zend_Translate</h1></div>
+        
+
+        <div class="section" id="migration.17.zend.translate.languages" name="migration.17.zend.translate.languages"><div class="info"><h1 class="title">Setting languages</h1></div>
+            
+
+            <p class="para">
+                When using automatic detection of languages, or setting languages manually
+                to <span class="classname">Zend_Translate</span> you may have mentioned that from time to
+                time a notice is thrown about not added or empty translations. In some previous
+                release also an exception was raised in some cases.
+            </p>
+
+            <p class="para">
+                The reason is, that when a user requests a non existing language, you
+                have no simple way to detect what&#039;s going wrong. So we added those
+                notices which show up in your log and tell you that the user requested
+                a language which you do not support. Note that the code, even when
+                we trigger such an notice, keeps working without problems.
+            </p>
+
+            <p class="para">
+                But when you use a own error or exception handler, like xdebug, you
+                will get all notices returned, even if this was not your intention.
+                This is due to the fact that these handlers override all settings
+                from within <acronym class="acronym">PHP</acronym>.
+            </p>
+
+            <p class="para">
+                To get rid of these notices you can simply set the new option
+                &#039;disableNotices&#039; to <b><tt>TRUE</tt></b>. It defaults to
+                <b><tt>FALSE</tt></b>.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #10 Setting languages without getting notices</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    Let&#039;s assume that we have &#039;en&#039; available and our user requests
+                    &#039;fr&#039; which is not in our portfolio of translated languages.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$language</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Translate<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'gettext'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'/path/to/translations'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'auto'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <div class="example-contents"><p>
+                    In this case we will get an notice about a not available language &#039;fr&#039;.
+                    Simply add the option and the notices will be disabled.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$language</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Translate<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'gettext'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'/path/to/translations'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'auto'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'disableNotices'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="migration.17.zend.view" name="migration.17.zend.view"><div class="info"><h1 class="title">Zend_View</h1></div>
+        
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                The <acronym class="acronym">API</acronym> changes within <span class="classname">Zend_View</span> are only
+                notable for you when you are upgrading to release 1.7.5 or higher.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Prior to the 1.7.5 release, the Zend Framework team was notified of
+            a potential Local File Inclusion (<acronym class="acronym">LFI</acronym>) vulnerability in the
+             <span class="methodname">Zend_View::render()</span> method. Prior to 1.7.5, the method
+            allowed, by default, the ability to specify view scripts that
+            included parent directory notation (e.g., &quot;../&quot; or &quot;..\&quot;). This
+            opens the possibility for an <acronym class="acronym">LFI</acronym> attack if unfiltered user input is
+            passed to the  <span class="methodname">render()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Where $_GET['foobar'] = '../../../../etc/passwd'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'foobar'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// LFI inclusion</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            <span class="classname">Zend_View</span> now by default raises an exception when such
+            a view script is requested.
+        </p>
+
+        <div class="section" id="migration.17.zend.view.disabling" name="migration.17.zend.view.disabling"><div class="info"><h1 class="title">Disabling LFI protection for the render() method</h1></div>
+            
+
+            <p class="para">
+                Since a number of developers reported that they were using such
+                notation within their applications that was <em class="emphasis">not</em>
+                the result of user input, a special flag was created to allow
+                disabling the default protection. You have two methods for doing so:
+                by passing the &#039;lfiProtectionOn&#039; key to the constructor options, or
+                by explicitly calling the  <span class="methodname">setLfiProtection()</span> method.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Disabling via constructor</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'lfiProtectionOn'</span> =&gt; <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Disabling via exlicit method call:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">setLfiProtection</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.18.html">Zend Framework 1.8</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.16.html">Zend Framework 1.6</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></li>
+  <li><a href="migration.110.html">Zend Framework 1.10</a></li>
+  <li><a href="migration.19.html">Zend Framework 1.9</a></li>
+  <li><a href="migration.18.html">Zend Framework 1.8</a></li>
+  <li class="active"><a href="migration.17.html">Zend Framework 1.7</a></li>
+  <li><a href="migration.16.html">Zend Framework 1.6</a></li>
+  <li><a href="migration.15.html">Zend Framework 1.5</a></li>
+  <li><a href="migration.10.html">Zend Framework 1.0</a></li>
+  <li><a href="migration.09.html">Zend Framework 0.9</a></li>
+  <li><a href="migration.08.html">Zend Framework 0.8</a></li>
+  <li><a href="migration.06.html">Zend Framework 0.6</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

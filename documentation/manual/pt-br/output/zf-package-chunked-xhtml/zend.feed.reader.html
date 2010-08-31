@@ -1,0 +1,1762 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Feed_Reader - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.feed.custom-feed.html">Custom Feed and Entry Classes</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.feed.html">Zend_Feed</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.feed.writer.html">Zend_Feed_Writer</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.feed.reader" class="section"><div class="info"><h1 class="title">Zend_Feed_Reader</h1></div>
+    
+
+    <div class="section" id="zend.feed.reader.introduction" name="zend.feed.reader.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Feed_Reader</span> is a component used to
+            consume <acronym class="acronym">RSS</acronym> and Atom feeds of any version, including
+            <acronym class="acronym">RDF</acronym>/<acronym class="acronym">RSS</acronym> 1.0,
+            <acronym class="acronym">RSS</acronym> 2.0, Atom 0.3 and Atom 1.0. The <acronym class="acronym">API</acronym> for
+            retrieving feed data is
+            deliberately simple since <span class="classname">Zend_Feed_Reader</span> is
+            capable of searching any feed of any type for the information
+            requested through the <acronym class="acronym">API</acronym>. If the typical elements containing this
+            information are not present, it will adapt and fall back on a
+            variety of alternative elements instead. This ability to choose from
+            alternatives removes the need for users to create their own
+            abstraction layer on top of the component to make it useful or have
+            any in-depth knowledge of the underlying standards, current
+            alternatives, and namespaced extensions.
+        </p>
+
+        <p class="para">
+            Internally, <span class="classname">Zend_Feed_Reader</span> works almost
+            entirely on the basis of making XPath queries against the feed <acronym class="acronym">XML</acronym>&#039;s
+            Document Object Model. The <acronym class="acronym">DOM</acronym> is not exposed though a chained
+            property <acronym class="acronym">API</acronym> like <span class="classname">Zend_Feed</span> though the
+            underlying DOMDocument, DOMElement and DOMXPath objects are exposed for external
+            manipulation. This singular approach to parsing is consistent and
+            the component offers a plugin system to add to the Feed and Entry
+            level <acronym class="acronym">API</acronym> by writing Extensions on a similar basis.
+        </p>
+
+        <p class="para">
+            Performance is assisted in three ways. First of all,
+            <span class="classname">Zend_Feed_Reader</span> supports caching using
+            <span class="classname">Zend_Cache</span> to maintain a copy of the original
+            feed <acronym class="acronym">XML</acronym>. This allows you to skip network requests for a feed
+            <acronym class="acronym">URI</acronym> if
+            the cache is valid. Second, the Feed and Entry level <acronym class="acronym">API</acronym> is backed
+            by an internal cache (non-persistant) so repeat <acronym class="acronym">API</acronym> calls for the
+            same feed will avoid additional <acronym class="acronym">DOM</acronym> or XPath use. Thirdly, importing
+            feeds from a <acronym class="acronym">URI</acronym> can take advantage of
+            <acronym class="acronym">HTTP</acronym> Conditional <b><tt>GET</tt></b> requests
+            which allow servers to issue an empty 304 response when the
+            requested feed has not changed since the last time you requested it.
+            In the final case, an instance of <span class="classname">Zend_Cache</span>
+            will hold the last received feed along with the ETag and
+            Last-Modified header values sent in the <acronym class="acronym">HTTP</acronym> response.
+        </p>
+
+        <p class="para">
+            In relation to <span class="classname">Zend_Feed</span>,
+            <span class="classname">Zend_Feed_Reader</span> was formulated as a free
+            standing replacement for <span class="classname">Zend_Feed</span> but it is
+            not backwards compatible with <span class="classname">Zend_Feed</span>.
+            Rather it is an alternative following a different ideology focused
+            on being simple to use, flexible, consistent and extendable through
+            the plugin system. <span class="classname">Zend_Feed_Reader</span> is also
+            not capable of constructing feeds and delegates this responsibility
+            to <span class="classname">Zend_Feed_Writer</span>, its sibling in arms.
+        </p>
+    </div>
+
+    <div class="section" id="zend.feed.reader.import" name="zend.feed.reader.import"><div class="info"><h1 class="title">Importing Feeds</h1></div>
+        
+
+        <p class="para">
+            Importing a feed with <span class="classname">Zend_Feed_Reader</span> is not
+            that much different to <span class="classname">Zend_Feed</span>. Feeds can
+            be imported from a string, file, <acronym class="acronym">URI</acronym> or an instance of type
+            <span class="classname">Zend_Feed_Abstract</span>. Importing from a <acronym class="acronym">URI</acronym> can
+            additionally utilise a <acronym class="acronym">HTTP</acronym> Conditional <b><tt>GET</tt></b>
+            request. If importing fails, an exception will be raised. The end result will be an
+            object of type <span class="classname">Zend_Feed_Reader_FeedInterface</span>, the
+            core implementations of which are
+            <span class="classname">Zend_Feed_Reader_Feed_Rss</span> and
+            <span class="classname">Zend_Feed_Reader_Feed_Atom</span>
+            (<span class="classname">Zend_Feed</span> took all the short names!). Both
+            objects support multiple (all existing) versions of these broad feed
+            types.
+        </p>
+
+        <p class="para">
+            In the following example, we import an <acronym class="acronym">RDF</acronym>/<acronym class="acronym">RSS</acronym> 1.0
+            feed and extract some basic information that can be saved to a database or
+            elsewhere.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net/rdf/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$data</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'title'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getTitle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'link'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'dateModified'</span> =&gt; <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getDateModified</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'description'</span>&nbsp; =&gt; <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getDescription</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'language'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getLanguage</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'entries'</span>&nbsp; &nbsp; &nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$feed</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$entry</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$edata</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'title'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getTitle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'description'</span>&nbsp; =&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getDescription</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'dateModified'</span> =&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getDateModified</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'authors'</span>&nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getAuthors</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'link'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'content'</span>&nbsp; &nbsp; &nbsp; =&gt; <span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">getContent</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'entries'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$edata</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The example above demonstrates
+            <span class="classname">Zend_Feed_Reader</span>&#039;s <acronym class="acronym">API</acronym>, and it also
+            demonstrates some of its internal operation. In reality, the <acronym class="acronym">RDF</acronym>
+            feed selected does not have any native date or author elements,
+            however it does utilise the Dublin Core 1.1 module which offers
+            namespaced creator and date elements.
+            <span class="classname">Zend_Feed_Reader</span> falls back on these and
+            similar options if no relevant native elements exist. If it
+            absolutely cannot find an alternative it will return <b><tt>NULL</tt></b>,
+            indicating the information could not be found in the feed. You
+            should note that classes implementing
+            <span class="classname">Zend_Feed_Reader_FeedInterface</span> also implement
+            the <acronym class="acronym">SPL</acronym> <span class="classname">Iterator</span> and
+            <span class="classname">Countable</span> interfaces.
+        </p>
+
+        <p class="para">
+            Feeds can also be imported from strings, files, and even objects of
+            type <span class="classname">Zend_Feed_Abstract</span>.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// from a URI</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net/rdf/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// from a String</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">importString</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$feedXmlString</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// from a file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">importFile</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'./feed.xml'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// from a Zend_Feed_Abstract object</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$zfeed</span> = Zend_Feed::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net/atom/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>&nbsp; = Zend_Feed_Reader::<span style="color: #006600;">importFeed</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$zfeed</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.feed.reader.sources" name="zend.feed.reader.sources"><div class="info"><h1 class="title">Retrieving Underlying Feed and Entry Sources</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Feed_Reader</span> does its best not to stick
+            you in a narrow confine. If you need to work on a feed outside of
+            <span class="classname">Zend_Feed_Reader</span>, you can extract the base
+            DOMDocument or DOMElement objects from any class, or even an <acronym class="acronym">XML</acronym>
+            string containing these. Also provided are methods to extract the current DOMXPath
+            object (with all core and Extension namespaces registered) and the correct prefix used
+            in all XPath queries for the current Feed or Entry. The basic methods
+            to use (on any object) are  <span class="methodname">saveXml()</span>,
+             <span class="methodname">getDomDocument()</span>,
+             <span class="methodname">getElement()</span>,
+             <span class="methodname">getXpath()</span> and
+             <span class="methodname">getXpathPrefix()</span>. These will let you break
+            free of <span class="classname">Zend_Feed_Reader</span> and do whatever else
+            you want.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">saveXml()</span> returns an <acronym class="acronym">XML</acronym> string
+                    containing only the element representing the current object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDomDocument()</span> returns the DOMDocument object
+                    representing the entire feed (even if called from an Entry object).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getElement()</span> returns the
+                    DOMElement of the current object (i.e. the Feed or current Entry).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getXpath()</span> returns the DOMXPath object for the current
+                    feed (even if called from an Entry object) with the namespaces of
+                    the current feed type and all loaded Extensions
+                    pre-registered.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getXpathPrefix()</span> returns the query
+                    prefix for the current object (i.e. the Feed or current
+                    Entry) which includes the correct XPath query path for that
+                    specific Feed or Entry.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Here&#039;s an example where a feed might include an <acronym class="acronym">RSS</acronym> Extension not
+            supported by <span class="classname">Zend_Feed_Reader</span> out of the box.
+            Notably, you could write and register an Extension (covered later)
+            to do this, but that&#039;s not always warranted for a quick check. You must register any
+            new namespaces on the DOMXPath object before use unless they are
+            registered by <span class="classname">Zend_Feed_Reader</span> or an
+            Extension beforehand.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>&nbsp; &nbsp; &nbsp; &nbsp; = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net/rdf/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$xpathPrefix</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getXpathPrefix</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$xpath</span>&nbsp; &nbsp; &nbsp; &nbsp;= <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getXpath</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$xpath</span>-&gt;<span style="color: #006600;">registerNamespace</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'admin'</span>, <span style="color: #ff0000;">'http://webns.net/mvcb/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$reportErrorsTo</span> = <span style="color: #0000ff;">$xpath</span>-&gt;<span style="color: #006600;">evaluate</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'string('</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;. <span style="color: #0000ff;">$xpathPrefix</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;. <span style="color: #ff0000;">'/admin:errorReportsTo)'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <div class="warning"><b class="warning">Warning</b>
+            <p class="para">
+                If you register an already registered namespace with a different
+                prefix name to that used internally by
+                <span class="classname">Zend_Feed_Reader</span>, it will break the
+                internal operation of this component.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.feed.reader.cache-request" name="zend.feed.reader.cache-request"><div class="info"><h1 class="title">Cache Support and Intelligent Requests</h1></div>
+        
+
+        <div class="section" id="zend.feed.reader.cache-request.cache" name="zend.feed.reader.cache-request.cache"><div class="info"><h1 class="title">Adding Cache Support to Zend_Feed_Reader</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Feed_Reader</span> supports using an
+                instance of <span class="classname">Zend_Cache</span> to cache feeds (as
+                <acronym class="acronym">XML</acronym>) to avoid unnecessary network requests. Adding a cache is as
+                simple here as it is for other Zend Framework components, create
+                and configure your cache and then tell
+                <span class="classname">Zend_Feed_Reader</span> to use it! The cache key
+                used is &quot;<span class="classname">Zend_Feed_Reader_</span>&quot; followed by the
+                <acronym class="acronym">MD5</acronym> hash of the feed&#039;s <acronym class="acronym">URI</acronym>.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$frontendOptions</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<span style="color: #ff0000;">'lifetime'</span> =&gt; <span style="color: #cc66cc;">7200</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<span style="color: #ff0000;">'automatic_serialization'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$backendOptions</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'cache_dir'</span> =&gt; <span style="color: #ff0000;">'./tmp/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cache</span> = Zend_Cache::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Core'</span>, <span style="color: #ff0000;">'File'</span>, <span style="color: #0000ff;">$frontendOptions</span>, <span style="color: #0000ff;">$backendOptions</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Feed_Reader::<span style="color: #006600;">setCache</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$cache</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    While it&#039;s a little off track, you should also consider
+                    adding a cache to
+                    <span class="classname">Zend_Loader_PluginLoader</span> which is
+                    used by <span class="classname">Zend_Feed_Reader</span> to load
+                    Extensions.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.feed.reader.cache-request.http-conditional-get" name="zend.feed.reader.cache-request.http-conditional-get"><div class="info"><h1 class="title">HTTP Conditional GET Support</h1></div>
+            
+
+            <p class="para">
+                The big question often asked when importing a feed frequently, is
+                if it has even changed. With a cache enabled, you can add <acronym class="acronym">HTTP</acronym>
+                Conditional <b><tt>GET</tt></b> support to your arsenal to answer that
+                question.
+            </p>
+
+            <p class="para">
+                Using this method, you can request feeds from <acronym class="acronym">URI</acronym>s and include
+                their last known ETag and Last-Modified response header values
+                with the request (using the If-None-Match and If-Modified-Since
+                headers). If the feed on the server remains unchanged, you
+                should receive a 304 response which tells
+                <span class="classname">Zend_Feed_Reader</span> to use the cached
+                version. If a full feed is sent in a response with a status code
+                of 200, this means the feed has changed and
+                <span class="classname">Zend_Feed_Reader</span> will parse the new
+                version and save it to the cache. It will also cache the new
+                ETag and Last-Modified header values for future use.
+            </p>
+
+            <p class="para">
+                These &quot;conditional&quot; requests are not guaranteed to be supported
+                by the server you request a <acronym class="acronym">URI</acronym> of, but can be attempted
+                regardless. Most common feed sources like blogs should however
+                have this supported. To enable conditional requests, you will
+                need to provide a cache to <span class="classname">Zend_Feed_Reader</span>.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$frontendOptions</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<span style="color: #ff0000;">'lifetime'</span> =&gt; <span style="color: #cc66cc;">86400</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<span style="color: #ff0000;">'automatic_serialization'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$backendOptions</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'cache_dir'</span> =&gt; <span style="color: #ff0000;">'./tmp/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cache</span> = Zend_Cache::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Core'</span>, <span style="color: #ff0000;">'File'</span>, <span style="color: #0000ff;">$frontendOptions</span>, <span style="color: #0000ff;">$backendOptions</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Feed_Reader::<span style="color: #006600;">setCache</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$cache</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Feed_Reader::<span style="color: #006600;">useHttpConditionalGet</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net/rdf/'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                In the example above, with <acronym class="acronym">HTTP</acronym> Conditional
+                <b><tt>GET</tt></b> requests enabled, the response header values for ETag and
+                Last-Modified will be cached along with the feed. For the next 24hrs (the cache
+                lifetime), feeds will only be updated on the cache if a non-304 response is received
+                containing a valid <acronym class="acronym">RSS</acronym> or Atom <acronym class="acronym">XML</acronym> document.
+            </p>
+
+            <p class="para">
+                If you intend on managing request headers from outside
+                <span class="classname">Zend_Feed_Reader</span>, you can set the
+                relevant If-None-Matches and If-Modified-Since request headers
+                via the <acronym class="acronym">URI</acronym> import method.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$lastEtagReceived</span> = <span style="color: #ff0000;">'5e6cefe7df5a7e95c8b1ba1a2ccaff3d'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$lastModifiedDateReceived</span> = <span style="color: #ff0000;">'Wed, 08 Jul 2009 13:37:22 GMT'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$uri</span>, <span style="color: #0000ff;">$lastEtagReceived</span>, <span style="color: #0000ff;">$lastModifiedDateReceived</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.feed.reader.locate" name="zend.feed.reader.locate"><div class="info"><h1 class="title">Locating Feed URIs from Websites</h1></div>
+        
+
+        <p class="para">
+            These days, many websites are aware that the location of their <acronym class="acronym">XML</acronym>
+            feeds is not always obvious. A small <acronym class="acronym">RDF</acronym>, <acronym class="acronym">RSS</acronym> or
+            Atom graphic helps when the user is reading the page, but what about when a machine
+            visits trying to identify where your feeds are located? To assist in
+            this, websites may point to their feeds using &lt;link&gt; tags in
+            the &lt;head&gt; section of their <acronym class="acronym">HTML</acronym>. To take advantage of this,
+            you can use <span class="classname">Zend_Feed_Reader</span> to locate these
+            feeds using the static  <span class="methodname">findFeedLinks()</span>
+            method.
+        </p>
+
+        <p class="para">
+            This method calls any <acronym class="acronym">URI</acronym> and searches for the location of
+            <acronym class="acronym">RSS</acronym>, <acronym class="acronym">RDF</acronym>
+            and Atom feeds assuming the website&#039;s <acronym class="acronym">HTML</acronym> contains the relevant
+            links. It then returns a value object where you can check for the existence of a
+            <acronym class="acronym">RSS</acronym>, <acronym class="acronym">RDF</acronym> or Atom feed <acronym class="acronym">URI</acronym>.
+        </p>
+
+        <p class="para">
+            The returned object is an <span class="classname">ArrayObject</span> subclass
+            called <span class="classname">Zend_Feed_Reader_Collection_FeedLink</span> so you can cast
+            it to an array, or iterate over it, to access all the detected links.
+            However, as a simple shortcut, you can just grab the first <acronym class="acronym">RSS</acronym>,
+            <acronym class="acronym">RDF</acronym> or Atom link using its public properties as in the example below.
+            Otherwise, each element of the <span class="classname">ArrayObject</span> is a simple array
+            with the keys &quot;type&quot; and &quot;uri&quot; where the type is one of &quot;rdf&quot;, &quot;rss&quot; or
+            &quot;atom&quot;.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$links</span> = Zend_Feed_Reader::<span style="color: #006600;">findFeedLinks</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">rdf</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">rdf</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>; <span style="color: #808080; font-style: italic;">// http://www.planet-php.org/rdf/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">rss</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">rss</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>; <span style="color: #808080; font-style: italic;">// http://www.planet-php.org/rss/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">atom</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$links</span>-&gt;<span style="color: #006600;">atom</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>; <span style="color: #808080; font-style: italic;">// http://www.planet-php.org/atom/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Based on these links, you can then import from whichever source you
+            wish in the usual manner.
+        </p>
+
+        <p class="para">
+            This quick method only gives you one link for each feed type, but
+            websites may indicate many links of any type. Perhaps it&#039;s a news
+            site with a <acronym class="acronym">RSS</acronym> feed for each news category. You can iterate over
+            all links using the ArrayObject&#039;s iterator.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$links</span> = Zend_Feed_Reader::<span style="color: #006600;">findFeedLinks</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.planet-php.net'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$links</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$link</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$link</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'uri'</span><span style="color: #66cc66;">&#93;</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+  </div>
+
+  <div class="section" id="zend.feed.reader.attribute-collections" name="zend.feed.reader.attribute-collections"><div class="info"><h1 class="title">Attribute Collections</h1></div>
+        
+
+        <p class="para">
+            In an attempt to simplify return types, with Zend Framework 1.10 return
+            types from the various feed and entry level methods may include an object
+            of type <span class="classname">Zend_Feed_Reader_Collection_CollectionAbstract</span>.
+            Despite the special class name which I&#039;ll explain below, this is just a simple
+            subclass of <acronym class="acronym">SPL</acronym>&#039;s <span class="classname">ArrayObject</span>.
+        </p>
+
+        <p class="para">
+            The main purpose here is to allow the presentation of as much data as possible
+            from the requested elements, while still allowing access to the most relevant
+            data as a simple array. This also enforces a standard approach to returning
+            such data which previously may have wandered between arrays and objects.
+        </p>
+
+        <p class="para">
+            The new class type acts identically to <span class="classname">ArrayObject</span>
+            with the sole addition being a new method  <span class="methodname">getValues()</span>
+            which returns a simple flat array containing the most relevant information.
+        </p>
+
+        <p class="para">
+            A simple example of this is
+             <span class="methodname">Zend_Feed_Reader_FeedInterface::getCategories()</span>. When used with
+            any <acronym class="acronym">RSS</acronym> or Atom feed, this method will return category data as a
+            container object called <span class="classname">Zend_Feed_Reader_Collection_Category</span>. The
+            container object will contain, per category, three fields of data: term, scheme and
+            label. The &quot;term&quot; is the basic category name, often machine readable (i.e. plays nice
+            with <acronym class="acronym">URI</acronym>s). The scheme represents a categorisation scheme (usually a
+            <acronym class="acronym">URI</acronym> identifier) also known as a &quot;domain&quot; in <acronym class="acronym">RSS</acronym>
+            2.0. The &quot;label&quot; is a human readable category name which supports
+            <acronym class="acronym">HTML</acronym> entities. In <acronym class="acronym">RSS</acronym> 2.0, there is no label
+            attribute so it is always set to the same value as the term for convenience.
+        </p>
+
+        <p class="para">
+            To access category labels by themselves in a simple value array,
+            you might commit to something like:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.example.com/atom.xml'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$categories</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getCategories</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$labels</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$categories</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$cat</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$labels</span><span style="color: #66cc66;">&#91;</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$cat</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'label'</span><span style="color: #66cc66;">&#93;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            It&#039;s a contrived example, but the point is that the labels are tied up with
+            other information.
+        </p>
+
+        <p class="para">
+            However, the container class allows you to access the &quot;most relevant&quot; data
+            as a simple array using the  <span class="methodname">getValues()</span> method. The concept
+            of &quot;most relevant&quot; is obviously a judgement call. For categories it means the category
+            labels (not the terms or schemes) while for authors it would be the authors&#039; names
+            (not their email addresses or <acronym class="acronym">URI</acronym>s). The simple array is flat (just
+            values) and passed through  <span class="methodname">array_unique()</span> to remove
+            duplication.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.example.com/atom.xml'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$categories</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getCategories</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$labels</span> = <span style="color: #0000ff;">$categories</span>-&gt;<span style="color: #006600;">getValues</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The above example shows how to extract only labels and nothing else thus
+            giving simple access to the category labels without any additional work to extract
+            that data by itself.
+        </p>
+  </div>
+
+  <div class="section" id="zend.feed.reader.retrieve-info" name="zend.feed.reader.retrieve-info"><div class="info"><h1 class="title">Retrieving Feed Information</h1></div>
+        
+
+        <p class="para">
+            Retrieving information from a feed (we&#039;ll cover entries and items in the
+            next section though they follow identical principals) uses a clearly
+            defined <acronym class="acronym">API</acronym> which is exactly the same regardless of whether the feed
+            in question is <acronym class="acronym">RSS</acronym>, <acronym class="acronym">RDF</acronym> or Atom. The same goes for
+            sub-versions of these standards and we&#039;ve tested every single
+            <acronym class="acronym">RSS</acronym> and Atom version. While
+            the underlying feed <acronym class="acronym">XML</acronym> can differ substantially in terms of the
+            tags and elements they present, they nonetheless are all trying to
+            convey similar information and to reflect this all the differences
+            and wrangling over alternative tags are handled internally by
+            <span class="classname">Zend_Feed_Reader</span> presenting you with an
+            identical interface for each. Ideally, you should not have to care
+            whether a feed is <acronym class="acronym">RSS</acronym> or Atom so long as you can extract the
+            information you want.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                While determining common ground between feed types is itself complex, it
+                should be noted that <acronym class="acronym">RSS</acronym> in particular is a constantly disputed
+                &quot;specification&quot;. This has its roots in the original <acronym class="acronym">RSS</acronym> 2.0
+                document which contains ambiguities and does not detail the correct treatment of all
+                elements. As a result, this component rigorously applies the <acronym class="acronym">RSS</acronym>
+                2.0.11 Specification published by the <acronym class="acronym">RSS</acronym> Advisory Board and its
+                accompanying <acronym class="acronym">RSS</acronym> Best Practices Profile. No other interpretation
+                of <acronym class="acronym">RSS</acronym> 2.0 will be supported though exceptions may be allowed
+                where it does not directly prevent the application of the two documents mentioned
+                above.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Of course, we don&#039;t live in an ideal world so there may be times the
+            <acronym class="acronym">API</acronym> just does not cover what you&#039;re looking for. To assist you,
+            <span class="classname">Zend_Feed_Reader</span> offers a plugin system which
+            allows you to write Extensions to expand the core <acronym class="acronym">API</acronym> and cover any
+            additional data you are trying to extract from feeds. If writing
+            another Extension is too much trouble, you can simply grab the
+            underlying <acronym class="acronym">DOM</acronym> or XPath objects and do it by hand in your
+            application. Of course, we really do encourage writing an Extension
+            simply to make it more portable and reusable, and useful Extensions may be proposed
+            to the Framework for formal addition.
+        </p>
+
+        <p class="para">
+            Here&#039;s a summary of the Core <acronym class="acronym">API</acronym> for Feeds. You should note it
+            comprises not only the basic <acronym class="acronym">RSS</acronym> and Atom standards, but also
+            accounts for a number of included Extensions bundled with
+            <span class="classname">Zend_Feed_Reader</span>. The naming of these
+            Extension sourced methods remain fairly generic - all Extension
+            methods operate at the same level as the Core <acronym class="acronym">API</acronym> though we do allow
+            you to retrieve any specific Extension object separately if required.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Feed Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getId()</span></td>
+                        <td align="left">Returns a unique ID associated with this feed</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getTitle()</span></td>
+                        <td align="left">Returns the title of the feed</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDescription()</span></td>
+                        <td align="left">Returns the text description of the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getLink()</span></td>
+
+                        <td align="left">
+                            Returns a <acronym class="acronym">URI</acronym> to the <acronym class="acronym">HTML</acronym> website
+                            containing the same or
+                            similar information as this feed (i.e. if the feed is from a blog,
+                            it should provide the blog&#039;s <acronym class="acronym">URI</acronym> where the
+                            <acronym class="acronym">HTML</acronym> version of the entries can be read).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getFeedLink()</span></td>
+
+                        <td align="left">
+                            Returns the <acronym class="acronym">URI</acronym> of this feed, which may be the
+                            same as the <acronym class="acronym">URI</acronym> used to import the feed. There
+                            are important cases where the feed link may differ because the source
+                            <acronym class="acronym">URI</acronym> is being updated and is intended to be removed in
+                            the future.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getAuthors()</span></td>
+
+                        <td align="left">
+                            Returns an object of type
+                            <span class="classname">Zend_Feed_Reader_Collection_Author</span> which is an
+                            <span class="classname">ArrayObject</span> whose elements are each simple arrays
+                            containing any combination of the keys &quot;name&quot;, &quot;email&quot; and &quot;uri&quot;. Where
+                            irrelevant to the source data, some of these keys may be omitted.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getAuthor(integer $index = 0)</span></td>
+
+                        <td align="left">
+                            Returns either the first author known, or with the
+                            optional <var class="varname">$index</var> parameter any specific
+                            index on the array of Authors as described above (returning
+                            <b><tt>NULL</tt></b> if an invalid index).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDateCreated()</span></td>
+
+                        <td align="left">
+                            Returns the date on which this feed was created. Generally
+                            only applicable to Atom where it represents the date the resource
+                            described by an Atom 1.0 document was created. The returned date
+                            will be a <span class="classname">Zend_Date</span> object.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDateModified()</span></td>
+
+                        <td align="left">
+                            Returns the date on which this feed was last modified. The returned date
+                            will be a <span class="classname">Zend_Date</span> object.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getLastBuildDate()</span></td>
+
+                        <td align="left">
+                            Returns the date on which this feed was last built. The returned date
+                            will be a <span class="classname">Zend_Date</span> object. This is only
+                            supported by <acronym class="acronym">RSS</acronym> - Atom feeds will always return
+                            <b><tt>NULL</tt></b>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getLanguage()</span></td>
+
+                        <td align="left">
+                            Returns the language of the feed (if defined) or simply the
+                            language noted in the <acronym class="acronym">XML</acronym> document.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getGenerator()</span></td>
+
+                        <td align="left">
+                            Returns the generator of the feed, e.g. the software which
+                            generated it. This may differ between <acronym class="acronym">RSS</acronym> and Atom
+                            since Atom defines a different notation.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getCopyright()</span></td>
+                        <td align="left">Returns any copyright notice associated with the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getHubs()</span></td>
+
+                        <td align="left">
+                            Returns an array of all Hub Server <acronym class="acronym">URI</acronym> endpoints
+                            which are advertised by the feed for use with the Pubsubhubbub
+                            Protocol, allowing subscriptions to the feed for real-time updates.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getCategories()</span></td>
+
+                        <td align="left">
+                            Returns a <span class="classname">Zend_Feed_Reader_Collection_Category</span>
+                            object containing the details of any categories associated with the
+                            overall feed. The supported fields include &quot;term&quot; (the machine readable
+                            category name), &quot;scheme&quot; (the categorisation scheme and domain for this
+                            category), and &quot;label&quot; (a <acronym class="acronym">HTML</acronym> decoded human readable
+                            category name). Where any of the three fields are absent from the field,
+                            they are either set to the closest available alternative or, in the case
+                            of &quot;scheme&quot;, set to <b><tt>NULL</tt></b>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getImage()</span></td>
+
+                        <td align="left">
+                            Returns an array containing data relating to any feed image or logo,
+                            or <b><tt>NULL</tt></b> if no image found. The resulting array may
+                            contain the following keys: <span class="property">uri</span>,
+                            <span class="property">link</span>, <span class="property">title</span>,
+                            <span class="property">description</span>, <span class="property">height</span>, and
+                            <span class="property">width</span>. Atom logos only contain a
+                            <acronym class="acronym">URI</acronym> so the remaining metadata is drawn from
+                            <acronym class="acronym">RSS</acronym> feeds only.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            Given the variety of feeds in the wild, some of these methods will
+            undoubtedly return <b><tt>NULL</tt></b> indicating the relevant information
+            couldn&#039;t be located. Where possible, <span class="classname">Zend_Feed_Reader</span>
+            will fall back on alternative elements during its search. For
+            example, searching an <acronym class="acronym">RSS</acronym> feed for a modification date is more
+            complicated than it looks. <acronym class="acronym">RSS</acronym> 2.0 feeds should include a
+            <strong class="command">&lt;lastBuildDate&gt;</strong> tag and (or) a
+            <strong class="command">&lt;pubDate&gt;</strong> element. But what if it doesn&#039;t, maybe
+            this is an <acronym class="acronym">RSS</acronym> 1.0 feed? Perhaps it instead has an
+            <strong class="command">&lt;atom:updated&gt;</strong> element with identical information
+            (Atom may be used to supplement <acronym class="acronym">RSS</acronym>&#039;s syntax)? Failing that, we
+            could simply look at the entries, pick the most recent, and use its
+            <strong class="command">&lt;pubDate&gt;</strong> element. Assuming it exists... Many
+            feeds also use Dublin Core 1.0 or 1.1 <strong class="command">&lt;dc:date&gt;</strong>
+            elements for feeds and entries. Or we could find Atom lurking again.
+        </p>
+
+        <p class="para">
+            The point is, <span class="classname">Zend_Feed_Reader</span> was designed
+            to know this. When you ask for the modification date (or anything
+            else), it will run off and search for all these alternatives until
+            it either gives up and returns <b><tt>NULL</tt></b>, or finds an
+            alternative that should have the right answer.
+        </p>
+
+        <p class="para">
+            In addition to the above methods, all Feed objects implement methods
+            for retrieving the <acronym class="acronym">DOM</acronym> and XPath objects for the current feeds as
+            described earlier. Feed objects also implement the <acronym class="acronym">SPL</acronym> Iterator and
+            Countable interfaces. The extended <acronym class="acronym">API</acronym> is summarised below.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Extended Feed Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDomDocument()</span></td>
+
+                        <td align="left">
+                            Returns the parent DOMDocument object for the
+                            entire source <acronym class="acronym">XML</acronym> document
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getElement()</span></td>
+
+                        <td align="left">
+                            Returns the current feed level DOMElement object
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">saveXml()</span></td>
+
+                        <td align="left">
+                            Returns a string containing an <acronym class="acronym">XML</acronym> document of the
+                            entire feed element (this is not the original
+                            document but a rebuilt version)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getXpath()</span></td>
+
+                        <td align="left">
+                            Returns the DOMXPath object used internally to run queries on the
+                            DOMDocument object (this includes core and Extension namespaces
+                            pre-registered)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getXpathPrefix()</span></td>
+
+                        <td align="left">
+                            Returns the valid <acronym class="acronym">DOM</acronym> path prefix prepended
+                            to all XPath queries matching the feed being queried
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getEncoding()</span></td>
+
+                        <td align="left">
+                            Returns the encoding of the source <acronym class="acronym">XML</acronym> document
+                            (note: this cannot account for errors such as the
+                            server sending documents in a different encoding). Where not
+                            defined, the default <acronym class="acronym">UTF-8</acronym> encoding of Unicode is
+                            applied.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">count()</span></td>
+
+                        <td align="left">
+                            Returns a count of the entries or items this feed contains
+                            (implements <acronym class="acronym">SPL</acronym> <span class="classname">Countable</span>
+                            interface)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">current()</span></td>
+
+                        <td align="left">
+                            Returns either the current entry (using the current index
+                            from  <span class="methodname">key()</span>)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">key()</span></td>
+                        <td align="left">Returns the current entry index</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">next()</span></td>
+                        <td align="left">Increments the entry index value by one</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">rewind()</span></td>
+                        <td align="left">Resets the entry index to 0</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">valid()</span></td>
+
+                        <td align="left">
+                            Checks that the current entry index is valid, i.e.
+                            it does fall below 0 and does not exceed the number
+                            of entries existing.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getExtensions()</span></td>
+
+                        <td align="left">
+                            Returns an array of all Extension objects loaded for
+                            the current feed (note: both feed-level and entry-level Extensions
+                            exist, and only feed-level Extensions are returned here).
+                            The array keys are of the form {ExtensionName}_Feed.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getExtension(string $name)</span></td>
+
+                        <td align="left">
+                            Returns an Extension object for the feed registered under the
+                            provided name. This allows more fine-grained access to
+                            Extensions which may otherwise be hidden within the implementation
+                            of the standard <acronym class="acronym">API</acronym> methods.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getType()</span></td>
+
+                        <td align="left">
+                            Returns a static class constant (e.g.
+                            <b><tt>Zend_Feed_Reader::TYPE_ATOM_03</tt></b>,
+                            i.e. Atom 0.3) indicating exactly what kind of feed
+                            is being consumed.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.feed.reader.entry" name="zend.feed.reader.entry"><div class="info"><h1 class="title">Retrieving Entry/Item Information</h1></div>
+        
+
+        <p class="para">
+            Retrieving information for specific entries or items (depending on
+            whether you speak Atom or <acronym class="acronym">RSS</acronym>) is identical to feed level data.
+            Accessing entries is simply a matter of iterating over a Feed object
+            or using the <acronym class="acronym">SPL</acronym> <span class="classname">Iterator</span> interface Feed
+            objects implement and calling the appropriate method on each.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Entry Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getId()</span></td>
+                        <td align="left">Returns a unique ID for the current entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getTitle()</span></td>
+                        <td align="left">Returns the title of the current entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDescription()</span></td>
+                        <td align="left">Returns a description of the current entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getLink()</span></td>
+
+                        <td align="left">
+                            Returns a <acronym class="acronym">URI</acronym> to the <acronym class="acronym">HTML</acronym> version
+                            of the current entry.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getPermaLink()</span></td>
+
+                        <td align="left">
+                            Returns the permanent link to the current entry. In most cases,
+                            this is the same as using  <span class="methodname">getLink()</span>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getAuthors()</span></td>
+
+                        <td align="left">
+                            Returns an object of type
+                            <span class="classname">Zend_Feed_Reader_Collection_Author</span> which is an
+                            <span class="classname">ArrayObject</span> whose elements are each simple arrays
+                            containing any combination of the keys &quot;name&quot;, &quot;email&quot; and &quot;uri&quot;. Where
+                            irrelevant to the source data, some of these keys may be omitted.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getAuthor(integer $index = 0)</span></td>
+
+                        <td align="left">
+                            Returns either the first author known, or with the
+                            optional <var class="varname">$index</var> parameter any specific
+                            index on the array of Authors as described above (returning
+                            <b><tt>NULL</tt></b> if an invalid index).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDateCreated()</span></td>
+
+                        <td align="left">
+                            Returns the date on which the current entry was
+                            created. Generally only applicable to Atom where it
+                            represents the date the resource described by an
+                            Atom 1.0 document was created.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDateModified()</span></td>
+
+                        <td align="left">
+                            Returns the date on which the current entry was last
+                            modified
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getContent()</span></td>
+
+                        <td align="left">
+                            Returns the content of the current entry (this has any
+                            entities reversed if possible assuming the content type is
+                            <acronym class="acronym">HTML</acronym>). The description is returned if a
+                            separate content element does not exist.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getEnclosure()</span></td>
+
+                        <td align="left">
+                            Returns an array containing the value of all
+                            attributes from a multi-media &lt;enclosure&gt; element including
+                            as array keys: <em class="emphasis">url</em>,
+                            <em class="emphasis">length</em>, <em class="emphasis">type</em>.
+                            In accordance with the <acronym class="acronym">RSS</acronym> Best Practices Profile of
+                            the <acronym class="acronym">RSS</acronym> Advisory Board, no support is offers for
+                            multiple enclosures since such support forms no part of the
+                            <acronym class="acronym">RSS</acronym> specification.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getCommentCount()</span></td>
+
+                        <td align="left">
+                            Returns the number of comments made on this entry at the
+                            time the feed was last generated
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getCommentLink()</span></td>
+
+                        <td align="left">
+                            Returns a <acronym class="acronym">URI</acronym> pointing to the <acronym class="acronym">HTML</acronym>
+                            page where comments can be made on this entry
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                             <span class="methodname">getCommentFeedLink([string $type =
+                                &#039;atom&#039;|&#039;rss&#039;])</span>
+                        </td>
+
+                        <td align="left">
+                            Returns a <acronym class="acronym">URI</acronym> pointing to a feed of the provided type
+                            containing all comments for this entry (type defaults to
+                            Atom/<acronym class="acronym">RSS</acronym> depending on current feed type).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getCategories()</span></td>
+
+                        <td align="left">
+                            Returns a <span class="classname">Zend_Feed_Reader_Collection_Category</span>
+                            object containing the details of any categories associated with the
+                            entry. The supported fields include &quot;term&quot; (the machine readable
+                            category name), &quot;scheme&quot; (the categorisation scheme and domain for this
+                            category), and &quot;label&quot; (a <acronym class="acronym">HTML</acronym> decoded human readable
+                            category name). Where any of the three fields are absent from the field,
+                            they are either set to the closest available alternative or, in the case
+                            of &quot;scheme&quot;, set to <b><tt>NULL</tt></b>.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            The extended <acronym class="acronym">API</acronym> for entries is identical to that for feeds with the
+            exception of the Iterator methods which are not needed here.
+        </p>
+
+        <div class="caution"><b class="caution">Caution</b>
+            <p class="para">
+                There is often confusion over the concepts of modified and
+                created dates. In Atom, these are two clearly defined concepts
+                (so knock yourself out) but in <acronym class="acronym">RSS</acronym> they are vague.
+                <acronym class="acronym">RSS</acronym> 2.0
+                defines a single <em class="emphasis">&lt;pubDate&gt;</em> element
+                which typically refers to the date this entry was published,
+                i.e. a creation date of sorts. This is not always the case, and
+                it may change with updates or not. As a result, if you really
+                want to check whether an entry has changed, don&#039;t rely on the
+                results of  <span class="methodname">getDateModified()</span>. Instead,
+                consider tracking the <acronym class="acronym">MD5</acronym> hash of three other elements
+                concatenated, e.g. using  <span class="methodname">getTitle()</span>,
+                 <span class="methodname">getDescription()</span> and
+                 <span class="methodname">getContent()</span>. If the entry was truly
+                updated, this hash computation will give a different result than
+                previously saved hashes for the same entry. This is obviously
+                content oriented, and will not assist in detecting changes to other
+                relevant elements. Atom feeds should not require such steps.
+            </p>
+
+            <p class="para">
+                Further muddying the
+                waters, dates in feeds may follow different standards. Atom and
+                Dublin Core dates should follow <acronym class="acronym">ISO</acronym> 8601,
+                and <acronym class="acronym">RSS</acronym> dates should
+                follow <acronym class="acronym">RFC</acronym> 822 or <acronym class="acronym">RFC</acronym> 2822
+                which is also common. Date methods
+                will throw an exception if <span class="classname">Zend_Date</span>
+                cannot load the date string using one of the above standards, or the
+                <acronym class="acronym">PHP</acronym> recognised possibilities for <acronym class="acronym">RSS</acronym> dates.
+            </p>
+        </div>
+
+        <div class="warning"><b class="warning">Warning</b>
+            <p class="para">
+                The values returned from these methods are not validated. This
+                means users must perform validation on all retrieved data
+                including the filtering of any <acronym class="acronym">HTML</acronym> such as from
+                 <span class="methodname">getContent()</span> before it is output from
+                your application. Remember that most feeds come from external
+                sources, and therefore the default assumption should be that
+                they cannot be trusted.
+            </p>
+        </div>
+
+        <table class="doctable table"><div class="info"><caption><b>Extended Entry Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getDomDocument()</span></td>
+
+                        <td align="left">
+                            Returns the parent DOMDocument object for the
+                            entire feed (not just the current entry)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getElement()</span></td>
+
+                        <td align="left">
+                            Returns the current entry level DOMElement object
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getXpath()</span></td>
+
+                        <td align="left">
+                            Returns the DOMXPath object used internally to run queries on the
+                            DOMDocument object (this includes core and Extension namespaces
+                            pre-registered)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getXpathPrefix()</span></td>
+
+                        <td align="left">
+                            Returns the valid <acronym class="acronym">DOM</acronym> path prefix prepended
+                            to all XPath queries matching the entry being queried
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getEncoding()</span></td>
+
+                        <td align="left">
+                            Returns the encoding of the source <acronym class="acronym">XML</acronym> document
+                            (note: this cannot account for errors such as the server sending
+                            documents in a different encoding). The default encoding applied
+                            in the absence of any other is the <acronym class="acronym">UTF-8</acronym> encoding of
+                            Unicode.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getExtensions()</span></td>
+
+                        <td align="left">
+                            Returns an array of all Extension objects loaded for
+                            the current entry (note: both feed-level and entry-level
+                            Extensions exist, and only entry-level Extensions are returned
+                            here). The array keys are in the form {ExtensionName}_Entry.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getExtension(string $name)</span></td>
+
+                        <td align="left">
+                            Returns an Extension object for the entry registered under the
+                            provided name. This allows more fine-grained access to
+                            Extensions which may otherwise be hidden within the implementation
+                            of the standard <acronym class="acronym">API</acronym> methods.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">getType()</span></td>
+
+                        <td align="left">
+                            Returns a static class constant (e.g.
+                            <b><tt>Zend_Feed_Reader::TYPE_ATOM_03</tt></b>,
+                            i.e. Atom 0.3) indicating exactly what kind
+                            of feed is being consumed.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.feed.reader.extending" name="zend.feed.reader.extending"><div class="info"><h1 class="title">Extending Feed and Entry APIs</h1></div>
+        
+
+        <p class="para">
+            Extending <span class="classname">Zend_Feed_Reader</span> allows you to add
+            methods at both the feed and entry level which cover the retrieval
+            of information not already supported by
+            <span class="classname">Zend_Feed_Reader</span>. Given the number of
+            <acronym class="acronym">RSS</acronym> and
+            Atom extensions that exist, this is a good thing since
+            <span class="classname">Zend_Feed_Reader</span> couldn&#039;t possibly add
+            everything.
+        </p>
+
+        <p class="para">
+            There are two types of Extensions possible, those which retrieve
+            information from elements which are immediate children of the root
+            element (e.g. <strong class="command">&lt;channel&gt;</strong> for <acronym class="acronym">RSS</acronym> or
+            <strong class="command">&lt;feed&gt;</strong> for Atom) and those who retrieve
+            information from child elements of an entry (e.g.
+            <strong class="command">&lt;item&gt;</strong> for <acronym class="acronym">RSS</acronym> or
+            <strong class="command">&lt;entry&gt;</strong> for Atom). On the filesystem these are grouped as
+            classes within a namespace based on the extension standard&#039;s name. For example,
+            internally we have <span class="classname">Zend_Feed_Reader_Extension_DublinCore_Feed</span>
+            and <span class="classname">Zend_Feed_Reader_Extension_DublinCore_Entry</span>
+            classes which are two Extensions implementing Dublin Core
+            1.0 and 1.1 support.
+        </p>
+
+        <p class="para">
+            Extensions are loaded into <span class="classname">Zend_Feed_Reader</span>
+            using <span class="classname">Zend_Loader_PluginLoader</span>, so their operation
+            will be familiar from other Zend Framework components.
+            <span class="classname">Zend_Feed_Reader</span> already bundles a number of
+            these Extensions, however those which are not used internally and
+            registered by default (so called Core Extensions) must be registered
+            to <span class="classname">Zend_Feed_Reader</span> before they are used. The
+            bundled Extensions include:
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Core Extensions (pre-registered)</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">DublinCore (Feed and Entry)</td>
+
+                        <td align="left">
+                            Implements support for Dublin Core Metadata Element Set 1.0 and 1.1
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Content (Entry only)</td>
+                        <td align="left">Implements support for Content 1.0</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Atom (Feed and Entry)</td>
+                        <td align="left">Implements support for Atom 0.3 and Atom 1.0</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Slash</td>
+
+                        <td align="left">
+                            Implements support for the Slash <acronym class="acronym">RSS</acronym> 1.0 module
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">WellFormedWeb</td>
+                        <td align="left">Implements support for the Well Formed Web CommentAPI 1.0</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Thread</td>
+
+                        <td align="left">
+                            Implements support for Atom Threading Extensions as described
+                            in <acronym class="acronym">RFC</acronym> 4685
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Podcast</td>
+
+                        <td align="left">
+                            Implements support for the Podcast 1.0 <b><tt>DTD</tt></b> from
+                            Apple
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            The Core Extensions are somewhat special since they are extremely
+            common and multi-faceted. For example, we have a Core Extension for Atom.
+            Atom is implemented as an Extension (not just a base class) because it
+            doubles as a valid <acronym class="acronym">RSS</acronym> module - you can insert
+            Atom elements into <acronym class="acronym">RSS</acronym> feeds. I&#039;ve even seen
+            <acronym class="acronym">RDF</acronym> feeds which use a lot of Atom in place of more
+            common Extensions like Dublin Core.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Non-Core Extensions (must register manually)</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">Syndication</td>
+
+                        <td align="left">
+                            Implements Syndication 1.0 support for <acronym class="acronym">RSS</acronym> feeds
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">CreativeCommons</td>
+
+                        <td align="left">
+                            A <acronym class="acronym">RSS</acronym> module that adds an element at the
+                            &lt;channel&gt; or &lt;item&gt; level that specifies which Creative
+                            Commons license applies.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            The additional non-Core Extensions are offered but not registered to
+            <span class="classname">Zend_Feed_Reader</span> by default. If you want to
+            use them, you&#039;ll need to tell
+            <span class="classname">Zend_Feed_Reader</span> to load them in advance of
+            importing a feed. Additional non-Core Extensions will be included
+            in future iterations of the component.
+        </p>
+
+        <p class="para">
+            Registering an Extension with
+            <span class="classname">Zend_Feed_Reader</span>, so it is loaded and its <acronym class="acronym">API</acronym>
+            is available to Feed and Entry objects, is a simple affair using the
+            <span class="classname">Zend_Loader_PluginLoader</span>. Here we register
+            the optional Slash Extension, and discover that it can be directly
+            called from the Entry level <acronym class="acronym">API</acronym> without any effort. Note that
+            Extension names are case sensitive and use camel casing for multiple
+            terms.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Feed_Reader::<span style="color: #006600;">registerExtension</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Syndication'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://rss.slashdot.org/Slashdot/slashdot'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$updatePeriod</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getUpdatePeriod</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            In the simple example above, we checked how frequently a feed is being updated
+            using the  <span class="methodname">getUpdatePeriod()</span>
+            method. Since it&#039;s not part of
+            <span class="classname">Zend_Feed_Reader</span>&#039;s core <acronym class="acronym">API</acronym>, it could only be
+            a method supported by the newly registered Syndication Extension.
+        </p>
+
+        <p class="para">
+            As you can also notice, the new methods from Extensions are accessible from the main
+            <acronym class="acronym">API</acronym> using <acronym class="acronym">PHP</acronym>&#039;s magic methods. As an alternative,
+            you can also directly access any Extension object for a similar result as seen below.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Feed_Reader::<span style="color: #006600;">registerExtension</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Syndication'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://rss.slashdot.org/Slashdot/slashdot'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$syndication</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getExtension</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Syndication'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$updatePeriod</span> = <span style="color: #0000ff;">$syndication</span>-&gt;<span style="color: #006600;">getUpdatePeriod</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <div class="section" id="zend.feed.reader.extending.feed" name="zend.feed.reader.extending.feed"><div class="info"><h1 class="title">Writing Zend_Feed_Reader Extensions</h1></div>
+            
+
+            <p class="para">
+                Inevitably, there will be times when the
+                <span class="classname">Zend_Feed_Reader</span> <acronym class="acronym">API</acronym> is just not capable
+                of getting something you need from a feed or entry. You can use
+                the underlying source objects, like DOMDocument, to get these by hand however
+                there is a more reusable method available by writing Extensions
+                supporting these new queries.
+            </p>
+
+            <p class="para">
+                As an example, let&#039;s take the case of a purely fictitious
+                corporation named Jungle Books. Jungle Books have been
+                publishing a lot of reviews on books they sell (from external
+                sources and customers), which are distributed as an <acronym class="acronym">RSS</acronym> 2.0
+                feed. Their marketing department realises that web applications
+                using this feed cannot currently figure out exactly what book is
+                being reviewed. To make life easier for everyone, they determine
+                that the geek department needs to extend <acronym class="acronym">RSS</acronym> 2.0 to include a
+                new element per entry supplying the <acronym class="acronym">ISBN</acronym>-10 or
+                <acronym class="acronym">ISBN</acronym>-13 number of
+                the publication the entry concerns. They define the new
+                <strong class="command">&lt;isbn&gt;</strong> element quite simply with a standard
+                name and namespace <acronym class="acronym">URI</acronym>:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">JungleBooks <span style="color: #cc66cc;">1.0</span>:</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">http:<span style="color: #808080; font-style: italic;">//example.com/junglebooks/rss/module/1.0/</span></div></li></ol></div></div></div>
+
+
+            <p class="para">
+                A snippet of <acronym class="acronym">RSS</acronym> containing this extension in practice could be
+                something similar to:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;?xml version=<span style="color: #ff0000;">&quot;1.0&quot;</span> encoding=<span style="color: #ff0000;">&quot;utf-8&quot;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;rss version=<span style="color: #ff0000;">&quot;2.0&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;xmlns:content=<span style="color: #ff0000;">&quot;http://purl.org/rss/1.0/modules/content/&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;xmlns:jungle=<span style="color: #ff0000;">&quot;http://example.com/junglebooks/rss/module/1.0/&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;channel&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;title&gt;Jungle Books Customer Reviews&lt;/title&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;link&gt;http:<span style="color: #808080; font-style: italic;">//example.com/junglebooks&lt;/link&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;description&gt;Many book reviews!&lt;/description&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;pubDate&gt;Fri, <span style="color: #cc66cc;">26</span> Jun <span style="color: #cc66cc;">2009</span> <span style="color: #cc66cc;">19</span>:<span style="color: #cc66cc;">15</span>:<span style="color: #cc66cc;">10</span> GMT&lt;/pubDate&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;jungle:dayPopular&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; http:<span style="color: #808080; font-style: italic;">//example.com/junglebooks/book/938</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/jungle:dayPopular&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;item&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;title&gt;Review Of Flatland: A Romance of Many Dimensions&lt;/title&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;link&gt;http:<span style="color: #808080; font-style: italic;">//example.com/junglebooks/review/987&lt;/link&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;author&gt;Confused Physics Student&lt;/author&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;content:encoded&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; A romantic square?!</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;/content:encoded&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;pubDate&gt;Thu, <span style="color: #cc66cc;">25</span> Jun <span style="color: #cc66cc;">2009</span> <span style="color: #cc66cc;">20</span>:<span style="color: #cc66cc;">03</span>:<span style="color: #cc66cc;">28</span> <span style="color: #cc66cc;">-0700</span>&lt;/pubDate&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;jungle:isbn&gt;048627263X&lt;/jungle:isbn&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/item&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/channel&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/rss&gt;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Implementing this new <acronym class="acronym">ISBN</acronym> element as a simple entry level
+                extension would require the following class (using your own class
+                namespace outside of Zend).
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_FeedReader_Extension_JungleBooks_Entry</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Feed_Reader_Extension_EntryAbstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getIsbn<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'isbn'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'isbn'</span><span style="color: #66cc66;">&#93;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$isbn</span> = <span style="color: #0000ff;">$this</span>-&gt;_xpath-&gt;<span style="color: #006600;">evaluate</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'string('</span> . <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getXpathPrefix</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">'/jungle:isbn)'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$isbn</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$isbn</span> = <span style="color: #000000; font-weight: bold;">null</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'isbn'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$isbn</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'isbn'</span><span style="color: #66cc66;">&#93;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #000000; font-weight: bold;">function</span> _registerNamespaces<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_xpath-&gt;<span style="color: #006600;">registerNamespace</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'jungle'</span>, <span style="color: #ff0000;">'http://example.com/junglebooks/rss/module/1.0/'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+            <p class="para">
+                This extension is easy enough to follow. It creates a new method
+                 <span class="methodname">getIsbn()</span> which runs an XPath query on
+                the current entry to extract the <acronym class="acronym">ISBN</acronym> number enclosed by the
+                <strong class="command">&lt;jungle:isbn&gt;</strong> element. It can optionally
+                store this to the internal non-persistent cache (no need to keep
+                querying the <acronym class="acronym">DOM</acronym> if it&#039;s called again on the same entry). The
+                value is returned to the caller. At the end we have a protected
+                method (it&#039;s abstract so it must exist) which registers the
+                Jungle Books namespace for their custom <acronym class="acronym">RSS</acronym> module. While we
+                call this an <acronym class="acronym">RSS</acronym> module, there&#039;s nothing to prevent the same
+                element being used in Atom feeds - and all Extensions which use
+                the prefix provided by  <span class="methodname">getXpathPrefix()</span>
+                are actually neutral and work on <acronym class="acronym">RSS</acronym> or Atom feeds with no
+                extra code.
+            </p>
+
+            <p class="para">
+                Since this Extension is stored outside of Zend Framework, you&#039;ll
+                need to register the path prefix for your Extensions so
+                <span class="classname">Zend_Loader_PluginLoader</span> can find them.
+                After that, it&#039;s merely a matter of registering the Extension,
+                if it&#039;s not already loaded, and using it in practice.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span>!Zend_Feed_Reader::<span style="color: #006600;">isRegistered</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'JungleBooks'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Feed_Reader::<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'/path/to/My/FeedReader/Extension'</span>, <span style="color: #ff0000;">'My_FeedReader_Extension'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Feed_Reader::<span style="color: #006600;">registerExtension</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'JungleBooks'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://example.com/junglebooks/rss'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// ISBN for whatever book the first entry in the feed was concerned with</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$firstIsbn</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getIsbn</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Writing a feed level Extension is not much different. The
+                example feed from earlier included an unmentioned
+                <strong class="command">&lt;jungle:dayPopular&gt;</strong> element which Jungle
+                Books have added to their standard to include a link to the
+                day&#039;s most popular book (in terms of visitor traffic). Here&#039;s
+                an Extension which adds a
+                 <span class="methodname">getDaysPopularBookLink()</span> method to the
+                feel level <acronym class="acronym">API</acronym>.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_FeedReader_Extension_JungleBooks_Feed</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">extends</span> Zend_Feed_Reader_Extension_FeedAbstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getDaysPopularBookLink<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'dayPopular'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'dayPopular'</span><span style="color: #66cc66;">&#93;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$dayPopular</span> = <span style="color: #0000ff;">$this</span>-&gt;_xpath-&gt;<span style="color: #006600;">evaluate</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'string('</span> . <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getXpathPrefix</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">'/jungle:dayPopular)'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$dayPopular</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$dayPopular</span> = <span style="color: #000000; font-weight: bold;">null</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'dayPopular'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$dayPopular</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;_data<span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'dayPopular'</span><span style="color: #66cc66;">&#93;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #000000; font-weight: bold;">function</span> _registerNamespaces<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_xpath-&gt;<span style="color: #006600;">registerNamespace</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'jungle'</span>, <span style="color: #ff0000;">'http://example.com/junglebooks/rss/module/1.0/'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Let&#039;s repeat the last example using a custom Extension to show the
+                method being used.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span>!Zend_Feed_Reader::<span style="color: #006600;">isRegistered</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'JungleBooks'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Feed_Reader::<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'/path/to/My/FeedReader/Extension'</span>, <span style="color: #ff0000;">'My_FeedReader_Extension'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Feed_Reader::<span style="color: #006600;">registerExtension</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'JungleBooks'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = Zend_Feed_Reader::<span style="color: #006600;">import</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://example.com/junglebooks/rss'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// URI to the information page of the day's most popular book with visitors</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$daysPopularBookLink</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">getDaysPopularBookLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// ISBN for whatever book the first entry in the feed was concerned with</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$firstIsbn</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getIsbn</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Going through these examples, you&#039;ll note that we don&#039;t register
+                feed and entry Extensions separately. Extensions within the same
+                standard may or may not include both a feed and entry class, so
+                <span class="classname">Zend_Feed_Reader</span> only requires you to
+                register the overall parent name, e.g. JungleBooks, DublinCore,
+                Slash. Internally, it can check at what level Extensions exist
+                and load them up if found. In our case, we have a full set of
+                Extensions now: <span class="classname">JungleBooks_Feed</span> and
+                <span class="classname">JungleBooks_Entry</span>.
+            </p>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.feed.custom-feed.html">Custom Feed and Entry Classes</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.feed.html">Zend_Feed</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.feed.writer.html">Zend_Feed_Writer</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.feed.html">Zend_Feed</a></li>
+  <li><a href="zend.feed.introduction.html">Introduction</a></li>
+  <li><a href="zend.feed.importing.html">Importing Feeds</a></li>
+  <li><a href="zend.feed.findFeeds.html">Retrieving Feeds from Web Pages</a></li>
+  <li><a href="zend.feed.consuming-rss.html">Consuming an RSS Feed</a></li>
+  <li><a href="zend.feed.consuming-atom.html">Consuming an Atom Feed</a></li>
+  <li><a href="zend.feed.consuming-atom-single-entry.html">Consuming a Single Atom Entry</a></li>
+  <li><a href="zend.feed.modifying-feed.html">Modifying Feed and Entry structures</a></li>
+  <li><a href="zend.feed.custom-feed.html">Custom Feed and Entry Classes</a></li>
+  <li class="active"><a href="zend.feed.reader.html">Zend_Feed_Reader</a></li>
+  <li><a href="zend.feed.writer.html">Zend_Feed_Writer</a></li>
+  <li><a href="zend.feed.pubsubhubbub.introduction.html">Zend_Feed_Pubsubhubbub</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

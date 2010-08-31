@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Searching - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.lucene.indexing.html">Indexing</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.lucene.queries.html">Supported queries</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="learning.lucene.searching" class="section"><div class="info"><h1 class="title">Searching</h1></div>
+    
+
+    <p class="para">
+        Searching is performed by using the  <span class="methodname">find()</span> method:
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #1 Searching through the index</b></p></div>
+        
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$hits</span> = <span style="color: #0000ff;">$index</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$query</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$hits</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$hit</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/printf"><span style="color: #000066;">printf</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;%d %f %s<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>, <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">id</span>, <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">score</span>, <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">title</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+    </div>
+
+    <p class="para">
+        This example demonstrates the usage of two special search hit properties -
+        <span class="property">id</span> and <span class="property">score</span>.
+    </p>
+
+    <p class="para">
+        <span class="property">id</span> is an internal document identifier used within a Lucene index.
+        It may be used for a variety of operations, including deleting a document from the
+        index:
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #2 Deleting an Indexed Document</b></p></div>
+        
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$index</span>-&gt;<span style="color: #006600;">delete</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$id</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <p class="para">
+        Or retrieving the document from the index:
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #3 Retrieving an Indexed Document</b></p></div>
+        
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$doc</span> = <span style="color: #0000ff;">$index</span>-&gt;<span style="color: #006600;">getDocument</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$id</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Internal Document Identifiers</b><br /></span>
+        
+
+        
+            Important note! Internal document identifiers may be changed by index optimization or
+            the auto-optimization process, but it&#039;s never changed within a single script&#039;s execution
+            unless the  <span class="methodname">addDocument()</span> (which may involve an
+            auto-optimization procedure) or  <span class="methodname">optimize()</span> methods are called.
+        <br />
+    </p></blockquote>
+
+    <p class="para">
+        The <span class="property">score</span> field is a hit score. Search results are ordered by score by
+        default (best results returned first).
+    </p>
+
+    <p class="para">
+        It&#039;s also possible to order result sets by specific field values. See the <a href="zend.search.lucene.searching.html#zend.search.lucene.searching.sorting" class="link">
+            <span class="classname">Zend_Search_Lucene</span> documentation</a> for more details about
+        this possibility.
+    </p>
+
+    <p class="para">
+        The example also demonstrates an ability to access stored fields (e.g.,
+        <strong class="command">$hit-&gt;title</strong>). At the first access to any hit property other than
+        <span class="property">id</span> or <span class="property">score</span>, document stored fields are loaded,
+        and the corresponding field value is returned.
+    </p>
+
+    <p class="para">
+        This causes an ambiguity for documents having their own <span class="property">id</span> or
+        <span class="property">score</span> fields; as a result, it&#039;s not recommended to use these field
+        names within stored documents. Nevertheless, they still can be accessed via the
+         <span class="methodname">getDocument()</span> method:
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #4 Accessing the original document&#039;s &quot;id&quot; and &quot;score&quot; fields</b></p></div>
+        
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$id</span>&nbsp; &nbsp; = <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">getDocument</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">id</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$score</span> = <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">getDocument</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">score</span>;</div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.lucene.indexing.html">Indexing</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.lucene.queries.html">Supported queries</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="learning.html">Conhecendo o Zend Framework</a></li>
+  <li class="header up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></li>
+  <li><a href="learning.lucene.intro.html">Zend_Search_Lucene Introduction</a></li>
+  <li><a href="learning.lucene.index-structure.html">Lucene Index Structure</a></li>
+  <li><a href="learning.lucene.index-opening.html">Index Opening and Creation</a></li>
+  <li><a href="learning.lucene.indexing.html">Indexing</a></li>
+  <li class="active"><a href="learning.lucene.searching.html">Searching</a></li>
+  <li><a href="learning.lucene.queries.html">Supported queries</a></li>
+  <li><a href="learning.lucene.pagination.html">Search result pagination</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Basic Methods - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.date.definition.theory.html">Theory of Operation</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.date.html">Zend_Date</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.date.overview.html">Zend_Date API Overview</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.date.basic" class="section"><div class="info"><h1 class="title">Basic Methods</h1></div>
+    
+
+    <p class="para">
+        The following sections show basic usage of <span class="classname">Zend_Date</span> primarily by
+        example. For this manual, &quot;dates&quot; always imply a calendar date with a time, even when not
+        explicitly mentioned, and vice-versa. The part not specified defaults to an internal
+        representation of &quot;zero&quot;. Thus, adding a date having no calendar date and a time value of 12
+        hours to another date consisting only of a calendar date would result in a date having that
+        calendar date and a time of &quot;noon&quot;.
+    </p>
+
+    <p class="para">
+        Setting only a specific date, with no time part, implies a time set to 00:00:00. Conversely,
+        setting only a specific time implies a date internally set to 01.01.1970 plus the number of
+        seconds equal to the elapsed hours, minutes, and seconds identified by the time. Normally,
+        people measure things from a starting point, such as the year 0 A.D. However, many software
+        systems use the first second of the year 1970 as the starting point, and denote times as a
+        timestamp offset counting the number of seconds elapsed from this starting point.
+    </p>
+
+    <div class="section" id="zend.date.basic.creation" name="zend.date.basic.creation"><div class="info"><h1 class="title">Current Date</h1></div>
+        
+
+        <p class="para">
+            Without any arguments, constructing an instance returns an object in the default locale
+            with the current, local date using <acronym class="acronym">PHP</acronym>&#039;s
+             <span class="methodname">time()</span> function to obtain the <a href="http://en.wikipedia.org/wiki/Unix_Time" class="link external">&raquo; UNIX timestamp</a>
+            for the object. Make sure your <acronym class="acronym">PHP</acronym> environment has the correct
+            <a href="zend.date.introduction.html#zend.date.setdefaulttimezone" class="link">default timezone</a>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Creating the Current Date</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Output of the current timestamp</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$date</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.date.basic.functions" name="zend.date.basic.functions"><div class="info"><h1 class="title">Zend_Date by Example</h1></div>
+        
+
+        <p class="para">
+            Reviewing basic methods of <span class="classname">Zend_Date</span> is a good place to start for
+            those unfamiliar with date objects in other languages or frameworks. A small example
+            will be provided for each method below.
+        </p>
+
+        <div class="section" id="zend.date.simple.functions.get" name="zend.date.simple.functions.get"><div class="info"><h1 class="title">Output a Date</h1></div>
+            
+
+            <p class="para">
+                The date in a <span class="classname">Zend_Date</span> object may be obtained as a localized
+                integer or string using the  <span class="methodname">get()</span> method. There are many
+                available options, which will be explained in later sections.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #2 get() - Output a Date</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Output of the desired date</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.date.simple.functions.set" name="zend.date.simple.functions.set"><div class="info"><h1 class="title">Setting a Date</h1></div>
+            
+
+            <p class="para">
+                The  <span class="methodname">set()</span> method alters the date stored in the object, and
+                returns the final date value as a timestamp (not an object). Again, there are many
+                options which will be explored in later sections.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #3 set() - Set a Date</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Setting of a new time</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13:00:00'</span>,Zend_Date::<span style="color: #006600;">TIMES</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span>Zend_Date::<span style="color: #006600;">W3C</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.date.simple.functions.add" name="zend.date.simple.functions.add"><div class="info"><h1 class="title">Adding and Subtracting Dates</h1></div>
+            
+
+            <p class="para">
+                Adding two dates with  <span class="methodname">add()</span> usually involves adding a real
+                date in time with an artificial timestramp representing a date part, such as 12
+                hours, as shown in the example below. Both  <span class="methodname">add()</span> and
+                 <span class="methodname">sub()</span> use the same set of options as
+                 <span class="methodname">set()</span>, which will be explained later.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #4 add() - Adding Dates</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// changes $date by adding 12 hours</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">add</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'12:00:00'</span>, Zend_Date::<span style="color: #006600;">TIMES</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Date via get() = &quot;</span>, <span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span>Zend_Date::<span style="color: #006600;">W3C</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// use magic __toString() method to call Zend_Date's toString()</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Date via toString() = &quot;</span>, <span style="color: #0000ff;">$date</span>, <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.date.simple.functions.compare" name="zend.date.simple.functions.compare"><div class="info"><h1 class="title">Comparison of Dates</h1></div>
+            
+
+            <p class="para">
+                All basic <span class="classname">Zend_Date</span> methods can operate on entire dates
+                contained in the objects, or can operate on date parts, such as comparing the
+                minutes value in a date to an absolute value. For example, the current minutes in
+                the current time may be compared with a specific number of minutes using
+                 <span class="methodname">compare()</span>, as in the example below.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 compare() - Compare Dates</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Comparation of both times</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">compare</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">10</span>, Zend_Date::<span style="color: #006600;">MINUTE</span><span style="color: #66cc66;">&#41;</span> == <span style="color: #cc66cc;">-1</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;This hour is less than 10 minutes old&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;This hour is at least 10 minutes old&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                For simple equality comparisons, use  <span class="methodname">equals()</span>, which
+                returns a boolean.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #6 equals() - Identify a Date or Date Part</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Comparation of the two dates</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span>-&gt;<span style="color: #006600;">equals</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">10</span>, Zend_Date::<span style="color: #006600;">HOUR</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;It's 10 o'clock. Time to get to work.&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;It is not 10 o'clock. You can keep sleeping.&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.date.definition.theory.html">Theory of Operation</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.date.html">Zend_Date</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.date.overview.html">Zend_Date API Overview</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.date.html">Zend_Date</a></li>
+  <li><a href="zend.date.introduction.html">Introduction</a></li>
+  <li><a href="zend.date.definition.theory.html">Theory of Operation</a></li>
+  <li class="active"><a href="zend.date.basic.html">Basic Methods</a></li>
+  <li><a href="zend.date.overview.html">Zend_Date API Overview</a></li>
+  <li><a href="zend.date.creation.html">Creation of Dates</a></li>
+  <li><a href="zend.date.constants.html">Constants for General Date Functions</a></li>
+  <li><a href="zend.date.additional.html">Working Examples</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

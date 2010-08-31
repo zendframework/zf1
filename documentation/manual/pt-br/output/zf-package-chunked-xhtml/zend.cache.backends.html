@@ -1,0 +1,960 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Cache Backends - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.cache.frontends.html">Zend_Cache Frontends</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.cache.html">Zend_Cache</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.cache.cache.manager.html">The Cache Manager</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.cache.backends" class="section"><div class="info"><h1 class="title">Zend_Cache Backends</h1></div>
+    
+
+    <p class="para">
+        There are two kinds of backends: standard ones and extended ones. Of course, extended
+        backends offer more features.
+    </p>
+
+    <div class="section" id="zend.cache.backends.file" name="zend.cache.backends.file"><div class="info"><h1 class="title">Zend_Cache_Backend_File</h1></div>
+        
+
+        <p class="para">
+            This (extended) backends stores cache records into files (in a chosen directory).
+        </p>
+
+        <p class="para">
+            Available options are :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>File Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">cache_dir</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;<var class="filename">/tmp/</var>&#039;</td>
+                        <td align="left">Directory where to store cache files</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">file_locking</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>TRUE</tt></b></td>
+
+                        <td align="left">
+                            Enable or disable file_locking : Can avoid cache corruption under
+                            bad circumstances but it doesn&#039;t help on multithread webservers
+                            or on <acronym class="acronym">NFS</acronym> filesystems...
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">read_control</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>TRUE</tt></b></td>
+
+                        <td align="left">
+                            Enable / disable read control : if enabled, a control key is
+                            embedded in the cache file and this key is compared with the
+                            one calculated after the reading.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">read_control_type</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;crc32&#039;</td>
+
+                        <td align="left">
+                            Type of read control (only if read control is enabled). Available values
+                            are : &#039;md5&#039; (best but slowest), &#039;crc32&#039; (lightly less safe but faster,
+                            better choice), &#039;adler32&#039; (new choice, faster than crc32),
+                            &#039;strlen&#039; for a length only test (fastest).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">hashed_directory_level</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">0</td>
+
+                        <td align="left">
+                            Hashed directory structure level : 0 means &quot;no hashed directory
+                            structure&quot;, 1 means &quot;one level of directory&quot;, 2 means &quot;two levels&quot;...
+                            This option can speed up the cache only when you have many thousands of
+                            cache files. Only specific benchs can help you to choose the perfect
+                            value for you. Maybe, 1 or 2 is a good start.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">hashed_directory_umask</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">0700</td>
+                        <td align="left">Umask for the hashed directory structure</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">file_name_prefix</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;zend_cache&#039;</td>
+
+                        <td align="left">
+                            prefix for cache files ; be really careful with this option because
+                            a too generic value in a system cache dir
+                            (like <var class="filename">/tmp</var>) can cause disasters when cleaning
+                            the cache
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">cache_file_umask</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">0700</td>
+                        <td align="left">umask for cache files</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">metatadatas_array_max_size</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">100</td>
+
+                        <td align="left">
+                            internal max size for the metadatas array (don&#039;t change this value
+                            unless you know what you are doing)
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.cache.backends.sqlite" name="zend.cache.backends.sqlite"><div class="info"><h1 class="title">Zend_Cache_Backend_Sqlite</h1></div>
+        
+
+        <p class="para">
+            This (extended) backends stores cache records into a SQLite database.
+        </p>
+
+        <p class="para">
+            Available options are :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Sqlite Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">cache_db_complete_path (mandatory)</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left"><b><tt>NULL</tt></b></td>
+
+                        <td align="left">
+                            The complete path (filename included) of the SQLite database
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">automatic_vacuum_factor</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">10</td>
+
+                        <td align="left">
+                            Disable / Tune the automatic vacuum process. The automatic vacuum
+                            process defragment the database file (and make it smaller) when a
+                             <span class="methodname">clean()</span> or  <span class="methodname">delete()</span>
+                            is called: 0 means no automatic vacuum ; 1 means systematic vacuum
+                            (when  <span class="methodname">delete()</span> or
+                             <span class="methodname">clean()</span> methods are called) ; x (integer) &gt;
+                            1 =&gt; automatic vacuum randomly 1 times on x
+                             <span class="methodname">clean()</span> or
+                             <span class="methodname">delete()</span>.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.cache.backends.memcached" name="zend.cache.backends.memcached"><div class="info"><h1 class="title">Zend_Cache_Backend_Memcached</h1></div>
+        
+
+        <p class="para">
+            This (extended) backends stores cache records into a memcached server. <a href="http://www.danga.com/memcached/" class="link external">&raquo; memcached</a> is a high-performance,
+            distributed memory object caching system. To use this backend, you need a memcached
+            daemon and <a href="http://pecl.php.net/package/memcache" class="link external">&raquo; the memcache
+                <acronym class="acronym">PECL</acronym> extension</a>.
+        </p>
+
+        <p class="para">
+            Be careful : with this backend, &quot;tags&quot; are not supported for the moment as
+            the &quot;doNotTestCacheValidity=true&quot; argument.
+        </p>
+
+        <p class="para">
+            Available options are :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Memcached Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">servers</em></td>
+                        <td align="left"> <span class="type">Array</span> </td>
+
+                        <td align="left">
+                            <strong class="command">array(array(&#039;host&#039; =&gt; &#039;localhost&#039;, &#039;port&#039; =&gt; 11211,
+                                &#039;persistent&#039; =&gt; true, &#039;weight&#039; =&gt; 1, &#039;timeout&#039; =&gt; 5,
+                                &#039;retry_interval&#039; =&gt; 15, &#039;status&#039; =&gt; true,
+                                &#039;failure_callback&#039; =&gt; &#039;&#039; ))</strong>
+                        </td>
+
+                        <td align="left">
+                            An array of memcached servers ; each memcached server is described by
+                            an associative array : &#039;host&#039; =&gt; (string) : the name of the memcached
+                            server, &#039;port&#039; =&gt; (int) : the port of the memcached server,
+                            &#039;persistent&#039; =&gt; (bool) : use or not persistent connections to this
+                            memcached server &#039;weight&#039; =&gt; (int) :the weight of the memcached
+                            server, &#039;timeout&#039; =&gt; (int) :the time out of the memcached server,
+                            &#039;retry_interval&#039; =&gt; (int) :the retry interval of the memcached server,
+                            &#039;status&#039; =&gt; (bool) :the status of the memcached server,
+                            &#039;failure_callback&#039; =&gt; (callback) : the failure_callback of the
+                            memcached server
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">compression</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            <b><tt>TRUE</tt></b> if you want to use on-the-fly compression
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">compatibility</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            <b><tt>TRUE</tt></b> if you want to use this compatibility mode
+                            with old memcache servers or extensions
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.cache.backends.apc" name="zend.cache.backends.apc"><div class="info"><h1 class="title">Zend_Cache_Backend_Apc</h1></div>
+        
+
+        <p class="para">
+            This (extended) backends stores cache records in shared memory through
+            the <a href="http://pecl.php.net/package/APC" class="link external">&raquo; APC</a> (Alternative
+            <acronym class="acronym">PHP</acronym> Cache) extension (which is of course need for using this
+            backend).
+        </p>
+
+        <p class="para">
+            Be careful : with this backend, &quot;tags&quot; are not supported for the moment as
+            the &quot;doNotTestCacheValidity=true&quot; argument.
+        </p>
+
+        <p class="para">
+            There is no option for this backend.
+        </p>
+    </div>
+
+    <div class="section" id="zend.cache.backends.xcache" name="zend.cache.backends.xcache"><div class="info"><h1 class="title">Zend_Cache_Backend_Xcache</h1></div>
+        
+
+        <p class="para">
+            This backends stores cache records in shared memory through
+            the <a href="http://xcache.lighttpd.net/" class="link external">&raquo; XCache</a> extension
+            (which is of course need for using this backend).
+        </p>
+
+        <p class="para">
+            Be careful : with this backend, &quot;tags&quot; are not supported for the moment as
+            the &quot;doNotTestCacheValidity=true&quot; argument.
+        </p>
+
+        <p class="para">
+            Available options are :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Xcache Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">user</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left"><b><tt>NULL</tt></b></td>
+
+                        <td align="left">
+                            <var class="filename">xcache.admin.user</var>, necessary for the
+                             <span class="methodname">clean()</span> method
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">password</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left"><b><tt>NULL</tt></b></td>
+
+                        <td align="left">
+                            <var class="filename">xcache.admin.pass</var> (in clear form, not
+                            <acronym class="acronym">MD5</acronym>), necessary for the
+                             <span class="methodname">clean()</span> method
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.cache.backends.platform" name="zend.cache.backends.platform"><div class="info"><h1 class="title">Zend_Cache_Backend_ZendPlatform</h1></div>
+        
+
+        <p class="para">
+            This backend uses content caching <acronym class="acronym">API</acronym> of the <a href="http://www.zend.com/en/products/platform/" class="link external">&raquo; Zend Platform</a> product.
+            Naturally, to use this backend you need to have Zend Platform installed.
+        </p>
+
+        <p class="para">
+            This backend supports tags, but does not support
+            <b><tt>CLEANING_MODE_NOT_MATCHING_TAG</tt></b> cleaning mode.
+        </p>
+
+        <p class="para">
+            Specify this backend using a word separator -- &#039;-&#039;, &#039;.&#039;, &#039; &#039;, or &#039;_&#039;
+            -- between the words &#039;Zend&#039; and &#039;Platform&#039; when using the
+             <span class="methodname">Zend_Cache::factory()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cache</span> = Zend_Cache::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Core'</span>, <span style="color: #ff0000;">'Zend Platform'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            There are no options for this backend.
+        </p>
+    </div>
+
+    <div class="section" id="zend.cache.backends.twolevels" name="zend.cache.backends.twolevels"><div class="info"><h1 class="title">Zend_Cache_Backend_TwoLevels</h1></div>
+        
+
+        <p class="para">
+            This (extend) backend is an hybrid one. It stores cache records in two other backends :
+            a fast one (but limited) like Apc, Memcache... and a &quot;slow&quot; one like File, Sqlite...
+        </p>
+
+        <p class="para">
+            This backend will use the priority parameter (given at the frontend level when storing a
+            record) and the remaining space in the fast backend to optimize the usage of these two
+            backends.
+        </p>
+
+        <p class="para">
+            Specify this backend using a word separator -- &#039;-&#039;, &#039;.&#039;, &#039; &#039;, or &#039;_&#039;
+            -- between the words &#039;Two&#039; and &#039;Levels&#039; when using the
+             <span class="methodname">Zend_Cache::factory()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cache</span> = Zend_Cache::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Core'</span>, <span style="color: #ff0000;">'Two Levels'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Available options are :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>TwoLevels Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">slow_backend</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">File</td>
+                        <td align="left">the &quot;slow&quot; backend name</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">fast_backend</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">Apc</td>
+                        <td align="left">the &quot;fast&quot; backend name</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">slow_backend_options</em></td>
+                        <td align="left"> <span class="type">Array</span> </td>
+                        <td align="left"> <span class="methodname">array()</span></td>
+                        <td align="left">the &quot;slow&quot; backend options</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">fast_backend_options</em></td>
+                        <td align="left"> <span class="type">Array</span> </td>
+                        <td align="left"> <span class="methodname">array()</span></td>
+                        <td align="left">the &quot;fast&quot; backend options</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">slow_backend_custom_naming</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            if <b><tt>TRUE</tt></b>, the slow_backend argument is used as a
+                            complete class name; if <b><tt>FALSE</tt></b>,
+                            the frontend argument is used as the end of
+                            &quot;<span class="classname">Zend_Cache_Backend_</span>[...]&quot; class name
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">fast_backend_custom_naming</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            if <b><tt>TRUE</tt></b>, the fast_backend argument is used as a
+                            complete class name; if <b><tt>FALSE</tt></b>,
+                            the frontend argument is used as the end of
+                            &quot;<span class="classname">Zend_Cache_Backend_</span>[...]&quot; class name
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">slow_backend_autoload</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            if <b><tt>TRUE</tt></b>, there will no require_once for the
+                            slow backend (useful only for custom backends)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">fast_backend_autoload</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            if <b><tt>TRUE</tt></b>, there will no require_once for the fast
+                            backend (useful only for custom backends)
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">auto_refresh_fast_cache</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>TRUE</tt></b></td>
+
+                        <td align="left">
+                            if <b><tt>TRUE</tt></b>, auto refresh the fast cache when a
+                            cache record is hit
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">stats_update_factor</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">10</td>
+
+                        <td align="left">
+                            disable / tune the computation of the fast backend filling percentage
+                            (when saving a record into cache, computation of the fast backend
+                            filling percentage randomly 1 times on x cache writes)
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="section" id="zend.cache.backends.zendserver" name="zend.cache.backends.zendserver"><div class="info"><h1 class="title">Zend_Cache_Backend_ZendServer_Disk and Zend_Cache_Backend_ZendServer_ShMem</h1></div>
+        
+
+        <p class="para">
+            These backends store cache records using <a href="http://www.zend.com/en/products/server/downloads-all?zfs=zf_download" class="link external">&raquo; Zend
+                Server</a> caching functionality.
+        </p>
+
+        <p class="para">
+             Be careful: with these backends, &quot;tags&quot; are not supported for the moment as the
+             &quot;doNotTestCacheValidity=true&quot; argument.
+        </p>
+
+        <p class="para">
+             These backend work only withing Zend Server environment for pages requested through
+             <acronym class="acronym">HTTP</acronym> or <acronym class="acronym">HTTPS</acronym> and don&#039;t work for command line
+             script execution
+        </p>
+
+        <p class="para">
+            Specify this backend using parameter <em class="emphasis">customBackendNaming</em> as
+            <b><tt>TRUE</tt></b> when using the  <span class="methodname">Zend_Cache::factory()</span>
+            method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cache</span> = Zend_Cache::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Core'</span>, <span style="color: #ff0000;">'Zend_Cache_Backend_ZendServer_Disk'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #0000ff;">$frontendOptions</span>, <span style="color: #0000ff;">$backendOptions</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            There is no option for this backend.
+        </p>
+    </div>
+
+    <div class="section" id="zend.cache.backends.static" name="zend.cache.backends.static"><div class="info"><h1 class="title">Zend_Cache_Backend_Static</h1></div>
+        
+
+        <p class="para">
+            This backend works in concert with <span class="classname">Zend_Cache_Frontend_Capture</span>
+            (the two must be used together) to save the output from requests as static files. This
+            means the static files are served directly on subsequent requests without any
+            involvement of <acronym class="acronym">PHP</acronym> or Zend Framework at all.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+                
+                    <span class="classname">Zend_Cache_Frontend_Capture</span> operates
+                    by registering a callback function to be called
+                    when the output buffering it uses is cleaned. In order for this to operate
+                    correctly, it must be the final output buffer in the request. To guarantee
+                    this, the output buffering used by the Dispatcher <em class="emphasis">must</em> be
+                    disabled by calling <span class="classname">Zend_Controller_Front</span>&#039;s
+                     <span class="methodname">setParam()</span> method, for example,
+                    <strong class="command">$front-&gt;setParam(&#039;disableOutputBuffering&#039;, true);</strong> or adding
+                    &quot;resources.frontcontroller.params.disableOutputBuffering = true&quot;
+                    to your bootstrap configuration file (assumed <acronym class="acronym">INI</acronym>) if using
+                    <span class="classname">Zend_Application</span>.
+                <br />
+            </p></blockquote>
+
+        <p class="para">
+            The benefits of this cache include a large throughput increase since
+            all subsequent requests return the static file and don&#039;t need any
+            dynamic processing. Of course this also has some disadvantages. The
+            only way to retry the dynamic request is to purge the cached file
+            from elsewhere in the application (or via a cronjob if timed). It
+            is also restricted to single-server applications where only one
+            filesystem is used. Nevertheless, it can be a powerful means of
+            getting more performance without incurring the cost of a proxy on
+            single machines.
+        </p>
+
+        <p class="para">
+            Before describing its options, you should note this needs some
+            changes to the default <var class="filename">.htaccess</var> file in order for requests to be
+            directed to the static files if they exist. Here&#039;s an example of
+            a simple application caching some content, including two specific
+            feeds which need additional treatment to serve a correct
+            Content-Type header:
+        </p>
+
+        <div class="programlisting text"><div class="textcode"><div class="text" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">AddType application/rss+xml .xml</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">AddType application/atom+xml .xml</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteEngine On</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{REQUEST_URI} feed/rss$</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}.xml -f</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule .* cached/%{REQUEST_URI}.xml [L,T=application/rss+xml]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{REQUEST_URI} feed/atom$</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}.xml -f</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule .* cached/%{REQUEST_URI}.xml [L,T=application/atom+xml]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{DOCUMENT_ROOT}/cached/index.html -f</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule ^/*$ cached/index.html [L]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{DOCUMENT_ROOT}/cached/%{REQUEST_URI}.(html|xml|json|opml|svg) -f</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule .* cached/%{REQUEST_URI}.%1 [L]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{REQUEST_FILENAME} -s [OR]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{REQUEST_FILENAME} -l [OR]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteCond %{REQUEST_FILENAME} -d</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule ^.*$ - [NC,L]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">RewriteRule ^.*$ index.php [NC,L]</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The above assumes static files are cached to the directory
+            <var class="filename">./public/cached</var>. We&#039;ll cover the option setting this location,
+            &quot;public_dir&quot;, below.
+        </p>
+
+        <p class="para">
+            Due to the nature of static file caching, the backend class offers two additional
+            methods:  <span class="methodname">remove()</span> and
+             <span class="methodname">removeRecursively()</span>. Both accept a request
+            <acronym class="acronym">URI</acronym>, which when mapped to the &quot;public_dir&quot; where static files are
+            cached, and has a pre-stored extension appended, provides the name of either a static
+            file to delete, or a directory path to delete recursively. Due to the
+            restraints of <span class="classname">Zend_Cache_Backend_Interface</span>, all
+            other methods such as  <span class="methodname">save()</span> accept an ID which
+            is calculated by applying  <span class="methodname">bin2hex()</span> to a request
+            <acronym class="acronym">URI</acronym>.
+        </p>
+
+        <p class="para">
+            Given the level at which static caching operates, static file caching is addressed for
+            simpler use with the <span class="classname">Zend_Controller_Action_Helper_Cache</span> action
+            helper. This helper assists in setting which actions of a controller to cache, with what
+            tags, and with which extension. It also offers methods for purging the cache by request
+            <acronym class="acronym">URI</acronym> or tag. Static file caching is also assisted by
+            <span class="classname">Zend_Cache_Manager</span> which includes pre-configured configuration
+            templates for a static cache (as <b><tt>Zend_Cache_Manager::PAGECACHE</tt></b> or
+            &quot;page&quot;). The defaults therein can be configured as needed to set up a &quot;public_dir&quot;
+            location for caching, etc.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                It should be noted that the static cache actually uses a secondary cache to store
+                tags (obviously we can&#039;t store them elsewhere since a static cache does not invoke
+                <acronym class="acronym">PHP</acronym> if working correctly). This is just a standard Core cache,
+                and should use a persistent backend such as File or TwoLevels (to take advantage of
+                memory storage without sacrificing permanent persistance). The backend includes the
+                option &quot;tag_cache&quot; to set this up (it is obligatory), or the
+                 <span class="methodname">setInnerCache()</span> method.
+            <br />
+        </p></blockquote>
+
+        <table class="doctable table"><div class="info"><caption><b>Static Backend Options</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Option</th>
+                        <th>Data Type</th>
+                        <th>Default Value</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">public_dir</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left"><b><tt>NULL</tt></b></td>
+                        <td align="left">
+                            Directory where to store static files. This must exist
+                            in your public directory.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">file_locking</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>TRUE</tt></b></td>
+
+                        <td align="left">
+                            Enable or disable file_locking : Can avoid cache corruption under
+                            bad circumstances but it doesn&#039;t help on multithread webservers
+                            or on <acronym class="acronym">NFS</acronym> filesystems...
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">read_control</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>TRUE</tt></b></td>
+
+                        <td align="left">
+                            Enable / disable read control : if enabled, a control key is
+                            embedded in the cache file and this key is compared with the
+                            one calculated after the reading.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">read_control_type</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;crc32&#039;</td>
+
+                        <td align="left">
+                            Type of read control (only if read control is enabled). Available values
+                            are : &#039;md5&#039; (best but slowest), &#039;crc32&#039; (lightly less safe but faster,
+                            better choice), &#039;adler32&#039; (new choice, faster than crc32),
+                            &#039;strlen&#039; for a length only test (fastest).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">cache_file_umask</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">0700</td>
+                        <td align="left">umask for cached files.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">cache_directory_umask</em></td>
+                        <td align="left"> <span class="type">Integer</span> </td>
+                        <td align="left">0700</td>
+                        <td align="left">Umask for directories created within public_dir.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">file_extension</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;<var class="filename">.html</var>&#039;</td>
+
+                        <td align="left">
+                            Default file extension for static files created. This can be
+                            configured on the fly, see
+                             <span class="methodname">Zend_Cache_Backend_Static::save()</span> though
+                            generally it&#039;s recommended to rely on
+                            <span class="classname">Zend_Controller_Action_Helper_Cache</span> when
+                            doing so since it&#039;s simpler that way than messing with
+                            arrays or serialization manually.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">index_filename</em></td>
+                        <td align="left"> <span class="type">String</span> </td>
+                        <td align="left">&#039;index&#039;</td>
+
+                        <td align="left">
+                            If a request <acronym class="acronym">URI</acronym> does not contain sufficient
+                            information to construct a static file (usually this means an index
+                            call, e.g. <acronym class="acronym">URI</acronym> of &#039;/&#039;), the index_filename is used
+                            instead. So &#039;&#039; or &#039;/&#039; would map to &#039;<var class="filename">index.html</var>&#039;
+                            (assuming the default file_extension is &#039;<var class="filename">.html</var>&#039;).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">tag_cache</em></td>
+                        <td align="left"> <span class="type">Object</span> </td>
+                        <td align="left"><b><tt>NULL</tt></b></td>
+
+                        <td align="left">
+                            Used to set an &#039;inner&#039; cache utilised to store tags
+                            and file extensions associated with static files. This
+                            <em class="emphasis">must</em> be set or the static cache cannot be tracked
+                            and managed.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">disable_caching</em></td>
+                        <td align="left"> <span class="type">Boolean</span> </td>
+                        <td align="left"><b><tt>FALSE</tt></b></td>
+
+                        <td align="left">
+                            If set to <b><tt>TRUE</tt></b>, static files will not be cached.
+                            This will force all requests to be dynamic even if marked
+                            to be cached in Controllers. Useful for debugging.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.cache.frontends.html">Zend_Cache Frontends</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.cache.html">Zend_Cache</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.cache.cache.manager.html">The Cache Manager</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.cache.html">Zend_Cache</a></li>
+  <li><a href="zend.cache.introduction.html">Introduction</a></li>
+  <li><a href="zend.cache.theory.html">The Theory of Caching</a></li>
+  <li><a href="zend.cache.frontends.html">Zend_Cache Frontends</a></li>
+  <li class="active"><a href="zend.cache.backends.html">Zend_Cache Backends</a></li>
+  <li><a href="zend.cache.cache.manager.html">The Cache Manager</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

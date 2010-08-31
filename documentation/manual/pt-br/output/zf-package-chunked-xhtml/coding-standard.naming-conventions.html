@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Naming Conventions - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="coding-standard.php-file-formatting.html">PHP File Formatting</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="coding-standard.html">Zend Framework Coding Standard for PHP</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="coding-standard.coding-style.html">Coding Style</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="coding-standard.naming-conventions" class="section"><div class="info"><h1 class="title">Naming Conventions</h1></div>
+        
+
+        <div class="section" id="coding-standard.naming-conventions.classes" name="coding-standard.naming-conventions.classes"><div class="info"><h1 class="title">Classes</h1></div>
+            
+
+            <p class="para">
+                Zend Framework standardizes on a class naming convention whereby the names of the
+                classes directly map to the directories in which they are stored. The root level
+                directory of Zend Framework&#039;s standard library is the &quot;Zend/&quot; directory, whereas
+                the root level directory of Zend Framework&#039;s extras library is the &quot;ZendX/&quot;
+                directory. All Zend Framework classes are stored hierarchically under these root
+                directories..
+            </p>
+
+            <p class="para">
+                Class names may only contain alphanumeric characters. Numbers are permitted
+                in class names but are discouraged in most cases. Underscores are only permitted in
+                place of the path separator; the filename &quot;<var class="filename">Zend/Db/Table.php</var>&quot;
+                must map to the class name &quot;<span class="classname">Zend_Db_Table</span>&quot;.
+            </p>
+
+            <p class="para">
+                If a class name is comprised of more than one word, the first letter of each new
+                word must be capitalized. Successive capitalized letters are not allowed, e.g.
+                a class &quot;Zend_PDF&quot; is not allowed while &quot;<span class="classname">Zend_Pdf</span>&quot; is
+                acceptable.
+            </p>
+
+            <p class="para">
+                These conventions define a pseudo-namespace mechanism for Zend Framework. Zend
+                Framework will adopt the <acronym class="acronym">PHP</acronym> namespace feature when it becomes
+                available and is feasible for our developers to use in their applications.
+            </p>
+
+            <p class="para">
+                See the class names in the standard and extras libraries for examples of this
+                classname convention.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    <em class="emphasis">Important</em>: Code that must be deployed alongside
+                    Zend Framework libraries but is not part of the standard or extras libraries
+                    (e.g. application code or libraries that are not distributed by Zend) must
+                    never start with &quot;Zend_&quot; or &quot;ZendX_&quot;.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.abstracts" name="coding-standard.naming-conventions.abstracts"><div class="info"><h1 class="title">Abstract Classes</h1></div>
+            
+
+            <p class="para">
+                In general, abstract classes follow the same conventions as <a href="coding-standard.naming-conventions.html#coding-standard.naming-conventions.classes" class="link">classes</a>,
+                with one additional rule: abstract class names must end in the term, &quot;Abstract&quot;,
+                and that term must not be preceded by an underscore. As an example,
+                <span class="classname">Zend_Controller_Plugin_Abstract</span> is considered an
+                invalid name, but <span class="classname">Zend_Controller_PluginAbstract</span> or
+                <span class="classname">Zend_Controller_Plugin_PluginAbstract</span> would be valid
+                names.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    This naming convention is new with version 1.9.0 of Zend Framework. Classes
+                    that pre-date that version may not follow this rule, but will be renamed in
+                    the future in order to comply.
+                <br />
+
+                
+                    The rationale for the change is due to namespace usage. As we look towards Zend
+                    Framework 2.0 and usage of <acronym class="acronym">PHP</acronym> 5.3, we will be using
+                    namespaces. The easiest way to automate conversion to namespaces is to simply
+                    convert underscores to the namespace separator -- but under the old naming
+                    conventions, this leaves the classname as simply &quot;Abstract&quot; or &quot;Interface&quot; --
+                    both of which are reserved keywords in <acronym class="acronym">PHP</acronym>. If we prepend the
+                    (sub)component name to the classname, we can avoid these issues.
+                <br />
+
+                
+                    To illustrate the situation, consider converting the class
+                    <span class="classname">Zend_Controller_Request_Abstract</span> to use namespaces:
+                <br />
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">namespace Zend\Controller\Request;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">abstract <span style="color: #000000; font-weight: bold;">class</span> Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                
+                    Clearly, this will not work. Under the new naming conventions, however, this
+                    would become:
+                <br />
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">namespace Zend\Controller\Request;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">abstract <span style="color: #000000; font-weight: bold;">class</span> RequestAbstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                
+                    We still retain the semantics and namespace separation, while omitting the
+                    keyword issues; simultaneously, it better describes the abstract class.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.interfaces" name="coding-standard.naming-conventions.interfaces"><div class="info"><h1 class="title">Interfaces</h1></div>
+            
+
+            <p class="para">
+                In general, interfaces follow the same conventions as <a href="coding-standard.naming-conventions.html#coding-standard.naming-conventions.classes" class="link">classes</a>,
+                with one additional rule: interface names may optionally end in the term,
+                &quot;Interface&quot;, but that term must not be preceded by an underscore. As an example,
+                <span class="classname">Zend_Controller_Plugin_Interface</span> is considered an
+                invalid name, but <span class="classname">Zend_Controller_PluginInterface</span> or
+                <span class="classname">Zend_Controller_Plugin_PluginInterface</span> would be valid
+                names.
+            </p>
+
+            <p class="para">
+                While this rule is not required, it is strongly recommended, as it provides a
+                good visual cue to developers as to which files contain interfaces rather than
+                classes.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    This naming convention is new with version 1.9.0 of Zend Framework. Classes
+                    that pre-date that version may not follow this rule, but will be renamed in
+                    the future in order to comply. See <a href="coding-standard.naming-conventions.html#coding-standard.naming-conventions.abstracts" class="link">the previous
+                        section</a> for more information on the rationale for this change.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.filenames" name="coding-standard.naming-conventions.filenames"><div class="info"><h1 class="title">Filenames</h1></div>
+            
+
+            <p class="para">
+                For all other files, only alphanumeric characters, underscores, and the dash
+                character (&quot;-&quot;) are permitted. Spaces are strictly prohibited.
+            </p>
+
+            <p class="para">
+                Any file that contains <acronym class="acronym">PHP</acronym> code should end with the extension
+                &quot;<var class="filename">.php</var>&quot;, with the notable exception of view scripts. The
+                following examples show acceptable filenames for Zend Framework classes:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend/Db.php</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend/Controller/Front.php</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend/View/Helper/FormRadio.php</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                File names must map to class names as described above.
+            </p>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.functions-and-methods" name="coding-standard.naming-conventions.functions-and-methods"><div class="info"><h1 class="title">Functions and Methods</h1></div>
+            
+
+            <p class="para">
+                Function names may only contain alphanumeric characters. Underscores are not
+                permitted. Numbers are permitted in function names but are discouraged in most
+                cases.
+            </p>
+
+            <p class="para">
+                Function names must always start with a lowercase letter. When a function name
+                consists of more than one word, the first letter of each new word must be
+                capitalized. This is commonly called &quot;camelCase&quot; formatting.
+            </p>
+
+            <p class="para">
+                Verbosity is generally encouraged. Function names should be as verbose as is
+                practical to fully describe their purpose and behavior.
+            </p>
+
+            <p class="para">
+                These are examples of acceptable names for functions:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">filterInput<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">getElementById<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">widgetFactory<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li></ol></div></div></div>
+
+
+            <p class="para">
+                For object-oriented programming, accessors for instance or static variables should
+                always be prefixed with &quot;get&quot; or &quot;set&quot;. In implementing design patterns, such as the
+                singleton or factory patterns, the name of the method should contain the pattern
+                name where practical to more thoroughly describe behavior.
+            </p>
+
+            <p class="para">
+                For methods on objects that are declared with the &quot;private&quot; or &quot;protected&quot; modifier,
+                the first character of the method name must be an underscore. This is the only
+                acceptable application of an underscore in a method name. Methods declared &quot;public&quot;
+                should never contain an underscore.
+            </p>
+
+            <p class="para">
+                Functions in the global scope (a.k.a &quot;floating functions&quot;) are permitted but
+                discouraged in most cases. Consider wrapping these functions in a static class.
+            </p>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.variables" name="coding-standard.naming-conventions.variables"><div class="info"><h1 class="title">Variables</h1></div>
+            
+
+            <p class="para">
+                Variable names may only contain alphanumeric characters. Underscores are not
+                permitted. Numbers are permitted in variable names but are discouraged in most
+                cases.
+            </p>
+
+            <p class="para">
+                For instance variables that are declared with the &quot;private&quot; or &quot;protected&quot; modifier,
+                the first character of the variable name must be a single underscore. This is the
+                only acceptable application of an underscore in a variable name. Member variables
+                declared &quot;public&quot; should never start with an underscore.
+            </p>
+
+            <p class="para">
+                As with function names (see section 3.3) variable names must always start with a
+                lowercase letter and follow the &quot;camelCaps&quot; capitalization convention.
+            </p>
+
+            <p class="para">
+                Verbosity is generally encouraged. Variables should always be as verbose as
+                practical to describe the data that the developer intends to store in them. Terse
+                variable names such as &quot;<var class="varname">$i</var>&quot; and &quot;<var class="varname">$n</var>&quot; are
+                discouraged for all but the smallest loop contexts. If a loop contains more than
+                20 lines of code, the index variables should have more descriptive names.
+            </p>
+        </div>
+
+        <div class="section" id="coding-standard.naming-conventions.constants" name="coding-standard.naming-conventions.constants"><div class="info"><h1 class="title">Constants</h1></div>
+            
+
+            <p class="para">
+                Constants may contain both alphanumeric characters and underscores. Numbers are
+                permitted in constant names.
+            </p>
+
+            <p class="para">
+                All letters used in a constant name must be capitalized, while all words in a
+                constant name must be separated by underscore characters.
+            </p>
+
+            <p class="para">
+                For example, <b><tt>EMBED_SUPPRESS_EMBED_EXCEPTION</tt></b> is permitted but
+                <b><tt>EMBED_SUPPRESSEMBEDEXCEPTION</tt></b> is not.
+            </p>
+
+            <p class="para">
+                Constants must be defined as class members with the &quot;const&quot; modifier. Defining
+                constants in the global scope with the &quot;define&quot; function is permitted but strongly
+                discouraged.
+            </p>
+        </div>
+    </div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="coding-standard.php-file-formatting.html">PHP File Formatting</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="coding-standard.html">Zend Framework Coding Standard for PHP</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="coding-standard.coding-style.html">Coding Style</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="coding-standard.html">Zend Framework Coding Standard for PHP</a></li>
+  <li><a href="coding-standard.overview.html">Overview</a></li>
+  <li><a href="coding-standard.php-file-formatting.html">PHP File Formatting</a></li>
+  <li class="active"><a href="coding-standard.naming-conventions.html">Naming Conventions</a></li>
+  <li><a href="coding-standard.coding-style.html">Coding Style</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

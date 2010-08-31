@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>MVC Exceptions - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.controller.modular.html">Using a Conventional Modular Directory Structure</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.controller.html">Zend_Controller</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.currency.html">Zend_Currency</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.controller.exceptions" class="section"><div class="info"><h1 class="title">MVC Exceptions</h1></div>
+    
+
+    <div class="section" id="zend.controller.exceptions.introduction" name="zend.controller.exceptions.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            The <acronym class="acronym">MVC</acronym> components in Zend Framework utilize a Front Controller,
+            which means that all requests to a given site will go through a
+            single entry point. As a result, all exceptions bubble up to the
+            Front Controller eventually, allowing the developer to handle them
+            in a single location.
+        </p>
+
+        <p class="para">
+            However, exception messages and backtrace information often contain
+            sensitive system information, such as <acronym class="acronym">SQL</acronym> statements, file
+            locations, and more. To help protect your site, by default
+            <span class="classname">Zend_Controller_Front</span> catches all exceptions and
+            registers them with the response object; in turn, by default, the
+            response object does not display exception messages.
+        </p>
+    </div>
+
+    <div class="section" id="zend.controller.exceptions.handling" name="zend.controller.exceptions.handling"><div class="info"><h1 class="title">Handling Exceptions</h1></div>
+        
+
+        <p class="para">
+            Several mechanisms are built in to the <acronym class="acronym">MVC</acronym> components already to
+            allow you to handle exceptions.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    By default, the <a href="zend.controller.plugins.html#zend.controller.plugins.standard.errorhandler" class="link">error
+                    handler plugin</a> is registered and active. This plugin
+                    was designed to handle:
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem"><p class="para">Errors due to missing controllers or actions</p></li>
+                    <li class="listitem"><p class="para">Errors occurring within action controllers</p></li>
+                </ul>
+
+                <p class="para">
+                    It operates as a  <span class="methodname">postDispatch()</span> plugin, and
+                    checks to see if a dispatcher, action controller, or
+                    other exception has occurred. If so, it forwards to an error
+                    handler controller.
+                </p>
+
+                <p class="para">
+                    This handler will cover most exceptional situations, and
+                    handle missing controllers and actions gracefully.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"> <span class="methodname">Zend_Controller_Front::throwExceptions()</span></p>
+
+                <p class="para">
+                    By passing a boolean <b><tt>TRUE</tt></b> value to this method, you can
+                    tell the front controller that instead of aggregating exceptions
+                    in the response object or using the error handler plugin,
+                    you&#039;d rather handle them yourself. As an example:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">throwExceptions</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">try <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> catch <span style="color: #66cc66;">&#40;</span>Exception <span style="color: #0000ff;">$e</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// handle exceptions yourself</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This method is probably the easiest way to add custom
+                    exception handling covering the full range of possible
+                    exceptions to your front controller application.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Response_Abstract::renderExceptions()</span>
+                </p>
+
+                <p class="para">
+                    By passing a boolean <b><tt>TRUE</tt></b> value to this method, you tell
+                    the response object that it should render an exception message
+                    and backtrace when rendering itself. In this scenario, any
+                    exception raised by your application will be displayed. This
+                    is only recommended for non-production environments.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Front::returnResponse()</span> and
+                     <span class="methodname">Zend_Controller_Response_Abstract::isException()</span>.
+                </p>
+
+                <p class="para">
+                    By passing a boolean <b><tt>TRUE</tt></b> to
+                     <span class="methodname">Zend_Controller_Front::returnResponse()</span>,
+                     <span class="methodname">Zend_Controller_Front::dispatch()</span> will not render the
+                    response, but instead return it. Once you have the response,
+                    you may then test to see if any exceptions were trapped using
+                    its  <span class="methodname">isException()</span> method, and retrieving the
+                    exceptions via the  <span class="methodname">getException()</span> method. As an
+                    example:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">returnResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">isException</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$exceptions</span> = <span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">getException</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// handle exceptions ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">sendHeaders</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">outputBody</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    The primary advantage this method offers over
+                     <span class="methodname">Zend_Controller_Front::throwExceptions()</span> is to
+                    allow you to conditionally render the response after
+                    handling the exception. This will catch any exception in the
+                    controller chain, unlike the error handler plugin.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.controller.exceptions.internal" name="zend.controller.exceptions.internal"><div class="info"><h1 class="title">MVC Exceptions You May Encounter</h1></div>
+        
+
+        <p class="para">
+            The various <acronym class="acronym">MVC</acronym> components -- request, router, dispatcher, action
+            controller, and response objects -- may each throw exceptions on
+            occasion. Some exceptions may be conditionally overridden, and
+            others are used to indicate the developer may need to consider
+            their application structure.
+        </p>
+
+        <p class="para">As some examples:</p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Dispatcher::dispatch()</span> will,
+                    by default, throw an exception if an invalid controller is
+                    requested. There are two recommended ways to deal with
+                    this.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Set the <span class="property">useDefaultControllerAlways</span> parameter.
+                        </p>
+
+                        <p class="para">
+                            In your front controller, or your dispatcher, add
+                            the following directive:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">setParam</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'useDefaultControllerAlways'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// or</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$dispatcher</span>-&gt;<span style="color: #006600;">setParam</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'useDefaultControllerAlways'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                        <p class="para">
+                            When this flag is set, the dispatcher will use the
+                            default controller and action instead of throwing an
+                            exception. The disadvantage to this method is that
+                            any typos a user makes when accessing your site will
+                            still resolve and display your home page, which can
+                            wreak havoc with search engine optimization.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            The exception thrown by  <span class="methodname">dispatch()</span> is
+                            a <span class="classname">Zend_Controller_Dispatcher_Exception</span>
+                            containing the text &#039;Invalid controller specified&#039;.
+                            Use one of the methods outlined in <a href="zend.controller.exceptions.html#zend.controller.exceptions.handling" class="link">the
+                                previous section</a> to catch the exception,
+                            and then redirect to a generic error page or the
+                            home page.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Action::__call()</span> will throw a
+                    <span class="classname">Zend_Controller_Action_Exception</span> if it cannot
+                    dispatch a non-existent action to a method. Most likely,
+                    you will want to use some default action in the controller
+                    in cases like this. Ways to achieve this include:
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Subclass <span class="classname">Zend_Controller_Action</span> and
+                            override the  <span class="methodname">__call()</span> method. As an
+                            example:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Controller_Action <span style="color: #000000; font-weight: bold;">extends</span> Zend_Controller_Action</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> __call<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$method</span>, <span style="color: #0000ff;">$args</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Action'</span> == <a href="http://www.php.net/substr"><span style="color: #000066;">substr</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$method</span>, <span style="color: #cc66cc;">-6</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$controller</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getControllerName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$url</span> = <span style="color: #ff0000;">'/'</span> . <span style="color: #0000ff;">$controller</span> . <span style="color: #ff0000;">'/index'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;_redirect<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$url</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; throw <span style="color: #000000; font-weight: bold;">new</span> Exception<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Invalid method'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                        <p class="para">
+                            The example above intercepts any undefined action
+                            method called and redirects it to the default action
+                            in the controller.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            Subclass <span class="classname">Zend_Controller_Dispatcher</span>
+                            and override the  <span class="methodname">getAction()</span> method to
+                            verify the action exists. As an example:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Controller_Dispatcher <span style="color: #000000; font-weight: bold;">extends</span> Zend_Controller_Dispatcher</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getAction<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">getActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/empty"><span style="color: #000066;">empty</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getDefaultAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">setActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">formatActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$controller</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getController</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span>&nbsp; &nbsp; &nbsp;= <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">formatActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<a href="http://www.php.net/method_exists"><span style="color: #000066;">method_exists</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$controller</span>, <span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getDefaultAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">setActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">formatActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$action</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                        <p class="para">
+                            The above code checks to see that the requested
+                            action exists in the controller class; if not, it
+                            resets the action to the default action.
+                        </p>
+
+                        <p class="para">
+                            This method is nice because you can transparently
+                            alter the action prior to final dispatch. However,
+                            it also means that typos in the <acronym class="acronym">URL</acronym> may still
+                            dispatch correctly, which is not great for search
+                            engine optimization.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            Use
+                             <span class="methodname">Zend_Controller_Action::preDispatch()</span>
+                            or
+                             <span class="methodname">Zend_Controller_Plugin_Abstract::preDispatch()</span>
+                            to identify invalid actions.
+                        </p>
+
+                        <p class="para">
+                            By subclassing <span class="classname">Zend_Controller_Action</span>
+                            and modifying  <span class="methodname">preDispatch()</span>, you can
+                            modify all of your controllers to forward to
+                            another action or redirect prior to actually
+                            dispatching the action. The code for this will look
+                            similar to the code for overriding
+                             <span class="methodname">__call()</span>, above.
+                        </p>
+
+                        <p class="para">
+                            Alternatively, you can check this information in a
+                            global plugin. This has the advantage of being
+                            action controller independent; if your application
+                            consists of a variety of action controllers, and not
+                            all of them inherit from the same class, this method
+                            can add consistency in handling your various
+                            classes.
+                        </p>
+
+                        <p class="para">
+                            As an example:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Controller_PreDispatchPlugin <span style="color: #000000; font-weight: bold;">extends</span> Zend_Controller_Plugin_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> preDispatch<span style="color: #66cc66;">&#40;</span>Zend_Controller_Request_Abstract <span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$front</span>&nbsp; &nbsp; &nbsp; = Zend_Controller_Front::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$dispatcher</span> = <span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">getDispatcher</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$class</span>&nbsp; &nbsp; &nbsp; = <span style="color: #0000ff;">$dispatcher</span>-&gt;<span style="color: #006600;">getControllerClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$class</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$class</span> = <span style="color: #0000ff;">$dispatcher</span>-&gt;<span style="color: #006600;">getDefaultControllerClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$r</span>&nbsp; &nbsp; &nbsp; = <span style="color: #000000; font-weight: bold;">new</span> ReflectionClass<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$class</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$dispatcher</span>-&gt;<span style="color: #006600;">getActionMethod</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$r</span>-&gt;<span style="color: #006600;">hasMethod</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$action</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$defaultAction</span>&nbsp; = <span style="color: #0000ff;">$dispatcher</span>-&gt;<span style="color: #006600;">getDefaultAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$controllerName</span> = <span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">getControllerName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$response</span>&nbsp; &nbsp; &nbsp; &nbsp;= <span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">getResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">setRedirect</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/'</span> . <span style="color: #0000ff;">$controllerName</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; . <span style="color: #ff0000;">'/'</span> . <span style="color: #0000ff;">$defaultAction</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">sendHeaders</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/exit"><span style="color: #000066;">exit</span></a>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+                        <p class="para">
+                            In this example, we check to see if the action
+                            requested is available in the controller. If not, we
+                            redirect to the default action in the controller,
+                            and exit script execution immediately.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.controller.modular.html">Using a Conventional Modular Directory Structure</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.controller.html">Zend_Controller</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.currency.html">Zend_Currency</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.controller.html">Zend_Controller</a></li>
+  <li><a href="zend.controller.quickstart.html">Guia de In&iacute;cio R&aacute;pido do Zend_Controller</a></li>
+  <li><a href="zend.controller.basics.html">O B&aacute;sico de Zend_Controller</a></li>
+  <li><a href="zend.controller.front.html">The Front Controller</a></li>
+  <li><a href="zend.controller.request.html">The Request Object</a></li>
+  <li><a href="zend.controller.router.html">The Standard Router</a></li>
+  <li><a href="zend.controller.dispatcher.html">The Dispatcher</a></li>
+  <li><a href="zend.controller.action.html">Action Controllers</a></li>
+  <li><a href="zend.controller.actionhelpers.html">Action Helpers</a></li>
+  <li><a href="zend.controller.response.html">The Response Object</a></li>
+  <li><a href="zend.controller.plugins.html">Plugins</a></li>
+  <li><a href="zend.controller.modular.html">Using a Conventional Modular Directory Structure</a></li>
+  <li class="active"><a href="zend.controller.exceptions.html">MVC Exceptions</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

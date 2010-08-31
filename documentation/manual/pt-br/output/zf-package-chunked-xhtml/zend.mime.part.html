@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Mime_Part - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.mime.message.html">Zend_Mime_Message</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.mime.html">Zend_Mime</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.navigation.html">Zend_Navigation</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.mime.part" class="section"><div class="info"><h1 class="title">Zend_Mime_Part</h1></div>
+    
+
+    <div class="section" id="zend.mime.part.introduction" name="zend.mime.part.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            This class represents a single part of a <acronym class="acronym">MIME</acronym> message. It contains
+            the actual content of the message part plus information about its encoding,
+            content type and original filename. It provides a method for generating a
+            string from the stored data. <span class="classname">Zend_Mime_Part</span> objects can be
+            added to <a href="zend.mime.message.html" class="link"><span class="classname">Zend_Mime_Message</span></a> to
+            assemble a complete multipart message.
+        </p>
+    </div>
+
+    <div class="section" id="zend.mime.part.instantiation" name="zend.mime.part.instantiation"><div class="info"><h1 class="title">Instantiation</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Mime_Part</span> is instantiated with a string that
+            represents the content of the new part. The type is assumed to be
+            OCTET-STREAM, encoding is 8Bit. After instantiating a
+            <span class="classname">Zend_Mime_Part</span>, meta information can be set by accessing its
+            attributes directly:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$type</span> = Zend_Mime::<span style="color: #006600;">TYPE_OCTETSTREAM</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$encoding</span> = Zend_Mime::<span style="color: #006600;">ENCODING_8BIT</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$id</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$disposition</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$filename</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$description</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$charset</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$boundary</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$location</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$language</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.mime.part.methods" name="zend.mime.part.methods"><div class="info"><h1 class="title">Methods for rendering the message part to a string</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">getContent()</span> returns the encoded content of the
+            MimePart as a string using the encoding specified in the attribute
+            $encoding. Valid values are Zend_Mime::ENCODING_* Characterset conversions are
+            not performed.
+        </p>
+
+        <p class="para">
+             <span class="methodname">getHeaders()</span> returns the Mime-Headers for the
+            MimePart as generated from the information in the publicly accessible
+            attributes. The attributes of the object need to be set correctly before
+            this method is called.
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$charset</var> has to be set to the actual charset of the
+                        content if it is a text type (Text or <acronym class="acronym">HTML</acronym>).
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$id</var> may be set to identify a content-id for inline images
+                        in a <acronym class="acronym">HTML</acronym> mail.
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$filename</var>
+                        contains the name the file will get when downloading it.
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$disposition</var> defines if the file should be treated as an
+                        attachment or if it is used inside the (HTML-) mail (inline).
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$description</var>
+                        is only used for informational purposes.
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$boundary</var>
+                        defines string as boundary.
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$location</var> can be used as resource <acronym class="acronym">URI</acronym>
+                        that has relation to the content.
+                    </p>
+                </li>
+                <li class="listitem">
+                    <p class="para">
+                        <var class="varname">$language</var>
+                        defines languages in the content.
+                    </p>
+                </li>
+            </ul>
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.mime.message.html">Zend_Mime_Message</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.mime.html">Zend_Mime</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.navigation.html">Zend_Navigation</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.mime.html">Zend_Mime</a></li>
+  <li><a href="zend.mime.mime.html">Zend_Mime</a></li>
+  <li><a href="zend.mime.message.html">Zend_Mime_Message</a></li>
+  <li class="active"><a href="zend.mime.part.html">Zend_Mime_Part</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

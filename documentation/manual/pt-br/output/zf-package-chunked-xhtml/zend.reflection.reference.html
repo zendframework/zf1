@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Reflection Reference - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.reflection.examples.html">Zend_Reflection Examples</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.reflection.html">Zend_Reflection</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.registry.html">Zend_Registry</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.reflection.reference" class="section"><div class="info"><h1 class="title">Zend_Reflection Reference</h1></div>
+    
+
+    <p class="para">
+        The various classes in <span class="classname">Zend_Reflection</span> mimic the
+        <acronym class="acronym">API</acronym> of <acronym class="acronym">PHP</acronym>&#039;s <a href="http://php.net/reflection" class="link external">&raquo; Reflection <acronym class="acronym">API</acronym></a> - with one
+        important difference. <acronym class="acronym">PHP</acronym>&#039;s Reflection <acronym class="acronym">API</acronym> does not
+        provide introspection into docblock annotation tags, nor into parameter variable
+        types or return types.
+    </p>
+
+    <p class="para">
+        <span class="classname">Zend_Reflection</span> analyzes method docblock annotations to
+        determine parameter variable types and the return type. Specifically,
+        the <code class="code">@param</code> and <code class="code">@return</code> annotations are used.
+        However, you can also check for any other annotation tags, as well as
+        the standard &quot;short&quot; and &quot;long&quot; descriptions.
+    </p>
+
+    <p class="para">
+        Each reflection object in <span class="classname">Zend_Reflection</span> overrides the
+         <span class="methodname">getDocblock()</span> method to return an instance of
+        <span class="classname">Zend_Reflection_Docblock</span>. This class provides introspection
+        into the docblocks and annotation tags.
+    </p>
+
+    <p class="para">
+        <span class="classname">Zend_Reflection_File</span> is a new reflection class that allows
+        introspection of <acronym class="acronym">PHP</acronym> files. With it, you can retrieve the classes,
+        functions, and global <acronym class="acronym">PHP</acronym> code contained in the file.
+    </p>
+
+    <p class="para">
+        Finally, the various methods that return other reflection objects
+        allow a second parameter, the name of the reflection class to use for
+        the returned reflection object.
+    </p>
+
+    <div class="section" id="zend.reflection.reference.docblock" name="zend.reflection.reference.docblock"><div class="info"><h1 class="title">Zend_Reflection_Docblock</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Docblock</span> is the heart of
+            <span class="classname">Zend_Reflection</span>&#039;s value-add over <acronym class="acronym">PHP</acronym>&#039;s
+            Reflection <acronym class="acronym">API</acronym>. It provides the following methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getContents()</span>: returns the full contents of the
+                    docblock.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getStartLine()</span>: returns the starting position of
+                    the docblock within the defining file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getEndLine()</span>: get last line of docblock within the
+                    defining file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getShortDescription()</span>: get the short, one-line
+                    description (usually the first line of the docblock).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getLongDescription()</span>: get the long description from
+                    the docblock.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">hasTag($name)</span>: determine if the docblock has the
+                    given annotation tag.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getTag($name)</span>: Retrieve the given annotation tag
+                    reflection object, or a boolean <b><tt>FALSE</tt></b> if it&#039;s not
+                    present.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getTags($filter)</span>: Retrieve all tags, or all tags
+                    matching the given <var class="varname">$filter</var> string. The tags
+                    returned will be an array of
+                    <span class="classname">Zend_Reflection_Docblock_Tag</span> objects.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.docblock-tag" name="zend.reflection.reference.docblock-tag"><div class="info"><h1 class="title">Zend_Reflection_Docblock_Tag</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Docblock_Tag</span> provides reflection for
+            individual annotation tags. Most tags consist of only a name and a
+            description. In the case of some special tags, the class provides a
+            factory method for retrieving an instance of the appropriate class.
+        </p>
+
+        <p class="para">
+            The following methods are defined for
+            <span class="classname">Zend_Reflection_Docblock_Tag</span>:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">factory($tagDocblockLine)</span>: instantiate the
+                    appropriate tag reflection class and return it.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getName()</span>: return the annotation tag name.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDescription()</span>: return the annotation
+                    description.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.docblock-tag-param" name="zend.reflection.reference.docblock-tag-param"><div class="info"><h1 class="title">Zend_Reflection_Docblock_Tag_Param</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Docblock_Tag_Param</span> is a specialized
+            version of <span class="classname">Zend_Reflection_Docblock_Tag</span>. The
+            <code class="code">@param</code> annotation tag description consists of the
+            parameter type, variable name, and variable description. It adds the
+            following methods to <span class="classname">Zend_Reflection_Docblock_Tag</span>:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getType()</span>: return the parameter variable type.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getVariableName()</span>: return the parameter variable
+                    name.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.docblock-tag-return" name="zend.reflection.reference.docblock-tag-return"><div class="info"><h1 class="title">Zend_Reflection_Docblock_Tag_Return</h1></div>
+        
+
+        <p class="para">
+            Like <span class="classname">Zend_Reflection_Docblock_Tag_Param</span>,
+            <span class="classname">Zend_Reflection_Docblock_Tag_Return</span> is a specialized
+            version of <span class="classname">Zend_Reflection_Docblock_Tag</span>. The
+            <code class="code">@return</code> annotation tag description consists of the
+            return type and variable description. It adds the following method
+            to <span class="classname">Zend_Reflection_Docblock_Tag</span>:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getType()</span>: return the return type.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.file" name="zend.reflection.reference.file"><div class="info"><h1 class="title">Zend_Reflection_File</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_File</span> provides introspection into
+            <acronym class="acronym">PHP</acronym> files. With it, you can introspect the classes, functions, and
+            bare <acronym class="acronym">PHP</acronym> code defined in a file. It defines the following methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFileName()</span>: retrieve the filename of the file
+                    being reflected.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getStartLine()</span>: retrieve the starting line of the
+                    file (always &quot;1&quot;).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getEndLine()</span> retrieve the last line / number of
+                    lines in the file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getDocComment($reflectionClass =
+                        &#039;Zend_Reflection_Docblock&#039;)</code>: retrive the file-level
+                    docblock reflection object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getClasses($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: retrieve an array of
+                    reflection objects, one for each class defined in the file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getFunctions($reflectionClass =
+                        &#039;Zend_Reflection_Function&#039;)</code>: retrieve an array of
+                    reflection objects, one for each function defined in the file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getClass($name = null, $reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: retrieve the reflection
+                    object for a single class.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getContents()</span>: retrieve the full contents of the
+                    file.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.class" name="zend.reflection.reference.class"><div class="info"><h1 class="title">Zend_Reflection_Class</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Class</span> extends
+            <code class="code">ReflectionClass</code>, and follows its <acronym class="acronym">API</acronym>. It adds one
+            additional method,  <span class="methodname">getDeclaringFile()</span>, which may be
+            used to retrieve the <span class="classname">Zend_Reflection_File</span> reflection
+            object for the defining file.
+        </p>
+
+        <p class="para">
+            Additionally, the following methods add an additional argument for
+            specifying the reflection class to use when fetching a reflection
+            object:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDeclaringFile($reflectionClass =
+                        &#039;Zend_Reflection_File&#039;)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getDocblock($reflectionClass =
+                        &#039;Zend_Reflection_Docblock&#039;)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getInterfaces($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getMethod($reflectionClass = &#039;Zend_Reflection_Method&#039;)</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getMethods($filter = -1, $reflectionClass =
+                        &#039;Zend_Reflection_Method&#039;)</span>
+                </p>
+            </li>
+
+            <li class="listitem"><p class="para">
+                 <span class="methodname">getParentClass($reflectionClass = &#039;Zend_Reflection_Class&#039;)</span>
+            </p></li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getProperty($name, $reflectionClass = &#039;Zend_Reflection_Property&#039;)</code>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getProperties($filter = -1, $reflectionClass =
+                        &#039;Zend_Reflection_Property&#039;)</code>
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.extension" name="zend.reflection.reference.extension"><div class="info"><h1 class="title">Zend_Reflection_Extension</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Extension</span> extends
+            <code class="code">ReflectionExtension</code>, and follows its <acronym class="acronym">API</acronym>. It overrides
+            the following methods to add an additional argument for specifying
+            the reflection class to use when fetching a reflection object:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getFunctions($reflectionClass =
+                        &#039;Zend_Reflection_Function&#039;)</code>: retrieve an array of
+                    reflection objects representing the functions defined by the extension.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getClasses($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: retrieve an array of
+                    reflection objects representing the classes defined by the extension.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.function" name="zend.reflection.reference.function"><div class="info"><h1 class="title">Zend_Reflection_Function</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Function</span> adds a method for retrieving
+            the function return type, as well as overrides several methods to
+            allow specifying the reflection class to use for returned reflection
+            objects.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getDocblock($reflectionClass =
+                        &#039;Zend_Reflection_Docblock&#039;)</code>: retrieve the function
+                    docblock reflection object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getParameters($reflectionClass =
+                        &#039;Zend_Reflection_Parameter&#039;)</code>: retrieve an array of
+                    all function parameter reflection objects.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getReturn()</span>: retrieve the return type reflection
+                    object.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.method" name="zend.reflection.reference.method"><div class="info"><h1 class="title">Zend_Reflection_Method</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Method</span> mirrors
+            <span class="classname">Zend_Reflection_Function</span>, and only overrides one
+            additional method:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getParentClass($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: retrieve the parent class
+                    reflection object.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.parameter" name="zend.reflection.reference.parameter"><div class="info"><h1 class="title">Zend_Reflection_Parameter</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Parameter</span> adds a method for retrieving
+            the parameter type, as well as overrides methods to allow specifying
+            the reflection class to use on returned reflection objects.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getDeclaringClass($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: get the declaring class of
+                    the parameter as a reflection object (if available).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getClass($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: get the class of
+                    the parameter as a reflection object (if available).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getDeclaringFunction($reflectionClass =
+                        &#039;Zend_Reflection_Function&#039;)</code>: get the function of
+                    the parameter as a reflection object (if available).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getType()</span>: get the parameter type.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.reflection.reference.property" name="zend.reflection.reference.property"><div class="info"><h1 class="title">Zend_Reflection_Property</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Reflection_Property</span> overrides a single method in
+            order to allow specifying the returned reflection object class:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">getDeclaringClass($reflectionClass =
+                        &#039;Zend_Reflection_Class&#039;)</code>: retrieve the declaring
+                    class of the property as a reflection object.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.reflection.examples.html">Zend_Reflection Examples</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.reflection.html">Zend_Reflection</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.registry.html">Zend_Registry</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.reflection.html">Zend_Reflection</a></li>
+  <li><a href="zend.reflection.introduction.html">Introduction</a></li>
+  <li><a href="zend.reflection.examples.html">Zend_Reflection Examples</a></li>
+  <li class="active"><a href="zend.reflection.reference.html">Zend_Reflection Reference</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

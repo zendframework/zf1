@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Markup Parsers - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.markup.getting-started.html">Getting Started With Zend_Markup</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.markup.html">Zend_Markup</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.markup.renderers.html">Zend_Markup Renderers</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.markup.parsers" class="section"><div class="info"><h1 class="title">Zend_Markup Parsers</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Markup</span> is currently shipped with two parsers, a BBCode parser
+        and a Textile parser.
+    </p>
+
+    <div class="section" id="zend.markup.parsers.theory" name="zend.markup.parsers.theory"><div class="info"><h1 class="title">Theory of Parsing</h1></div>
+        
+
+        <p class="para">
+            The parsers of <span class="classname">Zend_Markup</span> are classes that convert text with
+            markup to a token tree. Although we are using the BBCode parser as example here, the
+            idea of the token tree remains the same across all parsers. We will start with this
+            piece of BBCode for example:
+        </p>
+
+        <div class="programlisting"><div class="cdata"><pre>
+[b]foo[i]bar[/i][/b]baz
+</pre></div></div>
+
+
+        <p class="para">
+            Then the BBCode parser will take that value, tear it apart and create the following
+            tree:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">[b]</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">foo</p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">[i]</p>
+
+                        <ul class="itemizedlist">
+                            <li class="listitem">
+                                <p class="para">bar</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">baz</p>
+            </li>
+        </ul>
+
+        <p class="para">
+            You will notice that the closing tags are gone, they don&#039;t show up as content in the
+            tree structure. This is because the closing tag isn&#039;t part of the actual content.
+            Although, this does not mean that the closing tag is just lost, it is stored inside the
+            tag information for the tag itself. Also, please note that this is just a simplified
+            view of the tree itself. The actual tree contains a lot more information, like the tag&#039;s
+            attributes and its name.
+        </p>
+    </div>
+
+    <div class="section" id="zend.markup.parsers.bbcode" name="zend.markup.parsers.bbcode"><div class="info"><h1 class="title">The BBCode parser</h1></div>
+        
+
+        <p class="para">
+            The BBCode parser is a <span class="classname">Zend_Markup</span> parser that converts BBCode to
+            a token tree. The syntax of all BBCode tags is:
+        </p>
+
+        <div class="programlisting text"><div class="textcode"><div class="text" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">[name(=(value|&quot;value&quot;))( attribute=(value|&quot;value&quot;))*]</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Some examples of valid BBCode tags are:
+        </p>
+
+        <div class="programlisting"><div class="cdata"><pre>
+[b]
+[list=1]
+[code file=Zend/Markup.php]
+[url=&quot;http://framework.zend.com/&quot; title=&quot;Zend Framework!&quot;]
+</pre></div></div>
+
+
+        <p class="para">
+            By default, all tags are closed by using the format &#039;[/tagname]&#039;.
+        </p>
+    </div>
+
+    <div class="section" id="zend.markup.parsers.textile" name="zend.markup.parsers.textile"><div class="info"><h1 class="title">The Textile parser</h1></div>
+        
+
+        <p class="para">
+            The Textile parser is a <span class="classname">Zend_Markup</span> parser that converts Textile
+            to a token tree. Because Textile doesn&#039;t have a tag structure, the following is a list
+            of example tags:
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>List of basic Textile tags</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Sample input</th>
+                        <th>Sample output</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">*foo*</td>
+                        <td align="left">&lt;strong&gt;foo&lt;/strong&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">_foo_</td>
+                        <td align="left">&lt;em&gt;foo&lt;/em&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">??foo??</td>
+                        <td align="left">&lt;cite&gt;foo&lt;/cite&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">-foo-</td>
+                        <td align="left">&lt;del&gt;foo&lt;/del&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">+foo+</td>
+                        <td align="left">&lt;ins&gt;foo&lt;/ins&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">^foo^</td>
+                        <td align="left">&lt;sup&gt;foo&lt;/sup&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">~foo~</td>
+                        <td align="left">&lt;sub&gt;foo&lt;/sub&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">%foo%</td>
+                        <td align="left">&lt;span&gt;foo&lt;/span&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">PHP(PHP Hypertext Preprocessor)</td>
+
+                        <td align="left">
+                            &lt;acronym title=&quot;PHP Hypertext Preprocessor&quot;&gt;PHP&lt;/acronym&gt;
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">&quot;Zend Framework&quot;:http://framework.zend.com/</td>
+
+                        <td align="left">
+                            &lt;a href=&quot;http://framework.zend.com/&quot;&gt;Zend Framework&lt;/a&gt;
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">h1. foobar</td>
+                        <td align="left">&lt;h1&gt;foobar&lt;/h1&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">h6. foobar</td>
+                        <td align="left">&lt;h6&gt;foobar&lt;/h6&gt;</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">!http://framework.zend.com/images/logo.gif!</td>
+
+                        <td align="left">
+                            &lt;img src=&quot;http://framework.zend.com/images/logo.gif&quot; /&gt;
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            Also, the Textile parser wraps all tags into paragraphs; a paragraph ends with two
+            newlines, and if there are more tags, a new paragraph will be added.
+        </p>
+
+        <div class="section" id="zend.markup.parsers.textile.lists" name="zend.markup.parsers.textile.lists"><div class="info"><h1 class="title">Lists</h1></div>
+            
+
+            <p class="para">
+                The Textile parser also supports two types of lists. The numeric type, using the &quot;#&quot;
+                character and bullit-lists using the &quot;*&quot; character. An example of both lists:
+            </p>
+
+            <div class="programlisting"><div class="cdata"><pre>
+# Item 1
+# Item 2
+
+* Item 1
+* Item 2
+</pre></div></div>
+
+
+            <p class="para">
+                The above will generate two lists: the first, numbered; and the second, bulleted.
+                Inside list items, you can use normal tags like strong (*), and emphasized (_). Tags
+                that need to start on a new line (like &#039;h1&#039; etc.) cannot be used inside lists.
+            </p>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.markup.getting-started.html">Getting Started With Zend_Markup</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.markup.html">Zend_Markup</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.markup.renderers.html">Zend_Markup Renderers</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.markup.html">Zend_Markup</a></li>
+  <li><a href="zend.markup.introduction.html">Introduction</a></li>
+  <li><a href="zend.markup.getting-started.html">Getting Started With Zend_Markup</a></li>
+  <li class="active"><a href="zend.markup.parsers.html">Zend_Markup Parsers</a></li>
+  <li><a href="zend.markup.renderers.html">Zend_Markup Renderers</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

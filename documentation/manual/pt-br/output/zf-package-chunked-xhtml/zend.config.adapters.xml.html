@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Config_Xml - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.config.adapters.ini.html">Zend_Config_Ini</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.config.html">Zend_Config</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.config.writer.html">Zend_Config_Writer</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.config.adapters.xml" class="section"><div class="info"><h1 class="title">Zend_Config_Xml</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Config_Xml</span> permite aos desenvolvedores armazenarem os dados de
+        configuração em um formato <acronym class="acronym">XML</acronym> simples e lê-los através de uma sintaxe
+        de propriedade de objeto aninhado. O nome do elemento raiz do arquivo ou string
+        <acronym class="acronym">XML</acronym> é irrelevante e pode ser escolhido. O primeiro nível dos elementos
+        <acronym class="acronym">XML</acronym> corresponde às seções de dados de configuração. O formato
+        <acronym class="acronym">XML</acronym> suporta organização hierárquica para o aninhamento dos elementos
+        <acronym class="acronym">XML</acronym> abaixo dos elementos de seção-nível. O conteúdo de uma folha de
+        elemento <acronym class="acronym">XML</acronym> (leaf) corresponde ao valor de um dado de configuração.
+        Herança de seção é suportada por um atributo <acronym class="acronym">XML</acronym> especial chamado
+        <em class="emphasis">extends</em>, e o valor deste atributo corresponde à seção a que a
+        informação deve ser herdada.
+    </p>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Tipo de Retorno</b><br /></span>
+        
+
+        
+            Os dados de configuração lidos em <span class="classname">Zend_Config_Xml</span> são sempre
+            retornados como strings. A conversão de dados de strings para outros tipos é deixado
+            para os desenvolvedores de acordo com suas necessidades específicas.
+        <br />
+    </p></blockquote>
+
+    <div class="example"><div class="info"><p><b>Example #1 Usando o Zend_Config_Xml</b></p></div>
+        
+
+        <div class="example-contents"><p>
+            Este exemplo ilustra uma utilização básica de <span class="classname">Zend_Config_Xml</span>
+            para carregar dados de configuração de um arquivo <acronym class="acronym">XML</acronym>. Neste
+            exemplo, existem dados de configuração, tanto para um sistema de produção como para um
+            sistema de testes. Pois os dados de configuração de um sistema de testes são muito
+            semelhantes aos de produção, a seção de testes herda da seção de produção. Neste caso,
+            a decisão é arbitrária e poderia ter sido escrita de modo inverso, com a seção de
+            produção herdando da seção de testes, embora isso possa não ser o caso em situações
+            mais complexas. Suponha-se, então, que os dados de configuração a seguir estão
+            contidos em <var class="filename">/path/to/config.xml</var>:
+        </p></div>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;webhost<span style="font-weight: bold; color: black;">&gt;</span></span></span>www.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/webhost<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;adapter<span style="font-weight: bold; color: black;">&gt;</span></span></span>pdo_mysql<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/adapter<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host<span style="font-weight: bold; color: black;">&gt;</span></span></span>db.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/host<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;username<span style="font-weight: bold; color: black;">&gt;</span></span></span>dbuser<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/username<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;password<span style="font-weight: bold; color: black;">&gt;</span></span></span>secret<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/password<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;dbname<span style="font-weight: bold; color: black;">&gt;</span></span></span>dbname<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/dbname<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;staging</span> <span style="color: #000066;">extends</span>=<span style="color: #ff0000;">&quot;production&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host<span style="font-weight: bold; color: black;">&gt;</span></span></span>dev.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/host<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;username<span style="font-weight: bold; color: black;">&gt;</span></span></span>devuser<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/username<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;password<span style="font-weight: bold; color: black;">&gt;</span></span></span>devsecret<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/password<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/staging<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            Em seguida, suponha que o desenvolvedor do aplicativo necessite dos dados de
+            configuração de testes do arquivo <acronym class="acronym">XML</acronym>. É o simples caso de carregar
+            esses dados especificando o arquivo <acronym class="acronym">XML</acronym> e a seção de testes:
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$config</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Config_Xml<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/config.xml'</span>, <span style="color: #ff0000;">'staging'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$config</span>-&gt;<span style="color: #006600;">database</span>-&gt;<span style="color: #006600;">params</span>-&gt;<span style="color: #006600;">host</span>;&nbsp; &nbsp;<span style="color: #808080; font-style: italic;">// prints &quot;dev.example.com&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$config</span>-&gt;<span style="color: #006600;">database</span>-&gt;<span style="color: #006600;">params</span>-&gt;<span style="color: #006600;">dbname</span>; <span style="color: #808080; font-style: italic;">// prints &quot;dbname&quot;</span></div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="example"><div class="info"><p><b>Example #2 Usando os Atributos de Tag no Zend_Config_Xml</b></p></div>
+        
+
+        <div class="example-contents"><p>
+            <span class="classname">Zend_Config_Xml</span> também suporta outras duas maneiras para definir
+            os nós na configuração. Ambas fazem uso de atributos. A partir do momento que os
+            atributos <em class="emphasis">extends</em> e <em class="emphasis">value</em> são palavras-chaves
+            reservadas (o último através segunda maneira de uso dos atributos), eles não poderão
+            ser utilizados. A primeira maneira usar os atributos é adicionar um nó pai, assim eles
+            serão interpretados como um filho deste nó:
+        </p></div>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;production</span> <span style="color: #000066;">webhost</span>=<span style="color: #ff0000;">&quot;www.example.com&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database</span> <span style="color: #000066;">adapter</span>=<span style="color: #ff0000;">&quot;pdo_mysql&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params</span> <span style="color: #000066;">host</span>=<span style="color: #ff0000;">&quot;db.example.com&quot;</span> <span style="color: #000066;">username</span>=<span style="color: #ff0000;">&quot;dbuser&quot;</span> <span style="color: #000066;">password</span>=<span style="color: #ff0000;">&quot;secret&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">dbname</span>=<span style="color: #ff0000;">&quot;dbname&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;staging</span> <span style="color: #000066;">extends</span>=<span style="color: #ff0000;">&quot;production&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params</span> <span style="color: #000066;">host</span>=<span style="color: #ff0000;">&quot;dev.example.com&quot;</span> <span style="color: #000066;">username</span>=<span style="color: #ff0000;">&quot;devuser&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">password</span>=<span style="color: #ff0000;">&quot;devsecret&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/staging<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            A outra maneira não encurta realmente a configuração, mas a torna mais fácil para
+            manter, pois você não tem que escrever o nome da tag duas vezes. Você simplesmente cria
+            uma tag vazia com o valor no atributo <em class="emphasis">value</em>:
+        </p></div>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;webhost<span style="font-weight: bold; color: black;">&gt;</span></span></span>www.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/webhost<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;adapter</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;pdo_mysql&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;db.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;username</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;dbuser&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;password</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;secret&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;dbname</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;dbname&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;staging</span> <span style="color: #000066;">extends</span>=<span style="color: #ff0000;">&quot;production&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;dev.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;username</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;devuser&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;password</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;devsecret&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/database<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/staging<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/configdata<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+    </div>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Strings XML</b><br /></span>
+        
+
+        
+            <span class="classname">Zend_Config_Xml</span> é capaz de carregar uma string
+            <acronym class="acronym">XML</acronym> diretamente, por exemplo, uma que foi recuperada de um banco de
+            dados. A string é passada como primeiro parâmetro para o construtor e deve começar com
+            os caracteres <em class="emphasis">&#039;&lt;?xml&#039;</em>:
+        <br />
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$string = <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;</span><span style="font-weight: bold; color: black;">&lt;</span><span style="font-weight: bold; color: black;">&lt;EOT</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;config<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;adapter</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;pdo_mysql&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;db.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;staging</span> <span style="color: #000066;">extends</span>=<span style="color: #ff0000;">&quot;production&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;dev.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/staging<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/config<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">EOT;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$config = new Zend_Config_Xml($string, 'staging');</div></li></ol></div></div></div>
+
+    </p></blockquote>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>Namespace XML do Zend_Config</b><br /></span>
+        
+
+        
+            <span class="classname">Zend_Config</span> vem com sua próprio namespace <acronym class="acronym">XML</acronym>,
+            que adiciona funcionalidade adicional ao processo de análise. Para aproveitá-la, você
+            tem que definir um namespace com o namespace <acronym class="acronym">URI</acronym>
+            <var class="filename">http://framework.zend.com/xml/zend-config-xml/1.0/</var> em seu nó raiz
+            de configuração.
+        <br />
+
+        
+            Com o namespace habilitado, você pode usar constantes do <acronym class="acronym">PHP</acronym> dentro
+            de arquivos de configuração. Além disso, o atributo <em class="emphasis">extends</em> foi
+            transferido para um novo namespace e está depreciado no namespace
+            <b><tt>NULL</tt></b>. Ele será completamente removido no Zend Framework 2.0.
+        <br />
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$string = <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;</span><span style="font-weight: bold; color: black;">&lt;</span><span style="font-weight: bold; color: black;">&lt;EOT</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;config</span> <span style="color: #000066;">xmlns:zf</span>=<span style="color: #ff0000;">&quot;http://framework.zend.com/xml/zend-config-xml/1.0/&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;includePath<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;zf:const</span> <span style="color: #000066;">zf:name</span>=<span style="color: #ff0000;">&quot;APPLICATION_PATH&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span>/library<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/includePath<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;adapter</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;pdo_mysql&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;db.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/production<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;staging</span> <span style="color: #000066;">zf:extends</span>=<span style="color: #ff0000;">&quot;production&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;host</span> <span style="color: #000066;">value</span>=<span style="color: #ff0000;">&quot;dev.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/params<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/db<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/staging<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/config<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">EOT;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">define('APPLICATION_PATH', dirname(__FILE__));</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$config = new Zend_Config_Xml($string, 'staging');</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">echo $config-&gt;includePath; // Prints &quot;/var/www/something/library&quot;</div></li></ol></div></div></div>
+
+    </p></blockquote>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.config.adapters.ini.html">Zend_Config_Ini</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.config.html">Zend_Config</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.config.writer.html">Zend_Config_Writer</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.config.html">Zend_Config</a></li>
+  <li><a href="zend.config.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li><a href="zend.config.theory_of_operation.html">Teoria de Opera&ccedil;&atilde;o</a></li>
+  <li><a href="zend.config.adapters.ini.html">Zend_Config_Ini</a></li>
+  <li class="active"><a href="zend.config.adapters.xml.html">Zend_Config_Xml</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

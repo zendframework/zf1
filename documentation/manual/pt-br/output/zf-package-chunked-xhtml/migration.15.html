@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend Framework 1.5 - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.16.html">Zend Framework 1.6</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.10.html">Zend Framework 1.0</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="migration.15" class="section"><div class="info"><h1 class="title">Zend Framework 1.5</h1></div>
+    
+
+    <p class="para">
+        When upgrading from a previous release to Zend Framework 1.5 or higher you
+        should note the following migration notes.
+    </p>
+
+    <div class="section" id="migration.15.zend.controller" name="migration.15.zend.controller"><div class="info"><h1 class="title">Zend_Controller</h1></div>
+        
+
+        <p class="para">
+            Though most basic functionality remains the same, and all documented
+            functionality remains the same, there is one particular
+            <em class="emphasis">undocumented</em> &quot;feature&quot; that has changed.
+        </p>
+
+        <p class="para">
+            When writing <acronym class="acronym">URL</acronym>s, the documented way to write camelCased action
+            names is to use a word separator; these are &#039;.&#039; or &#039;-&#039; by default,
+            but may be configured in the dispatcher. The dispatcher internally
+            lowercases the action name, and uses these word separators to
+            re-assemble the action method using camelCasing. However, because <acronym class="acronym">PHP</acronym>
+            functions are not case sensitive, you <em class="emphasis">could</em>
+            still write <acronym class="acronym">URL</acronym>s using camelCasing, and the dispatcher would resolve
+            these to the same location. For example, &#039;camel-cased&#039; would become
+            &#039;camelCasedAction&#039; by the dispatcher, whereas &#039;camelCased&#039; would
+            become &#039;camelcasedAction&#039;; however, due to the case insensitivity of
+            <acronym class="acronym">PHP</acronym>, both will execute the same method.
+        </p>
+
+        <p class="para">
+            This causes issues with the ViewRenderer when resolving view
+            scripts. The canonical, documented way is that all word separators
+            are converted to dashes, and the words lowercased. This creates
+            a semantic tie between the actions and view scripts, and the
+            normalization ensures that the scripts can be found. However, if the
+            action &#039;camelCased&#039; is called and actually resolves, the word
+            separator is no longer present, and the ViewRenderer attempts to
+            resolve to a different location -- <var class="filename">camelcased.phtml</var> instead of
+            <var class="filename">camel-cased.phtml</var>.
+        </p>
+
+        <p class="para">
+            Some developers relied on this &quot;feature&quot;, which was never intended.
+            Several changes in the 1.5.0 tree, however, made it so that the
+            ViewRenderer no longer resolves these paths; the semantic tie is now
+            enforced. First among these, the dispatcher now enforces case
+            sensitivity in action names. What this means is that referring to
+            your actions on the url using camelCasing will no longer resolve to
+            the same method as using word separators (i.e., &#039;camel-casing&#039;).
+            This leads to the ViewRenderer now only honoring the word-separated
+            actions when resolving view scripts.
+        </p>
+
+        <p class="para">
+            If you find that you were relying on this &quot;feature&quot;, you have several
+            options:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Best option: rename your view scripts. Pros: forward
+                    compatibility. Cons: if you have many view scripts that
+                    relied on the former, unintended behavior, you will have a
+                    lot of renaming to do.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Second best option: The ViewRenderer now delegates view
+                    script resolution to <span class="classname">Zend_Filter_Inflector</span>; you
+                    can modify the rules of the inflector to no longer separate
+                    the words of an action with a dash:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$viewRenderer</span> =</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Controller_Action_HelperBroker::<span style="color: #006600;">getStaticHelper</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'viewRenderer'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$inflector</span> = <span style="color: #0000ff;">$viewRenderer</span>-&gt;<span style="color: #006600;">getInflector</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$inflector</span>-&gt;<span style="color: #006600;">setFilterRule</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">':action'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">new</span> Zend_Filter_PregReplace<span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'#[^a-z0-9'</span> . <a href="http://www.php.net/preg_quote"><span style="color: #000066;">preg_quote</span></a><span style="color: #66cc66;">&#40;</span>DIRECTORY_SEPARATOR, <span style="color: #ff0000;">'#'</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">']+#i'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">''</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'StringToLower'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    The above code will modify the inflector to no longer
+                    separate the words with dash; you may also want to remove
+                    the &#039;StringToLower&#039; filter if you <em class="emphasis">do</em>
+                    want the actual view script names camelCased as well.
+                </p>
+
+                <p class="para">
+                    If renaming your view scripts would be too tedious or time
+                    consuming, this is your best option until you can find the
+                    time to do so.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Least desirable option: You can force the dispatcher to
+                    dispatch camelCased action names with a new front controller
+                    flag, <span class="property">useCaseSensitiveActions</span>:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">setParam</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'useCaseSensitiveActions'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This will allow you to use camelCasing on the url and still
+                    have it resolve to the same action as when you use word
+                    separators. However, this will mean that the original issues
+                    will cascade on through; you will likely need to use the
+                    second option above in addition to this for things to work
+                    at all reliably.
+                </p>
+
+                <p class="para">
+                    Note, also, that usage of this flag will raise a notice that
+                    this usage is deprecated.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.16.html">Zend Framework 1.6</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.10.html">Zend Framework 1.0</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></li>
+  <li><a href="migration.110.html">Zend Framework 1.10</a></li>
+  <li><a href="migration.19.html">Zend Framework 1.9</a></li>
+  <li><a href="migration.18.html">Zend Framework 1.8</a></li>
+  <li><a href="migration.17.html">Zend Framework 1.7</a></li>
+  <li><a href="migration.16.html">Zend Framework 1.6</a></li>
+  <li class="active"><a href="migration.15.html">Zend Framework 1.5</a></li>
+  <li><a href="migration.10.html">Zend Framework 1.0</a></li>
+  <li><a href="migration.09.html">Zend Framework 0.9</a></li>
+  <li><a href="migration.08.html">Zend Framework 0.8</a></li>
+  <li><a href="migration.06.html">Zend Framework 0.6</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend Framework 0.6 - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.08.html">Zend Framework 0.8</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="coding-standard.html">Zend Framework Coding Standard for PHP</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="migration.06" class="section"><div class="info"><h1 class="title">Zend Framework 0.6</h1></div>
+    
+
+    <p class="para">
+        When upgrading from a previous release to Zend Framework 0.6 or higher you
+        should note the following migration notes.
+    </p>
+
+    <div class="section" id="migration.06.zend.controller" name="migration.06.zend.controller"><div class="info"><h1 class="title">Zend_Controller</h1></div>
+        
+
+        <p class="para">
+            The most basic usage of the <acronym class="acronym">MVC</acronym> components has not changed; you can
+            still do each of the following:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Controller_Front::<span style="color: #006600;">run</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/controllers'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/* -- create a router -- */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$router</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Controller_RewriteRouter<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$router</span>-&gt;<span style="color: #006600;">addRoute</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'user'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'user/:username'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'controller'</span> =&gt; <span style="color: #ff0000;">'user'</span>, <span style="color: #ff0000;">'action'</span> =&gt; <span style="color: #ff0000;">'info'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/* -- set it in a controller -- */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ctrl</span> = Zend_Controller_Front::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ctrl</span>-&gt;<span style="color: #006600;">setRouter</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$router</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/* -- set controller directory and dispatch -- */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ctrl</span>-&gt;<span style="color: #006600;">setControllerDirectory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/controllers'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ctrl</span>-&gt;<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            We encourage use of the Response object to aggregate content and
+            headers. This will allow for more flexible output format switching
+            (for instance, <acronym class="acronym">JSON</acronym> or <acronym class="acronym">XML</acronym> instead of
+            <acronym class="acronym">XHTML</acronym>) in your applications.
+            By default,  <span class="methodname">dispatch()</span> will render the response, sending both
+            headers and rendering any content. You may also have the front
+            controller return the response using  <span class="methodname">returnResponse()</span>,
+            and then render the response using your own logic. A future version
+            of the front controller may enforce use of the response object via
+            output buffering.
+        </p>
+
+        <p class="para">
+            There are many additional features that extend the existing <acronym class="acronym">API</acronym>,
+            and these are noted in the documentation.
+        </p>
+
+        <p class="para">
+            The main changes you will need to be aware of will be found when
+            subclassing the various components. Key amongst these are:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Front::dispatch()</span> by default
+                    traps exceptions in the response object, and does not render
+                    them, in order to prevent sensitive system information from
+                    being rendered. You can override this in several ways:
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            Set  <span class="methodname">throwExceptions()</span> in the front
+                            controller:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">throwExceptions</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            Set  <span class="methodname">renderExceptions()</span> in the response
+                            object:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">renderExceptions</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">setResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$response</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// or:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">returnResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$front</span>-&gt;<span style="color: #006600;">dispatch</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">renderExceptions</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$response</span>;</div></li></ol></div></div></div>
+
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Dispatcher_Interface::dispatch()</span>
+                    now accepts and returns a <a href="zend.controller.request.html" class="link">The
+                    Request Object</a> instead of a dispatcher token.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_Router_Interface::route()</span>
+                    now accepts and returns a <a href="zend.controller.request.html" class="link">The
+                    Request Object</a> instead of a dispatcher token.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"><span class="classname">Zend_Controller_Action</span> changes include:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            The constructor now accepts exactly three arguments,
+                            <span class="classname">Zend_Controller_Request_Abstract</span>
+                            <var class="varname">$request</var>,
+                            <span class="classname">Zend_Controller_Response_Abstract</span>
+                            <var class="varname">$response</var>,
+                            and  <span class="type">Array</span>  <var class="varname">$params</var> (optional).
+                             <span class="methodname">Zend_Controller_Action::__construct()</span> uses
+                            these to set the request, response, and invokeArgs
+                            properties of the object, and if overriding the
+                            constructor, you should do so as well. Better yet, use
+                            the  <span class="methodname">init()</span> method to do any instance
+                            configuration, as this method is called as the final
+                            action of the constructor.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">run()</span> is no longer defined as final, but is
+                            also no longer used by the front controller; its sole
+                            purpose is for using the class as a page controller. It
+                            now takes two optional arguments, a
+                            <span class="classname">Zend_Controller_Request_Abstract</span>
+                            <var class="varname">$request</var>
+                            and a <span class="classname">Zend_Controller_Response_Abstract</span>
+                            <var class="varname">$response</var>.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">indexAction()</span> no longer needs to be
+                            defined, but is encouraged as the default action. This
+                            allows using the RewriteRouter and action controllers to
+                            specify different default action methods.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">__call()</span> should be overridden to handle any
+                            undefined actions automatically.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">_redirect()</span> now takes an optional second
+                            argument, the <acronym class="acronym">HTTP</acronym> code to return with the redirect,
+                            and an optional third argument, <var class="varname">$prependBase</var>,
+                            that can indicate that the base <acronym class="acronym">URL</acronym> registered with
+                            the request object should be prepended to the url specified.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            The <var class="varname">$_action</var> property is no longer set. This property
+                            was a <span class="classname">Zend_Controller_Dispatcher_Token</span>,
+                            which no longer exists in the current incarnation.
+                            The sole purpose of the token was to provide
+                            information about the requested controller, action,
+                            and <acronym class="acronym">URL</acronym> parameters. This information is now
+                            available in the request object, and can be accessed
+                            as follows:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retrieve the requested controller name</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Access used to be via: $this-&gt;_action-&gt;getControllerName().</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// The example below uses getRequest(), though you may also directly</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// access the $_request property; using getRequest() is recommended as</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// a parent class may override access to the request object.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$controller</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getControllerName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retrieve the requested action name</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Access used to be via: $this-&gt;_action-&gt;getActionName().</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$action</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">getRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">getActionName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retrieve the request parameters</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// This hasn't changed; the _getParams() and _getParam() methods simply</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// proxy to the request object now.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$params</span> = <span style="color: #0000ff;">$this</span>-&gt;_getParams<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// request 'foo' parameter, using 'default' as default value if not found</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$foo</span> = <span style="color: #0000ff;">$this</span>-&gt;_getParam<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <span style="color: #ff0000;">'default'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">noRouteAction()</span> has been removed. The
+                            appropriate way to handle non-existent action
+                            methods should you wish to route them to a default
+                            action is using  <span class="methodname">__call()</span>:
+                        </p>
+
+                        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> __call<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$method</span>, <span style="color: #0000ff;">$args</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// If an unmatched 'Action' method was requested, pass on to the</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// default action method:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Action'</span> == <a href="http://www.php.net/substr"><span style="color: #000066;">substr</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$method</span>, <span style="color: #cc66cc;">-6</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">defaultAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; throw <span style="color: #000000; font-weight: bold;">new</span> Zend_Controller_Exception<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Invalid method called'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">Zend_Controller_RewriteRouter::setRewriteBase()</span> has
+                    been removed. Use  <span class="methodname">Zend_Controller_Front::setBaseUrl()</span>
+                    instead (or  <span class="methodname">Zend_Controller_Request_Http::setBaseUrl()</span>,
+                    if using that request class).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="classname">Zend_Controller_Plugin_Interface</span> was replaced
+                    by <span class="classname">Zend_Controller_Plugin_Abstract</span>. All methods now
+                    accept and return a <a href="zend.controller.request.html" class="link">The Request
+                    Object</a> instead of a dispatcher token.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.08.html">Zend Framework 0.8</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="coding-standard.html">Zend Framework Coding Standard for PHP</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></li>
+  <li><a href="migration.110.html">Zend Framework 1.10</a></li>
+  <li><a href="migration.19.html">Zend Framework 1.9</a></li>
+  <li><a href="migration.18.html">Zend Framework 1.8</a></li>
+  <li><a href="migration.17.html">Zend Framework 1.7</a></li>
+  <li><a href="migration.16.html">Zend Framework 1.6</a></li>
+  <li><a href="migration.15.html">Zend Framework 1.5</a></li>
+  <li><a href="migration.10.html">Zend Framework 1.0</a></li>
+  <li><a href="migration.09.html">Zend Framework 0.9</a></li>
+  <li><a href="migration.08.html">Zend Framework 0.8</a></li>
+  <li class="active"><a href="migration.06.html">Zend Framework 0.6</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

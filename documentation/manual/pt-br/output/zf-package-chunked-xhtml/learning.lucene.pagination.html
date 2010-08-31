@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Search result pagination - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.lucene.queries.html">Supported queries</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.paginator.html">Iniciando com o Zend_Paginator</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="learning.lucene.pagination" class="section"><div class="info"><h1 class="title">Search result pagination</h1></div>
+    
+
+    <p class="para">
+        As <a href="learning.lucene.searching.html#learning.lucene.searching.identifiers" class="link">mentioned above</a>, search
+        result hit objects use lazy loading for stored document fields. When any stored field is
+        accessed, the complete document is loaded.
+    </p>
+
+    <p class="para">
+        Do not retrieve all documents if you actually need to work only with some portion of them.
+        Go through the search results and store document IDs (and optionally the score) somewhere to
+        retrive documents from the index during the next script execution.
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #1 Search result pagination example</b></p></div>
+        
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cacheId</span> = <a href="http://www.php.net/md5"><span style="color: #000066;">md5</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$query</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$resultSet</span> = <span style="color: #0000ff;">$cache</span>-&gt;<span style="color: #006600;">load</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$cacheId</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$hits</span> = <span style="color: #0000ff;">$index</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$query</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$resultSet</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$hits</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$hit</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$resultSetEntry</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$resultSetEntry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'id'</span><span style="color: #66cc66;">&#93;</span>&nbsp; &nbsp; = <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">id</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$resultSetEntry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'score'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$hit</span>-&gt;<span style="color: #006600;">score</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$resultSet</span><span style="color: #66cc66;">&#91;</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$resultSetEntry</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$cache</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$resultSet</span>, <span style="color: #0000ff;">$cacheId</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$publishedResultSet</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">for</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$resultId</span> = <span style="color: #0000ff;">$startId</span>; <span style="color: #0000ff;">$resultId</span> &lt; <span style="color: #0000ff;">$endId</span>; <span style="color: #0000ff;">$resultId</span>++<span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$publishedResultSet</span><span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$resultId</span><span style="color: #66cc66;">&#93;</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'id'</span>&nbsp; &nbsp; =&gt; <span style="color: #0000ff;">$resultSet</span><span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$resultId</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'id'</span><span style="color: #66cc66;">&#93;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'score'</span> =&gt; <span style="color: #0000ff;">$resultSet</span><span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$resultId</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'score'</span><span style="color: #66cc66;">&#93;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'doc'</span>&nbsp; &nbsp;=&gt; <span style="color: #0000ff;">$index</span>-&gt;<span style="color: #006600;">getDocument</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$resultSet</span><span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$resultId</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'id'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="learning.lucene.queries.html">Supported queries</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="learning.paginator.html">Iniciando com o Zend_Paginator</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="learning.html">Conhecendo o Zend Framework</a></li>
+  <li class="header up"><a href="learning.lucene.html">Iniciando com o Zend_Search_Lucene</a></li>
+  <li><a href="learning.lucene.intro.html">Zend_Search_Lucene Introduction</a></li>
+  <li><a href="learning.lucene.index-structure.html">Lucene Index Structure</a></li>
+  <li><a href="learning.lucene.index-opening.html">Index Opening and Creation</a></li>
+  <li><a href="learning.lucene.indexing.html">Indexing</a></li>
+  <li><a href="learning.lucene.searching.html">Searching</a></li>
+  <li><a href="learning.lucene.queries.html">Supported queries</a></li>
+  <li class="active"><a href="learning.lucene.pagination.html">Search result pagination</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

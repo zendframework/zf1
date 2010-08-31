@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Service_Nirvanix - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.service.livedocx.html">Zend_Service_LiveDocx</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.service.html">Zend_Service</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.service.recaptcha.html">Zend_Service_ReCaptcha</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.service.nirvanix" class="section"><div class="info"><h1 class="title">Zend_Service_Nirvanix</h1></div>
+    
+
+    <div class="section" id="zend.service.nirvanix.introduction" name="zend.service.nirvanix.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            Nirvanix provides an Internet Media File System (IMFS), an
+            Internet storage service that allows applications to upload, store and
+            organize files and subsequently access them using a standard Web
+            Services interface. An IMFS is distributed clustered file system,
+            accessed over the Internet, and optimized for dealing with media files
+            (audio, video, etc). The goal of an IMFS is to provide massive
+            scalability to deal with the challenges of media storage growth, with
+            guaranteed access and availability regardless of time and location.
+            Finally, an IMFS gives applications the ability to access data
+            securely, without the large fixed costs associated with acquiring and
+            maintaining physical storage assets.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.registering" name="zend.service.nirvanix.registering"><div class="info"><h1 class="title">Registering with Nirvanix</h1></div>
+        
+
+        <p class="para">
+            Before you can get started with <span class="classname">Zend_Service_Nirvanix</span>, you must
+            first register for an account. Please see the
+            <a href="http://www.nirvanix.com/gettingStarted.aspx" class="link external">&raquo; Getting Started</a>
+            page on the Nirvanix website for more information.
+        </p>
+
+        <p class="para">
+            After registering, you will receive a Username, Password, and Application Key.
+            All three are required to use <span class="classname">Zend_Service_Nirvanix</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.apiDocumentation" name="zend.service.nirvanix.apiDocumentation"><div class="info"><h1 class="title">API Documentation</h1></div>
+        
+
+        <p class="para">
+            Access to the Nirvanix IMFS is available through both <acronym class="acronym">SOAP</acronym> and a
+            faster REST service. <span class="classname">Zend_Service_Nirvanix</span> provides a
+            relatively thin <acronym class="acronym">PHP</acronym> 5 wrapper around the REST service.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Service_Nirvanix</span> aims to make using the Nirvanix REST
+            service easier but understanding the service itself is still essential to be successful
+            with Nirvanix.
+        </p>
+
+        <p class="para">
+            The <a href="http://developer.nirvanix.com/sitefiles/1000/API.html" class="link external">&raquo; Nirvanix
+            <acronym class="acronym">API</acronym> Documentation</a> provides an overview as well as detailed
+            information using the service. Please familiarize yourself with this document and refer
+            back to it as you use <span class="classname">Zend_Service_Nirvanix</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.features" name="zend.service.nirvanix.features"><div class="info"><h1 class="title">Features</h1></div>
+        
+
+        <p class="para">
+            Nirvanix&#039;s REST service can be used effectively with <acronym class="acronym">PHP</acronym> using the
+            <a href="http://www.php.net/simplexml" class="link external">&raquo; SimpleXML</a>
+            extension and <span class="classname">Zend_Http_Client</span> alone. However, using it this way
+            is somewhat inconvenient due to repetitive operations like passing the
+            session token on every request and repeatedly checking the response body for
+            error codes.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Service_Nirvanix</span> provides the following functionality:
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        A single point for configuring your Nirvanix authentication
+                        credentials that can be used across the Nirvanix namespaces.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        A proxy object that is more convenient to use than an
+                        <acronym class="acronym">HTTP</acronym> client alone, mostly removing the need to manually
+                        construct <acronym class="acronym">HTTP</acronym> POST requests to access the REST service.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        A response wrapper that parses each response body and throws an
+                        exception if an error occurred, alleviating the need to repeatedly
+                        check the success of many commands.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        Additional convenience methods for some of the more common operations.
+                    </p>
+                </li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.storing-your-first" name="zend.service.nirvanix.storing-your-first"><div class="info"><h1 class="title">Getting Started</h1></div>
+        
+
+        <p class="para">
+            Once you have registered with Nirvanix, you&#039;re ready to store your first
+            file on the IMFS. The most common operations that you will need to do
+            on the IMFS are creating a new file, downloading an existing file, and
+            deleting a file. <span class="classname">Zend_Service_Nirvanix</span> provides convenience
+            methods for these three operations.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$auth</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'your-username'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'password'</span> =&gt; <span style="color: #ff0000;">'your-password'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'appKey'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'your-app-key'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$nirvanix</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Nirvanix<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$auth</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$imfs</span> = <span style="color: #0000ff;">$nirvanix</span>-&gt;<span style="color: #006600;">getService</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'IMFS'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$imfs</span>-&gt;<span style="color: #006600;">putContents</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/foo.txt'</span>, <span style="color: #ff0000;">'contents to store'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$imfs</span>-&gt;<span style="color: #006600;">getContents</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/foo.txt'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$imfs</span>-&gt;<span style="color: #006600;">unlink</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/foo.txt'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The first step to using <span class="classname">Zend_Service_Nirvanix</span> is always
+            to authenticate against the service. This is done by passing your
+            credentials to the <span class="classname">Zend_Service_Nirvanix</span> constructor
+            above. The associative array is passed directly to Nirvanix as POST
+            parameters.
+        </p>
+
+        <p class="para">
+            Nirvanix divides its web services into <a href="http://developer.nirvanix.com/sitefiles/1000/API.html#_Toc175999879" class="link external">&raquo; namespaces</a>.
+            Each namespace encapsulates a group of related operations. After getting
+            an instance of <span class="classname">Zend_Service_Nirvanix</span>, call the
+             <span class="methodname">getService()</span> method to create a proxy for the namespace
+            you want to use. Above, a proxy for the <b><tt>IMFS</tt></b> namespace is created.
+        </p>
+
+        <p class="para">
+            After you have a proxy for the namespace you want to use, call methods on it. The
+            proxy will allow you to use any command available on the REST <acronym class="acronym">API</acronym>.
+            The proxy may also make convenience methods available, which wrap web service
+            commands. The example above shows using the IMFS convenience methods to create a
+            new file, retrieve and display that file, and finally delete the file.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.understanding-proxy" name="zend.service.nirvanix.understanding-proxy"><div class="info"><h1 class="title">Understanding the Proxy</h1></div>
+        
+
+        <p class="para">
+            In the previous example, we used the  <span class="methodname">getService()</span> method to
+            return a proxy object to the <b><tt>IMFS</tt></b> namespace. The proxy object
+            allows you to use the Nirvanix REST service in a way that&#039;s closer to making a normal
+            <acronym class="acronym">PHP</acronym> method call, as opposed to constructing your own
+            <acronym class="acronym">HTTP</acronym> request objects.
+        </p>
+
+        <p class="para">
+            A proxy object may provide convenience methods. These are methods that the
+            <span class="classname">Zend_Service_Nirvanix</span> provides to simplify the use of
+            the Nirvanix web services. In the previous example, the methods
+             <span class="methodname">putContents()</span>,  <span class="methodname">getContents()</span>, and
+             <span class="methodname">unlink()</span> do not have direct equivalents in the REST
+            <acronym class="acronym">API</acronym>. They are convenience methods provided by
+            <span class="classname">Zend_Service_Nirvanix</span> that abstract more complicated operations
+            on the REST <acronym class="acronym">API</acronym>.
+        </p>
+
+        <p class="para">
+            For all other method calls to the proxy object, the proxy will dynamically convert the
+            method call to the equivalent <acronym class="acronym">HTTP</acronym> POST request to the REST
+            <acronym class="acronym">API</acronym>. It does this by using the method name as the
+            <acronym class="acronym">API</acronym> command, and an associative array in the first argument as the
+            POST parameters.
+        </p>
+
+        <p class="para">
+            Let&#039;s say you want to call the REST <acronym class="acronym">API</acronym> method <a href="http://developer.nirvanix.com/sitefiles/1000/API.html#_Toc175999923" class="link external">&raquo; RenameFile</a>,
+            which does not have a convenience method in
+            <span class="classname">Zend_Service_Nirvanix</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$auth</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'your-username'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'password'</span> =&gt; <span style="color: #ff0000;">'your-password'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'appKey'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'your-app-key'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$nirvanix</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Nirvanix<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$auth</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$imfs</span> = <span style="color: #0000ff;">$nirvanix</span>-&gt;<span style="color: #006600;">getService</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'IMFS'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$imfs</span>-&gt;<span style="color: #006600;">renameFile</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'filePath'</span> =&gt; <span style="color: #ff0000;">'/path/to/foo.txt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'newFileName'</span> =&gt; <span style="color: #ff0000;">'bar.txt'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Above, a proxy for the <b><tt>IMFS</tt></b> namespace is created. A method,
+             <span class="methodname">renameFile()</span>, is then called on the proxy. This method does not
+            exist as a convenience method in the <acronym class="acronym">PHP</acronym> code, so it is trapped by
+             <span class="methodname">__call()</span> and converted into a POST request to the REST
+            <acronym class="acronym">API</acronym> where the associative array is used as the POST parameters.
+        </p>
+
+        <p class="para">
+            Notice in the Nirvanix <acronym class="acronym">API</acronym> documentation that
+            <code class="code">sessionToken</code> is required for this method but we did not give it to the
+            proxy object. It is added automatically for your convenience.
+        </p>
+
+        <p class="para">
+            The result of this operation will either be a
+            <span class="classname">Zend_Service_Nirvanix_Response</span> object wrapping the
+            <acronym class="acronym">XML</acronym> returned by Nirvanix, or a
+            <span class="classname">Zend_Service_Nirvanix_Exception</span> if an error occurred.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.examining-results" name="zend.service.nirvanix.examining-results"><div class="info"><h1 class="title">Examining Results</h1></div>
+        
+
+        <p class="para">
+            The Nirvanix REST <acronym class="acronym">API</acronym> always returns its results in
+            <acronym class="acronym">XML</acronym>. <span class="classname">Zend_Service_Nirvanix</span> parses this
+            <acronym class="acronym">XML</acronym> with the <code class="code">SimpleXML</code> extension and then decorates the
+            resulting <code class="code">SimpleXMLElement</code> with a
+            <span class="classname">Zend_Service_Nirvanix_Response</span> object.
+        </p>
+
+        <p class="para">
+            The simplest way to examine a result from the service is to use the
+            built-in <acronym class="acronym">PHP</acronym> functions like  <span class="methodname">print_r()</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$auth</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'your-username'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'password'</span> =&gt; <span style="color: #ff0000;">'your-password'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'appKey'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'your-app-key'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$nirvanix</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Nirvanix<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$auth</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$imfs</span> = <span style="color: #0000ff;">$nirvanix</span>-&gt;<span style="color: #006600;">getService</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'IMFS'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$imfs</span>-&gt;<span style="color: #006600;">putContents</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/foo.txt'</span>, <span style="color: #ff0000;">'fourteen bytes'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$result</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Service_Nirvanix_Response Object</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>_sxml:protected<span style="color: #66cc66;">&#93;</span> =&gt; SimpleXMLElement Object</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>ResponseCode<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">0</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>FilesUploaded<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>BytesUploaded<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">14</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can access any property or method of the decorated <code class="code">SimpleXMLElement</code>.
+            In the above example, <code class="code">$result-&gt;BytesUploaded</code> could be used to see the
+            number of bytes received. Should you want to access the <code class="code">SimpleXMLElement</code>
+            directly, just use <code class="code">$result-&gt;getSxml()</code>.
+        </p>
+
+        <p class="para">
+            The most common response from Nirvanix is success (<code class="code">ResponseCode</code> of zero).
+            It is not normally necessary to check <code class="code">ResponseCode</code> because any non-zero
+            result will throw a <span class="classname">Zend_Service_Nirvanix_Exception</span>. See the next
+            section on handling errors.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.nirvanix.handling-errors" name="zend.service.nirvanix.handling-errors"><div class="info"><h1 class="title">Handling Errors</h1></div>
+        
+
+        <p class="para">
+            When using Nirvanix, it&#039;s important to anticipate errors that can be returned
+            by the service and handle them appropriately.
+        </p>
+
+        <p class="para">
+            All operations against the REST service result in an <acronym class="acronym">XML</acronym> return
+            payload that contains a <code class="code">ResponseCode</code> element, such as the following
+            example:
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;Response<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;ResponseCode<span style="font-weight: bold; color: black;">&gt;</span></span></span>0<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/ResponseCode<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/Response<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            When the <code class="code">ResponseCode</code> is zero such as in the example
+            above, the operation was successful. When the operation is not
+            successful, the <code class="code">ResponseCode</code> is non-zero and an
+            <code class="code">ErrorMessage</code> element should be present.
+        </p>
+
+        <p class="para">
+            To alleviate the need to repeatedly check if the <code class="code">ResponseCode</code>
+            is non-zero, <span class="classname">Zend_Service_Nirvanix</span> automatically checks each
+            response returned by Nirvanix. If the <code class="code">ResponseCode</code> indicates an
+            error, a <span class="classname">Zend_Service_Nirvanix_Exception</span> will be thrown.
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$auth = array('username' =&gt; 'your-username',</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'password' =&gt; 'your-password',</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'appKey'&nbsp; &nbsp;=&gt; 'your-app-key');</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">$nirvanix = new Zend_Service_Nirvanix($auth);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">try {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; $imfs = $nirvanix-&gt;getService('IMFS');</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; $imfs-&gt;unlink('/a-nonexistant-path');</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">} catch (Zend_Service_Nirvanix_Exception $e) {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; echo $e-&gt;getMessage() . &quot;\n&quot;;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; echo $e-&gt;getCode();</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            In the example above,  <span class="methodname">unlink()</span> is a convenience method that
+            wraps the <code class="code">DeleteFiles</code> command on the REST <acronym class="acronym">API</acronym>. The
+            <code class="code">filePath</code> parameter required by the <a href="http://developer.nirvanix.com/sitefiles/1000/API.html#_Toc175999918" class="link external">&raquo; DeleteFiles</a>
+            command contains a path that does not exist. This will result in a
+            <span class="classname">Zend_Service_Nirvanix</span> exception being thrown with the message
+            &quot;Invalid path&quot; and code 70005.
+        </p>
+
+        <p class="para">
+            The <a href="http://developer.nirvanix.com/sitefiles/1000/API.html" class="link external">&raquo; Nirvanix
+            <acronym class="acronym">API</acronym> Documentation</a> describes the errors associated with each
+            command. Depending on your needs, you may wrap each command in a <code class="code">try</code> block
+            or wrap many commands in the same <code class="code">try</code> block for convenience.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.service.livedocx.html">Zend_Service_LiveDocx</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.service.html">Zend_Service</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.service.recaptcha.html">Zend_Service_ReCaptcha</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.service.html">Zend_Service</a></li>
+  <li><a href="zend.service.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li><a href="zend.service.akismet.html">Zend_Service_Akismet</a></li>
+  <li><a href="zend.service.amazon.html">Zend_Service_Amazon</a></li>
+  <li><a href="zend.service.amazon.ec2.html">Zend_Service_Amazon_Ec2</a></li>
+  <li><a href="zend.service.amazon.ec2.instance.html">Zend_Service_Amazon_Ec2: Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.windows.instance.html">Zend_Service_Amazon_Ec2: Windows Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.reserved.instance.html">Zend_Service_Amazon_Ec2: Reserved Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.cloudwatch.html">Zend_Service_Amazon_Ec2: CloudWatch Monitoring</a></li>
+  <li><a href="zend.service.amazon.ec2.images.html">Zend_Service_Amazon_Ec2: Amazon Machine Images (AMI)</a></li>
+  <li><a href="zend.service.amazon.ec2.ebs.html">Zend_Service_Amazon_Ec2: Elastic Block Storage (EBS)</a></li>
+  <li><a href="zend.service.amazon.ec2.elasticip.html">Zend_Service_Amazon_Ec2: Elastic IP Addresses</a></li>
+  <li><a href="zend.service.amazon.ec2.keypairs.html">Zend_Service_Amazon_Ec2: Keypairs</a></li>
+  <li><a href="zend.service.amazon.ec2.zones.html">Zend_Service_Amazon_Ec2: Regions and Availability Zones</a></li>
+  <li><a href="zend.service.amazon.ec2.securitygroups.html">Zend_Service_Amazon_Ec2: Security Groups</a></li>
+  <li><a href="zend.service.amazon.s3.html">Zend_Service_Amazon_S3</a></li>
+  <li><a href="zend.service.amazon.sqs.html">Zend_Service_Amazon_Sqs</a></li>
+  <li><a href="zend.service.audioscrobbler.html">Zend_Service_Audioscrobbler</a></li>
+  <li><a href="zend.service.delicious.html">Zend_Service_Delicious</a></li>
+  <li><a href="zend.service.developergarden.html">Zend_Service_DeveloperGarden</a></li>
+  <li><a href="zend.service.flickr.html">Zend_Service_Flickr</a></li>
+  <li><a href="zend.service.livedocx.html">Zend_Service_LiveDocx</a></li>
+  <li class="active"><a href="zend.service.nirvanix.html">Zend_Service_Nirvanix</a></li>
+  <li><a href="zend.service.recaptcha.html">Zend_Service_ReCaptcha</a></li>
+  <li><a href="zend.service.simpy.html">Zend_Service_Simpy</a></li>
+  <li><a href="zend.service.slideshare.html">Zend_Service_SlideShare</a></li>
+  <li><a href="zend.service.strikeiron.html">Zend_Service_StrikeIron</a></li>
+  <li><a href="zend.service.strikeiron.bundled-services.html">Zend_Service_StrikeIron: Bundled Services</a></li>
+  <li><a href="zend.service.strikeiron.advanced-uses.html">Zend_Service_StrikeIron: Advanced Uses</a></li>
+  <li><a href="zend.service.technorati.html">Zend_Service_Technorati</a></li>
+  <li><a href="zend.service.twitter.html">Zend_Service_Twitter</a></li>
+  <li><a href="zend.service.windowsazure.html">Zend_Service_WindowsAzure</a></li>
+  <li><a href="zend.service.windowsazure.storage.blob.html">Zend_Service_WindowsAzure_Storage_Blob</a></li>
+  <li><a href="zend.service.windowsazure.diagnostics.manager.html">Zend_Service_WindowsAzure_Diagnostics_Manager</a></li>
+  <li><a href="zend.service.windowsazure.storage.queue.html">Zend_Service_WindowsAzure_Storage_Queue</a></li>
+  <li><a href="zend.service.windowsazure.storage.table.html">Zend_Service_WindowsAzure_Storage_Table</a></li>
+  <li><a href="zend.service.yahoo.html">Zend_Service_Yahoo</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,873 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Feed_Writer - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.feed.reader.html">Zend_Feed_Reader</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.feed.html">Zend_Feed</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.feed.pubsubhubbub.introduction.html">Zend_Feed_Pubsubhubbub</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.feed.writer" class="section"><div class="info"><h1 class="title">Zend_Feed_Writer</h1></div>
+    
+
+    <div class="section" id="zend.feed.writer.introduction" name="zend.feed.writer.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Feed_Writer</span> is the sibling component to
+            <span class="classname">Zend_Feed_Reader</span> responsible for generating feeds for output. It
+            supports the Atom 1.0 specification (<acronym class="acronym">RFC</acronym> 4287) and
+            <acronym class="acronym">RSS</acronym> 2.0 as specified by the <acronym class="acronym">RSS</acronym> Advisory Board
+            (<acronym class="acronym">RSS</acronym> 2.0.11). It does not deviate from these standards. It does,
+            however, offer a simple Extension system which allows for any extension and module for
+            either of these two specifications to be implemented if they are not provided out of the
+            box.
+        </p>
+
+        <p class="para">
+            In many ways, <span class="classname">Zend_Feed_Writer</span> is the inverse of
+            <span class="classname">Zend_Feed_Reader</span>. Where <span class="classname">Zend_Feed_Reader</span>
+            focuses on providing an easy to use architecture fronted by getter methods,
+            <span class="classname">Zend_Feed_Writer</span> is fronted by similarly named setters or
+            mutators. This ensures the <acronym class="acronym">API</acronym> won&#039;t pose a learning curve to anyone
+            familiar with <span class="classname">Zend_Feed_Reader</span>.
+        </p>
+
+        <p class="para">
+            As a result of this design, the rest may even be obvious. Behind the scenes, data set on
+            any <span class="classname">Zend_Feed_Writer</span> Data Container object is translated at
+            render time onto a DOMDocument object using the necessary feed elements. For each
+            supported feed type there is both an Atom 1.0 and <acronym class="acronym">RSS</acronym> 2.0 renderer.
+            Using a DOMDocument class rather than a templating solution has numerous advantages,
+            the most obvious being the ability to export the DOMDocument for
+            additional processing and relying on <acronym class="acronym">PHP</acronym> <acronym class="acronym">DOM</acronym> for
+            correct and valid rendering.
+        </p>
+
+        <p class="para">
+            As with <span class="classname">Zend_Feed_Reader</span>, <span class="classname">Zend_Feed_Writer</span>
+            is a standalone replacement for <span class="classname">Zend_Feed</span>&#039;s Builder architecture
+            and is not compatible with those classes.
+        </p>
+    </div>
+
+    <div class="section" id="zend.feed.writer.architecture" name="zend.feed.writer.architecture"><div class="info"><h1 class="title">Architecture</h1></div>
+        
+
+        <p class="para">
+            The architecture of <span class="classname">Zend_Feed_Writer</span> is very simple. It has two
+            core sets of classes: data containers and renderers.
+        </p>
+
+        <p class="para">
+            The containers include the <span class="classname">Zend_Feed_Writer_Feed</span> and
+            <span class="classname">Zend_Feed_Writer_Entry</span> classes. The Entry classes can be attached
+            to any Feed class. The sole purpose of these containers is to collect data about the
+            feed to generate using a simple interface of setter methods. These methods perform some
+            data validity testing. For example, it will validate any passed <acronym class="acronym">URI</acronym>s,
+            dates, etc. These checks are not tied to any of the feed standards definitions. The
+            container objects also contain methods to allow for fast rendering and export of the
+            final feed, and these can be reused at will.
+        </p>
+
+        <p class="para">
+            In addition to the main data container classes, there are two additional Atom 2.0
+            specific classes. <span class="classname">Zend_Feed_Writer_Source</span> and
+            <span class="classname">Zend_Feed_Writer_Deleted</span>. The former implements Atom 2.0 source
+            elements which carry source feed metadata for a specific entry within an aggregate feed
+            (i.e. the current feed is not the entry&#039;s original source). The latter implements the
+            Atom Tombstones <acronym class="acronym">RFC</acronym> allowing feeds to carry references to entries
+            which have been deleted.
+        </p>
+
+        <p class="para">
+            While there are two main data container types, there are four renderers - two matching
+            container renderers per supported feed type. Each renderer accepts a container, and
+            based on its content attempts to generate valid feed markup. If the renderer is unable
+            to generate valid feed markup, perhaps due to the container missing an obligatory data
+            point, it will report this by throwing an <span class="classname">Exception</span>. While it is
+            possible to ignore <span class="classname">Exception</span>s, this removes the default safeguard
+            of ensuring you have sufficient data set to render a wholly valid feed.
+        </p>
+
+        <p class="para">
+            To explain this more clearly, you may construct a set of data containers for a feed
+            where there is a Feed container, into which has been added some Entry containers and a
+            Deleted container. This forms a data hierarchy resembling a normal feed. When rendering
+            is performed, this hierarchy has its pieces passed to relevant renderers and the partial
+            feeds (all DOMDocuments) are then pieced together to create a complete feed. In the case
+            of Source or Deleted (Tomestone) containers, these are rendered only for Atom 2.0 and
+            ignored for <acronym class="acronym">RSS</acronym>.
+        </p>
+
+        <p class="para">
+            Due to the system being divided between data containers and renderers, it can make
+            Extensions somewhat interesting. A typical Extension offering namespaced feed and entry
+            level elements, must itself reflect the exact same architecture, i.e. offer feed and
+            entry level data containers, and matching renderers. There is, fortunately, no complex
+            integration work required since all Extension classes are simply registered and
+            automatically used by the core classes. We&#039;ll meet Extensions in more detail at the end
+            of this section.
+        </p>
+    </div>
+
+    <div class="section" id="zend.feed.writer.getting.started" name="zend.feed.writer.getting.started"><div class="info"><h1 class="title">Getting Started</h1></div>
+        
+
+        <p class="para">
+            Using <span class="classname">Zend_Feed_Writer</span> is as simple as setting data and
+            triggering the renderer. Here is an example to generate a minimal Atom 1.0 feed.
+            As this demonstrates, each feed or entry uses a separate data container.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * Create the parent feed</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Feed_Writer_Feed;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">setTitle</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Paddy<span style="color: #000099; font-weight: bold;">\'</span>s Blog'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">setLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.example.com'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">setFeedLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.example.com/atom'</span>, <span style="color: #ff0000;">'atom'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">addAuthor</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'name'</span>&nbsp; =&gt; <span style="color: #ff0000;">'Paddy'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'email'</span> =&gt; <span style="color: #ff0000;">'paddy@example.com'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'http://www.example.com'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">setDateModified</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/time"><span style="color: #000066;">time</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">addHub</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://pubsubhubbub.appspot.com/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * Add one or more entries. Note that entries must</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * be manually added once created.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">createEntry</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setTitle</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'All Your Base Are Belong To Us'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setLink</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.example.com/all-your-base-are-belong-to-us'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">addAuthor</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'name'</span>&nbsp; =&gt; <span style="color: #ff0000;">'Paddy'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'email'</span> =&gt; <span style="color: #ff0000;">'paddy@example.com'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'http://www.example.com'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setDateModified</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/time"><span style="color: #000066;">time</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setDateCreated</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/time"><span style="color: #000066;">time</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setDescription</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Exposing the difficultly of porting games to English.'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$entry</span>-&gt;<span style="color: #006600;">setContent</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'I am not writing the article. The example is long enough as is ;).'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">addEntry</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$entry</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * Render the resulting feed to Atom 1.0 and assign to $out.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * You can substitute &quot;atom&quot; with &quot;rss&quot; to generate an RSS 2.0 feed.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$out</span> = <span style="color: #0000ff;">$feed</span>-&gt;<span style="color: #006600;">export</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'atom'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The output rendered should be as follows:
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span> <span style="color: #000066;">encoding</span>=<span style="color: #ff0000;">&quot;utf-8&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;feed</span> <span style="color: #000066;">xmlns</span>=<span style="color: #ff0000;">&quot;http://www.w3.org/2005/Atom&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;title</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;text&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span>Paddy's Blog<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/title<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;subtitle</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;text&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span>Writing about PC Games since 176 BC.<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/subtitle<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;updated<span style="font-weight: bold; color: black;">&gt;</span></span></span>2009-12-14T20:28:18+00:00<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/updated<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;generator</span> <span style="color: #000066;">uri</span>=<span style="color: #ff0000;">&quot;http://framework.zend.com&quot;</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.10.0alpha&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; Zend_Feed_Writer</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/generator<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;link</span> <span style="color: #000066;">rel</span>=<span style="color: #ff0000;">&quot;alternate&quot;</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;text/html&quot;</span> <span style="color: #000066;">href</span>=<span style="color: #ff0000;">&quot;http://www.example.com&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;link</span> <span style="color: #000066;">rel</span>=<span style="color: #ff0000;">&quot;self&quot;</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;application/atom+xml&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">href</span>=<span style="color: #ff0000;">&quot;http://www.example.com/atom&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;id<span style="font-weight: bold; color: black;">&gt;</span></span></span>http://www.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/id<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;author<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;name<span style="font-weight: bold; color: black;">&gt;</span></span></span>Paddy<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/name<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;email<span style="font-weight: bold; color: black;">&gt;</span></span></span>paddy@example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/email<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;uri<span style="font-weight: bold; color: black;">&gt;</span></span></span>http://www.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/uri<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/author<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;link</span> <span style="color: #000066;">rel</span>=<span style="color: #ff0000;">&quot;hub&quot;</span> <span style="color: #000066;">href</span>=<span style="color: #ff0000;">&quot;http://pubsubhubbub.appspot.com/&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;entry<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;title</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;html&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span><span style="color: #339933;">&lt;![CDATA[All Your Base Are Belong To</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #339933;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Us]]&gt;</span><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/title<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;summary</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;html&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933;">&lt;![CDATA[Exposing the difficultly of porting games to</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #339933;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; English.]]&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/summary<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;published<span style="font-weight: bold; color: black;">&gt;</span></span></span>2009-12-14T20:28:18+00:00<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/published<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;updated<span style="font-weight: bold; color: black;">&gt;</span></span></span>2009-12-14T20:28:18+00:00<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/updated<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;link</span> <span style="color: #000066;">rel</span>=<span style="color: #ff0000;">&quot;alternate&quot;</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;text/html&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #000066;">href</span>=<span style="color: #ff0000;">&quot;http://www.example.com/all-your-base-are-belong-to-us&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;id<span style="font-weight: bold; color: black;">&gt;</span></span></span>http://www.example.com/all-your-base-are-belong-to-us<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/id<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;author<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;name<span style="font-weight: bold; color: black;">&gt;</span></span></span>Paddy<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/name<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;email<span style="font-weight: bold; color: black;">&gt;</span></span></span>paddy@example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/email<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;uri<span style="font-weight: bold; color: black;">&gt;</span></span></span>http://www.example.com<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/uri<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/author<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;content</span> <span style="color: #000066;">type</span>=<span style="color: #ff0000;">&quot;html&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933;">&lt;![CDATA[I am not writing the article.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #339933;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The example is long enough as is ;).]]&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/content<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/entry<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/feed<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This is a perfectly valid Atom 1.0 example. It should be noted that omitting an
+            obligatory point of data, such as a title, will trigger an
+            <span class="classname">Exception</span> when rendering as Atom 1.0. This will differ for
+            <acronym class="acronym">RSS</acronym> 2.0 since a title may be omitted so long as a description is
+            present. This gives rise to Exceptions that differ between the two standards depending
+            on the renderer in use. By design, <span class="classname">Zend_Feed_Writer</span> will not
+            render an invalid feed for either standard unless the end-user deliberately elects to
+            ignore all Exceptions. This built in safeguard was added to ensure users without
+            in-depth knowledge of the relevant specifications have a bit less to worry about.
+        </p>
+    </div>
+
+    <div class="section" id="zend.feed.writer.setting.feed.data.points" name="zend.feed.writer.setting.feed.data.points"><div class="info"><h1 class="title">Setting Feed Data Points</h1></div>
+        
+
+        <p class="para">
+            Before you can render a feed, you must first setup the data necessary for
+            the feed being rendered. This utilises a simple setter style <acronym class="acronym">API</acronym>
+            which doubles as an initial method for validating the data being set. By design, the
+            <acronym class="acronym">API</acronym> closely matches that for <span class="classname">Zend_Feed_Reader</span>
+            to avoid undue confusion and uncertainty.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            Users have commented that the lack of a simple array based notation for input data
+            gives rise to lengthy tracts of code. This will be addressed in a future release.<br />
+        </p></blockquote>
+
+        <p class="para">
+            <span class="classname">Zend_Feed_Writer</span> offers this <acronym class="acronym">API</acronym> via its data
+            container classes <span class="classname">Zend_Feed_Writer_Feed</span> and
+            <span class="classname">Zend_Feed_Writer_Entry</span> (not to mention the Atom 2.0 specific
+            and Extension classes). These classes merely store
+            all feed data in a type-agnostic manner, meaning you may reuse any data
+            container with any renderer without requiring additional work. Both classes
+            are also amenable to Extensions, meaning that an Extension may define its own
+            container classes which are registered to the base container classes as extensions, and
+            are checked when any method call triggers the base container&#039;s
+             <span class="methodname">__call()</span> method.
+        </p>
+
+        <p class="para">
+            Here&#039;s a summary of the Core <acronym class="acronym">API</acronym> for Feeds. You should note it
+            comprises not only the basic <acronym class="acronym">RSS</acronym> and Atom standards, but also
+            accounts for a number of included Extensions bundled with
+            <span class="classname">Zend_Feed_Writer</span>. The naming of these
+            Extension sourced methods remain fairly generic - all Extension
+            methods operate at the same level as the Core <acronym class="acronym">API</acronym> though we do allow
+            you to retrieve any specific Extension object separately if required.
+        </p>
+
+        <p class="para">
+            The Feed Level <acronym class="acronym">API</acronym> for data is contained in
+            <span class="classname">Zend_Feed_Writer_Feed</span>. In addition to the <acronym class="acronym">API</acronym>
+            detailed below, the class also implements the <span class="classname">Countable</span> and
+            <span class="classname">Iterator</span> interfaces.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Feed Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setId()</span></td>
+
+                        <td align="left">
+                            Set a unique ID associated with this feed. For Atom 1.0
+                            this is an atom:id element, whereas for <acronym class="acronym">RSS</acronym> 2.0 it
+                            is added as a guid element. These are optional so long as a link is
+                            added, i.e. the link is set as the ID.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setTitle()</span></td>
+                        <td align="left">Set the title of the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDescription()</span></td>
+                        <td align="left">Set the text description of the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setLink()</span></td>
+
+                        <td align="left">
+                            Set a <acronym class="acronym">URI</acronym> to the <acronym class="acronym">HTML</acronym> website
+                            containing the same or
+                            similar information as this feed (i.e. if the feed is from a blog,
+                            it should provide the blog&#039;s <acronym class="acronym">URI</acronym> where the
+                            <acronym class="acronym">HTML</acronym> version of the entries can be read).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setFeedLinks()</span></td>
+
+                        <td align="left">
+                            Add a link to an <acronym class="acronym">XML</acronym> feed, whether the feed being
+                            generated or an alternate <acronym class="acronym">URI</acronym> pointing to the same
+                            feed but in a different format. At a minimum, it is recommended to
+                            include a link to the feed being generated so it has an identifiable
+                            final <acronym class="acronym">URI</acronym> allowing a client to track its location
+                            changes without necessitating constant redirects. The parameter is an
+                            array of arrays, where each sub-array contains the keys &quot;type&quot; and
+                            &quot;uri&quot;. The type should be one of &quot;atom&quot;, &quot;rss&quot;, or &quot;rdf&quot;.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addAuthors()</span></td>
+
+                        <td align="left">
+                            Sets the data for authors. The parameter is an array of arrays
+                            where each sub-array may contain the keys &quot;name&quot;, &quot;email&quot; and
+                            &quot;uri&quot;. The &quot;uri&quot; value is only applicable for Atom feeds since
+                            <acronym class="acronym">RSS</acronym> contains no facility to show it. For
+                            <acronym class="acronym">RSS</acronym> 2.0, rendering will create two elements - an
+                            author element containing the email reference with the name in brackets,
+                            and a Dublin Core creator element only containing the name.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addAuthor()</span></td>
+
+                        <td align="left">
+                            Sets the data for a single author following the same
+                            array format as described above for a single sub-array.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDateCreated()</span></td>
+
+                        <td align="left">
+                            Sets the date on which this feed was created. Generally
+                            only applicable to Atom where it represents the date the resource
+                            described by an Atom 1.0 document was created. The expected parameter
+                            may be a <acronym class="acronym">UNIX</acronym> timestamp or a
+                            <span class="classname">Zend_Date</span> object.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDateModified()</span></td>
+
+                        <td align="left">
+                            Sets the date on which this feed was last modified. The expected
+                            parameter may be a <acronym class="acronym">UNIX</acronym> timestamp or a
+                            <span class="classname">Zend_Date</span> object.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setLastBuildDate()</span></td>
+
+                        <td align="left">
+                            Sets the date on which this feed was last build. The expected
+                            parameter may be a <acronym class="acronym">UNIX</acronym> timestamp or a
+                            <span class="classname">Zend_Date</span> object. This will only be
+                            rendered for <acronym class="acronym">RSS</acronym> 2.0 feeds and is automatically
+                            rendered as the current date by default when not explicity set.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setLanguage()</span></td>
+
+                        <td align="left">
+                            Sets the language of the feed. This will be omitted unless set.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setGenerator()</span></td>
+
+                        <td align="left">
+                            Allows the setting of a generator. The parameter should be an
+                            array containing the keys &quot;name&quot;, &quot;version&quot; and &quot;uri&quot;. If omitted
+                            a default generator will be added referencing
+                            <span class="classname">Zend_Feed_Writer</span>, the current Zend Framework
+                            version and the Framework&#039;s <acronym class="acronym">URI</acronym>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCopyright()</span></td>
+                        <td align="left">Sets a copyright notice associated with the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addHubs()</span></td>
+
+                        <td align="left">
+                            Accepts an array of Pubsubhubbub Hub Endpoints to be rendered in
+                            the feed as Atom links so that PuSH Subscribers may subscribe to
+                            your feed. Note that you must implement a Pubsubhubbub Publisher in
+                            order for real-time updates to be enabled. A Publisher may be
+                            implemented using
+                            <span class="classname">Zend_Feed_Pubsubhubbub_Publisher</span>.
+                            The method  <span class="methodname">addHub()</span> allows adding
+                            a single hub at a time.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addCategories()</span></td>
+
+                        <td align="left">
+                            Accepts an array of categories for rendering, where each element is
+                            itself an array whose possible keys include &quot;term&quot;, &quot;label&quot; and
+                            &quot;scheme&quot;. The &quot;term&quot; is a typically a category name suitable for
+                            inclusion in a <acronym class="acronym">URI</acronym>. The &quot;label&quot; may be a human
+                            readable category name supporting special characters (it is
+                            <acronym class="acronym">HTML</acronym> encoded during rendering) and is a required key.
+                            The &quot;scheme&quot; (called the domain in <acronym class="acronym">RSS</acronym>) is optional
+                            but must be a valid <acronym class="acronym">URI</acronym>. The method
+                             <span class="methodname">addCategory()</span> allows adding a single category
+                            at a time.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setImage()</span></td>
+
+                        <td align="left">
+                            Accepts an array of image metadata for an <acronym class="acronym">RSS</acronym> image
+                            or Atom logo. Atom 1.0 only requires a <acronym class="acronym">URI</acronym>.
+                            <acronym class="acronym">RSS</acronym> 2.0 requires a <acronym class="acronym">URI</acronym>,
+                            <acronym class="acronym">HTML</acronym> link, and an image title. <acronym class="acronym">RSS</acronym>
+                            2.0 optionally may send a width, height and image description. The array
+                            parameter may contain these using the keys: <span class="property">uri</span>,
+                            <span class="property">link</span>, <span class="property">title</span>,
+                            <span class="property">description</span>, <span class="property">height</span> and
+                            <span class="property">width</span>. The <acronym class="acronym">RSS</acronym> 2.0
+                            <acronym class="acronym">HTML</acronym> link should point to the feed source&#039;s
+                            <acronym class="acronym">HTML</acronym> page.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">createEntry()</span></td>
+
+                        <td align="left">
+                            Returns a new instance of
+                            <span class="classname">Zend_Feed_Writer_Entry</span>. This is the Entry level
+                            data container. New entries are not automatically assigned to the
+                            current feed, so you must explicitly call
+                             <span class="methodname">addEntry()</span> to add the entry for rendering.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addEntry()</span></td>
+
+                        <td align="left">
+                            Adds an instance of <span class="classname">Zend_Feed_Writer_Entry</span>
+                            to the current feed container for rendering.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">createTombstone()</span></td>
+
+                        <td align="left">
+                            Returns a new instance of
+                            <span class="classname">Zend_Feed_Writer_Deleted</span>. This is the Atom 2.0
+                            Tombstone level data container. New entries are not automatically
+                            assigned to the current feed, so you must explicitly call
+                             <span class="methodname">addTombstone()</span> to add the deleted entry for
+                            rendering.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addTombstone()</span></td>
+
+                        <td align="left">
+                            Adds an instance of <span class="classname">Zend_Feed_Writer_Deleted</span> to
+                            the current feed container for rendering.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">removeEntry()</span></td>
+
+                        <td align="left">
+                            Accepts a parameter indicating an array index of the entry to remove
+                            from the feed.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">export()</span></td>
+
+                        <td align="left">
+                            Exports the entire data hierarchy to an <acronym class="acronym">XML</acronym> feed. The
+                            method has two parameters. The first is the feed type, one of &quot;atom&quot;
+                            or &quot;rss&quot;. The second is an optional boolean to set whether
+                            Exceptions are thrown. The default is <b><tt>TRUE</tt></b>.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                In addition to these setters, there are also matching getters to retrieve data from
+                the Entry data container. For example,  <span class="methodname">setImage()</span> is
+                matched with a  <span class="methodname">getImage()</span> method.
+            <br />
+        </p></blockquote>
+
+        
+
+    </div>
+
+    <div class="section" id="zend.feed.writer.setting.entry.data.points" name="zend.feed.writer.setting.entry.data.points"><div class="info"><h1 class="title">Setting Entry Data Points</h1></div>
+        
+
+        <p class="para">
+            Here&#039;s a summary of the Core <acronym class="acronym">API</acronym> for Entries and Items. You should
+            note it comprises not only the basic <acronym class="acronym">RSS</acronym> and Atom standards, but
+            also accounts for a number of included Extensions bundled with
+            <span class="classname">Zend_Feed_Writer</span>. The naming of these
+            Extension sourced methods remain fairly generic - all Extension
+            methods operate at the same level as the Core <acronym class="acronym">API</acronym> though we do allow
+            you to retrieve any specific Extension object separately if required.
+        </p>
+
+        <p class="para">
+            The Entry Level <acronym class="acronym">API</acronym> for data is contained in
+            <span class="classname">Zend_Feed_Writer_Entry</span>.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Entry Level API Methods</b></caption></div>
+            
+
+            
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setId()</span></td>
+
+                        <td align="left">
+                            Set a unique ID associated with this entry. For Atom 1.0
+                            this is an atom:id element, whereas for <acronym class="acronym">RSS</acronym> 2.0 it is
+                            added as a guid element. These are optional so long as a link is
+                            added, i.e. the link is set as the ID.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setTitle()</span></td>
+                        <td align="left">Set the title of the entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDescription()</span></td>
+                        <td align="left">Set the text description of the entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setContent()</span></td>
+                        <td align="left">Set the content of the entry.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setLink()</span></td>
+
+                        <td align="left">
+                            Set a <acronym class="acronym">URI</acronym> to the <acronym class="acronym">HTML</acronym> website
+                            containing the same or
+                            similar information as this entry (i.e. if the feed is from a blog,
+                            it should provide the blog article&#039;s <acronym class="acronym">URI</acronym> where the
+                            <acronym class="acronym">HTML</acronym> version of the entry can be read).
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setFeedLinks()</span></td>
+
+                        <td align="left">
+                            Add a link to an <acronym class="acronym">XML</acronym> feed, whether the feed being
+                            generated or an alternate <acronym class="acronym">URI</acronym> pointing to the same
+                            feed but in a different format. At a minimum, it is recommended to
+                            include a link to the feed being generated so it has an identifiable
+                            final <acronym class="acronym">URI</acronym> allowing a client to track its location
+                            changes without necessitating constant redirects. The parameter is an
+                            array of arrays, where each sub-array contains the keys &quot;type&quot; and
+                            &quot;uri&quot;. The type should be one of &quot;atom&quot;, &quot;rss&quot;, or &quot;rdf&quot;. If a type is
+                            omitted, it defaults to the type used when rendering the feed.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addAuthors()</span></td>
+
+                        <td align="left">
+                            Sets the data for authors. The parameter is an array of arrays
+                            where each sub-array may contain the keys &quot;name&quot;, &quot;email&quot; and
+                            &quot;uri&quot;. The &quot;uri&quot; value is only applicable for Atom feeds since
+                            <acronym class="acronym">RSS</acronym> contains no facility to show it. For
+                            <acronym class="acronym">RSS</acronym> 2.0, rendering will create two elements - an
+                            author element containing the email reference with the name in brackets,
+                            and a Dublin Core creator element only containing the name.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">addAuthor()</span></td>
+
+                        <td align="left">
+                            Sets the data for a single author following the same
+                            format as described above for a single sub-array.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDateCreated()</span></td>
+
+                        <td align="left">
+                            Sets the date on which this feed was created. Generally
+                            only applicable to Atom where it represents the date the resource
+                            described by an Atom 1.0 document was created. The expected parameter
+                            may be a <acronym class="acronym">UNIX</acronym> timestamp or a
+                            <span class="classname">Zend_Date</span> object. If omitted, the date
+                            used will be the current date and time.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setDateModified()</span></td>
+
+                        <td align="left">
+                            Sets the date on which this feed was last modified. The expected
+                            parameter may be a <acronym class="acronym">UNIX</acronym> timestamp or a
+                            <span class="classname">Zend_Date</span> object. If omitted, the date
+                            used will be the current date and time.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCopyright()</span></td>
+                        <td align="left">Sets a copyright notice associated with the feed.</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCategories()</span></td>
+
+                        <td align="left">
+                            Accepts an array of categories for rendering, where each element is
+                            itself an array whose possible keys include &quot;term&quot;, &quot;label&quot; and
+                            &quot;scheme&quot;. The &quot;term&quot; is a typically a category name suitable for
+                            inclusion in a <acronym class="acronym">URI</acronym>. The &quot;label&quot; may be a human
+                            readable category name supporting special characters (it is encoded
+                            during rendering) and is a required key. The &quot;scheme&quot; (called the domain
+                            in <acronym class="acronym">RSS</acronym>) is optional but must be a valid
+                            <acronym class="acronym">URI</acronym>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCommentCount()</span></td>
+
+                        <td align="left">
+                            Sets the number of comments associated with this entry. Rendering
+                            differs between <acronym class="acronym">RSS</acronym> and Atom 2.0 depending
+                            on the element or attribute needed.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCommentLink()</span></td>
+
+                        <td align="left">
+                            Seta a link to a <acronym class="acronym">HTML</acronym> page containing comments
+                            associated with this entry.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCommentFeedLink()</span></td>
+
+                        <td align="left">
+                            Sets a link to a <acronym class="acronym">XML</acronym> feed containing comments
+                            associated with this entry. The parameter is an array containing the
+                            keys &quot;uri&quot; and &quot;type&quot;, where the type is one of &quot;rdf&quot;, &quot;rss&quot; or &quot;atom&quot;.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setCommentFeedLinks()</span></td>
+
+                        <td align="left">
+                            Same as  <span class="methodname">setCommentFeedLink()</span> except it
+                            accepts an array of arrays, where each subarray contains the
+                            expected parameters of  <span class="methodname">setCommentFeedLink()</span>.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"> <span class="methodname">setEncoding()</span></td>
+
+                        <td align="left">
+                            Sets the encoding of entry text. This will default to
+                            <acronym class="acronym">UTF-8</acronym> which is the preferred encoding.
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                In addition to these setters, there are also matching getters to retrieve data from
+                the Entry data container.
+            <br />
+        </p></blockquote>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.feed.reader.html">Zend_Feed_Reader</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.feed.html">Zend_Feed</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.feed.pubsubhubbub.introduction.html">Zend_Feed_Pubsubhubbub</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.feed.html">Zend_Feed</a></li>
+  <li><a href="zend.feed.introduction.html">Introduction</a></li>
+  <li><a href="zend.feed.importing.html">Importing Feeds</a></li>
+  <li><a href="zend.feed.findFeeds.html">Retrieving Feeds from Web Pages</a></li>
+  <li><a href="zend.feed.consuming-rss.html">Consuming an RSS Feed</a></li>
+  <li><a href="zend.feed.consuming-atom.html">Consuming an Atom Feed</a></li>
+  <li><a href="zend.feed.consuming-atom-single-entry.html">Consuming a Single Atom Entry</a></li>
+  <li><a href="zend.feed.modifying-feed.html">Modifying Feed and Entry structures</a></li>
+  <li><a href="zend.feed.custom-feed.html">Custom Feed and Entry Classes</a></li>
+  <li><a href="zend.feed.reader.html">Zend_Feed_Reader</a></li>
+  <li class="active"><a href="zend.feed.writer.html">Zend_Feed_Writer</a></li>
+  <li><a href="zend.feed.pubsubhubbub.introduction.html">Zend_Feed_Pubsubhubbub</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

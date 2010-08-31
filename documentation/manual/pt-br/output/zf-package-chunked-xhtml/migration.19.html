@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend Framework 1.9 - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.110.html">Zend Framework 1.10</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.18.html">Zend Framework 1.8</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="migration.19" class="section"><div class="info"><h1 class="title">Zend Framework 1.9</h1></div>
+    
+
+    <p class="para">
+        When upgrading from a release of Zend Framework earlier than 1.9.0 to any 1.9 release, you
+        should note the following migration notes.
+    </p>
+
+    <div class="section" id="migration.19.zend.file.transfer" name="migration.19.zend.file.transfer"><div class="info"><h1 class="title">Zend_File_Transfer</h1></div>
+        
+
+        <div class="section" id="migration.19.zend.file.transfer.mimetype" name="migration.19.zend.file.transfer.mimetype"><div class="info"><h1 class="title">MimeType validation</h1></div>
+            
+
+            <p class="para">
+                For security reasons we had to turn off the default fallback mechanism of the
+                <span class="classname">MimeType</span>, <span class="classname">ExcludeMimeType</span>,
+                <span class="classname">IsCompressed</span> and <span class="classname">IsImage</span> validators.
+                This means, that if the <em class="emphasis">fileInfo</em> or
+                <em class="emphasis">magicMime</em> extensions can not be found, the validation will
+                always fail.
+            </p>
+
+            <p class="para">
+                If you are in need of validation by using the <acronym class="acronym">HTTP</acronym> fields which
+                are provided by the user then you can turn on this feature by using the
+                 <span class="methodname">enableHeaderCheck()</span> method.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: <span class="info"><b>Security hint</b><br /></span>
+                
+
+                
+                    You should note that relying on the <acronym class="acronym">HTTP</acronym> fields, which are
+                    provided by your user, is a security risk. They can easily be changed and could
+                    allow your user to provide a malcious file.
+                <br />
+            </p></blockquote>
+
+            <div class="example"><div class="info"><p><b>Example #1 Allow the usage of the HTTP fields</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// at initiation</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$valid</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_File_Transfer_Adapter_Http<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'headerCheck'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// or afterwards</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$valid</span>-&gt;<span style="color: #006600;">enableHeaderCheck</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="migration.19.zend.filter" name="migration.19.zend.filter"><div class="info"><h1 class="title">Zend_Filter</h1></div>
+        
+
+        <p class="para">
+            Prior to the 1.9 release, <span class="classname">Zend_Filter</span> allowed
+            the usage of the static  <span class="methodname">get()</span> method. As with
+            release 1.9 this method has been renamed to
+             <span class="methodname">filterStatic()</span> to be more descriptive. The
+            old  <span class="methodname">get()</span> method is marked as deprecated.
+        </p>
+    </div>
+
+    <div class="section" id="migration.19.zend.http.client" name="migration.19.zend.http.client"><div class="info"><h1 class="title">Zend_Http_Client</h1></div>
+        
+
+        <div class="section" id="migration.19.zend.http.client.fileuploadsarray" name="migration.19.zend.http.client.fileuploadsarray"><div class="info"><h1 class="title">Changes to internal uploaded file information storage</h1></div>
+            
+
+            <p class="para">
+                In version 1.9 of Zend Framework, there has been a change in the way
+                <span class="classname">Zend_Http_Client</span> internally stores information about
+                files to be uploaded, set using the
+                 <span class="methodname">Zend_Http_Client::setFileUpload()</span> method.
+            </p>
+
+            <p class="para">
+                This change was introduced in order to allow multiple files to be uploaded
+                with the same form name, as an array of files. More information about this issue
+                can be found in <a href="http://framework.zend.com/issues/browse/ZF-5744" class="link external">&raquo; this bug report</a>.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #2 Internal storage of uploaded file information</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Upload two files with the same form element name, as an array</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Http_Client<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">setFileUpload</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'file1.txt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'userfile[]'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'some raw data'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'text/plain'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">setFileUpload</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'file2.txt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'userfile[]'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'some other data'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'application/octet-stream'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// In Zend Framework 1.8 or older, the value of</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// the protected member $client-&gt;files is:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $client-&gt;files = array(</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;'userfile[]' =&gt; array('file2.txt',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'application/octet-stream'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'some other data'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// );</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// In Zend Framework 1.9 or newer, the value of $client-&gt;files is:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $client-&gt;files = array(</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;array(</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'formname' =&gt; 'userfile[]',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'filename' =&gt; 'file1.txt,</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'ctype'&nbsp; &nbsp; =&gt; 'text/plain',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'data'&nbsp; &nbsp; &nbsp;=&gt; 'some raw data'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;),</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;array(</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'formname' =&gt; 'userfile[]',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'filename' =&gt; 'file2.txt',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'formname' =&gt; 'application/octet-stream',</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;'formname' =&gt; 'some other data'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// );</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                As you can see, this change permits the usage of the same form element name with
+                more than one file - however, it introduces a subtle backwards-compatibility change
+                and as such should be noted.
+            </p>
+        </div>
+
+        <div class="section" id="migration.19.zend.http.client.getparamsrecursize" name="migration.19.zend.http.client.getparamsrecursize"><div class="info"><h1 class="title">Deprecation of Zend_Http_Client::_getParametersRecursive()</h1></div>
+            
+
+            <p class="para">
+                Starting from version 1.9, the protected method
+                 <span class="methodname">_getParametersRecursive()</span> is no longer used by
+                <span class="classname">Zend_Http_Client</span> and is deprecated. Using it will cause an
+                <b><tt>E_NOTICE</tt></b> message to be emitted by <acronym class="acronym">PHP</acronym>.
+            </p>
+
+            <p class="para">
+                If you subclass <span class="classname">Zend_Http_Client</span> and call this method, you
+                should look into using the
+                 <span class="methodname">Zend_Http_Client::_flattenParametersArray()</span> static method
+                instead.
+            </p>
+
+            <p class="para">
+                Again, since this  <span class="methodname">_getParametersRecursive()</span> is a protected
+                method, this change will only affect users who subclass
+                <span class="classname">Zend_Http_Client</span>.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="migration.19.zend.locale" name="migration.19.zend.locale"><div class="info"><h1 class="title">Zend_Locale</h1></div>
+        
+
+        <div class="section" id="migration.19.zend.locale.deprecated" name="migration.19.zend.locale.deprecated"><div class="info"><h1 class="title">Deprecated methods</h1></div>
+            
+
+            <p class="para">
+                Some specialized translation methods have been deprecated because they duplicate
+                existing behaviour. Note that the old methods will still work, but a user notice is
+                triggered which describes the new call. The methods will be erased with 2.0.
+                See the following list for old and new method call.
+            </p>
+
+            <table class="doctable table"><div class="info"><caption><b>List of measurement types</b></caption></div>
+                
+
+                
+                    <thead valign="middle">
+                        <tr valign="middle">
+                            <th>Old call</th>
+                            <th>New call</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody valign="middle" class="tbody">
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getLanguageTranslationList($locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslationList(&#039;language&#039;, $locale)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getScriptTranslationList($locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslationList(&#039;script&#039;, $locale)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getCountryTranslationList($locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslationList(&#039;territory&#039;, $locale, 2)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getTerritoryTranslationList($locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslationList(&#039;territory&#039;, $locale, 1)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getLanguageTranslation($value, $locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslation($value, &#039;language&#039;, $locale)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getScriptTranslation($value, $locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslation($value, &#039;script&#039;, $locale)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getCountryTranslation($value, $locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslation($value, &#039;country&#039;, $locale)</span>
+                            </td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">
+                                 <span class="methodname">getTerritoryTranslation($value, $locale)</span>
+                            </td>
+
+                            <td align="left">
+                                 <span class="methodname">getTranslation($value, &#039;territory&#039;,
+                                    $locale)</span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                
+            </table>
+
+        </div>
+    </div>
+
+    <div class="section" id="migration.19.zend.view.helper.navigation" name="migration.19.zend.view.helper.navigation"><div class="info"><h1 class="title">Zend_View_Helper_Navigation</h1></div>
+        
+
+        <p class="para">
+            Prior to the 1.9 release, the menu helper
+            (<span class="classname">Zend_View_Helper_Navigation_Menu</span>) did not
+            render sub menus correctly. When <span class="property">onlyActiveBranch</span>
+            was <b><tt>TRUE</tt></b> and the option <span class="property">renderParents</span>
+            <b><tt>FALSE</tt></b>, nothing would be rendered if the deepest active
+            page was at a depth lower than the <span class="property">minDepth</span> option.
+        </p>
+
+        <p class="para">
+            In simpler words; if <span class="property">minDepth</span> was set to &#039;1&#039;
+            and the active page was at one of the first level pages, nothing
+            would be rendered, as the following example shows.
+        </p>
+
+        <p class="para">
+            Consider the following container setup:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$container</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Navigation<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">'Home'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'#'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'label'</span>&nbsp; =&gt; <span style="color: #ff0000;">'Products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'#'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'active'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'pages'</span>&nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">'Server'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'#'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">'Studio'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'#'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">'Solutions'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'uri'</span>&nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'#'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The following code is used in a view script:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">navigation</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">menu</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">renderMenu</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$container</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'minDepth'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #cc66cc;">1</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'onlyActiveBranch'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'renderParents'</span>&nbsp; &nbsp; =&gt; <span style="color: #000000; font-weight: bold;">false</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Before release 1.9, the code snippet above would output nothing.
+        </p>
+
+        <p class="para">
+            Since release 1.9, the  <span class="methodname">_renderDeepestMenu()</span> method in
+            <span class="classname">Zend_View_Helper_Navigation_Menu</span> will accept
+            active pages at one level below <span class="property">minDepth</span>, as long as
+            the page has children.
+        </p>
+
+        <p class="para">
+            The same code snippet will now output the following:
+        </p>
+
+        <div class="programlisting html"><div class="htmlcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;ul class=&quot;navigation&quot;&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;a href=&quot;#&quot;&gt;Server&lt;/a&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;a href=&quot;#&quot;&gt;Studio&lt;/a&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/ul&gt;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="migration.19.security" name="migration.19.security"><div class="info"><h1 class="title">Security fixes as with 1.9.7</h1></div>
+        
+
+        <p class="para">
+            Additionally, users of the 1.9 series may be affected by other changes starting in
+            version 1.9.7. These are all security fixes that also have potential backwards
+            compatibility implications.
+        </p>
+
+        <div class="section" id="migration.19.security.zend.dojo.editor" name="migration.19.security.zend.dojo.editor"><div class="info"><h1 class="title">Zend_Dojo_View_Helper_Editor</h1></div>
+            
+
+            <p class="para">
+                A slight change was made in the 1.9 series to modify the default usage of the Editor
+                dijit to use <acronym class="acronym">div</acronym> tags instead of a <acronym class="acronym">textarea</acronym>
+                tag; the latter usage has <a href="http://api.dojotoolkit.org/jsdoc/HEAD/dijit._editor.RichText" class="link external">&raquo; security
+                implications</a>, and usage of <acronym class="acronym">div</acronym> tags is recommended by the
+                Dojo project.
+            </p>
+
+            <p class="para">
+                In order to still allow graceful degradation, a new <var class="varname">degrade</var>
+                option was added to the view helper; this would allow developers to optionally use a
+                <acronym class="acronym">textarea</acronym> instead. However, this opens applications developed with
+                that usage to <acronym class="acronym">XSS</acronym> vectors. In 1.9.7, we have removed this option.
+                Graceful degradation is still supported, however, via a <acronym class="acronym">noscript</acronym>
+                tag that embeds a <acronym class="acronym">textarea</acronym>. This solution addressess all security
+                concerns.
+            </p>
+
+            <p class="para">
+                The takeaway is that if you were using the <var class="varname">degrade</var> flag, it will
+                simply be ignored at this time.
+            </p>
+        </div>
+
+        <div class="section" id="migration.19.security.zend.filter.html-entities" name="migration.19.security.zend.filter.html-entities"><div class="info"><h1 class="title">Zend_Filter_HtmlEntities</h1></div>
+            
+
+            <p class="para">
+                In order to default to a more secure character encoding,
+                <span class="classname">Zend_Filter_HtmlEntities</span> now defaults to
+                <acronym class="acronym">UTF-8</acronym> instead of <acronym class="acronym">ISO-8859-1</acronym>.
+            </p>
+
+            <p class="para">
+                Additionally, because the actual mechanism is dealing with character encodings and
+                not character sets, two new methods have been added,
+                 <span class="methodname">setEncoding()</span> and  <span class="methodname">getEncoding()</span>.
+                The previous methods  <span class="methodname">setCharSet()</span> and
+                 <span class="methodname">setCharSet()</span> are now deprecated and proxy to the new
+                methods. Finally, instead of using the protected members directly within the
+                 <span class="methodname">filter()</span> method, these members are retrieved by their
+                explicit accessors. If you were extending the filter in the past, please check your
+                code and unit tests to ensure everything still continues to work.
+            </p>
+        </div>
+
+        <div class="section" id="migration.19.security.zend.filter.strip-tags" name="migration.19.security.zend.filter.strip-tags"><div class="info"><h1 class="title">Zend_Filter_StripTags</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Filter_StripTags</span> contains a flag,
+                <var class="varname">commentsAllowed</var>, that, in previous versions, allowed you to
+                optionally whitelist <acronym class="acronym">HTML</acronym> comments in <acronym class="acronym">HTML</acronym>
+                text filtered by the class. However, this opens code enabling the flag to
+                <acronym class="acronym">XSS</acronym> attacks, particularly in Internet Explorer (which allows
+                specifying conditional functionality via <acronym class="acronym">HTML</acronym> comments). Starting
+                in version 1.9.7 (and backported to versions 1.8.5 and 1.7.9), the
+                <var class="varname">commentsAllowed</var> flag no longer has any meaning, and all
+                <acronym class="acronym">HTML</acronym> comments, including those containing other
+                <acronym class="acronym">HTML</acronym> tags or nested commments, will be stripped from the final
+                output of the filter.
+            </p>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="migration.110.html">Zend Framework 1.10</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="migration.18.html">Zend Framework 1.8</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="migration.html">Notas de Migra&ccedil;&atilde;o do Zend Framework</a></li>
+  <li><a href="migration.110.html">Zend Framework 1.10</a></li>
+  <li class="active"><a href="migration.19.html">Zend Framework 1.9</a></li>
+  <li><a href="migration.18.html">Zend Framework 1.8</a></li>
+  <li><a href="migration.17.html">Zend Framework 1.7</a></li>
+  <li><a href="migration.16.html">Zend Framework 1.6</a></li>
+  <li><a href="migration.15.html">Zend Framework 1.5</a></li>
+  <li><a href="migration.10.html">Zend Framework 1.0</a></li>
+  <li><a href="migration.09.html">Zend Framework 0.9</a></li>
+  <li><a href="migration.08.html">Zend Framework 0.8</a></li>
+  <li><a href="migration.06.html">Zend Framework 0.6</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

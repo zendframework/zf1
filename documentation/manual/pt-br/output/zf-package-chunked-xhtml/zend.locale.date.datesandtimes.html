@@ -1,0 +1,604 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Working with Dates and Times - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.locale.parsing.html">Normalization and Localization</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.locale.html">Zend_Locale</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.locale.appendix.html">Supported locales</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.locale.date.datesandtimes" class="section"><div class="info"><h1 class="title">Working with Dates and Times</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Locale_Format</span> provides several methods for working with dates
+        and times to help convert and normalize between different formats for different locales. Use
+        <span class="classname">Zend_Date</span> for manipulating dates, and working with date strings that
+        already conform to <a href="zend.date.constants.html" class="link">one of the many internationally
+            recognized standard formats, or one of the localized date formats supported by
+            <span class="classname">Zend_Date</span></a>. Using an existing, pre-defined format offers
+        advantages, including the use of well-tested code, and the assurance of some degree of
+        portability and interoperability (depending on the standard used). The examples below do not
+        follow these recommendations, since using non-standard date formats would needlessly
+        increase the difficulty of understanding these examples.
+    </p>
+
+    <div class="section" id="zend.locale.date.normalize" name="zend.locale.date.normalize"><div class="info"><h1 class="title">Normalizing Dates and Times</h1></div>
+        
+
+        <p class="para">
+            The  <span class="methodname">getDate()</span> method parses strings containing dates in
+            localized formats. The results are returned in a structured array, with well-defined
+            keys for each part of the date. In addition, the array will contain a key &#039;date_format&#039;
+            showing the format string used to parse the input date string. Since a localized date
+            string may not contain all parts of a date/time, the key-value pairs are optional. for
+            example, if only the year, month, and day is given, then all time values are suppressed
+            from the returned array, and vice-versa if only hour, minute, and second were given as
+            input. If no date or time can be found within the given input, an exception will be
+            thrown.
+        </p>
+
+        <p class="para">
+            If  <span class="methodname">setOption(array(&#039;fix_date&#039; =&gt; true))</span> is set the
+             <span class="methodname">getDate()</span> method adds a key &#039;fixed&#039; with a whole number value
+            indicating if the input date string required &quot;fixing&quot; by rearranging the day, month, or
+            year in the input to fit the format used.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Key values for getDate() with option &#039;fix_date&#039;</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>value</th>
+                        <th>meaning</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">0</td>
+                        <td align="left">nothing to fix</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">1</td>
+                        <td align="left">fixed false month</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">2</td>
+                        <td align="left">swapped day and year</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">3</td>
+                        <td align="left">swapped month and year</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">4</td>
+                        <td align="left">swapped month and day</td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            For those needing to specify explicitly the format of the date string, the following
+            format token specifiers are supported. If an invalid format specifier is used, such as
+            the <acronym class="acronym">PHP</acronym> &#039;i&#039; specifier when in <acronym class="acronym">ISO</acronym> format mode,
+            then an error will be thrown by the methods in <span class="classname">Zend_Locale_Format</span>
+            that support user-defined formats.
+        </p>
+
+        <p class="para">
+            These specifiers (below) are a small subset of the full &quot;ISO&quot; set supported by
+            <span class="classname">Zend_Date</span>&#039;s  <span class="methodname">toString()</span>. If you need to
+            use <acronym class="acronym">PHP</acronym>  <span class="methodname">date()</span> compatible format specifiers,
+            then first call  <span class="methodname">setOptions(array(&#039;format_type&#039; =&gt; &#039;php&#039;))</span>. And
+            if you want to convert only one special format string from <acronym class="acronym">PHP</acronym>
+             <span class="methodname">date()</span> compatible format to &quot;ISO&quot; format use
+             <span class="methodname">convertPhpToIsoFormat()</span>. Currently, the only practical
+            difference relates to the specifier for minutes (&#039;m&#039; using the <acronym class="acronym">ISO</acronym>
+            default, and &#039;i&#039; using the <acronym class="acronym">PHP</acronym> date format).
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Return values</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>getDate() format character</th>
+                        <th>Array key</th>
+                        <th>Returned value</th>
+                        <th>Minimum</th>
+                        <th>Maximum</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">d</td>
+                        <td align="left">day</td>
+                        <td align="left">integer</td>
+                        <td align="left">1</td>
+                        <td align="left">31</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">M</td>
+                        <td align="left">month</td>
+                        <td align="left">integer</td>
+                        <td align="left">1</td>
+                        <td align="left">12</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">y</td>
+                        <td align="left">year</td>
+                        <td align="left">integer</td>
+                        <td align="left">no limit</td>
+                        <td align="left">PHP integer&#039;s maximum</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">h</td>
+                        <td align="left">hour</td>
+                        <td align="left">integer</td>
+                        <td align="left">0</td>
+                        <td align="left">PHP integer&#039;s maximum</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">m</td>
+                        <td align="left">minute</td>
+                        <td align="left">integer</td>
+                        <td align="left">0</td>
+                        <td align="left">PHP integer&#039;s maximum</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">s</td>
+                        <td align="left">second</td>
+                        <td align="left">integer</td>
+                        <td align="left">0</td>
+                        <td align="left">PHP integer&#039;s maximum</td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <div class="example"><div class="info"><p><b>Example #1 Normalizing a date</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$dateString</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13.04.2006'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'dd.MM.yyyy'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// creates a Zend_Date object for this date</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$dateObject</span> = Zend_Date<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13.04.2006'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt; <span style="color: #ff0000;">'dd.MM.yyyy'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$dateString</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// outputs:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/array"><span style="color: #000066;">Array</span></a></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>format<span style="color: #66cc66;">&#93;</span> =&gt; dd.MM.yyyy</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>day<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">13</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>month<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">4</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>year<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">2006</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// alternatively, some types of problems with input data can be</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// automatically corrected</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'04.13.2006'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt; <span style="color: #ff0000;">'dd.MM.yyyy'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'fix_date'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// outputs:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/array"><span style="color: #000066;">Array</span></a></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>format<span style="color: #66cc66;">&#93;</span> =&gt; dd.MM.yyyy</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>day<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">13</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>month<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">4</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>year<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">2006</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>fixed<span style="color: #66cc66;">&#93;</span> =&gt; <span style="color: #cc66cc;">4</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Since  <span class="methodname">getDate()</span> is &quot;locale-aware&quot;, specifying the
+            <var class="varname">$locale</var> is sufficient for date strings adhering to that locale&#039;s
+            format. The option &#039;<span class="property">fix_date</span>&#039; uses simple tests to determine if the
+            day or month is not valid, and then applies heuristics to try and correct any detected
+            problems. Note the use of &#039;<b><tt>Zend_Locale_Format::STANDARD</tt></b>&#039; as the
+            value for &#039;<span class="property">date_format</span>&#039; to prevent the use of a class-wide default
+            date format set using  <span class="methodname">setOptions()</span>. This forces getDate to use
+            the default date format for <var class="varname">$locale</var>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Normalizing a date by locale</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13.04.2006'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Zend_Locale_Format::<span style="color: #006600;">STANDARD</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'locale'</span> =&gt; <span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            A complete date and time is returned when the input contains both a date and time in the
+            expected format.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Normalizing a date with time</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13.04.2005 22:14:55'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Zend_Locale_Format::<span style="color: #006600;">STANDARD</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'locale'</span> =&gt; <span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            If a specific format is desired, specify the <var class="varname">$format</var> argument,
+            without giving a <var class="varname">$locale</var>. Only single-letter codes
+            (H, m, s, y, M, d), and MMMM and EEEE are supported in the <var class="varname">$format</var>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Normalizing a userdefined date</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13200504T551422'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'ddyyyyMM ssmmHH'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The format can include the following signs :
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Format definition</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Format Letter</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">d or dd</td>
+                        <td align="left">1 or 2 digit day</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">M or MM</td>
+                        <td align="left">1 or 2 digit month</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">y or yy</td>
+                        <td align="left">1 or 2 digit year</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">yyyy</td>
+                        <td align="left">4 digit year</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">h</td>
+                        <td align="left">1 or 2 digit hour</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">m</td>
+                        <td align="left">1 or 2 digit minute</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">s</td>
+                        <td align="left">1 or 2 digit second</td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            Examples for proper formats are
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Example formats</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Formats</th>
+                        <th>Input</th>
+                        <th>Output</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">dd.MM.yy</td>
+                        <td align="left">1.4.6</td>
+                        <td align="left">[&#039;day&#039;] =&gt; 1, [&#039;month&#039;] =&gt; 4, [&#039;year&#039;] =&gt; 6</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">dd.MM.yy</td>
+                        <td align="left">01.04.2006</td>
+                        <td align="left">[&#039;day&#039;] =&gt; 1, [&#039;month&#039;] =&gt; 4, [&#039;year&#039;] =&gt; 2006</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">yyyyMMdd</td>
+                        <td align="left">1.4.6</td>
+                        <td align="left">[&#039;day&#039;] =&gt; 6, [&#039;month&#039;] =&gt; 4, [&#039;year&#039;] =&gt; 1</td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Database date format</b><br /></span>
+            
+
+            
+                To parse a database date value (f.e. MySql or MsSql), use
+                <span class="classname">Zend_Date</span>&#039;s ISO_8601 format instead of getDate().
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            The option &#039;<span class="property">fix_date</span>&#039; uses simple tests to determine if the day or
+            month is not valid, and then applies heuristics to try and correct any detected
+            problems.  <span class="methodname">getDate()</span> automatically detects and corrects some
+            kinds of problems with input, such as misplacing the year:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #5 Automatic correction of input dates</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$date</span> = Zend_Locale_Format::<a href="http://www.php.net/getdate"><span style="color: #000066;">getDate</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'41.10.20'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt; <span style="color: #ff0000;">'ddMMyy'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'fix_date'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// instead of 41 for the day, the 41 will be returned as year value</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$date</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.date.test" name="zend.locale.date.test"><div class="info"><h1 class="title">Testing Dates</h1></div>
+        
+
+        <p class="para">
+            Use  <span class="methodname">checkDateFormat($inputString, array(&#039;date_format&#039; =&gt; $format,
+                $locale))</span> to check if a given string contains all expected date parts.
+            The  <span class="methodname">checkDateFormat()</span> method uses
+             <span class="methodname">getDate()</span>, but without the option
+            &#039;<span class="property">fixdate</span>&#039; to avoid returning <b><tt>TRUE</tt></b> when the
+            input fails to conform to the date format. If errors are detected in the input, such as
+            swapped values for months and days, the option &#039;<span class="property">fixdate</span>&#039; method
+            will apply heuristics to &quot;correct&quot; dates before determining their validity.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 Date testing</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// using the default date format for 'de_AT', is this a valid date?</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale_Format::<span style="color: #006600;">checkDateFormat</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13.Apr.2006'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Zend_Locale_Format::<span style="color: #006600;">STANDARD</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;date&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;not a date&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.time.normalizing" name="zend.locale.time.normalizing"><div class="info"><h1 class="title">Normalizing a Time</h1></div>
+        
+
+        <p class="para">
+            Normally, a time will be returned with a date, if the input contains both. If the proper
+            format is not known, but the locale relevant to the user input is known, then
+             <span class="methodname">getTime()</span> should be used, because it uses the default time
+            format for the selected locale.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #7 Normalize an unknown time</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale_Format::<span style="color: #006600;">getTime</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13:44:42'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Zend_Locale_Format::<span style="color: #006600;">STANDARD</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'locale'</span> =&gt; <span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;time&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;not a time&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.time.test" name="zend.locale.time.test"><div class="info"><h1 class="title">Testing Times</h1></div>
+        
+
+        <p class="para">
+            Use  <span class="methodname">checkDateFormat()</span> to check if a given string contains a
+            proper time. The usage is exact the same as with checking Dates, only
+            <span class="property">date_format</span> should contain the parts which you expect to have.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #8 Testing a time</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale_Format::<span style="color: #006600;">checkDateFormat</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'13:44:42'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'date_format'</span> =&gt; <span style="color: #ff0000;">'HH:mm:ss'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'locale'</span> =&gt; <span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;time&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;not a time&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.locale.parsing.html">Normalization and Localization</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.locale.html">Zend_Locale</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.locale.appendix.html">Supported locales</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.locale.html">Zend_Locale</a></li>
+  <li><a href="zend.locale.introduction.html">Introduction</a></li>
+  <li><a href="zend.locale.functions.html">Using Zend_Locale</a></li>
+  <li><a href="zend.locale.parsing.html">Normalization and Localization</a></li>
+  <li class="active"><a href="zend.locale.date.datesandtimes.html">Working with Dates and Times</a></li>
+  <li><a href="zend.locale.appendix.html">Supported locales</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

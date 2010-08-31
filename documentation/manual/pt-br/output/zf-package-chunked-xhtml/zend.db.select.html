@@ -1,0 +1,1522 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Db_Select - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.profiler.html">Zend_Db_Profiler</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.html">Zend_Db_Table</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.db.select" class="section"><div class="info"><h1 class="title">Zend_Db_Select</h1></div>
+    
+
+    <div class="section" id="zend.db.select.introduction" name="zend.db.select.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            The <span class="classname">Zend_Db_Select</span> object represents a <acronym class="acronym">SQL</acronym>
+            <acronym class="acronym">SELECT</acronym> query statement. The class has methods for adding individual
+            parts to the query. You can specify some parts of the query using <acronym class="acronym">PHP</acronym>
+            methods and data structures, and the class forms the correct <acronym class="acronym">SQL</acronym>
+            syntax for you. After you build a query, you can execute the query as if you had written
+            it as a string.
+        </p>
+
+        <p class="para">
+            The value offered by <span class="classname">Zend_Db_Select</span> includes:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Object-oriented methods for specifying <acronym class="acronym">SQL</acronym> queries in a
+                    piece-by-piece manner;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Database-independent abstraction of some parts of the <acronym class="acronym">SQL</acronym>
+                    query;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Automatic quoting of metadata identifiers in most cases, to support identifiers
+                    containing <acronym class="acronym">SQL</acronym> reserved words and special characters;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Quoting identifiers and values, to help reduce risk of <acronym class="acronym">SQL</acronym>
+                    injection attacks.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Using <span class="classname">Zend_Db_Select</span> is not mandatory. For very simple
+            <acronym class="acronym">SELECT</acronym> queries, it is usually simpler to specify the entire
+            <acronym class="acronym">SQL</acronym> query as a string and execute it using Adapter methods like
+             <span class="methodname">query()</span> or  <span class="methodname">fetchAll()</span>. Using
+            <span class="classname">Zend_Db_Select</span> is helpful if you need to assemble a
+            <acronym class="acronym">SELECT</acronym> query procedurally, or based on conditional logic in your
+            application.
+        </p>
+    </div>
+
+    <div class="section" id="zend.db.select.creating" name="zend.db.select.creating"><div class="info"><h1 class="title">Creating a Select Object</h1></div>
+        
+
+        <p class="para">
+            You can create an instance of a <span class="classname">Zend_Db_Select</span> object using the
+             <span class="methodname">select()</span> method of a
+            <span class="classname">Zend_Db_Adapter_Abstract</span> object.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Example of the database adapter&#039;s select() method</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$db</span> = Zend_Db::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span> ...options... <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Another way to create a <span class="classname">Zend_Db_Select</span> object is with its
+            constructor, specifying the database adapter as an argument.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Example of creating a new Select object</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$db</span> = Zend_Db::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span> ...options... <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Db_Select<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$db</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.select.building" name="zend.db.select.building"><div class="info"><h1 class="title">Building Select queries</h1></div>
+        
+
+        <p class="para">
+            When building the query, you can add clauses of the query one by one. There is a
+            separate method to add each clause to the <span class="classname">Zend_Db_Select</span> object.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Example of the using methods to add clauses</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Create the Zend_Db_Select object</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Add a FROM clause</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span> ...specify table and columns... <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Add a WHERE clause</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span> ...specify search criteria... <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Add an ORDER BY clause</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span> ...specify sorting criteria... <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            You also can use most methods of the <span class="classname">Zend_Db_Select</span> object with a
+            convenient fluent interface. A fluent interface means that each method returns a
+            reference to the object on which it was called, so you can immediately call another
+            method.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Example of the using the fluent interface</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; -&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span> ...specify table and columns... <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; -&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span> ...specify search criteria... <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; -&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span> ...specify sorting criteria... <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The examples in this section show usage of the fluent interface, but you can use the
+            non-fluent interface in all cases. It is often necessary to use the non-fluent
+            interface, for example, if your application needs to perform some logic before adding a
+            clause to a query.
+        </p>
+
+        <div class="section" id="zend.db.select.building.from" name="zend.db.select.building.from"><div class="info"><h1 class="title">Adding a FROM clause</h1></div>
+            
+
+            <p class="para">
+                Specify the table for this query using the  <span class="methodname">from()</span> method.
+                You can specify the table name as a simple string.
+                <span class="classname">Zend_Db_Select</span> applies identifier quoting around the table
+                name, so you can use special characters.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 Example of the from() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT *</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span> <span style="color: #ff0000;">'products'</span> <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                You can also specify the correlation name (sometimes called the &quot;table alias&quot;) for
+                a table. Instead of a simple string, use an associative array mapping the
+                correlation name to the table name. In other clauses of the <acronym class="acronym">SQL</acronym>
+                query, use this correlation name. If your query joins more than one table,
+                <span class="classname">Zend_Db_Select</span> generates unique correlation names based on
+                the table names, for any tables for which you don&#039;t specify the correlation name.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #6 Example of specifying a table correlation name</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span> <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                Some <acronym class="acronym">RDBMS</acronym> brands support a leading schema specifier for a table.
+                You can specify the table name as &quot;<strong class="command">schemaName.tableName</strong>&quot;, where
+                <span class="classname">Zend_Db_Select</span> quotes each part individually, or you may
+                specify the schema name separately. A schema name specified in the table name takes
+                precedence over a schema provided separately in the event that both are provided.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #7 Example of specifying a schema name</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT *</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;myschema&quot;.&quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span> <span style="color: #ff0000;">'myschema.products'</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// or</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>, <span style="color: #ff0000;">'*'</span>, <span style="color: #ff0000;">'myschema'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.columns" name="zend.db.select.building.columns"><div class="info"><h1 class="title">Adding Columns</h1></div>
+            
+
+            <p class="para">
+                In the second argument of the  <span class="methodname">from()</span> method, you can
+                specify the columns to select from the respective table. If you specify no columns,
+                the default is &quot;<em class="emphasis">*</em>&quot;, the <acronym class="acronym">SQL</acronym> wildcard for
+                &quot;all columns&quot;.
+            </p>
+
+            <p class="para">
+                You can list the columns in a simple array of strings, or as an associative mapping
+                of column alias to column name. If you only have one column to query, and you don&#039;t
+                need to specify a column alias, you can list it as a plain string instead of an
+                array.
+            </p>
+
+            <p class="para">
+                If you give an empty array as the columns argument, no columns from the respective
+                table are included in the result set. See a
+                <a href="zend.db.select.html#zend.db.select.building.join.example-no-columns" class="link">code example</a>
+                under the section on the  <span class="methodname">join()</span> method.
+            </p>
+
+            <p class="para">
+                You can specify the column name as &quot;<strong class="command">correlationName.columnName</strong>&quot;.
+                <span class="classname">Zend_Db_Select</span> quotes each part individually. If you don&#039;t
+                specify a correlation name for a column, it uses the correlation name for the table
+                named in the current  <span class="methodname">from()</span> method.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #8 Examples of specifying columns</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build the same query, specifying correlation names:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p.product_id'</span>, <span style="color: #ff0000;">'p.product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query with an alias for one column:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot; AS prodno, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'prodno'</span> =&gt; <span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.columns-expr" name="zend.db.select.building.columns-expr"><div class="info"><h1 class="title">Adding Expression Columns</h1></div>
+            
+
+            <p class="para">
+                Columns in <acronym class="acronym">SQL</acronym> queries are sometimes expressions, not simply
+                column names from a table. Expressions should not have correlation names or quoting
+                applied. If your column string contains parentheses,
+                <span class="classname">Zend_Db_Select</span> recognizes it as an expression.
+            </p>
+
+            <p class="para">
+                You also can create an object of type <span class="classname">Zend_Db_Expr</span>
+                explicitly, to prevent a string from being treated as a column name.
+                <span class="classname">Zend_Db_Expr</span> is a minimal class that contains a single
+                string. <span class="classname">Zend_Db_Select</span> recognizes objects of type
+                <span class="classname">Zend_Db_Expr</span> and converts them back to string, but does not
+                apply any alterations, such as quoting or correlation names.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    Using <span class="classname">Zend_Db_Expr</span> for column names is not necessary if
+                    your column expression contains parentheses;
+                    <span class="classname">Zend_Db_Select</span> recognizes parentheses and treats the
+                    string as an expression, skipping quoting and correlation names.
+                <br />
+            </p></blockquote>
+
+            <div class="example"><div class="info"><p><b>Example #9 Examples of specifying columns containing expressions</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, LOWER(product_name)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// An expression with parentheses implicitly becomes</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// a Zend_Db_Expr.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'LOWER(product_name)'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, (p.cost * 1.08) AS cost_plus_tax</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'cost_plus_tax'</span> =&gt; <span style="color: #ff0000;">'(p.cost * 1.08)'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query using Zend_Db_Expr explicitly:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.cost * 1.08 AS cost_plus_tax</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'cost_plus_tax'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">new</span> Zend_Db_Expr<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p.cost * 1.08'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                In the cases above, <span class="classname">Zend_Db_Select</span> does not alter the string
+                to apply correlation names or identifier quoting. If those changes are necessary to
+                resolve ambiguity, you must make the changes manually in the string.
+            </p>
+
+            <p class="para">
+                If your column names are <acronym class="acronym">SQL</acronym> keywords or contain special
+                characters, you should use the Adapter&#039;s  <span class="methodname">quoteIdentifier()</span>
+                method and interpolate the result into the string. The
+                 <span class="methodname">quoteIdentifier()</span> method uses <acronym class="acronym">SQL</acronym>
+                quoting to delimit the identifier, which makes it clear that it is an identifier for
+                a table or a column, and not any other part of <acronym class="acronym">SQL</acronym> syntax.
+            </p>
+
+            <p class="para">
+                Your code is more database-independent if you use the
+                 <span class="methodname">quoteIdentifier()</span> method instead of typing quotes literally
+                in your string, because some <acronym class="acronym">RDBMS</acronym> brands use nonstandard symbols
+                for quoting identifiers. The  <span class="methodname">quoteIdentifier()</span> method is
+                designed to use the appropriate quoting symbols based on the adapter type. The
+                 <span class="methodname">quoteIdentifier()</span> method also escapes any quote characters
+                that appear within the identifier name itself.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #10 Examples of quoting columns in an expression</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query,</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// quoting the special column name &quot;from&quot; in the expression:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;from&quot; + 10 AS origin</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'origin'</span> =&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'(p.'</span> . <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">quoteIdentifier</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'from'</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">' + 10)'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.columns-atomic" name="zend.db.select.building.columns-atomic"><div class="info"><h1 class="title">Adding columns to an existing FROM or JOIN table</h1></div>
+            
+
+            <p class="para">
+                There may be cases where you wish to add columns to an existing
+                <acronym class="acronym">FROM</acronym> or <acronym class="acronym">JOIN</acronym> table after those methods have
+                been called. The  <span class="methodname">columns()</span> method allows you to add
+                specific columns at any point before the query is executed. You can supply the
+                columns as either a string or <span class="classname">Zend_Db_Expr</span> or as an array of
+                these elements. The second argument to this method can be omitted, implying that the
+                columns are to be added to the <acronym class="acronym">FROM</acronym> table, otherwise an existing
+                correlation name must be used.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #11 Examples of adding columns with the columns() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">columns</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build the same query, specifying correlation names:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #ff0000;">'p.product_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">columns</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'p'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #808080; font-style: italic;">// Alternatively use columns('p.product_name')</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.join" name="zend.db.select.building.join"><div class="info"><h1 class="title">Adding Another Table to the Query with JOIN</h1></div>
+            
+
+            <p class="para">
+                Many useful queries involve using a <acronym class="acronym">JOIN</acronym> to combine rows from
+                multiple tables. You can add tables to a <span class="classname">Zend_Db_Select</span> query
+                using the  <span class="methodname">join()</span> method. Using this method is similar to
+                the  <span class="methodname">from()</span> method, except you can also specify a join
+                condition in most cases.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #12 Example of the join() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;, l.*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p JOIN &quot;line_items&quot; AS l</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;ON p.product_id = l.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">join</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'l'</span> =&gt; <span style="color: #ff0000;">'line_items'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'p.product_id = l.product_id'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The second argument to  <span class="methodname">join()</span> is a string that is the join
+                condition. This is an expression that declares the criteria by which rows in one
+                table match rows in the other table. You can use correlation names in this
+                expression.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    No quoting is applied to the expression you specify for the join condition; if
+                    you have column names that need to be quoted, you must use
+                     <span class="methodname">quoteIdentifier()</span> as you form the string for the join
+                    condition.
+                <br />
+            </p></blockquote>
+
+            <p class="para">
+                The third argument to  <span class="methodname">join()</span> is an array of column names,
+                like that used in the  <span class="methodname">from()</span> method. It defaults to
+                &quot;<em class="emphasis">*</em>&quot;, supports correlation names, expressions, and
+                <span class="classname">Zend_Db_Expr</span> in the same way as the array of column names in
+                the  <span class="methodname">from()</span> method.
+            </p>
+
+            <p class="para">
+                To select no columns from a table, use an empty array for the list of columns. This
+                usage works in the  <span class="methodname">from()</span> method too, but typically you
+                want some columns from the primary table in your queries, whereas you might want no
+                columns from a joined table.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #13 Example of specifying no columns</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p JOIN &quot;line_items&quot; AS l</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;ON p.product_id = l.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">join</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'l'</span> =&gt; <span style="color: #ff0000;">'line_items'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'p.product_id = l.product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// empty list of columns</span></div></li></ol></div></div></div>
+
+
+                <div class="example-contents"><p>
+                    Note the empty  <span class="methodname">array()</span> in the above example in place of
+                    a list of columns from the joined table.
+                </p></div>
+            </div>
+
+            <p class="para">
+                <acronym class="acronym">SQL</acronym> has several types of joins. See the list below for the
+                methods to support different join types in <span class="classname">Zend_Db_Select</span>.
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">INNER JOIN</strong> with the
+                         <span class="methodname">join(table, join, [columns])</span> or
+                         <span class="methodname">joinInner(table, join, [columns])</span> methods.
+                    </p>
+
+                    <p class="para">
+                        This may be the most common type of join. Rows from each table are compared
+                        using the join condition you specify. The result set includes only the rows
+                        that satisfy the join condition. The result set can be empty if no rows
+                        satisfy this condition.
+                    </p>
+
+                    <p class="para">
+                        All <acronym class="acronym">RDBMS</acronym> brands support this join type.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">LEFT JOIN</strong> with the
+                         <span class="methodname">joinLeft(table, condition, [columns])</span> method.
+                    </p>
+
+                    <p class="para">
+                        All rows from the left operand table are included, matching rows from the
+                        right operand table included, and the columns from the right operand table
+                        are filled with <b><tt>NULL</tt></b> if no row exists matching the left
+                        table.
+                    </p>
+
+                    <p class="para">
+                        All <acronym class="acronym">RDBMS</acronym> brands support this join type.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">RIGHT JOIN</strong> with the
+                         <span class="methodname">joinRight(table, condition, [columns])</span> method.
+                    </p>
+
+                    <p class="para">
+                        Right outer join is the complement of left outer join. All rows from the
+                        right operand table are included, matching rows from the left operand table
+                        included, and the columns from the left operand table are filled with
+                        <b><tt>NULL</tt></b>&#039;s if no row exists matching the right table.
+                    </p>
+
+                    <p class="para">
+                        Some <acronym class="acronym">RDBMS</acronym> brands don&#039;t support this join type, but in
+                        general any right join can be represented as a left join by reversing the
+                        order of the tables.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">FULL JOIN</strong> with the
+                         <span class="methodname">joinFull(table, condition, [columns])</span> method.
+                    </p>
+
+                    <p class="para">
+                        A full outer join is like combining a left outer join and a right outer
+                        join. All rows from both tables are included, paired with each other on the
+                        same row of the result set if they satisfy the join condition, and
+                        otherwise paired with <b><tt>NULL</tt></b>&#039;s in place of columns from
+                        the other table.
+                    </p>
+
+                    <p class="para">
+                        Some <acronym class="acronym">RDBMS</acronym> brands don&#039;t support this join type.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">CROSS JOIN</strong> with the
+                         <span class="methodname">joinCross(table, [columns])</span> method.
+                    </p>
+
+                    <p class="para">
+                        A cross join is a Cartesian product. Every row in the first table is
+                        matched to every row in the second table. Therefore the number of rows in
+                        the result set is equal to the product of the number of rows in each table.
+                        You can filter the result set using conditions in a <acronym class="acronym">WHERE</acronym>
+                        clause; in this way a cross join is similar to the old
+                        <acronym class="acronym">SQL</acronym>-89 join syntax.
+                    </p>
+
+                    <p class="para">
+                        The  <span class="methodname">joinCross()</span> method has no parameter to specify
+                        the join condition. Some <acronym class="acronym">RDBMS</acronym> brands don&#039;t support this
+                        join type.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <strong class="command">NATURAL JOIN</strong> with the
+                         <span class="methodname">joinNatural(table, [columns])</span> method.
+                    </p>
+
+                    <p class="para">
+                        A natural join compares any columns that appear with the same name in
+                        both tables. The comparison is equality of all the columns; comparing the
+                        columns using inequality is not a natural join. Only natural inner joins
+                        are supported by this <acronym class="acronym">API</acronym>, even though
+                        <acronym class="acronym">SQL</acronym> permits natural outer joins as well.
+                    </p>
+
+                    <p class="para">
+                        The  <span class="methodname">joinNatural()</span> method has no parameter to
+                        specify the join condition.
+                    </p>
+                </li>
+            </ul>
+
+            <p class="para">
+                In addition to these join methods, you can simplify your queries by using the
+                JoinUsing methods. Instead of supplying a full condition to your join, you simply
+                pass the column name on which to join and the <span class="classname">Zend_Db_Select</span>
+                object completes the condition for you.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #14 Example of the joinUsing() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT *</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;table1&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;JOIN &quot;table2&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;ON &quot;table1&quot;.column1 = &quot;table2&quot;.column1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE column2 = 'foo'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'table1'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">joinUsing</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'table2'</span>, <span style="color: #ff0000;">'column1'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'column2 = ?'</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                Each of the applicable join methods in the <span class="classname">Zend_Db_Select</span>
+                component has a corresponding &#039;using&#039; method.
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">joinUsing(table, join, [columns])</span> and
+                         <span class="methodname">joinInnerUsing(table, join, [columns])</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">joinLeftUsing(table, join, [columns])</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">joinRightUsing(table, join, [columns])</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">joinFullUsing(table, join, [columns])</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" id="zend.db.select.building.where" name="zend.db.select.building.where"><div class="info"><h1 class="title">Adding a WHERE Clause</h1></div>
+            
+
+            <p class="para">
+                You can specify criteria for restricting rows of the result set using the
+                 <span class="methodname">where()</span> method. The first argument of this method is a
+                <acronym class="acronym">SQL</acronym> expression, and this expression is used in a
+                <acronym class="acronym">SQL</acronym> <acronym class="acronym">WHERE</acronym> clause in the query.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #15 Example of the where() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE price &gt; 100.00</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &gt; 100.00'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    No quoting is applied to expressions given to the
+                     <span class="methodname">where()</span> or  <span class="methodname">orWhere()</span> methods.
+                    If you have column names that need to be quoted, you must use
+                     <span class="methodname">quoteIdentifier()</span> as you form the string for the
+                    condition.
+                <br />
+            </p></blockquote>
+
+            <p class="para">
+                The second argument to the  <span class="methodname">where()</span> method is optional. It
+                is a value to substitute into the expression. <span class="classname">Zend_Db_Select</span>
+                quotes the value and substitutes it for a question-mark (&quot;<em class="emphasis">?</em>&quot;)
+                symbol in the expression.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #16 Example of a parameter in the where() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE (price &gt; 100.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$minimumPrice</span> = <span style="color: #cc66cc;">100</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &gt; ?'</span>, <span style="color: #0000ff;">$minimumPrice</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                You can pass an array as the second parameter to the
+                 <span class="methodname">where()</span> method when using the <acronym class="acronym">SQL</acronym> IN
+                operator.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #17 Example of an array parameter in the where() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE (product_id IN (1, 2, 3))</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$productIds</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1</span>, <span style="color: #cc66cc;">2</span>, <span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id IN (?)'</span>, <span style="color: #0000ff;">$productIds</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                You can invoke the  <span class="methodname">where()</span> method multiple times on the
+                same <span class="classname">Zend_Db_Select</span> object. The resulting query combines the
+                multiple terms together using <acronym class="acronym">AND</acronym> between them.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #18 Example of multiple where() methods</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE (price &gt; 100.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;AND (price &lt; 500.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$minimumPrice</span> = <span style="color: #cc66cc;">100</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$maximumPrice</span> = <span style="color: #cc66cc;">500</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &gt; ?'</span>, <span style="color: #0000ff;">$minimumPrice</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &lt; ?'</span>, <span style="color: #0000ff;">$maximumPrice</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                If you need to combine terms together using <acronym class="acronym">OR</acronym>, use the
+                 <span class="methodname">orWhere()</span> method. This method is used in the same way as
+                the  <span class="methodname">where()</span> method, except that the term specified is
+                preceded by <acronym class="acronym">OR</acronym>, instead of <acronym class="acronym">AND</acronym>.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #19 Example of the orWhere() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE (price &lt; 100.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;OR (price &gt; 500.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$minimumPrice</span> = <span style="color: #cc66cc;">100</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$maximumPrice</span> = <span style="color: #cc66cc;">500</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &lt; ?'</span>, <span style="color: #0000ff;">$minimumPrice</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">orWhere</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'price &gt; ?'</span>, <span style="color: #0000ff;">$maximumPrice</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                <span class="classname">Zend_Db_Select</span> automatically puts parentheses around each
+                expression you specify using the  <span class="methodname">where()</span> or
+                 <span class="methodname">orWhere()</span> methods. This helps to ensure that Boolean
+                operator precedence does not cause unexpected results.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #20 Example of parenthesizing Boolean expressions</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT product_id, product_name, price</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;WHERE (price &lt; 100.00 OR price &gt; 500.00)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;AND (product_name = 'Apple')</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$minimumPrice</span> = <span style="color: #cc66cc;">100</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$maximumPrice</span> = <span style="color: #cc66cc;">500</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$prod</span> = <span style="color: #ff0000;">'Apple'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span>, <span style="color: #ff0000;">'price'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;price &lt; $minimumPrice OR price &gt; $maximumPrice&quot;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_name = ?'</span>, <span style="color: #0000ff;">$prod</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                In the example above, the results would be quite different without the parentheses,
+                because <acronym class="acronym">AND</acronym> has higher precedence than <acronym class="acronym">OR</acronym>.
+                <span class="classname">Zend_Db_Select</span> applies the parentheses so the effect is that
+                each expression in successive calls to the  <span class="methodname">where()</span> bind
+                more tightly than the <acronym class="acronym">AND</acronym> that combines the expressions.
+            </p>
+        </div>
+
+        <div class="section" id="zend.db.select.building.group" name="zend.db.select.building.group"><div class="info"><h1 class="title">Adding a GROUP BY Clause</h1></div>
+            
+
+            <p class="para">
+                In <acronym class="acronym">SQL</acronym>, the <strong class="command">GROUP BY</strong> clause allows you to
+                reduce the rows of a query result set to one row per unique value found in the
+                columns named in the <strong class="command">GROUP BY</strong> clause.
+            </p>
+
+            <p class="para">
+                In <span class="classname">Zend_Db_Select</span>, you can specify the columns to use for
+                calculating the groups of rows using the  <span class="methodname">group()</span> method.
+                The argument to this method is a column or an array of columns to use in the
+                <strong class="command">GROUP BY</strong> clause.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #21 Example of the group() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, COUNT(*) AS line_items_per_product</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p JOIN &quot;line_items&quot; AS l</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;ON p.product_id = l.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;GROUP BY p.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">join</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'l'</span> =&gt; <span style="color: #ff0000;">'line_items'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'p.product_id = l.product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'line_items_per_product'</span> =&gt; <span style="color: #ff0000;">'COUNT(*)'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">group</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p.product_id'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                Like the columns array in the  <span class="methodname">from()</span> method, you can use
+                correlation names in the column name strings, and the column is quoted as an
+                identifier unless the string contains parentheses or is an object of type
+                <span class="classname">Zend_Db_Expr</span>.
+            </p>
+        </div>
+
+        <div class="section" id="zend.db.select.building.having" name="zend.db.select.building.having"><div class="info"><h1 class="title">Adding a HAVING Clause</h1></div>
+            
+
+            <p class="para">
+                In <acronym class="acronym">SQL</acronym>, the <b><tt>HAVING</tt></b> clause applies a
+                restriction condition on groups of rows. This is similar to how a
+                <b><tt>WHERE</tt></b> clause applies a restriction condition on rows. But the
+                two clauses are different because <b><tt>WHERE</tt></b> conditions are applied
+                before groups are defined, whereas <b><tt>HAVING</tt></b> conditions are
+                applied after groups are defined.
+            </p>
+
+            <p class="para">
+                In <span class="classname">Zend_Db_Select</span>, you can specify conditions for restricting
+                groups using the  <span class="methodname">having()</span> method. Its usage is similar to
+                that of the  <span class="methodname">where()</span> method. The first argument is a string
+                containing a <acronym class="acronym">SQL</acronym> expression. The optional second argument is a
+                value that is used to replace a positional parameter placeholder in the
+                <acronym class="acronym">SQL</acronym> expression. Expressions given in multiple invocations of the
+                 <span class="methodname">having()</span> method are combined using the Boolean
+                <acronym class="acronym">AND</acronym> operator, or the <acronym class="acronym">OR</acronym> operator if you
+                use the  <span class="methodname">orHaving()</span> method.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #22 Example of the having() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, COUNT(*) AS line_items_per_product</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p JOIN &quot;line_items&quot; AS l</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;ON p.product_id = l.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;GROUP BY p.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;HAVING line_items_per_product &gt; 10</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">join</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'l'</span> =&gt; <span style="color: #ff0000;">'line_items'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'p.product_id = l.product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'line_items_per_product'</span> =&gt; <span style="color: #ff0000;">'COUNT(*)'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">group</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p.product_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">having</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'line_items_per_product &gt; 10'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    No quoting is applied to expressions given to the
+                     <span class="methodname">having()</span> or  <span class="methodname">orHaving()</span>
+                    methods. If you have column names that need to be quoted, you must use
+                     <span class="methodname">quoteIdentifier()</span> as you form the string for the
+                    condition.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.db.select.building.order" name="zend.db.select.building.order"><div class="info"><h1 class="title">Adding an ORDER BY Clause</h1></div>
+            
+
+            <p class="para">
+                In <acronym class="acronym">SQL</acronym>, the <acronym class="acronym">ORDER</acronym> BY clause specifies one or
+                more columns or expressions by which the result set of a query is sorted. If
+                multiple columns are listed, the secondary columns are used to resolve ties; the
+                sort order is determined by the secondary columns if the preceding columns contain
+                identical values. The default sorting is from least value to greatest value. You can
+                also sort by greatest value to least value for a given column in the list by
+                specifying the keyword <b><tt>DESC</tt></b> after that column.
+            </p>
+
+            <p class="para">
+                In <span class="classname">Zend_Db_Select</span>, you can use the
+                 <span class="methodname">order()</span> method to specify a column or an array of columns
+                by which to sort. Each element of the array is a string naming a column. Optionally
+                with the <b><tt>ASC</tt></b> <b><tt>DESC</tt></b> keyword following it,
+                separated by a space.
+            </p>
+
+            <p class="para">
+                Like in the  <span class="methodname">from()</span> and  <span class="methodname">group()</span>
+                methods, column names are quoted as identifiers, unless they contain parentheses or
+                are an object of type <span class="classname">Zend_Db_Expr</span>.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #23 Example of the order() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, COUNT(*) AS line_items_per_product</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p JOIN &quot;line_items&quot; AS l</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp; &nbsp;ON p.product_id = l.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;GROUP BY p.product_id</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;ORDER BY &quot;line_items_per_product&quot; DESC, &quot;product_id&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">join</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'l'</span> =&gt; <span style="color: #ff0000;">'line_items'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'p.product_id = l.product_id'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'line_items_per_product'</span> =&gt; <span style="color: #ff0000;">'COUNT(*)'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">group</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p.product_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'line_items_per_product DESC'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.limit" name="zend.db.select.building.limit"><div class="info"><h1 class="title">Adding a LIMIT Clause</h1></div>
+            
+
+            <p class="para">
+                Some <acronym class="acronym">RDBMS</acronym> brands extend <acronym class="acronym">SQL</acronym> with a query
+                clause known as the <b><tt>LIMIT</tt></b> clause. This clause reduces the
+                number of rows in the result set to at most a number you specify. You can also
+                specify to skip a number of rows before starting to output. This feature makes it
+                easy to take a subset of a result set, for example when displaying query results on
+                progressive pages of output.
+            </p>
+
+            <p class="para">
+                In <span class="classname">Zend_Db_Select</span>, you can use the
+                 <span class="methodname">limit()</span> method to specify the count of rows and the number
+                of rows to skip. The <em class="emphasis">first</em> argument to this method is the
+                desired count of rows. The <em class="emphasis">second</em> argument is the number of
+                rows to skip.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #24 Example of the limit() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;LIMIT 10, 20</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Equivalent to:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;LIMIT 20 OFFSET 10</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">limit</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">20</span>, <span style="color: #cc66cc;">10</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    The <b><tt>LIMIT</tt></b> syntax is not supported by all
+                    <acronym class="acronym">RDBMS</acronym> brands. Some <acronym class="acronym">RDBMS</acronym> require different
+                    syntax to support similar functionality. Each
+                    <span class="classname">Zend_Db_Adapter_Abstract</span> class includes a method to
+                    produce <acronym class="acronym">SQL</acronym> appropriate for that <acronym class="acronym">RDBMS</acronym>.
+                <br />
+            </p></blockquote>
+
+            <p class="para">
+                Use the  <span class="methodname">limitPage()</span> method for an alternative way to
+                specify row count and offset. This method allows you to limit the result set to one
+                of a series of fixed-length subsets of rows from the query&#039;s total result set. In
+                other words, you specify the length of a &quot;page&quot; of results, and the ordinal number
+                of the single page of results you want the query to return. The page number is the
+                first argument of the  <span class="methodname">limitPage()</span> method, and the page
+                length is the second argument. Both arguments are required; they have no default
+                values.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #25 Example of the limitPage() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.&quot;product_id&quot;, p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;LIMIT 10, 20</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">limitPage</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">2</span>, <span style="color: #cc66cc;">10</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.distinct" name="zend.db.select.building.distinct"><div class="info"><h1 class="title">Adding the DISTINCT Query Modifier</h1></div>
+            
+
+            <p class="para">
+                The  <span class="methodname">distinct()</span> method enables you to add the
+                <b><tt>DISTINCT</tt></b> keyword to your <acronym class="acronym">SQL</acronym> query.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #26 Example of the distinct() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT DISTINCT p.&quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">distinct</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.for-update" name="zend.db.select.building.for-update"><div class="info"><h1 class="title">Adding the FOR UPDATE Query Modifier</h1></div>
+            
+
+            <p class="para">
+                The  <span class="methodname">forUpdate()</span> method enables you to add the
+                <acronym class="acronym">FOR</acronym> <acronym class="acronym">UPDATE</acronym> modifier to your
+                <acronym class="acronym">SQL</acronym> query.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #27 Example of forUpdate() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT FOR UPDATE p.*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">forUpdate</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.building.union" name="zend.db.select.building.union"><div class="info"><h1 class="title">Building a UNION Query</h1></div>
+            
+
+            <p class="para">
+                You can build union queries with <span class="classname">Zend_Db_Select</span> by passing an
+                array of <span class="classname">Zend_Db_Select</span> or <acronym class="acronym">SQL</acronym> Query
+                strings into the  <span class="methodname">union()</span> method. As second parameter you
+                can pass the <b><tt>Zend_Db_Select::SQL_UNION</tt></b> or
+                <b><tt>Zend_Db_Select::SQL_UNION_ALL</tt></b> constants to specify which type
+                of union you want to perform.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #28 Example of union() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$sql1</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$sql2</span> = <span style="color: #ff0000;">&quot;SELECT ...&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; -&gt;<span style="color: #006600;">union</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$sql1</span>, <span style="color: #0000ff;">$sql2</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; -&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;id&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.select.execute" name="zend.db.select.execute"><div class="info"><h1 class="title">Executing Select Queries</h1></div>
+        
+
+        <p class="para">
+            This section describes how to execute the query represented by a
+            <span class="classname">Zend_Db_Select</span> object.
+        </p>
+
+        <div class="section" id="zend.db.select.execute.query-adapter" name="zend.db.select.execute.query-adapter"><div class="info"><h1 class="title">Executing Select Queries from the Db Adapter</h1></div>
+            
+
+            <p class="para">
+                You can execute the query represented by the <span class="classname">Zend_Db_Select</span>
+                object by passing it as the first argument to the  <span class="methodname">query()</span>
+                method of a <span class="classname">Zend_Db_Adapter_Abstract</span> object. Use the
+                <span class="classname">Zend_Db_Select</span> objects instead of a string query.
+            </p>
+
+            <p class="para">
+                The  <span class="methodname">query()</span> method returns an object of type
+                <span class="classname">Zend_Db_Statement</span> or PDOStatement, depending on the adapter
+                type.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #29 Example using the Db adapter&#039;s query() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$stmt</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">query</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$select</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$stmt</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.execute.query-select" name="zend.db.select.execute.query-select"><div class="info"><h1 class="title">Executing Select Queries from the Object</h1></div>
+            
+
+            <p class="para">
+                As an alternative to using the  <span class="methodname">query()</span> method of the
+                adapter object, you can use the  <span class="methodname">query()</span> method of the
+                <span class="classname">Zend_Db_Select</span> object. Both methods return an object of type
+                <span class="classname">Zend_Db_Statement</span> or PDOStatement, depending on the adapter
+                type.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #30 Example using the Select object&#039;s query method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$stmt</span> = <span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">query</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$stmt</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.execute.tostring" name="zend.db.select.execute.tostring"><div class="info"><h1 class="title">Converting a Select Object to a SQL String</h1></div>
+            
+
+            <p class="para">
+                If you need access to a string representation of the <acronym class="acronym">SQL</acronym> query
+                corresponding to the <span class="classname">Zend_Db_Select</span> object, use the
+                 <span class="methodname">__toString()</span> method.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #31 Example of the __toString() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$sql</span> = <span style="color: #0000ff;">$select</span>-&gt;__toString<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;$sql<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// The output is the string:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT * FROM &quot;products&quot;</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.select.other" name="zend.db.select.other"><div class="info"><h1 class="title">Other methods</h1></div>
+        
+
+        <p class="para">
+            This section describes other methods of the <span class="classname">Zend_Db_Select</span> class
+            that are not covered above:  <span class="methodname">getPart()</span> and
+             <span class="methodname">reset()</span>.
+        </p>
+
+        <div class="section" id="zend.db.select.other.get-part" name="zend.db.select.other.get-part"><div class="info"><h1 class="title">Retrieving Parts of the Select Object</h1></div>
+            
+
+            <p class="para">
+                The  <span class="methodname">getPart()</span> method returns a representation of one part
+                of your <acronym class="acronym">SQL</acronym> query. For example, you can use this method to return
+                the array of expressions for the <b><tt>WHERE</tt></b> clause, or the array of
+                columns (or column expressions) that are in the <b><tt>SELECT</tt></b> list, or
+                the values of the count and offset for the <b><tt>LIMIT</tt></b> clause.
+            </p>
+
+            <p class="para">
+                The return value is not a string containing a fragment of <acronym class="acronym">SQL</acronym>
+                syntax. The return value is an internal representation, which is typically an array
+                structure containing values and expressions. Each part of the query has a different
+                structure.
+            </p>
+
+            <p class="para">
+                The single argument to the  <span class="methodname">getPart()</span> method is a string
+                that identifies which part of the Select query to return. For example, the string
+                <strong class="command">&#039;from&#039;</strong> identifies the part of the Select object that stores
+                information about the tables in the <b><tt>FROM</tt></b> clause, including
+                joined tables.
+            </p>
+
+            <p class="para">
+                The <span class="classname">Zend_Db_Select</span> class defines constants you can use for
+                parts of the <acronym class="acronym">SQL</acronym> query. You can use these constant definitions,
+                or you can the literal strings.
+            </p>
+
+            <table class="doctable table"><div class="info"><caption><b>Constants used by getPart() and reset()</b></caption></div>
+                
+
+                
+                    <thead valign="middle">
+                        <tr valign="middle">
+                            <th>Constant</th>
+                            <th>String value</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody valign="middle" class="tbody">
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::DISTINCT</tt></b></td>
+                            <td align="left"><strong class="command">&#039;distinct&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::FOR_UPDATE</tt></b></td>
+                            <td align="left"><strong class="command">&#039;forupdate&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::COLUMNS</tt></b></td>
+                            <td align="left"><strong class="command">&#039;columns&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::FROM</tt></b></td>
+                            <td align="left"><strong class="command">&#039;from&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::WHERE</tt></b></td>
+                            <td align="left"><strong class="command">&#039;where&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::GROUP</tt></b></td>
+                            <td align="left"><strong class="command">&#039;group&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::HAVING</tt></b></td>
+                            <td align="left"><strong class="command">&#039;having&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::ORDER</tt></b></td>
+                            <td align="left"><strong class="command">&#039;order&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::LIMIT_COUNT</tt></b></td>
+                            <td align="left"><strong class="command">&#039;limitcount&#039;</strong></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left"><b><tt>Zend_Db_Select::LIMIT_OFFSET</tt></b></td>
+                            <td align="left"><strong class="command">&#039;limitoffset&#039;</strong></td>
+                        </tr>
+
+                    </tbody>
+                
+            </table>
+
+
+            <div class="example"><div class="info"><p><b>Example #32 Example of the getPart() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// You can use a string literal to specify the part</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$orderData</span> = <span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">getPart</span><span style="color: #66cc66;">&#40;</span> <span style="color: #ff0000;">'order'</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// You can use a constant to specify the same part</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$orderData</span> = <span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">getPart</span><span style="color: #66cc66;">&#40;</span> Zend_Db_Select::<span style="color: #006600;">ORDER</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// The return value may be an array structure, not a string.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Each part has a different structure.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span> <span style="color: #0000ff;">$orderData</span> <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.select.other.reset" name="zend.db.select.other.reset"><div class="info"><h1 class="title">Resetting Parts of the Select Object</h1></div>
+            
+
+            <p class="para">
+                The  <span class="methodname">reset()</span> method enables you to clear one specified part
+                of the <acronym class="acronym">SQL</acronym> query, or else clear all parts of the
+                <acronym class="acronym">SQL</acronym> query if you omit the argument.
+            </p>
+
+            <p class="para">
+                The single argument is optional. You can specify the part of the query to clear,
+                using the same strings you used in the argument to the
+                 <span class="methodname">getPart()</span> method. The part of the query you specify is
+                reset to a default state.
+            </p>
+
+            <p class="para">
+                If you omit the parameter,  <span class="methodname">reset()</span> changes all parts of the
+                query to their default state. This makes the <span class="classname">Zend_Db_Select</span>
+                object equivalent to a new object, as though you had just instantiated it.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #33 Example of the reset() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Build this query:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;ORDER BY &quot;product_name&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$db</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">from</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'p'</span> =&gt; <span style="color: #ff0000;">'products'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_name'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Changed requirement, instead order by a different columns:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;SELECT p.*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;FROM &quot;products&quot; AS p</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//&nbsp; &nbsp;ORDER BY &quot;product_id&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Clear one part so we can redefine it</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">reset</span><span style="color: #66cc66;">&#40;</span> Zend_Db_Select::<span style="color: #006600;">ORDER</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// And specify a different column</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Clear all parts of the query</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span>-&gt;<span style="color: #006600;">reset</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.profiler.html">Zend_Db_Profiler</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.html">Zend_Db_Table</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.db.html">Zend_Db</a></li>
+  <li><a href="zend.db.adapter.html">Zend_Db_Adapter</a></li>
+  <li><a href="zend.db.statement.html">Zend_Db_Statement</a></li>
+  <li><a href="zend.db.profiler.html">Zend_Db_Profiler</a></li>
+  <li class="active"><a href="zend.db.select.html">Zend_Db_Select</a></li>
+  <li><a href="zend.db.table.html">Zend_Db_Table</a></li>
+  <li><a href="zend.db.table.row.html">Zend_Db_Table_Row</a></li>
+  <li><a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a></li>
+  <li><a href="zend.db.table.relationships.html">Zend_Db_Table Relationships</a></li>
+  <li><a href="zend.db.table.definition.html">Zend_Db_Table_Definition</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

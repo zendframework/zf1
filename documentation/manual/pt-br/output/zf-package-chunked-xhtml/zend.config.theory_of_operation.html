@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Teoria de Opera&ccedil;&atilde;o - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.config.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.config.html">Zend_Config</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.config.adapters.ini.html">Zend_Config_Ini</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.config.theory_of_operation" class="section"><div class="info"><h1 class="title">Teoria de Operação</h1></div>
+    
+
+    <p class="para">
+        Dados de configuração são disponibilizados para o construtor
+        <span class="classname">Zend_Config</span> através de uma matriz associativa, que pode ser
+        multi-dimensional, a fim organizar os dados do geral ao específico. Classes adaptadoras
+        específicas adaptam os dados de configuração armazenados para produzir uma matriz
+        associativa para o construtor <span class="classname">Zend_Config</span>. Scripts do usuário
+        poderão fornecer matrizes diretamente para o construtor <span class="classname">Zend_Config</span>,
+        sem usar uma classe adaptadora, visto que pode ser conveniente em determinadas situações.
+    </p>
+
+    <p class="para">
+        Cada dado de configuração de cada valor da matriz torna-se uma propriedade do objeto
+        <span class="classname">Zend_Config</span>. A chave é usada como o nome da propriedade. Se um valor
+        é também uma matriz, então a propriedade do objeto resultante é criada como um novo objeto
+        <span class="classname">Zend_Config</span>, carregado com os dados da matriz. Isso ocorre
+        recursivamente, tal como uma hierarquia de dados de configuração podendo ser criados com
+        qualquer número de níveis.
+    </p>
+
+    <p class="para">
+        <span class="classname">Zend_Config</span> implementa as interfaces <em class="emphasis">Countable</em>
+        e <em class="emphasis">Iterator</em>, a fim de facilitar o acesso simplificado aos dados de
+        configuração. Assim, pode-se usar a função
+        <a href="http://php.net/count" class="link external">&raquo;  <span class="methodname">count()</span></a>
+        e construtores do <acronym class="acronym">PHP</acronym> como
+        <a href="http://php.net/foreach" class="link external">&raquo; <em class="emphasis">foreach</em></a>
+        com os objetos <span class="classname">Zend_Config</span>.
+    </p>
+
+    <p class="para">
+        Por padrão, os dados de configuração disponibilizados através de
+        <span class="classname">Zend_Config</span> são somente leitura, e uma atribuição (por exemplo,
+        <strong class="command">$config-&gt;database-&gt;host = &#039;example.com&#039;;</strong>) resulta em uma exceção. Esse
+        comportamento padrão pode ser anulado através do construtor, no entanto, permitindo apenas
+        a modificação dos valores dos dados. Além disso, quando as modificações são permitidas,
+        <span class="classname">Zend_Config</span> suporta a desativação dos valores (ou seja,
+         <span class="methodname">unset($config-&gt;database-&gt;host)</span>). O método
+         <span class="methodname">readOnly()</span> pode ser usado para determinar se as modificações para
+        um determinado objeto <span class="classname">Zend_Config</span> são permitidas e o método
+         <span class="methodname">setReadOnly()</span> pode ser usado para interromper quaisquer alterações
+        posteriores a um objeto <span class="classname">Zend_Config</span> que foi criado
+        permitindo modificações.
+    </p>
+
+    <blockquote><p><b class="note">Note</b>: 
+        
+            É importante não confundir alterações em memória com dados de configuração salvos em
+            mídia específica de armazenamento. Ferramentas para criar e modificar dados de
+            configuração em diversas mídia de armazenamento estão fora do escopo em relação ao
+            <span class="classname">Zend_Config</span>. Soluções de código aberto de terceiros estão
+            prontamente disponíveis para esta finalidade.
+        <br />
+    </p></blockquote>
+
+    <p class="para">
+        Classes adaptadoras herdam da classe <span class="classname">Zend_Config</span> visto que utilizam
+        a sua funcionalidade.
+    </p>
+
+    <p class="para">
+        A família de classes <span class="classname">Zend_Config</span> permite que os dados de
+        configuração sejam organizados em seções. Os objetos adaptadores
+        <span class="classname">Zend_Config</span> podem ser carregados com uma única seção especificada,
+        várias seções especificadas, ou todas as seções (se nenhum for especificado).
+    </p>
+
+    <p class="para">
+        Classes adaptadoras <span class="classname">Zend_Config</span> suportam um modelo de herança única
+        que permite que dados de configuração sejam herdados de uma seção de dados de configuração
+        para outra. Isso é oferecido de forma a reduzir ou eliminar a necessidade de duplicação dos
+        dados de configuração para diferentes fins. Uma seção herdada também pode substituir os
+        valores que ela herda através de sua seção pai. Como a herança de classe no
+        <acronym class="acronym">PHP</acronym>, uma seção pode herdar de uma seção pai, que pode herdar de uma
+        seção avó, e assim por diante, mas a herança múltipla (ou seja, seção C herdando
+        diretamente das seções pais A e B) não é suportada.
+    </p>
+
+    <p class="para">
+        Se você tem dois objetos <span class="classname">Zend_Config</span>, você pode juntá-los em um
+        único objeto usando a função  <span class="methodname">merge()</span>. Por exemplo, dados
+        <var class="varname">$config</var> e <var class="varname">$localConfig</var>, você poderá unificar os
+        dados de <var class="varname">$localConfig</var> para <var class="varname">$config</var> usando
+        <strong class="command">$config-&gt;merge($localConfig);</strong>. Os itens em
+        <var class="varname">$localConfig</var> serão substituídos por quaisquer itens
+        com mesmo nome em <var class="varname">$config</var>.
+    </p>
+
+    <blockquote><p><b class="note">Note</b>: 
+        
+            O objeto <span class="classname">Zend_Config</span> que está executando a fusão deve ter sido
+            construído permitindo modificações, passando <b><tt>TRUE</tt></b> como o segundo
+            parâmetro do construtor. O método  <span class="methodname">setReadOnly()</span> pode então ser
+            usado para impedir quaisquer alterações posteriores, após a fusão estiver completa.
+        <br />
+    </p></blockquote>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.config.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.config.html">Zend_Config</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.config.adapters.ini.html">Zend_Config_Ini</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.config.html">Zend_Config</a></li>
+  <li><a href="zend.config.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li class="active"><a href="zend.config.theory_of_operation.html">Teoria de Opera&ccedil;&atilde;o</a></li>
+  <li><a href="zend.config.adapters.ini.html">Zend_Config_Ini</a></li>
+  <li><a href="zend.config.adapters.xml.html">Zend_Config_Xml</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

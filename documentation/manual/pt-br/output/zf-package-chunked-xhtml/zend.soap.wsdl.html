@@ -1,0 +1,681 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>WSDL Accessor - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.soap.client.html">Zend_Soap_Client</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.soap.html">Zend_Soap</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.soap.autodiscovery.html">AutoDiscovery</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.soap.wsdl" class="section"><div class="info"><h1 class="title">WSDL Accessor</h1></div>
+    
+
+    <blockquote><p><b class="note">Note</b>: 
+        
+            <span class="classname">Zend_Soap_Wsdl</span> class is used by
+            <span class="classname">Zend_Soap_Server</span> component internally to operate with WSDL
+            documents. Nevertheless, you could also use functionality provided by this class for
+            your own needs. The <span class="classname">Zend_Soap_Wsdl</span> package contains both a parser
+            and a builder of WSDL documents.
+        <br />
+
+        
+            If you don&#039;t plan to do this, you can skip this documentation section.
+        <br />
+    </p></blockquote>
+
+    <div class="section" id="zend.soap.wsdl.constructor" name="zend.soap.wsdl.constructor"><div class="info"><h1 class="title">Zend_Soap_Wsdl constructor</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Wsdl</span> constructor takes three parameters:
+
+            <ol type="1">
+                <li class="listitem">
+                    <span class="simpara">
+                        <var class="varname">$name</var> - name of the Web Service being described.
+                    </span>
+                </li>
+
+                <li class="listitem">
+                    <span class="simpara">
+                        <var class="varname">$uri</var> - <acronym class="acronym">URI</acronym> where the WSDL will be
+                        available (could also be a reference to the file in the filesystem.)
+                    </span>
+                </li>
+
+                <li class="listitem">
+                    <span class="simpara">
+                        <var class="varname">$strategy</var> - optional flag used to identify the strategy
+                        for complex types (objects) detection. This was a boolean
+                        <var class="varname">$extractComplexTypes</var> before version 1.7 and can still be
+                        set as a boolean for backwards compatibility. By default the 1.6 detection
+                        behaviour is set. To read more on complex type detection strategies go to
+                        the section: <a href="zend.soap.wsdl.html#zend.soap.wsdl.types.add_complex" class="link">Add complex
+                            types</a>.
+                    </span>
+                </li>
+            </ol>
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.addmessage" name="zend.soap.wsdl.addmessage"><div class="info"><h1 class="title">addMessage() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addMessage($name, $parts)</span> method adds new message description
+            to the WSDL document (/definitions/message element).
+        </p>
+
+        <p class="para">
+            Each message correspond to methods in terms of <span class="classname">Zend_Soap_Server</span>
+            and <span class="classname">Zend_Soap_Client</span> functionality.
+        </p>
+
+        <p class="para">
+           <var class="varname">$name</var> parameter represents message name.
+        </p>
+
+        <p class="para">
+           <var class="varname">$parts</var> parameter is an array of message parts which describe
+           <acronym class="acronym">SOAP</acronym> call parameters. It&#039;s an associative array: &#039;part name&#039; (SOAP
+           call parameter name) =&gt; &#039;part type&#039;.
+        </p>
+
+        <p class="para">
+            Type mapping management is performed using  <span class="methodname">addTypes()</span>,
+             <span class="methodname">addTypes()</span> and  <span class="methodname">addComplexType()</span>
+            methods (see below).
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Messages parts can use either &#039;element&#039; or &#039;type&#039; attribute for typing
+                (see <tt class="uri">http://www.w3.org/TR/wsdl#_messages</tt>).
+            <br />
+
+            
+                &#039;element&#039; attribute must refer to a corresponding element of data type definition.
+                &#039;type&#039; attribute refers to a corresponding complexType entry.
+            <br />
+
+            
+                All standard XSD types have both &#039;element&#039; and &#039;complexType&#039; definitions
+                (see <tt class="uri">http://schemas.xmlsoap.org/soap/encoding/</tt>).
+            <br />
+
+            
+                All non-standard types, which may be added using
+                 <span class="methodname">Zend_Soap_Wsdl::addComplexType()</span> method, are described
+                using &#039;complexType&#039; node of &#039;/definitions/types/schema/&#039; section of WSDL document.
+            <br />
+
+            
+                So  <span class="methodname">addMessage()</span> method always uses &#039;type&#039; attribute to
+                describe types.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_port_type" name="zend.soap.wsdl.add_port_type"><div class="info"><h1 class="title">addPortType() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addPortType($name)</span> method adds new port type to the WSDL
+            document (/definitions/portType) with the specified port type name.
+        </p>
+
+        <p class="para">
+            It joins a set of Web Service methods defined in terms of
+            <span class="classname">Zend_Soap_Server</span> implementation.
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_porttypes</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_port_operation" name="zend.soap.wsdl.add_port_operation"><div class="info"><h1 class="title">addPortOperation() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addPortOperation($portType, $name, $input = false, $output = false, $fault
+                = false)</span> method adds new port operation to the specified port type of
+            the WSDL document (/definitions/portType/operation).
+        </p>
+
+        <p class="para">
+            Each port operation corresponds to a class method (if Web Service is based on a class)
+            or function (if Web Service is based on a set of methods) in terms of
+            <span class="classname">Zend_Soap_Server</span> implementation.
+        </p>
+
+        <p class="para">
+            It also adds corresponding port operation messages depending on specified
+            <var class="varname">$input</var>, <var class="varname">$output</var> and <var class="varname">$fault</var>
+            parameters.
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    <span class="classname">Zend_Soap_Server</span> component generates two messages for
+                    each port operation while describing service based on
+                    <span class="classname">Zend_Soap_Server</span> class:
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                input message with name <code class="code">$methodName . &#039;Request&#039;</code>.
+                            </p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para">
+                                output message with name <code class="code">$methodName . &#039;Response&#039;</code>.
+                            </p>
+                        </li>
+                    </ul>
+                <br />
+            </p></blockquote>
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_request-response</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_binding" name="zend.soap.wsdl.add_binding"><div class="info"><h1 class="title">addBinding() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addBinding($name, $portType)</span> method adds new binding to the
+            WSDL document (/definitions/binding).
+        </p>
+
+        <p class="para">
+            &#039;binding&#039; WSDL document node defines message format and protocol details for operations
+            and messages defined by a particular portType (see <tt class="uri">http://www.w3.org/TR/wsdl#_bindings</tt>).
+        </p>
+
+        <p class="para">
+            The method creates binding node and returns it. Then it may be used to fill with actual
+            data.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> implementation uses
+            <code class="code">$serviceName . &#039;Binding&#039;</code> name for &#039;binding&#039; element of WSDL document.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_binding_operation" name="zend.soap.wsdl.add_binding_operation"><div class="info"><h1 class="title">addBindingOperation() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addBindingOperation($binding, $name, $input = false, $output = false, $fault
+                = false)</span> method adds an operation to a binding element
+            (/definitions/binding/operation) with the specified name.
+        </p>
+
+        <p class="para">
+            It takes <code class="code">XML_Tree_Node</code> object returned by
+             <span class="methodname">addBinding()</span> as an input (<var class="varname">$binding</var>
+            parameter) to add &#039;operation&#039; element with input/output/false entries depending on
+            specified parameters
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> implementation adds corresponding binding entry
+            for each Web Service method with input and output entries defining &#039;soap:body&#039; element
+            as &#039;&lt;soap:body use=&quot;encoded&quot;
+                encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;/&gt;
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_bindings</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_soap_binding" name="zend.soap.wsdl.add_soap_binding"><div class="info"><h1 class="title">addSoapBinding() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addSoapBinding($binding, $style = &#039;document&#039;, $transport =
+                &#039;http://schemas.xmlsoap.org/soap/http&#039;)</span> method adds
+            <acronym class="acronym">SOAP</acronym> binding (&#039;soap:binding&#039;) entry to the binding element (which is
+            already linked to some port type) with the specified style and transport
+            (Zend_Soap_Server implementation uses RPC style over <acronym class="acronym">HTTP</acronym>).
+        </p>
+
+        <p class="para">
+            &#039;/definitions/binding/soap:binding&#039; element is used to signify that the binding is bound
+            to the <acronym class="acronym">SOAP</acronym> protocol format.
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_bindings</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_soap_operation" name="zend.soap.wsdl.add_soap_operation"><div class="info"><h1 class="title">addSoapOperation() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addSoapOperation($binding, $soap_action)</span> method adds
+            <acronym class="acronym">SOAP</acronym> operation (&#039;soap:operation&#039;) entry to the binding element with
+            the specified action. &#039;style&#039; attribute of the &#039;soap:operation&#039; element is not used
+            since programming model (RPC-oriented or document-oriented) may be using
+             <span class="methodname">addSoapBinding()</span> method
+        </p>
+
+        <p class="para">
+            &#039;soapAction&#039; attribute of &#039;/definitions/binding/soap:operation&#039; element specifies the
+            value of the <acronym class="acronym">SOAP</acronym>Action header for this operation. This attribute is
+            required for <acronym class="acronym">SOAP</acronym> over <acronym class="acronym">HTTP</acronym> and
+            <em class="emphasis">must not</em> be specified for other transports.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> implementation uses
+            <code class="code">$serviceUri . &#039;#&#039; . $methodName</code> for <acronym class="acronym">SOAP</acronym> operation
+            action name.
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_soap:operation</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_service" name="zend.soap.wsdl.add_service"><div class="info"><h1 class="title">addService() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addService($name, $port_name, $binding, $location)</span> method adds
+            &#039;/definitions/service&#039; element to the WSDL document with the specified Wed Service name,
+            port name, binding, and location.
+        </p>
+
+        <p class="para">
+            WSDL 1.1 allows to have several port types (sets of operations) per service. This
+            ability is not used by <span class="classname">Zend_Soap_Server</span> implementation and not
+            supported by <span class="classname">Zend_Soap_Wsdl</span> class.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> implementation uses:
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <code class="code">$name . &#039;Service&#039;</code> as a Web Service name,
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <code class="code">$name . &#039;Port&#039;</code> as a port type name,
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <code class="code">&#039;tns:&#039; . $name . &#039;Binding&#039;</code>
+
+                        <a href="#fnid1" name="fn1"><sup>[1]</sup></a>
+                            
+                                <code class="code">&#039;tns:&#039; namespace</code><acronym class="acronym">URI</acronym><code class="code">&#039;http://&#039; .$_SERVER[&#039;HTTP_HOST&#039;]
+                                    . $_SERVER[&#039;SCRIPT_NAME&#039;]</code>
+                        
+
+                        as binding name,
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        script <acronym class="acronym">URI</acronym>
+
+                        <a href="#fnid2" name="fn2"><sup>[2]</sup></a>
+                            
+                                <code class="code">&#039;http://&#039; .$_SERVER[&#039;HTTP_HOST&#039;] .
+                                    $_SERVER[&#039;SCRIPT_NAME&#039;]</code>
+                            
+                        
+
+                        as a service URI for Web Service definition using classes.
+                    </p>
+                </li>
+            </ul>
+
+            where <var class="varname">$name</var> is a class name for the Web Service definition mode using
+            class and script name for the Web Service definition mode using set of functions.
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_services</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.types" name="zend.soap.wsdl.types"><div class="info"><h1 class="title">Type mapping</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Soap</span> WSDL accessor implementation uses the following type
+            mapping between <acronym class="acronym">PHP</acronym> and <acronym class="acronym">SOAP</acronym> types:
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">PHP strings &lt;-&gt; <code class="code">xsd:string</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP integers &lt;-&gt; <code class="code">xsd:int</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP floats and doubles &lt;-&gt; <code class="code">xsd:float</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP booleans &lt;-&gt; <code class="code">xsd:boolean</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP arrays &lt;-&gt; <code class="code">soap-enc:Array</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP object &lt;-&gt; <code class="code">xsd:struct</code>.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <acronym class="acronym">PHP</acronym> class &lt;-&gt; based on complex type strategy (See:
+                        <a href="zend.soap.wsdl.html#zend.soap.wsdl.types.add_complex" class="link">this section</a>)
+
+                        <a href="#fnid3" name="fn3"><sup>[3]</sup></a>
+                            <span class="classname">Zend_Soap_Wsdl</span><span class="classname">Zend_Soap_Wsdl_Strategy_DefaultComplexType</span><span class="classname">Zend_Soap_Wsdl_Strategy_Interface</span><var class="varname">$extractComplexType</var><span class="classname">Zend_Soap_Wsdl_Strategy_DefaultComplexType</span>
+                                <span class="classname">Zend_Soap_Wsdl_Strategy_AnyType</span>
+                        .
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">PHP void &lt;-&gt; empty type.</p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        If type is not matched to any of these types by some reason, then
+                        <code class="code">xsd:anyType</code> is used.
+                    </p>
+                </li>
+            </ul>
+
+            Where <code class="code">xsd:</code> is &quot;http://www.w3.org/2001/XMLSchema&quot; namespace,
+            <code class="code">soap-enc:</code> is a &quot;http://schemas.xmlsoap.org/soap/encoding/&quot; namespace,
+            <code class="code">tns:</code> is a &quot;target namespace&quot; for a service.
+        </p>
+
+        <div class="section" id="zend.soap.wsdl.types.retrieve" name="zend.soap.wsdl.types.retrieve"><div class="info"><h1 class="title">Retrieving type information</h1></div>
+            
+
+            <p class="para">
+                 <span class="methodname">getType($type)</span> method may be used to get mapping for a
+                specified <acronym class="acronym">PHP</acronym> type:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$wsdl</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Wsdl<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Web_Service'</span>, <span style="color: #0000ff;">$myWebServiceUri</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$soapIntType</span> = <span style="color: #0000ff;">$wsdl</span>-&gt;<span style="color: #006600;">getType</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'int'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyClass <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$soapMyClassType</span> = <span style="color: #0000ff;">$wsdl</span>-&gt;<span style="color: #006600;">getType</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'MyClass'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.soap.wsdl.types.add_complex" name="zend.soap.wsdl.types.add_complex"><div class="info"><h1 class="title">Adding complex type information</h1></div>
+            
+
+            <p class="para">
+                 <span class="methodname">addComplexType($type)</span> method is used to add complex types
+                (PHP classes) to a WSDL document.
+            </p>
+
+            <p class="para">
+                It&#039;s automatically used by  <span class="methodname">getType()</span> method to add
+                corresponding complex types of method parameters or return types.
+            </p>
+
+            <p class="para">
+                Its detection and building algorithm is based on the currently active detection
+                strategy for complex types. You can set the detection strategy either by specifying
+                the class name as string or instance of a
+                <span class="classname">Zend_Soap_Wsdl_Strategy_Interface</span> implementation as the third
+                parameter of the constructor or using the
+                 <span class="methodname">setComplexTypeStrategy($strategy)</span> function of
+                <span class="classname">Zend_Soap_Wsdl</span>. The following detection strategies currently
+                exist:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        Class <span class="classname">Zend_Soap_Wsdl_Strategy_DefaultComplexType</span>:
+                        Enabled by default (when no third constructor parameter is set). Iterates
+                        over the public attributes of a class type and registers them as subtypes of
+                        the complex object type.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        Class <span class="classname">Zend_Soap_Wsdl_Strategy_AnyType</span>: Casts all
+                        complex types into the simple XSD type xsd:anyType. Be careful this shortcut
+                        for complex type detection can probably only be handled successfully by
+                        weakly typed languages such as <acronym class="acronym">PHP</acronym>.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        Class <span class="classname">Zend_Soap_Wsdl_Strategy_ArrayOfTypeSequence</span>:
+                        This strategy allows to specify return parameters of the type:
+                        <code class="code">int[]</code> or <code class="code">string[]</code>. As of Zend Framework version
+                        1.9 it can handle both simple <acronym class="acronym">PHP</acronym> types such as int,
+                        string, boolean, float aswell as objects and arrays of objects.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        Class <span class="classname">Zend_Soap_Wsdl_Strategy_ArrayOfTypeComplex</span>:
+                        This strategy allows to detect very complex arrays of objects. Objects types
+                        are detected based on the
+                        <span class="classname">Zend_Soap_Wsdl_Strategy_DefaultComplexType</span> and an
+                        array is wrapped around that definition.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        Class <span class="classname">Zend_Soap_Wsdl_Strategy_Composite</span>: This
+                        strategy can combine all strategies by connecting <acronym class="acronym">PHP</acronym>
+                        Complex types (Classnames) to the desired strategy via the
+                         <span class="methodname">connectTypeToStrategy($type, $strategy)</span> method. A
+                        complete typemap can be given to the constructor as an array with
+                        <var class="varname">$type</var> -&gt; <var class="varname">$strategy</var> pairs. The second
+                        parameter specifies the default strategy that will be used if an unknown
+                        type is requested for adding. This parameter defaults to the
+                        <span class="classname">Zend_Soap_Wsdl_Strategy_DefaultComplexType</span> strategy.
+                    </p>
+                </li>
+            </ul>
+
+            <p class="para">
+                 <span class="methodname">addComplexType()</span> method creates
+                &#039;/definitions/types/xsd:schema/xsd:complexType&#039; element for
+                each described complex type with name of the specified <acronym class="acronym">PHP</acronym> class.
+            </p>
+
+            <p class="para">
+                Class property <em class="emphasis">MUST</em> have docblock section with the described
+                <acronym class="acronym">PHP</acronym> type to have property included into WSDL description.
+            </p>
+
+            <p class="para">
+                 <span class="methodname">addComplexType()</span> checks if type is already described within
+                types section of the WSDL document.
+            </p>
+
+            <p class="para">
+                It prevents duplications if this method is called two or more times and recursion in
+                the types definition section.
+            </p>
+
+            <p class="para">
+                See <tt class="uri">http://www.w3.org/TR/wsdl#_types</tt> for the details.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.add_documentation" name="zend.soap.wsdl.add_documentation"><div class="info"><h1 class="title">addDocumentation() method</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">addDocumentation($input_node, $documentation)</span> method adds human
+            readable documentation using optional &#039;wsdl:document&#039; element.
+        </p>
+
+        <p class="para">
+            &#039;/definitions/binding/soap:binding&#039; element is used to signify that the binding is bound
+            to the <acronym class="acronym">SOAP</acronym> protocol format.
+        </p>
+
+        <p class="para">
+            See <tt class="uri">http://www.w3.org/TR/wsdl#_documentation</tt> for the details.
+        </p>
+    </div>
+
+    <div class="section" id="zend.soap.wsdl.retrieve" name="zend.soap.wsdl.retrieve"><div class="info"><h1 class="title">Get finalized WSDL document</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">toXML()</span>,  <span class="methodname">toDomDocument()</span> and
+             <span class="methodname">dump($filename = false)</span> methods may be used to get WSDL
+            document as an <acronym class="acronym">XML</acronym>, DOM structure or a file.
+        </p>
+    </div>
+<div class="footnote"><a name="fnid1" href="#fn1"><sup>[1]</sup></a><span class="para footnote"> is defined as script
+                                 ().
+                            </span></div>
+<div class="footnote"><a name="fnid2" href="#fn2"><sup>[2]</sup></a><span class="para footnote"></span></div>
+<div class="footnote"><a name="fnid3" href="#fn3"><sup>[3]</sup></a><span class="para footnote">
+                                By default  will be created
+                                with the
+                                
+                                class as detection algorithm for complex types. The first parameter
+                                of the AutoDiscover constructor takes any complex type strategy
+                                implementing
+                                 or a string
+                                with the name of the class. For backwards compatibility with
+                                 boolean variables are parsed
+                                the following way: If <b><tt>TRUE</tt></b>,
+                                ,
+                                if <b><tt>FALSE</tt></b>.
+                            </span></div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.soap.client.html">Zend_Soap_Client</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.soap.html">Zend_Soap</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.soap.autodiscovery.html">AutoDiscovery</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.soap.html">Zend_Soap</a></li>
+  <li><a href="zend.soap.server.html">Zend_Soap_Server</a></li>
+  <li><a href="zend.soap.client.html">Zend_Soap_Client</a></li>
+  <li class="active"><a href="zend.soap.wsdl.html">WSDL Accessor</a></li>
+  <li><a href="zend.soap.autodiscovery.html">AutoDiscovery</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

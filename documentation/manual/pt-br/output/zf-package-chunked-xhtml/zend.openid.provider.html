@@ -1,0 +1,542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_OpenId_Provider - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.openid.html">Zend_OpenId</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.paginator.html">Zend_Paginator</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.openid.provider" class="section"><div class="info"><h1 class="title">Zend_OpenId_Provider</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_OpenId_Provider</span> can be used to implement OpenID
+        servers. This chapter provides examples that demonstrate how to
+        build a very basic server. However, for implementation of a production OpenID
+        server (such as <a href="http://www.myopenid.com" class="link external">&raquo; www.myopenid.com</a>) you
+        may have to deal with more complex issues.
+    </p>
+
+    <div class="section" id="zend.openid.provider.start" name="zend.openid.provider.start"><div class="info"><h1 class="title">Quick start</h1></div>
+        
+
+        <p class="para">
+            The following example includes code for creating a user account
+            using <span class="classname">Zend_OpenId_Provider::register</span>. The link element with
+            <strong class="command">rel=&quot;openid.server&quot;</strong> points to our own server script. If you
+            submit this identity to an OpenID-enabled site, it will perform
+            authentication on this server.
+        </p>
+
+        <p class="para">
+            The code before the &lt;html&gt; tag is just a trick that automatically
+            creates a user account. You won&#039;t need such code when using real
+            identities.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 The Identity</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set up test identity</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_SERVER&quot;</span>, Zend_OpenId::<span style="color: #006600;">absoluteURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-8.php&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_ID&quot;</span>, Zend_OpenId::<span style="color: #006600;">selfURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_PASSWORD&quot;</span>, <span style="color: #ff0000;">&quot;123&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">hasUser</span><span style="color: #66cc66;">&#40;</span>TEST_ID<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">register</span><span style="color: #66cc66;">&#40;</span>TEST_ID, TEST_PASSWORD<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;&lt;head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;link rel=<span style="color: #ff0000;">&quot;openid.server&quot;</span> href=<span style="color: #ff0000;">&quot;&lt;?php echo TEST_SERVER;?&gt;&quot;</span> /&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/head&gt;&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> TEST_ID;?&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;&lt;/html&gt;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The following identity server script handles two kinds of requests
+            from OpenID-enabled sites (for association and authentication). Both of
+            them are handled by the same method:
+            <span class="classname">Zend_OpenId_Provider::handle</span>. The two arguments to the
+            <span class="classname">Zend_OpenId_Provider</span> constructor are <acronym class="acronym">URL</acronym>s of
+            login and trust pages, which ask for input from the end user.
+        </p>
+
+        <p class="para">
+            On success, the method <span class="classname">Zend_OpenId_Provider::handle</span>
+            returns a string that should be passed back to the OpenID-enabled site. On
+            failure, it returns <b><tt>FALSE</tt></b>. This example will return an
+            <acronym class="acronym">HTTP</acronym> 403 response if
+            <span class="classname">Zend_OpenId_Provider::handle</span> fails. You will get this response if
+            you open this script with a web browser, because it sends a non-OpenID conforming
+            request.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Simple Identity Provider</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-8-login.php&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">&quot;example-8-trust.php&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ret</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_string"><span style="color: #000066;">is_string</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$ret</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span> !== <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/header"><span style="color: #000066;">header</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HTTP/1.0 403 Forbidden'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Forbidden'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                It is a good idea to use a secure connection (HTTPS) for these scripts-
+                especially for the following interactive scripts- to prevent password
+                disclosure.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            The following script implements a login screen for an identity
+            server using <span class="classname">Zend_OpenId_Provider</span> and redirects to this page when
+            a required user has not yet logged in. On this page, a user will enter his password
+            to login.
+        </p>
+
+        <p class="para">
+            You should use the password &quot;123&quot; that was used in the identity script above.
+        </p>
+
+        <p class="para">
+            On submit, the script calls <span class="classname">Zend_OpenId_Provider::login</span>
+            with the accepted user&#039;s identity and password, then redirects back
+            to the main identity provider&#039;s script. On success, the
+            <span class="classname">Zend_OpenId_Provider::login</span> establishes a session between the
+            user and the identity provider and stores the information about
+            the user, who is now logged in. All following requests from the same user won&#039;t
+            require a login procedure- even if they come from another OpenID enabled
+            web site.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note that this session is between end-user and identity provider
+                only. OpenID enabled sites know nothing about it.
+            <br />
+        </p></blockquote>
+
+        <div class="example"><div class="info"><p><b>Example #3 Simple Login Screen</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'POST'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'login'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_identifier'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_password'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">login</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_identifier'</span><span style="color: #66cc66;">&#93;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_password'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_OpenId::<span style="color: #006600;">redirect</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-8.php&quot;</span>, <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;form method=<span style="color: #ff0000;">&quot;post&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;fieldset&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;legend&gt;OpenID Login&lt;/legend&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;table border=<span style="color: #cc66cc;">0</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;Name:&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;text&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;name=<span style="color: #ff0000;">&quot;openid_identifier&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;value=<span style="color: #ff0000;">&quot;&lt;?php echo htmlspecialchars($_GET['openid_identity']);?&gt;&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;Password:&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;text&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;name=<span style="color: #ff0000;">&quot;openid_password&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;value=<span style="color: #ff0000;">&quot;&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;&amp;nbsp;&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;submit&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;name=<span style="color: #ff0000;">&quot;openid_action&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;value=<span style="color: #ff0000;">&quot;login&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/table&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/fieldset&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/form&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/html&gt;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The fact that the user is now logged in doesn&#039;t mean that the
+            authentication must necessarily succeed. The user may decide not to trust
+            particular OpenID enabled sites. The following trust screen allows the
+            end user to make that choice. This choice may either be made only for current
+            requests or forever. In the second case, information about
+            trusted/untrusted sites is stored in an internal database, and all
+            following authentication requests from this site will be handled
+            automatically without user interaction.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Simple Trust Screen</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'POST'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'trust'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'allow'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'forever'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">allowSite</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getSiteRoot</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">respondToConsumer</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'deny'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'forever'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">denySite</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getSiteRoot</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; Zend_OpenId::<span style="color: #006600;">redirect</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_return_to'</span><span style="color: #66cc66;">&#93;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'openid.mode'</span>=&gt;<span style="color: #ff0000;">'cancel'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;p&gt;A site identifying <span style="color: #b1b100;">as</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;a href=<span style="color: #ff0000;">&quot;&lt;?php echo htmlspecialchars($server-&gt;getSiteRoot($_GET));?&gt;&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <a href="http://www.php.net/htmlspecialchars"><span style="color: #000066;">htmlspecialchars</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getSiteRoot</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;?&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/a&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">has asked us <span style="color: #b1b100;">for</span> confirmation that</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;a href=<span style="color: #ff0000;">&quot;&lt;?php echo htmlspecialchars($server-&gt;getLoggedInUser());?&gt;&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <a href="http://www.php.net/htmlspecialchars"><span style="color: #000066;">htmlspecialchars</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getLoggedInUser</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;?&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/a&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">is your identity URL.</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/p&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;form method=<span style="color: #ff0000;">&quot;post&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;checkbox&quot;</span> name=<span style="color: #ff0000;">&quot;forever&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;label <span style="color: #b1b100;">for</span>=<span style="color: #ff0000;">&quot;forever&quot;</span>&gt;forever&lt;/label&gt;&lt;br&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;hidden&quot;</span> name=<span style="color: #ff0000;">&quot;openid_action&quot;</span> value=<span style="color: #ff0000;">&quot;trust&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;submit&quot;</span> name=<span style="color: #ff0000;">&quot;allow&quot;</span> value=<span style="color: #ff0000;">&quot;Allow&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;input type=<span style="color: #ff0000;">&quot;submit&quot;</span> name=<span style="color: #ff0000;">&quot;deny&quot;</span> value=<span style="color: #ff0000;">&quot;Deny&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/form&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/html&gt;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Production OpenID servers usually support the Simple Registration
+            Extension that allows consumers to request some information about the user from
+            the provider. In this case, the trust page can be extended to allow
+            entering requested fields or selecting a specific user profile.
+        </p>
+    </div>
+
+    <div class="section" id="zend.openid.provider.all" name="zend.openid.provider.all"><div class="info"><h1 class="title">Combined Provide Scripts</h1></div>
+        
+
+        <p class="para">
+            It is possible to combine all provider functionality in one script. In
+            this case login and trust <acronym class="acronym">URL</acronym>s are omitted, and
+            <span class="classname">Zend_OpenId_Provider</span> assumes that they point to the same page
+            with the additional &quot;openid.action&quot; <b><tt>GET</tt></b> argument.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                The following example is not complete. It doesn&#039;t provide GUI code for
+                the user, instead performing an automatic login and trust relationship instead.
+                This is done just to simplify the example; a production server should include some
+                code from previous examples.
+            <br />
+        </p></blockquote>
+
+        <div class="example"><div class="info"><p><b>Example #5 Everything Together</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_ID&quot;</span>, Zend_OpenId::<span style="color: #006600;">absoluteURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-9-id.php&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_PASSWORD&quot;</span>, <span style="color: #ff0000;">&quot;123&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'GET'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'login'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">login</span><span style="color: #66cc66;">&#40;</span>TEST_ID, TEST_PASSWORD<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/unset"><span style="color: #000066;">unset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_OpenId::<span style="color: #006600;">redirect</span><span style="color: #66cc66;">&#40;</span>Zend_OpenId::<span style="color: #006600;">selfUrl</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'GET'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'trust'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/unset"><span style="color: #000066;">unset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">respondToConsumer</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$ret</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_string"><span style="color: #000066;">is_string</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$ret</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span> !== <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/header"><span style="color: #000066;">header</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HTTP/1.0 403 Forbidden'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Forbidden'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            If you compare this example with previous examples split in to
+            separate pages, you will see only the one
+            difference besides the dispatch code:
+             <span class="methodname">unset($_GET[&#039;openid_action&#039;])</span>. This call to
+             <span class="methodname">unset()</span> is necessary to route the next request to main handler.
+        </p>
+    </div>
+
+    <div class="section" id="zend.openid.provider.sreg" name="zend.openid.provider.sreg"><div class="info"><h1 class="title">Simple Registration Extension</h1></div>
+        
+
+        <p class="para">
+            Again, the code before the &lt;html&gt; tag is just a trick to demonstrate
+            functionality. It creates a new user account and associates it with a profile (nickname
+            and password). Such tricks aren&#039;t needed in deployed providers where end users register
+            on OpenID servers and fill in their profiles. Implementing this GUI is out of scope for
+            this manual.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 Identity with Profile</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_SERVER&quot;</span>, Zend_OpenId::<span style="color: #006600;">absoluteURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-10.php&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_ID&quot;</span>, Zend_OpenId::<span style="color: #006600;">selfURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_PASSWORD&quot;</span>, <span style="color: #ff0000;">&quot;123&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">hasUser</span><span style="color: #66cc66;">&#40;</span>TEST_ID<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">register</span><span style="color: #66cc66;">&#40;</span>TEST_ID, TEST_PASSWORD<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">login</span><span style="color: #66cc66;">&#40;</span>TEST_ID, TEST_PASSWORD<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$sreg</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Extension_Sreg<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'nickname'</span> =&gt;<span style="color: #ff0000;">'test'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'email'</span> =&gt; <span style="color: #ff0000;">'test@test.com'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$root</span> = Zend_OpenId::<span style="color: #006600;">absoluteURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;.&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_OpenId::<span style="color: #006600;">normalizeUrl</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$root</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">allowSite</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$root</span>, <span style="color: #0000ff;">$sreg</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">logout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;link rel=<span style="color: #ff0000;">&quot;openid.server&quot;</span> href=<span style="color: #ff0000;">&quot;&lt;?php echo TEST_SERVER;?&gt;&quot;</span> /&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> TEST_ID;?&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/html&gt;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            You should now pass this identity to the OpenID-enabled web site (use the Simple
+            Registration Extension example from the previous section), and it should use the
+            following OpenID server script.
+        </p>
+
+        <p class="para">
+            This script is a variation of the script in the &quot;Everything Together&quot; example. It uses
+            the same automatic login mechanism, but doesn&#039;t contain any code for a trust
+            page. The user already trusts the example scripts forever. This trust was
+            established by calling the  <span class="methodname">Zend_OpenId_Provider::allowSite()</span>
+            method in the identity script. The same method associates the profile with the trusted
+            <acronym class="acronym">URL</acronym>. This profile will be returned automatically for a request from
+            the trusted <acronym class="acronym">URL</acronym>.
+        </p>
+
+        <p class="para">
+            To make Simple Registration Extension work, you must simply
+            pass an instance of <span class="classname">Zend_OpenId_Extension_Sreg</span> as the second
+            argument to the  <span class="methodname">Zend_OpenId_Provider::handle()</span> method.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #7 Provider with SREG</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Provider<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$sreg</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_OpenId_Extension_Sreg<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_ID&quot;</span>, Zend_OpenId::<span style="color: #006600;">absoluteURL</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;example-10-id.php&quot;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/define"><span style="color: #000066;">define</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;TEST_PASSWORD&quot;</span>, <span style="color: #ff0000;">&quot;123&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'GET'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'login'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">login</span><span style="color: #66cc66;">&#40;</span>TEST_ID, TEST_PASSWORD<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/unset"><span style="color: #000066;">unset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_OpenId::<span style="color: #006600;">redirect</span><span style="color: #66cc66;">&#40;</span>Zend_OpenId::<span style="color: #006600;">selfUrl</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_SERVER</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'REQUEST_METHOD'</span><span style="color: #66cc66;">&#93;</span> == <span style="color: #ff0000;">'GET'</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> &amp;&amp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'openid_action'</span><span style="color: #66cc66;">&#93;</span> === <span style="color: #ff0000;">'trust'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp;<a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;UNTRUSTED DATA&quot;</span> ;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$ret</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">null</span>, <span style="color: #0000ff;">$sreg</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_string"><span style="color: #000066;">is_string</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$ret</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$ret</span> !== <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/header"><span style="color: #000066;">header</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HTTP/1.0 403 Forbidden'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">'Forbidden'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.openid.provider.else" name="zend.openid.provider.else"><div class="info"><h1 class="title">Anything Else?</h1></div>
+        
+
+        <p class="para">
+            Building OpenID providers is much less common than building
+            OpenID-enabled sites, so this manual doesn&#039;t cover all
+            <span class="classname">Zend_OpenId_Provider</span> features exhaustively, as was done for
+            <span class="classname">Zend_OpenId_Consumer</span>.
+        </p>
+
+        <p class="para">
+            To summamize, <span class="classname">Zend_OpenId_Provider</span> contains:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    A set of methods to build an end-user GUI that allows
+                    users to register and manage their trusted sites and profiles
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    An abstract storage layer to store information about users,
+                    their sites and their profiles. It also stores associations between
+                    the provider and OpenID-enabled sites. This layer is very similar
+                    to that of the <span class="classname">Zend_OpenId_Consumer</span> class. It also uses
+                    file storage by default, but may used with another backend.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    An abstract user-association layer that may associate
+                    a user&#039;s web browser with a logged-in identity
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            The <span class="classname">Zend_OpenId_Provider</span> class doesn&#039;t attempt to cover all
+            possible features that can be implemented by OpenID servers, e.g. digital
+            certificates, but it can be extended easily using
+            <span class="classname">Zend_OpenId_Extension</span>s or by standard object-oriented extension.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.openid.html">Zend_OpenId</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.paginator.html">Zend_Paginator</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.openid.html">Zend_OpenId</a></li>
+  <li><a href="zend.openid.introduction.html">Introduction</a></li>
+  <li><a href="zend.openid.consumer.html">Zend_OpenId_Consumer Basics</a></li>
+  <li class="active"><a href="zend.openid.provider.html">Zend_OpenId_Provider</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

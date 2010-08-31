@@ -1,0 +1,652 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Standard Form Decorators Shipped With Zend Framework - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.form.standardDecorators" class="section"><div class="info"><h1 class="title">Standard Form Decorators Shipped With Zend Framework</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Form</span> ships with several standard decorators. For more
+        information on general decorator usage, see <a href="zend.form.decorators.html" class="link">the Decorators section</a>.
+    </p>
+
+    <div class="section" id="zend.form.standardDecorators.callback" name="zend.form.standardDecorators.callback"><div class="info"><h1 class="title">Zend_Form_Decorator_Callback</h1></div>
+        
+
+        <p class="para">
+            The Callback decorator can execute an arbitrary callback to
+            render content. Callbacks should be specified via the &#039;callback&#039;
+            option passed in the decorator configuration, and can be any
+            valid <acronym class="acronym">PHP</acronym> callback type. Callbacks should accept three
+            arguments, <var class="varname">$content</var> (the original content passed to
+            the decorator), <var class="varname">$element</var> (the item being
+            decorated), and an array of <var class="varname">$options</var>. As an example
+            callback:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Util</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <a href="http://www.php.net/static"><span style="color: #000066;">static</span></a> <span style="color: #000000; font-weight: bold;">function</span> label<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$content</span>, <span style="color: #0000ff;">$element</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a> <span style="color: #0000ff;">$options</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #ff0000;">'&lt;span class=&quot;label&quot;&gt;'</span> . <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> . <span style="color: #ff0000;">&quot;&lt;/span&gt;&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This callback would be specified as  <span class="methodname">array(&#039;Util&#039;,
+                &#039;label&#039;)</span>, and would generate some (bad) <acronym class="acronym">HTML</acronym> markup
+            for the label. The Callback decorator would then either replace,
+            append, or prepend the original content with the return value of
+            this.
+        </p>
+
+        <p class="para">
+            The Callback decorator allows specifying a <b><tt>NULL</tt></b> value for the
+            placement option, which will replace the original content with
+            the callback return value; &#039;prepend&#039; and &#039;append&#039; are still
+            valid as well.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.captcha" name="zend.form.standardDecorators.captcha"><div class="info"><h1 class="title">Zend_Form_Decorator_Captcha</h1></div>
+        
+
+        <p class="para">
+            The Captcha decorator is for use with the <a href="zend.form.standardElements.html#zend.form.standardElements.captcha" class="link">CAPTCHA form
+                element</a>. It utilizes the CAPTCHA adapter&#039;s
+             <span class="methodname">render()</span> method to generate the output.
+        </p>
+
+        <p class="para">
+            A variant on the Captcha decorator, &#039;Captcha_Word&#039;, is also commonly
+            used, and creates two elements, an id and input. The id indicates
+            the session identifier to compare against, and the input is for the
+            user verification of the CAPTCHA. These are validated as a single
+            element.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.description" name="zend.form.standardDecorators.description"><div class="info"><h1 class="title">Zend_Form_Decorator_Description</h1></div>
+        
+
+        <p class="para">
+            The Description decorator can be used to display a description set
+            on a <span class="classname">Zend_Form</span>, <span class="classname">Zend_Form_Element</span>, or
+            <span class="classname">Zend_Form_DisplayGroup</span> item; it pulls the description
+            using the object&#039;s  <span class="methodname">getDescription()</span> method. Common use
+            cases are for providing UI hints for your elements.
+        </p>
+
+        <p class="para">
+            By default, if no description is present, no output is generated. If
+            the description is present, then it is wrapped in an <acronym class="acronym">HTML</acronym>
+            <em class="emphasis">p</em> tag by default, though you may specify a tag by
+            passing a <span class="property">tag</span> option when creating the decorator, or
+            calling  <span class="methodname">setTag()</span>. You may additionally specify a class
+            for the tag using the <span class="property">class</span> option or by calling
+             <span class="methodname">setClass()</span>; by default, the class &#039;hint&#039; is used.
+        </p>
+
+        <p class="para">
+            The description is escaped using the view object&#039;s escaping
+            mechanisms by default. You can disable this by passing a
+            <b><tt>FALSE</tt></b> value to the decorator&#039;s &#039;escape&#039; option or
+             <span class="methodname">setEscape()</span> method.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.dtDdWrapper" name="zend.form.standardDecorators.dtDdWrapper"><div class="info"><h1 class="title">Zend_Form_Decorator_DtDdWrapper</h1></div>
+        
+
+        <p class="para">
+            The default decorators utilize definition lists
+            (<em class="emphasis">&lt;dl&gt;</em>) to render form elements. Since form
+            items can appear in any order, display groups and sub forms can
+            be interspersed with other form items. To keep these particular
+            item types within the definition list, the DtDdWrapper creates a
+            new, empty definition term (<em class="emphasis">&lt;dt&gt;</em>) and wraps
+            its content in a new definition datum (<em class="emphasis">&lt;dd&gt;</em>).
+            The output looks something like this:
+        </p>
+
+        <div class="programlisting html"><div class="htmlcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;dt&gt;&lt;/dt&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;dd&gt;&lt;fieldset id=&quot;subform&quot;&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;legend&gt;User Information&lt;/legend&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/fieldset&gt;&lt;/dd&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This decorator replaces the content provided to it by wrapping
+            it within the <em class="emphasis">&lt;dd&gt;</em> element.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.errors" name="zend.form.standardDecorators.errors"><div class="info"><h1 class="title">Zend_Form_Decorator_Errors</h1></div>
+        
+
+        <p class="para">
+            Element errors get their own decorator with the Errors
+            decorator. This decorator proxies to the FormErrors view helper,
+            which renders error messages in an unordered list
+            (<em class="emphasis">&lt;ul&gt;</em>) as list items. The
+            <em class="emphasis">&lt;ul&gt;</em> element receives a class of &quot;errors&quot;.
+        </p>
+
+        <p class="para">
+            The Errors decorator can either prepend or append the content
+            provided to it.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.fieldset" name="zend.form.standardDecorators.fieldset"><div class="info"><h1 class="title">Zend_Form_Decorator_Fieldset</h1></div>
+        
+
+        <p class="para">
+            Display groups and sub forms render their content within
+            fieldsets by default. The Fieldset decorator checks for either a
+            &#039;legend&#039; option or a  <span class="methodname">getLegend()</span> method in the
+            registered element, and uses that as a legend if non-empty. Any
+            content passed in is wrapped in the <acronym class="acronym">HTML</acronym> fieldset, replacing the
+            original content. Any attributes set in the decorated item are
+            passed to the fieldset as <acronym class="acronym">HTML</acronym> attributes.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.file" name="zend.form.standardDecorators.file"><div class="info"><h1 class="title">Zend_Form_Decorator_File</h1></div>
+        
+
+        <p class="para">
+            File Elements have special notation when you use multiple
+            file elements or subforms. The File decorator is used by
+            <span class="classname">Zend_Form_Element_File</span> and allows to set multiple
+            file elements with only a single methodcall. It is used
+            automatically and fixes the elements name.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.form" name="zend.form.standardDecorators.form"><div class="info"><h1 class="title">Zend_Form_Decorator_Form</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> objects typically need to render an
+            <acronym class="acronym">HTML</acronym> form tag. The Form decorator proxies to the Form view helper. It
+            wraps any provided content in an <acronym class="acronym">HTML</acronym> form element, using the
+            <span class="classname">Zend_Form</span> object&#039;s action and method, and any
+            attributes as <acronym class="acronym">HTML</acronym> attributes.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.formElements" name="zend.form.standardDecorators.formElements"><div class="info"><h1 class="title">Zend_Form_Decorator_FormElements</h1></div>
+        
+
+        <p class="para">
+            Forms, display groups, and sub forms are collections of
+            elements. In order to render these elements, they utilize the
+            FormElements decorator, which iterates through all items,
+            calling  <span class="methodname">render()</span> on each and joining them with the
+            registered separator. It can either append or prepend content
+            passed to it.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.formErrors" name="zend.form.standardDecorators.formErrors"><div class="info"><h1 class="title">Zend_Form_Decorator_FormErrors</h1></div>
+        
+
+        <p class="para">
+            Some developers and designers prefer to group all error messages at
+            the top of the form. The FormErrors decorator allows you to do this.
+        </p>
+
+        <p class="para">
+            By default, the generated list of errors has the following markup:
+        </p>
+
+        <div class="programlisting html"><div class="htmlcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;ul class=&quot;form-errors&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;li&gt;&lt;b&gt;[element label or name]&lt;/b&gt;&lt;ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;[error message]&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;[error message]&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;/ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;li&gt;&lt;ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;&lt;b&gt;[subform element label or name&lt;/b&gt;&lt;ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;[error message]&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;li&gt;[error message]&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/ul&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/ul&gt;&lt;/li&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/ul&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can pass in a variety of options to configure the generated
+            output:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">ignoreSubForms</span>: whether or not to disable recursion into
+                    subforms. Default value: <b><tt>FALSE</tt></b> (i.e., allow recursion).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupElementLabelEnd</span>: Markup to append to element
+                    labels. Default value: &#039;&lt;/b&gt;&#039;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupElementLabelStart</span>: Markup to prepend to
+                    element labels. Default value: &#039;&lt;b&gt;&#039;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupListEnd</span>: Markup to append error message lists
+                    with. Default value: &#039;&lt;/ul&gt;&#039;.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupListItemEnd</span>: Markup to append individual
+                    error messages with. Default value: &#039;&lt;/li&gt;&#039;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupListItemStart</span>: Markup to prepend individual
+                    error messages with. Default value: &#039;&lt;li&gt;&#039;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">markupListStart</span>: Markup to append error message
+                    lists with. Default value: &#039;&lt;ul class=&quot;form-errors&quot;&gt;&#039;
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            The FormErrors decorator can either prepend or append the content
+            provided to it.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.htmlTag" name="zend.form.standardDecorators.htmlTag"><div class="info"><h1 class="title">Zend_Form_Decorator_HtmlTag</h1></div>
+        
+
+        <p class="para">
+            The HtmlTag decorator allows you to utilize <acronym class="acronym">HTML</acronym> tags to
+            decorate content; the tag utilized is passed in the &#039;tag&#039;
+            option, and any other options are used as <acronym class="acronym">HTML</acronym> attributes to
+            that tag. The tag by default is assumed to be block level, and
+            replaces the content by wrapping it in the given tag. However,
+            you can specify a placement to append or prepend a tag as well.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.image" name="zend.form.standardDecorators.image"><div class="info"><h1 class="title">Zend_Form_Decorator_Image</h1></div>
+        
+
+        <p class="para">
+            The Image decorator allows you to create an <acronym class="acronym">HTML</acronym> image input
+            (<em class="emphasis">&lt;input type=&quot;image&quot; ... /&gt;</em>), and optionally
+            render it within another <acronym class="acronym">HTML</acronym> tag.
+        </p>
+
+        <p class="para">
+            By default, the decorator uses the element&#039;s src property, which can
+            be set with the  <span class="methodname">setImage()</span> method, as the image
+            source. Additionally, the element&#039;s label will be used as the alt
+            tag, and the <span class="property">imageValue</span> (manipulated with the Image
+            element&#039;s  <span class="methodname">setImageValue()</span> and
+             <span class="methodname">getImageValue()</span> accessors) will be used for the value.
+        </p>
+
+        <p class="para">
+            To specify an <acronym class="acronym">HTML</acronym> tag with which to wrap the element, either pass a
+            &#039;tag&#039; option to the decorator, or explicitly call
+             <span class="methodname">setTag()</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.label" name="zend.form.standardDecorators.label"><div class="info"><h1 class="title">Zend_Form_Decorator_Label</h1></div>
+        
+
+        <p class="para">
+            Form elements typically have labels, and the Label decorator is
+            used to render these labels. It proxies to the FormLabel view
+            helper, and pulls the element label using the
+             <span class="methodname">getLabel()</span> method of the element. If no label is
+            present, none is rendered. By default, labels are translated when a
+            translation adapter exists and a translation for the label exists.
+        </p>
+
+        <p class="para">
+            You may optionally specify a &#039;tag&#039; option; if provided, it wraps
+            the label in that block-level tag. If the &#039;tag&#039; option is
+            present, and no label present, the tag is rendered with no
+            content. You can specify the class to use with the tag with the
+            &#039;class&#039; option or by calling  <span class="methodname">setClass()</span>.
+        </p>
+
+        <p class="para">
+            Additionally, you can specify prefixes and suffixes to use when
+            displaying the element, based on whether or not the label is for an
+            optional or required element. Common use cases would be to append a
+            &#039;:&#039; to the label, or a &#039;*&#039; indicating an item is required. You can
+            do so with the following options and methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">optionalPrefix</span>: set the text to prefix the
+                    label with when the element is optional. Use the
+                     <span class="methodname">setOptionalPrefix()</span> and
+                     <span class="methodname">getOptionalPrefix()</span> accessors to manipulate it.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">optionalSuffix</span>: set the text to append the
+                    label with when the element is optional. Use the
+                     <span class="methodname">setOptionalSuffix()</span> and
+                     <span class="methodname">getOptionalSuffix()</span> accessors to manipulate it.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">requiredPrefix</span>: set the text to prefix the
+                    label with when the element is required. Use the
+                     <span class="methodname">setRequiredPrefix()</span> and
+                     <span class="methodname">getRequiredPrefix()</span> accessors to manipulate it.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">requiredSuffix</span>: set the text to append the
+                    label with when the element is required. Use the
+                     <span class="methodname">setRequiredSuffix()</span> and
+                     <span class="methodname">getRequiredSuffix()</span> accessors to manipulate it.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            By default, the Label decorator prepends to the provided
+            content; specify a &#039;placement&#039; option of &#039;append&#039; to place it
+            after the content.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.prepareElements" name="zend.form.standardDecorators.prepareElements"><div class="info"><h1 class="title">Zend_Form_Decorator_PrepareElements</h1></div>
+        
+
+        <p class="para">
+            Forms, display groups, and sub forms are collections of
+            elements. When using the <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.viewScript" class="link">ViewScript</a>
+            decorator with your form or sub form, it&#039;s useful to be able to
+            recursively set the view object, translator, and all fully qualifid
+            names (as determined by sub form array notation). The
+            &#039;PrepareElements&#039; decorator can do this for you. Typically, you will
+            set it as the first decorator in the list.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'PrepareElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewScript'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'viewScript'</span> =&gt; <span style="color: #ff0000;">'form.phtml'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.viewHelper" name="zend.form.standardDecorators.viewHelper"><div class="info"><h1 class="title">Zend_Form_Decorator_ViewHelper</h1></div>
+        
+
+        <p class="para">
+            Most elements utilize <span class="classname">Zend_View</span> helpers for
+            rendering, and this is done with the ViewHelper decorator. With
+            it, you may specify a &#039;helper&#039; tag to explicitly set the view
+            helper to utilize; if none is provided, it uses the last segment
+            of the element&#039;s class name to determine the helper, prepending
+            it with the string &#039;form&#039;: e.g., &#039;Zend_Form_Element_Text&#039; would
+            look for a view helper of &#039;formText&#039;.
+        </p>
+
+        <p class="para">
+            Any attributes of the provided element are passed to the view
+            helper as element attributes.
+        </p>
+
+        <p class="para">
+            By default, this decorator appends content; use the &#039;placement&#039;
+            option to specify alternate placement.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardDecorators.viewScript" name="zend.form.standardDecorators.viewScript"><div class="info"><h1 class="title">Zend_Form_Decorator_ViewScript</h1></div>
+        
+
+        <p class="para">
+            Sometimes you may wish to use a view script for creating your
+            elements; this way you can have fine-grained control over your
+            elements, turn the view script over to a designer, or simply create
+            a way to easily override setting based on which module you&#039;re using
+            (each module could optionally override element view scripts to suit
+            their own needs). The ViewScript decorator solves this problem.
+        </p>
+
+        <p class="para">
+            The ViewScript decorator requires a &#039;viewScript&#039; option, either
+            provided to the decorator, or as an attribute of the element. It
+            then renders that view script as a partial script, meaning each call
+            to it has its own variable scope; no variables from the view will be
+            injected other than the element itself. Several variables are then
+            populated:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">element</span>: the element being decorated
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">content</span>: the content passed to the decorator
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">decorator</span>: the decorator object itself
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Additionally, all options passed to the decorator via
+                     <span class="methodname">setOptions()</span> that are not used internally (such
+                    as placement, separator, etc.) are passed to the view script
+                    as view variables.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            As an example, you might have the following element:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Setting the decorator for the element to a single, ViewScript,</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// decorator, specifying the viewScript as an option, and some extra</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// options:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewScript'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'viewScript'</span> =&gt; <span style="color: #ff0000;">'_element.phtml'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'class'</span>&nbsp; &nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'form element'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// OR specifying the viewScript as an element attribute:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">viewScript</span> = <span style="color: #ff0000;">'_element.phtml'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewScript'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span> =&gt; <span style="color: #ff0000;">'form element'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You could then have a view script something like this:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;div <span style="color: #000000; font-weight: bold;">class</span>=<span style="color: #ff0000;">&quot;&lt;?php echo $this-&gt;class ?&gt;&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">formLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #66cc66;">&#123;</span><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">helper</span><span style="color: #66cc66;">&#125;</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getValue</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getAttribs</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">formErrors</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getMessages</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;div <span style="color: #000000; font-weight: bold;">class</span>=<span style="color: #ff0000;">&quot;hint&quot;</span>&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">element</span>-&gt;<span style="color: #006600;">getDescription</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> ?&gt;&lt;/div&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/div&gt;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Replacing content with a view script</b><br /></span>
+            
+
+            
+                You may find it useful for the view script to replace the
+                content provided to the decorator -- for instance, if you want
+                to wrap it. You can do so by specifying a boolean <b><tt>FALSE</tt></b> value
+                for the decorator&#039;s &#039;placement&#039; option:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// At decorator creation:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewScript'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'placement'</span> =&gt; <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Applying to an existing decorator instance:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$decorator</span>-&gt;<span style="color: #006600;">setOption</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'placement'</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Applying to a decorator already attached to an element:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewScript'</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">setOption</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'placement'</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Within a view script used by a decorator:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">decorator</span>-&gt;<span style="color: #006600;">setOption</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'placement'</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </p></blockquote>
+
+        <p class="para">
+            Using the ViewScript decorator is recommended for when you want to
+            have very fine-grained control over how your elements are rendered.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.form.html">Zend_Form</a></li>
+  <li><a href="zend.form.introduction.html">Zend_Form</a></li>
+  <li><a href="zend.form.quickstart.html">Zend_Form Quick Start</a></li>
+  <li><a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a></li>
+  <li><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></li>
+  <li><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></li>
+  <li><a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a></li>
+  <li class="active"><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></li>
+  <li><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Uso Avan&ccedil;ado do Zend_Json - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.json.basics.html">Uso B&aacute;sico</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.json.html">Zend_Json</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.json.xml2json.html">Convers&atilde;o de XML para JSON</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.json.advanced" class="section"><div class="info"><h1 class="title">Uso Avançado do Zend_Json</h1></div>
+    
+
+    <div class="section" id="zend.json.advanced.objects1" name="zend.json.advanced.objects1"><div class="info"><h1 class="title">Objetos JSON</h1></div>
+        
+
+        <p class="para">
+            Quando codificamos objetos <acronym class="acronym">PHP</acronym> como <acronym class="acronym">JSON</acronym>, todas
+            as propriedades públicas desse objeto estarão codificadas em um objeto
+            <acronym class="acronym">JSON</acronym>.
+        </p>
+
+        <p class="para">
+            <acronym class="acronym">JSON</acronym> não permite referências de objeto, por isso deve-se tomar
+            cuidado para não codificar objetos com referências recursivas. Se você tiver problemas
+            com a recursividade,  <span class="methodname">Zend_Json::encode()</span> e
+             <span class="methodname">Zend_Json_Encoder::encode()</span> permitem um segundo parâmetro
+            opcional para verificar a recursividade; se um objeto for serializado duplamente,
+            uma exceção será lançada.
+        </p>
+
+        <p class="para">
+            Descodificar objetos <acronym class="acronym">JSON</acronym> traz uma ligeira dificuldade, entretanto,
+            desde que os objetos do JavaScript correspondam o mais próximo de uma matriz
+            associativa do <acronym class="acronym">PHP</acronym>. Alguns sugerem que um identificador da classe
+            deve ser passado, e um exemplo do objeto dessa classe deve ser criado e populado com
+            os pares chave/valor do objeto <acronym class="acronym">JSON</acronym>; outros pensam que isto poderia
+            gerar um risco substancial da segurança.
+        </p>
+
+        <p class="para">
+            Por padrão, <span class="classname">Zend_Json</span> irá descodificar objetos
+            <acronym class="acronym">JSON</acronym> como matriz associativas. Entretanto, se você deseja que o
+            retorne um objeto, você pode especificar isto:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Descodifique objetos JSON como objetos PHP</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$phpNative</span> = Zend_Json::<span style="color: #006600;">decode</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$encodedValue</span>, Zend_Json::<span style="color: #006600;">TYPE_OBJECT</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Todos os objetos descodificados assim são retornados como objetos de
+            <span class="classname">StdClass</span> com as propriedades que correspondem aos pares
+            chave/valor na notação de <acronym class="acronym">JSON</acronym>.
+        </p>
+
+        <p class="para">
+            A recomendação do Zend Framework é que o desenvolvedor deve decidir-se como
+            descodificar objetos <acronym class="acronym">JSON</acronym>. Se um objeto de um tipo especificado for
+            criado, pode ser criado no código do desenvolvedor e ser populado com os valores
+            descodificados usando <span class="classname">Zend_Json</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.json.advanced.objects2" name="zend.json.advanced.objects2"><div class="info"><h1 class="title">Codificando Objetos PHP</h1></div>
+        
+
+        <p class="para">
+            Se você estiver codificando objetos <acronym class="acronym">PHP</acronym> por padrão, o mecanismo de
+            codificação só poderá acessar as propriedades públicas desses objetos. Quando o método
+             <span class="methodname">toJson()</span> é implementado em um objeto para codificar,
+            <span class="classname">Zend_Json</span> chama esse método e espera que o objeto retorne uma
+            representação <acronym class="acronym">JSON</acronym> de seu estado interno.
+        </p>
+    </div>
+
+    <div class="section" id="zend.json.advanced.internal" name="zend.json.advanced.internal"><div class="info"><h1 class="title">Codificador/Descodificador Interno</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Json</span> tem dois modos diferentes, dependendo se ext/json
+            está habilitado em sua instalação do <acronym class="acronym">PHP</acronym> ou não. Se estiver
+            instalado por padrão,  <span class="methodname">json_encode()</span> e
+             <span class="methodname">json_decode()</span> são utilizados para a codificação e
+            descodificação <acronym class="acronym">JSON</acronym>. Se não estiver instalado, uma implementação do
+            Zend Framework no código <acronym class="acronym">PHP</acronym> é usada para a codificação e
+            descodificação. Este último é consideravelmente mais lento do que usando a extensão
+            do <acronym class="acronym">PHP</acronym>, mas comporta-se exatamente da mesma forma.
+        </p>
+
+        <p class="para">
+            Entretanto, você talvez queira usar o codificador/descodificador interno mesmo tendo o
+            ext/json instalado. Você pode conseguir isso chamando:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Json::<span style="color: #0000ff;">$useBuiltinEncoderDecoder</span> = <span style="color: #000000; font-weight: bold;">true</span>:</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.json.advanced.expr" name="zend.json.advanced.expr"><div class="info"><h1 class="title">Expressões do JSON</h1></div>
+        
+
+        <p class="para">
+            Javascript faz uso pesado de funções de callback anônimas, que podem ser guardadas
+            dentro de variáveis de objeto <acronym class="acronym">JSON</acronym>. Mesmo assim elas só
+            funcionam se não forem devolvidas dentro aspas duplas, que
+            <span class="classname">Zend_Json</span> naturalmente faz. Com o suporte à Expressão no
+            <span class="classname">Zend_Json</span>, você pode codificar objetos <acronym class="acronym">JSON</acronym>
+            com callbacks de javascript válidos. Isso funciona tanto para
+             <span class="methodname">json_encode()</span> quanto para o codificador interno.
+        </p>
+
+        <p class="para">
+            Um callback javascript é representado usando o objeto
+            <span class="classname">Zend_Json_Expr</span>. Ela implementa o padrão value object e é
+            imutável. Você pode definir a expressão javascript como o primeiro argumento do
+            construtor. Por padrão <span class="classname">Zend_Json::encode</span> não codifica callbacks
+            de javascript, você deverá passar a opção <span class="property">enableJsonExprFinder</span> e
+            defini-la para <b><tt>TRUE</tt></b> para a função
+             <span class="methodname">encode()</span>. Se ativado, o suporte à expressão funcionará para
+            todas as expressões aninhadas em estruturas de grande porte. Um exemplo de uso seria
+            parecido com:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$data</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'onClick'</span> =&gt; <span style="color: #000000; font-weight: bold;">new</span> Zend_Json_Expr<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'function() {'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; . <span style="color: #ff0000;">'alert(&quot;I am a valid javascript callback '</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; . <span style="color: #ff0000;">'created by Zend_Json&quot;); }'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'other'</span> =&gt; <span style="color: #ff0000;">'no expression'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$jsonObjectWithExpression</span> = Zend_Json::<span style="color: #006600;">encode</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$data</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'enableJsonExprFinder'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.json.basics.html">Uso B&aacute;sico</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.json.html">Zend_Json</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.json.xml2json.html">Convers&atilde;o de XML para JSON</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.json.html">Zend_Json</a></li>
+  <li><a href="zend.json.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li><a href="zend.json.basics.html">Uso B&aacute;sico</a></li>
+  <li class="active"><a href="zend.json.advanced.html">Uso Avan&ccedil;ado do Zend_Json</a></li>
+  <li><a href="zend.json.xml2json.html">Convers&atilde;o de XML para JSON</a></li>
+  <li><a href="zend.json.server.html">Zend_Json_Server - JSON-RPC server</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

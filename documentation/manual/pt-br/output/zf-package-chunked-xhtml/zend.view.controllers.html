@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Scripts Controladores - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.view.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.view.html">Zend_View</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.view.scripts.html">Scripts de Visualiza&ccedil;&atilde;o</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.view.controllers" class="section"><div class="info"><h1 class="title">Scripts Controladores</h1></div>
+    
+
+    <p class="para">
+        O controlador é onde você instancia e configura o <span class="classname">Zend_View</span>. Você
+        atribui variáveis ao visualizador, instruindo-o a renderizar a saída usando um script
+        particular.
+    </p>
+
+    <div class="section" id="zend.view.controllers.assign" name="zend.view.controllers.assign"><div class="info"><h1 class="title">Atribuindo Variáveis</h1></div>
+        
+
+        <p class="para">
+            Seu script controlador deverá atribuir as variáveis necessárias ao visualizador antes de
+            passar o controle para ele. Normalmente, você pode fazer isso atribuindo valores aos
+            nomes de propriedades da instância do visualizador:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">a</span> = <span style="color: #ff0000;">&quot;Hay&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">b</span> = <span style="color: #ff0000;">&quot;Bee&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">c</span> = <span style="color: #ff0000;">&quot;Sea&quot;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Porém, isto pode ser tedioso quando você coletar os valores a serem atribuídos a partir
+            de uma matriz ou objeto.
+        </p>
+
+        <p class="para">
+            O método assign() permite a atribuições a partir de uma matriz ou objeto &quot;a granel&quot;. O
+            exemplo seguinte tem o mesmo efeito que o exemplo de atribuição de propriedades uma a
+            uma.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// atribui uma matriz associativa onde a chave é nome da variável</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// e o valor é proprio valor atribuído.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$array</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'a'</span> =&gt; <span style="color: #ff0000;">&quot;Hay&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'b'</span> =&gt; <span style="color: #ff0000;">&quot;Bee&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'c'</span> =&gt; <span style="color: #ff0000;">&quot;Sea&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">assign</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$array</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// faz o mesmo com as propriedades públicas do objeto;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// note a forma a conversão ao tipo matriz na atribuição.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$obj</span> = <span style="color: #000000; font-weight: bold;">new</span> StdClass;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$obj</span>-&gt;<span style="color: #006600;">a</span> = <span style="color: #ff0000;">&quot;Hay&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$obj</span>-&gt;<span style="color: #006600;">b</span> = <span style="color: #ff0000;">&quot;Bee&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$obj</span>-&gt;<span style="color: #006600;">c</span> = <span style="color: #ff0000;">&quot;Sea&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">assign</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#41;</span> <span style="color: #0000ff;">$obj</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Alternativamente, você pode usar o método assign para fazer atribuições uma a uma
+            passando a string contendo o nome da variável, e logo em seguida o valor a ser
+            atribuído.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">assign</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'a'</span>, <span style="color: #ff0000;">&quot;Hay&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">assign</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'b'</span>, <span style="color: #ff0000;">&quot;Bee&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">assign</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'c'</span>, <span style="color: #ff0000;">&quot;Sea&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.view.controllers.render" name="zend.view.controllers.render"><div class="info"><h1 class="title">Renderizando um Script de Visualização</h1></div>
+        
+
+        <p class="para">
+            Uma vez que tenhamos atribuído todas as variáveis necessárias, o controlador irá
+            instruir o <span class="classname">Zend_View</span> a renderizar um script de visualização
+            particular. Ele fará isso chamando o método render(). Note que o método irá retornar a
+            visualização renderizada, mas não irá imprimí-la, ficando ao seu encargo fazê-lo
+            (echo() ou print()) no momento apropriado.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">a</span> = <span style="color: #ff0000;">&quot;Hay&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">b</span> = <span style="color: #ff0000;">&quot;Bee&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">c</span> = <span style="color: #ff0000;">&quot;Sea&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'someView.php'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.view.controllers.script-paths" name="zend.view.controllers.script-paths"><div class="info"><h1 class="title">Caminhos do Script de Visualização</h1></div>
+        
+
+        <p class="para">
+            Por padrão, <span class="classname">Zend_View</span> espera encontrar os scripts de visualização
+            localizados no mesmo diretório onde reside o script controlador. Por exemplo, se o seu
+            script controlador estiver em &quot;/path/to/app/controllers&quot; e chamar
+            $view-&gt;render(&#039;someView.php&#039;), <span class="classname">Zend_View</span> irá procurar por ele em
+            &quot;/path/to/app/controllers/someView.php&quot;.
+        </p>
+
+        <p class="para">
+            Obviamente, os seus scripts de visualização estarão provavelmente situados em outro
+            lugar. Para informar ao <span class="classname">Zend_View</span> onde procurar pelos referidos
+            scripts, use o método setScriptPath().
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">setScriptPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/app/views'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Agora quando você chamar $view-&gt;render(&#039;someView.php&#039;), ele irá procurar em
+            &quot;/path/to/app/views/someView.php&quot;.
+        </p>
+
+        <p class="para">
+            De fato, você pode &quot;empilhar&quot; caminhos usando o método addScriptPath(). A medida que
+            você acrescenta caminhos à pilha, <span class="classname">Zend_View</span> irá procurar pela
+            visão no caminho mais recentemente adicionado à pilha. Isto permite sobrepor visões
+            padronizadas por visões customizadas, permitindo a criação de &quot;temas&quot; e &quot;peles&quot; para
+            algumas visões, deixando outras intocadas.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">addScriptPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/app/views'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">addScriptPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/custom/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// agora quando você chamar $view-&gt;render('booklist.php'),</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Zend_View procurará primeiro em &quot;/path/to/custom/booklist.php&quot;,</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// depois em &quot;/path/to/app/views/booklist.php&quot;, e finalmente no</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// diretório corrente, por &quot;booklist.php&quot;.</span></div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Nunca utilize uma entrada do usuário para definir caminhos de script</b><br /></span>
+            
+
+            
+                <span class="classname">Zend_View</span> utiliza caminhos de script para pesquisar e
+                renderizar os scripts de visualização. Como tal, estes diretórios devem ser
+                conhecidos de antemão, e estarem sob seu controle. <em class="emphasis">Nunca</em> defina
+                caminhos de script de visualização com base em entradas do usuário, pois você pode
+                se abrir potencialmente para a vulnerabilidade de Inclusão Local de Arquivo se o
+                caminho especificado incluir percursos ao diretório pai. Por exemplo, a seguinte
+                entrada pode desencadear o problema:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $_GET['foo'] == '../../../etc'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">addScriptPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_GET</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'passwd'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                Embora este exemplo seja artificial, ele mostra claramente o problema em potencial.
+                Se você <em class="emphasis">deve</em> contar com a entrada do usuário para definir o
+                caminho do script, filtre a entrada de forma apropriada e certifique-se de que os
+                caminhos sejam controlados por sua aplicação.
+            <br />
+        </p></blockquote>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.view.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.view.html">Zend_View</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.view.scripts.html">Scripts de Visualiza&ccedil;&atilde;o</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.view.html">Zend_View</a></li>
+  <li><a href="zend.view.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li class="active"><a href="zend.view.controllers.html">Scripts Controladores</a></li>
+  <li><a href="zend.view.scripts.html">Scripts de Visualiza&ccedil;&atilde;o</a></li>
+  <li><a href="zend.view.helpers.html">Assistentes de Visualiza&ccedil;&atilde;o</a></li>
+  <li><a href="zend.view.abstract.html">Zend_View_Abstract</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

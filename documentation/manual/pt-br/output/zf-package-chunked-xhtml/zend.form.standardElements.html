@@ -1,0 +1,929 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Standard Form Elements Shipped With Zend Framework - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.form.standardElements" class="section"><div class="info"><h1 class="title">Standard Form Elements Shipped With Zend Framework</h1></div>
+    
+
+    <p class="para">
+        Zend Framework ships with concrete element classes covering most <acronym class="acronym">HTML</acronym>
+        form elements. Most simply specify a particular view helper for use when
+        decorating the element, but several offer additional functionality. The
+        following is a list of all such classes, as well as descriptions of the
+        functionality they offer.
+    </p>
+
+    <div class="section" id="zend.form.standardElements.button" name="zend.form.standardElements.button"><div class="info"><h1 class="title">Zend_Form_Element_Button</h1></div>
+        
+
+        <p class="para">
+            Used for creating <acronym class="acronym">HTML</acronym> button elements,
+            <span class="classname">Zend_Form_Element_Button</span> extends <a href="zend.form.standardElements.html#zend.form.standardElements.submit" class="link">Zend_Form_Element_Submit</a>,
+            specifying some custom functionality. It specifies the &#039;formButton&#039;
+            view helper for decoration.
+        </p>
+
+        <p class="para">
+            Like the submit element, it uses the element&#039;s label as the element
+            value for display purposes; in other words, to set the text of the
+            button, set the value of the element. The label will be translated
+            if a translation adapter is present.
+        </p>
+
+        <p class="para">
+            Because the label is used as part of the element, the button element
+            uses only the <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.viewHelper" class="link">ViewHelper</a>
+            and <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.dtDdWrapper" class="link">DtDdWrapper</a>
+            decorators.
+        </p>
+
+        <p class="para">
+            After populating or validating a form, you can check if the given
+            button was clicked using the  <span class="methodname">isChecked()</span> method.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.captcha" name="zend.form.standardElements.captcha"><div class="info"><h1 class="title">Zend_Form_Element_Captcha</h1></div>
+        
+
+        <p class="para">
+            CAPTCHAs are used to prevent automated submission of forms by bots
+            and other automated processes.
+        </p>
+
+        <p class="para">
+            The Captcha form element allows you to specify which <a href="zend.captcha.adapters.html" class="link">Zend_Captcha adapter</a> you
+            wish to utilize as a form CAPTCHA. It then sets this adapter as a
+            validator to the object, and uses a Captcha decorator for rendering
+            (which proxies to the CAPTCHA adapter).
+        </p>
+
+        <p class="para">
+            Adapters may be any adapters in <span class="classname">Zend_Captcha</span>, as well
+            as any custom adapters you may have defined elsewhere. To allow
+            this, you may pass an additional plugin loader type key, &#039;CAPTCHA&#039;
+            or &#039;captcha&#039;, when specifying a plugin loader prefix path:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Captcha'</span>, <span style="color: #ff0000;">'My/Captcha/'</span>, <span style="color: #ff0000;">'captcha'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Captcha&#039;s may then be registered using the  <span class="methodname">setCaptcha()</span>
+            method, which can take either a concrete CAPTCHA instance, or the
+            short name of a CAPTCHA adapter:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Concrete instance:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setCaptcha</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Captcha_Figlet<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using shortnames:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setCaptcha</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Dumb'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If you wish to load your element via configuration, specify either
+            the key &#039;captcha&#039; with an array containing the key &#039;captcha&#039;, or
+            both the keys &#039;captcha&#039; and &#039;captchaOptions&#039;:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using single captcha key:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Captcha<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">&quot;Please verify you're a human&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'captcha'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'captcha'</span> =&gt; <span style="color: #ff0000;">'Figlet'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'wordLen'</span> =&gt; <span style="color: #cc66cc;">6</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'timeout'</span> =&gt; <span style="color: #cc66cc;">300</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using both captcha and captchaOptions:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Captcha<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">&quot;Please verify you're a human&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'captcha'</span> =&gt; <span style="color: #ff0000;">'Figlet'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'captchaOptions'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'captcha'</span> =&gt; <span style="color: #ff0000;">'Figlet'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'wordLen'</span> =&gt; <span style="color: #cc66cc;">6</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'timeout'</span> =&gt; <span style="color: #cc66cc;">300</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The decorator used is determined by querying the captcha adapter. By
+            default, the <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.captcha" class="link">Captcha
+                decorator</a> is used, but an adapter may specify a different
+            one via its  <span class="methodname">getDecorator()</span> method.
+        </p>
+
+        <p class="para">
+            As noted, the captcha adapter itself acts as a validator for the
+            element. Additionally, the NotEmpty validator is not used, and the
+            element is marked as required. In most cases, you should need to do
+            nothing else to have a captcha present in your form.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.checkbox" name="zend.form.standardElements.checkbox"><div class="info"><h1 class="title">Zend_Form_Element_Checkbox</h1></div>
+        
+
+        <p class="para">
+            <acronym class="acronym">HTML</acronym> checkboxes allow you return a specific value, but basically
+            operate as booleans. When checked, the checkbox&#039;s value is submitted.
+            When the checkbox is not checked, nothing is submitted. Internally,
+            <span class="classname">Zend_Form_Element_Checkbox</span> enforces this state.
+        </p>
+
+        <p class="para">
+            By default, the checked value is &#039;1&#039;, and the unchecked value &#039;0&#039;.
+            You can specify the values to use using the  <span class="methodname">setCheckedValue()</span>
+            and  <span class="methodname">setUncheckedValue()</span> accessors, respectively. Internally,
+            any time you set the value, if the provided value matches the checked value, then it is
+            set, but any other value causes the unchecked value to be set.
+        </p>
+
+        <p class="para">
+            Additionally, setting the value sets the <span class="property">checked</span>
+            property of the checkbox. You can query this using
+             <span class="methodname">isChecked()</span> or simply accessing the property. Using the
+             <span class="methodname">setChecked($flag)</span> method will both set the state of the
+            flag as well as set the appropriate checked or unchecked value in the
+            element. Please use this method when setting the checked state of a
+            checkbox element to ensure the value is set properly.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_Checkbox</span> uses the &#039;formCheckbox&#039; view
+            helper. The checked value is always used to populate it.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.file" name="zend.form.standardElements.file"><div class="info"><h1 class="title">Zend_Form_Element_File</h1></div>
+        
+
+        <p class="para">
+            The File form element provides a mechanism for supplying file upload
+            fields to your form. It utilizes <a href="zend.file.transfer.introduction.html" class="link">Zend_File_Transfer</a>
+            internally to provide this functionality, and the
+            <span class="classname">FormFile</span> view helper as also the <span class="classname">File</span>
+            decorator to display the form element.
+        </p>
+
+        <p class="para">
+            By default, it uses the <span class="classname">Http</span> transfer adapter, which
+            introspects the <var class="varname">$_FILES</var> array and allows you to attach
+            validators and filters. Validators and filters attached to the form
+            element are in turn attached to the transfer adapter.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 File form element usage</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                The above explanation of using the File form element may seem
+                arcane, but actual usage is relatively trivial:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_File<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Upload an image:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setDestination</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/var/www/upload'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// ensure only 1 file</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Count'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// limit to 100K</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">102400</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// only JPEG, PNG, and GIFs</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Extension'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #ff0000;">'jpg,png,gif'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                You also need to ensure that the correct encoding type is provided to
+                the form; you should use &#039;multipart/form-data&#039;. You can do this
+                by setting the &#039;enctype&#039; attribute on the form:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'enctype'</span>, <span style="color: #ff0000;">'multipart/form-data'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                After the form is validated successfully, you must receive the file
+                to store it in the final destination using  <span class="methodname">receive()</span>.
+                Additionally you can determinate the final location using
+                 <span class="methodname">getFileName()</span>:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">isValid</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Uh oh... validation error&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">foo</span>-&gt;<span style="color: #006600;">receive</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Error receiving the file&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$location</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">foo</span>-&gt;<span style="color: #006600;">getFileName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Default Upload Location</b><br /></span>
+            
+
+            
+                By default, files are uploaded to the system temp directory.
+            <br />
+        </p></blockquote>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>File values</b><br /></span>
+            
+
+            
+                Within <acronym class="acronym">HTTP</acronym> a file element has no value. For this reason and
+                because of security concerns  <span class="methodname">getValue()</span> returns only the
+                uploaded filename and not the complete path. If you need the file path, call
+                 <span class="methodname">getFileName()</span>, which returns both the path and the name of
+                the file.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Per default the file will automatically be received when you call
+             <span class="methodname">getValues()</span> on the form. The reason behind this behaviour is,
+            that the file itself is the value of the file element.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getValues</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Therefor another call of  <span class="methodname">receive()</span> after calling
+                 <span class="methodname">getValues()</span> will not have an effect. Also creating a
+                instance of <span class="classname">Zend_File_Transfer</span> will not have an effect as
+                there no file anymore to receive.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Still, sometimes you may want to call  <span class="methodname">getValues()</span> without
+            receiving the file. You can archive this by calling
+             <span class="methodname">setValueDisabled(true)</span>. To get the actual value of this flag
+            you can call  <span class="methodname">isValueDisabled()</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Explicit file retrievement</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                First call  <span class="methodname">setValueDisabled(true)</span>.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_File<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Upload an image:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setDestination</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/var/www/upload'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setValueDisabled</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                Now the file will not be received when you call
+                 <span class="methodname">getValues()</span>. So you must call
+                 <span class="methodname">receive()</span> on the file element, or an instance of
+                <span class="classname">Zend_File_Transfer</span> yourself.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$values</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getValues</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">isValid</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getPost</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">foo</span>-&gt;<span style="color: #006600;">receive</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Upload error&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            There are several states of the uploaded file which can be checked
+            with the following methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">isUploaded()</span>: Checks if the file element has
+                    been uploaded or not.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">isReceived()</span>: Checks if the file element has
+                    already been received.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">isFiltered()</span>: Checks if the filters have already
+                    been applied to the file element or not.
+                </p>
+            </li>
+        </ul>
+
+        <div class="example"><div class="info"><p><b>Example #3 Checking if an optional file has been uploaded</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_File<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Upload an image:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setDestination</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/var/www/upload'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setRequired</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">102400</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// The foo file element is optional but when it's given go into here</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">foo</span>-&gt;<span style="color: #006600;">isUploaded</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// foo file given... do something</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_File</span> also supports multiple files.
+            By calling the  <span class="methodname">setMultiFile($count)</span> method you can set
+            the number of file elements you want to create. This keeps you
+            from setting the same settings multiple times.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Setting multiple files</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                Creating a multifile element is the same as setting a single element.
+                Just call  <span class="methodname">setMultiFile()</span> after the element is created:
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_File<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Upload an image:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setDestination</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/var/www/upload'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// ensure minimum 1, maximum 3 files</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Count'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'min'</span> =&gt; <span style="color: #cc66cc;">1</span>, <span style="color: #ff0000;">'max'</span> =&gt; <span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// limit to 100K</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">102400</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// only JPEG, PNG, and GIFs</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Extension'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #ff0000;">'jpg,png,gif'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// defines 3 identical file elements</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setMultiFile</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <div class="example-contents"><p>
+                You now have 3 identical file upload elements
+                with the same settings. To get the set multifile number simply call
+                 <span class="methodname">getMultiFile()</span>.
+            </p></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>File elements in Subforms</b><br /></span>
+            
+
+            
+                When you use file elements in subforms you must set unique names.
+                For example, if you name a file element in subform1 &quot;file&quot;, you must give
+                any file element in subform2 a different name.
+            <br />
+
+            
+                If there are 2 file elements with the same name, the second
+                element is not be displayed or submitted.
+            <br />
+
+            
+                Additionally, file elements are not rendered within the sub-form. So when
+                you add a file element into a subform, then the element will be rendered
+                within the main form.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            To limit the size of the file uploaded, you can
+            specify the maximum file size by setting the <b><tt>MAX_FILE_SIZE</tt></b>
+            option on the form. When you set this value by using the
+             <span class="methodname">setMaxFileSize($size)</span> method, it will be rendered with the
+            file element.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_File<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Upload an image:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setDestination</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/var/www/upload'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">addValidator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Size'</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #cc66cc;">102400</span><span style="color: #66cc66;">&#41;</span> <span style="color: #808080; font-style: italic;">// limit to 100K</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">setMaxFileSize</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">102400</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// limits the filesize on the client side</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>MaxFileSize with Multiple File Elements</b><br /></span>
+            
+
+            
+                When you use multiple file elements in your form you should set
+                the <b><tt>MAX_FILE_SIZE</tt></b> only once. Setting it again will
+                overwrite the previous value.
+            <br />
+
+            
+                Note, that this is also the case when you use multiple forms.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.hidden" name="zend.form.standardElements.hidden"><div class="info"><h1 class="title">Zend_Form_Element_Hidden</h1></div>
+        
+
+        <p class="para">
+            Hidden elements inject data that should be submitted, but that should not manipulated by
+            the user . <span class="classname">Zend_Form_Element_Hidden</span> accomplishes this with the
+            &#039;formHidden&#039; view helper.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.hash" name="zend.form.standardElements.hash"><div class="info"><h1 class="title">Zend_Form_Element_Hash</h1></div>
+        
+
+        <p class="para">
+            This element provides protection from CSRF attacks on forms,
+            ensuring the data is submitted by the user session that generated
+            the form and not by a rogue script. Protection is achieved by adding
+            a hash element to a form and verifying it when the form is
+            submitted.
+        </p>
+
+        <p class="para">
+            The name of the hash element should be unique. We recommend using
+            the <i>salt</i> option for the element- two hashes with
+            same names and different salts would not collide:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'hash'</span>, <span style="color: #ff0000;">'no_csrf_foo'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'salt'</span> =&gt; <span style="color: #ff0000;">'unique'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can set the salt later using the  <span class="methodname">setSalt($salt)</span>
+            method.
+        </p>
+
+        <p class="para">
+            Internally, the element stores a unique identifier using
+            <span class="classname">Zend_Session_Namespace</span>, and checks for it at
+            submission (checking that the TTL has not expired). The &#039;Identical&#039;
+            validator is then used to ensure the submitted hash matches the
+            stored hash.
+        </p>
+
+        <p class="para">
+            The &#039;formHidden&#039; view helper is used to render the element in the
+            form.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.Image" name="zend.form.standardElements.Image"><div class="info"><h1 class="title">Zend_Form_Element_Image</h1></div>
+        
+
+        <p class="para">
+            Images can be used as form elements, and you can use these images as
+            graphical elements on form buttons.
+        </p>
+
+        <p class="para">
+            Images need an image source. <span class="classname">Zend_Form_Element_Image</span>
+            allows you to specify this by using the  <span class="methodname">setImage()</span>
+            accessor (or &#039;image&#039; configuration key). You can also optionally specify a value to use
+            when submitting the image using the  <span class="methodname">setImageValue()</span> accessor
+            (or &#039;imageValue&#039; configuration key). When the value set for the
+            element matches the <span class="property">imageValue</span>, then the accessor
+             <span class="methodname">isChecked()</span> will return <b><tt>TRUE</tt></b>.
+        </p>
+
+        <p class="para">
+            Image elements use the
+            <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.image" class="link">Image
+                Decorator</a> for rendering, in addition to the standard Errors,
+            HtmlTag, and Label decorators. You can optionally specify a tag to
+            the <span class="classname">Image</span> decorator that will then wrap the image
+            element.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.multiCheckbox" name="zend.form.standardElements.multiCheckbox"><div class="info"><h1 class="title">Zend_Form_Element_MultiCheckbox</h1></div>
+        
+
+        <p class="para">
+            Often you have a set of related checkboxes, and you wish to group
+            the results. This is much like a <a href="zend.form.standardElements.html#zend.form.standardElements.multiselect" class="link">Multiselect</a>,
+            but instead of them being in a dropdown list, you need to show
+            checkbox/value pairs.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_MultiCheckbox</span> makes this a snap. Like
+            all other elements extending the base Multi element, you can specify
+            a list of options, and easily validate against that same list. The
+            &#039;formMultiCheckbox&#039; view helper ensures that these are returned as
+            an array in the form submission.
+        </p>
+
+        <p class="para">
+            By default, this element registers an <span class="classname">InArray</span> validator
+            which validates against the array keys of registered options. You
+            can disable this behavior by either calling
+             <span class="methodname">setRegisterInArrayValidator(false)</span>, or by passing a
+            <b><tt>FALSE</tt></b> value to the <span class="property">registerInArrayValidator</span>
+            configuration key.
+        </p>
+
+        <p class="para">
+            You may manipulate the various checkbox options using the following
+            methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOption($option, $value)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOptions(array $options)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setMultiOptions(array $options)</span> (overwrites existing
+                    options)
+                </p>
+            </li>
+
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOptions()</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">removeMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">clearMultiOptions()</span></p></li>
+        </ul>
+
+        <p class="para">
+            To mark checked items, you need to pass an array of values to
+             <span class="methodname">setValue()</span>. The following will check the values &quot;bar&quot;
+            and &quot;bat&quot;:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_MultiCheckbox<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'multiOptions'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'foo'</span> =&gt; <span style="color: #ff0000;">'Foo Option'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bar'</span> =&gt; <span style="color: #ff0000;">'Bar Option'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'baz'</span> =&gt; <span style="color: #ff0000;">'Baz Option'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bat'</span> =&gt; <span style="color: #ff0000;">'Bat Option'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">setValue</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bar'</span>, <span style="color: #ff0000;">'bat'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Note that even when setting a single value, you must pass an array.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.multiselect" name="zend.form.standardElements.multiselect"><div class="info"><h1 class="title">Zend_Form_Element_Multiselect</h1></div>
+        
+
+        <p class="para">
+            <acronym class="acronym">XHTML</acronym> <em class="emphasis">select</em> elements allow a &#039;multiple&#039;
+            attribute, indicating multiple options may be selected for submission, instead
+            of the usual one. <span class="classname">Zend_Form_Element_Multiselect</span> extends
+            <a href="zend.form.standardElements.html#zend.form.standardElements.select" class="link">Zend_Form_Element_Select</a>,
+            and sets the <span class="property">multiple</span> attribute to &#039;multiple&#039;. Like
+            other classes that inherit from the base
+            <span class="classname">Zend_Form_Element_Multi</span> class, you can manipulate the
+            options for the select using:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOption($option, $value)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOptions(array $options)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setMultiOptions(array $options)</span> (overwrites existing
+                    options)
+                </p>
+            </li>
+
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOptions()</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">removeMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">clearMultiOptions()</span></p></li>
+        </ul>
+
+        <p class="para">
+            If a translation adapter is registered with the form and/or element,
+            option values will be translated for display purposes.
+        </p>
+
+        <p class="para">
+            By default, this element registers an <span class="classname">InArray</span> validator
+            which validates against the array keys of registered options. You
+            can disable this behavior by either calling
+             <span class="methodname">setRegisterInArrayValidator(false)</span>, or by passing a
+            <b><tt>FALSE</tt></b> value to the <span class="property">registerInArrayValidator</span>
+            configuration key.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.password" name="zend.form.standardElements.password"><div class="info"><h1 class="title">Zend_Form_Element_Password</h1></div>
+        
+
+        <p class="para">
+            Password elements are basically normal text elements -- except that
+            you typically do not want the submitted password displayed in error
+            messages or the element itself when the form is re-displayed.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_Password</span> achieves this by calling
+             <span class="methodname">setObscureValue(true)</span> on each validator (ensuring that
+            the password is obscured in validation error messages), and using
+            the &#039;formPassword&#039; view helper (which does not display the value
+            passed to it).
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.radio" name="zend.form.standardElements.radio"><div class="info"><h1 class="title">Zend_Form_Element_Radio</h1></div>
+        
+
+        <p class="para">
+            Radio elements allow you to specify several options, of which you
+            need a single value returned. <span class="classname">Zend_Form_Element_Radio</span>
+            extends the base <span class="classname">Zend_Form_Element_Multi</span> class,
+            allowing you to specify a number of options, and then uses the
+            <em class="emphasis">formRadio</em> view helper to display these.
+        </p>
+
+        <p class="para">
+            By default, this element registers an <span class="classname">InArray</span> validator
+            which validates against the array keys of registered options. You
+            can disable this behavior by either calling
+             <span class="methodname">setRegisterInArrayValidator(false)</span>, or by passing a
+            <b><tt>FALSE</tt></b> value to the <span class="property">registerInArrayValidator</span>
+            configuration key.
+        </p>
+
+        <p class="para">
+            Like all elements extending the Multi element base class, the
+            following methods may be used to manipulate the radio options
+            displayed:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOption($option, $value)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOptions(array $options)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setMultiOptions(array $options)</span>
+                    (overwrites existing options)
+                </p>
+            </li>
+
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOptions()</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">removeMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">clearMultiOptions()</span></p></li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.reset" name="zend.form.standardElements.reset"><div class="info"><h1 class="title">Zend_Form_Element_Reset</h1></div>
+        
+
+        <p class="para">
+            Reset buttons are typically used to clear a form, and are not part
+            of submitted data. However, as they serve a purpose in the display,
+            they are included in the standard elements.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_Reset</span> extends <a href="zend.form.standardElements.html#zend.form.standardElements.submit" class="link">Zend_Form_Element_Submit</a>.
+            As such, the label is used for the button display, and will be
+            translated if a translation adapter is present. It utilizes only the
+            &#039;ViewHelper&#039; and &#039;DtDdWrapper&#039; decorators, as there should never be
+            error messages for such elements, nor will a label be necessary.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.select" name="zend.form.standardElements.select"><div class="info"><h1 class="title">Zend_Form_Element_Select</h1></div>
+        
+
+        <p class="para">
+            Select boxes are a common way of limiting to specific choices for a
+            given form datum. <span class="classname">Zend_Form_Element_Select</span> allows you
+            to generate these quickly and easily.
+        </p>
+
+        <p class="para">
+            By default, this element registers an <span class="classname">InArray</span> validator
+            which validates against the array keys of registered options. You
+            can disable this behavior by either calling
+             <span class="methodname">setRegisterInArrayValidator(false)</span>, or by passing a
+            <b><tt>FALSE</tt></b> value to the <span class="property">registerInArrayValidator</span>
+            configuration key.
+        </p>
+
+        <p class="para">
+            As it extends the base Multi element, the following methods may be
+            used to manipulate the select options:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOption($option, $value)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para"> <span class="methodname">addMultiOptions(array $options)</span></p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setMultiOptions(array $options)</span>
+                    (overwrites existing options)
+                </p>
+            </li>
+
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">getMultiOptions()</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">removeMultiOption($option)</span></p></li>
+            <li class="listitem"><p class="para"> <span class="methodname">clearMultiOptions()</span></p></li>
+        </ul>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_Select</span> uses the &#039;formSelect&#039; view
+            helper for decoration.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.submit" name="zend.form.standardElements.submit"><div class="info"><h1 class="title">Zend_Form_Element_Submit</h1></div>
+        
+
+        <p class="para">
+            Submit buttons are used to submit a form. You may use multiple
+            submit buttons; you can use the button used to submit the form to
+            decide what action to take with the data submitted.
+            <span class="classname">Zend_Form_Element_Submit</span> makes this decisioning easy,
+            by adding a  <span class="methodname">isChecked()</span> method; as only one button
+            element will be submitted by the form, after populating or
+            validating the form, you can call this method on each submit button
+            to determine which one was used.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Form_Element_Submit</span> uses the label as the &quot;value&quot;
+            of the submit button, translating it if a translation adapter is
+            present.  <span class="methodname">isChecked()</span> checks the submitted value against
+            the label in order to determine if the button was used.
+        </p>
+
+        <p class="para">
+            The <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.viewHelper" class="link">ViewHelper</a>
+            and <a href="zend.form.standardDecorators.html#zend.form.standardDecorators.dtDdWrapper" class="link">DtDdWrapper</a>
+            decorators to render the element. No label decorator is used, as the
+            button label is used when rendering the element; also, typically,
+            you will not associate errors with a submit element.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.text" name="zend.form.standardElements.text"><div class="info"><h1 class="title">Zend_Form_Element_Text</h1></div>
+        
+
+        <p class="para">
+            By far the most prevalent type of form element is the text element,
+            allowing for limited text entry; it&#039;s an ideal element for most data
+            entry. <span class="classname">Zend_Form_Element_Text</span> simply uses the
+            &#039;formText&#039; view helper to display the element.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.standardElements.textarea" name="zend.form.standardElements.textarea"><div class="info"><h1 class="title">Zend_Form_Element_Textarea</h1></div>
+        
+
+        <p class="para">
+            Textareas are used when large quantities of text are expected, and
+            place no limits on the amount of text submitted (other than maximum
+            size limits as dictated by your server or <acronym class="acronym">PHP</acronym>).
+            <span class="classname">Zend_Form_Element_Textarea</span> uses the &#039;textArea&#039; view
+            helper to display such elements, placing the value as the content of
+            the element.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.form.html">Zend_Form</a></li>
+  <li><a href="zend.form.introduction.html">Zend_Form</a></li>
+  <li><a href="zend.form.quickstart.html">Zend_Form Quick Start</a></li>
+  <li><a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a></li>
+  <li><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></li>
+  <li><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></li>
+  <li class="active"><a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></li>
+  <li><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

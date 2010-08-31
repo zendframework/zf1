@@ -1,0 +1,2304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Creating Forms Using Zend_Form - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.form.forms" class="section"><div class="info"><h1 class="title">Creating Forms Using Zend_Form</h1></div>
+    
+
+    <p class="para">
+        The <span class="classname">Zend_Form</span> class is used to aggregate form elements,
+        display groups, and subforms. It can then perform the following actions
+        on those items:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                Validation, including retrieving error codes and messages
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                Value aggregation, including populating items and retrieving both
+                filtered and unfiltered values from all items
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                Iteration over all items, in the order in which they are entered or
+                based on the order hints retrieved from each item
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                Rendering of the entire form, either via a single decorator that
+                performs custom rendering or by iterating over each item in the form
+            </p>
+        </li>
+    </ul>
+
+    <p class="para">
+        While forms created with <span class="classname">Zend_Form</span> may be complex, probably
+        the best use case is for simple forms; its best use is for Rapid
+        Application Development (RAD) and prototyping.
+    </p>
+
+    <p class="para">
+        At its most basic, you simply instantiate a form object:
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Generic form object:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Custom form object:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #000000; font-weight: bold;">new</span> My_Form<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li></ol></div></div></div>
+
+
+    <p class="para">
+        You can optionally pass in a instance of <span class="classname">Zend_Config</span> or an array,
+        which will be used to set object state and potentially create new elements:
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Passing in configuration options:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$config</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+    <p class="para">
+        <span class="classname">Zend_Form</span> is iterable, and will iterate over elements,
+        display groups, and subforms, using the order they were registered and
+        any order index each may have. This is useful in cases where you wish to
+        render the elements manually in the appropriate order.
+    </p>
+
+    <p class="para">
+        <span class="classname">Zend_Form</span>&#039;s magic lies in its ability to serve as a factory
+        for elements and display groups, as well as the ability to render itself
+        through decorators.
+    </p>
+
+    <div class="section" id="zend.form.forms.plugins" name="zend.form.forms.plugins"><div class="info"><h1 class="title">Plugin Loaders</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> makes use of
+            <span class="classname">Zend_Loader_PluginLoader</span> to allow developers to specify
+            the locations of alternate elements and decorators. Each has its own
+            plugin loader associated with it, and general accessors are used to
+            retrieve and modify each.
+        </p>
+
+        <p class="para">
+            The following loader types are used with the various plugin loader
+            methods: &#039;element&#039; and &#039;decorator&#039;. The type names are case
+            insensitive.
+        </p>
+
+        <p class="para">
+            The methods used to interact with plugin loaders are as follows:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">setPluginLoader($loader, $type)</span>: $loader is the
+                    plugin loader object itself, while type is one of the types
+                    specified above. This sets the plugin loader for the given type
+                    to the newly specified loader object.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getPluginLoader($type)</span>: retrieves the plugin loader
+                    associated with $type.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addPrefixPath($prefix, $path, $type = null)</span>: adds a
+                    prefix/path association to the loader specified by $type. If
+                    $type is <b><tt>NULL</tt></b>, it will attempt to add the path to all
+                    loaders, by appending the prefix with each of &quot;_Element&quot; and
+                    &quot;_Decorator&quot;; and appending the path with &quot;Element/&quot; and
+                    &quot;Decorator/&quot;. If you have all your extra form element classes
+                    under a common hierarchy, this is a convenience method for
+                    setting the base prefix for them.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addPrefixPaths(array $spec)</span>: allows you to add many
+                    paths at once to one or more plugin loaders. It expects each
+                    array item to be an array with the keys &#039;path&#039;, &#039;prefix&#039;, and
+                    &#039;type&#039;.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Additionally, you can specify prefix paths for all elements and
+            display groups created through a <span class="classname">Zend_Form</span> instance
+            using the following methods:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addElementPrefixPath($prefix, $path, $type = null)</span>:
+                    Just like  <span class="methodname">addPrefixPath()</span>, you must specify a class
+                    prefix and a path. <var class="varname">$type</var>, when specified, must be
+                    one of the plugin loader types specified by
+                    <span class="classname">Zend_Form_Element</span>; see the <a href="zend.form.elements.html#zend.form.elements.loaders" class="link">element plugins
+                        section</a> for more information on valid
+                    <var class="varname">$type</var> values. If no <var class="varname">$type</var> is
+                    specified, the method will assume it is a general prefix for all
+                    types.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">addDisplayGroupPrefixPath($prefix, $path)</span>:
+                    Just like  <span class="methodname">addPrefixPath()</span>, you must specify a class
+                    prefix and a path; however, since display groups only support
+                    decorators as plugins, no <var class="varname">$type</var> is necessary.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Custom elements and decorators are an easy way to share
+            functionality between forms and encapsulate custom functionality.
+            See the <a href="zend.form.elements.html#zend.form.elements.loaders.customLabel" class="link">Custom Label
+                example</a> in the elements documentation for an example of
+            how custom elements can be used as replacements for standard
+            classes.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.forms.elements" name="zend.form.forms.elements"><div class="info"><h1 class="title">Elements</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> provides several accessors for adding and
+            removing form elements from a form. These can take element object
+            instances or serve as factories for instantiating the element
+            objects themselves.
+        </p>
+
+        <p class="para">
+            The most basic method for adding an element is
+             <span class="methodname">addElement()</span>. This method can take either an object of
+            type <span class="classname">Zend_Form_Element</span> (or of a class extending
+            <span class="classname">Zend_Form_Element</span>), or arguments for building a new
+            element -- including the element type, name, and any configuration
+            options.
+        </p>
+
+        <p class="para">
+            Some examples:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using an element instance:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$element</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Text<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$element</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using a factory</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">//</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Creates an element of type Zend_Form_Element_Text with the</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// name of 'foo':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'text'</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Pass label option to the element:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'text'</span>, <span style="color: #ff0000;">'foo'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'label'</span> =&gt; <span style="color: #ff0000;">'Foo:'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>addElement() Implements Fluent Interface</b><br /></span>
+            
+
+            
+                 <span class="methodname">addElement()</span> implements a fluent interface; that is
+                to say, it returns the <span class="classname">Zend_Form</span> object, and not
+                the element. This is done to allow you to chain together
+                multiple addElement() methods or other form methods that
+                implement the fluent interface (all setters in <span class="classname">Zend_Form</span>
+                implement the pattern).
+            <br />
+
+            
+                If you wish to return the element instead, use
+                 <span class="methodname">createElement()</span>, which is outlined below. Be aware,
+                however, that  <span class="methodname">createElement()</span> does not attach the
+                element to the form.
+            <br />
+
+            
+                Internally,  <span class="methodname">addElement()</span> actually uses
+                 <span class="methodname">createElement()</span> to create the element before
+                attaching it to the form.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Once an element has been added to the form, you can retrieve it by
+            name. This can be done either by using the  <span class="methodname">getElement()</span>
+            method or by using overloading to access the element as an object
+            property:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// getElement():</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$foo</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// As object property:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$foo</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">foo</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Occasionally, you may want to create an element without attaching it
+            to the form (for instance, if you wish to make use of the various
+            plugin paths registered with the form, but wish to later attach the
+            object to a sub form). The  <span class="methodname">createElement()</span> method
+            allows you to do so:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $username becomes a Zend_Form_Element_Text object:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$username</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">createElement</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'text'</span>, <span style="color: #ff0000;">'username'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <div class="section" id="zend.form.forms.elements.values" name="zend.form.forms.elements.values"><div class="info"><h1 class="title">Populating and Retrieving Values</h1></div>
+            
+
+            <p class="para">
+                After validating a form, you will typically need to retrieve the
+                values so you can perform other operations, such as updating a
+                database or notifying a web service. You can retrieve all values
+                for all elements using  <span class="methodname">getValues()</span>;
+                 <span class="methodname">getValue($name)</span> allows you to retrieve a single
+                element&#039;s value by element name:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Get all values:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$values</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getValues</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Get only 'foo' element's value:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$value</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getValue</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Sometimes you&#039;ll want to populate the form with specified values
+                prior to rendering. This can be done with either the
+                 <span class="methodname">setDefaults()</span> or  <span class="methodname">populate()</span>
+                methods:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setDefaults</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">populate</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                On the flip side, you may want to clear a form after populating
+                or validating it; this can be done using the
+                 <span class="methodname">reset()</span> method:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">reset</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.form.forms.elements.global" name="zend.form.forms.elements.global"><div class="info"><h1 class="title">Global Operations</h1></div>
+            
+
+            <p class="para">
+                Occasionally you will want certain operations to affect all
+                elements. Common scenarios include needing to set plugin prefix
+                paths for all elements, setting decorators for all elements, and
+                setting filters for all elements. As examples:
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #1 Setting Prefix Paths for All Elements</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    You can set prefix paths for all elements by type, or using
+                    a global prefix. Some examples:
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set global prefix path:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Creates paths for prefixes My_Foo_Filter, My_Foo_Validate,</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// and My_Foo_Decorator</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElementPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Foo'</span>, <span style="color: #ff0000;">'My/Foo/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Just filter paths:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElementPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Foo_Filter'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'My/Foo/Filter'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'filter'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Just validator paths:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElementPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Foo_Validate'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'My/Foo/Validate'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'validate'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Just decorator paths:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addElementPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Foo_Decorator'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'My/Foo/Decorator'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'decorator'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <div class="example"><div class="info"><p><b>Example #2 Setting Decorators for All Elements</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    You can set decorators for all elements.
+                     <span class="methodname">setElementDecorators()</span> accepts an array of
+                    decorators, just like  <span class="methodname">setDecorators()</span>, and will
+                    overwrite any previously set decorators in each element. In
+                    this example, we set the decorators to simply a ViewHelper
+                    and a Label:
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setElementDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Label'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <div class="example"><div class="info"><p><b>Example #3 Setting Decorators for Some Elements</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    You can also set decorators for a subset of elements,
+                    either by inclusion or exclusion. The second argument to
+                     <span class="methodname">setElementDecorators()</span> may be an array of
+                    element names; by default, specifying such an array will
+                    set the specified decorators on those elements only. You
+                    may also pass a third argument, a flag indicating whether
+                    this list of elements is for inclusion or exclusion
+                    purposes. If the flag is <b><tt>FALSE</tt></b>, it will decorate all
+                    elements <em class="emphasis">except</em> those in the passed list.
+                    As with standard usage of the method, any decorators passed
+                    will overwrite any previously set decorators in each
+                    element.
+                </p></div>
+
+                <div class="example-contents"><p>
+                    In the following snippet, we indicate that we want only the
+                    ViewHelper and Label decorators for the &#039;foo&#039; and &#039;bar&#039;
+                    elements:
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setElementDecorators</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Label'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'foo'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bar'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <div class="example-contents"><p>
+                    On the flip side, with this snippet, we&#039;ll now indicate
+                    that we want to use only the ViewHelper and Label
+                    decorators for every element <em class="emphasis">except</em>
+                    the &#039;foo&#039; and &#039;bar&#039; elements:
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setElementDecorators</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Label'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'foo'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'bar'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: <span class="info"><b>Some Decorators are Inappropriate for Some Elements</b><br /></span>
+                
+
+                
+                    While  <span class="methodname">setElementDecorators()</span> may seem like
+                    a good solution, there are some cases where it may
+                    actually end up with unexpected results. For example,
+                    the various button elements (Submit, Button, Reset)
+                    currently use the label as the value of the button,
+                    and only use ViewHelper and DtDdWrapper decorators --
+                    preventing an additional labels, errors, and hints from
+                    being rendered. The example above would duplicate some
+                    content (the label) for button elements.
+                <br />
+
+                
+                    You can use the inclusion/exclusion array to overcome
+                    this issue as noted in the previous example.
+                <br />
+
+                
+                    So, use this method wisely, and realize that you may
+                    need to exclude some elements or manually change some elements&#039; decorators
+                    to prevent unwanted output.
+                <br />
+            </p></blockquote>
+
+            <div class="example"><div class="info"><p><b>Example #4 Setting Filters for All Elements</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    In some cases, you may want to apply the same filter to all
+                    elements; a common case is to  <span class="methodname">trim()</span> all values:
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setElementFilters</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'StringTrim'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.form.forms.elements.methods" name="zend.form.forms.elements.methods"><div class="info"><h1 class="title">Methods For Interacting With Elements</h1></div>
+            
+
+            <p class="para">
+                The following methods may be used to interact with elements:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">createElement($element, $name = null, $options =
+                            null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addElement($element, $name = null, $options = null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addElements(array $elements)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setElements(array $elements)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getElement($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getElements()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">removeElement($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearElements()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDefaults(array $defaults)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDefault($name, $value)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getValue($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getValues()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getUnfilteredValue($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getUnfilteredValues()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setElementFilters(array $filters)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setElementDecorators(array $decorators)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addElementPrefixPath($prefix, $path, $type = null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addElementPrefixPaths(array $spec)</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.forms.displaygroups" name="zend.form.forms.displaygroups"><div class="info"><h1 class="title">Display Groups</h1></div>
+        
+
+        <p class="para">
+            Display groups are a way to create virtual groupings of elements for
+            display purposes. All elements remain accessible by name in the
+            form, but when iterating over the form or rendering, any elements in
+            a display group are rendered together. The most common use case for
+            this is for grouping elements in fieldsets.
+        </p>
+
+        <p class="para">
+            The base class for display groups is
+            <span class="classname">Zend_Form_DisplayGroup</span>. While it can be instantiated
+            directly, it is usually best to use <span class="classname">Zend_Form</span>&#039;s
+             <span class="methodname">addDisplayGroup()</span> method to do so. This method takes an
+            array of elements as its first argument, and a name for the display
+            group as its second argument. You may optionally pass in an array of
+            options or a <span class="classname">Zend_Config</span> object as the third argument.
+        </p>
+
+        <p class="para">
+            Assuming that the elements &#039;username&#039; and &#039;password&#039; are already set
+            in the form, the following code would group these elements in a
+            &#039;login&#039; display group:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDisplayGroup</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span>, <span style="color: #ff0000;">'password'</span><span style="color: #66cc66;">&#41;</span>, <span style="color: #ff0000;">'login'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can access display groups using the
+             <span class="methodname">getDisplayGroup()</span> method, or via overloading using the
+            display group&#039;s name:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using getDisplayGroup():</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$login</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getDisplayGroup</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'login'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using overloading:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$login</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">login</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Default Decorators Do Not Need to Be Loaded</b><br /></span>
+            
+
+            
+                By default, the default decorators are loaded during object
+                initialization. You can disable this by passing the
+                &#039;disableLoadDefaultDecorators&#039; option when creating a display
+                group:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDisplayGroup</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <span style="color: #ff0000;">'bar'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'foobar'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'disableLoadDefaultDecorators'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                This option may be mixed with any other options you pass,
+                both as array options or in a <span class="classname">Zend_Config</span> object.
+            <br />
+        </p></blockquote>
+
+        <div class="section" id="zend.form.forms.displaygroups.global" name="zend.form.forms.displaygroups.global"><div class="info"><h1 class="title">Global Operations</h1></div>
+            
+
+            <p class="para">
+                Just as with elements, there are some operations which might
+                affect all display groups; these include setting decorators and
+                setting the plugin path in which to look for decorators.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 Setting Decorator Prefix Path for All Display Groups</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    By default, display groups inherit whichever decorator paths
+                    the form uses; however, if they should look in alternate
+                    locations, you can use the
+                     <span class="methodname">addDisplayGroupPrefixPath()</span> method.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDisplayGroupPrefixPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Foo_Decorator'</span>, <span style="color: #ff0000;">'My/Foo/Decorator'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <div class="example"><div class="info"><p><b>Example #6 Setting Decorators for All Display Groups</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    You can set decorators for all display groups.
+                     <span class="methodname">setDisplayGroupDecorators()</span> accepts an array of
+                    decorators, just like  <span class="methodname">setDecorators()</span>, and will
+                    overwrite any previously set decorators in each display
+                    group. In this example, we set the decorators to simply a
+                    fieldset (the FormElements decorator is necessary to ensure
+                    that the elements are iterated):
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setDisplayGroupDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'FormElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Fieldset'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.form.forms.displaygroups.customClasses" name="zend.form.forms.displaygroups.customClasses"><div class="info"><h1 class="title">Using Custom Display Group Classes</h1></div>
+            
+
+            <p class="para">
+                By default, <span class="classname">Zend_Form</span> uses the
+                <span class="classname">Zend_Form_DisplayGroup</span> class for display groups.
+                You may find you need to extend this class in order to provided
+                custom functionality.  <span class="methodname">addDisplayGroup()</span> does not
+                allow passing in a concrete instance, but does allow specifying
+                the class to use as one of its options, using the
+                &#039;displayGroupClass&#039; key:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use the 'My_DisplayGroup' class</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDisplayGroup</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span>, <span style="color: #ff0000;">'password'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'user'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'displayGroupClass'</span> =&gt; <span style="color: #ff0000;">'My_DisplayGroup'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                If the class has not yet been loaded, <span class="classname">Zend_Form</span>
+                will attempt to do so using <span class="classname">Zend_Loader</span>.
+            </p>
+
+            <p class="para">
+                You can also specify a default display group class to use with
+                the form such that all display groups created with the form
+                object will use that class:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use the 'My_DisplayGroup' class for all display groups:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setDefaultDisplayGroupClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_DisplayGroup'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                This setting may be specified in configurations as
+                &#039;defaultDisplayGroupClass&#039;, and will be loaded early to ensure
+                all display groups use that class.
+            </p>
+        </div>
+
+        <div class="section" id="zend.form.forms.displaygroups.interactionmethods" name="zend.form.forms.displaygroups.interactionmethods"><div class="info"><h1 class="title">Methods for Interacting With Display Groups</h1></div>
+            
+
+            <p class="para">
+                The following methods may be used to interact with display
+                groups:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addDisplayGroup(array $elements, $name, $options
+                            = null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addDisplayGroups(array $groups)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDisplayGroups(array $groups)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getDisplayGroup($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getDisplayGroups()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">removeDisplayGroup($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearDisplayGroups()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDisplayGroupDecorators(array $decorators)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addDisplayGroupPrefixPath($prefix, $path)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDefaultDisplayGroupClass($class)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getDefaultDisplayGroupClass($class)</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" id="zend.form.forms.displaygroups.methods" name="zend.form.forms.displaygroups.methods"><div class="info"><h1 class="title">Zend_Form_DisplayGroup Methods</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Form_DisplayGroup</span> has the following methods,
+                grouped by type:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">Configuration:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">setOptions(array $options)</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setConfig(Zend_Config $config)</span></p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">Metadata:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setAttrib($key, $value)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">addAttribs(array $attribs)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setAttribs(array $attribs)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getAttrib($key)</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">getAttribs()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">removeAttrib($key)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">clearAttribs()</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">setName($name)</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">getName()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setDescription($value)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getDescription()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setLegend($legend)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getLegend()</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">setOrder($order)</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">getOrder()</span></p></li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">Elements:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">createElement($type, $name, array $options
+                                    = array())</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">addElement($typeOrElement, $name, array $options =
+                                    array())</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">addElements(array $elements)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setElements(array $elements)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getElement($name)</span></p></li>
+                        <li class="listitem"><p class="para"> <span class="methodname">getElements()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">removeElement($name)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">clearElements()</span></p></li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">Plugin loaders:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">setPluginLoader(Zend_Loader_PluginLoader
+                                    $loader)</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getPluginLoader()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">addPrefixPath($prefix, $path)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">addPrefixPaths(array $spec)</span></p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">Decorators:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">addDecorator($decorator, $options = null)</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">addDecorators(array $decorators)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setDecorators(array $decorators)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">getDecorator($name)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getDecorators()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">removeDecorator($name)</span></p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">clearDecorators()</span></p></li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">Rendering:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">setView(Zend_View_Interface $view = null)</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getView()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">render(Zend_View_Interface $view = null)</span>
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">I18n:</p>
+
+                    <ul class="itemizedlist">
+                        <li class="listitem">
+                            <p class="para">
+                                 <span class="methodname">setTranslator(Zend_Translate_Adapter $translator =
+                                    null)</span>
+                            </p>
+                        </li>
+
+                        <li class="listitem"><p class="para"> <span class="methodname">getTranslator()</span></p></li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">setDisableTranslator($flag)</span></p>
+                        </li>
+
+                        <li class="listitem">
+                            <p class="para"> <span class="methodname">translatorIsDisabled()</span></p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.forms.subforms" name="zend.form.forms.subforms"><div class="info"><h1 class="title">Sub Forms</h1></div>
+        
+
+        <p class="para">
+            Sub forms serve several purposes:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Creating logical element groups. Since sub forms are simply
+                    forms, you can validate subforms as individual entities.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Creating multi-page forms. Since sub forms are simply forms, you
+                    can display a separate sub form per page, building up multi-page
+                    forms where each form has its own validation logic. Only once
+                    all sub forms validate would the form be considered complete.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Display groupings. Like display groups, sub forms, when rendered
+                    as part of a larger form, can be used to group elements. Be
+                    aware, however, that the master form object will have no
+                    awareness of the elements in sub forms.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            A sub form may be a <span class="classname">Zend_Form</span> object, or, more
+            typically, a <span class="classname">Zend_Form_SubForm</span> object. The latter
+            contains decorators suitable for inclusion in a larger form (i.e.,
+            it does not render additional <acronym class="acronym">HTML</acronym> form tags, but does group
+            elements). To attach a sub form, simply add it to the form and give
+            it a name:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addSubForm</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$subForm</span>, <span style="color: #ff0000;">'subform'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can retrieve a sub form using either
+             <span class="methodname">getSubForm($name)</span> or overloading using the sub form
+            name:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using getSubForm():</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$subForm</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getSubForm</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'subform'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Using overloading:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$subForm</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">subform</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Sub forms are included in form iteration, although the elements they
+            contain are not.
+        </p>
+
+        <div class="section" id="zend.form.forms.subforms.global" name="zend.form.forms.subforms.global"><div class="info"><h1 class="title">Global Operations</h1></div>
+            
+
+            <p class="para">
+                Like elements and display groups, there are some operations that
+                might need to affect all sub forms. Unlike display groups and
+                elements, however, sub forms inherit most functionality from the
+                master form object, and the only real operation that may need to
+                be performed globally is setting decorators for sub forms. For
+                this purpose, there is the  <span class="methodname">setSubFormDecorators()</span>
+                method. In the next example, we&#039;ll set the decorator for all
+                subforms to be simply a fieldset (the FormElements decorator is
+                needed to ensure its elements are iterated):
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setSubFormDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'FormElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Fieldset'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.form.forms.subforms.methods" name="zend.form.forms.subforms.methods"><div class="info"><h1 class="title">Methods for Interacting With Sub Forms</h1></div>
+            
+
+            <p class="para">
+                The following methods may be used to interact with sub forms:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addSubForm(Zend_Form $form, $name, $order = null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addSubForms(array $subForms)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setSubForms(array $subForms)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getSubForm($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getSubForms()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">removeSubForm($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearSubForms()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setSubFormDecorators(array $decorators)</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.forms.metadata" name="zend.form.forms.metadata"><div class="info"><h1 class="title">Metadata and Attributes</h1></div>
+        
+
+        <p class="para">
+            While a form&#039;s usefulness primarily derives from the elements it
+            contains, it can also contain other metadata, such as a name (often
+            used as a unique ID in the <acronym class="acronym">HTML</acronym> markup); the form action and method;
+            the number of elements, groups, and sub forms it contains; and
+            arbitrary metadata (usually used to set <acronym class="acronym">HTML</acronym> attributes for the form
+            tag itself).
+        </p>
+
+        <p class="para">
+            You can set and retrieve a form&#039;s name using the name accessors:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set the name:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setName</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'registration'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retrieve the name:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$name</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getName</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            To set the action (url to which the form submits) and method (method
+            by which it should submit, e.g., &#039;POST&#039; or &#039;<b><tt>GET</tt></b>&#039;), use the action
+            and method accessors:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set the action and method:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/user/login'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setMethod</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'post'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You may also specify the form encoding type specifically using the
+            enctype accessors. <span class="classname">Zend_Form</span> defines two constants,
+            <b><tt>Zend_Form::ENCTYPE_URLENCODED</tt></b> and
+            <b><tt>Zend_Form::ENCTYPE_MULTIPART</tt></b>, corresponding to the
+            values &#039;application/x-www-form-urlencoded&#039; and
+            &#039;multipart/form-data&#039;, respectively; however, you can set this to
+            any arbitrary encoding type.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set the action, method, and enctype:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setAction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/user/login'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setMethod</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'post'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setEnctype</span><span style="color: #66cc66;">&#40;</span>Zend_Form::<span style="color: #006600;">ENCTYPE_MULTIPART</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                The method, action, and enctype are only used internally for rendering,
+                and not for any sort of validation.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> implements the <span class="classname">Countable</span>
+            interface, allowing you to pass it as an argument to count:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$numItems</span> = <a href="http://www.php.net/count"><span style="color: #000066;">count</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$form</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Setting arbitrary metadata is done through the attribs accessors.
+            Since overloading in <span class="classname">Zend_Form</span> is used to access
+            elements, display groups, and sub forms, this is the only method for
+            accessing metadata.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Setting attributes:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span>, <span style="color: #ff0000;">'zend-form'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">addAttribs</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'id'</span>&nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'registration'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'onSubmit'</span> =&gt; <span style="color: #ff0000;">'validate(this)'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retrieving attributes:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$class</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$attribs</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getAttribs</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Remove an attribute:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">removeAttrib</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'onSubmit'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Clear all attributes:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">clearAttribs</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.form.forms.decorators" name="zend.form.forms.decorators"><div class="info"><h1 class="title">Decorators</h1></div>
+        
+
+        <p class="para">
+            Creating the markup for a form is often a time-consuming task,
+            particularly if you plan on re-using the same markup to show things
+            such as validation errors, submitted values, etc.
+            <span class="classname">Zend_Form</span>&#039;s answer to this issue is
+            <em class="emphasis">decorators</em>.
+        </p>
+
+        <p class="para">
+            Decorators for <span class="classname">Zend_Form</span> objects can be used to render
+            a form. The FormElements decorator will iterate through all items in
+            a form -- elements, display groups, and sub forms -- and render
+            them, returning the result. Additional decorators may then be used
+            to wrap this content, or append or prepend it.
+        </p>
+
+        <p class="para">
+            The default decorators for <span class="classname">Zend_Form</span> are FormElements,
+            HtmlTag (wraps in a definition list), and Form; the equivalent code
+            for creating them is as follows:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'FormElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'dl'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Form'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This creates output like the following:
+        </p>
+
+        <div class="programlisting html"><div class="htmlcode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;form action=&quot;/form/action&quot; method=&quot;post&quot;&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;dl&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/dl&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/form&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Any attributes set on the form object will be used as <acronym class="acronym">HTML</acronym>
+            attributes of the <em class="emphasis">&lt;form&gt;</em> tag.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Default Decorators Do Not Need to Be Loaded</b><br /></span>
+            
+
+            
+                By default, the default decorators are loaded during object
+                initialization. You can disable this by passing the
+                &#039;disableLoadDefaultDecorators&#039; option to the constructor:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'disableLoadDefaultDecorators'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                This option may be mixed with any other options you pass,
+                both as array options or in a <span class="classname">Zend_Config</span> object.
+            <br />
+        </p></blockquote>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Using Multiple Decorators of the Same Type</b><br /></span>
+            
+
+            
+                Internally, <span class="classname">Zend_Form</span> uses a decorator&#039;s
+                class as the lookup mechanism when retrieving decorators. As a
+                result, you cannot register multiple decorators of the same
+                type; subsequent decorators will simply overwrite those that
+                existed before.
+            <br />
+
+            
+                To get around this, you can use aliases. Instead of passing a
+                decorator or decorator name as the first argument to
+                 <span class="methodname">addDecorator()</span>, pass an array with a single
+                element, with the alias pointing to the decorator object or
+                name:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Alias to 'FooBar':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDecorator</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span> =&gt; <span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'div'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// And retrieve later:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #0000ff;">$element</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            
+                In the  <span class="methodname">addDecorators()</span> and
+                 <span class="methodname">setDecorators()</span> methods, you will need to pass
+                the &#039;decorator&#039; option in the array representing the decorator:
+            <br />
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Add two 'HtmlTag' decorators, aliasing one to 'FooBar':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">addDecorators</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'div'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'decorator'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span> =&gt; <span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'options'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'tag'</span> =&gt; <span style="color: #ff0000;">'dd'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// And retrieve later:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$htmlTag</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'HtmlTag'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$fooBar</span>&nbsp; = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getDecorator</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'FooBar'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </p></blockquote>
+
+        <p class="para">
+            You may create your own decorators for generating the form. One
+            common use case is if you know the exact <acronym class="acronym">HTML</acronym> you wish to use; your
+            decorator could create the exact <acronym class="acronym">HTML</acronym> and simply return it,
+            potentially using the decorators from individual elements or display
+            groups.
+        </p>
+
+        <p class="para">
+            The following methods may be used to interact with decorators:
+        </p>
+
+        <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addDecorator($decorator, $options = null)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addDecorators(array $decorators)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setDecorators(array $decorators)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getDecorator($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getDecorators()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">removeDecorator($name)</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearDecorators()</span>
+                    </p>
+                </li>
+        </ul>
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> also uses overloading to allow rendering
+            specific decorators.  <span class="methodname">__call()</span> will intercept methods
+            that lead with the text &#039;render&#039; and use the remainder of the method
+            name to lookup a decorator; if found, it will then render that
+            <em class="emphasis">single</em> decorator. Any arguments passed to the
+            method call will be used as content to pass to the decorator&#039;s
+             <span class="methodname">render()</span> method. As an example:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Render only the FormElements decorator:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">renderFormElements</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Render only the fieldset decorator, passing in content:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">renderFieldset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;&lt;p&gt;This is fieldset content&lt;/p&gt;&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If the decorator does not exist, an exception is raised.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.forms.validation" name="zend.form.forms.validation"><div class="info"><h1 class="title">Validation</h1></div>
+        
+
+        <p class="para">
+            A primary use case for forms is validating submitted data.
+            <span class="classname">Zend_Form</span> allows you to validate an entire form, a partial form,
+            or responses for XmlHttpRequests (AJAX). If the submitted data is not valid, it has
+            methods for retrieving the various error codes and messages for
+            elements and sub forms.
+        </p>
+
+        <p class="para">
+            To validate a full form, use the  <span class="methodname">isValid()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">isValid</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// failed validation</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+             <span class="methodname">isValid()</span> will validate every required element, and any
+            unrequired element contained in the submitted data.
+        </p>
+
+        <p class="para">
+            Sometimes you may need to validate only a subset of the data; for
+            this, use  <span class="methodname">isValidPartial($data)</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">isValidPartial</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// failed validation</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+             <span class="methodname">isValidPartial()</span> only attempts to validate those items
+            in the data for which there are matching elements; if an element is
+            not represented in the data, it is skipped.
+        </p>
+
+        <p class="para">
+            When validating elements or groups of elements for an <acronym class="acronym">AJAX</acronym> request,
+            you will typically be validating a subset of the form, and want the
+            response back in <acronym class="acronym">JSON</acronym>.  <span class="methodname">processAjax()</span> does
+            precisely that:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$json</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">processAjax</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            You can then simply send the <acronym class="acronym">JSON</acronym> response to the client. If the
+            form is valid, this will be a boolean <b><tt>TRUE</tt></b> response. If not, it
+            will be a javascript object containing key/message pairs, where each
+            &#039;message&#039; is an array of validation error messages.
+        </p>
+
+        <p class="para">
+            For forms that fail validation, you can retrieve both error codes
+            and error messages, using  <span class="methodname">getErrors()</span> and
+             <span class="methodname">getMessages()</span>, respectively:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$codes</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getErrors</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$messages</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getMessages</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Since the messages returned by  <span class="methodname">getMessages()</span> are an
+                array of error code/message pairs,  <span class="methodname">getErrors()</span> is
+                typically not needed.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            You can retrieve codes and error messages for individual elements by
+            simply passing the element name to each:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$codes</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getErrors</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$messages</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getMessages</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note: When validating elements, <span class="classname">Zend_Form</span> sends a
+                second argument to each element&#039;s  <span class="methodname">isValid()</span> method:
+                the array of data being validated. This can then be used by
+                individual validators to allow them to utilize other submitted
+                values when determining the validity of the data. An example
+                would be a registration form that requires both a password and
+                password confirmation; the password element could use the
+                password confirmation as part of its validation.
+            <br />
+        </p></blockquote>
+
+        <div class="section" id="zend.form.forms.validation.errors" name="zend.form.forms.validation.errors"><div class="info"><h1 class="title">Custom Error Messages</h1></div>
+            
+
+            <p class="para">
+                At times, you may want to specify one or more specific error
+                messages to use instead of the error messages generated by the
+                validators attached to your elements. Additionally, at times you
+                may want to mark the form invalid yourself. This
+                functionality is possible via the following methods.
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrorMessage($message)</span>: add an error message
+                        to display on form validation errors. You may call this more
+                        than once, and new messages are appended to the stack.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrorMessages(array $messages)</span>: add multiple
+                        error messages to display on form validation errors.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setErrorMessages(array $messages)</span>: add multiple
+                        error messages to display on form validation errors,
+                        overwriting all previously set error messages.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getErrorMessages()</span>: retrieve the list of
+                        custom error messages that have been defined.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">clearErrorMessages()</span>: remove all custom error
+                        messages that have been defined.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">markAsError()</span>: mark the form as having
+                        failed validation.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addError($message)</span>: add a message to the custom
+                        error messages stack and flag the form as invalid.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">addErrors(array $messages)</span>: add several
+                        messages to the custom error messages stack and flag the
+                        form as invalid.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">setErrors(array $messages)</span>: overwrite the
+                        custom error messages stack with the provided messages and
+                        flag the form as invalid.
+                    </p>
+                </li>
+            </ul>
+
+            <p class="para">
+                All errors set in this fashion may be translated.
+            </p>
+        </div>
+
+        <div class="section" id="zend.form.forms.validation.values" name="zend.form.forms.validation.values"><div class="info"><h1 class="title">Retrieving Valid Values Only</h1></div>
+            
+
+            <p class="para">
+                There are scenarios when you want to allow your user to work on a valid form
+                in several steps. Meanwhile you allow the user to save the form with any
+                set of values inbetween. Then if all the data is specified you can transfer
+                the model from the building or prototying stage to a valid stage.
+            </p>
+
+            <p class="para">
+                You can retrieve all the valid values that match the submitted data by calling:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$validValues</span> = <span style="color: #0000ff;">$form</span>-&gt;<span style="color: #006600;">getValidValues</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$_POST</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.form.forms.methods" name="zend.form.forms.methods"><div class="info"><h1 class="title">Methods</h1></div>
+        
+
+        <p class="para">
+            The following is a full list of methods available to
+            <span class="classname">Zend_Form</span>, grouped by type:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">Configuration and Options:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setOptions(array $options)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setConfig(Zend_Config $config)</span></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Plugin Loaders and paths:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setPluginLoader(Zend_Loader_PluginLoader_Interface $loader,
+                                $type = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getPluginLoader($type = null)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addPrefixPath($prefix, $path, $type = null) </span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addPrefixPaths(array $spec)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addElementPrefixPath($prefix, $path, $type
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addElementPrefixPaths(array $spec)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addDisplayGroupPrefixPath($prefix, $path)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Metadata:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setAttrib($key, $value)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addAttribs(array $attribs)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setAttribs(array $attribs)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getAttrib($key)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getAttribs()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">removeAttrib($key)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">clearAttribs()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setAction($action)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getAction()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setMethod($method)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getMethod()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">setName($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getName()</span></p></li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Elements:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addElement($element, $name = null, $options
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addElements(array $elements)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setElements(array $elements)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getElement($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getElements()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">removeElement($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">clearElements()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDefaults(array $defaults)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDefault($name, $value)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getValue($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getValues()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getUnfilteredValue($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getUnfilteredValues()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setElementFilters(array $filters)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setElementDecorators(array $decorators)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Sub forms:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addSubForm(Zend_Form $form, $name, $order
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addSubForms(array $subForms)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setSubForms(array $subForms)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getSubForm($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getSubForms()</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">removeSubForm($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">clearSubForms()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setSubFormDecorators(array $decorators)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Display groups:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addDisplayGroup(array $elements, $name, $options
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addDisplayGroups(array $groups)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDisplayGroups(array $groups)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getDisplayGroup($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getDisplayGroups()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">removeDisplayGroup($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">clearDisplayGroups()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setDisplayGroupDecorators(array $decorators)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Validation</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">populate(array $values)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">isValid(array $data)</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">isValidPartial(array $data)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">processAjax(array $data)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">persistData()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getErrors($name = null)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">getMessages($name = null)</span></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">Rendering:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setView(Zend_View_Interface $view = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getView()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">addDecorator($decorator, $options = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">addDecorators(array $decorators)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDecorators(array $decorators)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getDecorator($name)</span></p></li>
+                    <li class="listitem"><p class="para"> <span class="methodname">getDecorators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">removeDecorator($name)</span></p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">clearDecorators()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">render(Zend_View_Interface $view = null)</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">I18n:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                             <span class="methodname">setTranslator(Zend_Translate_Adapter $translator
+                                = null)</span>
+                        </p>
+                    </li>
+
+                    <li class="listitem"><p class="para"> <span class="methodname">getTranslator()</span></p></li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">setDisableTranslator($flag)</span></p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para"> <span class="methodname">translatorIsDisabled()</span></p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.form.forms.config" name="zend.form.forms.config"><div class="info"><h1 class="title">Configuration</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Form</span> is fully configurable via
+             <span class="methodname">setOptions()</span> and  <span class="methodname">setConfig()</span> (or by
+            passing options or a <span class="classname">Zend_Config</span> object to the
+            constructor). Using these methods, you can specify form elements,
+            display groups, decorators, and metadata.
+        </p>
+
+        <p class="para">
+            As a general rule, if &#039;set&#039; + the option key refers to a
+            <span class="classname">Zend_Form</span> method, then the value provided will be
+            passed to that method. If the accessor does not exist, the key is
+            assumed to reference an attribute, and will be passed to
+             <span class="methodname">setAttrib()</span>.
+        </p>
+
+        <p class="para">
+            Exceptions to the rule include the following:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">prefixPath</span> will be passed to
+                     <span class="methodname">addPrefixPaths()</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">elementPrefixPath</span> will be passed to
+                     <span class="methodname">addElementPrefixPaths()</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">displayGroupPrefixPath</span> will be passed to
+                     <span class="methodname">addDisplayGroupPrefixPaths()</span>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">the following setters cannot be set in this way:</p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para"><span class="property">setAttrib</span> (though setAttribs *will* work)</p>
+                    </li>
+
+                    <li class="listitem"><p class="para"><span class="property">setConfig</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setDefault</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setOptions</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setPluginLoader</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setSubForms</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setTranslator</span></p></li>
+                    <li class="listitem"><p class="para"><span class="property">setView</span></p></li>
+                </ul>
+            </li>
+        </ul>
+
+        <p class="para">
+            As an example, here is a config file that passes configuration for
+            every type of configurable data:
+        </p>
+
+        <div class="programlisting ini"><div class="inicode"><div class="ini" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000066; font-weight:bold;"><span style="">&#91;</span>element<span style="">&#93;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">name </span>= <span style="color: #933;">&quot;registration&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">action </span>= <span style="color: #933;">&quot;/user/register&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">method </span>= <span style="color: #933;">&quot;post&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">attribs.<span style="color: #000099;">class </span>= <span style="color: #933;">&quot;zend_form&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">attribs.<span style="color: #000099;">onclick </span>= <span style="color: #933;">&quot;validate(this)&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000099;">disableTranslator </span>=<span style="color: #660066;"> <span style="">0</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">prefixPath.element.<span style="color: #000099;">prefix </span>= <span style="color: #933;">&quot;My_Element&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">prefixPath.element.<span style="color: #000099;">path </span>= <span style="color: #933;">&quot;My/Element/&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elementPrefixPath.validate.<span style="color: #000099;">prefix </span>= <span style="color: #933;">&quot;My_Validate&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elementPrefixPath.validate.<span style="color: #000099;">path </span>= <span style="color: #933;">&quot;My/Validate/&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroupPrefixPath.<span style="color: #000099;">prefix </span>= <span style="color: #933;">&quot;My_Group&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroupPrefixPath.<span style="color: #000099;">path </span>= <span style="color: #933;">&quot;My/Group/&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elements.username.<span style="color: #000099;">type </span>= <span style="color: #933;">&quot;text&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elements.username.options.<span style="color: #000099;">label </span>= <span style="color: #933;">&quot;Username&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elements.username.options.validators.alpha.<span style="color: #000099;">validator </span>= <span style="color: #933;">&quot;Alpha&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elements.username.options.filters.<span style="color: #000099;">lcase </span>= <span style="color: #933;">&quot;StringToLower&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #666666; font-style: italic;">; more elements, of course...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">elementFilters.<span style="color: #000099;">trim </span>= <span style="color: #933;">&quot;StringTrim&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #666666; font-style: italic;">;elementDecorators.trim = &quot;StringTrim&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroups.login.elements.<span style="color: #000099;">username </span>= <span style="color: #933;">&quot;username&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroups.login.elements.<span style="color: #000099;">password </span>= <span style="color: #933;">&quot;password&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroupDecorators.elements.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;FormElements&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">displayGroupDecorators.fieldset.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;Fieldset&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.elements.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;FormElements&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.fieldset.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;FieldSet&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.fieldset.decorator.options.<span style="color: #000099;">class </span>= <span style="color: #933;">&quot;zend_form&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">decorators.form.<span style="color: #000099;">decorator </span>= <span style="color: #933;">&quot;Form&quot;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The above could easily be abstracted to an <acronym class="acronym">XML</acronym> or
+            <acronym class="acronym">PHP</acronym> array-based configuration file.
+        </p>
+    </div>
+
+    <div class="section" id="zend.form.forms.custom" name="zend.form.forms.custom"><div class="info"><h1 class="title">Custom forms</h1></div>
+        
+
+        <p class="para">
+            An alternative to using configuration-based forms is to subclass
+            <span class="classname">Zend_Form</span>. This has several benefits:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    You can unit test your form easily to ensure validations and
+                    rendering perform as expected.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Fine-grained control over individual elements.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Re-use of form objects, and greater portability (no need to
+                    track config files).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Implementing custom functionality.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            The most typical use case would be to use the
+             <span class="methodname">init()</span> method to setup specific form elements and
+            configuration:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Form_Login <span style="color: #000000; font-weight: bold;">extends</span> Zend_Form</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> init<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$username</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Text<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'username'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$username</span>-&gt;<span style="color: #006600;">class</span> = <span style="color: #ff0000;">'formtext'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$username</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Username:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'helper'</span> =&gt; <span style="color: #ff0000;">'formText'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Label'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span> =&gt; <span style="color: #ff0000;">'label'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$password</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Password<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'password'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$password</span>-&gt;<span style="color: #006600;">class</span> = <span style="color: #ff0000;">'formtext'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$password</span>-&gt;<span style="color: #006600;">setLabel</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Password:'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'helper'</span> =&gt; <span style="color: #ff0000;">'formPassword'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Label'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'class'</span> =&gt; <span style="color: #ff0000;">'label'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$submit</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Form_Element_Submit<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'login'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$submit</span>-&gt;<span style="color: #006600;">class</span> = <span style="color: #ff0000;">'formsubmit'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$submit</span>-&gt;<span style="color: #006600;">setValue</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Login'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ViewHelper'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'helper'</span> =&gt; <span style="color: #ff0000;">'formSubmit'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">addElements</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$username</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$password</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$submit</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'FormElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Fieldset'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Form'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This form can then be instantiated with simply:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$form</span> = <span style="color: #000000; font-weight: bold;">new</span> My_Form_Login<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            and all functionality is already setup and ready; no config files
+            needed. (Note that this example is greatly simplified, as it
+            contains no validators or filters for the elements.)
+        </p>
+
+        <p class="para">
+            Another common reason for extension is to define a set of
+            default decorators. You can do this by overriding the
+             <span class="methodname">loadDefaultDecorators()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> My_Form_Login <span style="color: #000000; font-weight: bold;">extends</span> Zend_Form</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> loadDefaultDecorators<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">setDecorators</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'FormElements'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Fieldset'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Form'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.form.html">Zend_Form</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.form.html">Zend_Form</a></li>
+  <li><a href="zend.form.introduction.html">Zend_Form</a></li>
+  <li><a href="zend.form.quickstart.html">Zend_Form Quick Start</a></li>
+  <li><a href="zend.form.elements.html">Creating Form Elements Using Zend_Form_Element</a></li>
+  <li class="active"><a href="zend.form.forms.html">Creating Forms Using Zend_Form</a></li>
+  <li><a href="zend.form.decorators.html">Creating Custom Form Markup Using Zend_Form_Decorator</a></li>
+  <li><a href="zend.form.standardElements.html">Standard Form Elements Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.standardDecorators.html">Standard Form Decorators Shipped With Zend Framework</a></li>
+  <li><a href="zend.form.i18n.html">Internationalization of Zend_Form</a></li>
+  <li><a href="zend.form.advanced.html">Advanced Zend_Form Usage</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

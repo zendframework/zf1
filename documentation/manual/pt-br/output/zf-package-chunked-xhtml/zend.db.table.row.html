@@ -1,0 +1,713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Db_Table_Row - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.table.html">Zend_Db_Table</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.db.table.row" class="section"><div class="info"><h1 class="title">Zend_Db_Table_Row</h1></div>
+    
+
+    <div class="section" id="zend.db.table.row.introduction" name="zend.db.table.row.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Db_Table_Row</span> is a class that contains an individual row of a
+            <span class="classname">Zend_Db_Table</span> object. When you run a query against a Table class,
+            the result is returned in a set of <span class="classname">Zend_Db_Table_Row</span> objects. You
+            can also use this object to create new rows and add them to the database table.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Db_Table_Row</span> is an implementation of the <a href="http://www.martinfowler.com/eaaCatalog/rowDataGateway.html" class="link external">&raquo; Row Data
+                Gateway</a> pattern.
+        </p>
+    </div>
+
+    <div class="section" id="zend.db.table.row.read" name="zend.db.table.row.read"><div class="info"><h1 class="title">Fetching a Row</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Db_Table_Abstract</span> provides methods
+             <span class="methodname">find()</span> and  <span class="methodname">fetchAll()</span>, which each
+            return an object of type <span class="classname">Zend_Db_Table_Rowset</span>, and the method
+             <span class="methodname">fetchRow()</span>, which returns an object of type
+            <span class="classname">Zend_Db_Table_Row</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Example of fetching a row</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = ?'</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            A <span class="classname">Zend_Db_Table_Rowset</span> object contains a collection of
+            <span class="classname">Zend_Db_Table_Row</span> objects. See the chapter about <a href="zend.db.table.rowset.html" class="link">table rowset</a> for details.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Example of reading a row in a rowset</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowset</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_status = ?'</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$rowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.db.table.row.read.get" name="zend.db.table.row.read.get"><div class="info"><h1 class="title">Reading column values from a row</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Db_Table_Row_Abstract</span> provides accessor methods so you
+                can reference columns in the row as object properties.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #3 Example of reading a column in a row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = ?'</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Echo the value of the bug_description column</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">bug_description</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    Earlier versions of <span class="classname">Zend_Db_Table_Row</span> mapped these column
+                    accessors to the database column names using a string transformation called
+                    <em class="emphasis">inflection</em>.
+                <br />
+
+                
+                    Currently, <span class="classname">Zend_Db_Table_Row</span> does not implement
+                    inflection. Accessed property names need to match the spelling of the column
+                    names as they appear in your database.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.db.table.row.read.to-array" name="zend.db.table.row.read.to-array"><div class="info"><h1 class="title">Retrieving Row Data as an Array</h1></div>
+            
+
+            <p class="para">
+                You can access the row&#039;s data as an array using the
+                 <span class="methodname">toArray()</span> method of the Row object. This returns an
+                associative array of the column names to the column values.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #4 Example of using the toArray() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = ?'</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Get the column/value associative array from the Row object</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowArray</span> = <span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">toArray</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Now use it as a normal array</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$rowArray</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$column</span> =&gt; <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Column: $column<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Value:&nbsp; $value<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The array returned from  <span class="methodname">toArray()</span> is not updateable. You
+                can modify values in the array as you can with any array, but you cannot save
+                changes to this array to the database directly.
+            </p>
+        </div>
+
+        <div class="section" id="zend.db.table.row.read.relationships" name="zend.db.table.row.read.relationships"><div class="info"><h1 class="title">Fetching data from related tables</h1></div>
+            
+
+            <p class="para">
+                The <span class="classname">Zend_Db_Table_Row_Abstract</span> class provides methods for
+                fetching rows and rowsets from related tables. See the <a href="zend.db.table.relationships.html" class="link">relationship chapter</a> for more
+                information on table relationships.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.row.write" name="zend.db.table.row.write"><div class="info"><h1 class="title">Writing rows to the database</h1></div>
+        
+
+        <div class="section" id="zend.db.table.row.write.set" name="zend.db.table.row.write.set"><div class="info"><h1 class="title">Changing column values in a row</h1></div>
+            
+
+            <p class="para">
+                You can set individual column values using column accessors, similar to how the
+                columns are read as object properties in the example above.
+            </p>
+
+            <p class="para">
+                Using a column accessor to set a value changes the column value of the row object
+                in your application, but it does not commit the change to the database yet. You can
+                do that with the  <span class="methodname">save()</span> method.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 Example of changing a column in a row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">where</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = ?'</span>, <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Change the value of one or more columns</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">bug_status</span> = <span style="color: #ff0000;">'FIXED'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// UPDATE the row in the database with new values</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.table.row.write.insert" name="zend.db.table.row.write.insert"><div class="info"><h1 class="title">Inserting a new row</h1></div>
+            
+
+            <p class="para">
+                You can create a new row for a given table with the
+                 <span class="methodname">createRow()</span> method of the table class. You can access
+                fields of this row with the object-oriented interface, but the row is not stored in
+                the database until you call the  <span class="methodname">save()</span> method.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #6 Example of creating a new row for a table</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">createRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set column values as appropriate for your application</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">bug_description</span> = <span style="color: #ff0000;">'...description...'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">bug_status</span> = <span style="color: #ff0000;">'NEW'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// INSERT the new row to the database</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The optional argument to the  <span class="methodname">createRow()</span> method is an
+                associative array, with which you can populate fields of the new row.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #7 Example of populating a new row for a table</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$data</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'bug_description'</span> =&gt; <span style="color: #ff0000;">'...description...'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'bug_status'</span>&nbsp; &nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'NEW'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">createRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// INSERT the new row to the database</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                    The  <span class="methodname">createRow()</span> method was called
+                     <span class="methodname">fetchNew()</span> in earlier releases of
+                    <span class="classname">Zend_Db_Table</span>. You are encouraged to use the new method
+                    name, even though the old name continues to work for the sake of backward
+                    compatibility.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.db.table.row.write.set-from-array" name="zend.db.table.row.write.set-from-array"><div class="info"><h1 class="title">Changing values in multiple columns</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Db_Table_Row_Abstract</span> provides the
+                 <span class="methodname">setFromArray()</span> method to enable you to set several columns
+                in a single row at once, specified in an associative array that maps the column
+                names to values. You may find this method convenient for setting values both for new
+                rows and for rows you need to update.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #8 Example of using setFromArray() to set values in a new Row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">createRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Data are arranged in an associative array</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$data</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'bug_description'</span> =&gt; <span style="color: #ff0000;">'...description...'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'bug_status'</span>&nbsp; &nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'NEW'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set all the column values at once</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">setFromArray</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$data</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// INSERT the new row to the database</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$newRow</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.table.row.write.delete" name="zend.db.table.row.write.delete"><div class="info"><h1 class="title">Deleting a row</h1></div>
+            
+
+            <p class="para">
+                You can call the  <span class="methodname">delete()</span> method on a Row object. This
+                deletes rows in the database matching the primary key in the Row object.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #9 Example of deleting a row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = 1'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// DELETE this row</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">delete</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                You do not have to call  <span class="methodname">save()</span> to apply the delete; it is
+                executed against the database immediately.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.row.serialize" name="zend.db.table.row.serialize"><div class="info"><h1 class="title">Serializing and unserializing rows</h1></div>
+        
+
+        <p class="para">
+            It is often convenient to save the contents of a database row to be used later.
+            <em class="emphasis">Serialization</em> is the name for the operation that converts an
+            object into a form that is easy to save in offline storage (for example, a file).
+            Objects of type <span class="classname">Zend_Db_Table_Row_Abstract</span> are serializable.
+        </p>
+
+        <div class="section" id="zend.db.table.row.serialize.serializing" name="zend.db.table.row.serialize.serializing"><div class="info"><h1 class="title">Serializing a Row</h1></div>
+            
+
+            <p class="para">
+                Simply use <acronym class="acronym">PHP</acronym>&#039;s  <span class="methodname">serialize()</span> function to
+                create a string containing a byte-stream representation of the Row object argument.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #10 Example of serializing a row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id = 1'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Convert object to serialized form</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$serializedRow</span> = <a href="http://www.php.net/serialize"><span style="color: #000066;">serialize</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$row</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Now you can write $serializedRow to a file, etc.</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.table.row.serialize.unserializing" name="zend.db.table.row.serialize.unserializing"><div class="info"><h1 class="title">Unserializing Row Data</h1></div>
+            
+
+            <p class="para">
+                Use <acronym class="acronym">PHP</acronym>&#039;s  <span class="methodname">unserialize()</span> function to
+                restore a string containing a byte-stream representation of an object. The function
+                returns the original object.
+            </p>
+
+            <p class="para">
+                Note that the Row object returned is in a <em class="emphasis">disconnected</em> state.
+                You can read the Row object and its properties, but you cannot change values in the
+                Row or execute other methods that require a database connection (for example,
+                queries against related tables).
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #11 Example of unserializing a serialized row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowClone</span> = <a href="http://www.php.net/unserialize"><span style="color: #000066;">unserialize</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$serializedRow</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Now you can use object properties, but read-only</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$rowClone</span>-&gt;<span style="color: #006600;">bug_description</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: <span class="info"><b>Why do Rows unserialize in a disconnected state?</b><br /></span>
+                
+
+                
+                    A serialized object is a string that is readable to anyone who possesses it. It
+                    could be a security risk to store parameters such as database account and
+                    password in plain, unencrypted text in the serialized string. You would not
+                    want to store such data to a text file that is not protected, or send it in an
+                    email or other medium that is easily read by potential attackers. The reader of
+                    the serialized object should not be able to use it to gain access to your
+                    database without knowing valid credentials.
+                <br />
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.db.table.row.serialize.set-table" name="zend.db.table.row.serialize.set-table"><div class="info"><h1 class="title">Reactivating a Row as Live Data</h1></div>
+            
+
+            <p class="para">
+                You can reactivate a disconnected Row, using the  <span class="methodname">setTable()</span>
+                method. The argument to this method is a valid object of type
+                <span class="classname">Zend_Db_Table_Abstract</span>, which you create. Creating a Table
+                object requires a live connection to the database, so by reassociating the Table
+                with the Row, the Row gains access to the database. Subsequently, you can change
+                values in the Row object and save the changes to the database.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #12 Example of reactivating a row</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowClone</span> = <a href="http://www.php.net/unserialize"><span style="color: #000066;">unserialize</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$serializedRow</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Reconnect the row to a table, and</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// thus to a live database connection</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowClone</span>-&gt;<span style="color: #006600;">setTable</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$bugs</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Now you can make changes to the row and save them</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowClone</span>-&gt;<span style="color: #006600;">bug_status</span> = <span style="color: #ff0000;">'FIXED'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$rowClone</span>-&gt;<span style="color: #006600;">save</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.row.extending" name="zend.db.table.row.extending"><div class="info"><h1 class="title">Extending the Row class</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Db_Table_Row</span> is the default concrete class that extends
+            <span class="classname">Zend_Db_Table_Row_Abstract</span>. You can define your own concrete
+            class for instances of Row by extending
+            <span class="classname">Zend_Db_Table_Row_Abstract</span>. To use your new Row class to store
+            results of Table queries, specify the custom Row class by name either in the
+            <var class="varname">$_rowClass</var> protected member of a Table class, or in the array
+            argument of the constructor of a Table object.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #13 Specifying a custom Row class</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyRow <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Row_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// ...customizations</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Specify a custom Row to be used by default</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// in all instances of a Table class.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Products <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span> = <span style="color: #ff0000;">'products'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_rowClass</span> = <span style="color: #ff0000;">'MyRow'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Or specify a custom Row to be used in one</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// instance of a Table class.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'rowClass'</span> =&gt; <span style="color: #ff0000;">'MyRow'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.db.table.row.extending.overriding" name="zend.db.table.row.extending.overriding"><div class="info"><h1 class="title">Row initialization</h1></div>
+            
+
+            <p class="para">
+                If application-specific logic needs to be initialized when a row is constructed,
+                you can select to move your tasks to the  <span class="methodname">init()</span> method,
+                which is called after all row metadata has been processed. This is recommended over
+                the  <span class="methodname">__construct()</span> method if you do not need to alter the
+                metadata in any programmatic way.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #14 Example usage of init() method</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyApplicationRow <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Row_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_role</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> init<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_role = <span style="color: #000000; font-weight: bold;">new</span> MyRoleClass<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.table.row.extending.insert-update" name="zend.db.table.row.extending.insert-update"><div class="info"><h1 class="title">Defining Custom Logic for Insert, Update, and Delete in Zend_Db_Table_Row</h1></div>
+            
+
+            <p class="para">
+                The Row class calls protected methods  <span class="methodname">_insert()</span>,
+                 <span class="methodname">_update()</span>, and  <span class="methodname">_delete()</span> before
+                performing the corresponding operations <b><tt>INSERT</tt></b>,
+                <b><tt>UPDATE</tt></b>, and <b><tt>DELETE</tt></b>. You can add logic to
+                these methods in your custom Row subclass.
+            </p>
+
+            <p class="para">
+                If you need to do custom logic in a specific table, and the custom logic must occur
+                for every operation on that table, it may make more sense to implement your custom
+                code in the  <span class="methodname">insert()</span>,  <span class="methodname">update()</span> and
+                 <span class="methodname">delete()</span> methods of your Table class. However, sometimes it
+                may be necessary to do custom logic in the Row class.
+            </p>
+
+            <p class="para">
+                Below are some example cases where it might make sense to implement custom logic in
+                a Row class instead of in the Table class:
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #15 Example of custom logic in a Row class</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    The custom logic may not apply in all cases of operations on the respective
+                    Table. You can provide custom logic on demand by implementing it in a Row class
+                    and creating an instance of the Table class with that custom Row class
+                    specified. Otherwise, the Table uses the default Row class.
+                </p></div>
+
+                <div class="example-contents"><p>
+                    You need data operations on this table to record the operation to a
+                    <span class="classname">Zend_Log</span> object, but only if the application
+                    configuration has enabled this behavior.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyLoggingRow <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Row_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #000000; font-weight: bold;">function</span> _insert<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$log</span> = Zend_Registry::<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'database_log'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$log</span>-&gt;<span style="color: #006600;">info</span><span style="color: #66cc66;">&#40;</span>Zend_Debug::<span style="color: #006600;">dump</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_data,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;INSERT: $this-&gt;_tableClass&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $loggingEnabled is an example property that depends</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// on your application configuration</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$loggingEnabled</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'rowClass'</span> =&gt; <span style="color: #ff0000;">'MyLoggingRow'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <div class="example"><div class="info"><p><b>Example #16 Example of a Row class that logs insert data for multiple tables</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    The custom logic may be common to multiple tables. Instead of implementing the
+                    same custom logic in every one of your Table classes, you can implement the
+                    code for such actions in the definition of a Row class, and use this Row in
+                    each of your Table classes.
+                </p></div>
+
+                <div class="example-contents"><p>
+                    In this example, the logging code is identical in all table classes.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyLoggingRow <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Row_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #000000; font-weight: bold;">function</span> _insert<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$log</span> = Zend_Registry::<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'database_log'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$log</span>-&gt;<span style="color: #006600;">info</span><span style="color: #66cc66;">&#40;</span>Zend_Debug::<span style="color: #006600;">dump</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_data,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;INSERT: $this-&gt;_tableClass&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Bugs <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span> = <span style="color: #ff0000;">'bugs'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_rowClass</span> = <span style="color: #ff0000;">'MyLoggingRow'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Products <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span> = <span style="color: #ff0000;">'products'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_rowClass</span> = <span style="color: #ff0000;">'MyLoggingRow'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+        <div class="section" id="zend.db.table.row.extending.inflection" name="zend.db.table.row.extending.inflection"><div class="info"><h1 class="title">Define Inflection in Zend_Db_Table_Row</h1></div>
+            
+
+            <p class="para">
+                Some people prefer that the table class name match a table name in the
+                <acronym class="acronym">RDBMS</acronym> by using a string transformation called
+                <em class="emphasis">inflection</em>.
+            </p>
+
+            <p class="para">
+                <span class="classname">Zend_Db</span> classes do not implement inflection by default. See
+                the chapter about <a href="zend.db.table.html#zend.db.table.extending.inflection" class="link">extending
+                    inflection</a> for an explanation of this policy.
+            </p>
+
+            <p class="para">
+                If you prefer to use inflection, then you must implement the transformation
+                yourself, by overriding the  <span class="methodname">_transformColumn()</span> method in a
+                custom Row class, and using that custom Row class when you perform queries against
+                your Table class.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #17 Example of defining an inflection transformation</b></p></div>
+                
+
+                <div class="example-contents"><p>
+                    This allows you to use an inflected version of the column name in the
+                    accessors. The Row class uses the  <span class="methodname">_transformColumn()</span>
+                    method to change the name you use to the native column name in the database
+                    table.
+                </p></div>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyInflectedRow <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Row_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #000000; font-weight: bold;">function</span> _transformColumn<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$columnName</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$nativeColumnName</span> = myCustomInflector<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$columnName</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$nativeColumnName</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Bugs <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span> = <span style="color: #ff0000;">'bugs'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_rowClass</span> = <span style="color: #ff0000;">'MyInflectedRow'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugs</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span> = <span style="color: #0000ff;">$bugs</span>-&gt;<span style="color: #006600;">fetchNew</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use camelcase column names, and rely on the</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// transformation function to change it into the</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// native representation.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">bugDescription</span> = <span style="color: #ff0000;">'New description'</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                You are responsible for writing the functions to perform inflection transformation.
+                Zend Framework does not provide such a function.
+            </p>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.table.html">Zend_Db_Table</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.db.html">Zend_Db</a></li>
+  <li><a href="zend.db.adapter.html">Zend_Db_Adapter</a></li>
+  <li><a href="zend.db.statement.html">Zend_Db_Statement</a></li>
+  <li><a href="zend.db.profiler.html">Zend_Db_Profiler</a></li>
+  <li><a href="zend.db.select.html">Zend_Db_Select</a></li>
+  <li><a href="zend.db.table.html">Zend_Db_Table</a></li>
+  <li class="active"><a href="zend.db.table.row.html">Zend_Db_Table_Row</a></li>
+  <li><a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a></li>
+  <li><a href="zend.db.table.relationships.html">Zend_Db_Table Relationships</a></li>
+  <li><a href="zend.db.table.definition.html">Zend_Db_Table_Definition</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

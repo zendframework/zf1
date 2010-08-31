@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Using the Registry - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.registry.html">Zend_Registry</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.registry.html">Zend_Registry</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.rest.html">Zend_Rest</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.registry.using" class="section"><div class="info"><h1 class="title">Using the Registry</h1></div>
+    
+
+    <p class="para">
+        A registry is a container for storing objects and values in the
+        application space. By storing the value in a registry, the same
+        object is always available throughout your application.
+        This mechanism is an alternative to using global storage.
+    </p>
+
+    <p class="para">
+        The typical method to use registries with Zend Framework is through static methods in the
+        <span class="classname">Zend_Registry</span> class. Alternatively, the registry can be used as an
+        array object, so you can access elements stored within it with a convenient array-like
+        interface.
+    </p>
+
+    <div class="section" id="zend.registry.using.storing" name="zend.registry.using.storing"><div class="info"><h1 class="title">Setting Values in the Registry</h1></div>
+        
+
+        <p class="para">
+            Use the static method  <span class="methodname">set()</span> to store an entry in the registry.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Example of set() Method Usage</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span>, <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The value returned can be an object, an array, or a scalar.
+            You can change the value stored in a specific entry of
+            the registry by calling the  <span class="methodname">set()</span> method to set the entry
+            to a new value.
+        </p>
+
+        <p class="para">
+            The index can be a scalar (<b><tt>NULL</tt></b>, string, or number), like an
+            ordinary array.
+        </p>
+    </div>
+
+    <div class="section" id="zend.registry.using.retrieving" name="zend.registry.using.retrieving"><div class="info"><h1 class="title">Getting Values from the Registry</h1></div>
+        
+
+        <p class="para">
+            To retrieve an entry from the registry, use the static
+             <span class="methodname">get()</span> method.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Example of get() Method Usage</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$value</span> = Zend_Registry::<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The  <span class="methodname">getInstance()</span> method returns the singleton registry object.
+            This registry object is iterable, making all values stored in the registry easily
+            accessible.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Example of Iterating over the Registry</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = Zend_Registry::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$index</span> =&gt; <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Registry index $index contains:<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/var_dump"><span style="color: #000066;">var_dump</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.registry.using.constructing" name="zend.registry.using.constructing"><div class="info"><h1 class="title">Constructing a Registry Object</h1></div>
+        
+
+        <p class="para">
+            In addition to accessing the static registry via
+            static methods, you can create an instance directly and
+            use it as an object.
+        </p>
+
+        <p class="para">
+            The registry instance you access through the
+            static methods is simply one such instance. It is
+            for convenience that it is stored statically, so that it is
+            accessible from anywhere in an application.
+        </p>
+
+        <p class="para">
+            Use the traditional <em class="emphasis">new</em> operator to instantiate
+            <span class="classname">Zend_Registry</span>. Instantiating <span class="classname">Zend_Registry</span>
+            using its constructor also makes initializing the entries in the registry simple by
+            taking an associative array as an argument.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Example of Constructing a Registry</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Registry<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span> =&gt; <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Once such a <span class="classname">Zend_Registry</span> object is instantiated,
+            you can use it by calling any array object method or by setting it
+            as the singleton instance for <span class="classname">Zend_Registry</span> with the static
+            method  <span class="methodname">setInstance()</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #5 Example of Initializing the Singleton Registry</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Registry<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span> =&gt; <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">setInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The  <span class="methodname">setInstance()</span> method throws a
+            <span class="classname">Zend_Exception</span> if the static registry has already been
+            initialized.
+        </p>
+    </div>
+
+    <div class="section" id="zend.registry.using.array-access" name="zend.registry.using.array-access"><div class="info"><h1 class="title">Accessing the Registry as an Array</h1></div>
+        
+
+        <p class="para">
+            If you have several values to get or set, you may find it
+            convenient to access the registry with array notation.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 Example of Array Access</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = Zend_Registry::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'index'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$value</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/var_dump"><span style="color: #000066;">var_dump</span></a><span style="color: #66cc66;">&#40;</span> <span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'index'</span><span style="color: #66cc66;">&#93;</span> <span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.registry.using.array-object" name="zend.registry.using.array-object"><div class="info"><h1 class="title">Accessing the Registry as an Object</h1></div>
+        
+
+        <p class="para">
+            You may also find it convenient to access the registry
+            in an object-oriented fashion by using index names as object
+            properties.
+            You must specifically construct the registry
+            object using the <b><tt>ArrayObject::ARRAY_AS_PROPS</tt></b> option
+            and initialize the static instance to enable this functionality.
+
+            <blockquote><p><b class="note">Note</b>: 
+                You must set the <b><tt>ArrayObject::ARRAY_AS_PROPS</tt></b> option
+                <em class="emphasis">before</em> the static registry has been accessed for
+                the first time.<br />
+            </p></blockquote>
+        </p>
+
+        <div class="warning"><b class="warning">Warning</b><div class="info"><h1 class="title">Known Issues with the ArrayObject::ARRAY_AS_PROPS Option</h1></div>
+            
+
+            <p class="para">
+                Some versions of <acronym class="acronym">PHP</acronym> have proven very buggy when using the
+                registry with the <b><tt>ArrayObject::ARRAY_AS_PROPS</tt></b> option.
+            </p>
+        </div>
+
+        <div class="example"><div class="info"><p><b>Example #7 Example of Object Access</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// in your application bootstrap:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Registry<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>, ArrayObject::<span style="color: #006600;">ARRAY_AS_PROPS</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">setInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">tree</span> = <span style="color: #ff0000;">'apple'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">.</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">.</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">.</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// in a different function, elsewhere in your application:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = Zend_Registry::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">tree</span>; <span style="color: #808080; font-style: italic;">// echo's &quot;apple&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">index</span> = <span style="color: #0000ff;">$value</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/var_dump"><span style="color: #000066;">var_dump</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">index</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.registry.using.isset" name="zend.registry.using.isset"><div class="info"><h1 class="title">Querying if an Index Exists</h1></div>
+        
+
+        <p class="para">
+            To find out if a particular index in the registry
+            has been set, use the static method  <span class="methodname">isRegistered()</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #8 Example of isRegistered() Method Usage</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Registry::<span style="color: #006600;">isRegistered</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$index</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$value</span> = Zend_Registry::<span style="color: #006600;">get</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$index</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            To find out if a particular index in a registry
+            array or object has a value, use the  <span class="methodname">isset()</span> function
+            as you would with an ordinary array.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #9 Example of isset() Method Usage</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$registry</span> = Zend_Registry::<span style="color: #006600;">getInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// using array access syntax</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'index'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/var_dump"><span style="color: #000066;">var_dump</span></a><span style="color: #66cc66;">&#40;</span> <span style="color: #0000ff;">$registry</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'index'</span><span style="color: #66cc66;">&#93;</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// using object access syntax</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">index</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/var_dump"><span style="color: #000066;">var_dump</span></a><span style="color: #66cc66;">&#40;</span> <span style="color: #0000ff;">$registry</span>-&gt;<span style="color: #006600;">index</span> <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.registry.using.subclassing" name="zend.registry.using.subclassing"><div class="info"><h1 class="title">Extending the Registry</h1></div>
+        
+
+        <p class="para">
+            The static registry is an instance of the class <span class="classname">Zend_Registry</span>.
+            If you want to add functionality to the registry, you should
+            create a class that extends <span class="classname">Zend_Registry</span> and
+            specify this class to instantiate for the singleton in the static registry.
+            Use the static method  <span class="methodname">setClassName()</span> to specify
+            the class.
+
+            <blockquote><p><b class="note">Note</b>: 
+                The class must be a subclass of <span class="classname">Zend_Registry</span>.<br />
+            </p></blockquote>
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #10 Example of Specifying the Singleton Registry&#039;s Class Name</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">setClassName</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Registry'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span>, <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The registry throws a <span class="classname">Zend_Exception</span> if you attempt to set the
+            classname after the registry has been accessed for the first time.
+            It is therefore recommended that you specify the class name for your
+            static registry in your application bootstrap.
+        </p>
+    </div>
+
+    <div class="section" id="zend.registry.using.unsetting" name="zend.registry.using.unsetting"><div class="info"><h1 class="title">Unsetting the Static Registry</h1></div>
+        
+
+        <p class="para">
+            Although it is not normally necessary, you can
+            unset the singleton instance of the registry, if desired.
+            Use the static method  <span class="methodname">_unsetInstance()</span> to do so.
+        </p>
+
+        <div class="warning"><b class="warning">Warning</b><div class="info"><h1 class="title">Data Loss Risk</h1></div>
+            
+
+            <p class="para">
+                When you use  <span class="methodname">_unsetInstance()</span>,
+                all data in the static registry are
+                discarded and cannot be recovered.
+            </p>
+        </div>
+
+        <p class="para">
+            You might use this method, for example, if you want to
+            use  <span class="methodname">setInstance()</span> or  <span class="methodname">setClassName()</span>
+            after the singleton registry object has been initialized.
+            Unsetting the singleton instance allows you to use these methods
+            even after the singleton registry object has been set. Using
+            <span class="classname">Zend_Registry</span> in this manner is not recommended for typical
+            applications and environments.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #11 Example of _unsetInstance() Method Usage</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span>, <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::_unsetInstance<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// change the class</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">setClassName</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My_Registry'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Registry::<span style="color: #006600;">set</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'index'</span>, <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.registry.html">Zend_Registry</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.registry.html">Zend_Registry</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.rest.html">Zend_Rest</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.registry.html">Zend_Registry</a></li>
+  <li class="active"><a href="zend.registry.using.html">Using the Registry</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

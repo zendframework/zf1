@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Guia R&aacute;pido Zend_Layout - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.layout.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.layout.html">Zend_Layout</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.layout.options.html">Op&ccedil;&otilde;es de Configura&ccedil;&atilde;o Zend_Layout</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.layout.quickstart" class="section"><div class="info"><h1 class="title">Guia Rápido Zend_Layout</h1></div>
+    
+
+    <p class="para">
+        Há dois casos de uso primários para <span class="classname">Zend_Layout</span>: com o
+        <acronym class="acronym">MVC</acronym> do Zend Framework, e sem.
+    </p>
+
+    <div class="section" id="zend.layout.quickstart.layouts" name="zend.layout.quickstart.layouts"><div class="info"><h1 class="title">Scripts de Layout</h1></div>
+        
+
+        <p class="para">
+            Em ambos os casos, entretanto, você precisará criar um script de layout.
+            Scripts de layout simplesmente utilizam <span class="classname">Zend_View</span> (ou
+            qualquer outra implementação de view que você esteja usando). Variáveis de layout são
+            registradas com um <a href="zend.view.helpers.html#zend.view.helpers.initial.placeholder" class="link">marcador</a>
+            <span class="classname">Zend_Layout</span>, e podem ser acessadas via helper de marcador
+            ou buscando-as como propriedades de objeto do objeto layout via helper de layout.
+        </p>
+
+        <p class="para">
+            Como um exemplo:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;!DOCTYPE html</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">PUBLIC</span> <span style="color: #ff0000;">&quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;meta http-equiv=<span style="color: #ff0000;">&quot;Content-Type&quot;</span> content=<span style="color: #ff0000;">&quot;text/html; charset=utf-8&quot;</span> /&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;title&gt;Meu Site&lt;/title&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// busca a chave 'content' usando um helper de layout:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">content</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// busca a chave 'foo' usando um helper marcador:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">placeholder</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend_Layout'</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">foo</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// busca o objeto de layout e recupera várias chaves dele:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$layout</span> = <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">bar</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">baz</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/html&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Como <span class="classname">Zend_Layout</span> utiliza <span class="classname">Zend_View</span> para
+            renderização, Você pode também usar quaisquer helpers de view registradas, e também
+            ter acesso a quaisquer variáveis de view associadas. Particularmente útil são os
+            vários <a href="zend.view.helpers.html#zend.view.helpers.initial.placeholder" class="link">helpers marcadores</a>,
+            que permitem a você recuperar conteúdo para áreas tais como a seção &lt;head&gt;,
+            navegação, etc.:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;!DOCTYPE html</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">PUBLIC</span> <span style="color: #ff0000;">&quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;</span>&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;html&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;meta http-equiv=<span style="color: #ff0000;">&quot;Content-Type&quot;</span> content=<span style="color: #ff0000;">&quot;text/html; charset=utf-8&quot;</span> /&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">headTitle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">headScript</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">headStyle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/head&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'header.phtml'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;div id=<span style="color: #ff0000;">&quot;nav&quot;</span>&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">placeholder</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'nav'</span><span style="color: #66cc66;">&#41;</span> ?&gt;&lt;/div&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;div id=<span style="color: #ff0000;">&quot;content&quot;</span>&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">content</span> ?&gt;&lt;/div&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'footer.phtml'</span><span style="color: #66cc66;">&#41;</span> <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/html&gt;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.layout.quickstart.mvc" name="zend.layout.quickstart.mvc"><div class="info"><h1 class="title">Usando Zend_Layout com o MVC do Zend Framework</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Controller</span> oferece um rico conjunto de funcionalidades
+            para extensão por meio de seus <a href="zend.controller.plugins.html" class="link">front controller plugins</a> e <a href="zend.controller.actionhelpers.html" class="link">action controller helpers</a>.
+            <span class="classname">Zend_View</span> também tem <a href="zend.view.helpers.html" class="link">helpers</a>. <span class="classname">Zend_Layout</span>
+            toma vantagem desses diversos pontos de extensão quando usado com os
+            componentes <acronym class="acronym">MVC</acronym>.
+        </p>
+
+        <p class="para">
+             <span class="methodname">Zend_Layout::startMvc()</span> cria uma instância de
+            <span class="classname">Zend_Layout</span> com qualquer configuração opcional que
+            você fornecer. Ele registra então um front controller plugin que renderiza o
+            layout com qualquer conteúdo de aplicação uma vez que o laço de despacho foi feito,
+            e registra um action helper para permitir o acesso ao objeto layout a partir de seus
+            action controllers. Adicionalmente, você pode a qualquer tempo pegar a instância de
+            dentro de um view script usando o view helper <span class="classname">Layout</span>.
+        </p>
+
+        <p class="para">
+            Primeiro, dê uma olhada em como inicializar <span class="classname">Zend_Layout</span>
+            para uso com o <acronym class="acronym">MVC</acronym>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Em seu bootstrap:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Layout::<span style="color: #006600;">startMvc</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+             <span class="methodname">startMvc()</span> pode tomar uma matriz opcional de opções ou
+            um objeto <span class="classname">Zend_Config</span> para customizar a instância; essas
+            opções são detalhadas <a href="zend.layout.options.html" class="link">nesta seção</a>.
+        </p>
+
+        <p class="para">
+            Em um action controller, você pode então acessar a instância de layout como um action
+            helper:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> FooController <span style="color: #000000; font-weight: bold;">extends</span> Zend_Controller_Action</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> barAction<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// desabilita layouts para este action:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_helper-&gt;<span style="color: #006600;">layout</span>-&gt;<span style="color: #006600;">disableLayout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> bazAction<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// usa um script de layout diferente com este action:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$this</span>-&gt;_helper-&gt;<span style="color: #006600;">layout</span>-&gt;<span style="color: #006600;">setLayout</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foobaz'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Em seus view scripts, você pode então acessar o objeto de layout via view helper
+            <span class="classname">Layout</span>. Esse view helper é levemente diferente dos outros
+            no que toca a não tomar argumentos, e retornar um objeto ao invés de um valor
+            string. Isso permite que você imediatamente chame métodos no objeto de layout:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">setLayout</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// configura layout alternativo ?&gt;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            A qualquer tempo, você pode buscar a instância de <span class="classname">Zend_Layout</span>
+            registrada com <acronym class="acronym">MVC</acronym> via método estático
+             <span class="methodname">getMvcInstance()</span>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Retorna null se startMvc() não foi o primeiro a ser chamado</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span> = Zend_Layout::<span style="color: #006600;">getMvcInstance</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Finalmente, o front controller plugin de <span class="classname">Zend_Layout</span> tem
+            uma importante característica em adição a renderização do layout: ele recupera
+            todos os segmentos nomeados do objeto de resposta e associa variáveis,
+            associando o segmento &#039;default&#039; a variável &#039;content&#039;. Isso permite a você acessar
+            o conteúdo de sua aplicação e renderizá-lo em seus view scripts.
+        </p>
+
+        <p class="para">
+            Como um exemplo, diremos que seu código primeiro ativa
+             <span class="methodname">FooController::indexAction()</span>, que renderiza algum
+            conteúdo para o segmento de resposta padrão, e então prossegue para
+             <span class="methodname">NavController::menuAction()</span>, que renderiza conteúdo
+            para o segmento de resposta &#039;nav&#039;. Finalmente, você prossegue para
+             <span class="methodname">CommentController::fetchAction()</span> e busca alguns comentários,
+            mas renderizar isso para o segmento de resposta é bom (o que adiciona conteúdo
+            aquele segmento). Seu view script poderia então renderizar cada um separadamente:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;body&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;!-- renders /nav/menu --&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;div id=<span style="color: #ff0000;">&quot;nav&quot;</span>&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">nav</span> ?&gt;&lt;/div&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;!-- renders /foo/index + /comment/fetch --&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;div id=<span style="color: #ff0000;">&quot;content&quot;</span>&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">layout</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">content</span> ?&gt;&lt;/div&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&lt;/body&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Essa característica é particularmente útil quando usada em conjunção com o
+            <a href="zend.controller.actionhelpers.html#zend.controller.actionhelpers.actionstack" class="link">action helper</a> e
+            <a href="zend.controller.plugins.html#zend.controller.plugins.standard.actionstack" class="link">plugin</a>
+            ActionStack, o qual você pode usar para configurar uma pilha de ações através da
+            qual itertamos, e então criamos páginas widgetizadas.
+        </p>
+    </div>
+
+    <div class="section" id="zend.layout.quickstart.standalone" name="zend.layout.quickstart.standalone"><div class="info"><h1 class="title">Usando Zend_Layout como um Componente</h1></div>
+        
+
+        <p class="para">
+            Como um componente autônomo, <span class="classname">Zend_Layout</span> não oferece tantas
+            características ou tanta conveniência como quanto é usado com o
+            <acronym class="acronym">MVC</acronym>. Entretanto, ele ainda tem dois benefícios a destacar:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Escopo de variáveis de layout.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Isolamento do view script de layout de outros scripts view.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            Quando usado como um componente autônomo, simplesmente inicie o objeto layout,
+            use os vários acessores para configurar estado, configure variáveis como
+            propriedades de objeto, e renderize o layout:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Layout<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Configura um caminho de script de layout:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">setLayoutPath</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'/path/to/layouts'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Configura algumas variáveis:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">content</span> = <span style="color: #0000ff;">$content</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">nav</span>&nbsp; &nbsp; &nbsp;= <span style="color: #0000ff;">$nav</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Escolhe um script de layout diferente:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">setLayout</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Renderiza o layout final</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$layout</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.layout.quickstart.example" name="zend.layout.quickstart.example"><div class="info"><h1 class="title">Exemplo de Layout</h1></div>
+        
+
+        <p class="para">
+            Algumas vezes uma imagem vale mais que mil palavras. A seguir temos
+            um exemplo de um script de layout.
+        </p>
+
+        <p class="para">
+            <div class="inlinemediaobject"><div class="imageobject"><a href="images/d481d625821a97b9a5eb2cec99dca50e-zend.layout.quickstart.example.png"><img src="images/d481d625821a97b9a5eb2cec99dca50e-zend.layout.quickstart.example.png" alt="zend.layout.quickstart.example.png" width="450" height="583" /></a></div></div>
+        </p>
+
+        <p class="para">
+            A ordem real dos elementos pode variar, dependendo do <acronym class="acronym">CSS</acronym> que
+            você tenha configurado; por exemplo, se você está usando posicionamento absoluto,
+            você pode ser capaz de ter a navegação exibida mais tarde no documento, mas ainda
+            mostrar-se no topo; o mesmo poderia ser dito para a barra lateral ou o cabeçalho.
+            A mecânica real de puxar o conteúdo permanece a mesma, entretanto.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.layout.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.layout.html">Zend_Layout</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.layout.options.html">Op&ccedil;&otilde;es de Configura&ccedil;&atilde;o Zend_Layout</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.layout.html">Zend_Layout</a></li>
+  <li><a href="zend.layout.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li class="active"><a href="zend.layout.quickstart.html">Guia R&aacute;pido Zend_Layout</a></li>
+  <li><a href="zend.layout.options.html">Op&ccedil;&otilde;es de Configura&ccedil;&atilde;o Zend_Layout</a></li>
+  <li><a href="zend.layout.advanced.html">Uso Avan&ccedil;ado de Zend_Layout</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

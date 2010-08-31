@@ -1,0 +1,419 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Introdu&ccedil;&atilde;o - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.view.html">Zend_View</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.view.html">Zend_View</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.view.controllers.html">Scripts Controladores</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.view.introduction" class="section"><div class="info"><h1 class="title">Introdução</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_View</span> é uma classe para trabalhar com a parte de visualização do
+        padrão de projeto MVC. Basicamente ela existe para separar o script de visualização dos
+        controladores e modelos. Ela fornece um sistema de assistentes, filtros de saída e escape
+        de variáveis.
+    </p>
+
+    <p class="para">
+        <span class="classname">Zend_View</span> é um sistema de template agnóstico; você pode usar o
+        <acronym class="acronym">PHP</acronym> como sua linguagem de template, ou criar instâncias de outros
+        sistemas de template e manipulá-las dentro do seu script de visualização.
+    </p>
+
+    <p class="para">
+        Essencialmente, o funcionamento do <span class="classname">Zend_View</span> acontece em duas etapas
+        principais:
+        1. Seu script controlador cria uma instância de <span class="classname">Zend_View</span>,
+        atribuindo-lhe variáveis.
+        2. O controlador instrui o <span class="classname">Zend_View</span> a renderizar uma determinada
+        visualização, passando o controle ao script de visualização, responsável pela geração da
+        saída a ser visualizada.
+    </p>
+
+    <div class="section" id="zend.view.introduction.controller" name="zend.view.introduction.controller"><div class="info"><h1 class="title">Script Controlador</h1></div>
+        
+
+        <p class="para">
+            Neste exemplo simples, suponhamos que seu controlador tenha uma listagem contendo dados
+            sobre livros, que queremos renderizar para uma visualização. O controlador poderia ser
+            algo como isto:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// use a model to get the data for book authors and titles.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$data</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'author'</span> =&gt; <span style="color: #ff0000;">'Hernando de Soto'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'The Mystery of Capitalism'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'author'</span> =&gt; <span style="color: #ff0000;">'Henry Hazlitt'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'Economics in One Lesson'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'author'</span> =&gt; <span style="color: #ff0000;">'Milton Friedman'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'Free to Choose'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// now assign the book data to a Zend_View instance</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Loader::<span style="color: #006600;">loadClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend_View'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_View<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">books</span> = <span style="color: #0000ff;">$data</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// and render a view script called &quot;booklist.php&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">render</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'booklist.php'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.view.introduction.view" name="zend.view.introduction.view"><div class="info"><h1 class="title">Script Visualizador</h1></div>
+        
+
+        <p class="para">
+            Agora necessitaremos do script de visualização associado, &quot;booklist.php&quot;. Trata-se de um
+            script <acronym class="acronym">PHP</acronym> como qualquer outro, com uma exceção: ele executa dentro
+            do escopo da instância de <span class="classname">Zend_View</span>, o que implica que as
+            referências a $this apontam para as propriedades e métodos da instância
+            <span class="classname">Zend_View</span>. (Variáveis atribuídas à instância pelo controlador são
+            propriedades públicas da instância de <span class="classname">Zend_View</span>). Deste modo, um
+            script de visualização muito básico poderia se parecer com isto:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">books</span><span style="color: #66cc66;">&#41;</span>: <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;!-- Uma tabela contendo alguns livros. --&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;table&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;th&gt;Autor&lt;/th&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;th&gt;Título&lt;/th&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;/tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">books</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$key</span> =&gt; <span style="color: #0000ff;">$val</span><span style="color: #66cc66;">&#41;</span>: <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;td&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">escape</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$val</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'author'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> ?&gt;&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;td&gt;&lt;?php <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$this</span>-&gt;<span style="color: #006600;">escape</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$val</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'title'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span> ?&gt;&lt;/td&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &lt;/tr&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">endforeach</span>; <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;/table&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">else</span>: <span style="color: #000000; font-weight: bold;">?&gt;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &lt;p&gt;Não existem livros a serem exibidos.&lt;/p&gt;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">&lt;?php</span> <span style="color: #b1b100;">endif</span>;?&gt;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Observe a forma como empregamos o método &quot;escape()&quot; para escapar o conteúdo das
+            variáveis para a saída.
+        </p>
+    </div>
+
+    <div class="section" id="zend.view.introduction.options" name="zend.view.introduction.options"><div class="info"><h1 class="title">Options</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_View</span> has several options that may be set to
+            configure the behaviour of your view scripts.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">basePath</span>: indicate a base path from which to set
+                    the script, helper, and filter path. It assumes a directory
+                    structure of:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">base/path/</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; helpers/</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; filters/</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; scripts/</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This may be set via  <span class="methodname">setBasePath()</span>,
+                     <span class="methodname">addBasePath()</span>, or the <span class="property">basePath</span>
+                    option to the constructor.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">encoding</span>: indicate the character encoding to use
+                    with  <span class="methodname">htmlentities()</span>,
+                     <span class="methodname">htmlspecialchars()</span>, and other operations. Defaults
+                    to ISO-8859-1 (latin1). May be set via
+                     <span class="methodname">setEncoding()</span> or the <span class="property">encoding</span>
+                    option to the constructor.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">escape</span>: indicate a callback to be used by
+                     <span class="methodname">escape()</span>. May be set via
+                     <span class="methodname">setEscape()</span> or the <span class="property">escape</span> option
+                    to the constructor.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">filter</span>: indicate a filter to use after rendering
+                    a view script. May be set via  <span class="methodname">setFilter()</span>,
+                     <span class="methodname">addFilter()</span>, or the <span class="property">filter</span> option
+                    to the constructor.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <span class="property">strictVars</span>: force <span class="classname">Zend_View</span> to emit
+                    notices and warnings when uninitialized view variables are
+                    accessed. This may be set by calling
+                     <span class="methodname">strictVars(true)</span> or passing the
+                    <span class="property">strictVars</span> option to the constructor.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.view.introduction.shortTags" name="zend.view.introduction.shortTags"><div class="info"><h1 class="title">Short Tags with View Scripts</h1></div>
+        
+
+        <p class="para">
+            In our examples, we make use of <acronym class="acronym">PHP</acronym> long tags:
+            <em class="emphasis">&lt;?php</em>. We also favor the use of <a href="http://us.php.net/manual/en/control-structures.alternative-syntax.php" class="link external">&raquo; alternate
+                syntax for control structures</a>. These are convenient shorthands to use when
+            writing view scripts, as they make the constructs more terse, keep statements on single
+            lines, and eliminate the need to hunt for brackets within <acronym class="acronym">HTML</acronym>.
+        </p>
+
+        <p class="para">
+            In previous versions, we often recommended using short tags (<em class="emphasis">&lt;?</em>
+            and <em class="emphasis">&lt;?=</em>), as they make the view scripts slightly less verbose.
+            However, the default for the <var class="filename">php.ini</var>
+            <b><tt>short_open_tag</tt></b> setting is typically off in production or on shared
+            hosts -- making their use not terribly portable. If you use template
+            <acronym class="acronym">XML</acronym> in view scripts, short open tags will cause the templates to fail
+            validation. Finally, if you use short tags when <b><tt>short_open_tag</tt></b> is
+            off, the view scripts will either cause errors or simply echo <acronym class="acronym">PHP</acronym>
+            code back to the viewer.
+        </p>
+
+        <p class="para">
+            If, despite these warnings, you wish to use short tags but they are disabled, you have
+            two options:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Turn on short tags in your <var class="filename">.htaccess</var> file:
+                </p>
+
+                <div class="programlisting apache"><div class="apachecode"><div class="apache" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">php_value <span style="color: #7f007f;">&quot;short_open_tag&quot;</span> <span style="color: #7f007f;">&quot;on&quot;</span></div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This will only be possible if you are allowed to create and
+                    utilize <var class="filename">.htaccess</var> files. This directive can
+                    also be added to your <var class="filename">httpd.conf</var> file.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Enable an optional stream wrapper to convert short tags to
+                    long tags on the fly:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$view</span>-&gt;<span style="color: #006600;">setUseStreamWrapper</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+                <p class="para">
+                    This registers <span class="classname">Zend_View_Stream</span> as a stream
+                    wrapper for view scripts, and will ensure that your code
+                    continues to work as if short tags were enabled.
+                </p>
+            </li>
+        </ul>
+
+        <div class="warning"><b class="warning">Warning</b><div class="info"><h1 class="title">View Stream Wrapper Degrades Performance</h1></div>
+            
+
+            <p class="para">
+                Usage of the stream wrapper <em class="emphasis">will</em> degrade
+                performance of your application, though actual benchmarks are
+                unavailable to quantify the amount of degradation. We recommend
+                that you either enable short tags, convert your scripts to use
+                full tags, or have a good partial and/or full page content
+                caching strategy in place.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.view.introduction.accessors" name="zend.view.introduction.accessors"><div class="info"><h1 class="title">Utility Accessors</h1></div>
+        
+
+        <p class="para">
+            Typically, you&#039;ll only ever need to call on  <span class="methodname">assign()</span>,
+             <span class="methodname">render()</span>, or one of the methods for setting/adding
+            filter, helper, and script paths. However, if you wish to extend
+            <span class="classname">Zend_View</span> yourself, or need access to some of its
+            internals, a number of accessors exist:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getVars()</span> will return all assigned variables.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">clearVars()</span> will clear all assigned variables;
+                    useful when you wish to re-use a view object, but want to
+                    control what variables are available.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getScriptPath($script)</span> will retrieve the
+                    resolved path to a given view script.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getScriptPaths()</span> will retrieve all registered
+                    script paths.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getHelperPath($helper)</span> will retrieve the
+                    resolved path to the named helper class.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getHelperPaths()</span> will retrieve all registered
+                    helper paths.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilterPath($filter)</span> will retrieve the
+                    resolved path to the named filter class.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getFilterPaths()</span> will retrieve all registered
+                    filter paths.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.view.html">Zend_View</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.view.html">Zend_View</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.view.controllers.html">Scripts Controladores</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.view.html">Zend_View</a></li>
+  <li class="active"><a href="zend.view.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li><a href="zend.view.controllers.html">Scripts Controladores</a></li>
+  <li><a href="zend.view.scripts.html">Scripts de Visualiza&ccedil;&atilde;o</a></li>
+  <li><a href="zend.view.helpers.html">Assistentes de Visualiza&ccedil;&atilde;o</a></li>
+  <li><a href="zend.view.abstract.html">Zend_View_Abstract</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

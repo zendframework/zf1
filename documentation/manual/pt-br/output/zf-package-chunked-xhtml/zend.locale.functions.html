@@ -1,0 +1,2212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Using Zend_Locale - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.locale.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.locale.html">Zend_Locale</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.locale.parsing.html">Normalization and Localization</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.locale.functions" class="section"><div class="info"><h1 class="title">Using Zend_Locale</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Locale</span> also provides localized information about locales for
+        each locale, including localized names for other locales, days of the week, month names,
+        etc.
+    </p>
+
+    <div class="section" id="zend.locale.copying" name="zend.locale.copying"><div class="info"><h1 class="title">Copying, Cloning, and Serializing Locale Objects</h1></div>
+        
+
+        <p class="para">
+            Use <a href="http://php.net/language.oop5.cloning" class="link external">&raquo; object cloning</a> to
+            duplicate a locale object exactly and efficiently. Most locale-aware methods also accept
+            string representations of locales, such as the result of
+            <strong class="command">$locale-&gt;toString()</strong>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 clone</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ar'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Save the $locale object as a serialization</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$serializedLocale</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">serialize</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// re-create the original object</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$localeObject</span> = <a href="http://www.php.net/unserialize"><span style="color: #000066;">unserialize</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$serializedLocale</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Obtain a string identification of the locale</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$stringLocale</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">toString</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Make a cloned copy of the $local object</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$copiedLocale</span> = clone <span style="color: #0000ff;">$locale</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;copied: &quot;</span>, <span style="color: #0000ff;">$copiedLocale</span>-&gt;<span style="color: #006600;">toString</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// PHP automatically calls toString() via __toString()</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;copied: &quot;</span>, <span style="color: #0000ff;">$copiedLocale</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.equals" name="zend.locale.equals"><div class="info"><h1 class="title">Equality</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Locale</span> also provides a convenience function to compare two
+            locales. All locale-aware classes should provide a similar equality check.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Check for equal locales</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$mylocale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'en_US'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Check if locales are equal</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">equals</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$mylocale</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Locales are equal&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.getdefault" name="zend.locale.getdefault"><div class="info"><h1 class="title">Default locales</h1></div>
+        
+
+        <p class="para">
+            The method  <span class="methodname">getDefault()</span> returns an array of relevant locales
+            using information from the user&#039;s web browser (if available), information from the
+            environment of the host server, and Zend Framework settings. As with the constructor
+            for <span class="classname">Zend_Locale</span>, the first parameter selects a preference of
+            which information to consider <a href="zend.locale.introduction.html#zend.locale.selection" class="link">(<b><tt>BROWSER</tt></b>,
+                <b><tt>ENVIRONMENT</tt></b>, or <b><tt>FRAMEWORK</tt></b></a> first.
+            The second parameter toggles between returning all matching locales or only the
+            first or best match. Locale-aware components normally use only the first locale. A
+            quality rating is included, when available.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Get default locales</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Return all default locales</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$found</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getDefault</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$found</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Return only browser locales</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$found2</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getDefault</span><span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">BROWSER</span>,<span style="color: #000000; font-weight: bold;">TRUE</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$found2</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            To obtain only the default locales relevant to the <a href="zend.locale.introduction.html#zend.locale.selection" class="link"><b><tt>BROWSER</tt></b>,
+                <b><tt>ENVIRONMENT</tt></b>, or <b><tt>FRAMEWORK</tt></b></a>, use
+            the corresponding method:
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getEnvironment()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getBrowser()</span>
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                         <span class="methodname">getLocale()</span>
+                    </p>
+                </li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="section" id="zend.locale.setlocale" name="zend.locale.setlocale"><div class="info"><h1 class="title">Set a new locale</h1></div>
+        
+
+        <p class="para">
+            A new locale can be set with the function  <span class="methodname">setLocale()</span>. This
+            function takes a locale string as parameter. If no locale is given, a locale is
+            <a href="zend.locale.introduction.html#zend.locale.selection" class="link">automatically selected</a>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 setLocale</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Actual locale</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">toString</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// new locale</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">setLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'aa_DJ'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">toString</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.getlocale" name="zend.locale.getlocale"><div class="info"><h1 class="title">Getting the language and region</h1></div>
+        
+
+        <p class="para">
+            Use  <span class="methodname">getLanguage()</span> to obtain a string containing the two
+            character language code from the string locale identifier. Use
+             <span class="methodname">getRegion()</span> to obtain a string containing the two character
+            region code from the string locale identifier.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #5 getLanguage and getRegion</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// if locale is 'de_AT' then 'de' will be returned as language</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getLanguage</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// if locale is 'de_AT' then 'AT' will be returned as region</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getRegion</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.getlocaletoterritory" name="zend.locale.getlocaletoterritory"><div class="info"><h1 class="title">Get the locale by giving a territory</h1></div>
+        
+
+        <p class="para">
+            When you only have the territory or country then it&#039;s also possible to get a locale
+            from that information. You can manually search if there is a locale for this territory
+            by using  <span class="methodname">getLocaleToTerritory()</span>. This method returns a
+            locale for the given territory or <b><tt>NULL</tt></b> when there was has no locale
+            been found.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 getLocaleToTerritory</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = Zend_Locale::<span style="color: #006600;">getLocaleToTerritory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'US'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// returns 'en_US'</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Uppercase territories</b><br /></span>
+            
+
+            
+                When you know that you are using a territory, then you should uppercase it.
+                Otherwise you could get an in your eyes false locale in return when you use other
+                methods. For example: When you give &quot;om&quot; then
+                 <span class="methodname">getLocaleToTerritory()</span> returns you &quot;ar_OM&quot; as it knows that
+                you mean a territory. But all other methods will return &quot;om&quot;, as it&#039;s also a
+                language.
+            <br />
+
+            
+                So when you know that the given string is a territory, eighter use
+                 <span class="methodname">getLocaleToTerritory()</span> yourself before creating a locale,
+                or uppercase the input.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.locale.getdata" name="zend.locale.getdata"><div class="info"><h1 class="title">Obtaining localized strings</h1></div>
+        
+
+        <p class="para">
+             <span class="methodname">getTranslationList()</span> gives you access to localized information
+            of several types. These information are useful if you want to display localized data to
+            a customer without the need of translating it. They are already available for your
+            usage.
+        </p>
+
+        <p class="para">
+            The requested list of information is always returned as named array. If you want to give
+            more than one value to a explicit type where you wish to receive values from, you have
+            to give an array instead of multiple values.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #7 getTranslationList</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$list</span> = Zend_Locale::<span style="color: #006600;">getTranslationList</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'language'</span>, <span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$list</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// example key -&gt; value pairs...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// [de] -&gt; Deutsch</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// [en] -&gt; Englisch</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// use one of the returned key as value for the getTranslation() method</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// of another language</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> Zend_Locale::<span style="color: #006600;">getTranslation</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de'</span>, <span style="color: #ff0000;">'language'</span>, <span style="color: #ff0000;">'zh'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// returns the translation for the language 'de' in chinese</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            You can receive this information for all languages. But not all information is
+            completely available for all languages. Some of these types are also available through
+            an own function for simplicity. See this list for detailed information.
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>
+                Details for getTranslationList($type = null, $locale = null, $value = null)
+            </b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Language</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all languages. The language part of the
+                            locale is returned as key and the translation as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Script</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all scripts. The script is returned as key
+                            and the translation as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Territory</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all territories. This contains countries,
+                            continents and territories. To get only territories and continents use
+                            &#039;1&#039; as value. To get only countries use &#039;2&#039; as value. The country part
+                            of the locale is used as key where applicable. In the other case the
+                            official <acronym class="acronym">ISO</acronym> code for this territory is used. The
+                            translated territory is returned as value. When you omit the value you
+                            will get a list with both.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Variant</em></td>
+
+                        <td align="left">
+                            Returns a localized list of known variants of scripts. The variant is
+                            returned as key and the translation as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Key</em></td>
+
+                        <td align="left">
+                            Returns a localized list of known keys. This keys are generic values
+                            used in translation. These are normally calendar, collation and
+                            currency. The key is returned as array key and the translation as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Type</em></td>
+
+                        <td align="left">
+                            Returns a localized list of known types of keys. These are variants of
+                            types of calendar representations and types of collations. When you use
+                            &#039;collation&#039; as value you will get all types of collations returned. When
+                            you use &#039;calendar&#039; as value you will get all types of calendars
+                            returned. When you omit the value you will get a list all both returned.
+                            The type is used as key and the translation as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Layout</em></td>
+
+                        <td align="left">
+                            Returns a list of rules which describes how to format special text parts
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Characters</em></td>
+                        <td align="left">Returns a list of allowed characters within this locale</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Delimiters</em></td>
+                        <td align="left">Returns a list of allowed quoting characters for this locale</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Measurement</em></td>
+
+                        <td align="left">
+                            Returns a list of known measurement values. This list is depreciated
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Months</em></td>
+
+                        <td align="left">
+                            Returns a list of all month representations within this locale. There
+                            are several different representations which are all returned as sub
+                            array. If you omit the value you will get a list of all months from the
+                            &#039;gregorian&#039; calendar returned. You can give any known calendar as value
+                            to get a list of months from this calendar returned. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Month</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all month names for this locale. If you omit
+                            the value you will get the normally used gregorian full name of the
+                            months where each month number is used as key and the translated month
+                            is returned as value. You can get the months for different calendars and
+                            formats if you give an array as value. The first array entry has to be
+                            the calendar, the second the used context and the third the width to
+                            return. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Days</em></td>
+
+                        <td align="left">
+                            Returns a list of all day representations within this locale. There are
+                            several different representations which are all returned as sub array.
+                            If you omit the value you will get a list of all days from the
+                            &#039;gregorian&#039; calendar returned. You can give any known calendar as value
+                            to get a list of days from this calendar returned. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Day</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all day names for this locale. If you omit
+                            the value you will get the normally used gregorian full name of the days
+                            where the english day abbreviation is used as key and the translated day
+                            is returned as value. You can get the days for different calendars and
+                            formats if you give an array as value. The first array entry has to be
+                            the calendar, the second the used context and the third the width to
+                            return. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Week</em></td>
+
+                        <td align="left">
+                            Returns a list of values used for proper week calculations within a
+                            locale. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Quarters</em></td>
+
+                        <td align="left">
+                            Returns a list of all quarter representations within this locale. There
+                            are several different representations which are all returned as sub
+                            array. If you omit the value you will get a list of all quarters from
+                            the &#039;gregorian&#039; calendar returned. You can give any known calendar as
+                            value to get a list of quarters from this calendar returned
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Quarter</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all quarter names for this locale. If you
+                            omit the value you will get the normally used gregorian full name of the
+                            quarters where each quarter number is used as key and the translated
+                            quarter is returned as value. You can get the quarters for different
+                            calendars and formats if you give an array as value. The first array
+                            entry has to be the calendar, the second the used context and the third
+                            the width to return
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Eras</em></td>
+
+                        <td align="left">
+                            Returns a list of all era representations within this locale. If you
+                            omit the value you will get a list of all eras from the &#039;gregorian&#039;
+                            calendar returned. You can give any known calendar as value to get a
+                            list of eras from this calendar returned
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Era</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all era names for this locale. If you omit
+                            the value you will get the normally used gregorian full name of the eras
+                            where each era number is used as key and the translated era is returned
+                            as value. You can get the eras for different calendars and formats if
+                            you give an array as value. The first array entry has to be the calendar
+                            and the second the width to return
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Date</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all date formats for this locale. The name
+                            of the dateformat is used as key and the format itself as value.If you
+                            omit the value you will get the date formats for the gregorian calendar
+                            returned. You can get the date formats for different calendars if you
+                            give the wished calendar as string. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Time</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all time formats for this locale. The name
+                            of the timeformat is used as key and the format itself as value. If you
+                            omit the value you will get the time formats for the gregorian calendar
+                            returned. You can get the time formats for different calendars if you
+                            give the wished calendar as string. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateTime</em></td>
+
+                        <td align="left">
+                            Returns a localized list of all known date-time formats for this locale.
+                            The name of the date-time format is used as key and the format itself as
+                            value. If you omit the value you will get the date-time formats for the
+                            gregorian calendar returned. You can get the date-time formats for
+                            different calendars if you give the wished calendar as string. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateItem</em></td>
+
+                        <td align="left">
+                            Returns a list of default formats for given date or time items
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateInterval</em></td>
+
+                        <td align="left">
+                            Returns a list of date or time formats which are used when you want to
+                            display intervals. The list is a multidimentional array where the first
+                            dimension is the interval format, and the second dimension is the token
+                            with the greatest difference.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Field</em></td>
+
+                        <td align="left">
+                            Returns a localized list of date fields which can be used to display
+                            calendars or date strings like &#039;month&#039; or &#039;year&#039; in a wished language.
+                            If you omit the value you will get this list for the gregorian calendar
+                            returned. You can get the list for different calendars if you give the
+                            wished calendar as string
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Relative</em></td>
+
+                        <td align="left">
+                            Returns a localized list of relative dates which can be used to display
+                            textual relative dates like &#039;yesterday&#039; or &#039;tomorrow&#039; in a wished
+                            language. If you omit the value you will get this list for the gregorian
+                            calendar returned. You can get the list for different calendars if you
+                            give the wished calendar as string
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Symbols</em></td>
+
+                        <td align="left">
+                            Returns a localized list of characters used for number representations
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NameToCurrency</em></td>
+
+                        <td align="left">
+                            Returns a localized list of names for currencies. The currency is used
+                            as key and the translated name as value. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyToName</em></td>
+
+                        <td align="left">
+                            Returns a list of currencies for localized names. The translated name is
+                            used as key and the currency as value. Use  <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencySymbol</em></td>
+
+                        <td align="left">
+                            Returns a list of known localized currency symbols for currencies. The
+                            currency is used as key and the symbol as value. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Question</em></td>
+
+                        <td align="left">
+                            Returns a list of localized strings for acceptance (&#039;yes&#039;) and
+                            negation (&#039;no&#039;). Use <a href="zend.locale.functions.html#zend.locale.getquestion" class="link">Zend_Locale&#039;s getQuestion
+                                method</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyFraction</em></td>
+
+                        <td align="left">
+                            Returns a list of fractions for currency values. The currency is used as
+                            key and the fraction as integer value. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyRounding</em></td>
+
+                        <td align="left">
+                            Returns a list of how to round which currency. The currency is used as
+                            key and the rounding as integer value. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyToRegion</em></td>
+
+                        <td align="left">
+                            Returns a list of currencies which are known to be used within a region.
+                            The <b><tt>ISO3166</tt></b> value (&#039;region&#039;) is used as array key
+                            and the <b><tt>ISO4217</tt></b> value (&#039;currency&#039;) as array value.
+                            Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">RegionToCurrency</em></td>
+
+                        <td align="left">
+                            Returns a list of regions where a currency is used . The
+                            <b><tt>ISO4217</tt></b> value (&#039;currency&#039;) is used as array key and
+                            the <b><tt>ISO3166</tt></b> value (&#039;region&#039;) as array value. When a
+                            currency is used in several regions these regions are separated with a
+                            whitespace. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">RegionToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of territories with the countries or sub territories
+                            which are included within that territory. The <acronym class="acronym">ISO</acronym>
+                            territory code (&#039;territory&#039;) is used as array key and the
+                            <b><tt>ISO3166</tt></b> value (&#039;region&#039;) as array value. When a
+                            territory contains several regions these regions are separated with a
+                            whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToRegion</em></td>
+
+                        <td align="left">
+                            Returns a list of regions and the territories where these regions are
+                            located. The <b><tt>ISO3166</tt></b> code (&#039;region&#039;) is used as
+                            array key and the <acronym class="acronym">ISO</acronym> territory code (&#039;territory&#039;) as
+                            array value. When a region is located in several territories these
+                            territories are separated with a whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">ScriptToLanguage</em></td>
+
+                        <td align="left">
+                            Returns a list of scripts which are used within a language. The language
+                            code is used as array key and the script code as array value. When a
+                            language contains several scripts these scripts are separated with a
+                            whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LanguageToScript</em></td>
+
+                        <td align="left">
+                            Returns a list of languages which are using a script. The script code
+                            is used as array key and the language code as array value. When a script
+                            is used in several languages these languages are separated with a
+                            whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToLanguage</em></td>
+
+                        <td align="left">
+                            Returns a list of languages and the countries where they are spoken. The
+                            language is used as array key and the country code as array value. When
+                            a language is used in several countries these countries are separated
+                            with a whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LanguageToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of countries and the languages which are spoken within
+                            them. The country code is used as array key and the language code
+                            as array value. When several languages are spoken within a territory
+                            then these languages are separated with a whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToWindows</em></td>
+
+                        <td align="left">
+                            Returns a list of windows timezones and the related
+                            <acronym class="acronym">ISO</acronym> timezone. The windows timezone is used as array
+                            key and the <acronym class="acronym">ISO</acronym> timezone as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">WindowsToTimezone</em></td>
+
+                        <td align="left">
+                            Returns a list of <acronym class="acronym">ISO</acronym> timezones and the related
+                            windows timezone. The <acronym class="acronym">ISO</acronym> timezone is used as array
+                            key and the windows timezone as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToTimezone</em></td>
+
+                        <td align="left">
+                            Returns a list of regions or territories and the related
+                            <acronym class="acronym">ISO</acronym> timezone. The <acronym class="acronym">ISO</acronym> timezone is
+                            used as array key and the territory code as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of timezones and the related region or territory code.
+                            The region or territory code is used as array key and the
+                            <acronym class="acronym">ISO</acronym> timezone as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CityToTimezone</em></td>
+
+                        <td align="left">
+                            Returns a localized list of cities which can be used as translation for
+                            a related timezone. Not for all timezones is a translation available,
+                            but for a user is the real city written in his languages more accurate
+                            than the <acronym class="acronym">ISO</acronym> name of this timezone. The
+                            <acronym class="acronym">ISO</acronym> timezone is used as array key and the translated
+                            city as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToCity</em></td>
+
+                        <td align="left">
+                            Returns a list of timezones for localized city names. The localized city
+                            is used as array key and the <acronym class="acronym">ISO</acronym> timezone name as
+                            array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">PhoneToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of phone codes which are known to be used within a
+                            territory. The territory (region) is used as array key and the telephone
+                            code as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToPhone</em></td>
+
+                        <td align="left">
+                            Returns a list of territories where a phone is used . The phone code
+                            is used as array key and the territory (region) as array value. When a
+                            phone code is used in several territories these territories are
+                            separated with a whitespace
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NumericToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of 3 digit number codes for territories.
+                            The territory (region) is used as array key and the 3 digit number code
+                            as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToNumeric</em></td>
+
+                        <td align="left">
+                            Returns a list of territories with their 3 digit number code. The 3
+                            digit number code is used as array key and the territory (region) as
+                            array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Alpha3ToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of 3 sign character codes for territories.
+                            The territory (region) is used as array key and the 3 sign character
+                            code as array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToAlpha3</em></td>
+
+                        <td align="left">
+                            Returns a list of territories with their 3 sign character code. The 3
+                            sign character code is used as array key and the territory (region) as
+                            array value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">PostalToTerritory</em></td>
+
+                        <td align="left">
+                            Returns a list of territories with a regex for postal codes which are
+                            included within that territory. The <acronym class="acronym">ISO</acronym> territory
+                            code (&#039;territory&#039;) is used as array key and the regex as array value.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NumberingSystem</em></td>
+
+                        <td align="left">
+                            Returns a list of scripts with the notation for digits used within the
+                            script
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">FallbackToChar</em></td>
+
+                        <td align="left">
+                            Returns a list of replacement characters for often used unicode
+                            characters. This can be used to replace &quot;©&quot; with &quot;(C)&quot; for example
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CharToFallback</em></td>
+
+                        <td align="left">
+                            Returns a list of unicode characters for often used replacement
+                            characters. This can be used to replace &quot;(C)&quot; with &quot;©&quot; for example
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LocaleUpgrade</em></td>
+
+                        <td align="left">
+                            Returns a list of locale dependencies which can be used to upgrade a
+                            language to a full qualified locale
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Unit</em></td>
+
+                        <td align="left">
+                            Returns a list of localized calendar units. This can be used to
+                            translate the strings &quot;day&quot;, &quot;month&quot; and so on automatically
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            If you are in need of a single translated value, you can use the
+             <span class="methodname">getTranslation()</span> method. It always returns a string but it
+            accepts some different types than the  <span class="methodname">getTranslationList()</span>
+            method. Also value is the same as before with one difference. You have to give the
+            detail you want to get returned as additional value.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Because you have almost always give a value as detail this parameter has to be given
+                as first parameter. This differs from the
+                 <span class="methodname">getTranslationList()</span> method.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            See the following table for detailed information:
+        </p>
+
+        <table class="doctable table"><div class="info"><caption><b>Details for getTranslation($value = null, $type = null, $locale = null)</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Language</em></td>
+
+                        <td align="left">
+                            Returns a translation for a language. To select the wished translation
+                            you must give the language code as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Script</em></td>
+
+                        <td align="left">
+                            Returns a translation for a script. To select the wished translation you
+                            must give the script code as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">
+                            <em class="emphasis">Territory</em> or <em class="emphasis">Country</em>
+                        </td>
+
+                        <td align="left">
+                            Returns a translation for a territory. This can be countries, continents
+                            and territories. To select the wished variant you must give the
+                            territory code as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Variant</em></td>
+
+                        <td align="left">
+                            Returns a translation for a script variant. To select the wished variant
+                            you must give the variant code as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Key</em></td>
+
+                        <td align="left">
+                            Returns translation for a known keys. This keys are generic values used
+                            in translation. These are normally calendar, collation and currency. To
+                            select the wished key you must give the key code as value
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DefaultCalendar</em></td>
+
+                        <td align="left">
+                            Returns the default calendar for the given locale. For most locales this
+                            will be &#039;gregorian&#039;. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">MonthContext</em></td>
+
+                        <td align="left">
+                            Returns the default context for months which is used within the given
+                            calendar. If you omit the value the &#039;gregorian&#039; calendar will be used.
+                            Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DefaultMonth</em></td>
+
+                        <td align="left">
+                            Returns the default format for months which is used within the given
+                            calendar. If you omit the value the &#039;gregorian&#039; calendar will be used.
+                            Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Month</em></td>
+
+                        <td align="left">
+                            Returns a translation for a month. You have to give the number of the
+                            month as integer value. It has to be between 1 and 12. If you want to
+                            receive data for other calendars, contexts or formats, then you must
+                            give an array instead of an integer with the expected values. The array
+                            has to look like this: <strong class="command">array( &#039;calendar&#039;, &#039;context&#039;, &#039;format&#039;,
+                                &#039;month number&#039;)</strong>. If you give only an integer then the
+                            default values are the &#039;gregorian&#039; calendar, the context &#039;format&#039; and
+                            the format &#039;wide&#039;. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DayContext</em></td>
+
+                        <td align="left">
+                            Returns the default context for ´days which is used within the given
+                            calendar. If you omit the value the &#039;gregorian&#039; calendar will be used.
+                            Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DefaultDay</em></td>
+
+                        <td align="left">
+                            Returns the default format for days which is used within the given
+                            calendar. If you omit the value the &#039;gregorian&#039; calendar will be used.
+                            Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Day</em></td>
+
+                        <td align="left">
+                            Returns a translation for a day. You have to give the english
+                            abbreviation of the day as string value (&#039;sun&#039;, &#039;mon&#039;, etc.). If you
+                            want to receive data for other calendars, contexts or format, then you
+                            must give an array instead of an integer with the expected values. The
+                            array has to look like this:  <span class="methodname">array(&#039;calendar&#039;, &#039;context&#039;,
+                                &#039;format&#039;, &#039;day abbreviation&#039;)</span>. If you give only an
+                            string then the default values are the &#039;gregorian&#039; calendar, the context
+                            &#039;format&#039; and the format &#039;wide&#039;. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Quarter</em></td>
+
+                        <td align="left">
+                            Returns a translation for a quarter. You have to give the number of the
+                            quarter as integer and it has to be between 1 and 4. If you want to
+                            receive data for other calendars, contexts or formats, then you must
+                            give an array instead of an integer with the expected values. The array
+                            has to look like this:  <span class="methodname">array(&#039;calendar&#039;, &#039;context&#039;,
+                                &#039;format&#039;, &#039;quarter number&#039;)</span>. If you give only an
+                            string then the default values are the &#039;gregorian&#039; calendar,
+                            the context &#039;format&#039; and the format &#039;wide&#039;
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Am</em></td>
+
+                        <td align="left">
+                            Returns translation for &#039;AM&#039; in the expected locale. If you want to
+                            receive data for other calendars provide a string with the expected
+                            calendar. If you omit the value then the &#039;gregorian&#039; calendar will be
+                            used. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Pm</em></td>
+
+                        <td align="left">
+                            Returns translation for &#039;PM&#039; in the expected locale. If you want to
+                            receive data for other calendars provide a string with the expected
+                            calendar. If you omit the value then the &#039;gregorian&#039; calendar will be
+                            used. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Era</em></td>
+
+                        <td align="left">
+                            Returns a translation for an era within a locale. You have to give the
+                            era number as string or integer. If you want to receive data for other
+                            calendars or formats, then you must give an array instead of the era
+                            number with the expected values. The array has to look like this:
+                             <span class="methodname">array(&#039;calendar&#039;, &#039;format&#039;, &#039;era number&#039;)</span>. If
+                            you give only a string then the default values are the &#039;gregorian&#039;
+                            calendar and the &#039;abbr&#039; format
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DefaultDate</em></td>
+
+                        <td align="left">
+                            Returns the default date format which is used within the given
+                            calendar. If you omit the value the &#039;gregorian&#039; calendar will be used.
+                            Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Date</em></td>
+
+                        <td align="left">
+                            Returns the date format for a given calendar or format within a locale.
+                            If you omit the value then the &#039;gregorian&#039; calendar will be used with
+                            the &#039;medium&#039; format. If you give a string then the &#039;gregorian&#039; calendar
+                            will be used with the given format. Or you can also give an array which
+                            will have to look like this:  <span class="methodname">array(&#039;calendar&#039;,
+                                &#039;format&#039;)</span>. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DefaultTime</em></td>
+
+                        <td align="left">
+                            Returns the default time format which is used within the given calendar.
+                            If you omit the value the &#039;gregorian&#039; calendar will be used. Use
+                            <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Time</em></td>
+
+                        <td align="left">
+                            Returns the time format for a given calendar or format within a locale.
+                            If you omit the value then the &#039;gregorian&#039; calendar will be used with
+                            the &#039;medium&#039; format. If you give a string then the &#039;gregorian&#039; calendar
+                            will be used with the given format. Or you can also give an array which
+                            will have to look like this:
+                             <span class="methodname">array(&#039;calendar&#039;, &#039;format&#039;)</span>. Use <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateTime</em></td>
+
+                        <td align="left">
+                            Returns the datetime format for the given locale which indicates how to
+                            display date with times in the same string within the given calendar. If
+                            you omit the value the &#039;gregorian&#039; calendar will be used. Use
+                            <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateItem</em></td>
+                        <td align="left">Returns the default format for a given date or time item</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DateInterval</em></td>
+
+                        <td align="left">
+                            Returns the interval format for a given date or time format. The first
+                            value is the calendar format, normally &#039;gregorian&#039;. The second value is
+                            the interval format and the third value the token with the greatest
+                            difference. For example: array(&#039;gregorian&#039;, &#039;yMMMM&#039;, &#039;y&#039;) returns the
+                            interval format for the date format &#039;yMMMM&#039; where &#039;y&#039; has the greatest
+                            difference.
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Field</em></td>
+
+                        <td align="left">
+                            Returns a translated date field which can be used to display calendars
+                            or date strings like &#039;month&#039; or &#039;year&#039; in a wished language. You must
+                            give the field which has to be returned as string. In this case the
+                            &#039;gregorian&#039; calendar will be used. You can get the field for other
+                            calendar formats if you give an array which has to look like this:
+                             <span class="methodname">array(&#039;calendar&#039;, &#039;date field&#039;)</span>
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Relative</em></td>
+
+                        <td align="left">
+                            Returns a translated date which is relative to today which can include
+                            date strings like &#039;yesterday&#039; or &#039;tomorrow&#039; in a wished language. You
+                            have to give the number of days relative to tomorrow to receive the
+                            expected string. Yesterday would be &#039;-1&#039;, tomorrow &#039;1&#039; and so on. This
+                            will use the &#039;gregorian&#039; calendar. if you want to get relative dates for
+                            other calendars you will have to give an array which has to look like
+                            this:  <span class="methodname">array(&#039;calendar&#039;, &#039;relative days&#039;)</span>. Use
+                            <a href="zend.date.introduction.html" class="link">Zend_Date</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">DecimalNumber</em></td>
+
+                        <td align="left">
+                            Returns the format for decimal numbers within a given locale. Use <a href="zend.locale.parsing.html" class="link">Zend_Locale_Format</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">ScientificNumber</em></td>
+
+                        <td align="left">
+                            Returns the format for scientific numbers within a given locale
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">PercentNumber</em></td>
+
+                        <td align="left">
+                            Returns the format for percentage numbers within a given locale
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyNumber</em></td>
+
+                        <td align="left">
+                            Returns the format for displaying currency numbers within a given
+                            locale. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NameToCurrency</em></td>
+
+                        <td align="left">
+                            Returns the translated name for a given currency. The currency has to be
+                            given in <acronym class="acronym">ISO</acronym> format which is for example &#039;EUR&#039; for
+                            the currency &#039;euro&#039;. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyToName</em></td>
+
+                        <td align="left">
+                            Returns a currency for a given localized name. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencySymbol</em></td>
+
+                        <td align="left">
+                            Returns the used symbol for a currency within a given locale. Not for
+                            all currencies exists a symbol. Use
+                            <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Question</em></td>
+
+                        <td align="left">
+                            Returns a localized string for acceptance (&#039;yes&#039;) and negation (&#039;no&#039;).
+                            You have to give either &#039;yes&#039; or &#039;no&#039; as value to receive the expected
+                            string. Use <a href="zend.locale.functions.html#zend.locale.getquestion" class="link">Zend_Locale&#039;s
+                                getQuestion method</a> for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyFraction</em></td>
+
+                        <td align="left">
+                            Returns the fraction to use for a given currency. You must give the
+                            currency as <acronym class="acronym">ISO</acronym> value. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a>
+                            for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyRounding</em></td>
+
+                        <td align="left">
+                            Returns how to round a given currency. You must give the currency as
+                            <acronym class="acronym">ISO</acronym> value. If you omit the currency then the
+                            &#039;DEFAULT&#039; rounding will be returned. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a>
+                            for simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CurrencyToRegion</em></td>
+
+                        <td align="left">
+                            Returns the currency for a given region. The region code has to be given
+                            as <b><tt>ISO3166</tt></b> string for example &#039;AT&#039; for austria. Use
+                            <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">RegionToCurrency</em></td>
+
+                        <td align="left">
+                            Returns the regions where a currency is used. The currency has to be
+                            given as <b><tt>ISO4217</tt></b> code for example &#039;EUR&#039; for euro.
+                            When a currency is used in multiple regions, these regions are separated
+                            with a whitespace character. Use <a href="zend.currency.introduction.html" class="link">Zend_Currency</a> for
+                            simplicity
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">RegionToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the regions for a given territory. The territory has to be given
+                            as <b><tt>ISO4217</tt></b> string for example &#039;001&#039; for world. The
+                            regions within this territory are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToRegion</em></td>
+
+                        <td align="left">
+                            Returns the territories where a given region is located. The region has
+                            to be given in <b><tt>ISO3166</tt></b> string for example &#039;AT&#039; for
+                            austria. When a region is located in multiple territories then these
+                            territories are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">ScriptToLanguage</em></td>
+
+                        <td align="left">
+                            Returns the scripts which are used within a given language. The language
+                            has to be given as <acronym class="acronym">ISO</acronym> language code for example &#039;en&#039;
+                            for english. When multiple scripts are used within a language then these
+                            scripts are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LanguageToScript</em></td>
+
+                        <td align="left">
+                            Returns the languages which are used within a given script. The script
+                            has to be given as <acronym class="acronym">ISO</acronym> script code for example &#039;Latn&#039;
+                            for latin. When a script is used in multiple languages then these
+                            languages are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToLanguage</em></td>
+
+                        <td align="left">
+                            Returns the territory where a given language is used. The language has
+                            to be given as <acronym class="acronym">ISO</acronym> language code for example &#039;en&#039; for
+                            english. When the given language is spoken within multiple territories
+                            then these territories are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LanguageToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the language which is spoken within a given territory. The
+                            territory has to be given as <b><tt>ISO3166</tt></b> code for
+                            example &#039;IT&#039; for italia. When multiple languages are spoken within the
+                            given territory then these languages are separated with a whitespace
+                            character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToWindows</em></td>
+
+                        <td align="left">
+                            Returns a <acronym class="acronym">ISO</acronym> timezone for a given windows timezone
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">WindowsToTimezone</em></td>
+
+                        <td align="left">
+                            Returns a windows timezone for a given <acronym class="acronym">ISO</acronym> timezone
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToTimezone</em></td>
+
+                        <td align="left">
+                            Returns the territory for a given <acronym class="acronym">ISO</acronym> timezone
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the <acronym class="acronym">ISO</acronym> timezone for a given territory
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CityToTimezone</em></td>
+
+                        <td align="left">
+                            Returns the localized city for a given <acronym class="acronym">ISO</acronym> timezone.
+                            Not for all timezones does a city translation exist
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TimezoneToCity</em></td>
+
+                        <td align="left">
+                            Returns the <acronym class="acronym">ISO</acronym> timezone for a given localized city
+                            name. Not for all cities does a timezone exist
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">PhoneToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the telephone code for a given territory (region). The territory
+                            code has to be given as <b><tt>ISO3166</tt></b> string for example
+                            &#039;AT&#039; for austria
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToPhone</em></td>
+
+                        <td align="left">
+                            Returns the territory (region) where a telephone code is used. The
+                            telephone code has to be given as plain integer code for example &#039;43&#039;
+                            for +43. When a telephone code is used in multiple territories
+                            (regions), these territories are separated with a whitespace character
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NumericToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the 3 digit number code for a given territory (region). The
+                            territory code has to be given as <b><tt>ISO3166</tt></b> string
+                            for example &#039;AT&#039; for austria
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToNumeric</em></td>
+
+                        <td align="left">
+                            Returns the territory (region) for a 3 digit number code. The 3 digit
+                            number code has to be given as plain integer code for example &#039;43&#039;
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Alpha3ToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the 3 sign character code for a given territory (region). The
+                            territory code has to be given as <b><tt>ISO3166</tt></b> string
+                            for example &#039;AT&#039; for austria
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">TerritoryToAlpha3</em></td>
+                        <td align="left">Returns the territory (region) for a 3 sign character code</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">PostalToTerritory</em></td>
+
+                        <td align="left">
+                            Returns the a regex for postal codes for a given territory. The
+                            territory has to be given as <b><tt>ISO4217</tt></b> string for
+                            example &#039;001&#039; for world
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">NumberingSystem</em></td>
+
+                        <td align="left">
+                            Returns a scripts with the notation for digits used within this script
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">FallbackToChar</em></td>
+
+                        <td align="left">
+                            Returns a replacement character for a often used unicode character.
+                            This can be used to replace &quot;©&quot; with &quot;(C)&quot; for example
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">CharToFallback</em></td>
+
+                        <td align="left">
+                            Returns a unicode character for a often used replacement character.
+                            This can be used to replace &quot;(C)&quot; with &quot;©&quot; for example
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">LocaleUpgrade</em></td>
+
+                        <td align="left">
+                            Returns a locale dependencies for a given language which can be used to
+                            upgrade this language to a full qualified locale
+                        </td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left"><em class="emphasis">Unit</em></td>
+
+                        <td align="left">
+                            Returns a localized calendar unit. This can be used to translate
+                            the strings &quot;day&quot;, &quot;month&quot; and so on automatically. The first parameter
+                            has to be the type, and the second parameter has to be the count
+                        </td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                With Zend Framework 1.5 several old types have been renamed. This has to be done
+                because of several new types, some misspelling and to increase the usability. See
+                this table for a list of old to new types:
+            <br />
+        </p></blockquote>
+
+        <table class="doctable table"><div class="info"><caption><b>Differences between Zend Framework 1.0 and 1.5</b></caption></div>
+            
+
+            
+                <thead valign="middle">
+                    <tr valign="middle">
+                        <th>Old type</th>
+                        <th>New type</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody valign="middle" class="tbody">
+                    <tr valign="middle">
+                        <td align="left">Country</td>
+                        <td align="left">Territory (with value &#039;2&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Calendar</td>
+                        <td align="left">Type (with value &#039;calendar&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Month_Short</td>
+                        <td align="left">Month (with array(&#039;gregorian&#039;, &#039;format&#039;, &#039;abbreviated&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Month_Narrow</td>
+                        <td align="left">Month (with array(&#039;gregorian&#039;, &#039;stand-alone&#039;, &#039;narrow&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Month_Complete</td>
+                        <td align="left">Months</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Day_Short</td>
+                        <td align="left">Day (with array(&#039;gregorian&#039;, &#039;format&#039;, &#039;abbreviated&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Day_Narrow</td>
+                        <td align="left">Day (with array(&#039;gregorian&#039;, &#039;stand-alone&#039;, &#039;narrow&#039;)</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">DateFormat</td>
+                        <td align="left">Date</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">TimeFormat</td>
+                        <td align="left">Time</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Timezones</td>
+                        <td align="left">CityToTimezone</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Currency</td>
+                        <td align="left">NameToCurrency</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Currency_Sign</td>
+                        <td align="left">CurrencySymbol</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Currency_Detail</td>
+                        <td align="left">CurrencyToRegion</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Territory_Detail</td>
+                        <td align="left">TerritoryToRegion</td>
+                    </tr>
+
+
+                    <tr valign="middle">
+                        <td align="left">Language_Detail</td>
+                        <td align="left">LanguageToTerritory</td>
+                    </tr>
+
+                </tbody>
+            
+        </table>
+
+
+        <p class="para">
+            The example below demonstrates how to obtain the names of things in different languages.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #8 getTranslationList</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// prints the names of all countries in German language</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">getTranslationList</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'country'</span>, <span style="color: #ff0000;">'de'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The next example shows how to find the name of a language in another language, when the
+            two letter iso country code is not known.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #9 Converting country name in one language to another</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$code2name</span> = Zend_Locale::<span style="color: #006600;">getLanguageTranslationList</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'en_US'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$name2code</span> = <a href="http://www.php.net/array_flip"><span style="color: #000066;">array_flip</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$code2name</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$frenchCode</span> = <span style="color: #0000ff;">$name2code</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'French'</span><span style="color: #66cc66;">&#93;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> Zend_Locale::<span style="color: #006600;">getLanguageTranslation</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$frenchCode</span>, <span style="color: #ff0000;">'de_AT'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// output is the German name of the French language</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            To generate a list of all languages known by <span class="classname">Zend_Locale</span>, with
+            each language name shown in its own language, try the example below in a web page.
+            Similarly,  <span class="methodname">getCountryTranslationList()</span> and
+             <span class="methodname">getCountryTranslation()</span> could be used to create a table mapping
+            your native language names for regions to the names of the regions shown in another
+            language. Use a <strong class="command">try .. catch</strong> block to handle exceptions that occur
+            when using a locale that does not exist. Not all languages are also locales. In the
+            example, below exceptions are ignored to prevent early termination.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #10 All Languages written in their native language</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$list</span> = Zend_Locale::<span style="color: #006600;">getLanguageTranslationList</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'auto'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$list</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$language</span> =&gt; <span style="color: #0000ff;">$content</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; try <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$output</span> = Zend_Locale::<span style="color: #006600;">getLanguageTranslation</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$language</span>, <span style="color: #0000ff;">$language</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/is_string"><span style="color: #000066;">is_string</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$output</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\n</span>&lt;br&gt;[&quot;</span>.<span style="color: #0000ff;">$language</span>.<span style="color: #ff0000;">&quot;] &quot;</span>.<span style="color: #0000ff;">$output</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span> catch <span style="color: #66cc66;">&#40;</span>Exception <span style="color: #0000ff;">$e</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">continue</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.locale.getquestion" name="zend.locale.getquestion"><div class="info"><h1 class="title">Obtaining translations for &quot;yes&quot; and &quot;no&quot;</h1></div>
+        
+
+        <p class="para">
+            Frequently, programs need to solicit a &quot;yes&quot; or &quot;no&quot; response from the user. Use
+             <span class="methodname">getQuestion()</span> to obtain an array containing the correct word(s)
+            or regex strings to use for prompting the user in a particular $locale (defaults to the
+            current object&#039;s locale). The returned array will contain the following information :
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">yes and no</em>: A generic string representation for yes and no
+                    responses. This will contain the first and most generic response from yesarray
+                    and noarray.
+                </p>
+
+                <p class="para">
+                    <em class="emphasis">yesarray and noarray</em>: An array with all known yes and
+                    no responses. Several languages have more than just two responses. In general
+                    this is the full string and its abbreviation.
+                </p>
+
+                <p class="para">
+                    <em class="emphasis">yesexpr and noexpr</em>: A generated regex which allows you
+                    to handle user response, and search for yes or no.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            All of this information are of course localized and depend on the set locale. See the
+            following example for the information you can receive:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #11 getQuestion()</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Question strings</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/print_r"><span style="color: #000066;">print_r</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">getQuestion</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'de'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">- - - Output - - -</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/array"><span style="color: #000066;">Array</span></a></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>yes<span style="color: #66cc66;">&#93;</span> =&gt; ja</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>no<span style="color: #66cc66;">&#93;</span> =&gt; nein</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>yesarray<span style="color: #66cc66;">&#93;</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">Array</span></a></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#93;</span> =&gt; ja</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#93;</span> =&gt; j</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>noarray<span style="color: #66cc66;">&#93;</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">Array</span></a></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">0</span><span style="color: #66cc66;">&#93;</span> =&gt; nein</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span><span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#93;</span> =&gt; n</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>yesexpr<span style="color: #66cc66;">&#93;</span> =&gt; ^<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#91;</span>jJ<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span>aA<span style="color: #66cc66;">&#93;</span>?<span style="color: #66cc66;">&#41;</span>|<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#91;</span>jJ<span style="color: #66cc66;">&#93;</span>?<span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#91;</span>noexpr<span style="color: #66cc66;">&#93;</span> =&gt; ^<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#91;</span>nN<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#91;</span>eE<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span>iI<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span>nN<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>?<span style="color: #66cc66;">&#41;</span>|<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#91;</span>nN<span style="color: #66cc66;">&#93;</span>?<span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Until 1.0.3 <em class="emphasis">yesabbr</em> from the underlaying locale data was also
+                available. Since 1.5 this information is no longer standalone available, but you
+                will find the information from it within <em class="emphasis">yesarray</em>.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.locale.getlocalelist" name="zend.locale.getlocalelist"><div class="info"><h1 class="title">Get a list of all known locales</h1></div>
+        
+
+        <p class="para">
+            Sometimes you will want to get a list of all known locales. This can be used for several
+            tasks like the creation of a selectbox. For this purpose you can use the static
+             <span class="methodname">getLocaleList()</span> method which will return a list of all known
+            locales.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #12 getLocaleList()</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$localelist</span> = Zend_Locale::<span style="color: #006600;">getLocaleList</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Note that the locales are returned as key of the array you will receive. The value
+                is always a boolean <b><tt>TRUE</tt></b>.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.locale.detection" name="zend.locale.detection"><div class="info"><h1 class="title">Detecting locales</h1></div>
+        
+
+        <p class="para">
+            When you want to detect if a given input, regardless of its source, is a locale you
+            should use the static  <span class="methodname">isLocale()</span> method. The first parameter of
+            this method is the string which you want to check.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #13 Simple locale detection</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$input</span> = <span style="color: #ff0000;">'to_RU'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$input</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;'{$input}' is a locale&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Sorry... the given input is no locale&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            As you can see, the output of this method is always a boolean. There is only one reason
+            you could get an exception when calling this method. When your system does not provide
+            any locale and Zend Framework is not able to detect it automatically. Normally this
+            shows that there is a problem with your OS in combination with <acronym class="acronym">PHP</acronym>&#039;s
+             <span class="methodname">setlocale()</span>.
+        </p>
+
+        <p class="para">
+            You should also note that any given locale string will automatically be degraded if the
+            region part does not exist for this locale. In our previous example the language
+            &#039;<span class="property">to</span>&#039; does not exist in the region &#039;<span class="property">RU</span>&#039;, but
+            you will still get <b><tt>TRUE</tt></b> returned as
+            <span class="classname">Zend_Locale</span> can work with the given input.
+        </p>
+
+        <p class="para">
+            Still it&#039;s sometimes useful to prevent this automatic degrading, and this is where the
+            second parameter of  <span class="methodname">isLocale()</span> comes in place. The
+            <span class="property">strict</span> parameter defaults to <b><tt>FALSE</tt></b> and can be
+            used to prevent degrading when set to <b><tt>TRUE</tt></b>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #14 Strict locale detection</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$input</span> = <span style="color: #ff0000;">'to_RU'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$input</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;'{$input}' is a locale&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #ff0000;">&quot;Sorry... the given input is no locale&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Now that you are able to detect if a given string is a locale you could add locale aware
+            behaviour to your own classes. But you will soon detect that this always leads to
+            the same 15 lines of code. Something like the following example:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #15 Implement locale aware behaviour</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span> === <span style="color: #000000; font-weight: bold;">null</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>, <span style="color: #000000; font-weight: bold;">true</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!Zend_Locale::<span style="color: #006600;">isLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span>, <span style="color: #000000; font-weight: bold;">false</span>, <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; throw <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale_Exception<span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">&quot;The locale '$locale' is no known locale&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$locale</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Locale<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$locale</span> instanceof Zend_Locale<span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$locale</span> = <span style="color: #0000ff;">$locale</span>-&gt;<span style="color: #006600;">toString</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            With Zend Framework 1.8 we added a static  <span class="methodname">findLocale()</span> method
+            which returns a locale string which you can work with. It processes the following
+            tasks:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    Detects if a given string is a locale
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Degrades the locale if it does not exist in the given region
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Upgrades the locale when it is detected as region without language
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Returns a previous set application wide locale if no input is given
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Detects the locale from browser when the previous detections failed
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Detects the locale from environment when the previous detections failed
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Detects the locale from framework when the previous detections failed
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Returns always a string which represents the found locale.
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            The following example shows how these checks and the above code can be simplified with
+            one single call:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #16 Locale aware behaviour as with Zend Framework 1.8</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$locale</span> = Zend_Locale::<span style="color: #006600;">findLocale</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$inputstring</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.locale.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.locale.html">Zend_Locale</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.locale.parsing.html">Normalization and Localization</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.locale.html">Zend_Locale</a></li>
+  <li><a href="zend.locale.introduction.html">Introduction</a></li>
+  <li class="active"><a href="zend.locale.functions.html">Using Zend_Locale</a></li>
+  <li><a href="zend.locale.parsing.html">Normalization and Localization</a></li>
+  <li><a href="zend.locale.date.datesandtimes.html">Working with Dates and Times</a></li>
+  <li><a href="zend.locale.appendix.html">Supported locales</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

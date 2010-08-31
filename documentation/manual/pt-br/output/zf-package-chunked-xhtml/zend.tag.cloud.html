@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Tag_Cloud - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.tag.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.tag.html">Zend_Tag</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.test.html">Zend_Test</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.tag.cloud" class="section"><div class="info"><h1 class="title">Zend_Tag_Cloud</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Tag_Cloud</span> is the rendering part of
+        <span class="classname">Zend_Tag</span>. By default it comes with a set of <acronym class="acronym">HTML</acronym>
+        decorators, which allow you to create tag clouds for a website, but
+        also supplies you with two abstract classes to create your own
+        decorators, to create tag clouds in <acronym class="acronym">PDF</acronym> documents for example.
+    </p>
+
+    <p class="para">
+        You can instantiate and configure <span class="classname">Zend_Tag_Cloud</span> either
+        programatically or completely via an array or an instance of
+        <span class="classname">Zend_Config</span>. The available options are:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                <span class="property">cloudDecorator</span>: defines the decorator for the
+                cloud. Can either be the name of the class which should be
+                loaded by the pluginloader, an instance of
+                <span class="classname">Zend_Tag_Cloud_Decorator_Cloud</span> or an array
+                containing the string &#039;decorator&#039; and optionally
+                an array &#039;options&#039;, which will be passed to the
+                decorators constructor.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="property">tagDecorator</span>: defines the decorator for individual
+                tags. This can either be the name of the class which should be
+                loaded by the pluginloader, an instance of
+                <span class="classname">Zend_Tag_Cloud_Decorator_Tag</span> or an array
+                containing the string &#039;decorator&#039; and optionally
+                an array &#039;options&#039;, which will be passed to the
+                decorators constructor.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="property">pluginLoader</span>: a different plugin loader to use.
+                Must be an instance of
+                <span class="classname">Zend_Loader_PluginLoader_Interface</span>.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="property">prefixPath</span>: prefix paths to add to the plugin
+                loader. Must be an array containing the keys prefix and path or
+                multiple arrays containing the keys prefix and path. Invalid
+                elements will be skipped.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="property">itemList</span>: a different item list to use. Must be an
+                instance of <span class="classname">Zend_Tag_ItemList</span>.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <span class="property">tags</span>: a list of tags to assign to the cloud. Each
+                tag must either implement <span class="classname">Zend_Tag_Taggable</span> or be
+                an array which can be used to instantiate
+                <span class="classname">Zend_Tag_Item</span>.
+            </p>
+        </li>
+    </ul>
+
+    <div class="example"><div class="info"><p><b>Example #1 Using Zend_Tag_Cloud</b></p></div>
+        
+
+        <div class="example-contents"><p>
+            This example illustrates a basic example of how to create a tag
+            cloud, add multiple tags to it and finally render it.
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Create the cloud and assign static tags to it</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$cloud</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Tag_Cloud<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'tags'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'Code'</span>, <span style="color: #ff0000;">'weight'</span> =&gt; <span style="color: #cc66cc;">50</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'params'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'url'</span> =&gt; <span style="color: #ff0000;">'/tag/code'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'Zend Framework'</span>, <span style="color: #ff0000;">'weight'</span> =&gt; <span style="color: #cc66cc;">1</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'params'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'url'</span> =&gt; <span style="color: #ff0000;">'/tag/zend-framework'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'title'</span> =&gt; <span style="color: #ff0000;">'PHP'</span>, <span style="color: #ff0000;">'weight'</span> =&gt; <span style="color: #cc66cc;">5</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'params'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'url'</span> =&gt; <span style="color: #ff0000;">'/tag/php'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Render the cloud</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$cloud</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            This will output the tag cloud with the three tags, spread with
+            the default font-sizes.
+        </p></div>
+    </div>
+
+    <div class="section" id="zend.tag.cloud.decorators" name="zend.tag.cloud.decorators"><div class="info"><h1 class="title">Decorators</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Tag_Cloud</span> requires two types of decorators to be
+            able to render a tag cloud. This includes a decorator which renders
+            the single tags as well as a decorator which renders the surounding
+            cloud. <span class="classname">Zend_Tag_Cloud</span> ships a default decorator set for
+            formatting a tag cloud in <acronym class="acronym">HTML</acronym>. This set will by default create a
+            tag cloud as ul/li-list, spread with different font-sizes according
+            to the weight values of the tags assigned to them.
+        </p>
+
+        <div class="section" id="zend.tag.cloud.decorators.htmltag" name="zend.tag.cloud.decorators.htmltag"><div class="info"><h1 class="title">HTML Tag decorator</h1></div>
+            
+
+            <p class="para">
+                The <acronym class="acronym">HTML</acronym> tag decorator will by default render every tag in an
+                anchor element, surounded by a li element. The anchor itself is
+                fixed and cannot be changed, but the surounding element(s) can.
+            </p>
+
+            <blockquote><p><b class="note">Note</b>: <span class="info"><b>URL parameter</b><br /></span>
+                
+
+                
+                    As the <acronym class="acronym">HTML</acronym> tag decorator always surounds the tag title with
+                    an anchor, you should define an <acronym class="acronym">URL</acronym> parameter for every
+                    tag used in it.
+                <br />
+            </p></blockquote>
+
+            <p class="para">
+                The tag decorator can either spread different font-sizes over
+                the anchors or a defined list of classnames. When setting
+                options for one of those possibilities, the corespondening one
+                will automatically be enabled. The following configuration
+                options are available:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">fontSizeUnit</span>: defines the font-size unit
+                        used for all font-sizes. The possible values are:
+                        em, ex, px, in, cm, mm, pt, pc and %.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">minFontSize</span>: the minimum font-size
+                        distributed through the tags (must be an integer).
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">maxFontSize</span>: the maximum font-size
+                        distributed through the tags (must be an integer).
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">classList</span>: an arry of classes distributed
+                        through the tags.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">htmlTags</span>: an array of <acronym class="acronym">HTML</acronym> tags
+                        surounding the anchor. Each element can either be a string, which
+                        is used as element type then, or an array containing
+                        an attribute list for the element, defined as key/value
+                        pair. In this case, the array key is used as element
+                        type.
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" id="zend.tag.cloud.decorators.htmlcloud" name="zend.tag.cloud.decorators.htmlcloud"><div class="info"><h1 class="title">HTML Cloud decorator</h1></div>
+            
+
+            <p class="para">
+                The <acronym class="acronym">HTML</acronym> cloud decorator will suround the <acronym class="acronym">HTML</acronym>
+                tags with an ul-element by default and add no separation. Like in the tag
+                decorator, you can define multiple surounding <acronym class="acronym">HTML</acronym> tags and
+                additionally define a separator. The available options are:
+            </p>
+
+            <ul class="itemizedlist">
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">separator</span>: defines the separator which
+                        is placed between all tags.
+                    </p>
+                </li>
+
+                <li class="listitem">
+                    <p class="para">
+                        <span class="property">htmlTags</span>: an array of <acronym class="acronym">HTML</acronym> tags
+                        surounding all tags. Each element can either be a string, which
+                        is used as element type then, or an array containing
+                        an attribute list for the element, defined as key/value
+                        pair. In this case, the array key is used as element type.
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.tag.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.tag.html">Zend_Tag</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.test.html">Zend_Test</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.tag.html">Zend_Tag</a></li>
+  <li><a href="zend.tag.introduction.html">Introduction</a></li>
+  <li class="active"><a href="zend.tag.cloud.html">Zend_Tag_Cloud</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

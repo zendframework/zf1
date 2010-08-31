@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Uri - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.uri.html">Zend_Uri</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.uri.html">Zend_Uri</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.validate.html">Zend_Validate</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.uri.chapter" class="section"><div class="info"><h1 class="title">Zend_Uri</h1></div>
+    
+
+    <div class="section" id="zend.uri.overview" name="zend.uri.overview"><div class="info"><h1 class="title">Overview</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Uri</span> is a component that aids in manipulating and validating
+            <a href="http://www.w3.org/Addressing/" class="link external">&raquo; Uniform Resource Identifiers</a> (URIs).
+            <span class="classname">Zend_Uri</span> exists primarily to service other components, such as
+            <span class="classname">Zend_Http_Client</span>, but is also useful as a standalone utility.
+        </p>
+
+        <p class="para">
+            <acronym class="acronym">URI</acronym>s always begin with a scheme, followed by a colon. The
+            construction of the many different schemes varies significantly. The
+            <span class="classname">Zend_Uri</span> class provides a factory that returns a subclass
+            of itself which specializes in each scheme. The subclass will be named
+            <span class="classname">Zend_Uri_&lt;scheme&gt;</span>, where
+            <em class="emphasis">&lt;scheme&gt;</em> is the scheme, lowercased with the first letter
+            capitalized. An exception to this rule is <acronym class="acronym">HTTPS</acronym>, which is also
+            handled by <span class="classname">Zend_Uri_Http</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.uri.creation" name="zend.uri.creation"><div class="info"><h1 class="title">Creating a New URI</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Uri</span> will build a new <acronym class="acronym">URI</acronym> from scratch
+            if only a scheme is passed to  <span class="methodname">Zend_Uri::factory()</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Creating a New URI with Zend_Uri::factory()</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// To create a new URI from scratch, pass only the scheme.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$uri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $uri instanceof Zend_Uri_Http</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            To create a new <acronym class="acronym">URI</acronym> from scratch, pass only the scheme to
+             <span class="methodname">Zend_Uri::factory()</span><a href="#fnid1" name="fn1"><sup>[1]</sup></a><span class="classname">Zend_Uri</span><acronym class="acronym">HTTP</acronym><acronym class="acronym">HTTPS</acronym>. If an unsupported scheme is
+            passed and no scheme-specific class is specified, a <span class="classname">Zend_Uri_Exception</span>
+            will be thrown.
+        </p>
+
+        <p class="para">
+            If the scheme or <acronym class="acronym">URI</acronym> passed is supported,
+             <span class="methodname">Zend_Uri::factory()</span> will return a subclass of itself that
+            specializes in the scheme to be created.
+        </p>
+
+        <div class="section"><div class="info"><h1 class="title">Creating a New Custom-Class URI</h1></div>
+            
+
+            <p class="para">
+                Starting from Zend Framework 1.10.5, you can specify a custom class to be
+                used when creating the Zend_Uri instance, as a second parameter to the
+                 <span class="methodname">Zend_Uri::factory()</span> method.
+                This enables you to subclass Zend_Uri and create your own custom URI classes,
+                and instantiate new URI objects based on your own custom classes.
+            </p>
+
+            <p class="para">
+                The 2nd parameter passed to  <span class="methodname">Zend_Uri::factory()</span> must
+                be a string with the name of a class extending <span class="classname">Zend_Uri</span>.
+                The class must either be alredy-loaded, or loadable using  <span class="methodname">Zend_Loader::loadClass()</span> -
+                that is, it must follow the Zend Framework class and file naming conventions, and
+                must be in your include_path.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #2 Creating a URI using a custom class</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Create a new 'ftp' URI based on a custom class</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$ftpUri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'ftp://user@ftp.example.com/path/file'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'MyLibrary_Uri_Ftp'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $ftpUri is an instance of MyLibrary_Uri_Ftp, which is a subclass of Zend_Uri</span></div></li></ol></div></div></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="section" id="zend.uri.manipulation" name="zend.uri.manipulation"><div class="info"><h1 class="title">Manipulating an Existing URI</h1></div>
+        
+
+        <p class="para">
+            To manipulate an existing <acronym class="acronym">URI</acronym>, pass the entire <acronym class="acronym">URI</acronym>
+            to  <span class="methodname">Zend_Uri::factory()</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Manipulating an Existing URI with Zend_Uri::factory()</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// To manipulate an existing URI, pass it in.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$uri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.zend.com'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $uri instanceof Zend_Uri_Http</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The <acronym class="acronym">URI</acronym> will be parsed and validated. If it is found to be invalid,
+            a <span class="classname">Zend_Uri_Exception</span> will be thrown immediately. Otherwise,
+             <span class="methodname">Zend_Uri::factory()</span> will return a subclass of itself that
+            specializes in the scheme to be manipulated.
+        </p>
+    </div>
+
+    <div class="section" id="zend.uri.validation" name="zend.uri.validation"><div class="info"><h1 class="title">URI Validation</h1></div>
+        
+
+        <p class="para">
+            The  <span class="methodname">Zend_Uri::check()</span> method can only be used if validation
+            of an existing <acronym class="acronym">URI</acronym> is needed.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 URI Validation with Zend_Uri::check()</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Validate whether a given URI is well formed</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$valid</span> = Zend_Uri::<span style="color: #006600;">check</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://uri.in.question'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $valid is TRUE for a valid URI, or FALSE otherwise.</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+             <span class="methodname">Zend_Uri::check()</span> returns a boolean, which is more convenient
+            than using  <span class="methodname">Zend_Uri::factory()</span> and catching the exception.
+        </p>
+
+        <div class="section" id="zend.uri.validation.allowunwise" name="zend.uri.validation.allowunwise"><div class="info"><h1 class="title">Allowing &quot;Unwise&quot; characters in URIs</h1></div>
+            
+
+            <p class="para">
+                By default, <span class="classname">Zend_Uri</span> will not accept the following
+                characters: <em class="emphasis">&quot;{&quot;, &quot;}&quot;, &quot;|&quot;, &quot;\&quot;, &quot;^&quot;, &quot;`&quot;</em>. These characters are
+                defined by the <acronym class="acronym">RFC</acronym> as &quot;unwise&quot; and invalid; however, many
+                implementations do accept these characters as valid.
+            </p>
+
+            <p class="para">
+                <span class="classname">Zend_Uri</span> can be set to accept these &quot;unwise&quot; characters by
+                setting the &#039;allow_unwise&#039; option to boolean <b><tt>TRUE</tt></b> using
+                 <span class="methodname">Zend_Uri::setConfig()</span>:
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 Allowing special characters in URIs</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Contains '|' symbol</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Normally, this would return false:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$valid</span> = Zend_Uri::<span style="color: #006600;">check</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://example.com/?q=this|that'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// However, you can allow &quot;unwise&quot; characters</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Uri::<span style="color: #006600;">setConfig</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'allow_unwise'</span> =&gt; <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// will return 'true'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$valid</span> = Zend_Uri::<span style="color: #006600;">check</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://example.com/?q=this|that'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Reset the 'allow_unwise' value to the default FALSE</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Uri::<span style="color: #006600;">setConfig</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'allow_unwise'</span> =&gt; <span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </div>
+
+            <blockquote><p><b class="note">Note</b>: 
+                
+                     <span class="methodname">Zend_Uri::setConfig()</span> sets configuration options
+                    globally. It is recommended to reset the &#039;allow_unwise&#039; option to
+                    &#039;<b><tt>FALSE</tt></b>&#039;, like in the example above, unless you are certain
+                    you want to always allow unwise characters globally.
+                <br />
+            </p></blockquote>
+        </div>
+    </div>
+
+    <div class="section" id="zend.uri.instance-methods" name="zend.uri.instance-methods"><div class="info"><h1 class="title">Common Instance Methods</h1></div>
+        
+
+        <p class="para">
+            Every instance of a <span class="classname">Zend_Uri</span> subclass (e.g.
+            <span class="classname">Zend_Uri_Http</span>) has several instance methods that are useful for
+            working with any kind of <acronym class="acronym">URI</acronym>.
+        </p>
+
+        <div class="section" id="zend.uri.instance-methods.getscheme" name="zend.uri.instance-methods.getscheme"><div class="info"><h1 class="title">Getting the Scheme of the URI</h1></div>
+            
+
+            <p class="para">
+                The scheme of the <acronym class="acronym">URI</acronym> is the part of the <acronym class="acronym">URI</acronym>
+                that precedes the colon. For example, the scheme of
+                <var class="filename">http://www.zend.com</var> is &#039;http&#039;.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #6 Getting the Scheme from a Zend_Uri_* Object</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$uri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.zend.com'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$scheme</span> = <span style="color: #0000ff;">$uri</span>-&gt;<span style="color: #006600;">getScheme</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;&nbsp; <span style="color: #808080; font-style: italic;">// &quot;http&quot;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The  <span class="methodname">getScheme()</span> instance method returns only the scheme
+                part of the <acronym class="acronym">URI</acronym> object.
+            </p>
+        </div>
+
+        <div class="section" id="zend.uri.instance-methods.geturi" name="zend.uri.instance-methods.geturi"><div class="info"><h1 class="title">Getting the Entire URI</h1></div>
+            
+
+            <div class="example"><div class="info"><p><b>Example #7 Getting the Entire URI from a Zend_Uri_* Object</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$uri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.zend.com'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$uri</span>-&gt;<span style="color: #006600;">getUri</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;&nbsp; <span style="color: #808080; font-style: italic;">// &quot;http://www.zend.com&quot;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The  <span class="methodname">getUri()</span> method returns the string representation
+                of the entire <acronym class="acronym">URI</acronym>.
+            </p>
+        </div>
+
+        <div class="section" id="zend.uri.instance-methods.valid" name="zend.uri.instance-methods.valid"><div class="info"><h1 class="title">Validating the URI</h1></div>
+            
+
+            <p class="para">
+                 <span class="methodname">Zend_Uri::factory()</span> will always validate any
+                <acronym class="acronym">URI</acronym> passed to it and will not instantiate a new
+                <span class="classname">Zend_Uri</span> subclass if the given <acronym class="acronym">URI</acronym> is
+                found to be invalid. However, after the <span class="classname">Zend_Uri</span> subclass is
+                instantiated for a new <acronym class="acronym">URI</acronym> or an existing valid one, it is
+                possible that the <acronym class="acronym">URI</acronym> can later become invalid after it
+                is manipulated.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #8 Validating a Zend_Uri_* Object</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$uri</span> = Zend_Uri::<span style="color: #006600;">factory</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://www.zend.com'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$isValid</span> = <span style="color: #0000ff;">$uri</span>-&gt;<span style="color: #006600;">valid</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;&nbsp; <span style="color: #808080; font-style: italic;">// TRUE</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                The  <span class="methodname">valid()</span> instance method provides a means to check that
+                the <acronym class="acronym">URI</acronym> object is still valid.
+            </p>
+        </div>
+    </div>
+<div class="footnote"><a name="fnid1" href="#fn1"><sup>[1]</sup></a><span class="para footnote">At the time of writing,
+             only provides built-in support for the 
+            and  schemes.</span></div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.uri.html">Zend_Uri</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.uri.html">Zend_Uri</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.validate.html">Zend_Validate</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.uri.html">Zend_Uri</a></li>
+  <li class="active"><a href="zend.uri.chapter.html">Zend_Uri</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

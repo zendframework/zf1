@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Amf_Server - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.amf.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.amf.html">Zend_Amf</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.application.html">Zend_Application</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.amf.server" class="section"><div class="info"><h1 class="title">Zend_Amf_Server</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Amf_Server</span> provides an <acronym class="acronym">RPC</acronym>-style server for
+        handling requests made from the Adobe Flash Player using the <acronym class="acronym">AMF</acronym>
+        protocol. Like all Zend Framework server classes, it follows the SoapServer
+        <acronym class="acronym">API</acronym>, providing an easy to remember interface for creating servers.
+    </p>
+
+    <div class="example"><div class="info"><p><b>Example #1 Basic AMF Server</b></p></div>
+        
+
+        <div class="example-contents"><p>
+            Let&#039;s assume that you have created a class <span class="classname">Foo</span> with a
+            variety of public methods. You may create an <acronym class="acronym">AMF</acronym> server using the
+            following code:
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Amf_Server<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Foo'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$response</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            Alternately, you may choose to attach a simple function as a
+            callback instead:
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Amf_Server<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addFunction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myUberCoolFunction'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$response</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            You could also mix and match multiple classes and functions. When
+            doing so, we suggest namespacing each to ensure that no method name
+            collisions occur; this can be done by simply passing a second string
+            argument to either  <span class="methodname">addFunction()</span> or
+             <span class="methodname">setClass()</span>:
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Amf_Server<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addFunction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myUberCoolFunction'</span>, <span style="color: #ff0000;">'my'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Foo'</span>, <span style="color: #ff0000;">'foo'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp;-&gt;<span style="color: #006600;">setClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Bar'</span>, <span style="color: #ff0000;">'bar'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$response</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            The <span class="classname">Zend_Amf_Server</span> also allows services to be dynamically
+            loaded based on a supplied directory path. You may add as many directories as you wish
+            to the server. The order that you add the directories to the server will be the
+            order that the <acronym class="acronym">LIFO</acronym> search will be performed on the directories to
+            match the class. Adding directories is completed with the
+             <span class="methodname">addDirectory()</span> method.
+        </p></div>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addDirectory</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/dirname"><span style="color: #000066;">dirname</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">__FILE__</span><span style="color: #66cc66;">&#41;</span> .<span style="color: #ff0000;">'/../services/'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addDirectory</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/dirname"><span style="color: #000066;">dirname</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">__FILE__</span><span style="color: #66cc66;">&#41;</span> .<span style="color: #ff0000;">'/../package/'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <div class="example-contents"><p>
+            When calling remote services your source name can have underscore (&quot;_&quot;) and dot (&quot;.&quot;)
+            directory delimiters. When an underscore is used <acronym class="acronym">PEAR</acronym> and Zend
+            Framework class naming conventions will be respected. This means that if you call the
+            service com_Foo_Bar the server will look for the file
+            <var class="filename">Bar.php</var> in the each of the included paths at
+            <var class="filename">com/Foo/Bar.php</var>. If the dot notation is used for your remote
+            service such as <var class="filename">com.Foo.Bar</var> each included path will have
+            <var class="filename">com/Foo/Bar.php</var> append to the end to autoload
+            <var class="filename">Bar.php</var>
+        </p></div>
+
+        <div class="example-contents"><p>
+            All <acronym class="acronym">AMF</acronym> requests sent to the script will then be handled by the
+            server, and an <acronym class="acronym">AMF</acronym> response will be returned.
+        </p></div>
+    </div>
+
+    <blockquote><p><b class="note">Note</b>: <span class="info"><b>All Attached Methods and Functions Need Docblocks</b><br /></span>
+        
+
+        
+            Like all other server components in Zend Framework, you must document your class
+            methods using <acronym class="acronym">PHP</acronym> docblocks. At the minimum, you
+            need to provide annotations for each required argument as well as
+            the return value. As examples:
+        <br />
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Function to attach:</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @param&nbsp; string $name</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @param&nbsp; string $greeting</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @return string</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">function</span> helloWorld<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span>, <span style="color: #0000ff;">$greeting</span> = <span style="color: #ff0000;">'Hello'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$greeting</span> . <span style="color: #ff0000;">', '</span> . <span style="color: #0000ff;">$name</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Attached class</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> World</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param&nbsp; string $name</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param&nbsp; string $greeting</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @return string</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> hello<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$name</span>, <span style="color: #0000ff;">$greeting</span> = <span style="color: #ff0000;">'Hello'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$greeting</span> . <span style="color: #ff0000;">', '</span> . <span style="color: #0000ff;">$name</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        
+            Other annotations may be used, but will be ignored.
+        <br />
+    </p></blockquote>
+
+    <div class="section" id="zend.amf.server.flex" name="zend.amf.server.flex"><div class="info"><h1 class="title">Connecting to the Server from Flex</h1></div>
+        
+
+        <p class="para">
+            Connecting to your <span class="classname">Zend_Amf_Server</span> from your Flex
+            project is quite simple; you simply need to point your endpoint <acronym class="acronym">URI</acronym>
+            to your <span class="classname">Zend_Amf_Server</span> script.
+        </p>
+
+        <p class="para">
+            Say, for instance, you have created your server and placed it in the
+            <var class="filename">server.php</var> file in your application root, and thus the
+            <acronym class="acronym">URI</acronym> is <var class="filename">http://example.com/server.php</var>. In this
+            case, you would modify your <var class="filename">services-config.xml</var> file to set the
+            channel endpoint uri attribute to this value.
+        </p>
+
+        <p class="para">
+            If you have never created a <var class="filename">service-config.xml</var> file you can do so
+            by opening your project in your Navigator window. Right click on the project name and
+            select &#039;properties&#039;. In the Project properties dialog go into &#039;Flex Build Path&#039; menu,
+            &#039;Library path&#039; tab and be sure the &#039;<var class="filename">rpc.swc</var>&#039; file is added to your
+            projects path and Press Ok to close the window.
+        </p>
+
+        <p class="para">
+            You will also need to tell the compiler to use the
+            <var class="filename">service-config.xml</var> to find the RemoteObject endpoint. To do this
+            open your project properties panel again by right clicking on the project folder from
+            your Navigator and selecting properties. From the properties popup select &#039;Flex
+            Compiler&#039; and add the string: <strong class="command">-services &quot;services-config.xml&quot;</strong>. Press
+            Apply then OK to return to update the option. What you have just done is told the Flex
+            compiler to look to the <var class="filename">services-config.xml</var> file for runtime
+            variables that will be used by the RemotingObject class.
+        </p>
+
+        <p class="para">
+            We now need to tell Flex which services configuration file to use for connecting to
+            our remote methods. For this reason create a new
+            &#039;<var class="filename">services-config.xml</var>&#039; file into your Flex project src folder. To
+            do this right click on the project folder and select &#039;new&#039; &#039;File&#039; which will popup a
+            new window. Select the project folder and then name the file
+            &#039;<var class="filename">services-config.xml</var>&#039; and press finish.
+        </p>
+
+        <p class="para">
+            Flex has created the new <var class="filename">services-config.xml</var> and has it open. Use
+            the following example text for your <var class="filename">services-config.xml</var> file. Make
+            sure that you update your endpoint to match that of your testing server. Make sure you
+            save the file.
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;?xml</span> <span style="color: #000066;">version</span>=<span style="color: #ff0000;">&quot;1.0&quot;</span> <span style="color: #000066;">encoding</span>=<span style="color: #ff0000;">&quot;UTF-8&quot;</span><span style="font-weight: bold; color: black;">?&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;services-config<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;services<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;service</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;zend-service&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">class</span>=<span style="color: #ff0000;">&quot;flex.messaging.services.RemotingService&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">messageTypes</span>=<span style="color: #ff0000;">&quot;flex.messaging.messages.RemotingMessage&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;destination</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;zend&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;channels<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;channel</span> <span style="color: #000066;">ref</span>=<span style="color: #ff0000;">&quot;zend-endpoint&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/channels<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;properties<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;source<span style="font-weight: bold; color: black;">&gt;</span></span></span>*<span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/source<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/properties<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/destination<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/service<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/services<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;channels<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;channel-definition</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;zend-endpoint&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">class</span>=<span style="color: #ff0000;">&quot;mx.messaging.channels.AMFChannel&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;endpoint</span> <span style="color: #000066;">uri</span>=<span style="color: #ff0000;">&quot;http://example.com/server.php&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">class</span>=<span style="color: #ff0000;">&quot;flex.messaging.endpoints.AMFEndpoint&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/channel-definition<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/channels<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/services-config<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            There are two key points in the example. First, but last in the
+            listing, we create an <acronym class="acronym">AMF</acronym> channel, and specify the endpoint as the
+            <acronym class="acronym">URL</acronym> to our <span class="classname">Zend_Amf_Server</span>:
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;channel-definition</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;zend-endpoint&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="font-weight: bold; color: black;">&lt;endpoint</span> <span style="color: #000066;">uri</span>=<span style="color: #ff0000;">&quot;http://example.com/server.php&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #000066;">class</span>=<span style="color: #ff0000;">&quot;flex.messaging.endpoints.AMFEndpoint&quot;</span><span style="font-weight: bold; color: black;">/&gt;</span></span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;/channel-definition<span style="font-weight: bold; color: black;">&gt;</span></span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Notice that we&#039;ve given this channel an identifier, &quot;zend-endpoint&quot;.
+            The example create a service destination that refers to this channel,
+            assigning it an ID as well -- in this case &quot;zend&quot;.
+        </p>
+
+        <p class="para">
+            Within our Flex <acronym class="acronym">MXML</acronym> files, we need to bind a RemoteObject to the
+            service. In <acronym class="acronym">MXML</acronym>, this might be done as follows:
+        </p>
+
+        <div class="programlisting xml"><div class="xmlcode"><div class="xml" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #009900;"><span style="font-weight: bold; color: black;">&lt;mx:RemoteObject</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;myservice&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000066;">fault</span>=<span style="color: #ff0000;">&quot;faultHandler(event)&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000066;">showBusyCursor</span>=<span style="color: #ff0000;">&quot;true&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000066;">destination</span>=<span style="color: #ff0000;">&quot;zend&quot;</span><span style="font-weight: bold; color: black;">&gt;</span></span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Here, we&#039;ve defined a new remote object identified by &quot;myservice&quot;
+            bound to the service destination &quot;zend&quot; we defined in the
+            <var class="filename">services-config.xml</var> file. We then call methods on it
+            in our ActionScript by simply calling &quot;myservice.&lt;method&gt;&quot;.
+            As an example:
+        </p>
+
+        <div class="programlisting ActionScript"><div class="ActionScriptcode"><div class="actionscript" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">myservice.<span style="color: #006600;">hello</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Wade&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            When namespacing, you would use
+            &quot;myservice.&lt;namespace&gt;.&lt;method&gt;&quot;:
+        </p>
+
+        <div class="programlisting ActionScript"><div class="ActionScriptcode"><div class="actionscript" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">myservice.<span style="color: #006600;">world</span>.<span style="color: #006600;">hello</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Wade&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            For more information on Flex RemoteObject invocation, <a href="http://livedocs.adobe.com/flex/3/html/help.html?content=data_access_4.html" class="link external">&raquo; 
+            visit the Adobe Flex 3 Help site</a>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.amf.server.errors" name="zend.amf.server.errors"><div class="info"><h1 class="title">Error Handling</h1></div>
+        
+
+        <p class="para">
+            By default, all exceptions thrown in your attached classes or
+            functions will be caught and returned as <acronym class="acronym">AMF</acronym> ErrorMessages. However,
+            the content of these ErrorMessage objects will vary based on whether
+            or not the server is in &quot;production&quot; mode (the default state).
+        </p>
+
+        <p class="para">
+            When in production mode, only the exception code will be returned.
+            If you disable production mode -- something that should be done for
+            testing only -- most exception details will be returned: the
+            exception message, line, and backtrace will all be attached.
+        </p>
+
+        <p class="para">
+            To disable production mode, do the following:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setProduction</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">false</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            To re-enable it, pass a <b><tt>TRUE</tt></b> boolean value instead:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setProduction</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Disable production mode sparingly!</b><br /></span>
+            
+
+            
+                We recommend disabling production mode only when in development.
+                Exception messages and backtraces can contain sensitive system
+                information that you may not wish for outside parties to access.
+                Even though <acronym class="acronym">AMF</acronym> is a binary format, the specification is now
+                open, meaning anybody can potentially deserialize the payload.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            One area to be especially careful with is <acronym class="acronym">PHP</acronym> errors themselves.
+            When the <span class="property">display_errors</span> <acronym class="acronym">INI</acronym> directive is
+            enabled, any <acronym class="acronym">PHP</acronym> errors for the current error reporting level are
+            rendered directly in the output -- potentially disrupting the <acronym class="acronym">AMF</acronym>
+            response payload. We suggest turning off the <span class="property">display_errors</span>
+            directive in production to prevent such problems
+        </p>
+    </div>
+
+    <div class="section" id="zend.amf.server.response" name="zend.amf.server.response"><div class="info"><h1 class="title">AMF Responses</h1></div>
+        
+
+        <p class="para">
+            Occasionally you may desire to manipulate the response object
+            slightly, typically to return extra message headers. The
+             <span class="methodname">handle()</span> method of the server returns the response
+            object, allowing you to do so.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Adding Message Headers to the AMF Response</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                In this example, we add a &#039;foo&#039; MessageHeader with the value
+                &#039;bar&#039; to the response prior to returning it.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>-&gt;<span style="color: #006600;">addAmfHeader</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> Zend_Amf_Value_MessageHeader<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <span style="color: #000000; font-weight: bold;">true</span>, <span style="color: #ff0000;">'bar'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$response</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.amf.server.typedobjects" name="zend.amf.server.typedobjects"><div class="info"><h1 class="title">Typed Objects</h1></div>
+        
+
+        <p class="para">
+            Similar to <acronym class="acronym">SOAP</acronym>, <acronym class="acronym">AMF</acronym> allows passing objects
+            between the client and server. This allows a great amount of flexibility and
+            coherence between the two environments.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Amf</span> provides three methods for mapping
+            ActionScript and <acronym class="acronym">PHP</acronym> objects.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    First, you may create explicit bindings at the server level,
+                    using the  <span class="methodname">setClassMap()</span> method. The first
+                    argument is the ActionScript class name, the second the <acronym class="acronym">PHP</acronym>
+                    class name it maps to:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Map the ActionScript class 'ContactVO' to the PHP class 'Contact':</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setClassMap</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'ContactVO'</span>, <span style="color: #ff0000;">'Contact'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Second, you can set the public property <var class="varname">$_explicitType</var>
+                    in your <acronym class="acronym">PHP</acronym> class, with the
+                    value representing the ActionScript class to map to:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Contact</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #0000ff;">$_explicitType</span> = <span style="color: #ff0000;">'ContactVO'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Third, in a similar vein, you may define the public method
+                     <span class="methodname">getASClassName()</span> in your <acronym class="acronym">PHP</acronym> class;
+                    this method should return the appropriate ActionScript class:
+                </p>
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Contact</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> getASClassName<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #ff0000;">'ContactVO'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </li>
+        </ul>
+
+        <p class="para">
+            Although we have created the ContactVO on the server we now need to make its
+            corresponding class in <acronym class="acronym">AS3</acronym> for the server object to be mapped to.
+        </p>
+
+        <p class="para">
+            Right click on the src folder of the Flex project and select New -&gt; ActionScript
+            File. Name the file ContactVO and press finish to see the new file. Copy the
+            following code into the file to finish creating the class.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">package</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">{</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; [Bindable]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; [RemoteClass(alias=&quot;ContactVO&quot;)]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; public class ContactVO</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public var id:int;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public var firstname:String;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public var lastname:String;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public var email:String;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public var mobile:String;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; public function ProductVO():void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The class is syntactically equivalent to the <acronym class="acronym">PHP</acronym> of the same name.
+            The variable names are exactly the same and need to be in the same case
+            to work properly. There are two unique <acronym class="acronym">AS3</acronym> meta tags in this class.
+            The first is bindable which makes fire a change event when it is updated.
+            The second tag is the RemoteClass tag which defines that this class can
+            have a remote object mapped with the alias name in this case
+            <em class="emphasis">ContactVO</em>. It is mandatory that this tag the value that was set
+            is the <acronym class="acronym">PHP</acronym> class are strictly equivalent.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">[Bindable]</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private var myContact:ContactVO;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private function getContactHandler(event:ResultEvent):void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; myContact = ContactVO(event.result);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The following result event from the service call is cast instantly onto the Flex
+            ContactVO. Anything that is bound to myContact will be updated with the returned
+            ContactVO data.
+        </p>
+    </div>
+
+    <div class="section" id="zend.amf.server.resources" name="zend.amf.server.resources"><div class="info"><h1 class="title">Resources</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Amf</span> provides tools for mapping resource types
+            returned by service classes into data consumable by ActionScript.
+        </p>
+
+        <p class="para">
+            In order to handle specific resource type, the user needs to create a plugin class named
+            after the resource name, with words capitalized and spaces removed (so, resource
+            type &quot;mysql result&quot; becomes MysqlResult), with some prefix, e.g.
+            <span class="classname">My_MysqlResult</span>. This class should implement one method,
+             <span class="methodname">parse()</span>, receiving one argument - the resource - and returning
+            the value that should be sent to ActionScript. The class should be located in the file
+            named after the last component of the name, e.g. <var class="filename">MysqlResult.php</var>.
+        </p>
+
+        <p class="para">
+            The directory containing the resource handling plugins should be registered with
+            <span class="classname">Zend_Amf</span> type loader:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Amf_Parse_TypeLoader::<span style="color: #006600;">addResourceDirectory</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">&quot;My&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">&quot;application/library/resources/My&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            For detailed discussion of loading plugins, please see
+            the <a href="zend.loader.pluginloader.html" class="link">plugin loader</a> section.
+        </p>
+
+        <p class="para">
+            Default directory for <span class="classname">Zend_Amf</span> resources is registered
+            automatically and currently contains handlers for &quot;mysql result&quot; and &quot;stream&quot;
+            resources.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Example class implementing handling resources of type mysql result</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Zend_Amf_Parse_Resource_MysqlResult</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* Parse resource into array</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param resource $resource</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @return array</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> parse<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$resource</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$result</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">while</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$row</span> = <a href="http://www.php.net/mysql_fetch_assoc"><span style="color: #000066;">mysql_fetch_assoc</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$resource</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #0000ff;">$result</span><span style="color: #66cc66;">&#91;</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #0000ff;">$row</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #0000ff;">$result</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Trying to return unknown resource type (i.e., one for which no handler plugin exists)
+            will result in an exception.
+        </p>
+    </div>
+
+    <div class="section" id="zend.amf.server.flash" name="zend.amf.server.flash"><div class="info"><h1 class="title">Connecting to the Server from Flash</h1></div>
+        
+
+        <p class="para">
+            Connecting to your <span class="classname">Zend_Amf_Server</span> from your Flash project is
+            slightly different than from Flex. However once the connection Flash functions with
+            <span class="classname">Zend_Amf_Server</span> the same way is flex. The following example can
+            also be used from a Flex <acronym class="acronym">AS3</acronym> file. We will reuse the same
+            <span class="classname">Zend_Amf_Server</span> configuration along with the World class for our
+            connection.
+        </p>
+
+        <p class="para">
+            Open Flash CS and create and new Flash File (ActionScript 3). Name the document
+            <var class="filename">ZendExample.fla</var> and save the document into a folder that you will
+            use for this example. Create a new <acronym class="acronym">AS3</acronym> file in the same directory
+            and call the file <var class="filename">Main.as</var>. Have both files open in your editor. We
+            are now going to connect the two files via the document class. Select ZendExample and
+            click on the stage. From the stage properties panel change the Document class to Main.
+            This links the <var class="filename">Main.as</var> ActionScript file with the user interface
+            in <var class="filename">ZendExample.fla</var>. When you run the Flash file ZendExample the
+            <var class="filename">Main.as</var> class will now be run. Next we will add ActionScript to
+            make the <acronym class="acronym">AMF</acronym> call.
+        </p>
+
+        <p class="para">
+            We now are going to make a Main class so that we can send the data to the server and
+            display the result. Copy the following code into your <var class="filename">Main.as</var> file
+            and then we will walk through the code to describe what each element&#039;s role is.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">package {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; import flash.display.MovieClip;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; import flash.events.*;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; import flash.net.NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; import flash.net.Responder;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; public class Main extends MovieClip {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; private var gateway:String = &quot;http://example.com/server.php&quot;;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; private var connection:NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; private var responder:Responder;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; public function Main() {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; responder = new Responder(onResult, onFault);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; connection = new NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; connection.connect(gateway);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; public function onComplete( e:Event ):void{</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; var params = &quot;Sent to Server&quot;;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; connection.call(&quot;World.hello&quot;, responder, params);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; private function onResult(result:Object):void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; // Display the returned data</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; trace(String(result));</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; private function onFault(fault:Object):void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; trace(String(fault.description));</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; }</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            We first need to import two ActionScript libraries that perform the bulk of the work.
+            The first is NetConnection which acts like a by directional pipe between the client and
+            the server. The second is a Responder object which handles the return values from the
+            server related to the success or failure of the call.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">import flash.net.NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">import flash.net.Responder;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            In the class we need three variables to represent the NetConnection, Responder, and
+            the gateway <acronym class="acronym">URL</acronym> to our <span class="classname">Zend_Amf_Server</span>
+            installation.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private var gateway:String = &quot;http://example.com/server.php&quot;;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private var connection:NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private var responder:Responder;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            In the Main constructor we create a responder and a new connection to the
+            <span class="classname">Zend_Amf_Server</span> endpoint. The responder defines two different
+            methods for handling the response from the server. For simplicity I have called these
+            onResult and onFault.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">responder = new Responder(onResult, onFault);</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">connection = new NetConnection;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">connection.connect(gateway);</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            In the onComplete function which is run as soon as the construct has completed we send
+            the data to the server. We need to add one more line that makes a call to the
+            <span class="classname">Zend_Amf_Server</span> World-&gt;hello function.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">connection.call(&quot;World.hello&quot;, responder, params);</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            When we created the responder variable we defined an onResult and onFault function to
+            handle the response from the server. We added this function for the successful result
+            from the server. A successful event handler is run every time the connection is handled
+            properly to the server.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private function onResult(result:Object):void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; // Display the returned data</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; trace(String(result));</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The onFault function, is called if there was an invalid response from the server. This
+            happens when there is an error on the server, the <acronym class="acronym">URL</acronym> to the server
+            is invalid, the remote service or method does not exist, and any other connection
+            related issues.
+        </p>
+
+        <div class="programlisting as"><div class="ascode"><div style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">private function onFault(fault:Object):void {</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; trace(String(fault.description));</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">}</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Adding in the ActionScript to make the remoting connection is now complete. Running the
+            ZendExample file now makes a connection to <span class="classname">Zend_Amf</span>. In review
+            you have added the required variables to open a connection to the remote server, defined
+            what methods should be used when your application receives a response from the server,
+            and finally displayed the returned data to output via  <span class="methodname">trace()</span>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.amf.server.auth" name="zend.amf.server.auth"><div class="info"><h1 class="title">Authentication</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Amf_Server</span> allows you to specify authentication and
+            authorization hooks to control access to the services. It is using the infrastructure
+            provided by <a href="zend.auth.html" class="link"><span class="classname">Zend_Auth</span></a> and
+            <a href="zend.acl.html" class="link"><span class="classname">Zend_Acl</span></a> components.
+        </p>
+
+        <p class="para">
+            In order to define authentication, the user provides authentication adapter extening
+            <span class="classname">Zend_Amf_Auth_Abstract</span> abstract class. The adapter should
+            implement the  <span class="methodname">authenticate()</span> method just like regular
+            <a href="zend.auth.introduction.html#zend.auth.introduction.adapters" class="link">authentication adapter</a>.
+        </p>
+
+        <p class="para">
+            The adapter should use properties <em class="emphasis">_username</em> and
+            <em class="emphasis">_password</em> from the parent
+            <span class="classname">Zend_Amf_Auth_Abstract</span> class in order to authenticate. These
+            values are set by the server using  <span class="methodname">setCredentials()</span> method
+            before call to  <span class="methodname">authenticate()</span> if the credentials are received
+            in the <acronym class="acronym">AMF</acronym> request headers.
+        </p>
+
+        <p class="para">
+            The identity returned by the adapter should be an object containing property
+            <span class="property">role</span> for the <acronym class="acronym">ACL</acronym> access control to work.
+        </p>
+
+        <p class="para">
+            If the authentication result is not successful, the request is not proceseed further
+            and failure message is returned with the reasons for failure taken from the result.
+        </p>
+
+        <p class="para">
+            The adapter is connected to the server using  <span class="methodname">setAuth()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setAuth</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> My_Amf_Auth<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            Access control is performed by using <span class="classname">Zend_Acl</span> object set by
+             <span class="methodname">setAcl()</span> method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$acl</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Acl<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">createPermissions<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$acl</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// create permission structure</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setAcl</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$acl</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If the <acronym class="acronym">ACL</acronym> object is set, and the class being called defines
+             <span class="methodname">initAcl()</span> method, this method will be called with the
+            <acronym class="acronym">ACL</acronym> object as an argument. The class then can create additional
+            <acronym class="acronym">ACL</acronym> rules and return <b><tt>TRUE</tt></b>, or return
+            <b><tt>FALSE</tt></b> if no access control is required for this class.
+        </p>
+
+        <p class="para">
+            After <acronym class="acronym">ACL</acronym> have been set up, the server will check if access is
+            allowed with role set by the authentication, resource being the class name (or
+            <b><tt>NULL</tt></b> for
+            function calls) and privilege being the function name. If no authentication was
+            provided, then if the <em class="emphasis">anonymous</em> role was defined, it will be used,
+            otherwise the access will be denied.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$this</span>-&gt;_acl-&gt;<span style="color: #006600;">isAllowed</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$role</span>, <span style="color: #0000ff;">$class</span>, <span style="color: #0000ff;">$function</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">return</span> <span style="color: #000000; font-weight: bold;">true</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #b1b100;">require_once</span> <span style="color: #ff0000;">'Zend/Amf/Server/Exception.php'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; throw <span style="color: #000000; font-weight: bold;">new</span> Zend_Amf_Server_Exception<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">&quot;Access not allowed&quot;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.amf.introduction.html">Introdu&ccedil;&atilde;o</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.amf.html">Zend_Amf</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.application.html">Zend_Application</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.amf.html">Zend_Amf</a></li>
+  <li><a href="zend.amf.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li class="active"><a href="zend.amf.server.html">Zend_Amf_Server</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,789 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_XmlRpc_Client - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.xmlrpc.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.xmlrpc.html">Zend_XmlRpc</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.xmlrpc.server.html">Zend_XmlRpc_Server</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.xmlrpc.client" class="section"><div class="info"><h1 class="title">Zend_XmlRpc_Client</h1></div>
+    
+
+    <div class="section" id="zend.xmlrpc.client.introduction" name="zend.xmlrpc.client.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            Zend Framework provides support for consuming remote <acronym class="acronym">XML-RPC</acronym>
+            services as a client in the <span class="classname">Zend_XmlRpc_Client</span>
+            package. Its major features include automatic type conversion
+            between <acronym class="acronym">PHP</acronym> and <acronym class="acronym">XML-RPC</acronym>, a server proxy object,
+            and access to server introspection capabilities.
+        </p>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.method-calls" name="zend.xmlrpc.client.method-calls"><div class="info"><h1 class="title">Method Calls</h1></div>
+        
+
+        <p class="para">
+            The constructor of <span class="classname">Zend_XmlRpc_Client</span> receives the
+            <acronym class="acronym">URL</acronym> of the remote <acronym class="acronym">XML-RPC</acronym> server endpoint as its
+            first parameter. The new instance returned may be used to call any number of
+            remote methods at that endpoint.
+        </p>
+
+        <p class="para">
+            To call a remote method with the <acronym class="acronym">XML-RPC</acronym> client, instantiate it
+            and use the  <span class="methodname">call()</span> instance method. The code sample
+            below uses a demonstration <acronym class="acronym">XML-RPC</acronym> server on the Zend Framework
+            website. You can use it for testing or exploring the
+            <span class="classname">Zend_XmlRpc</span> components.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 XML-RPC Method Call</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">call</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'test.sayHello'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// hello</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The <acronym class="acronym">XML-RPC</acronym> value returned from the remote method call will be
+            automatically unmarshaled and cast to the equivalent <acronym class="acronym">PHP</acronym> native
+            type. In the example above, a <acronym class="acronym">PHP</acronym>  <span class="type">String</span>  is returned
+            and is immediately ready to be used.
+        </p>
+
+        <p class="para">
+            The first parameter of the  <span class="methodname">call()</span> method receives the
+            name of the remote method to call. If the remote method requires
+            any parameters, these can be sent by supplying a second, optional
+            parameter to  <span class="methodname">call()</span> with an  <span class="type">Array</span>  of
+            values to pass to the remote method:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 XML-RPC Method Call with Parameters</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$arg1</span> = <span style="color: #cc66cc;">1.1</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$arg2</span> = <span style="color: #ff0000;">'foo'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">call</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'test.sayHello'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$arg1</span>, <span style="color: #0000ff;">$arg2</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $result is a native PHP type</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            If the remote method doesn&#039;t require parameters, this optional
+            parameter may either be left out or an empty  <span class="methodname">array()</span>
+            passed to it. The array of parameters for the remote method can
+            contain native <acronym class="acronym">PHP</acronym> types, <span class="classname">Zend_XmlRpc_Value</span>
+            objects, or a mix of each.
+        </p>
+
+        <p class="para">
+            The  <span class="methodname">call()</span> method will automatically convert the
+            <acronym class="acronym">XML-RPC</acronym> response and return its equivalent <acronym class="acronym">PHP</acronym>
+            native type. A <span class="classname">Zend_XmlRpc_Response</span> object for the return value
+            will also be available by calling the  <span class="methodname">getLastResponse()</span>
+            method after the call.
+        </p>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.value.parameters" name="zend.xmlrpc.value.parameters"><div class="info"><h1 class="title">Types and Conversions</h1></div>
+        
+
+        <p class="para">
+            Some remote method calls require parameters. These are given to
+            the  <span class="methodname">call()</span> method of <span class="classname">Zend_XmlRpc_Client</span>
+            as an array in the second parameter. Each parameter may be
+            given as either a native <acronym class="acronym">PHP</acronym> type which will be automatically
+            converted, or as an object representing a specific <acronym class="acronym">XML-RPC</acronym> type
+            (one of the <span class="classname">Zend_XmlRpc_Value</span> objects).
+        </p>
+
+        <div class="section" id="zend.xmlrpc.value.parameters.php-native" name="zend.xmlrpc.value.parameters.php-native"><div class="info"><h1 class="title">PHP Native Types as Parameters</h1></div>
+            
+
+            <p class="para">
+                Parameters may be passed to  <span class="methodname">call()</span> as native
+                <acronym class="acronym">PHP</acronym> variables, meaning as a  <span class="type">String</span> ,
+                 <span class="type">Integer</span> ,  <span class="type">Float</span> ,
+                 <span class="type">Boolean</span> ,  <span class="type">Array</span> , or an
+                 <span class="type">Object</span> . In this case, each <acronym class="acronym">PHP</acronym> native type will
+                be auto-detected and converted into one of the <acronym class="acronym">XML-RPC</acronym> types
+                according to this table:
+            </p>
+
+            <table class="doctable table"><div class="info"><caption><b>PHP and XML-RPC Type Conversions</b></caption></div>
+                
+
+                
+                    <thead valign="middle">
+                        <tr valign="middle">
+                            <th><acronym class="acronym">PHP</acronym> Native Type</th>
+                            <th><acronym class="acronym">XML-RPC</acronym> Type</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody valign="middle" class="tbody">
+                        <tr valign="middle">
+                            <td align="left">integer</td>
+                            <td align="left">int</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">Zend_Crypt_Math_BigInteger</td>
+                            <td align="left">i8</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">double</td>
+                            <td align="left">double</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">boolean</td>
+                            <td align="left">boolean</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">string</td>
+                            <td align="left">string</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">null</td>
+                            <td align="left">nil</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">array</td>
+                            <td align="left">array</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">associative array</td>
+                            <td align="left">struct</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">object</td>
+                            <td align="left">array</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">Zend_Date</td>
+                            <td align="left">dateTime.iso8601</td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">DateTime</td>
+                            <td align="left">dateTime.iso8601</td>
+                        </tr>
+
+                    </tbody>
+                
+            </table>
+
+
+            <blockquote><p><b class="note">Note</b>: <span class="info"><b>What type do empty arrays get cast to?</b><br /></span>
+                
+
+                
+                    Passing an empty array to an <acronym class="acronym">XML-RPC</acronym> method is problematic,
+                    as it could represent either an array or a struct.
+                    <span class="classname">Zend_XmlRpc_Client</span> detects such conditions and
+                    makes a request to the server&#039;s
+                    <strong class="command">system.methodSignature</strong> method to determine the
+                    appropriate <acronym class="acronym">XML-RPC</acronym> type to cast to.
+                <br />
+
+                
+                    However, this in itself can lead to issues. First off,
+                    servers that do not support
+                    <strong class="command">system.methodSignature</strong> will log failed
+                    requests, and <span class="classname">Zend_XmlRpc_Client</span> will resort to
+                    casting the value to an <acronym class="acronym">XML-RPC</acronym> array type. Additionally,
+                    this means that any call with array arguments will result in
+                    an additional call to the remote server.
+                <br />
+
+                
+                    To disable the lookup entirely, you can call the
+                     <span class="methodname">setSkipSystemLookup()</span> method prior to making
+                    your <acronym class="acronym">XML-RPC</acronym> call:
+                <br />
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">setSkipSystemLookup</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$result</span> = <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">call</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo.bar'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+            </p></blockquote>
+        </div>
+
+        <div class="section" id="zend.xmlrpc.value.parameters.xmlrpc-value" name="zend.xmlrpc.value.parameters.xmlrpc-value"><div class="info"><h1 class="title">Zend_XmlRpc_Value Objects as Parameters</h1></div>
+            
+
+            <p class="para">
+                Parameters may also be created as <span class="classname">Zend_XmlRpc_Value</span>
+                instances to specify an exact <acronym class="acronym">XML-RPC</acronym> type. The primary reasons
+                for doing this are:
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            When you want to make sure the correct parameter
+                            type is passed to the procedure (i.e. the
+                            procedure requires an integer and you may get it
+                            from a database as a string)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            When the procedure requires <span class="property">base64</span> or
+                            <span class="property">dateTime.iso8601</span> type (which doesn&#039;t exists as a
+                            <acronym class="acronym">PHP</acronym> native type)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            When auto-conversion may fail (i.e. you want to
+                            pass an empty <acronym class="acronym">XML-RPC</acronym> struct as a parameter. Empty
+                            structs are represented as empty arrays in <acronym class="acronym">PHP</acronym>
+                            but, if you give an empty array as a parameter it
+                            will be auto-converted to an <acronym class="acronym">XML-RPC</acronym> array since
+                            it&#039;s not an associative array)
+                        </p>
+                    </li>
+                </ul>
+            </p>
+
+            <p class="para">
+                There are two ways to create a <span class="classname">Zend_XmlRpc_Value</span>
+                object: instantiate one of the <span class="classname">Zend_XmlRpc_Value</span>
+                subclasses directly, or use the static factory method
+                 <span class="methodname">Zend_XmlRpc_Value::getXmlRpcValue()</span>.
+            </p>
+
+            <table class="doctable table"><div class="info"><caption><b>Zend_XmlRpc_Value Objects for XML-RPC Types</b></caption></div>
+                
+
+                
+                    <thead valign="middle">
+                        <tr valign="middle">
+                            <th><acronym class="acronym">XML-RPC</acronym> Type</th>
+                            <th><span class="classname">Zend_XmlRpc_Value</span> Constant</th>
+                            <th><span class="classname">Zend_XmlRpc_Value</span> Object</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody valign="middle" class="tbody">
+                        <tr valign="middle">
+                            <td align="left">int</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_INTEGER</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Integer</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">i8</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_I8</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_BigInteger</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">ex:i8</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_APACHEI8</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_BigInteger</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">double</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_DOUBLE</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Double</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">boolean</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_BOOLEAN</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Boolean</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">string</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_STRING</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_String</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">nil</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_NIL</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Nil</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">ex:nil</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_APACHENIL</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Nil</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">base64</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_BASE64</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Base64</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">dateTime.iso8601</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_DateTime</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">array</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_ARRAY</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Array</span></td>
+                        </tr>
+
+
+                        <tr valign="middle">
+                            <td align="left">struct</td>
+
+                            <td align="left">
+                                <b><tt>Zend_XmlRpc_Value::XMLRPC_TYPE_STRUCT</tt></b>
+                            </td>
+
+                            <td align="left"><span class="classname">Zend_XmlRpc_Value_Struct</span></td>
+                        </tr>
+
+                    </tbody>
+                
+            </table>
+
+
+            <p class="para">
+                <blockquote><p><b class="note">Note</b>: <span class="info"><b>Automatic Conversion</b><br /></span>
+                    
+
+                    
+                        When building a new <span class="classname">Zend_XmlRpc_Value</span>
+                        object, its value is set by a <acronym class="acronym">PHP</acronym> type. The
+                        <acronym class="acronym">PHP</acronym> type will be converted to the specified type using
+                        <acronym class="acronym">PHP</acronym> casting. For example, if a string is given as a
+                        value to the <span class="classname">Zend_XmlRpc_Value_Integer</span>
+                        object, it will be converted using
+                        <strong class="command">(int)$value</strong>.
+                    <br />
+                </p></blockquote>
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.requests-and-responses" name="zend.xmlrpc.client.requests-and-responses"><div class="info"><h1 class="title">Server Proxy Object</h1></div>
+        
+
+        <p class="para">
+            Another way to call remote methods with the <acronym class="acronym">XML-RPC</acronym> client is to
+            use the server proxy. This is a <acronym class="acronym">PHP</acronym> object that proxies a remote
+            <acronym class="acronym">XML-RPC</acronym> namespace, making it work as close to a native
+            <acronym class="acronym">PHP</acronym> object as possible.
+        </p>
+
+        <p class="para">
+            To instantiate a server proxy, call the  <span class="methodname">getProxy()</span>
+            instance method of <span class="classname">Zend_XmlRpc_Client</span>. This will
+            return an instance of <span class="classname">Zend_XmlRpc_Client_ServerProxy</span>.
+            Any method call on the server proxy object will be forwarded to
+            the remote, and parameters may be passed like any other <acronym class="acronym">PHP</acronym>
+            method.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Proxy the Default Namespace</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$service</span> = <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">getProxy</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #808080; font-style: italic;">// Proxy the default namespace</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$hello</span> = <span style="color: #0000ff;">$service</span>-&gt;<span style="color: #006600;">test</span>-&gt;<span style="color: #006600;">sayHello</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1</span>, <span style="color: #cc66cc;">2</span><span style="color: #66cc66;">&#41;</span>;&nbsp; <span style="color: #808080; font-style: italic;">// test.Hello(1, 2) returns &quot;hello&quot;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The  <span class="methodname">getProxy()</span> method receives an optional argument
+            specifying which namespace of the remote server to proxy. If it
+            does not receive a namespace, the default namespace will be
+            proxied. In the next example, the &#039;test&#039; namespace
+            will be proxied:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Proxy Any Namespace</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$test</span>&nbsp; = <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">getProxy</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'test'</span><span style="color: #66cc66;">&#41;</span>;&nbsp; &nbsp; &nbsp;<span style="color: #808080; font-style: italic;">// Proxy the &quot;test&quot; namespace</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$hello</span> = <span style="color: #0000ff;">$test</span>-&gt;<span style="color: #006600;">sayHello</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1</span>, <span style="color: #cc66cc;">2</span><span style="color: #66cc66;">&#41;</span>;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #808080; font-style: italic;">// test.Hello(1,2) returns &quot;hello&quot;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            If the remote server supports nested namespaces of any depth,
+            these can also be used through the server proxy. For example, if
+            the server in the example above had a method
+            <strong class="command">test.foo.bar()</strong>, it could be called as
+            <strong class="command">$test-&gt;foo-&gt;bar()</strong>.
+        </p>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.error-handling" name="zend.xmlrpc.client.error-handling"><div class="info"><h1 class="title">Error Handling</h1></div>
+        
+
+        <p class="para">
+            Two kinds of errors can occur during an <acronym class="acronym">XML-RPC</acronym> method call:
+            <acronym class="acronym">HTTP</acronym> errors and <acronym class="acronym">XML-RPC</acronym> faults. The
+            <span class="classname">Zend_XmlRpc_Client</span> recognizes each and provides the ability
+            to detect and trap them independently.
+        </p>
+
+        <div class="section" id="zend.xmlrpc.client.error-handling.http" name="zend.xmlrpc.client.error-handling.http"><div class="info"><h1 class="title">HTTP Errors</h1></div>
+            
+
+            <p class="para">
+                If any <acronym class="acronym">HTTP</acronym> error occurs, such as the remote
+                <acronym class="acronym">HTTP</acronym> server returns a <em class="emphasis">404 Not Found</em>, a
+                <span class="classname">Zend_XmlRpc_Client_HttpException</span> will be thrown.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #5 Handling HTTP Errors</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://foo/404'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">try <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">call</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bar'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$arg1</span>, <span style="color: #0000ff;">$arg2</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> catch <span style="color: #66cc66;">&#40;</span>Zend_XmlRpc_Client_HttpException <span style="color: #0000ff;">$e</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// $e-&gt;getCode() returns 404</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// $e-&gt;getMessage() returns &quot;Not Found&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                Regardless of how the <acronym class="acronym">XML-RPC</acronym> client is used, the
+                <span class="classname">Zend_XmlRpc_Client_HttpException</span> will be thrown
+                whenever an <acronym class="acronym">HTTP</acronym> error occurs.
+            </p>
+        </div>
+
+        <div class="section" id="zend.xmlrpc.client.error-handling.faults" name="zend.xmlrpc.client.error-handling.faults"><div class="info"><h1 class="title">XML-RPC Faults</h1></div>
+            
+
+            <p class="para">
+                An <acronym class="acronym">XML-RPC</acronym> fault is analogous to a <acronym class="acronym">PHP</acronym>
+                exception. It is a special type returned from an <acronym class="acronym">XML-RPC</acronym> method
+                call that has both an error code and an error message. <acronym class="acronym">XML-RPC</acronym>
+                faults are handled differently depending on the context of how the
+                <span class="classname">Zend_XmlRpc_Client</span> is used.
+            </p>
+
+            <p class="para">
+                When the  <span class="methodname">call()</span> method or the server
+                proxy object is used, an <acronym class="acronym">XML-RPC</acronym> fault will result in a
+                <span class="classname">Zend_XmlRpc_Client_FaultException</span> being thrown.
+                The code and message of the exception will map directly to
+                their respective values in the original <acronym class="acronym">XML-RPC</acronym> fault
+                response.
+            </p>
+
+            <div class="example"><div class="info"><p><b>Example #6 Handling XML-RPC Faults</b></p></div>
+                
+
+                <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">try <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">call</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'badMethod'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> catch <span style="color: #66cc66;">&#40;</span>Zend_XmlRpc_Client_FaultException <span style="color: #0000ff;">$e</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// $e-&gt;getCode() returns 1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// $e-&gt;getMessage() returns &quot;Unknown method&quot;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+            </div>
+
+            <p class="para">
+                When the  <span class="methodname">call()</span> method is used to make the
+                request, the <span class="classname">Zend_XmlRpc_Client_FaultException</span> will be
+                thrown on fault. A <span class="classname">Zend_XmlRpc_Response</span> object
+                containing the fault will also be available by calling
+                 <span class="methodname">getLastResponse()</span>.
+            </p>
+
+            <p class="para">
+                When the  <span class="methodname">doRequest()</span> method is used to make the
+                request, it will not throw the exception. Instead, it will
+                return a <span class="classname">Zend_XmlRpc_Response</span> object returned
+                will containing the fault. This can be checked with
+                 <span class="methodname">isFault()</span> instance method of
+                <span class="classname">Zend_XmlRpc_Response</span>.
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.introspection" name="zend.xmlrpc.client.introspection"><div class="info"><h1 class="title">Server Introspection</h1></div>
+        
+
+        <p class="para">
+            Some <acronym class="acronym">XML-RPC</acronym> servers support the de facto introspection methods
+            under the <acronym class="acronym">XML-RPC</acronym> <em class="emphasis">system.</em> namespace.
+            <span class="classname">Zend_XmlRpc_Client</span> provides special support for servers with
+            these capabilities.
+        </p>
+
+        <p class="para">
+            A <span class="classname">Zend_XmlRpc_Client_ServerIntrospection</span> instance may be
+            retrieved by calling the  <span class="methodname">getIntrospector()</span> method of
+            <span class="classname">Zend_XmlRpcClient</span>. It can then be used to perform introspection
+            operations on the server.
+        </p>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.request-to-response" name="zend.xmlrpc.client.request-to-response"><div class="info"><h1 class="title">From Request to Response</h1></div>
+        
+
+        <p class="para">
+            Under the hood, the  <span class="methodname">call()</span> instance method of
+            <span class="classname">Zend_XmlRpc_Client</span> builds a request object
+            (<span class="classname">Zend_XmlRpc_Request</span>) and sends it to another method,
+             <span class="methodname">doRequest()</span>, that returns a response object
+            (<span class="classname">Zend_XmlRpc_Response</span>).
+        </p>
+
+        <p class="para">
+            The  <span class="methodname">doRequest()</span> method is also available for use directly:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #7 Processing Request to Response</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Client<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'http://framework.zend.com/xmlrpc'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$request</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_XmlRpc_Request<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">setMethod</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'test.sayHello'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$request</span>-&gt;<span style="color: #006600;">setParams</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'foo'</span>, <span style="color: #ff0000;">'bar'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$client</span>-&gt;<span style="color: #006600;">doRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $client-&gt;getLastRequest() returns instanceof Zend_XmlRpc_Request</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $client-&gt;getLastResponse() returns instanceof Zend_XmlRpc_Response</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Whenever an <acronym class="acronym">XML-RPC</acronym> method call is made by the client through any
+            means, either the  <span class="methodname">call()</span> method,
+             <span class="methodname">doRequest()</span> method, or server proxy, the last request
+            object and its resultant response object will always be available
+            through the methods  <span class="methodname">getLastRequest()</span> and
+             <span class="methodname">getLastResponse()</span> respectively.
+        </p>
+    </div>
+
+    <div class="section" id="zend.xmlrpc.client.http-client" name="zend.xmlrpc.client.http-client"><div class="info"><h1 class="title">HTTP Client and Testing</h1></div>
+        
+
+        <p class="para">
+            In all of the prior examples, an <acronym class="acronym">HTTP</acronym> client was never specified.
+            When this is the case, a new instance of
+            <span class="classname">Zend_Http_Client</span> will be created with its default
+            options and used by <span class="classname">Zend_XmlRpc_Client</span> automatically.
+        </p>
+
+        <p class="para">
+            The <acronym class="acronym">HTTP</acronym> client can be retrieved at any time with the
+             <span class="methodname">getHttpClient()</span> method. For most cases, the default
+            <acronym class="acronym">HTTP</acronym> client will be sufficient. However, the
+             <span class="methodname">setHttpClient()</span> method allows for a different
+            <acronym class="acronym">HTTP</acronym> client instance to be injected.
+        </p>
+
+        <p class="para">
+            The  <span class="methodname">setHttpClient()</span> is particularly useful for unit testing.
+            When combined with the <span class="classname">Zend_Http_Client_Adapter_Test</span>, remote
+            services can be mocked out for testing. See the unit tests for
+            <span class="classname">Zend_XmlRpc_Client</span> for examples of how to do this.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.xmlrpc.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.xmlrpc.html">Zend_XmlRpc</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.xmlrpc.server.html">Zend_XmlRpc_Server</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.xmlrpc.html">Zend_XmlRpc</a></li>
+  <li><a href="zend.xmlrpc.introduction.html">Introduction</a></li>
+  <li class="active"><a href="zend.xmlrpc.client.html">Zend_XmlRpc_Client</a></li>
+  <li><a href="zend.xmlrpc.server.html">Zend_XmlRpc_Server</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

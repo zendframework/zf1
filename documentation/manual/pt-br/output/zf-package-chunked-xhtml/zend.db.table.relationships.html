@@ -1,0 +1,948 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Db_Table Relationships - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.definition.html">Zend_Db_Table_Definition</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.db.table.relationships" class="section"><div class="info"><h1 class="title">Zend_Db_Table Relationships</h1></div>
+    
+
+    <div class="section" id="zend.db.table.relationships.introduction" name="zend.db.table.relationships.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            Tables have relationships to each other in a relational database. An entity in one
+            table can be linked to one or more entities in another table by using referential
+            integrity constraints defined in the database schema.
+        </p>
+
+        <p class="para">
+            The <span class="classname">Zend_Db_Table_Row</span> class has methods for querying related rows
+            in other tables.
+        </p>
+    </div>
+
+    <div class="section" id="zend.db.table.relationships.defining" name="zend.db.table.relationships.defining"><div class="info"><h1 class="title">Defining Relationships</h1></div>
+        
+
+        <p class="para">
+            Define classes for each of your tables, extending the abstract class
+            <span class="classname">Zend_Db_Table_Abstract</span>, as described in
+            <a href="zend.db.table.html#zend.db.table.defining" class="link">this chapter</a>. Also see
+            <a href="zend.db.adapter.html#zend.db.adapter.example-database" class="link">this chapter</a> for a description
+            of the example database for which the following example code is designed.
+        </p>
+
+        <p class="para">
+            Below are the <acronym class="acronym">PHP</acronym> class definitions for these tables:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Accounts <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = <span style="color: #ff0000;">'accounts'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_dependentTables</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Bugs'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Products <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = <span style="color: #ff0000;">'products'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_dependentTables</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'BugsProducts'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> Bugs <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = <span style="color: #ff0000;">'bugs'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_dependentTables</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'BugsProducts'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_referenceMap</span>&nbsp; &nbsp; = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Reporter'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'reported_by'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Accounts'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'account_name'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Engineer'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'assigned_to'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Accounts'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <span style="color: #ff0000;">'account_name'</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Verifier'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'verified_by'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Accounts'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'account_name'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> BugsProducts <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_name</span> = <span style="color: #ff0000;">'bugs_products'</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_referenceMap</span>&nbsp; &nbsp; = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Bug'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Bugs'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Product'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            If you use <span class="classname">Zend_Db_Table</span> to emulate cascading
+            <b><tt>UPDATE</tt></b> and <b><tt>DELETE</tt></b>
+            operations, declare the <var class="varname">$_dependentTables</var> array in the class for the
+            parent table. List the class name for each dependent table. Use the class name, not the
+            physical name of the <acronym class="acronym">SQL</acronym> table.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Skip declaration of <var class="varname">$_dependentTables</var> if you use referential
+                integrity constraints in the <acronym class="acronym">RDBMS</acronym> server to implement cascading
+                operations. See <a href="zend.db.table.relationships.html#zend.db.table.relationships.cascading" class="link">this
+                    chapter</a> for more information.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            Declare the <var class="varname">$_referenceMap</var> array in the class for each dependent
+            table. This is an associative array of reference &quot;rules&quot;. A reference rule identifies
+            which table is the parent table in the relationship, and also lists which columns in the
+            dependent table reference which columns in the parent table.
+        </p>
+
+        <p class="para">
+            The rule key is a string used as an index to the <var class="varname">$_referenceMap</var>
+            array. This rule key is used to identify each reference relationship. Choose a
+            descriptive name for this rule key. It&#039;s best to use a string that can be part of a
+            <acronym class="acronym">PHP</acronym> method name, as you will see later.
+        </p>
+
+        <p class="para">
+            In the example <acronym class="acronym">PHP</acronym> code above, the rule keys in the Bugs table class
+            are: <strong class="command">&#039;Reporter&#039;</strong>, <strong class="command">&#039;Engineer&#039;</strong>,
+            <strong class="command">&#039;Verifier&#039;</strong>, and <strong class="command">&#039;Product&#039;</strong>.
+        </p>
+
+        <p class="para">
+            The value of each rule entry in the <var class="varname">$_referenceMap</var> array is also an
+            associative array. The elements of this rule entry are described below:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">columns</em> =&gt; A string or an array of strings
+                    naming the foreign key column names in the dependent table.
+                </p>
+
+                <p class="para">
+                    It&#039;s common for this to be a single column, but some tables have multi-column
+                    keys.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">refTableClass</em> =&gt; The class name of the parent table. Use
+                    the class name, not the physical name of the <acronym class="acronym">SQL</acronym> table.
+                </p>
+
+                <p class="para">
+                    It&#039;s common for a dependent table to have only one reference to its parent
+                    table, but some tables have multiple references to the same parent table. In
+                    the example database, there is one reference from the <strong class="command">bugs</strong>
+                    table to the <strong class="command">products</strong> table, but three references from the
+                    <strong class="command">bugs</strong> table to the <strong class="command">accounts</strong> table. Put each
+                    reference in a separate entry in the <var class="varname">$_referenceMap</var> array.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">refColumns</em> =&gt; A string or an array of
+                    strings naming the primary key column names in the parent table.
+                </p>
+
+                <p class="para">
+                    It&#039;s common for this to be a single column, but some tables have multi-column
+                    keys. If the reference uses a multi-column key, the order of columns in the
+                    <strong class="command">&#039;columns&#039;</strong> entry must match the order of columns in the
+                    <strong class="command">&#039;refColumns&#039;</strong> entry.
+                </p>
+
+                <p class="para">
+                    It is optional to specify this element. If you don&#039;t specify the
+                    <span class="property">refColumns</span>, the columns reported as the primary key columns
+                    of the parent table are used by default.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">onDelete</em> =&gt; The rule for an action to
+                    execute if a row is deleted in the parent table. See
+                    <a href="zend.db.table.relationships.html#zend.db.table.relationships.cascading" class="link">this chapter</a> for
+                    more information.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <em class="emphasis">onUpdate</em> =&gt; The rule for an action to
+                    execute if values in primary key columns are updated in the parent table. See
+                    <a href="zend.db.table.relationships.html#zend.db.table.relationships.cascading" class="link">this chapter</a> for
+                    more information.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.db.table.relationships.fetching.dependent" name="zend.db.table.relationships.fetching.dependent"><div class="info"><h1 class="title">Fetching a Dependent Rowset</h1></div>
+        
+
+        <p class="para">
+            If you have a Row object as the result of a query on a parent table, you can fetch rows
+            from dependent tables that reference the current row. Use the method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">findDependentRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$table</span>, <span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$rule</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This method returns a <span class="classname">Zend_Db_Table_Rowset_Abstract</span> object,
+            containing a set of rows from the dependent table <var class="varname">$table</var> that refer
+            to the row identified by the <var class="varname">$row</var> object.
+        </p>
+
+        <p class="para">
+            The first argument <var class="varname">$table</var> can be a string that specifies the
+            dependent table by its class name. You can also specify the dependent table by using an
+            object of that table class.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Fetching a Dependent Rowset</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the table <strong class="command">Accounts</strong>,
+                and finding the <strong class="command">Bugs</strong> reported by that account.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Accounts<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsRowset</span> = <span style="color: #0000ff;">$accountsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$user1234</span> = <span style="color: #0000ff;">$accountsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsReportedByUser</span> = <span style="color: #0000ff;">$user1234</span>-&gt;<span style="color: #006600;">findDependentRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Bugs'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The second argument <var class="varname">$rule</var> is optional. It is a string that names the
+            rule key in the <var class="varname">$_referenceMap</var> array of the dependent table class. If
+            you don&#039;t specify a rule, the first rule in the array that references the parent table
+            is used. If you need to use a rule other than the first, you need to specify the key.
+        </p>
+
+        <p class="para">
+            In the example code above, the rule key is not specified, so the rule used by default
+            is the first one that matches the parent table. This is the rule
+            <strong class="command">&#039;Reporter&#039;</strong>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 Fetching a Dependent Rowset By a Specific Rule</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the table <strong class="command">Accounts</strong>,
+                and finding the <strong class="command">Bugs</strong> assigned to be fixed by the user of that
+                account. The rule key string that corresponds to this reference relationship in this
+                example is <strong class="command">&#039;Engineer&#039;</strong>.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Accounts<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsRowset</span> = <span style="color: #0000ff;">$accountsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$user1234</span> = <span style="color: #0000ff;">$accountsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsAssignedToUser</span> = <span style="color: #0000ff;">$user1234</span>-&gt;<span style="color: #006600;">findDependentRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Bugs'</span>, <span style="color: #ff0000;">'Engineer'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            You can also add criteria, ordering and limits to your relationships using the parent
+            row&#039;s select object.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Fetching a Dependent Rowset using a Zend_Db_Table_Select</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the table
+                <strong class="command">Accounts</strong>, and finding the <strong class="command">Bugs</strong> assigned to
+                be fixed by the user of that account, limited only to 3 rows and ordered by
+                name.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Accounts<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsRowset</span> = <span style="color: #0000ff;">$accountsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$user1234</span> = <span style="color: #0000ff;">$accountsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$select</span> = <span style="color: #0000ff;">$accountsTable</span>-&gt;<span style="color: #006600;">select</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>-&gt;<span style="color: #006600;">order</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'name ASC'</span><span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&gt;<span style="color: #006600;">limit</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">3</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsAssignedToUser</span> = <span style="color: #0000ff;">$user1234</span>-&gt;<span style="color: #006600;">findDependentRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Bugs'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'Engineer'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #0000ff;">$select</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Alternatively, you can query rows from a dependent table using a special mechanism
+            called a &quot;magic method&quot;. <span class="classname">Zend_Db_Table_Row_Abstract</span> invokes the
+            method:  <span class="methodname">findDependentRowset(&#039;&lt;TableClass&gt;&#039;,
+                &#039;&lt;Rule&gt;&#039;)</span> if you invoke a method on the Row object matching
+            either of the following patterns:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;find&lt;TableClass&gt;()</strong>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;find&lt;TableClass&gt;By&lt;Rule&gt;()</strong>
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            In the patterns above, <strong class="command">&lt;TableClass&gt;</strong> and
+            <strong class="command">&lt;Rule&gt;</strong> are strings that correspond to the class name of the
+            dependent table, and the dependent table&#039;s rule key that references the parent table.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                Some application frameworks, such as Ruby on Rails, use a mechanism called
+                &quot;inflection&quot; to allow the spelling of identifiers to change depending on usage. For
+                simplicity, <span class="classname">Zend_Db_Table_Row</span> does not provide any inflection
+                mechanism. The table identity and the rule key named in the method call must match
+                the spelling of the class and rule key exactly.
+            <br />
+        </p></blockquote>
+
+        <div class="example"><div class="info"><p><b>Example #4 Fetching Dependent Rowsets using the Magic Method</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows finding dependent Rowsets equivalent to those in the previous
+                examples. In this case, the application uses the magic method invocation instead of
+                specifying the table and rule as strings.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Accounts<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$accountsRowset</span> = <span style="color: #0000ff;">$accountsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$user1234</span> = <span style="color: #0000ff;">$accountsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use the default reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsReportedBy</span> = <span style="color: #0000ff;">$user1234</span>-&gt;<span style="color: #006600;">findBugs</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Specify the reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsAssignedTo</span> = <span style="color: #0000ff;">$user1234</span>-&gt;<span style="color: #006600;">findBugsByEngineer</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.relationships.fetching.parent" name="zend.db.table.relationships.fetching.parent"><div class="info"><h1 class="title">Fetching a Parent Row</h1></div>
+        
+
+        <p class="para">
+            If you have a Row object as the result of a query on a dependent table, you can fetch
+            the row in the parent to which the dependent row refers. Use the method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">findParentRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$table</span>, <span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$rule</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            There always should be exactly one row in the parent table referenced by a dependent
+            row, therefore this method returns a Row object, not a Rowset object.
+        </p>
+
+        <p class="para">
+            The first argument <var class="varname">$table</var> can be a string that specifies the parent
+            table by its class name. You can also specify the parent table by using an object of
+            that table class.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #5 Fetching the Parent Row</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the table <strong class="command">Bugs</strong> (for
+                example one of those bugs with status &#039;NEW&#039;), and finding the row in the
+                <strong class="command">Accounts</strong> table for the user who reported the bug.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_status = ?'</span> =&gt; <span style="color: #ff0000;">'NEW'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$reporter</span> = <span style="color: #0000ff;">$bug1</span>-&gt;<span style="color: #006600;">findParentRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Accounts'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The second argument <var class="varname">$rule</var> is optional. It is a string that names the
+            rule key in the <var class="varname">$_referenceMap</var> array of the dependent table class. If
+            you don&#039;t specify a rule, the first rule in the array that references the parent table
+            is used. If you need to use a rule other than the first, you need to specify the key.
+        </p>
+
+        <p class="para">
+            In the example above, the rule key is not specified, so the rule used by default is the
+            first one that matches the parent table. This is the rule <strong class="command">&#039;Reporter&#039;</strong>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #6 Fetching a Parent Row By a Specific Rule</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the table <strong class="command">Bugs</strong>, and
+                finding the account for the engineer assigned to fix that bug. The rule key string
+                that corresponds to this reference relationship in this example is
+                <strong class="command">&#039;Engineer&#039;</strong>.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_status = ?'</span>, <span style="color: #ff0000;">'NEW'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$engineer</span> = <span style="color: #0000ff;">$bug1</span>-&gt;<span style="color: #006600;">findParentRow</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Accounts'</span>, <span style="color: #ff0000;">'Engineer'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Alternatively, you can query rows from a parent table using a &quot;magic method&quot;.
+            <span class="classname">Zend_Db_Table_Row_Abstract</span> invokes the method:
+             <span class="methodname">findParentRow(&#039;&lt;TableClass&gt;&#039;, &#039;&lt;Rule&gt;&#039;)</span> if you
+            invoke a method on the Row object matching either of the following patterns:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;findParent&lt;TableClass&gt;([Zend_Db_Table_Select
+                        $select])</strong>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;findParent&lt;TableClass&gt;By&lt;Rule&gt;([Zend_Db_Table_Select
+                       $select])</strong>
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            In the patterns above, <strong class="command">&lt;TableClass&gt;</strong> and
+            <strong class="command">&lt;Rule&gt;</strong> are strings that correspond to the class name of the
+            parent table, and the dependent table&#039;s rule key that references the parent table.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                The table identity and the rule key named in the method call must match the
+                spelling of the class and rule key exactly.
+            <br />
+        </p></blockquote>
+
+        <div class="example"><div class="info"><p><b>Example #7 Fetching the Parent Row using the Magic Method</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows finding parent Rows equivalent to those in the previous
+                examples. In this case, the application uses the magic method invocation instead of
+                specifying the table and rule as strings.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">fetchAll</span><span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'bug_status = ?'</span>, <span style="color: #ff0000;">'NEW'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use the default reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$reporter</span> = <span style="color: #0000ff;">$bug1</span>-&gt;<span style="color: #006600;">findParentAccounts</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Specify the reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$engineer</span> = <span style="color: #0000ff;">$bug1</span>-&gt;<span style="color: #006600;">findParentAccountsByEngineer</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.relationships.fetching.many-to-many" name="zend.db.table.relationships.fetching.many-to-many"><div class="info"><h1 class="title">Fetching a Rowset via a Many-to-many Relationship</h1></div>
+        
+
+        <p class="para">
+            If you have a Row object as the result of a query on one table in a many-to-many
+            relationship (for purposes of the example, call this the &quot;origin&quot; table), you can
+            fetch corresponding rows in the other table (call this the &quot;destination&quot; table) via an
+            intersection table. Use the method:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$row</span>-&gt;<span style="color: #006600;">findManyToManyRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$table</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #0000ff;">$intersectionTable</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$rule1</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#91;</span><span style="color: #0000ff;">$rule2</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#91;</span>Zend_Db_Table_Select <span style="color: #0000ff;">$select</span><span style="color: #66cc66;">&#93;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#93;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <p class="para">
+            This method returns a <span class="classname">Zend_Db_Table_Rowset_Abstract</span> containing
+            rows from the table <var class="varname">$table</var>, satisfying the many-to-many relationship.
+            The current Row object <var class="varname">$row</var> from the origin table is used to find
+            rows in the intersection table, and that is joined to the destination table.
+        </p>
+
+        <p class="para">
+            The first argument <var class="varname">$table</var> can be a string that specifies the
+            destination table in the many-to-many relationship by its class name. You can also
+            specify the destination table by using an object of that table class.
+        </p>
+
+        <p class="para">
+            The second argument <var class="varname">$intersectionTable</var> can be a string that specifies
+            the intersection table between the two tables in the many-to-many relationship by
+            its class name. You can also specify the intersection table by using an object of that
+            table class.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #8 Fetching a Rowset with the Many-to-many Method</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows getting a Row object from the origin table
+                <strong class="command">Bugs</strong>, and finding rows from the destination table
+                <strong class="command">Products</strong>, representing products related to that bug.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1234</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$productsRowset</span> = <span style="color: #0000ff;">$bug1234</span>-&gt;<span style="color: #006600;">findManyToManyRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'BugsProducts'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The third and fourth arguments <var class="varname">$rule1</var> and <var class="varname">$rule2</var>
+            are optional. These are strings that name the rule keys in the
+            <var class="varname">$_referenceMap</var> array of the intersection table.
+        </p>
+
+        <p class="para">
+            The <var class="varname">$rule1</var> key names the rule for the relationship from the
+            intersection table to the origin table. In this example, this is the relationship from
+            <strong class="command">BugsProducts</strong> to <strong class="command">Bugs</strong>.
+        </p>
+
+        <p class="para">
+            The <var class="varname">$rule2</var> key names the rule for the relationship from the
+            intersection table to the destination table. In this example, this is the relationship
+            from <strong class="command">Bugs</strong> to <strong class="command">Products</strong>.
+        </p>
+
+        <p class="para">
+            Similarly to the methods for finding parent and dependent rows, if you don&#039;t specify a
+            rule, the method uses the first rule in the <var class="varname">$_referenceMap</var> array that
+            matches the tables in the relationship. If you need to use a rule other than the first,
+            you need to specify the key.
+        </p>
+
+        <p class="para">
+            In the example code above, the rule key is not specified, so the rules used by default
+            are the first ones that match. In this case, <var class="varname">$rule1</var> is
+            <strong class="command">&#039;Reporter&#039;</strong> and <var class="varname">$rule2</var> is
+            <strong class="command">&#039;Product&#039;</strong>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #9 Fetching a Rowset with the Many-to-many Method By a Specific Rule</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows geting a Row object from the origin table
+                <strong class="command">Bugs</strong>, and finding rows from the destination table
+                <strong class="command">Products</strong>, representing products related to that bug.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1234</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$productsRowset</span> = <span style="color: #0000ff;">$bug1234</span>-&gt;<span style="color: #006600;">findManyToManyRowset</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'BugsProducts'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff0000;">'Bug'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Alternatively, you can query rows from the destination table in a many-to-many
+            relationship using a &quot;magic method.&quot; <span class="classname">Zend_Db_Table_Row_Abstract</span>
+            invokes the method: <strong class="command">findManyToManyRowset(&#039;&lt;TableClass&gt;&#039;,
+                &#039;&lt;IntersectionTableClass&gt;&#039;, &#039;&lt;Rule1&gt;&#039;, &#039;&lt;Rule2&gt;&#039;)</strong> if you
+            invoke a method matching any of the following patterns:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;find&lt;TableClass&gt;Via&lt;IntersectionTableClass&gt;
+                        ([Zend_Db_Table_Select $select])</strong>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;find&lt;TableClass&gt;Via&lt;IntersectionTableClass&gt;By&lt;Rule1&gt;
+                        ([Zend_Db_Table_Select $select])</strong>
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <strong class="command">$row-&gt;find&lt;TableClass&gt;Via&lt;IntersectionTableClass&gt;By&lt;Rule1&gt;And&lt;Rule2&gt;
+                        ([Zend_Db_Table_Select $select])</strong>
+                </p>
+            </li>
+        </ul>
+
+        <p class="para">
+            In the patterns above, <strong class="command">&lt;TableClass&gt;</strong> and
+            <strong class="command">&lt;IntersectionTableClass&gt;</strong> are strings that correspond to the
+            class names of the destination table and the intersection table, respectively.
+            <strong class="command">&lt;Rule1&gt;</strong> and <strong class="command">&lt;Rule2&gt;</strong> are strings that
+            correspond to the rule keys in the intersection table that reference the origin table
+            and the destination table, respectively.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                The table identities and the rule keys named in the method call must match the
+                spelling of the class and rule key exactly.
+            <br />
+        </p></blockquote>
+
+        <div class="example"><div class="info"><p><b>Example #10 Fetching Rowsets using the Magic Many-to-many Method</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows finding rows in the destination table of a many-to-many
+                relationship representing products related to a given bug.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Bugs<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bugsRowset</span> = <span style="color: #0000ff;">$bugsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$bug1234</span> = <span style="color: #0000ff;">$bugsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Use the default reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$products</span> = <span style="color: #0000ff;">$bug1234</span>-&gt;<span style="color: #006600;">findProductsViaBugsProducts</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Specify the reference rule</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$products</span> = <span style="color: #0000ff;">$bug1234</span>-&gt;<span style="color: #006600;">findProductsViaBugsProductsByBug</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.db.table.relationships.cascading" name="zend.db.table.relationships.cascading"><div class="info"><h1 class="title">Cascading Write Operations</h1></div>
+        
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Declare DRI in the database:</b><br /></span>
+            
+
+            
+                Declaring cascading operations in <span class="classname">Zend_Db_Table</span> is intended
+                <em class="emphasis">only</em> for <acronym class="acronym">RDBMS</acronym> brands that do not support
+                declarative referential integrity (<acronym class="acronym">DRI</acronym>).
+            <br />
+
+            
+                For example, if you use MySQL&#039;s MyISAM storage engine, or SQLite, these solutions
+                do not support <acronym class="acronym">DRI</acronym>. You may find it helpful to declare the
+                cascading operations with <span class="classname">Zend_Db_Table</span>.
+            <br />
+
+            
+                If your <acronym class="acronym">RDBMS</acronym> implements <acronym class="acronym">DRI</acronym> and the
+                ON <b><tt>DELETE</tt></b> and ON <b><tt>UPDATE</tt></b> clauses, you
+                should declare these clauses in your database schema, instead of using the cascading
+                feature in <span class="classname">Zend_Db_Table</span>. Declaring cascading
+                <acronym class="acronym">DRI</acronym> rules in the <acronym class="acronym">RDBMS</acronym> is better for database
+                performance, consistency, and integrity.
+            <br />
+
+            
+                Most importantly, do not declare cascading operations both in the
+                <acronym class="acronym">RDBMS</acronym> and in your <span class="classname">Zend_Db_Table</span> class.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            You can declare cascading operations to execute against a dependent table when you
+            apply an <b><tt>UPDATE</tt></b> or a <b><tt>DELETE</tt></b> to a row in a
+            parent table.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #11 Example of a Cascading Delete</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                This example shows deleting a row in the <strong class="command">Products</strong> table, which is
+                configured to automatically delete dependent rows in the <strong class="command">Bugs</strong>
+                table.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$productsTable</span> = <span style="color: #000000; font-weight: bold;">new</span> Products<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$productsRowset</span> = <span style="color: #0000ff;">$productsTable</span>-&gt;<span style="color: #006600;">find</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$product1234</span> = <span style="color: #0000ff;">$productsRowset</span>-&gt;<span style="color: #006600;">current</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$product1234</span>-&gt;<span style="color: #006600;">delete</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Automatically cascades to Bugs table</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// and deletes dependent rows.</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            Similarly, if you use <b><tt>UPDATE</tt></b> to change the value of a primary key
+            in a parent table, you may want the value in foreign keys of dependent tables to be
+            updated automatically to match the new value, so that such references are kept up to
+            date.
+        </p>
+
+        <p class="para">
+            It&#039;s usually not necessary to update the value of a primary key that was generated by a
+            sequence or other mechanism. But if you use a <em class="emphasis">natural key</em> that may
+            change value occasionally, it is more likely that you need to apply cascading updates
+            to dependent tables.
+        </p>
+
+        <p class="para">
+            To declare a cascading relationship in the <span class="classname">Zend_Db_Table</span>, edit
+            the rules in the <var class="varname">$_referenceMap</var>. Set the associative array keys
+            <strong class="command">&#039;onDelete&#039;</strong> and <strong class="command">&#039;onUpdate&#039;</strong> to the string &#039;cascade&#039;
+            (or the constant <b><tt>self::CASCADE</tt></b>). Before a row is deleted from the
+            parent table, or its primary key values updated, any rows in the dependent table that
+            refer to the parent&#039;s row are deleted or updated first.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #12 Example Declaration of Cascading Operations</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                In the example below, rows in the <strong class="command">Bugs</strong> table are automatically
+                deleted if the row in the <strong class="command">Products</strong> table to which they refer is
+                deleted. The <strong class="command">&#039;onDelete&#039;</strong> element of the reference map entry is set
+                to <b><tt>self::CASCADE</tt></b>.
+            </p></div>
+
+            <div class="example-contents"><p>
+                No cascading update is done in the example below if the primary key value in the
+                parent class is changed. The <strong class="command">&#039;onUpdate&#039;</strong> element of the reference
+                map entry is <b><tt>self::RESTRICT</tt></b>. You can get the same result by
+                omitting the <strong class="command">&#039;onUpdate&#039;</strong> entry.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> BugsProducts <span style="color: #000000; font-weight: bold;">extends</span> Zend_Db_Table_Abstract</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; protected <span style="color: #0000ff;">$_referenceMap</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'Product'</span> =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'columns'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refTableClass'</span>&nbsp; &nbsp; &nbsp;=&gt; <span style="color: #ff0000;">'Products'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'refColumns'</span>&nbsp; &nbsp; &nbsp; &nbsp; =&gt; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'product_id'</span><span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'onDelete'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =&gt; self::<span style="color: #006600;">CASCADE</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'onUpdate'</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =&gt; self::<span style="color: #006600;">RESTRICT</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.db.table.relationships.cascading.notes" name="zend.db.table.relationships.cascading.notes"><div class="info"><h1 class="title">Notes Regarding Cascading Operations</h1></div>
+            
+
+            <p class="para">
+                <em class="emphasis">Cascading operations invoked by <span class="classname">Zend_Db_Table</span> are
+                not atomic.</em>
+            </p>
+
+            <p class="para">
+                This means that if your database implements and enforces referential integrity
+                constraints, a cascading <b><tt>UPDATE</tt></b> executed by a
+                <span class="classname">Zend_Db_Table</span> class conflicts with the constraint, and
+                results in a referential integrity violation. You can use cascading
+                <b><tt>UPDATE</tt></b> in <span class="classname">Zend_Db_Table</span>
+                <em class="emphasis">only</em> if your database does not enforce that referential
+                integrity constraint.
+            </p>
+
+            <p class="para">
+                Cascading <b><tt>DELETE</tt></b> suffers less from the problem of referential
+                integrity violations. You can delete dependent rows as a non-atomic action before
+                deleting the parent row that they reference.
+            </p>
+
+            <p class="para">
+                However, for both <b><tt>UPDATE</tt></b> and <b><tt>DELETE</tt></b>,
+                changing the database in a non-atomic way also creates the risk that another
+                database user can see the data in an inconsistent state. For example, if you delete
+                a row and all its dependent rows, there is a small chance that another database
+                client program can query the database after you have deleted the dependent rows, but
+                before you delete the parent row. That client program may see the parent row with no
+                dependent rows, and assume this is the intended state of the data. There is no way
+                for that client to know that its query read the database in the middle of a change.
+            </p>
+
+            <p class="para">
+                The issue of non-atomic change can be mitigated by using transactions to isolate
+                your change. But some <acronym class="acronym">RDBMS</acronym> brands don&#039;t support transactions, or
+                allow clients to read &quot;dirty&quot; changes that have not been committed yet.
+            </p>
+
+            <p class="para">
+                <em class="emphasis">Cascading operations in <span class="classname">Zend_Db_Table</span> are invoked
+                only by <span class="classname">Zend_Db_Table</span>.</em>
+            </p>
+
+            <p class="para">
+                Cascading deletes and updates defined in your <span class="classname">Zend_Db_Table</span>
+                classes are applied if you execute the  <span class="methodname">save()</span> or
+                 <span class="methodname">delete()</span> methods on the Row class. However, if you update
+                or delete data using another interface, such as a query tool or another application,
+                the cascading operations are not applied. Even when using
+                 <span class="methodname">update()</span> and  <span class="methodname">delete()</span> methods
+                in the <span class="classname">Zend_Db_Adapter</span> class, cascading operations defined in
+                your <span class="classname">Zend_Db_Table</span> classes are not executed.
+            </p>
+
+            <p class="para">
+                <em class="emphasis">No Cascading <b><tt>INSERT</tt></b>.</em>
+            </p>
+
+            <p class="para">
+                There is no support for a cascading <b><tt>INSERT</tt></b>. You must insert a
+                row to a parent table in one operation, and insert rows to a dependent table in a
+                separate operation.
+            </p>
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.db.html">Zend_Db</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.db.table.definition.html">Zend_Db_Table_Definition</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.db.html">Zend_Db</a></li>
+  <li><a href="zend.db.adapter.html">Zend_Db_Adapter</a></li>
+  <li><a href="zend.db.statement.html">Zend_Db_Statement</a></li>
+  <li><a href="zend.db.profiler.html">Zend_Db_Profiler</a></li>
+  <li><a href="zend.db.select.html">Zend_Db_Select</a></li>
+  <li><a href="zend.db.table.html">Zend_Db_Table</a></li>
+  <li><a href="zend.db.table.row.html">Zend_Db_Table_Row</a></li>
+  <li><a href="zend.db.table.rowset.html">Zend_Db_Table_Rowset</a></li>
+  <li class="active"><a href="zend.db.table.relationships.html">Zend_Db_Table Relationships</a></li>
+  <li><a href="zend.db.table.definition.html">Zend_Db_Table_Definition</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

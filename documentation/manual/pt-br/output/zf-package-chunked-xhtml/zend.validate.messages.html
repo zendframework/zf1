@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Validation Messages - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.validate.writing_validators.html">Writing Validators</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.validate.html">Zend_Validate</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.version.html">Zend_Version</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.validate.messages" class="section"><div class="info"><h1 class="title">Validation Messages</h1></div>
+    
+
+    <p class="para">
+        Each validator which is based on <span class="classname">Zend_Validate</span> provides
+        one or multiple messages in the case of a failed validation. You can use
+        this information to set your own messages, or to translate existing messages which a
+        validator could return to something different.
+    </p>
+
+    <p class="para">
+        These validation messages are constants which can be found at top of each validator class.
+        Let&#039;s look into <span class="classname">Zend_Validate_GreaterThan</span> for an descriptive example:
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">protected <span style="color: #0000ff;">$_messageTemplates</span> = <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; self::<span style="color: #006600;">NOT_GREATER</span> =&gt; <span style="color: #ff0000;">&quot;'%value%' is not greater than '%min%'&quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+    <p class="para">
+        As you can see the constant <b><tt>self::NOT_GREATER</tt></b> refers to the failure and
+        is used as key, and the message itself is used as value of the message array.
+    </p>
+
+    <p class="para">
+        You can retrieve all message templates from a validator by using the
+         <span class="methodname">getMessageTemplates()</span> method. It returns you the above array which
+        contains all messages a validator could return in the case of a failed validation.
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$validator</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Validate_GreaterThan<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$messages</span>&nbsp; = <span style="color: #0000ff;">$validator</span>-&gt;<span style="color: #006600;">getMessageTemplates</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+    <p class="para">
+        Using the  <span class="methodname">setMessage()</span> method you can set another message to be
+        returned in case of the specified failure.
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$validator</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Validate_GreaterThan<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$validator</span>-&gt;<span style="color: #006600;">setMessage</span><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'Please enter a lower value'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; Zend_Validate_GreaterThan::<span style="color: #006600;">NOT_GREATER</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+    <p class="para">
+        The second parameter defines the failure which will be overridden. When you omit this
+        parameter, then the given message will be set for all possible failures of this validator.
+    </p>
+
+    <div class="section" id="zend.validate.messages.pretranslated" name="zend.validate.messages.pretranslated"><div class="info"><h1 class="title">Using pre-translated validation messages</h1></div>
+        
+
+        <p class="para">
+            Zend Framework is shipped with more than 45 different validators with more than 200
+            failure messages. It can be a tedious task to translate all of these messages. But for
+            your convenience Zend Framework comes with already pre-translated validation messages.
+            You can find them within the path <var class="filename">/resources/languages</var> in your
+            Zend Framework installation.
+        </p>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Used path</b><br /></span>
+            
+
+            
+                The resource files are outside of the library path because all of your translations
+                should also be outside of this path.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            So to translate all validation messages to German for example, all you have to do is to
+            attach a translator to <span class="classname">Zend_Validate</span> using these resource files.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$translator</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Translate<span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'adapter'</span> =&gt; <span style="color: #ff0000;">'array'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'content'</span> =&gt; <span style="color: #ff0000;">'/resources/languages'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'locale'</span>&nbsp; =&gt; <span style="color: #0000ff;">$language</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff0000;">'scan'</span> =&gt; Zend_Translate::<span style="color: #006600;">LOCALE_DIRECTORY</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#41;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Validate_Abstract::<span style="color: #006600;">setDefaultTranslator</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$translator</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Used translation adapter</b><br /></span>
+            
+
+            
+                As translation adapter Zend Framework chose the array adapter. It is simple to
+                edit and created very fast.
+            <br />
+        </p></blockquote>
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Supported languages</b><br /></span>
+            
+
+            
+                This feature is very young, so the amount of supported languages may not be
+                complete. New languages will be added with each release. Additionally feel free to
+                use the existing resource files to make your own translations.
+            <br />
+
+            
+                You could also use these resource files to rewrite existing translations. So you
+                are not in need to create these files manually yourself.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.validate.messages.limitation" name="zend.validate.messages.limitation"><div class="info"><h1 class="title">Limit the size of a validation message</h1></div>
+        
+
+        <p class="para">
+            Sometimes it is necessary to limit the maximum size a validation message can have.
+            For example when your view allows a maximum size of 100 chars to be rendered on one
+            line. To simplify the usage, <span class="classname">Zend_Validate</span> is able to
+            automatically limit the maximum returned size of a validation message.
+        </p>
+
+        <p class="para">
+            To get the actual set size use
+             <span class="methodname">Zend_Validate::getMessageLength()</span>. If it is -1, then the
+            returned message will not be truncated. This is default behaviour.
+        </p>
+
+        <p class="para">
+            To limit the returned message size use
+             <span class="methodname">Zend_Validate::setMessageLength()</span>. Set it to any integer size
+            you need. When the returned message exceeds the set size, then the message
+            will be truncated and the string &#039;<em class="emphasis">...</em>&#039; will be added instead of
+            the rest of the message.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">Zend_Validate::<span style="color: #006600;">setMessageLength</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">100</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Where is this parameter used?</b><br /></span>
+            
+
+            
+                The set message length is used for all validators, even for self defined ones,
+                as long as they extend <span class="classname">Zend_Validate_Abstract</span>.
+            <br />
+        </p></blockquote>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.validate.writing_validators.html">Writing Validators</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.validate.html">Zend_Validate</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.version.html">Zend_Version</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.validate.html">Zend_Validate</a></li>
+  <li><a href="zend.validate.introduction.html">Introduction</a></li>
+  <li><a href="zend.validate.set.html">Standard Validation Classes</a></li>
+  <li><a href="zend.validate.validator_chains.html">Validator Chains</a></li>
+  <li><a href="zend.validate.writing_validators.html">Writing Validators</a></li>
+  <li class="active"><a href="zend.validate.messages.html">Validation Messages</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

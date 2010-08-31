@@ -1,0 +1,1255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Service_Twitter - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.service.technorati.html">Zend_Service_Technorati</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.service.html">Zend_Service</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.service.windowsazure.html">Zend_Service_WindowsAzure</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.service.twitter" class="section"><div class="info"><h1 class="title">Zend_Service_Twitter</h1></div>
+    
+
+    <div class="section" id="zend.service.twitter.introduction" name="zend.service.twitter.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Service_Twitter</span> provides a client for the
+            <a href="http://apiwiki.twitter.com/Twitter-API-Documentation" class="link external">&raquo; Twitter
+            <acronym class="acronym">REST</acronym> <acronym class="acronym">API</acronym></a>.
+            <span class="classname">Zend_Service_Twitter</span> allows you to query the public timeline. If
+            you provide a username and OAuth details for Twitter, it will allow you to get and update
+            your status, reply to friends, direct message friends, mark tweets as favorite, and
+            much more.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Service_Twitter</span> implements a <acronym class="acronym">REST</acronym>
+            service, and all methods return an instance of
+            <span class="classname">Zend_Rest_Client_Result</span>.
+        </p>
+
+        <p class="para">
+            <span class="classname">Zend_Service_Twitter</span> is broken up into subsections so you can
+            easily identify which type of call is being requested.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">account</code> makes sure that your account credentials are valid, checks
+                    your <acronym class="acronym">API</acronym> rate limit, and ends the current session for the
+                    authenticated user.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">status</code> retrieves the public and user timelines and
+                    shows, updates, destroys, and retrieves replies for the authenticated user.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">user</code> retrieves friends and followers for the authenticated user
+                    and returns extended information about a passed user.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">directMessage</code> retrieves the authenticated user&#039;s received direct
+                    messages, deletes direct messages, and sends new direct messages.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">friendship</code> creates and removes friendships for the
+                    authenticated user.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">favorite</code> lists, creates, and removes favorite tweets.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">block</code> blocks and unblocks users from following you.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.authentication" name="zend.service.twitter.authentication"><div class="info"><h1 class="title">Authentication</h1></div>
+        
+
+        <p class="para">
+            With the exception of fetching the public timeline,
+            <span class="classname">Zend_Service_Twitter</span> requires authentication as a valid
+            user. This is achieved using the OAuth authentication protocol. OAuth is
+            the only supported authentication mode for Twitter as of August 2010. The OAuth
+            implementation used by <span class="classname">Zend_Service_Twitter</span> is
+            <span class="classname">Zend_Oauth</span>.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Creating the Twitter Class</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                <span class="classname">Zend_Service_Twitter</span> must authorize itself, on behalf of a user, before use with the
+                Twitter API (except for public timeline). This must be accomplished using OAuth since
+                Twitter has disabled it&#039;s basic HTTP authentication as of August 2010.
+            </p></div>
+
+            <div class="example-contents"><p>
+                There are two options to establishing authorization. The first is to implement the
+                workflow of <span class="classname">Zend_Oauth</span> via <span class="classname">Zend_Service_Twitter</span>
+                which proxies to an internal <span class="classname">Zend_Oauth_Consumer</span> object. Please refer to
+                the <span class="classname">Zend_Oauth</span> documentation for a full example of this
+                workflow - you can call all documented <span class="classname">Zend_Oauth_Consumer</span> methods
+                on <span class="classname">Zend_Service_Twitter</span> including constructor options. You may also
+                use <span class="classname">Zend_Oauth</span> directly and only pass the resulting access
+                token into <span class="classname">Zend_Service_Twitter</span>. This is the normal workflow
+                once you have established a reusable access token for a particular Twitter user. The resulting OAuth
+                access token should be stored to a database for future use (otherwise you will need to
+                authorize for every new instance of <span class="classname">Zend_Service_Twitter</span>). Bear in mind
+                that authorization via OAuth results in your user being redirected to Twitter to give their
+                consent to the requested authorization (this is not repeated for stored access tokens). This will
+                require additional work (i.e. redirecting users and hosting a callback URL) over the previous
+                HTTP authentication mechanism where a user just
+                needed to allow applications to store their username and password.
+            </p></div>
+
+            <div class="example-contents"><p>The following example demonstrates setting up <span class="classname">Zend_Service_Twitter</span>
+            which is given an already established OAuth access token. Please refer to the <span class="classname">Zend_Oauth</span>
+            documentation to understand the workflow involved. The access token is a serializable object, so you may
+            store the serialized object to a database, and unserialize it at retrieval time before passing the objects
+            into <span class="classname">Zend_Service_Twitter</span>. The <span class="classname">Zend_Oauth</span> documentation
+            demonstrates the workflow and objects involved.</p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * We assume $serializedToken is the serialized token retrieved from a database</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * or even $_SESSION (if following the simple Zend_Oauth documented example)</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$token</span> = <a href="http://www.php.net/unserialize"><span style="color: #000066;">unserialize</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$serializedToken</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// verify user's credentials with Twitter</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">account</span>-&gt;<span style="color: #006600;">verifyCredentials</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <blockquote><p><b class="note">Note</b>: 
+            
+                In order to authenticate with Twitter, ALL applications MUST be registered with
+                Twitter in order to receive a Consumer Key and Consumer Secret to be used when
+                authenticating with OAuth. This can not be reused across multiple applications -
+                you must register each new application separately. Twitter access tokens have
+                no expiry date, so storing them to a database is advised (they can, of course,
+                be refreshed simply be repeating the OAuth authorization process). This can only
+                be done while interacting with the user associated with that access token.
+            <br />
+
+            
+                The previous pre-OAuth version of <span class="classname">Zend_Service_Twitter</span>
+                allowed passing in a username as the first parameter rather than within an array.
+                This is no longer supported.
+            <br />
+        </p></blockquote>
+    </div>
+
+    <div class="section" id="zend.service.twitter.account" name="zend.service.twitter.account"><div class="info"><h1 class="title">Account Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">verifyCredentials()</span> tests if supplied user
+                    credentials are valid with minimal overhead.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #2 Verifying credentials</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">account</span>-&gt;<span style="color: #006600;">verifyCredentials</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">endSession()</span> signs users out of
+                    client-facing applications.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #3 Sessions ending</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">account</span>-&gt;<span style="color: #006600;">endSession</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">rateLimitStatus()</span> returns the remaining number of
+                    <acronym class="acronym">API</acronym> requests available to the authenticating user
+                    before the <acronym class="acronym">API</acronym> limit is reached for the current hour.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #4 Rating limit status</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">account</span>-&gt;<span style="color: #006600;">rateLimitStatus</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.status" name="zend.service.twitter.status"><div class="info"><h1 class="title">Status Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">publicTimeline()</span> returns the 20 most recent statuses
+                    from non-protected users with a custom user icon. The public timeline is cached
+                    by Twitter for 60 seconds.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #5 Retrieving public timeline</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">publicTimeline</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">friendsTimeline()</span> returns the 20 most recent statuses
+                    posted by the authenticating user and that user&#039;s friends.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #6 Retrieving friends timeline</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">friendsTimeline</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">friendsTimeline()</span> method accepts an array of
+                    optional parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">userTimeline()</span> returns the 20 most recent statuses
+                    posted from the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #7 Retrieving user timeline</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">userTimeline</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">userTimeline()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">id</code> specifies the ID or screen name of the user for whom to
+                            return the friends_timeline.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">count</code> specifies the number of statuses to retrieve.
+                            May not be greater than 200.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">show()</span> returns a single status, specified by the
+                    <code class="code">id</code> parameter below. The status&#039; author will be returned inline.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #8 Showing user status</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">show</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">1234</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">update()</span> updates the authenticating user&#039;s status.
+                    This method requires that you pass in the status update that you want to post
+                    to Twitter.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #9 Updating user status</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">update</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'My Great Tweet'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">update()</span> method accepts a second additional
+                    parameter.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">in_reply_to_status_id</code> specifies the ID of an existing
+                            status that the status to be posted is in reply to.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">replies()</span> returns the 20 most recent @replies (status
+                    updates prefixed with @username) for the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #10 Showing user replies</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">replies</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">replies()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since_id</code> returns only statuses with an ID greater than
+                            (that is, more recent than) the specified ID.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">destroy()</span> destroys the status specified by the
+                    required <code class="code">id</code> parameter.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #11 Deleting user status</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">status</span>-&gt;<span style="color: #006600;">destroy</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">12345</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+     <div class="section" id="zend.service.twitter.user" name="zend.service.twitter.user"><div class="info"><h1 class="title">User Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">friends()</span>r eturns up to 100 of the authenticating
+                    user&#039;s friends who have most recently updated, each with current status inline.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #12 Retrieving user friends</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">user</span>-&gt;<span style="color: #006600;">friends</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">friends()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">id</code> specifies the ID or screen name of the user for whom to
+                            return a list of friends.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">followers()</span> returns the authenticating user&#039;s
+                    followers, each with current status inline.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #13 Retrieving user followers</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">user</span>-&gt;<span style="color: #006600;">followers</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">followers()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">id</code> specifies the ID or screen name of the user for whom to
+                            return a list of followers.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">show()</span> returns extended information of a given user,
+                    specified by ID or screen name as per the required <code class="code">id</code>
+                    parameter below.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #14 Showing user informations</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">user</span>-&gt;<span style="color: #006600;">show</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myfriend'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.directmessage" name="zend.service.twitter.directmessage"><div class="info"><h1 class="title">Direct Message Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">messages()</span> returns a list of the 20 most recent direct
+                    messages sent to the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #15 Retrieving recent direct messages received</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">directMessage</span>-&gt;<span style="color: #006600;">messages</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">message()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since_id</code> returns only direct messages with an ID greater
+                            than (that is, more recent than) the specified ID.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">sent()</span> returns a list of the 20 most recent direct
+                    messages sent by the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #16 Retrieving recent direct messages sent</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">directMessage</span>-&gt;<span style="color: #006600;">sent</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">sent()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since_id</code> returns only direct messages with an ID greater
+                            than (that is, more recent than) the specified ID.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">since</code> narrows the returned results to just those statuses
+                            created after the specified date/time (up to 24 hours old).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">new()</span> sends a new direct message to the specified user
+                    from the authenticating user. Requires both the user and text parameters below.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #17 Sending direct message</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">directMessage</span>-&gt;<span style="color: #006600;">new</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myfriend'</span>, <span style="color: #ff0000;">'mymessage'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">destroy()</span> destroys the direct message specified in the
+                    required <code class="code">id</code> parameter. The authenticating user must be the
+                    recipient of the specified direct message.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #18 Deleting direct message</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">directMessage</span>-&gt;<span style="color: #006600;">destroy</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">123548</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.friendship" name="zend.service.twitter.friendship"><div class="info"><h1 class="title">Friendship Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">create()</span> befriends the user specified in the
+                    <code class="code">id</code> parameter with the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #19 Creating friend</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">friendship</span>-&gt;<span style="color: #006600;">create</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'mynewfriend'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">destroy()</span> discontinues friendship with the user
+                    specified in the <code class="code">id</code> parameter and the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #20 Deleting friend</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">friendship</span>-&gt;<span style="color: #006600;">destroy</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myoldfriend'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">exists()</span> tests if a friendship exists between the
+                    user specified in the <code class="code">id</code> parameter and the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #21 Checking friend existence</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">friendship</span>-&gt;<span style="color: #006600;">exists</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myfriend'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.favorite" name="zend.service.twitter.favorite"><div class="info"><h1 class="title">Favorite Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">favorites()</span> returns the 20 most recent favorite
+                    statuses for the authenticating user or user specified by the
+                    <code class="code">id</code> parameter.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #22 Retrieving favorites</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">favorite</span>-&gt;<span style="color: #006600;">favorites</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">favorites()</span> method accepts an array of optional
+                    parameters to modify the query.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">id</code> specifies the ID or screen name of the user for whom to
+                            request a list of favorite statuses.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page you want to return.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">create()</span> favorites the status specified in the
+                    <code class="code">id</code> parameter as the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #23 Creating favorites</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">favorite</span>-&gt;<span style="color: #006600;">create</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">12351</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">destroy()</span> un-favorites the status specified in the
+                    <code class="code">id</code> parameter as the authenticating user.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #24 Deleting favorites</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">favorite</span>-&gt;<span style="color: #006600;">destroy</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">12351</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.block" name="zend.service.twitter.block"><div class="info"><h1 class="title">Block Methods</h1></div>
+        
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">exists()</span> checks if the authenticating user is blocking
+                    a target user and can optionally return the blocked user&#039;s object if a
+                    block does exists.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #25 Checking if block exists</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// returns true or false</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">exists</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'blockeduser'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// returns the blocked user's info if the user is blocked</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response2</span> = <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">exists</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'blockeduser'</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">favorites()</span> method accepts a second
+                    optional parameter.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">returnResult</code> specifies whether or not return the user
+                            object instead of just <b><tt>TRUE</tt></b> or
+                            <b><tt>FALSE</tt></b>.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">create()</span> blocks the user specified in the
+                    <code class="code">id</code> parameter as the authenticating user and destroys a friendship
+                    to the blocked user if one exists. Returns the blocked user in the requested
+                    format when successful.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #26 Blocking a user</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">create</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'usertoblock);</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #ff0000;"</span></div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">destroy()</span> un-blocks the user specified in the
+                    <code class="code">id</code> parameter for the authenticating user. Returns the un-blocked
+                    user in the requested format when successful.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #27 Removing a block</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span>&nbsp; &nbsp;= <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">destroy</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'blockeduser'</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">blocking()</span> returns an array of user objects that the
+                    authenticating user is blocking.
+                </p>
+
+                <div class="example"><div class="info"><p><b>Example #28 Who are you blocking</b></p></div>
+                    
+
+                    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitter</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter<span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'username'</span> =&gt; <span style="color: #ff0000;">'johndoe'</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #ff0000;">'accessToken'</span> =&gt; <span style="color: #0000ff;">$token</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// return the full user list from the first page</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">blocking</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// return an array of numeric user IDs from the second page</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response2</span> = <span style="color: #0000ff;">$twitter</span>-&gt;<span style="color: #006600;">block</span>-&gt;<span style="color: #006600;">blocking</span><span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">2</span>, <span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+                </div>
+
+                <p class="para">
+                    The  <span class="methodname">favorites()</span> method accepts two optional parameters.
+                </p>
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">page</code> specifies which page ou want to return. A single page
+                            contains 20 IDs.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <code class="code">returnUserIds</code> specifies whether to return an array of
+                            numeric user IDs the authenticating user is blocking instead of an
+                            array of user objects.
+                        </p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.search" name="zend.service.twitter.search"><div class="info"><h1 class="title">Zend_Service_Twitter_Search</h1></div>
+    
+
+    <div class="section" id="zend.service.twitter.search.introduction" name="zend.service.twitter.search.introduction"><div class="info"><h1 class="title">Introduction</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Service_Twitter_Search</span> provides a client for the
+            <a href="http://apiwiki.twitter.com/Search+API+Documentation" class="link external">&raquo; Twitter Search
+            <acronym class="acronym">API</acronym></a>. The Twitter Search service is use to search Twitter.
+            Currently, it only returns data in Atom or <acronym class="acronym">JSON</acronym> format, but a full
+            <acronym class="acronym">REST</acronym> service is in the future, which will support
+            <acronym class="acronym">XML</acronym> responses.
+        </p>
+    </div>
+
+    <div class="section" id="zend.service.twitter.search.trends" name="zend.service.twitter.search.trends"><div class="info"><h1 class="title">Twitter Trends</h1></div>
+        
+
+        <p class="para">
+            Returns the top ten queries that are currently trending on Twitter. The response
+            includes the time of the request, the name of each trending topic, and the url to the
+            Twitter Search results page for that topic. Currently the search <acronym class="acronym">API</acronym>
+            for trends only supports a <acronym class="acronym">JSON</acronym> return so the function returns
+            an array.
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitterSearch</span>&nbsp; = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter_Search<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitterTrends</span>&nbsp; = <span style="color: #0000ff;">$twitterSearch</span>-&gt;<span style="color: #006600;">trends</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$twitterTrends</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$trend</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/print"><span style="color: #000066;">print</span></a> <span style="color: #0000ff;">$trend</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'name'</span><span style="color: #66cc66;">&#93;</span> . <span style="color: #ff0000;">' - '</span> . <span style="color: #0000ff;">$trend</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'url'</span><span style="color: #66cc66;">&#93;</span> . PHP_EOL</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+
+        <p class="para">
+            The return array has two values in it:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">name</code> is the name of trend.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">url</code> is the <acronym class="acronym">URL</acronym> to see the tweets for
+                    that trend.
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section" id="zend.service.twitter.search.search" name="zend.service.twitter.search.search"><div class="info"><h1 class="title">Searching Twitter</h1></div>
+        
+
+        <p class="para">
+            Using the search method returns tweets that match a specific query. There are a number
+            of <a href="http://search.twitter.com/operators" class="link external">&raquo; Search Operators</a> that you
+            can use to query with.
+        </p>
+
+        <p class="para">
+            The search method can accept six different optional <acronym class="acronym">URL</acronym> parameters
+            passed in as an array:
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">lang</code> restricts the tweets to a given language. <code class="code">lang</code>
+                    must be given by an
+                    <a href="http://en.wikipedia.org/wiki/ISO_639-1" class="link external">&raquo; ISO 639-1 code</a>.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">rpp</code> is the number of tweets to return per page, up to a maximum
+                    of 100.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">page</code> specifies the page number to return, up to a maximum of
+                    roughly 1500 results (based on rpp * page).
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">since_id</code> returns tweets with status IDs greater than the given ID.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">show_user</code> specifies whether to add &quot;&gt;user&lt;:&quot; to the
+                    beginning of the tweet. This is useful for readers that do not display Atom&#039;s
+                    author field. The default is &quot;<b><tt>FALSE</tt></b>&quot;.
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    <code class="code">geocode</code> returns tweets by users located within a given radius of
+                    the given latitude/longitude, where the user&#039;s location is taken from their
+                    Twitter profile. The parameter value is specified by
+                    &quot;latitude,longitude,radius&quot;, where radius units must be specified as either
+                    &quot;mi&quot; (miles) or &quot;km&quot; (kilometers).
+                </p>
+            </li>
+        </ul>
+
+        <div class="example"><div class="info"><p><b>Example #29 JSON Search Example</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                The following code sample will return an array with the search results.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitterSearch</span>&nbsp; = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter_Search<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'json'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$searchResults</span>&nbsp; = <span style="color: #0000ff;">$twitterSearch</span>-&gt;<span style="color: #006600;">search</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'zend'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'lang'</span> =&gt; <span style="color: #ff0000;">'en'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="example"><div class="info"><p><b>Example #30 ATOM Search Example</b></p></div>
+            
+
+            <div class="example-contents"><p>
+                The following code sample will return a <span class="classname">Zend_Feed_Atom</span>
+                object.
+            </p></div>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$twitterSearch</span>&nbsp; = <span style="color: #000000; font-weight: bold;">new</span> Zend_Service_Twitter_Search<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'atom'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$searchResults</span>&nbsp; = <span style="color: #0000ff;">$twitterSearch</span>-&gt;<span style="color: #006600;">search</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'zend'</span>, <a href="http://www.php.net/array"><span style="color: #000066;">array</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'lang'</span> =&gt; <span style="color: #ff0000;">'en'</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.service.twitter.search.accessors" name="zend.service.twitter.search.accessors"><div class="info"><h1 class="title">Zend-specific Accessor Methods</h1></div>
+        
+
+        <p class="para">
+            While the Twitter Search <acronym class="acronym">API</acronym> only specifies two methods,
+            <span class="classname">Zend_Service_Twitter_Search</span> has additional methods that may be
+            used for retrieving and modifying internal properties.
+        </p>
+
+        <ul class="itemizedlist">
+            <li class="listitem">
+                <p class="para">
+                     <span class="methodname">getResponseType()</span> and
+                     <span class="methodname">setResponseType()</span>
+                    allow you to retrieve and modify the response type of the search between
+                    <acronym class="acronym">JSON</acronym> and Atom.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.service.technorati.html">Zend_Service_Technorati</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.service.html">Zend_Service</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.service.windowsazure.html">Zend_Service_WindowsAzure</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.service.html">Zend_Service</a></li>
+  <li><a href="zend.service.introduction.html">Introdu&ccedil;&atilde;o</a></li>
+  <li><a href="zend.service.akismet.html">Zend_Service_Akismet</a></li>
+  <li><a href="zend.service.amazon.html">Zend_Service_Amazon</a></li>
+  <li><a href="zend.service.amazon.ec2.html">Zend_Service_Amazon_Ec2</a></li>
+  <li><a href="zend.service.amazon.ec2.instance.html">Zend_Service_Amazon_Ec2: Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.windows.instance.html">Zend_Service_Amazon_Ec2: Windows Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.reserved.instance.html">Zend_Service_Amazon_Ec2: Reserved Instances</a></li>
+  <li><a href="zend.service.amazon.ec2.cloudwatch.html">Zend_Service_Amazon_Ec2: CloudWatch Monitoring</a></li>
+  <li><a href="zend.service.amazon.ec2.images.html">Zend_Service_Amazon_Ec2: Amazon Machine Images (AMI)</a></li>
+  <li><a href="zend.service.amazon.ec2.ebs.html">Zend_Service_Amazon_Ec2: Elastic Block Storage (EBS)</a></li>
+  <li><a href="zend.service.amazon.ec2.elasticip.html">Zend_Service_Amazon_Ec2: Elastic IP Addresses</a></li>
+  <li><a href="zend.service.amazon.ec2.keypairs.html">Zend_Service_Amazon_Ec2: Keypairs</a></li>
+  <li><a href="zend.service.amazon.ec2.zones.html">Zend_Service_Amazon_Ec2: Regions and Availability Zones</a></li>
+  <li><a href="zend.service.amazon.ec2.securitygroups.html">Zend_Service_Amazon_Ec2: Security Groups</a></li>
+  <li><a href="zend.service.amazon.s3.html">Zend_Service_Amazon_S3</a></li>
+  <li><a href="zend.service.amazon.sqs.html">Zend_Service_Amazon_Sqs</a></li>
+  <li><a href="zend.service.audioscrobbler.html">Zend_Service_Audioscrobbler</a></li>
+  <li><a href="zend.service.delicious.html">Zend_Service_Delicious</a></li>
+  <li><a href="zend.service.developergarden.html">Zend_Service_DeveloperGarden</a></li>
+  <li><a href="zend.service.flickr.html">Zend_Service_Flickr</a></li>
+  <li><a href="zend.service.livedocx.html">Zend_Service_LiveDocx</a></li>
+  <li><a href="zend.service.nirvanix.html">Zend_Service_Nirvanix</a></li>
+  <li><a href="zend.service.recaptcha.html">Zend_Service_ReCaptcha</a></li>
+  <li><a href="zend.service.simpy.html">Zend_Service_Simpy</a></li>
+  <li><a href="zend.service.slideshare.html">Zend_Service_SlideShare</a></li>
+  <li><a href="zend.service.strikeiron.html">Zend_Service_StrikeIron</a></li>
+  <li><a href="zend.service.strikeiron.bundled-services.html">Zend_Service_StrikeIron: Bundled Services</a></li>
+  <li><a href="zend.service.strikeiron.advanced-uses.html">Zend_Service_StrikeIron: Advanced Uses</a></li>
+  <li><a href="zend.service.technorati.html">Zend_Service_Technorati</a></li>
+  <li class="active"><a href="zend.service.twitter.html">Zend_Service_Twitter</a></li>
+  <li><a href="zend.service.windowsazure.html">Zend_Service_WindowsAzure</a></li>
+  <li><a href="zend.service.windowsazure.storage.blob.html">Zend_Service_WindowsAzure_Storage_Blob</a></li>
+  <li><a href="zend.service.windowsazure.diagnostics.manager.html">Zend_Service_WindowsAzure_Diagnostics_Manager</a></li>
+  <li><a href="zend.service.windowsazure.storage.queue.html">Zend_Service_WindowsAzure_Storage_Queue</a></li>
+  <li><a href="zend.service.windowsazure.storage.table.html">Zend_Service_WindowsAzure_Storage_Table</a></li>
+  <li><a href="zend.service.yahoo.html">Zend_Service_Yahoo</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

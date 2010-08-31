@@ -1,0 +1,523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Zend_Soap_Server - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.soap.html">Zend_Soap</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.soap.html">Zend_Soap</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.soap.client.html">Zend_Soap_Client</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.soap.server" class="section"><div class="info"><h1 class="title">Zend_Soap_Server</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Soap_Server</span> class is intended to simplify Web Services server
+        part development for <acronym class="acronym">PHP</acronym> programmers.
+    </p>
+
+    <p class="para">
+        It may be used in WSDL or non-WSDL mode, and using classes or functions to define Web
+        Service <acronym class="acronym">API</acronym>.
+    </p>
+
+    <p class="para">
+        When <span class="classname">Zend_Soap_Server</span> component works in the WSDL mode, it uses
+        already prepared WSDL document to define server object behavior and transport layer options.
+    </p>
+
+    <p class="para">
+        WSDL document may be auto-generated with functionality provided by <a href="zend.soap.autodiscovery.html#zend.soap.autodiscovery.introduction" class="link">Zend_Soap_AutoDiscovery component</a>
+        or should be constructed manually using <a href="zend.soap.wsdl.html" class="link"><span class="classname">Zend_Soap_Wsdl</span> class</a> or any other
+        <acronym class="acronym">XML</acronym> generating tool.
+    </p>
+
+    <p class="para">
+        If the non-WSDL mode is used, then all protocol options have to be set using options
+        mechanism.
+    </p>
+
+    <div class="section" id="zend.soap.server.constructor" name="zend.soap.server.constructor"><div class="info"><h1 class="title">Zend_Soap_Server constructor</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> constructor should be used a bit differently for
+            WSDL and non-WSDL modes.
+        </p>
+
+        <div class="section" id="zend.soap.server.constructor.wsdl_mode" name="zend.soap.server.constructor.wsdl_mode"><div class="info"><h1 class="title">Zend_Soap_Server constructor for the WSDL mode</h1></div>
+            
+
+            <p class="para">
+                <span class="classname">Zend_Soap_Server</span> constructor takes two optional parameters
+                when it works in WSDL mode:
+
+                <ol type="1">
+                    <li class="listitem">
+                        <p class="para">
+                            <var class="varname">$wsdl</var>, which is an <acronym class="acronym">URI</acronym> of a WSDL
+                            file
+
+                            <a href="#fnid1" name="fn1"><sup>[1]</sup></a>
+                                 <span class="methodname">setWsdl($wsdl)</span>
+                            .
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            <var class="varname">$options</var> - options to create <acronym class="acronym">SOAP</acronym>
+                            server object
+
+                            <a href="#fnid2" name="fn2"><sup>[2]</sup></a>
+                                 <span class="methodname">setOptions($options)</span>
+                            .
+                        </p>
+
+                        <p class="para">
+                            The following options are recognized in the WSDL mode:
+
+                            <ul class="itemizedlist">
+                                <li class="listitem">
+                                    <p class="para">
+                                        &#039;soap_version&#039; (&#039;soapVersion&#039;) - soap version to use
+                                        (SOAP_1_1 or <acronym class="acronym">SOAP</acronym>_1_2).
+                                    </p>
+                                </li>
+
+                                <li class="listitem">
+                                    <p class="para">
+                                        &#039;actor&#039; - the actor <acronym class="acronym">URI</acronym> for the server.
+                                    </p>
+                                </li>
+
+                                <li class="listitem">
+                                    <p class="para">
+                                        &#039;classmap&#039; (&#039;classMap&#039;) which can be used to map some WSDL
+                                        types to <acronym class="acronym">PHP</acronym> classes.
+                                    </p>
+
+                                    <p class="para">
+                                        The option must be an array with WSDL types as keys and
+                                        names of <acronym class="acronym">PHP</acronym> classes as values.
+                                    </p>
+                                </li>
+
+                                <li class="listitem">
+                                    <p class="para">
+                                        &#039;encoding&#039; - internal character encoding (UTF-8 is always
+                                        used as an external encoding).
+                                    </p>
+                                </li>
+
+                                <li class="listitem">
+                                    <p class="para">
+                                        &#039;wsdl&#039; which is equivalent to
+                                         <span class="methodname">setWsdl($wsdlValue)</span> call.
+                                    </p>
+                                </li>
+                            </ul>
+                        </p>
+                    </li>
+                </ol>
+            </p>
+        </div>
+
+        <div class="section" id="zend.soap.server.wsdl_mode" name="zend.soap.server.wsdl_mode"><div class="info"><h1 class="title">Zend_Soap_Server constructor for the non-WSDL mode</h1></div>
+            
+
+            <p class="para">
+                The first constructor parameter <em class="emphasis">must</em> be set to
+                <b><tt>NULL</tt></b> if you plan to use <span class="classname">Zend_Soap_Server</span>
+                functionality in non-WSDL mode.
+            </p>
+
+            <p class="para">
+                You also have to set &#039;uri&#039; option in this case (see below).
+            </p>
+
+            <p class="para">
+                The second constructor parameter (<var class="varname">$options</var>) is an array with
+                options to create <acronym class="acronym">SOAP</acronym> server object
+
+                <a href="#fnid3" name="fn3"><sup>[3]</sup></a>
+                     <span class="methodname">setOptions($options)</span>
+                .
+            </p>
+
+            <p class="para">
+                The following options are recognized in the non-WSDL mode:
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            &#039;soap_version&#039; (&#039;soapVersion&#039;) - soap version to use (SOAP_1_1 or
+                            <acronym class="acronym">SOAP</acronym>_1_2).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            &#039;actor&#039; - the actor <acronym class="acronym">URI</acronym> for the server.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            &#039;classmap&#039; (&#039;classMap&#039;) which can be used to map some WSDL types to
+                            <acronym class="acronym">PHP</acronym> classes.
+                        </p>
+
+                        <p class="para">
+                            The option must be an array with WSDL types as keys and names of
+                            <acronym class="acronym">PHP</acronym> classes as values.
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            &#039;encoding&#039; - internal character encoding (UTF-8 is always used as an
+                            external encoding).
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            &#039;uri&#039; (required) - <acronym class="acronym">URI</acronym> namespace for
+                            <acronym class="acronym">SOAP</acronym> server.
+                        </p>
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+
+    <div class="section" id="zend.soap.server.api_define_methods" name="zend.soap.server.api_define_methods"><div class="info"><h1 class="title">Methods to define Web Service API</h1></div>
+        
+
+        <p class="para">
+            There are two ways to define Web Service <acronym class="acronym">API</acronym> when your want to give
+            access to your <acronym class="acronym">PHP</acronym> code through <acronym class="acronym">SOAP</acronym>.
+        </p>
+
+        <p class="para">
+            The first one is to attach some class to the <span class="classname">Zend_Soap_Server</span>
+            object which has to completely describe Web Service <acronym class="acronym">API</acronym>:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">class</span> MyClass <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* This method takes ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param integer $inputParam</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @return string</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> method1<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$inputParam</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* This method takes ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param integer $inputParam1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @param string&nbsp; $inputParam2</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;* @return float</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">&nbsp; &nbsp; &nbsp;*/</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">public</span> <span style="color: #000000; font-weight: bold;">function</span> method2<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$inputParam1</span>, <span style="color: #0000ff;">$inputParam2</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; &nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">null</span>, <span style="color: #0000ff;">$options</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Bind Class to Soap Server</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setClass</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'MyClass'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Bind already initialized object to Soap Server</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setObject</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">new</span> MyClass<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Important!</b><br /></span>
+            
+
+            
+                You should completely describe each method using method docblock if you plan to
+                use autodiscover functionality to prepare corresponding Web Service WSDL.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            The second method of defining Web Service <acronym class="acronym">API</acronym> is using set of
+            functions and  <span class="methodname">addFunction()</span> or
+             <span class="methodname">loadFunctions()</span> methods:
+        </p>
+
+        <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * This function ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> *</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @param integer $inputParam</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @return string</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">function</span> function1<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$inputParam</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">/**</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * This function ...</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> *</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @param integer $inputParam1</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @param string&nbsp; $inputParam2</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> * @return float</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;"> */</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #000000; font-weight: bold;">function</span> function2<span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$inputParam1</span>, <span style="color: #0000ff;">$inputParam2</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; ...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">null</span>, <span style="color: #0000ff;">$options</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addFunction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'function1'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">addFunction</span><span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'function2'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+    </div>
+
+    <div class="section" id="zend.soap.server.request_response" name="zend.soap.server.request_response"><div class="info"><h1 class="title">Request and response objects handling</h1></div>
+        
+
+        <blockquote><p><b class="note">Note</b>: <span class="info"><b>Advanced</b><br /></span>
+            
+
+            
+                This section describes advanced request/response processing options and may be
+                skipped.
+            <br />
+        </p></blockquote>
+
+        <p class="para">
+            <span class="classname">Zend_Soap_Server</span> component performs request/response processing
+            automatically, but allows to catch it and do some pre- and post-processing.
+        </p>
+
+        <div class="section" id="zend.soap.server.request_response.request" name="zend.soap.server.request_response.request"><div class="info"><h1 class="title">Request processing</h1></div>
+            
+
+            <p class="para">
+                 <span class="methodname">Zend_Soap_Server::handle()</span> method takes request from the
+                standard input stream (&#039;php://input&#039;). It may be overridden either by supplying
+                optional parameter to the  <span class="methodname">handle()</span> method or by setting
+                request using  <span class="methodname">setRequest()</span> method:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span>...<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set request using optional $request parameter</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$request</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Set request using setRequest() method</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Request object may be represented using any of the following:
+
+                <ul class="itemizedlist">
+                    <li class="listitem">
+                        <p class="para">
+                            DOMDocument (casted to <acronym class="acronym">XML</acronym>)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            DOMNode (owner document is grabbed and casted to <acronym class="acronym">XML</acronym>)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            SimpleXMLElement (casted to <acronym class="acronym">XML</acronym>)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            stdClass (__toString() is called and verified to be valid
+                            <acronym class="acronym">XML</acronym>)
+                        </p>
+                    </li>
+
+                    <li class="listitem">
+                        <p class="para">
+                            string (verified to be valid <acronym class="acronym">XML</acronym>)
+                        </p>
+                    </li>
+                </ul>
+            </p>
+
+            <p class="para">
+                Last processed request may be retrieved using
+                 <span class="methodname">getLastRequest()</span> method as an <acronym class="acronym">XML</acronym>
+                string:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span>...<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$request</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getLastRequest</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <div class="section" id="zend.soap.server.request_response.response" name="zend.soap.server.request_response.response"><div class="info"><h1 class="title">Response pre-processing</h1></div>
+            
+
+            <p class="para">
+                 <span class="methodname">Zend_Soap_Server::handle()</span> method automatically emits
+                generated response to the output stream. It may be blocked using
+                 <span class="methodname">setReturnResponse()</span> with <b><tt>TRUE</tt></b> or
+                <b><tt>FALSE</tt></b> as a parameter
+
+                <a href="#fnid4" name="fn4"><sup>[4]</sup></a>
+                     <span class="methodname">setReturnResponse()</span>
+                .
+
+                Generated response is returned by  <span class="methodname">handle()</span> method in this
+                case.
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span>...<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// Get a response as a return value of handle() method</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// instead of emitting it to the standard output</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">setReturnResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #000000; font-weight: bold;">true</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li></ol></div></div></div>
+
+
+            <p class="para">
+                Last response may be also retrieved by  <span class="methodname">getLastResponse()</span>
+                method for some post-processing:
+            </p>
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Soap_Server<span style="color: #66cc66;">&#40;</span>...<span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">handle</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$response</span> = <span style="color: #0000ff;">$server</span>-&gt;<span style="color: #006600;">getLastResponse</span><span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">...</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+<div class="footnote"><a name="fnid1" href="#fn1"><sup>[1]</sup></a><span class="para footnote">
+                                    May be set later using 
+                                    method.
+                                </span></div>
+<div class="footnote"><a name="fnid2" href="#fn2"><sup>[2]</sup></a><span class="para footnote">
+                                    Options may be set later using
+                                     method.
+                                </span></div>
+<div class="footnote"><a name="fnid3" href="#fn3"><sup>[3]</sup></a><span class="para footnote">
+                        Options may be set later using 
+                        method.
+                    </span></div>
+<div class="footnote"><a name="fnid4" href="#fn4"><sup>[4]</sup></a><span class="para footnote">
+                        Current state of the Return Response flag may be requested with
+                         method.
+                    </span></div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.soap.html">Zend_Soap</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.soap.html">Zend_Soap</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.soap.client.html">Zend_Soap_Client</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.soap.html">Zend_Soap</a></li>
+  <li class="active"><a href="zend.soap.server.html">Zend_Soap_Server</a></li>
+  <li><a href="zend.soap.client.html">Zend_Soap_Client</a></li>
+  <li><a href="zend.soap.wsdl.html">WSDL Accessor</a></li>
+  <li><a href="zend.soap.autodiscovery.html">AutoDiscovery</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

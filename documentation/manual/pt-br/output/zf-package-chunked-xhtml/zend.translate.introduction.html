@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Introduction - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.translate.html">Zend_Translate</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.translate.html">Zend_Translate</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.translate.adapter.html">Adapters for Zend_Translate</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.translate.introduction" class="section"><div class="info"><h1 class="title">Introduction</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Translate</span> is Zend Framework&#039;s solution for multilingual
+        applications.
+    </p>
+
+    <p class="para">
+        In multilingual applications, the content must be translated into
+        several languages and display content depending on the user&#039;s language.
+        <acronym class="acronym">PHP</acronym> offers already several ways to handle such problems, however
+        the <acronym class="acronym">PHP</acronym> solution has some problems:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Inconsistent <acronym class="acronym">API</acronym>:</em>
+                There is no single <acronym class="acronym">API</acronym> for the different source formats.
+                The usage of gettext for example is very complicated.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">PHP supports only gettext and native array:</em>
+                <acronym class="acronym">PHP</acronym> itself offers only support for array or gettext.
+                All other source formats have to be coded manually,
+                because there is no native support.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">No detection of the default language:</em>
+                The default language of the user cannot be detected without
+                deeper knowledge of the backgrounds for
+                the different web browsers.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Gettext is not thread-safe:</em>
+                <acronym class="acronym">PHP</acronym>&#039;s gettext library is not thread safe, and it
+                should not be used in a multithreaded environment.
+                This is due to problems with gettext itself, not <acronym class="acronym">PHP</acronym>,
+                but it is an existing problem.
+            </p>
+        </li>
+    </ul>
+
+    <p class="para">
+        <span class="classname">Zend_Translate</span> does not have the above problems. This is why we
+        recommend using <span class="classname">Zend_Translate</span> instead of <acronym class="acronym">PHP</acronym>&#039;s
+        native functions. The benefits of <span class="classname">Zend_Translate</span> are:
+    </p>
+
+    <ul class="itemizedlist">
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Supports multiple source formats:</em>
+                <span class="classname">Zend_Translate</span> supports several source formats, including
+                those supported by <acronym class="acronym">PHP</acronym>, and other formats including TMX
+                and CSV files.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Thread-safe gettext:</em>
+                The gettext reader of <span class="classname">Zend_Translate</span> is thread-safe.
+                There are no problems using it in multi-threaded environments.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Easy and generic <acronym class="acronym">API</acronym>:</em>
+                The <acronym class="acronym">API</acronym> of <span class="classname">Zend_Translate</span> is very simple
+                and requires only a handful of functions.
+                So it&#039;s easy to learn and easy to maintain.
+                All source formats are handled the same way, so if the format
+                of your source files change from Gettext to TMX,
+                you only need to change one line of code to specify the
+                storage adapter.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Detection of the user&#039;s standard language:</em>
+                The preferred language of the user accessing the site can be
+                detected and used by <span class="classname">Zend_Translate</span>.
+            </p>
+        </li>
+
+        <li class="listitem">
+            <p class="para">
+                <em class="emphasis">Automatic source detection:</em>
+                <span class="classname">Zend_Translate</span> is capable of detecting and integrating
+                multiple source files and additionally detect the locale to be used depending on
+                directory or filenames.
+            </p>
+        </li>
+    </ul>
+
+    <div class="section" id="zend.translate.introduction.adapters" name="zend.translate.introduction.adapters"><div class="info"><h1 class="title">Starting multi-lingual</h1></div>
+        
+
+        <p class="para">
+            So let&#039;s get started with multi-lingual business.
+            What we want to do is translate our string
+            output so the view produces the translated output.
+            Otherwise we would have to write one view
+            for each language, and no one would like to do this.
+            Generally, multi-lingual sites are very simple in their design.
+            There are only four steps you would have to do:
+        </p>
+
+        <ol type="1">
+            <li class="listitem">
+                <p class="para">
+                    Decide which adapter you want to use;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Create your view and integrate <span class="classname">Zend_Translate</span> in your
+                    code;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Create the source file from your code;
+                </p>
+            </li>
+
+            <li class="listitem">
+                <p class="para">
+                    Translate your source file to the desired language.
+                </p>
+            </li>
+        </ol>
+
+        <p class="para">
+            The following sections guide you through all four steps.
+            Read through the next few pages to create your own
+            multi-lingual web application.
+        </p>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.translate.html">Zend_Translate</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.translate.html">Zend_Translate</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.translate.adapter.html">Adapters for Zend_Translate</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.translate.html">Zend_Translate</a></li>
+  <li class="active"><a href="zend.translate.introduction.html">Introduction</a></li>
+  <li><a href="zend.translate.adapter.html">Adapters for Zend_Translate</a></li>
+  <li><a href="zend.translate.using.html">Using Translation Adapters</a></li>
+  <li><a href="zend.translate.sourcecreation.html">Creating source files</a></li>
+  <li><a href="zend.translate.additional.html">Additional features for translation</a></li>
+  <li><a href="zend.translate.plurals.html">Plural notations for Translation</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>

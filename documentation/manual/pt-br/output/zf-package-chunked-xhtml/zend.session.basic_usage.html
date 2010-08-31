@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Basic Usage - Zend Framework Manual</title>
+
+</head>
+<body>
+<table width="100%">
+    <tr valign="top">
+        <td width="85%">
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.session.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.session.html">Zend_Session</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.session.advanced_usage.html">Advanced Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+<hr />
+<div id="zend.session.basic_usage" class="section"><div class="info"><h1 class="title">Basic Usage</h1></div>
+    
+
+    <p class="para">
+        <span class="classname">Zend_Session_Namespace</span> instances provide the primary
+        <acronym class="acronym">API</acronym> for manipulating session data in the Zend Framework. Namespaces are
+        used to segregate all session data, although a default namespace exists for those who only
+        want one namespace for all their session data. <span class="classname">Zend_Session</span> utilizes
+        ext/session and its special <var class="varname">$_SESSION</var> superglobal as the storage
+        mechanism for session state data. while <var class="varname">$_SESSION</var> is still available in
+        <acronym class="acronym">PHP</acronym>&#039;s global namespace, developers should refrain from directly accessing
+        it, so that <span class="classname">Zend_Session</span> and
+        <span class="classname">Zend_Session_Namespace</span> can most effectively and securely provide its
+        suite of session related functionality.
+    </p>
+
+    <p class="para">
+        Each instance of <span class="classname">Zend_Session_Namespace</span> corresponds to an entry of
+        the <var class="varname">$_SESSION</var> superglobal array, where the namespace is used as the key.
+    </p>
+
+    <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$myNamespace</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'myNamespace'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// $myNamespace corresponds to $_SESSION['myNamespace']</span></div></li></ol></div></div></div>
+
+
+    <p class="para">
+        It is possible to use <span class="classname">Zend_Session</span> in conjunction with other code
+        that uses <var class="varname">$_SESSION</var> directly. To avoid problems, however, it is highly
+        recommended that such code only uses parts of <var class="varname">$_SESSION</var> that do not
+        correspond to instances of <span class="classname">Zend_Session_Namespace</span>.
+    </p>
+
+    <div class="section" id="zend.session.basic_usage.basic_examples" name="zend.session.basic_usage.basic_examples"><div class="info"><h1 class="title">Tutorial Examples</h1></div>
+        
+
+        <p class="para">
+            If no namespace is specified when instantiating
+            <span class="classname">Zend_Session_Namespace</span>, all data will be transparently stored in
+            a namespace called &quot;<code class="code">Default</code>&quot;. <span class="classname">Zend_Session</span> is not
+            intended to work directly on the contents of session namespace containers. Instead, we
+            use <span class="classname">Zend_Session_Namespace</span>. The example below demonstrates use of
+            this default namespace, showing how to count the number of client requests during a
+            session:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #1 Counting Page Views</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$defaultNamespace</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Default'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span><a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$defaultNamespace</span>-&gt;<span style="color: #006600;">numberOfPageRequests</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">// this will increment for each page load.</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$defaultNamespace</span>-&gt;<span style="color: #006600;">numberOfPageRequests</span>++;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span> <span style="color: #b1b100;">else</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$defaultNamespace</span>-&gt;<span style="color: #006600;">numberOfPageRequests</span> = <span style="color: #cc66cc;">1</span>; <span style="color: #808080; font-style: italic;">// first time</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;Page requests this session: &quot;</span>,</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #0000ff;">$defaultNamespace</span>-&gt;<span style="color: #006600;">numberOfPageRequests</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            When multiple modules use instances of <span class="classname">Zend_Session_Namespace</span>
+            having different namespaces, each module obtains data encapsulation for its session
+            data. The <span class="classname">Zend_Session_Namespace</span> constructor can be passed an
+            optional <var class="varname">$namespace</var> argument, which allows developers to partition
+            session data into separate namespaces. Namespacing provides an effective and popular way
+            to secure session state data against changes due to accidental naming collisions.
+        </p>
+
+        <p class="para">
+            Namespace names are restricted to character sequences represented as non-empty
+            <acronym class="acronym">PHP</acronym> strings that do not begin with an underscore (&quot;<code class="code">_</code>&quot;)
+            character. Only core components included in Zend Framework should use namespace names
+            starting with &quot;<code class="code">Zend</code>&quot;.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #2 New Way: Namespaces Avoid Collisions</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// in the Zend_Auth component</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$authNamespace</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Zend_Auth'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$authNamespace</span>-&gt;<span style="color: #006600;">user</span> = <span style="color: #ff0000;">&quot;myusername&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #808080; font-style: italic;">// in a web services component</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$webServiceNamespace</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'Some_Web_Service'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$webServiceNamespace</span>-&gt;<span style="color: #006600;">user</span> = <span style="color: #ff0000;">&quot;mywebusername&quot;</span>;</div></li></ol></div></div></div>
+
+        </div>
+
+        <p class="para">
+            The example above achieves the same effect as the code below, except that the session
+            objects above preserve encapsulation of session data within their respective namespaces.
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #3 Old Way: PHP Session Access</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$_SESSION</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'Zend_Auth'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'user'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #ff0000;">&quot;myusername&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$_SESSION</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'Some_Web_Service'</span><span style="color: #66cc66;">&#93;</span><span style="color: #66cc66;">&#91;</span><span style="color: #ff0000;">'user'</span><span style="color: #66cc66;">&#93;</span> = <span style="color: #ff0000;">&quot;mywebusername&quot;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.session.basic_usage.iteration" name="zend.session.basic_usage.iteration"><div class="info"><h1 class="title">Iterating Over Session Namespaces</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Session_Namespace</span> provides the full <a href="http://www.php.net/~helly/php/ext/spl/interfaceIteratorAggregate.html" class="link external">&raquo; IteratorAggregate
+                interface</a>, including support for the <code class="code">foreach</code> statement:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #4 Session Iteration</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$aNamespace</span> =</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #ff0000;">'some_namespace_with_data_present'</span><span style="color: #66cc66;">&#41;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">foreach</span> <span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$aNamespace</span> <span style="color: #b1b100;">as</span> <span style="color: #0000ff;">$index</span> =&gt; <span style="color: #0000ff;">$value</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;aNamespace-&gt;$index = '$value';<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li></ol></div></div></div>
+
+        </div>
+    </div>
+
+    <div class="section" id="zend.session.basic_usage.accessors" name="zend.session.basic_usage.accessors"><div class="info"><h1 class="title">Accessors for Session Namespaces</h1></div>
+        
+
+        <p class="para">
+            <span class="classname">Zend_Session_Namespace</span> implements the
+             <span class="methodname">__get()</span>,  <span class="methodname">__set()</span>,
+             <span class="methodname">__isset()</span>, and  <span class="methodname">__unset()</span> <a href="http://www.php.net/manual/en/language.oop5.overloading.php" class="link external">&raquo; magic
+                methods</a>, which should not be invoked directly, except from within a
+            subclass. Instead, the normal operators automatically invoke these methods, such as in
+            the following example:
+        </p>
+
+        <div class="example"><div class="info"><p><b>Example #5 Accessing Session Data</b></p></div>
+            
+
+            <div class="programlisting php"><div class="phpcode"><div class="php" style="font-family: monospace;"><ol><li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$namespace</span> = <span style="color: #000000; font-weight: bold;">new</span> Zend_Session_Namespace<span style="color: #66cc66;">&#40;</span><span style="color: #66cc66;">&#41;</span>; <span style="color: #808080; font-style: italic;">// default namespace</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #0000ff;">$namespace</span>-&gt;<span style="color: #006600;">foo</span> = <span style="color: #cc66cc;">100</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\$</span>namespace-&gt;foo = $namespace-&gt;foo<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #b1b100;">if</span> <span style="color: #66cc66;">&#40;</span>!<a href="http://www.php.net/isset"><span style="color: #000066;">isset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$namespace</span>-&gt;<span style="color: #006600;">bar</span><span style="color: #66cc66;">&#41;</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">&#123;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp; &nbsp; <a href="http://www.php.net/echo"><span style="color: #000066;">echo</span></a> <span style="color: #ff0000;">&quot;<span style="color: #000099; font-weight: bold;">\$</span>namespace-&gt;bar not set<span style="color: #000099; font-weight: bold;">\n</span>&quot;</span>;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><span style="color: #66cc66;">&#125;</span></div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;">&nbsp;</div></li>
+<li style="font-family: 'Courier New', Courier, monospace; color: black; font-weight: normal; font-style: normal;"><div style="font-family: 'Courier New', Courier, monospace; font-weight: normal;"><a href="http://www.php.net/unset"><span style="color: #000066;">unset</span></a><span style="color: #66cc66;">&#40;</span><span style="color: #0000ff;">$namespace</span>-&gt;<span style="color: #006600;">foo</span><span style="color: #66cc66;">&#41;</span>;</div></li></ol></div></div></div>
+
+        </div>
+    </div>
+</div>
+        <hr />
+
+            <table width="100%">
+                <tr>
+                    <td width="25%" style="text-align: left;">
+                    <a href="zend.session.introduction.html">Introduction</a>
+                    </td>
+
+                    <td width="50%" style="text-align: center;">
+                        <div class="up"><span class="up"><a href="zend.session.html">Zend_Session</a></span><br />
+                        <span class="home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></span></div>
+                    </td>
+
+                    <td width="25%" style="text-align: right;">
+                        <div class="next" style="text-align: right; float: right;"><a href="zend.session.advanced_usage.html">Advanced Usage</a></div>
+                    </td>
+                </tr>
+            </table>
+</td>
+        <td style="font-size: smaller;" width="15%"> <style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="manual.html">Guia de Refer&ecirc;ncia do Programador</a></li>
+  <li class="header up"><a href="reference.html">Refer&ecirc;ncia do Zend Framework</a></li>
+  <li class="header up"><a href="zend.session.html">Zend_Session</a></li>
+  <li><a href="zend.session.introduction.html">Introduction</a></li>
+  <li class="active"><a href="zend.session.basic_usage.html">Basic Usage</a></li>
+  <li><a href="zend.session.advanced_usage.html">Advanced Usage</a></li>
+  <li><a href="zend.session.global_session_management.html">Global Session Management</a></li>
+  <li><a href="zend.session.savehandler.dbtable.html">Zend_Session_SaveHandler_DbTable</a></li>
+ </ul>
+ </td>
+    </tr>
+</table>
+</body>
+</html>
