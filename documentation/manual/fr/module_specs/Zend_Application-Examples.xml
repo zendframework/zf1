@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- EN-Revision: 20763 -->
+<!-- EN-Revision: 22741 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.application.examples">
     <title>Exemples</title>
@@ -20,13 +20,33 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     <programlisting language="ini"><![CDATA[
 ; APPLICATION_PATH/configs/application.ini
 [production]
+autoloaderNamespaces[] = "My_"
 bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
 bootstrap.class = "Bootstrap"
+pluginpaths.My_Bootstrap_Resource = "My/Bootstrap/Resource"
 resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
 
 [testing : production]
 [development : production]
 ]]></programlisting>
+
+    <note>
+        <title>Espaces de noms de l'autoloader</title>
+
+        <para>
+            Comme ces exemples utilisent du code personnalisé, nous devons enregistrer les préfixes
+            des espaces de noms pour ce code dans notre configuration&#160;; ceci est réalisé avec
+            la clé de configuration <property>autoloaderNamespaces</property>, qui est un tableau.
+        </para>
+
+        <para>
+            De plus, afin de s'assurer que les plugins de ressources sont trouvées, nous devons
+            enregistrer un préfixe de chemin de plugin lors de l'amorçage. Ceci peut être réalisé
+            avec la clé de configuration <property>pluginpaths</property>, qui est un tableau
+            associatif dont les clés sont les préfixes à utiliser et les valeurs sont les chemins
+            relatifs à ces préfixes.
+        </para>
+    </note>
 
     <para>
         Cependant, si de l'initialisation personnalisée est nécessaire, alors vous avez 2
