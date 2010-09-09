@@ -2922,8 +2922,6 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     public function getView()
     {
         $view = new Zend_View();
-        $libPath = dirname(__FILE__) . '/../../../library';
-        $view->addHelperPath($libPath . '/Zend/View/Helper');
         return $view;
     }
 
@@ -4380,6 +4378,16 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $t2 = $this->form->getDecorators();
         $this->assertEquals($t1, $t2);
     }
+
+    /**
+     * @group ZF-10411
+     */
+    public function testAddingElementToDisplayGroupManuallyShouldPreventRenderingByForm()
+    {
+        $form = new Zend_Form_FormTest_AddToDisplayGroup();
+        $html = $form->render($this->getView());
+        $this->assertEquals(1, substr_count($html, 'Customer Type'), $html);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
@@ -4391,6 +4399,34 @@ class Zend_Form_FormTest_FormExtension extends Zend_Form
     public function init()
     {
         $this->setDisableLoadDefaultDecorators(true);
+    }
+}
+
+class Zend_Form_FormTest_WithDisplayGroup extends Zend_Form
+{
+    public function init()
+    {
+        $this->addElement('text', 'el1', array(
+            'label'    => 'Title',
+            'required' => true,
+        ));
+        $this->addDisplayGroup(array('el1'), 'group1', array(
+            'legend' => 'legend 1',
+        ));
+    }
+}
+
+class Zend_Form_FormTest_AddToDisplayGroup extends Zend_Form_FormTest_WithDisplayGroup
+{
+    public function init()
+    {
+        parent::init();
+        $element = new Zend_Form_Element_Text('el2', array(
+            'label' => 'Customer Type',
+        ));
+
+        $this->addElement($element);
+        $this->group1->addElement($element);
     }
 }
 

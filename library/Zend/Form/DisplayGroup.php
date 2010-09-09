@@ -66,6 +66,13 @@ class Zend_Form_DisplayGroup implements Iterator,Countable
     protected $_elements = array();
 
     /**
+     * Form object to which the display group is currently registered
+     * 
+     * @var Zend_Form
+     */
+    protected $_form;
+
+    /**
      * Whether or not a new element has been added to the group
      * @var bool
      */
@@ -276,6 +283,35 @@ class Zend_Form_DisplayGroup implements Iterator,Countable
     }
 
     /**
+     * Set form object to which the display group is attached
+     * 
+     * @param  Zend_Form $form 
+     * @return Zend_Form_DisplayGroup
+     */
+    public function setForm(Zend_Form $form)
+    {
+        $this->_form = $form;
+
+        // Ensure any elements attached prior to setting the form are now 
+        // removed from iteration by the form
+        foreach ($this->getElements() as $element) {
+            $form->removeFromIteration($element->getName());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get form object to which the group is attached
+     * 
+     * @return Zend_Form|null
+     */
+    public function getForm()
+    {
+        return $this->_form;
+    }
+
+    /**
      * Filter a name to only allow valid variable characters
      *
      * @param  string $value
@@ -432,6 +468,12 @@ class Zend_Form_DisplayGroup implements Iterator,Countable
     {
         $this->_elements[$element->getName()] = $element;
         $this->_groupUpdated = true;
+
+        // Display group will now handle display of element
+        if (null !== ($form = $this->getForm())) {
+            $form->removeFromIteration($element->getName());
+        }
+
         return $this;
     }
 
