@@ -655,6 +655,9 @@ class Zend_Service_WindowsAzure_Storage_Table
 		} else {
 			$mergeEntity = $entity;
 		}
+
+        // Ensure entity timestamp matches updated timestamp 
+        $entity->setTimestamp($this->isoDate());
 		
 	    return $this->_changeEntity(Zend_Http_Client::MERGE, $tableName, $mergeEntity, $verifyEtag);
 	}
@@ -720,8 +723,14 @@ class Zend_Service_WindowsAzure_Storage_Table
                           </content>
                         </entry>';
 		
+        // Attempt to get timestamp from entity
+        $timestamp = $entity->getTimestamp();
+        if ($timestamp == Zend_Service_WindowsAzure_Storage_TableEntity::DEFAULT_TIMESTAMP) {
+            $timestamp = $this->isoDate();
+        }
+
         $requestBody = $this->_fillTemplate($requestBody, array(
-        	'Updated'    => $this->isoDate(),
+        	'Updated'    => $timestamp,
             'Properties' => $this->_generateAzureRepresentation($entity)
         ));
 
@@ -737,10 +746,10 @@ class Zend_Service_WindowsAzure_Storage_Table
 		// Perform request
 		$response = null;
 	    if ($this->isInBatch()) {
-		    $this->getCurrentBatch()->enlistOperation($tableName . '(PartitionKey=\'' . $entity->getPartitionKey() . '\', RowKey=\'' . $entity->getRowKey() . '\')', '', $httpVerb, $headers, true, $requestBody);
+		    $this->getCurrentBatch()->enlistOperation($tableName . '(PartitionKey=\'' . $entity->getPartitionKey() . '\',RowKey=\'' . $entity->getRowKey() . '\')', '', $httpVerb, $headers, true, $requestBody);
 		    return null;
 		} else {
-		    $response = $this->_performRequest($tableName . '(PartitionKey=\'' . $entity->getPartitionKey() . '\', RowKey=\'' . $entity->getRowKey() . '\')', '', $httpVerb, $headers, true, $requestBody);
+		    $response = $this->_performRequest($tableName . '(PartitionKey=\'' . $entity->getPartitionKey() . '\',RowKey=\'' . $entity->getRowKey() . '\')', '', $httpVerb, $headers, true, $requestBody);
 		}
 		if ($response->isSuccessful()) {
 		    // Update properties

@@ -35,6 +35,8 @@ require_once 'Zend/Service/WindowsAzure/Exception.php';
  */
 class Zend_Service_WindowsAzure_Storage_TableEntity
 {
+    const DEFAULT_TIMESTAMP = '1900-01-01T00:00:00';
+
     /**
      * Partition key
      * 
@@ -54,7 +56,7 @@ class Zend_Service_WindowsAzure_Storage_TableEntity
      * 
      * @var string
      */
-    protected $_timestamp = '1900-01-01T00:00:00';
+    protected $_timestamp;
     
     /**
      * Etag
@@ -127,6 +129,9 @@ class Zend_Service_WindowsAzure_Storage_TableEntity
      */
     public function getTimestamp()
     {
+        if (null === $this->_timestamp) {
+            $this->setTimestamp(self::DEFAULT_TIMESTAMP);
+        }
         return $this->_timestamp;
     }
     

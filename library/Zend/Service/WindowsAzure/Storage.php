@@ -238,6 +238,16 @@ class Zend_Service_WindowsAzure_Storage
 	{
 		$this->_httpClientChannel->setAdapter($adapterInstance);
 	}
+
+    /**
+     * Retrieve HTTP client channel
+     * 
+     * @return Zend_Http_Client_Adapter_Interface
+     */
+    public function getHttpClientChannel()
+    {
+        return $this->_httpClientChannel;
+    }
 	
 	/**
 	 * Set retry policy to use when making requests
