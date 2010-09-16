@@ -262,21 +262,10 @@ class Zend_Cache_Backend_Static
     protected function _createDirectoriesFor($path)
     {
         if ( !is_dir($path)
-          && !@mkdir($path, $this->_options['cache_directory_umask'], true)) {
+          && !@mkdir($path, $this->_octdec($this->_options['cache_directory_umask']), true)) {
             $lastErr = error_get_last();
             Zend_Cache::throwException("Can't create directory: {$lastErr['message']}");
         }
-
-        /*
-        $parts = explode('/', $path);
-        $directory = '';
-        foreach ($parts as $part) {
-            $directory = rtrim($directory, '/') . '/' . $part;
-            if (!is_dir($directory)) {
-                mkdir($directory, $this->_octdec($this->_options['cache_directory_umask']));
-            }
-        }
-        */
     }
 
     /**
@@ -550,7 +539,7 @@ class Zend_Cache_Backend_Static
      */
     protected function _octdec($val)
     {
-        if (decoct(octdec($val)) == $val && is_string($val)) {
+        if (is_string($val) && decoct(octdec($val)) == $val) {
             return octdec($val);
         }
         return $val;
