@@ -261,10 +261,14 @@ class Zend_Cache_Backend_Static
      */
     protected function _createDirectoriesFor($path)
     {
-        if ( !is_dir($path)
-          && !@mkdir($path, $this->_octdec($this->_options['cache_directory_umask']), true)) {
-            $lastErr = error_get_last();
-            Zend_Cache::throwException("Can't create directory: {$lastErr['message']}");
+        if (!is_dir($path)) {
+            $oldUmask = umask(0);
+            if ( !@mkdir($path, $this->_octdec($this->_options['cache_directory_umask']), true)) {
+                $lastErr = error_get_last();
+                umask($oldUmask);
+                Zend_Cache::throwException("Can't create directory: {$lastErr['message']}");
+            }
+            umask($oldUmask);
         }
     }
 

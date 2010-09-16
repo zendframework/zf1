@@ -125,6 +125,30 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         unlink($this->_instance->getOption('public_dir') . '/foo2.xml');
     }
 
+    public function testSaveWithSubFolder()
+    {
+        $res = $this->_instance->save('data to cache', bin2hex('/foo/bar'));
+        $this->assertTrue($res);
+        $this->assertTrue($this->_instance->test(bin2hex('/foo/bar')));
+
+        unlink($this->_instance->getOption('public_dir') . '/foo/bar.html');
+        rmdir($this->_instance->getOption('public_dir') . '/foo');
+    }
+
+    public function testDirectoryUmaskAsString()
+    {
+        $this->_instance->setOption('cache_directory_umask', '777');
+
+        $res = $this->_instance->save('data to cache', bin2hex('/foo/bar'));
+        $this->assertTrue($res);
+
+        $perms = fileperms($this->_instance->getOption('public_dir') . '/foo');
+        $this->assertEquals('777', substr(decoct($perms), -3));
+
+        unlink($this->_instance->getOption('public_dir') . '/foo/bar.html');
+        rmdir($this->_instance->getOption('public_dir') . '/foo');
+    }
+
     public function testSaveWithSpecificExtensionWithTag()
     {
         $res = $this->_instance->save(serialize(array('data to cache', 'xml')), bin2hex('/foo'), array('tag1'));
