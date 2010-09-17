@@ -492,6 +492,17 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
         $this->assertNotContains('https://', $test);
         $this->assertEquals('http://localhost/bar/baz', $test);
     }
+    
+    /**
+     * @group ZF-9859
+     */
+    public function testGotoUrlAndSetGotoUrlBehaveTheSame()
+    {
+        $url = 'http://www.example.com';
+        $gotoUrl = $this->redirector->gotoUrl($url);
+        $setGotoUrl = $this->redirector->setGotoUrl($url);
+        $this->assertSame($gotoUrl, $setGotoUrl);
+    }
 
     /**#@-*/
 }
