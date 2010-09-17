@@ -503,6 +503,26 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
         $setGotoUrl = $this->redirector->setGotoUrl($url);
         $this->assertSame($gotoUrl, $setGotoUrl);
     }
+    
+    /**
+     * @group ZF-10364
+     */
+    public function testGotoSimpleDefaultModuleRedirectsToDefaultModule()
+    {
+        $this->controller->getFrontController()->setDefaultModule('test')
+                                               ->setDefaultControllerName('test')
+                                               ->setDefaultAction('test');
+
+        $this->redirector->gotoSimple('test', 'test', 'test');
+        $result = $this->redirector->getRedirectUrl();
+        $expected = '/';
+        $this->assertEquals($expected, $result);
+
+        $this->redirector->gotoSimple('index', 'index', 'default');
+        $result = $this->redirector->getRedirectUrl();
+        $expected = '/default/index/index';
+        $this->assertEquals($expected, $result);
+    }
 
     /**#@-*/
 }
