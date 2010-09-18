@@ -1,5 +1,8 @@
 <?php
-
-class AutoloaderTest_AutoloaderClosure
-{
+return function($class) {
+    if ('AutoloaderTest_AutoloaderClosure' == $class) {
+        return true;
+    }
+    return false;
 }
+?>
