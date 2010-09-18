@@ -640,12 +640,13 @@ class Zend_Gdata_App
 
         // Set the params for the new request to be performed
         $this->_httpClient->setHeaders($headers);
+        require_once 'Zend/Uri/Http.php';
         $uri = Zend_Uri_Http::fromString($url);
         preg_match("/^(.*?)(\?.*)?$/", $url, $matches);
         $this->_httpClient->setUri($matches[1]);
         $queryArray = $uri->getQueryAsArray();
-        foreach ($queryArray as $name => $value) { 
-          $this->_httpClient->setParameterGet($name, $value);
+        foreach ($queryArray as $name => $value) {
+            $this->_httpClient->setParameterGet($name, $value);
         }
 
 
