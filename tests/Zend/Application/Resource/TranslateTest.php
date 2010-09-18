@@ -179,6 +179,50 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
         $this->assertType('Zend_Cache_Core', Zend_Translate::getCache());
         Zend_Translate::clearCache();
     }
+
+    /**
+     * @group ZF-10352
+     */
+    public function testToUseTheSameKeyAsTheOptionsZendTranslate()
+    {
+        $options = array(
+            'adapter' => 'array',
+            'content' => array(
+                'm1' => 'message1',
+                'm2' => 'message2'
+            ),
+            'locale' => 'auto'
+        );
+
+        $resource = new Zend_Application_Resource_Translate($options);
+        $translator = $resource->init();
+
+        $this->assertEquals(new Zend_Translate($options), $translator);
+        $this->assertEquals('message2', $translator->_('m2'));
+    }
+
+    /**
+     * @group ZF-10352
+     * @expectedException Zend_Application_Resource_Exception
+     */
+    public function testToUseTheTwoKeysContentAndDataShouldThrowsException()
+    {
+        $options = array(
+            'adapter' => 'array',
+            'content' => array(
+                'm1' => 'message1',
+                'm2' => 'message2'
+            ),
+            'data' => array(
+                'm3' => 'message3',
+                'm4' => 'message4'
+            ),
+            'locale' => 'auto'
+        );
+
+        $resource = new Zend_Application_Resource_Translate($options);
+        $translator = $resource->init();
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_TranslateTest::main') {
