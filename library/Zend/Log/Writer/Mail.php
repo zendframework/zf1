@@ -102,7 +102,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
     /**
      * MethodMap for Zend_Mail's headers
-     * 
+     *
      * @var array
      */
     protected static $_methodMapHeaders = array(
@@ -134,7 +134,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
     /**
      * Create a new instance of Zend_Log_Writer_Mail
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Mail
      */
@@ -160,7 +160,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
     /**
      * Set the layout
-     * 
+     *
      * @param Zend_Layout|array $layout
      * @return Zend_Log_Writer_Mail
      * @throws Zend_Log_Exception
@@ -182,7 +182,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
     /**
      * Construct a Zend_Mail instance based on a configuration array
-     * 
+     *
      * @param array $config
      * @return Zend_Mail
      */
@@ -209,7 +209,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
         if (count($headerAddresses)) {
             foreach ($headerAddresses as $header => $address) {
                 $method = self::$_methodMapHeaders[$header];
-                if (is_array($address) && isset($address['name']) 
+                if (is_array($address) && isset($address['name'])
                     && !is_numeric($address['name'])
                 ) {
                     $params = array(
@@ -217,7 +217,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
                     	$address['name']
                     );
                 } else if (is_array($address) && isset($address['email'])) {
-                    $params = $address['email'];
+                    $params = array($address['email']);
                 } else {
                     $params = array($address);
                 }
@@ -230,7 +230,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
     /**
      * Construct a Zend_Layout instance based on a configuration array
-     * 
+     *
      * @param array $config
      * @return Zend_Layout
      */
