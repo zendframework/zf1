@@ -89,6 +89,18 @@ class Zend_VersionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-10363
+     */
+    public function testFetchLatestVersion()
+    {
+        $actual = Zend_Version::getLatest();
+        if ('not available' === $actual) {
+            $this->markIncomplete('http://framework.zend.com/ may be down');
+        }
+
+        $this->assertRegExp('/^[1-2](\.[0-9]+){2}/', $actual);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == "Zend_VersionTest::main") {
