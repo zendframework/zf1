@@ -144,7 +144,7 @@ class Zend_Search_Lucene_Interface_MultiSearcher implements Zend_Search_Lucene_I
         $count = 0;
 
         foreach ($this->_indices as $index) {
-            $count += $this->_indices->count();
+            $count += $index->count();
         }
 
         return $count;
@@ -172,7 +172,7 @@ class Zend_Search_Lucene_Interface_MultiSearcher implements Zend_Search_Lucene_I
         $docs = 0;
 
         foreach ($this->_indices as $index) {
-            $docs += $this->_indices->numDocs();
+            $docs += $index->numDocs();
         }
 
         return $docs;
