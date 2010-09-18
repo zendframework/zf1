@@ -121,10 +121,97 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
     public function testDoctypeIsSet()
     {
         $options = array('doctype' => 'XHTML1_FRAMESET');
-	$resource = new Zend_Application_Resource_View($options);
+        $resource = new Zend_Application_Resource_View($options);
         $resource->init();
         $view  = $resource->getView();
-	$this->assertEquals('XHTML1_FRAMESET', $view->doctype()->getDoctype());
+        $this->assertEquals('XHTML1_FRAMESET', $view->doctype()->getDoctype());
+    }
+
+    /**
+     * @group ZF-10343
+     */
+    public function testContentTypeIsSet()
+    {
+        $contentType = 'text/html; charset=UTF-8';
+        $options = array('contentType' => $contentType);
+        $resource = new Zend_Application_Resource_View($options);
+        $headMetaHelper = $resource->init()->headMeta();
+ 
+        $actual = null;
+        $container = $headMetaHelper->getContainer();
+        foreach ($container as $item) {
+            if ('Content-Type' == $item->{$item->type}) {
+                $actual = $item->content;
+                break;
+            }
+        }
+
+        $this->assertEquals($contentType, $actual);
+
+        Zend_View_Helper_Placeholder_Registry::getRegistry()
+            ->deleteContainer('Zend_View_Helper_HeadMeta');
+    }
+    
+    /**
+     * @group ZF-10343
+     */
+    public function testSetMetaCharsetForHtml5()
+    {
+        $charset = 'UTF-8';
+        $options = array(
+            'doctype' => 'HTML5',
+            'charset' => $charset,
+        );
+        $resource = new Zend_Application_Resource_View($options);
+        $view = $resource->init();
+        $headMetaHelper = $view->headMeta();
+
+        $actual = null;
+        $container = $headMetaHelper->getContainer();
+        foreach ($container as $item) {
+            if ('charset' == $item->type) {
+                $actual = $item->charset;
+                break;
+            }
+        }
+
+        $this->assertTrue($view->doctype()->isHtml5());
+        $this->assertEquals($charset, $actual);
+
+        $registry = Zend_View_Helper_Placeholder_Registry::getRegistry();
+        $registry->deleteContainer('Zend_View_Helper_HeadMeta');
+        $registry->deleteContainer('Zend_View_Helper_Doctype');
+    }
+	
+    /**
+     * @group ZF-10343
+     */
+    public function testSetMetaCharsetShouldOnlyAvailableForHtml5()
+    {
+    	$charset = 'UTF-8';
+        $options = array(
+            'doctype' => 'XHTML1_STRICT',
+            'charset' => $charset,
+        );
+        $resource = new Zend_Application_Resource_View($options);
+        $view = $resource->init();
+        $headMetaHelper = $view->headMeta();
+
+        $actual = null;
+        $container = $headMetaHelper->getContainer();
+        foreach ($container as $item) {
+            if ('charset' == $item->type) {
+                $actual = $item->charset;
+                break;
+            }
+        }
+
+        $this->assertFalse($view->doctype()->isHtml5());
+        $this->assertNull($actual);
+
+        $registry = Zend_View_Helper_Placeholder_Registry::getRegistry();
+        $registry->deleteContainer('Zend_View_Helper_HeadMeta');
+        $registry->deleteContainer('Zend_View_Helper_Doctype');
     }
 }
 
