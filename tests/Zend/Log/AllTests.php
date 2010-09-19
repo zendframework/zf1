@@ -27,23 +27,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once 'Zend/Log/LogTest.php';
-require_once 'Zend/Log/Filter/ChainingTest.php';
-require_once 'Zend/Log/Filter/PriorityTest.php';
-require_once 'Zend/Log/Filter/MessageTest.php';
-require_once 'Zend/Log/Filter/SuppressTest.php';
-require_once 'Zend/Log/Formatter/SimpleTest.php';
-require_once 'Zend/Log/Formatter/XmlTest.php';
-require_once 'Zend/Log/Writer/AbstractTest.php';
-require_once 'Zend/Log/Writer/DbTest.php';
-if (PHP_OS != 'AIX') {
-    require_once 'Zend/Log/Writer/FirebugTest.php';
-}
-require_once 'Zend/Log/Writer/MailTest.php';
-require_once 'Zend/Log/Writer/MockTest.php';
-require_once 'Zend/Log/Writer/NullTest.php';
-require_once 'Zend/Log/Writer/StreamTest.php';
-require_once 'Zend/Log/Writer/SyslogTest.php';
-require_once 'Zend/Log/Writer/ZendMonitorTest.php';
+require_once 'Zend/Log/Filter/AllTests.php';
+require_once 'Zend/Log/Formatter/AllTests.php';
+require_once 'Zend/Log/Writer/AllTests.php';
 
 /**
  * @category   Zend
@@ -62,29 +48,12 @@ class Zend_Log_AllTests
 
     public static function suite()
     {
-        // hack to allow us to view code coverage for Log.php
-        PHPUnit_Util_Filter::removeFileFromFilter(dirname(__FILE__) . '/../../../library/Zend/Log.php', 'PEAR');
-
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Log');
 
         $suite->addTestSuite('Zend_Log_LogTest');
-        $suite->addTestSuite('Zend_Log_Filter_ChainingTest');
-        $suite->addTestSuite('Zend_Log_Filter_PriorityTest');
-        $suite->addTestSuite('Zend_Log_Filter_MessageTest');
-        $suite->addTestSuite('Zend_Log_Filter_SuppressTest');
-        $suite->addTestSuite('Zend_Log_Formatter_SimpleTest');
-        $suite->addTestSuite('Zend_Log_Formatter_XmlTest');
-        $suite->addTestSuite('Zend_Log_Writer_AbstractTest');
-        $suite->addTestSuite('Zend_Log_Writer_DbTest');
-        if (PHP_OS != 'AIX') {
-            $suite->addTestSuite('Zend_Log_Writer_FirebugTest');
-        }
-        $suite->addTestSuite('Zend_Log_Writer_MailTest');
-        $suite->addTestSuite('Zend_Log_Writer_MockTest');
-        $suite->addTestSuite('Zend_Log_Writer_NullTest');
-        $suite->addTestSuite('Zend_Log_Writer_StreamTest');
-        $suite->addTestSuite('Zend_Log_Writer_SyslogTest');
-        $suite->addTestSuite('Zend_Log_Writer_ZendMonitorTest');
+        $suite->addTest(Zend_Log_Filter_AllTests::suite());
+        $suite->addTest(Zend_Log_Formatter_AllTests::suite());
+        $suite->addTest(Zend_Log_Writer_AllTests::suite());
 
         return $suite;
     }

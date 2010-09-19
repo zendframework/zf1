@@ -20,17 +20,14 @@
  * @version    $Id$
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Writer_MockTest::main');
-}
-
-/**
- * Test helper
- */
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
-/** Zend_Log_Writer_Mock */
-require_once 'Zend/Log/Writer/Mock.php';
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Formatter_AllTests::main');
+}
+
+require_once 'Zend/Log/Formatter/SimpleTest.php';
+require_once 'Zend/Log/Formatter/XmlTest.php';
 
 /**
  * @category   Zend
@@ -39,37 +36,26 @@ require_once 'Zend/Log/Writer/Mock.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Log
+ * @group      Zend_Log_Formatter
  */
-class Zend_Log_Writer_MockTest extends PHPUnit_Framework_TestCase
+class Zend_Log_Formatter_AllTests
 {
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
+        PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 
-    public function testWrite()
+    public static function suite()
     {
-        $writer = new Zend_Log_Writer_Mock();
-        $this->assertSame(array(), $writer->events);
+        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Log_Formatter');
 
-        $fields = array('foo' => 'bar');
-        $writer->write($fields);
-        $this->assertSame(array($fields), $writer->events);
-    }
+        $suite->addTestSuite('Zend_Log_Formatter_SimpleTest');
+        $suite->addTestSuite('Zend_Log_Formatter_XmlTest');
 
-    public function testFactory()
-    {
-        $cfg = array('log' => array('memory' => array(
-            'writerName' => "Mock"
-        )));
-
-        require_once 'Zend/Log.php';
-        $logger = Zend_Log::factory($cfg['log']);
-        $this->assertTrue($logger instanceof Zend_Log);
+        return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Log_Writer_MockTest::main') {
-    Zend_Log_Writer_MockTest::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_AllTests::main') {
+    Zend_Log_Formatter_AllTests::main();
 }

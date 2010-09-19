@@ -20,8 +20,14 @@
  * @version    $Id$
  */
 
-/** PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Filter_SuppressTest::main');
+}
+
+/**
+ * Test helper
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /** Zend_Log */
 require_once 'Zend/Log.php';
@@ -39,6 +45,12 @@ require_once 'Zend/Log/Filter/Suppress.php';
  */
 class Zend_Log_Filter_SuppressTest extends PHPUnit_Framework_TestCase
 {
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
     public function setUp()
     {
         $this->filter = new Zend_Log_Filter_Suppress();
@@ -72,15 +84,19 @@ class Zend_Log_Filter_SuppressTest extends PHPUnit_Framework_TestCase
         $this->filter->suppress(true);
         $this->assertFalse($this->filter->accept(array()));
     }
-    
+
     public function testFactory()
     {
         $cfg = array('log' => array('memory' => array(
-            'writerName' => "Mock", 
+            'writerName' => "Mock",
             'filterName' => "Suppress"
         )));
 
         $logger = Zend_Log::factory($cfg['log']);
         $this->assertTrue($logger instanceof Zend_Log);
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Filter_SuppressTest::main') {
+    Zend_Log_Filter_SuppressTest::main();
 }

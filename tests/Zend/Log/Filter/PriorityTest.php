@@ -20,8 +20,14 @@
  * @version    $Id$
  */
 
-/** PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Filter_PriorityTest::main');
+}
+
+/**
+ * Test helper
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /** Zend_Log */
 require_once 'Zend/Log.php';
@@ -39,6 +45,12 @@ require_once 'Zend/Log/Filter/Priority.php';
  */
 class Zend_Log_Filter_PriorityTest extends PHPUnit_Framework_TestCase
 {
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
     public function testComparisonDefaultsToLessThanOrEqual()
     {
         // accept at or below priority 2
@@ -69,30 +81,34 @@ class Zend_Log_Filter_PriorityTest extends PHPUnit_Framework_TestCase
             $this->assertRegExp('/must be an integer/i', $e->getMessage());
         }
     }
-    
+
     public function testFactory()
     {
         $cfg = array('log' => array('memory' => array(
-            'writerName' => "Mock", 
-            'filterName' => "Priority", 
+            'writerName' => "Mock",
+            'filterName' => "Priority",
             'filterParams' => array(
-                'priority' => "Zend_Log::CRIT", 
+                'priority' => "Zend_Log::CRIT",
                 'operator' => "<="
-             ),        
+             ),
         )));
 
         $logger = Zend_Log::factory($cfg['log']);
         $this->assertTrue($logger instanceof Zend_Log);
-        
+
         try {
             $logger = Zend_Log::factory(array('Null' => array(
                 'writerName'   => 'Mock',
                 'filterName'   => 'Priority',
                 'filterParams' => array(),
-            )));            
+            )));
         } catch(Exception $e) {
             $this->assertType('Zend_Log_Exception', $e);
             $this->assertRegExp('/must be an integer/', $e->getMessage());
         }
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Filter_PriorityTest::main') {
+    Zend_Log_Filter_PriorityTest::main();
 }

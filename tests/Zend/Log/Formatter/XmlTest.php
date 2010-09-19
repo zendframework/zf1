@@ -20,10 +20,14 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__)."/../../../TestHelper.php";
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Formatter_XmlTest::main');
+}
 
-/** PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
+/**
+ * Test helper
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /** Zend_Log_Formatter_Xml */
 require_once 'Zend/Log/Formatter/Xml.php';
@@ -38,6 +42,12 @@ require_once 'Zend/Log/Formatter/Xml.php';
  */
 class Zend_Log_Formatter_XmlTest extends PHPUnit_Framework_TestCase
 {
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
     public function testDefaultFormat()
     {
         $f = new Zend_Log_Formatter_Xml();
@@ -95,4 +105,8 @@ class Zend_Log_Formatter_XmlTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('&amp;amp', $line);
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_XmlTest::main') {
+    Zend_Log_Formatter_XmlTest::main();
 }

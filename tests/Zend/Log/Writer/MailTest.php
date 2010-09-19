@@ -60,7 +60,7 @@ class Zend_Log_Writer_MailTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Mock Transport for Zend_Mail
-     * 
+     *
      * @var Zend_Mail_Transport_Abstract
      */
     protected $_transport;
@@ -72,8 +72,7 @@ class Zend_Log_Writer_MailTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
-        $suite = new PHPUnit_Framework_TestSuite("Zend_Log_Writer_MailTest");
+        $suite = new PHPUnit_Framework_TestSuite(__CLASS__);
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -504,7 +503,7 @@ class Zend_Log_Writer_MailTest extends PHPUnit_Framework_TestCase
 
     /**
      * Returns a sample of an event
-     * 
+     *
      * @return array
      */
     protected function _getEvent()

@@ -20,8 +20,14 @@
  * @version    $Id$
  */
 
-/** PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Writer_FirebugTest::main');
+}
+
+/**
+ * Test helper
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /** Zend_Log */
 require_once 'Zend/Log.php';
@@ -54,8 +60,6 @@ require_once 'Zend/Controller/Response/Http.php';
  */
 class Zend_Log_Writer_FirebugTest extends PHPUnit_Framework_TestCase
 {
-
-
     protected $_controller = null;
     protected $_request = null;
     protected $_response = null;
@@ -70,9 +74,7 @@ class Zend_Log_Writer_FirebugTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
-
-        $suite  = new PHPUnit_Framework_TestSuite("Zend_Log_Writer_FirebugTest");
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -285,7 +287,7 @@ class Zend_Log_Writer_FirebugTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(serialize($qued_messages),
                             serialize($messages));
     }
-    
+
     public function testFactory()
     {
         $cfg = array('log' => array('memory' => array(
@@ -365,5 +367,8 @@ class Zend_Log_Writer_FirebugTest_Response extends Zend_Controller_Response_Http
 
         return true;
     }
+}
 
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Writer_FirebugTest::main') {
+    Zend_Log_Writer_FirebugTest::main();
 }

@@ -20,6 +20,13 @@
  * @version    $Id$
  */
 
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_LogTest::main');
+}
+
+/**
+ * Test helper
+ */
 require_once dirname(__FILE__) . '/../../TestHelper.php';
 
 /** Zend_Log */
@@ -44,6 +51,12 @@ require_once 'Zend/Log/FactoryInterface.php';
  */
 class Zend_Log_LogTest extends PHPUnit_Framework_TestCase
 {
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
     public function setUp()
     {
         $this->log = fopen('php://memory', 'w+');
@@ -457,4 +470,8 @@ class Zend_Log_Filter_NotImplementsFilterInterface implements Zend_Log_FactoryIn
     public static function factory($config)
     {
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_LogTest::main') {
+    Zend_Log_LogTest::main();
 }
