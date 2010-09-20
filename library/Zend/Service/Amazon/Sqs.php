@@ -279,7 +279,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
 
         $result = $this->_makeRequest($queue_url, 'DeleteMessage', $params);
 
-        if ($result->Error->Code !== null) {
+        if (isset($result->Error->Code) 
+            && !empty($result->Error->Code)
+        ) {
             return false;
         }
 
