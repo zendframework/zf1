@@ -105,7 +105,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
             $retry  = false;
             $result = $this->_makeRequest(null, 'CreateQueue', $params);
 
-            if ($result->CreateQueueResult->QueueUrl === null) {
+            if (!isset($result->CreateQueueResult->QueueUrl)
+                || empty($result->CreateQueueResult->QueueUrl)
+            ) {
                 if ($result->Error->Code == 'AWS.SimpleQueueService.QueueNameExists') {
                     return false;
                 } elseif ($result->Error->Code == 'AWS.SimpleQueueService.QueueDeletedRecently') {
@@ -157,7 +159,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
     {
         $result = $this->_makeRequest(null, 'ListQueues');
 
-        if ($result->ListQueuesResult->QueueUrl === null) {
+        if (!isset($result->ListQueuesResult->QueueUrl)
+            || empty($result->ListQueuesResult->QueueUrl)
+        ) {
             require_once 'Zend/Service/Amazon/Sqs/Exception.php';
             throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
         }
@@ -199,7 +203,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
 
         $result = $this->_makeRequest($queue_url, 'SendMessage', $params);
 
-        if ($result->SendMessageResult->MessageId === null) {
+        if (!isset($result->SendMessageResult->MessageId)
+            || empty($result->SendMessageResult->MessageId)
+        ) {
             require_once 'Zend/Service/Amazon/Sqs/Exception.php';
             throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
         } else if ((string) $result->SendMessageResult->MD5OfMessageBody != $checksum) {
@@ -235,7 +241,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
 
         $result = $this->_makeRequest($queue_url, 'ReceiveMessage', $params);
 
-        if ($result->ReceiveMessageResult->Message === null) {
+        if (!isset($result->ReceiveMessageResult->Message)
+            || empty($result->ReceiveMessageResult->Message)
+        ) {
             require_once 'Zend/Service/Amazon/Sqs/Exception.php';
             throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
         }
@@ -294,7 +302,9 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
 
         $result = $this->_makeRequest($queue_url, 'GetQueueAttributes', $params);
 
-        if ($result->GetQueueAttributesResult->Attribute === null) {
+        if (!isset($result->GetQueueAttributesResult->Attribute)
+            || empty($result->GetQueueAttributesResult->Attribute)
+        ) {
             require_once 'Zend/Service/Amazon/Sqs/Exception.php';
             throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
         }
