@@ -159,11 +159,15 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
     {
         $result = $this->_makeRequest(null, 'ListQueues');
 
+        if (isset($result->Error)) {
+            require_once 'Zend/Service/Amazon/Sqs/Exception.php';
+            throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
+        }
+
         if (!isset($result->ListQueuesResult->QueueUrl)
             || empty($result->ListQueuesResult->QueueUrl)
         ) {
-            require_once 'Zend/Service/Amazon/Sqs/Exception.php';
-            throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
+            return array();
         }
 
         $queues = array();
