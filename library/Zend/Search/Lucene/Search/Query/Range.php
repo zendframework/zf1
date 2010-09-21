@@ -186,7 +186,7 @@ class Zend_Search_Lucene_Search_Query_Range extends Zend_Search_Lucene_Search_Qu
 
                 while ($index->currentTerm() !== null          &&
                        $index->currentTerm()->field == $field  &&
-                       $index->currentTerm()->text  <  $upperTerm->text) {
+                       strcmp($index->currentTerm()->text, $upperTerm->text) < 0) {
                     $this->_matches[] = $index->currentTerm();
 
                     if ($maxTerms != 0  &&  count($this->_matches) > $maxTerms) {
