@@ -245,11 +245,16 @@ class Zend_Service_Amazon_Sqs extends Zend_Service_Amazon_Abstract
 
         $result = $this->_makeRequest($queue_url, 'ReceiveMessage', $params);
 
+        if (isset($result->Error)) {
+            require_once 'Zend/Service/Amazon/Sqs/Exception.php';
+            throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
+        }
+
         if (!isset($result->ReceiveMessageResult->Message)
             || empty($result->ReceiveMessageResult->Message)
         ) {
-            require_once 'Zend/Service/Amazon/Sqs/Exception.php';
-            throw new Zend_Service_Amazon_Sqs_Exception($result->Error->Code);
+            // no messages found
+            return array();
         }
 
         $data = array();
