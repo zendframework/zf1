@@ -913,6 +913,8 @@ class Zend_Ldap
      * - attributes
      * - sort
      * - collectionClass
+     * - sizelimit
+     * - timelimit
      *
      * @param  string|Zend_Ldap_Filter_Abstract|array $filter
      * @param  string|Zend_Ldap_Dn|null               $basedn
@@ -920,11 +922,13 @@ class Zend_Ldap
      * @param  array                                  $attributes
      * @param  string|null                            $sort
      * @param  string|null                            $collectionClass
+     * @param  integer                            	  $sizelimit
+     * @param  integer                            	  $timelimit
      * @return Zend_Ldap_Collection
      * @throws Zend_Ldap_Exception
      */
-    public function search($filter, $basedn = null, $scope = self::SEARCH_SCOPE_SUB,
-        array $attributes = array(), $sort = null, $collectionClass = null)
+    public function search($filter, $basedn = null, $scope = self::SEARCH_SCOPE_SUB, array $attributes = array(),
+        $sort = null, $collectionClass = null, $sizelimit = 0, $timelimit = 0)
     {
         if (is_array($filter)) {
             $options = array_change_key_case($filter, CASE_LOWER);
@@ -944,6 +948,9 @@ class Zend_Ldap
                     case 'collectionclass':
                         $collectionClass = $value;
                         break;
+                    case 'sizelimit':
+                    case 'timelimit':
+                        $$key = (int)$value;
                 }
             }
         }
@@ -961,14 +968,14 @@ class Zend_Ldap
 
         switch ($scope) {
             case self::SEARCH_SCOPE_ONE:
-                $search = @ldap_list($this->getResource(), $basedn, $filter, $attributes);
+                $search = @ldap_list($this->getResource(), $basedn, $filter, $attributes, 0, $sizelimit, $timelimit);
                 break;
             case self::SEARCH_SCOPE_BASE:
-                $search = @ldap_read($this->getResource(), $basedn, $filter, $attributes);
+                $search = @ldap_read($this->getResource(), $basedn, $filter, $attributes, 0, $sizelimit, $timelimit);
                 break;
             case self::SEARCH_SCOPE_SUB:
             default:
-                $search = @ldap_search($this->getResource(), $basedn, $filter, $attributes);
+                $search = @ldap_search($this->getResource(), $basedn, $filter, $attributes, 0, $sizelimit, $timelimit);
                 break;
         }
 
@@ -1091,6 +1098,8 @@ class Zend_Ldap
      * - attributes
      * - sort
      * - reverseSort
+     * - sizelimit
+     * - timelimit
      *
      * @param  string|Zend_Ldap_Filter_Abstract|array $filter
      * @param  string|Zend_Ldap_Dn|null               $basedn
@@ -1098,11 +1107,13 @@ class Zend_Ldap
      * @param  array                                  $attributes
      * @param  string|null                            $sort
      * @param  boolean                                $reverseSort
+     * @param  integer                            	  $sizelimit
+     * @param  integer                            	  $timelimit
      * @return array
      * @throws Zend_Ldap_Exception
      */
     public function searchEntries($filter, $basedn = null, $scope = self::SEARCH_SCOPE_SUB,
-        array $attributes = array(), $sort = null, $reverseSort = false)
+        array $attributes = array(), $sort = null, $reverseSort = false, $sizelimit = 0, $timelimit = 0)
     {
         if (is_array($filter)) {
             $filter = array_change_key_case($filter, CASE_LOWER);
@@ -1114,7 +1125,7 @@ class Zend_Ldap
                 unset($filter['reversesort']);
             }
         }
-        $result = $this->search($filter, $basedn, $scope, $attributes, $sort);
+        $result = $this->search($filter, $basedn, $scope, $attributes, $sort, null, $sizelimit, $timelimit);
         $items = $result->toArray();
         if ((bool)$reverseSort === true) {
             $items = array_reverse($items, false);
