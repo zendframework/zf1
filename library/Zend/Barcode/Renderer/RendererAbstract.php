@@ -529,12 +529,12 @@ abstract class Zend_Barcode_Renderer_RendererAbstract
      * @param float $orientation
      */
     abstract protected function _drawText(
-        $text, 
-        $size, 
-        $position, 
-        $font, 
-        $color, 
-        $alignment = 'center', 
+        $text,
+        $size,
+        $position,
+        $font,
+        $color,
+        $alignment = 'center',
         $orientation = 0
     );
 }
