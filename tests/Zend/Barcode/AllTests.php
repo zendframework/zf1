@@ -39,6 +39,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 require_once 'Zend/Barcode/FactoryTest.php';
 
 require_once 'Zend/Barcode/Object/Code39Test.php';
+
+require_once 'Zend/Barcode/Object/Code128Test.php';
+
 require_once 'Zend/Barcode/Object/Code25Test.php';
 require_once 'Zend/Barcode/Object/Code25interleavedTest.php';
 require_once 'Zend/Barcode/Object/Itf14Test.php';
@@ -85,6 +88,9 @@ class Zend_Barcode_AllTests
         $suite->addTestSuite('Zend_Barcode_FactoryTest');
 
         $suite->addTestSuite('Zend_Barcode_Object_Code39Test');
+        
+        $suite->addTestSuite('Zend_Barcode_Object_Code128Test');
+        
         $suite->addTestSuite('Zend_Barcode_Object_Code25Test');
         $suite->addTestSuite('Zend_Barcode_Object_Code25interleavedTest');
         $suite->addTestSuite('Zend_Barcode_Object_Itf14Test');
