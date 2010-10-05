@@ -210,11 +210,59 @@
                 </itemizedlist>
             </sect4>
 
-            <sect4 id="zend.service.livedocx.formats.image">
+            <sect4 id="zend.service.livedocx.formats.imageimport">
+                <title>Image File Formats (import):</title>
+
+                <para>
+                    Images can be merged into templates in any of following file formats:
+                </para>
+
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <ulink url="http://en.wikipedia.org/wiki/BMP_file_format">BMP</ulink> -
+                            Bitmap image format
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <ulink url="http://en.wikipedia.org/wiki/GIF">GIF</ulink> - Graphics
+                            Interchange Format
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <ulink url="http://en.wikipedia.org/wiki/Jpg">JPG</ulink> - Joint
+                            Photographic Experts Group format
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <ulink
+                                url="http://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</ulink>
+                            - Portable Network Graphics format
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <ulink
+                                url="http://en.wikipedia.org/wiki/Tagged_Image_File_Format">TIFF</ulink>
+                            - Tagged Image File Format
+                        </para>
+                    </listitem>
+
+                </itemizedlist>
+            </sect4>
+
+            <sect4 id="zend.service.livedocx.formats.imageexport">
                 <title>Image File Formats (output):</title>
 
                 <para>
-                    The resulting document can be saved in any of the following graphical file
+                    The resulting document can be exported to any of the following graphical file
                     formats:
                 </para>
 
@@ -403,6 +451,85 @@ file_put_contents('document.pdf', $document);
             </para>
         </sect3>
 
+
+        <sect3 id="zend.service.livedocx.mailmerge.imagemerge">
+
+            <title>Merging image data</title>
+
+            <para>
+                Using <classname>Zend_Service_LiveDocx_MailMerge</classname> it is also possible to merge images into
+                a template. This feature is useful, for example, in the case of a badge application
+                for a conference. In addition to the name and company name that should appear on
+                the badge, it is possible to insert a photo of the delegate, using the API.
+            </para>
+
+            <para>
+                Even it is sounds a little counter-intuitive, image-merging also work with
+                text fields, as described in the section above. In fact, inserting a text field
+                for an image is identical to inserting a text field for textual information.
+                The only difference is the naming convention of the text field. Whereas, a text
+                field for textual information can have (almost) any identifier, a text field for
+                an image must start with <emphasis>image:</emphasis>. For example, in the case of our badge
+                application, we would have the following fields 3 fields:
+            </para>
+
+            <para>
+                <inlinegraphic
+                    fileref="figures/zend.service.livedocx.mailmerge.templates-imagemerge_zoom.png"
+                    format="PNG" />
+            </para>
+
+            <para>
+                The text field, into which image data will be inserted is called <emphasis>image:photo</emphasis>
+                and can be populated just like any other text field, using the assign method. The
+                text fields <emphasis>name</emphasis> and <emphasis>company</emphasis> are regular
+                text fields for textual information.
+            </para>
+
+            <para>
+                Before we insert graphic data, we first have to upload the image to the backend
+                LiveDocx server. This can be achieved using the <emphasis>uploadImage($filename)</emphasis> method.
+            </para>
+
+            <para>The following code snipped illustrates the flow:</para>
+
+            <programlisting language="php"><![CDATA[
+$phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
+
+$phpLiveDocx->setUsername('username')
+            ->setPassword('password');
+
+$photoFilename = 'dailemaitre.jpg';
+
+if (!$phpLiveDocx->imageExists($photoFilename)) {
+    $phpLiveDocx->uploadImage($photoFilename);
+}
+
+$phpLiveDocx->setLocalTemplate('template.docx');
+
+$phpLiveDocx->assign('name',        'Daï Lemaitre')
+            ->assign('company',     'Megasoft Co-operation')
+            ->assign('date',        Zend_Date::now()->toString(Zend_Date::DATE_LONG))
+            ->assign('image:photo', $photoFilename);
+
+$phpLiveDocx->createDocument();
+
+$document = $phpLiveDocx->retrieveDocument('pdf');
+
+file_put_contents('document.pdf', $document);
+
+$phpLiveDocx->deleteImage($photoFilename);
+]]></programlisting>
+
+            <para>
+                Note that all images uploaded to your LiveDocx account must have a unique
+                filename. In the case that you only intend to use the image once (such
+                as is probable for our badge application), it makes sense to immediately
+                delete it from the backend, using the <emphasis>deleteImage($filename)</emphasis> method.
+            </para>
+
+        </sect3>
+
         <sect3 id="zend.service.livedocx.mailmerge.advanced">
             <title>Advanced Mail-Merge</title>
 
@@ -565,7 +692,7 @@ file_put_contents('document.pdf', $document);
             <para>
                 In addition to document file formats,
                 <classname>Zend_Service_LiveDocx_MailMerge</classname> also allows documents to be
-                saved to a number of image file formats (<acronym>BMP</acronym>,
+                exported to a number of image file formats (<acronym>BMP</acronym>,
                 <acronym>GIF</acronym>, <acronym>JPG</acronym>, <acronym>PNG</acronym> and
                 <acronym>TIFF</acronym>). Each page of the document is saved to one file.
             </para>
@@ -583,7 +710,7 @@ file_put_contents('document.pdf', $document);
                 relative to the original page size. The range of this parameter is 10 to 400.
                 <varname>$format</varname> is the format of the images returned by this method. The
                 supported formats can be obtained by calling
-                <methodname>getImageFormats()</methodname>.
+                <methodname>getImageExportFormats()</methodname>.
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -857,11 +984,36 @@ Zend_Debug::dump($phpLiveDocx->getDocumentFormats());
 ]]></programlisting>
             </example>
 
-            <example id="zend.service.livedocx.mailmerge.information.getimageformats">
-                <title>Get Array of Supported Image File Formats</title>
+            <example id="zend.service.livedocx.mailmerge.information.getimageimportformats">
+                <title>Get Array of Supported Image Import File Formats</title>
 
                 <para>
-                    The following code returns and displays an array of all supported image file
+                    The following code returns and displays an array of all supported imput image file
+                    formats.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+$phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
+
+$phpLiveDocx->setUsername('myUsername')
+            ->setPassword('myPassword');
+
+Zend_Debug::dump($phpLiveDocx->getImageImportFormats());
+]]></programlisting>
+
+                <para>
+                    <emphasis>NOTE:</emphasis> As the return value of this method changes very
+                    infrequently, it is highly recommended to use a cache, such as
+                    <classname>Zend_Cache</classname> - this will considerably speed up your
+                    application.
+                </para>
+            </example>
+            
+            <example id="zend.service.livedocx.mailmerge.information.getimageexportformats">
+                <title>Get Array of Supported Image Export File Formats</title>
+
+                <para>
+                    The following code returns and displays an array of all supported export image file
                     formats. This method is particularly useful in the case that a combo list should
                     be displayed that allows the end-user to select the output format of the
                     documentation generation process.
@@ -873,7 +1025,7 @@ $phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
 $phpLiveDocx->setUsername('myUsername')
             ->setPassword('myPassword');
 
-Zend_Debug::dump($phpLiveDocx->getImageFormats());
+Zend_Debug::dump($phpLiveDocx->getImageExportFormats());
 ]]></programlisting>
 
                 <para>

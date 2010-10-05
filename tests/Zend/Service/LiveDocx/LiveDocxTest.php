@@ -89,7 +89,7 @@ class Zend_Service_LiveDocX_LiveDocxTest extends PHPUnit_Framework_TestCase
     
     public function testGetVersion ()
     {
-        $expectedResults = '1.2';
+        $expectedResults = '2.0';
         $this->assertEquals($expectedResults, $this->phpLiveDocx->getVersion());
     }
 }

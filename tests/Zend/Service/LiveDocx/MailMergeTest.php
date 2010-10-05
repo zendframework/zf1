@@ -44,7 +44,9 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
 {
     const TEST_TEMPLATE_1 = 'phpunit-template.docx';
     const TEST_TEMPLATE_2 = 'phpunit-template-block-fields.doc';
-    const ENDPOINT = 'https://api.livedocx.com/1.2/mailmerge.asmx?wsdl';
+    const TEST_IMAGE_1 = 'image-01.png';
+    const TEST_IMAGE_2 = 'image-02.png';
+    const ENDPOINT = 'https://api.livedocx.com/2.0/mailmerge.asmx?wsdl';
 
     public $path;
     public $phpLiveDocx;
@@ -276,11 +278,11 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         // - DOC because of ???
 
         $expectedResults = array(
-            'docx' => '50fe2abd9b42e67c3126d355768b6e75',
-            'rtf'  => '24f950ff620ba194fe5900c3a5360570',
-            'txd'  => '22d7a7558b19ba8be9fe03b35068cf20',
-            'txt'  => '3dc103f033ef6efba770c8196059d96d',
-            'html' => '8b91dc8617651b6e3142d0716c0f616a',
+            'docx' => 'f21728491855c27a9e64a47266c2a720',
+            'rtf'  => 'fb75deabf481b0264927cb4a5c9db765',
+            'txd'  => 'd1f645405ded0718edff6ae6f50a496e',
+            'txt'  => 'ec2f680646540edd79cd22773fa7e183',
+            'html' => 'e3a28523794b0071501c09f791f8c795',
         );
 
         // Remote Template
@@ -331,11 +333,11 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         // - PDF because of the timestamp in meta data
         // - DOC because of ???
         $expectedResults = array(
-            'docx' => '0697e57da0c886dee9fa2d5c98335121',
-            'rtf'  => '9a3f448519e2be0da08a13702fd9d48b',
-            'txd'  => 'f76a6575e74db5b15b4c4be76157bc03',
-            'txt'  => 'e997415fd0d5e766b2490fed9386da21',
-            'html' => '2dfafbb8f81281dbbae99e131963cd50',
+            'docx' => '2757b4d10c8c031d8f501231be39fcfe',
+            'rtf'  => '2997e531011d826f315291fca1351988',
+            'txd'  => '8377a5a62f2e034974fc299c322d137f',
+            'txt'  => 'a7d23668f81b314e15d653ab657316f9',
+            'html' => '57365a2ff02347a7863626317505e037',
         );
 
         // Remote Template
@@ -373,10 +375,16 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResults, $this->phpLiveDocx->getDocumentFormats());
     }
 
-    public function testGetImageFormats()
+    public function testGetImageImportFormats()
+    {
+        $expectedResults = array('bmp' , 'gif' , 'jpg' , 'png' , 'tiff', 'wmf');
+        $this->assertEquals($expectedResults, $this->phpLiveDocx->getImageImportFormats());
+    }
+
+    public function testGetImageExportFormats()
     {
         $expectedResults = array('bmp' , 'gif' , 'jpg' , 'png' , 'tiff');
-        $this->assertEquals($expectedResults, $this->phpLiveDocx->getImageFormats());
+        $this->assertEquals($expectedResults, $this->phpLiveDocx->getImageExportFormats());
     }
    
     // -------------------------------------------------------------------------
@@ -394,17 +402,17 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         );
 
         $expectedResults = array(
-            'bmp'  => 'c588ee10d63e0598fe3541a032f509d6',
-            'gif'  => '2edd4066dda5f4c2049717137d76cf58',
-            'jpg'  => '8766618c572f19ceccc39af7ad0c8478',
-            'png'  => '1e12e4937b9ccb0fa6d78dcd342b7f28',
-            'tiff' => '014ae48643e3a50f691b7d9442605426',
+            'bmp'  => 'a1934f2153172f021847af7ece9049ce',
+            'gif'  => 'd7281d7b6352ff897917e25d6b92746f',
+            'jpg'  => 'e0b20ea2c9a6252886f689f227109085',
+            'png'  => 'c449f0c2726f869e9a42156e366f1bf9',
+            'tiff' => '20a96a94762a531e9879db0aa6bd673f',
         );
 
         $this->phpLiveDocx->setLocalTemplate($this->path . DIRECTORY_SEPARATOR . self::TEST_TEMPLATE_1);
         $this->phpLiveDocx->assign($testValues);
         $this->phpLiveDocx->createDocument();
-        foreach($this->phpLiveDocx->getImageFormats() as $format) {
+        foreach($this->phpLiveDocx->getImageExportFormats() as $format) {
             $bitmaps = $this->phpLiveDocx->getBitmaps(1, 1, 20, $format);
             $this->assertEquals($expectedResults[$format], md5(serialize($bitmaps)));
         }
@@ -423,17 +431,17 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         );
 
         $expectedResults = array(
-            'bmp'  => '0ae732498dd3798fc51c1ccccd09e3e3',
-            'gif'  => '9a5f7bfa2aafd8b99f6955b8bdbb8bf7',
-            'jpg'  => '38550446bfc84af3ddd1a0f3339a84dd',
-            'png'  => 'a3b5517bb118db67b8a8259652a389c2',
-            'tiff' => 'b49aa783c14bc7f07776d816085894a3',
+            'bmp'  => 'e8a884ee61c394deec8520fb397d1cf1',
+            'gif'  => '2255fee47b4af8438b109efc3cb0d304',
+            'jpg'  => 'e1acfc3001fc62567de2a489eccdb552',
+            'png'  => '15eac34d08e602cde042862b467fa865',
+            'tiff' => '98bad79380a80c9cc43dfffc5158d0f9',
         );
 
         $this->phpLiveDocx->setLocalTemplate($this->path . DIRECTORY_SEPARATOR . self::TEST_TEMPLATE_1);
         $this->phpLiveDocx->assign($testValues);
         $this->phpLiveDocx->createDocument();
-        foreach($this->phpLiveDocx->getImageFormats() as $format) {
+        foreach($this->phpLiveDocx->getImageExportFormats() as $format) {
             $bitmaps = $this->phpLiveDocx->getAllBitmaps(20, $format);
             $this->assertEquals($expectedResults[$format], md5(serialize($bitmaps)));
         }
@@ -572,6 +580,80 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $this->phpLiveDocx->uploadTemplate($this->path . DIRECTORY_SEPARATOR . self::TEST_TEMPLATE_2);
         $this->assertTrue($this->phpLiveDocx->templateExists(self::TEST_TEMPLATE_2));
         $this->phpLiveDocx->deleteTemplate(self::TEST_TEMPLATE_2);
+    }
+
+    // -------------------------------------------------------------------------
+
+    public function testUploadImage()
+    {
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_2);
+        $this->assertNull($this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_2));
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_2);
+    }
+
+    public function testDownloadImage()
+    {
+        $expectedResults = 'f8b663e465acd570414395d5c33541ab';
+        $this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_2);
+        $image = $this->phpLiveDocx->downloadImage(self::TEST_IMAGE_2);
+        $this->assertEquals($expectedResults, md5($image));
+    }
+
+    public function testDeleteImage()
+    {
+        $this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_2);
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_2);
+        $imageDeleted = true;
+        foreach($this->phpLiveDocx->listImages() as $image) {
+            if($image['filename'] == self::TEST_IMAGE_2) {
+                $imageDeleted = false;
+            }
+        }
+        $this->assertTrue($imageDeleted);
+    }
+
+    public function testListImages()
+    {
+        $this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_1);
+        $this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_2);
+
+        // Where images uploaded and are being listed?
+        $testImage1Exists = false;
+        $testImage2Exists = false;
+
+        $images = $this->phpLiveDocx->listImages();
+        foreach($images as $image) {
+            if(self::TEST_IMAGE_1 === $image['filename']) {
+                $testImage1Exists = true;
+            } elseif(self::TEST_IMAGE_2 === $image['filename']) {
+                $testImage2Exists = true;
+            }
+        }
+        $this->assertTrue($testImage1Exists && $testImage2Exists);
+
+        // Is all info about images available?
+        $expectedResults = array('filename', 'fileSize', 'createTime', 'modifyTime');
+        foreach($images as $image) {
+            $this->assertEquals($expectedResults, array_keys($image));
+        }
+
+        // Is all info about images correct?
+        foreach($images as $image) {
+            $this->assertTrue(strlen($image['filename']) > 0);
+            $this->assertTrue($image['fileSize'] > 1);
+            $this->assertTrue($image['createTime'] > mktime(0, 0, 0, 1, 1, 1980));
+            $this->assertTrue($image['modifyTime'] > mktime(0, 0, 0, 1, 1, 1980));
+        }
+
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_1);
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_2);
+    }
+
+    public function testImageExists()
+    {
+        $this->phpLiveDocx->uploadImage($this->path . DIRECTORY_SEPARATOR . self::TEST_IMAGE_2);
+        $this->assertTrue($this->phpLiveDocx->imageExists(self::TEST_IMAGE_2));
+        $this->phpLiveDocx->deleteImage(self::TEST_IMAGE_2);
     }
 
     // -------------------------------------------------------------------------
