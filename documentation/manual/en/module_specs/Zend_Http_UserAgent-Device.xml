@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.http.user-agent-device">
+    <title>The UserAgent Device Interface</title>
+
+    <sect2 id="zend.http.user-agent-device.intro">
+        <title>Overview</title>
+
+        <para>
+            Once the User-Agent has been parsed and capabilities retrieved from the <link
+                linkend="zend.http.user-agent-features">Features adapter</link>, you will be
+            returned an object that represents the discovered brower device. This interface
+            describes the various capabilities you may now introspect.
+        </para>
+
+        <para>
+            Additionally, the various device classes define algorithms for matching the devices they
+            describe. By implementing this interface, you may provide additional logic around these
+            capabilities.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-device.quick-start">
+        <title>Quick Start</title>
+
+        <para>
+            The <interfacename>Zend_Http_UserAgent_Device</interfacename> interface defines the
+            following methods.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+interface Zend_Http_UserAgent_Device extends Serializable
+{
+    public function __construct($userAgent = null, array $server = array(), array $config = array());
+    public static function match($userAgent, $server);
+    public function getAllFeatures();
+    public function getAllGroups();
+    public function getBrowser();
+    public function getBrowserVersion();
+    public function getGroup($group);
+    public function getImageFormatSupport();
+    public function getImages();
+    public function getMaxImageHeight();
+    public function getMaxImageWidth();
+    public function getPhysicalScreenHeight();
+    public function getPhysicalScreenWidth();
+    public function getPreferredMarkup();
+    public function getUserAgent();
+    public function getXhtmlSupportLevel();
+    public function hasFlashSupport();
+    public function hasPdfSupport();
+    public function hasPhoneNumber();
+    public function httpsSupport();
+}
+]]></programlisting>
+
+        <para>
+            The static function <methodname>match()</methodname> should be used to determine whether
+            the provided User-Agent and environment (represented by the <varname>$server</varname>
+            variable) match this device. If they do, the <classname>Zend_Http_UserAgent</classname>
+            class will then create an instance of the class, passing it the User-Agent,
+            <varname>$server</varname> array, and any configuration available; at this time, it is
+            expected that the Device class will consult with a features adapter, if present, and
+            populate itself with discovered capabilities.
+        </para>
+
+        <para>
+            In practice, you will likely extend
+            <clasname>Zend_Http_UserAgent_AbstractDevice</clasname>, which provides functionality
+            around discovering capabilities from the User-Agent string itself, as well as
+            discovering and querying a <link linkend="zend.http.user-agent-features">Features
+                adapter</link>. 
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-device.options">
+        <title>Configuration Options</title>
+
+        <para>
+            Configuration options are defined on a per-device basis. The following options are
+            defined in <classname>Zend_Http_UserAgent_AbstractDevice</classname>. Like all options,
+            the "." character represents an additional level of depth to the configuration array.
+        </para>
+
+        <variablelist>
+            <title>Device Options</title>
+
+            <varlistentry>
+                <term>features.classname</term>
+
+                <listitem>
+                    <para>
+                        The name of a <link linkend="zend.http.user-agent-features">Features
+                            adapter</link> class that has either been previously loaded or which is
+                        discoverable via autoloading, or used in conjunction with the
+                        <varname>features.path</varname> option. This class must implement the
+                        <interfacename>Zend_Http_UserAgent_Features_Adapter</interfacename>
+                        interface.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>features.path</term>
+
+                <listitem>
+                    <para>
+                        If provided, the filesystem path to the features adapter class being used.
+                        The path must either be an absolute path or discoverable via the
+                        <varname>include_path</varname>.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+        </variablelist>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-device.methods">
+        <title>Available Methods</title>
+
+        <refentry id="zend.http.user-agent-device.methods.constructor">
+            <refnamediv>
+                <refname>__construct</refname>
+                <refpurpose>Instantiate a Device instance</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>__construct</methodname>
+                    <methodparam>
+                        <funcparams>$userAgent = null, array $server = array(), array $config = array()</funcparams>
+                    </methodparam>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>__construct()</title>
+
+                <para>
+                    Expects a User-Agent string, an array representing the HTTP environment, and an
+                    array of configuration values. The values are all optional, as they may be
+                    populated during deserialization.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.match">
+            <refnamediv>
+                <refname>match</refname>
+                <refpurpose>Determine if a User-Agent matches this device</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>match</methodname>
+                    <methodparam>
+                        <funcparams>$userAgent, $server</funcparams>
+                    </methodparam>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>match()</title>
+
+                <para>
+                    This method is static.
+                </para>
+
+                <para>
+                    Provided the <varname>$userAgent</varname> string and an array representing the
+                    HTTP headers provided in the request, determine if they match the capabilities
+                    of this device. This method should return a boolean.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-all-features">
+            <refnamediv>
+                <refname>getAllFeatures</refname>
+                <refpurpose>Get an array of all supported features</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getAllFeatures</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getAllFeatures()</title>
+
+                <para>
+                    Returns an array of key/value pairs representing the features supported by this
+                    device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-all-groups">
+            <refnamediv>
+                <refname>getAllGroups</refname>
+                <refpurpose>Retrieve all feature groups</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getAllGroups</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getAllGroups()</title>
+
+                <para>
+                    Similar to <methodname>getAllFeatures()</methodname>, this retrieves all
+                    features, but grouped by type.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-browser">
+            <refnamediv>
+                <refname>getBrowser</refname>
+                <refpurpose>Get the User-Agent browser string</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getBrowser</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getBrowser()</title>
+
+                <para>
+                    Returns the browser string as discoverd from the User-Agent string.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-browser-version">
+            <refnamediv>
+                <refname>getBrowserVersion</refname>
+                <refpurpose>Determine the browser version</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getBrowserVersion</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getBrowserVersion()</title>
+
+                <para>
+                    Retrieve the browser version as discovered from the User-Agent string.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-group">
+            <refnamediv>
+                <refname>getGroup</refname>
+                <refpurpose>Get features from a given group</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getGroup</methodname>
+                    <methodparam>
+                        <funcparams>$group</funcparams>
+                    </methodparam>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getGroup()</title>
+
+                <para>
+                    Get all features from a given feature group.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-image-format-support">
+            <refnamediv>
+                <refname>getImageFormatSupport</refname>
+                <refpurpose>Retrieve list of supported images</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getImageFormatSupport</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getImageFormatSupport()</title>
+
+                <para>
+                    Retrieve a list of supported image types.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-images">
+            <refnamediv>
+                <refname>getImages</refname>
+                <refpurpose>Alias for <methodname>getImageFormatSupport()</methodname></refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getImages</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getImages()</title>
+
+                <para>
+                    Alias for <methodname>getImageFormatSupport()</methodname>.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-max-image-height">
+            <refnamediv>
+                <refname>getMaxImageHeight</refname>
+                <refpurpose>Get maximum supported image height</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getMaxImageHeight</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getMaxImageHeight()</title>
+
+                <para>
+                    Retrieve the maximum supported image height for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-max-image-width">
+            <refnamediv>
+                <refname>getMaxImageWidth</refname>
+                <refpurpose>Get maximum supported image width</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getMaxImageWidth</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getMaxImageWidth()</title>
+
+                <para>
+                    Retrieve the maximum supported image width for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-physical-screen-height">
+            <refnamediv>
+                <refname>getPhysicalScreenHeight</refname>
+                <refpurpose>Get the physical screen height for the device</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getPhysicalScreenHeight</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getPhysicalScreenHeight()</title>
+
+                <para>
+                    Retrieve the physical screen height for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-physical-screen-width">
+            <refnamediv>
+                <refname>getPhysicalScreenWidth</refname>
+                <refpurpose>Get the physical screen width for the device</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getPhysicalScreenWidth</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getPhysicalScreenWidth()</title>
+
+                <para>
+                    Retrieve the physical screen width for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-preferred-markup">
+            <refnamediv>
+                <refname>getPreferredMarkup</refname>
+                <refpurpose>Determine the preferred markup format</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getPreferredMarkup</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getPreferredMarkup()</title>
+
+                <para>
+                    Retrieve the preferred markup format for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-user-agent">
+            <refnamediv>
+                <refname>getUserAgent</refname>
+                <refpurpose>Get the User-Agent string</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getUserAgent</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getUserAgent()</title>
+
+                <para>
+                    Retrieve the User-Agent string for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.get-xhtml-support-level">
+            <refnamediv>
+                <refname>getXhtmlSupportLevel</refname>
+                <refpurpose>Get the version of XHTML supported</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>getXhtmlSupportLevel</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>getXhtmlSupportLevel()</title>
+
+                <para>
+                    Retrieve the supported X/HTML version for the current device instance.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.has-flash-support">
+            <refnamediv>
+                <refname>hasFlashSupport</refname>
+                <refpurpose>Does the device support Flash?</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>hasFlashSupport</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>hasFlashSupport()</title>
+
+                <para>
+                    Determine if the current device instance supports Flash.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.has-pdf-support">
+            <refnamediv>
+                <refname>hasPdfSupport</refname>
+                <refpurpose>Does the device support PDF?</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>hasPdfSupport</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>hasPdfSupport()</title>
+
+                <para>
+                    Determine if the current device instance supports PDF.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.has-phone-number">
+            <refnamediv>
+                <refname>hasPhoneNumber</refname>
+                <refpurpose>Does the device have a phone number?</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>hasPhoneNumber</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>hasPhoneNumber()</title>
+
+                <para>
+                    Determine if the device has an associated phone number. Note: does not retrieve
+                    the phone number. This can be useful for determining if the device is a mobile
+                    phone versus another wireless capable device.
+                </para>
+            </refsect1>
+        </refentry>
+
+        <refentry id="zend.http.user-agent-device.methods.https-support">
+            <refnamediv>
+                <refname>httpsSupport</refname>
+                <refpurpose>Does the device support HTTPS?</refpurpose>
+            </refnamediv>
+
+            <refsynopsisdiv>
+                <methodsynopsis>
+                    <methodname>httpsSupport</methodname>
+                </methodsynopsis>
+            </refsynopsisdiv>
+
+            <refsect1>
+                <title>httpsSupport()</title>
+
+                <para>
+                    Determine if the current device instance supports HTTPS. 
+                </para>
+            </refsect1>
+        </refentry>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-device.examples">
+        <title>Examples</title>
+
+        <example id="zend.http.user-agent-device.examples.support">
+            <title>Determining Supported Features</title>
+
+            <para>
+                You may wish to direct the user to specific areas of your site based on features
+                supported by the device they are using. For instance, if a particular app works only
+                in Flash, you might direct a non-Flash-capable device to a page indicating the
+                application will not work on their device; or for a device not capable of HTTPS, you
+                may indicate certain actions, such as purchases, are not available.
+            </para>
+
+            <programlisting language="php"><![CDATA[
+$userAgent = new Zend_Http_UserAgent();
+$device    = $userAgent->getDevice();
+
+// Redirect to a Flash version of the app:
+if ($device->hasFlashSupport()) {
+    header('Location: /flash/app');
+    exit;
+}
+
+// Determine whether to show a "purchase" link:
+if ($device->httpsSupport()) {
+    echo '<a href="https://store-site.com/purchase">Purchase!</a>';
+} else {
+    echo 'Purchasing is unavailable on this device.';
+}
+]]></programlisting>
+        </example>
+
+        <example id="zend.http.user-agent-device.examples.images">
+            <title>Dynamically Scaling Images</title>
+
+            <para>
+                You may wish to alter the image sizes present in order to achieve a specific design
+                within mobile devices. You may use a variety of methods in the device object to make
+                this happen.
+            </para>
+
+            <programlisting language="php"><![CDATA[
+$userAgent = new Zend_Http_UserAgent();
+$device    = $userAgent->getDevice();
+
+// Get the maximum image width and height
+$maxWidth  = $device->getMaxImageWidth();
+$maxHeight = $device->getMaxImageHeight();
+
+// Create an <img> tag with appropriate sizes
+echo '<img src="/images/foo.png"';
+if ((null !== $maxWidth) && ($maxWidth < 328)) {
+    echo ' width="' . $maxWidth . '"';
+}
+if ((null !== $maxHeight) && ($maxHeight < 400)) {
+    echo ' height="' . $maxHeight . '"';
+}
+echo '/>';
+]]></programlisting>
+
+            <note>
+                <title>Markup- based scaling is not ideal</title>
+
+                <para>
+                    Markup-based scaling such as in the example above is not the best approach, as
+                    it means that the full-sized image is still delivered to the device. A better
+                    approach is to pre-scale your images to a variety of sizes representing the
+                    devices you wish to support, and then using the device capabilities to determine
+                    which image to use.
+                </para>
+
+                <para>
+                    Another approach is to use third-party services. Zend Framework provides one
+                    such capability via the <link
+                        linkend="zend.view.helpers.initial.tiny-src">TinySrc view helper</link>.
+                </para>
+            </note>
+        </example>
+    </sect2>
+</sect1>

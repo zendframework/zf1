@@ -20,17 +20,15 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Http_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Zend_Http_UserAgent_AllTests::main');
 }
 
-require_once 'Zend/Http/ResponseTest.php';
-require_once 'Zend/Http/CookieTest.php';
-require_once 'Zend/Http/CookieJarTest.php';
-require_once 'Zend/Http/Client/AllTests.php';
-require_once 'Zend/Http/UserAgent/AllTests.php';
+require_once 'Zend/Http/UserAgentTest.php';
+require_once 'Zend/Http/UserAgent/AbstractDeviceTest.php';
+require_once 'Zend/Http/UserAgent/Features/Adapter/WurflApiTest.php';
 
 /**
  * @category   Zend
@@ -49,18 +47,16 @@ class Zend_Http_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Http');
+        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Http - UserAgent');
 
-        $suite->addTestSuite('Zend_Http_ResponseTest');
-        $suite->addTestSuite('Zend_Http_CookieTest');
-        $suite->addTestSuite('Zend_Http_CookieJarTest');
-        $suite->addTest(Zend_Http_Client_AllTests::suite());
-        $suite->addTest(Zend_Http_UserAgent_AllTests::suite());
+        $suite->addTestSuite('Zend_Http_UserAgentTest');
+        $suite->addTestSuite('Zend_Http_UserAgent_AbstractDeviceTest');
+        $suite->addTestSuite('Zend_Http_UserAgent_Features_Adapter_WurflApiTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Http_AllTests::main') {
-    Zend_Http_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Http_UserAgent_AllTests::main') {
+    Zend_Http_UserAgent_AllTests::main();
 }
