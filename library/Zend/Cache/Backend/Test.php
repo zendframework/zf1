@@ -109,7 +109,8 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
           || $id == 'e83249ea22178277d5befc2c5e2e9ace'
           || $id == '40f649b94977c0a6e76902e2a0b43587'
           || $id == '88161989b73a4cbfd0b701c446115a99'
-          || $id == '205fc79cba24f0f0018eb92c7c8b3ba4')
+          || $id == '205fc79cba24f0f0018eb92c7c8b3ba4'
+          || $id == '170720e35f38150b811f68a937fb042d')
         {
             return false;
         }
