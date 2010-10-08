@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- EN-Revision: 22741 -->
-<!-- Reviewed: no -->
+<!-- Reviewed: 22741 -->
 <sect2 id="zend.test.phpunit.testing">
     <title>Testen eigener Controller und MVC Anwendungen</title>
 
     <para>
         Sobald man sein Bootstrap hat, kann man mit dem Testen beginnen. Testen funktioniert
-        grundsätzlich wie man es in einer PHPUnit Test Suite erwarten würde, mit ein paar kleinen
+        grundsätzlich so, wie man es in einer PHPUnit-TestSuite erwarten würde, mit ein paar kleinen
         Unterschieden.
     </para>
 
     <para>
-        Zuerst muß man eine <acronym>URL</acronym> die getestet werden soll ausführen, indem die
-        <methodname>dispatch()</methodname> Methode des TestCases ausgeführt wird:
+        Zuerst muss man eine <acronym>URL</acronym> ausführen, die getestet werden soll, indem die
+        <methodname>dispatch()</methodname>-Methode des Testfalls ausgeführt wird:
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -29,9 +29,9 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 ]]></programlisting>
 
     <para>
-        Es gibt trotzdem Zeiten, , in denen man zusätzliche Informationen angeben muß --
-        <constant>GET</constant> und POST Variablen, COOKIE Informationen, usw. Man kann die Anfrage
-        mit diesen Informationen ausstatten:
+        Manchmal ist es trotzdem nötig, zusätzliche Informationen anzugeben -- 
+        <constant>GET</constant> und POST Variablen, COOKIE Informationen, usw.
+        Man kann die Anfrage mit folgenden Informationen ausstatten:
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -76,7 +76,7 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 ]]></programlisting>
 
     <para>
-        Jetzt wurde die Anfrage durchgeführt, es ist also Zeit Behauptungen zu prüfen.
+        Jetzt wurde die Anfrage durchgeführt, es ist also Zeit Zusicherungen zu prüfen.
     </para>
 
     <sect3 id="zend.test.phpunit.testing.redirector">
@@ -84,21 +84,21 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
         <important>
             <para>
-                Der Redirect Action Helper hat Probleme mit der <methodname>exit()</methodname>
-                Anweisung wenn die <methodname>gotoAndExit()</methodname> Methode verwendet wird,
-                und wird dann natürlich auch einen Test beenden der für diese Methode läuft. Um die
-                eigene Anwendung testbar zu machen sollte diese Methode nicht am Redirector
+                Der Redirect Action Helper hat Probleme mit der Anweisung <methodname>exit()</methodname>,
+                wenn die Methode <methodname>gotoAndExit()</methodname> verwendet wird
+                und wird dann natürlich auch einen Test beenden, der für diese Methode läuft. Um die
+                eigene Anwendung testbar zu machen, sollte diese Methode nicht am Redirector
                 verwendet werden.
             </para>
         </important>
 
         <para>
             Durch seine Natur führt das Redirector Action Helper Plugin ein Redirect aus und steigt
-            nach diesem aus. Weil man Teile einer Anwendung nicht testen kann wenn diese Exit
-            Aufrufe durchführen, schaltet
-            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname> den Exit Teil des
-            Redirectors was zu unterschiedlichen Verhaltensweisen in Tests und echter Anwendung
-            führen kann. Um sicherzustellen das der Redirect richtig arbeitet  sollte man diesen
+            nach diesem aus. Weil man Teile einer Anwendung nicht testen kann, wenn diese
+            Exit-Aufrufe durchführen, deaktiviert
+            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname> den Exit-Teil des
+            Redirectors automatisch, was zu unterschiedlichen Verhaltensweisen in Tests und echter Anwendung
+            führen kann. Um sicherzustellen, dass der Redirect richtig arbeitet, sollte man diesen
             auf folgendem Weg durchführen:
         </para>
 
@@ -107,9 +107,9 @@ class MyController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        if($someCondition == true) {
+        if ($someCondition == true) {
             return $this->_redirect(...);
-        } else if($anotherCondition == true) {
+        } else if ($anotherCondition == true) {
             $this->_redirector->gotoSimple("foo");
             return;
         }
@@ -121,9 +121,9 @@ class MyController extends Zend_Controller_Action
 
         <important>
             <para>
-                Abhängig von der eigenen Anwendung kann es sein dass das nicht genug ist da eine
-                zusätzliche <methodname>preDispatch()</methodname> oder
-                <methodname>postDispatch()</methodname> Logik ausgeführt werden könnte. Das kann
+                Abhängig von der eigenen Anwendung kann es sein, dass das nicht genug ist, da eine
+                zusätzliche <methodname>preDispatch()</methodname>- oder
+                <methodname>postDispatch()</methodname>-Logik ausgeführt werden könnte. Das kann
                 aktuell mit Zend_Test auf keine vernünftige Weise behandelt werden.
             </para>
         </important>
