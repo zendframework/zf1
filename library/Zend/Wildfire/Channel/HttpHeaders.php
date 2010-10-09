@@ -269,7 +269,12 @@ class Zend_Wildfire_Channel_HttpHeaders extends Zend_Controller_Plugin_Abstract 
         ) {
             return true;
         }
-        
+
+        // use is_a() instead of 'instanceof' to avoid having to load the class
+        if (!is_a($this->getRequest(), 'Zend_Controller_Request_Http')) {
+            return false;
+        }
+
         return ($this->getResponse()->canSendHeaders()
                 && (preg_match_all(
                         '/\s?FirePHP\/([\.\d]*)\s?/si',

@@ -44,6 +44,9 @@ require_once 'Zend/Controller/Request/HttpTestCase.php';
 /** Zend_Controller_Response_Http */
 require_once 'Zend/Controller/Response/HttpTestCase.php';
 
+/** Zend_Controller_Request_Simple */
+require_once 'Zend/Controller/Request/Simple.php';
+
 /** Zend_Controller_Front **/
 require_once 'Zend/Controller/Front.php';
 
@@ -972,6 +975,25 @@ class Zend_Wildfire_WildfireTest extends PHPUnit_Framework_TestCase
                             '[{"Type":"TABLE","Label":"Label"},[["Col1","Col2"],[{"__className":"Zend_Wildfire_WildfireTest_TestObject3","public:name":"Name","public:value":"Value","undeclared:testArray":["val1","** Max Array Depth (1) **"],"undeclared:child":{"__className":"Zend_Wildfire_WildfireTest_TestObject3","public:name":"Name","public:value":"Value","undeclared:testArray":["val1","** Max Array Depth (1) **"],"undeclared:child":"** Max Object Depth (2) **"}},{"__className":"Zend_Wildfire_WildfireTest_TestObject3","public:name":"Name","public:value":"Value","undeclared:testArray":["val1","** Max Array Depth (1) **"],"undeclared:child":{"__className":"Zend_Wildfire_WildfireTest_TestObject3","public:name":"Name","public:value":"Value","undeclared:testArray":["val1","** Max Array Depth (1) **"],"undeclared:child":"** Max Object Depth (2) **"}}]]]');
     }
 
+    /**
+     * @group ZF-10526
+     */
+    public function testNonHTTPRequest()
+    {
+        $this->_request = new Zend_Controller_Request_Simple();
+        $this->_response = new Zend_Wildfire_WildfireTest_Response();
+
+        $channel = Zend_Wildfire_Channel_HttpHeaders::getInstance();
+        $channel->setRequest($this->_request);
+        $channel->setResponse($this->_response);
+
+        // this should not fail with: PHP Fatal error:  Call to undefined method Zend_Controller_Request_Simple::getHeader()
+        $this->assertFalse($channel->isReady());
+
+        // this should not fail with: PHP Fatal error:  Call to undefined method Zend_Controller_Request_Simple::getHeader()
+        $firephp = Zend_Wildfire_Plugin_FirePhp::getInstance();
+        $firephp->send('This is a log message!');
+    }
 }
 
 class Zend_Wildfire_WildfireTest_TestObject1
