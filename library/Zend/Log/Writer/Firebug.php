@@ -195,6 +195,7 @@ class Zend_Log_Writer_Firebug extends Zend_Log_Writer_Abstract
         Zend_Wildfire_Plugin_FirePhp::getInstance()->send($message,
                                                           $label,
                                                           $type,
-                                                          array('traceOffset'=>6));
+                                                          array('traceOffset'=>4,
+                                                                'fixZendLogOffsetIfApplicable'=>true));
     }
 }

@@ -994,6 +994,52 @@ class Zend_Wildfire_WildfireTest extends PHPUnit_Framework_TestCase
         $firephp = Zend_Wildfire_Plugin_FirePhp::getInstance();
         $firephp->send('This is a log message!');
     }
+
+    /**
+     * @group ZF-10537
+     */
+    public function testFileLineOffsets()
+    {
+        $this->_setupWithoutFrontController();
+
+        $firephp = Zend_Wildfire_Plugin_FirePhp::getInstance();
+        $channel = Zend_Wildfire_Channel_HttpHeaders::getInstance();
+        $protocol = $channel->getProtocol(Zend_Wildfire_Plugin_FirePhp::PROTOCOL_URI);
+        $firephp->setOption('includeLineNumbers', true);
+        $firephp->setOption('maxTraceDepth', 0);
+
+        $lines = array();
+        // NOTE: Do NOT separate the following pairs otherwise the line numbers will not match for the test
+
+        // Message number: 1
+        $lines[] = __LINE__+1;
+        $firephp->send('Hello World');
+
+        // Message number: 2
+        $lines[] = __LINE__+1;
+        $firephp->send('Hello World', null, 'TRACE');
+
+        // Message number: 3
+        $table = array('Summary line for the table',
+                       array(
+                           array('Column 1', 'Column 2'),
+                           array('Row 1 c 1',' Row 1 c 2'),
+                           array('Row 2 c 1',' Row 2 c 2')
+                       )
+                      );
+        $lines[] = __LINE__+1;
+        $firephp->send($table, null, 'TABLE');
+
+        $messages = $protocol->getMessages();
+        $messages = $messages[Zend_Wildfire_Plugin_FirePhp::STRUCTURE_URI_FIREBUGCONSOLE][Zend_Wildfire_Plugin_FirePhp::PLUGIN_URI];
+
+        for( $i=0 ; $i<sizeof($messages) ; $i++ ) {
+            if(!preg_match_all('/WildfireTest\.php","Line":' . $lines[$i] . '/', $messages[$i], $m)) {
+                $this->fail("File and line does not match for message number: " . ($i+1));
+            }
+
+        }
+    }
 }
 
 class Zend_Wildfire_WildfireTest_TestObject1
