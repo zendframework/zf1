@@ -119,6 +119,7 @@ class Zend_Http_Client
         'strict'          => true,
         'output_stream'   => false,
         'encodecookies'   => true,
+        'rfc3986_strict'  => false
     );
 
     /**
@@ -950,6 +951,9 @@ class Zend_Http_Client
                        $query .= '&';
                    }
                 $query .= http_build_query($this->paramsGet, null, '&');
+                if ($this->config['rfc3986_strict']) {
+                    $query = str_replace('+', '%20', $query);
+                }
 
                 $uri->setQuery($query);
             }
