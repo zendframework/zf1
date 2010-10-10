@@ -152,14 +152,20 @@ class Zend_Oauth_Consumer extends Zend_Oauth
      * Sends headers and exit()s on completion.
      *
      * @param  null|array $customServiceParameters
+     * @param  null|Zend_Oauth_Token_Request $token
      * @param  null|Zend_Oauth_Http_UserAuthorization $request
      * @return void
      */
     public function redirect(
         array $customServiceParameters = null,
+        Zend_Oauth_Token_Request $token = null,
         Zend_Oauth_Http_UserAuthorization $request = null
     ) {
-        $redirectUrl = $this->getRedirectUrl($customServiceParameters, $request);
+        if ($token instanceof Zend_Oauth_Http_UserAuthorization) {
+            $request = $token;
+            $token = null;
+        }
+        $redirectUrl = $this->getRedirectUrl($customServiceParameters, $token, $request);
         header('Location: ' . $redirectUrl);
         exit(1);
     }
