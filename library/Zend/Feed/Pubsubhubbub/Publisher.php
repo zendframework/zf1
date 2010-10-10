@@ -412,7 +412,7 @@ class Zend_Feed_Pubsubhubbub_Publisher
             $params[] = urlencode($name) . '=' . urlencode($value);
         }
         $paramString = implode('&', $params);
-        $client->setRawData($paramString);
+        $client->setRawData($paramString, 'application/x-www-form-urlencoded');
         return $client;
     }
 }
