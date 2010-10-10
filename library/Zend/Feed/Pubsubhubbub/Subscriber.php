@@ -638,7 +638,10 @@ class Zend_Feed_Pubsubhubbub_Subscriber
                 $client->setAuth($auth[0], $auth[1]);
             }
             $client->setUri($url);
-            $client->setRawData($this->_getRequestParameters($url, $mode));
+            $client->setRawData(
+                $this->_getRequestParameters($url, $mode),
+                'application/x-www-form-urlencoded'
+            );
             $response = $client->request();
             if ($response->getStatus() !== 204
                 && $response->getStatus() !== 202
