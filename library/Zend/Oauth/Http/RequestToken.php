@@ -108,7 +108,7 @@ class Zend_Oauth_Http_RequestToken extends Zend_Oauth_Http
         $client->setHeaders('Authorization', $headerValue);
         $rawdata = $this->_httpUtility->toEncodedQueryString($params, true);
         if (!empty($rawdata)) {
-            $client->setRawData($rawdata);
+            $client->setRawData($rawdata, 'application/x-www-form-urlencoded');
         }
         $client->setMethod($this->_preferredRequestMethod);
         return $client;

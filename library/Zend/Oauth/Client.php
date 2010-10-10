@@ -263,7 +263,7 @@ class Zend_Oauth_Client extends Zend_Http_Client
                 $this->_config,
                 $this->_getSignableParametersAsQueryString()
             );
-            $this->setRawData($raw);
+            $this->setRawData($raw, 'application/x-www-form-urlencoded');
             $this->paramsPost = array();
         } elseif ($requestScheme == Zend_Oauth::REQUEST_SCHEME_QUERYSTRING) {
             $params = array();
