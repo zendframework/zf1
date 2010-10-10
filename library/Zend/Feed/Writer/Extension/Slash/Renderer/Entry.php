@@ -81,7 +81,7 @@ class Zend_Feed_Writer_Extension_Slash_Renderer_Entry
     {
         $count = $this->getDataContainer()->getCommentCount();
         if (!$count) {
-            $count = 0;
+            return;
         }
         $tcount = $this->_dom->createElement('slash:comments');
         $tcount->nodeValue = $count;
