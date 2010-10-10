@@ -76,6 +76,9 @@ class Zend_Oauth_Client extends Zend_Http_Client
      */
     public function __construct($oauthOptions, $uri = null, $config = null)
     {
+        if (!isset($config['rfc3986_strict'])) {
+            $config['rfc3986_strict'] = true;
+        }
         parent::__construct($uri, $config);
         $this->_config = new Zend_Oauth_Config;
         if ($oauthOptions !== null) {
