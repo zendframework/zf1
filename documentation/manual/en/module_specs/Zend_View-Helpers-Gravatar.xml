@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect3 id="zend.view.helpers.initial.gravatar">
+    <title>Gravatar View Helper</title>
+
+    <para>
+        The <classname>Gravatar</classname> view helper is used to received avatars from Gravatar's
+        service.
+    </para>
+
+    <example id="zend.view.helpers.initial.gravatar.usage">
+        <title>Basic Usage of Gravatar View Helper</title>
+
+        <programlisting language="php"><![CDATA[
+// From a view script (using XHTML DOCTYPE):
+echo $this->gravatar('example@example.com');
+
+/* results in the following output:
+    <img src="http://www.gravatar.com/avatar/23463b99b62a72f26ed677cc556c44e8?s=80&d=mm&r=g" />
+ */
+]]></programlisting>
+    </example>
+
+    <note role="info">
+        <para>
+            Of course we can configure this helper. We can change height of image (by default it is
+            80px), and add <acronym>CSS</acronym> class or other attributes to image tag. The above
+            simply shows the most basic usage.
+        </para>
+    </note>
+
+    <warning>
+        <title>Use a valid email address!</title>
+
+        <para>
+            The email address you provide the helper should be valid. This class does not validate
+            the address (only the rating parameter). It is recommended to validate your email
+            address within your model layer.
+        </para>
+    </warning>
+
+    <example id="zend.view.helpers.initial.gravatar.advanced">
+        <title>Advanced Usage of Gravatar View Helper</title>
+
+        <para>
+            There are several ways to configure the returned gravatar. In most cases, you may either
+            pass an array of options as a second argument to the helper, or call methods on the
+            returned object in order to configure it.
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    The <varname>img_size</varname> option can be used to specify an alternate
+                    height; alternately, call <methodname>setImgSize()</methodname>.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    The <varname>secure</varname> option can be used to force usage of SSL in
+                    the returned image URI by passing a boolean <constant>true</constant> value (or
+                    disabling SSL usage by passing <constant>false</constant>). Alternately, call
+                    the <methodname>setSecure()</methodname> method. (By default, the setting
+                    follows the same security as the current page request.)
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    To add attributes to the image, pass an array of key/value pairs as the
+                    <emphasis>third</emphasis> argument to the helper, or call the
+                    <methodname>setAttribs()</methodname> method.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <programlisting language="php"><![CDATA[
+// Within the view script (using HTML DOCTYPE)
+echo $this->gravatar('example@example.com',
+    array('imgSize' => 90, 'defaultImg' => 'monsterid', 'secure' => true),
+    array('class' => 'avatar', 'title' => 'Title for this image')
+);
+    
+// Or use mutator methods
+$this->gravatar()
+     ->setEmail('example@example.com')
+     ->setImgSize(90)
+     ->setDefaultImg(Zend_View_Helper_Gravatar::DEFAULT_MONSTERID)
+     ->setSecure(true)
+     ->setAttribs(array('class' => 'avatar', 'title' => 'Title for this image'));
+
+/* Both generate the following output:
+<img class="avatar" title="Title for this image"
+    src="https://secure.gravatar.com/avatar/23463b99b62a72f26ed677cc556c44e8?s=90&d=monsterid&r=g" >
+ */
+]]></programlisting>
+    </example>
+
+    <sect4 id="zend.view.helper.gravatar.options">
+        <title>Options</title>
+
+        <variablelist>
+            <title>Zend_Service_Gravatar Options</title>
+
+            <varlistentry>
+                <term>img_size</term>
+
+                <listitem>
+                    <para>
+                        An integer describing the height of the avatar, in pixels; defaults to "80".
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>default_img</term>
+
+                <listitem>
+                    <para>
+                        Image to return if the gravatar service is unable to match the email address
+                        provided. Defaults to "mm", the "mystery man" image.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>rating</term>
+
+                <listitem>
+                    <para>
+                        Audience rating to confine returned images to. Defaults to "g"; may be one
+                        of "g", "pg", "r", or "x", in order of least offensive to most offensive.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>secure</term>
+
+                <listitem>
+                    <para>
+                        Whether or not to load the image via an SSL connection. Defaults to the what
+                        is detected from the current request.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect4>
+</sect3>

@@ -48,6 +48,7 @@ require_once 'Zend/View/Helper/FormSubmitTest.php';
 require_once 'Zend/View/Helper/FormTest.php';
 require_once 'Zend/View/Helper/FormTextTest.php';
 require_once 'Zend/View/Helper/FormTextareaTest.php';
+require_once 'Zend/View/Helper/GravatarTest.php';
 require_once 'Zend/View/Helper/HeadLinkTest.php';
 require_once 'Zend/View/Helper/HeadMetaTest.php';
 require_once 'Zend/View/Helper/HeadScriptTest.php';
@@ -117,6 +118,7 @@ class Zend_View_Helper_AllTests
         $suite->addTestSuite('Zend_View_Helper_FormTest');
         $suite->addTestSuite('Zend_View_Helper_FormTextTest');
         $suite->addTestSuite('Zend_View_Helper_FormTextareaTest');
+        $suite->addTestSuite('Zend_View_Helper_GravatarTest');
         $suite->addTestSuite('Zend_View_Helper_HeadLinkTest');
         $suite->addTestSuite('Zend_View_Helper_HeadMetaTest');
         $suite->addTestSuite('Zend_View_Helper_HeadScriptTest');
