@@ -848,6 +848,50 @@ class Zend_Feed_Writer_FeedTest extends PHPUnit_Framework_TestCase
             'description' => 'Image description'
         ), $writer->getImage());
     }
+    
+    // Icon Tests
+
+    public function testSetsIconUri()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setIcon(array(
+            'uri' => 'http://www.example.com/logo.gif'
+        ));
+        $this->assertEquals(array(
+            'uri' => 'http://www.example.com/logo.gif'
+        ), $writer->getIcon());
+    }
+
+    /**
+     * @expectedException Zend_Feed_Exception
+     */
+    public function testSetsIconUriThrowsExceptionOnEmptyUri()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setIcon(array(
+            'uri' => ''
+        ));
+    }
+
+    /**
+     * @expectedException Zend_Feed_Exception
+     */
+    public function testSetsIconUriThrowsExceptionOnMissingUri()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setIcon(array());
+    }
+
+    /**
+     * @expectedException Zend_Feed_Exception
+     */
+    public function testSetsIconUriThrowsExceptionOnInvalidUri()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setIcon(array(
+            'uri' => 'http://'
+        ));
+    }
 
     public function testGetCategoriesReturnsNullIfNotSet()
     {

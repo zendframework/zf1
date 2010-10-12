@@ -549,4 +549,42 @@ class Zend_Feed_Reader_Feed_AtomTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(null, $feed->getImage());
     }
+    
+    /**
+     * Get Icon (Unencoded Text)
+     */
+    public function testGetsIconFromAtom03()
+    {
+        $feed = Zend_Feed_Reader::importString(
+            file_get_contents($this->_feedSamplePath.'/icon/plain/atom03.xml')
+        );
+        $this->assertEquals(array('uri'=>'http://www.example.com/logo.gif'), $feed->getIcon());
+    }
+
+    public function testGetsIconFromAtom10()
+    {
+        $feed = Zend_Feed_Reader::importString(
+            file_get_contents($this->_feedSamplePath.'/icon/plain/atom10.xml')
+        );
+        $this->assertEquals(array('uri'=>'http://www.example.com/logo.gif'), $feed->getIcon());
+    }
+
+    /**
+     * Get Icon (Unencoded Text) When Missing
+     */
+    public function testGetsIconFromAtom03_None()
+    {
+        $feed = Zend_Feed_Reader::importString(
+            file_get_contents($this->_feedSamplePath.'/icon/plain/none/atom03.xml')
+        );
+        $this->assertEquals(null, $feed->getIcon());
+    }
+
+    public function testGetsIconFromAtom10_None()
+    {
+        $feed = Zend_Feed_Reader::importString(
+            file_get_contents($this->_feedSamplePath.'/icon/plain/none/atom10.xml')
+        );
+        $this->assertEquals(null, $feed->getIcon());
+    }
 }

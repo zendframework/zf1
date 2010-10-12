@@ -361,6 +361,24 @@ class Zend_Feed_Writer_Feed_FeedAbstract
         }
         $this->_data['image'] = $data;  
     }
+    
+    /**
+     * Set a feed icon (URI at minimum). Parameter is a single array with the
+     * required key 'uri'. Only 'uri' is required and used for Atom rendering.
+     * RSS does not support an Icon tag except via Atom 1.0 as an extension.
+     *
+     * @param array $data
+     */
+    public function setIcon(array $data)
+    {
+        if (empty($data['uri']) || !is_string($data['uri'])
+        || !Zend_Uri::check($data['uri'])) {
+            require_once 'Zend/Feed/Exception.php';
+            throw new Zend_Feed_Exception('Invalid parameter: parameter \'uri\''
+            . ' must be a non-empty string and valid URI/IRI');
+        }
+        $this->_data['icon'] = $data;  
+    }
 
     /**
      * Set the feed language
@@ -652,6 +670,19 @@ class Zend_Feed_Writer_Feed_FeedAbstract
             return null;
         }
         return $this->_data['image'];
+    }
+    
+    /**
+     * Get the feed icon URI
+     *
+     * @return array
+     */
+    public function getIcon()
+    {
+        if (!array_key_exists('icon', $this->_data)) {
+            return null;
+        }
+        return $this->_data['icon'];
     }
 
     /**

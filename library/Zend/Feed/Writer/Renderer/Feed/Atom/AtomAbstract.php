@@ -342,6 +342,25 @@ class Zend_Feed_Writer_Renderer_Feed_Atom_AtomAbstract
     }
     
     /**
+     * Set feed level icon (image)
+     * 
+     * @param DOMDocument $dom 
+     * @param DOMElement $root 
+     * @return void
+     */
+    protected function _setIcon(DOMDocument $dom, DOMElement $root)
+    {
+        $image = $this->getDataContainer()->getIcon();
+        if (!$image) {
+            return;
+        }
+        $img = $dom->createElement('icon');
+        $root->appendChild($img);
+        $text = $dom->createTextNode($image['uri']);
+        $img->appendChild($text);
+    }
+    
+    /**
      * Set date feed was created 
      * 
      * @param  DOMDocument $dom 

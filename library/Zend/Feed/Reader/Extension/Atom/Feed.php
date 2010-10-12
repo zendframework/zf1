@@ -315,6 +315,30 @@ class Zend_Feed_Reader_Extension_Atom_Feed
 
         return $this->_data['image'];
     }
+    
+    /**
+     * Get the feed image
+     *
+     * @return array|null
+     */
+    public function getIcon()
+    {
+        if (array_key_exists('icon', $this->_data)) {
+            return $this->_data['icon'];
+        }
+
+        $imageUrl = $this->_xpath->evaluate('string(' . $this->getXpathPrefix() . '/atom:icon)');
+
+        if (!$imageUrl) {
+            $image = null;
+        } else {
+            $image = array('uri'=>$imageUrl);
+        }
+
+        $this->_data['icon'] = $image;
+
+        return $this->_data['icon'];
+    }
 
     /**
      * Get the base URI of the feed (if set).
