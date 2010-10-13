@@ -51,14 +51,6 @@ class Zend_Service_Ebay_Finding_SellingStatus extends Zend_Service_Ebay_Finding_
     public $convertedCurrentPrice;
 
     /**
-     * Currency in which the monetary amount is specified.
-     *
-     * @link http://developer.ebay.com/DevZone/finding/CallRef/Enums/currencyIdList.html
-     * @var  string
-     */
-    public $convertedCurrentPrice_currencyId;
-
-    /**
      * The current price of the item given in the currency of the site on which
      * the item is listed.
      *
@@ -74,14 +66,6 @@ class Zend_Service_Ebay_Finding_SellingStatus extends Zend_Service_Ebay_Finding_
      * @var float
      */
     public $currentPrice;
-
-    /**
-     * Currency in which the monetary amount is specified.
-     *
-     * @link http://developer.ebay.com/DevZone/finding/CallRef/Enums/currencyIdList.html
-     * @var  string
-     */
-    public $currentPrice_currencyId;
 
     /**
      * Specifies the listing's status in eBay's processing workflow.
@@ -129,12 +113,18 @@ class Zend_Service_Ebay_Finding_SellingStatus extends Zend_Service_Ebay_Finding_
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->bidCount                         = $this->_query(".//$ns:bidCount[1]", 'integer');
-        $this->convertedCurrentPrice            = $this->_query(".//$ns:convertedCurrentPrice[1]", 'float');
-        $this->convertedCurrentPrice_currencyId = $this->_query(".//$ns:convertedCurrentPrice[1]/@currencyId[1]", 'string');
-        $this->currentPrice                     = $this->_query(".//$ns:currentPrice[1]", 'float');
-        $this->currentPrice_currencyId          = $this->_query(".//$ns:currentPrice[1]/@currencyId[1]", 'string');
-        $this->sellingState                     = $this->_query(".//$ns:sellingState[1]", 'string');
-        $this->timeLeft                         = $this->_query(".//$ns:timeLeft[1]", 'string');
+        $this->bidCount              = $this->_query(".//$ns:bidCount[1]", 'integer');
+        $this->convertedCurrentPrice = $this->_query(".//$ns:convertedCurrentPrice[1]", 'float');
+        $this->currentPrice          = $this->_query(".//$ns:currentPrice[1]", 'float');
+        $this->sellingState          = $this->_query(".//$ns:sellingState[1]", 'string');
+        $this->timeLeft              = $this->_query(".//$ns:timeLeft[1]", 'string');
+
+        $this->_attributes['convertedCurrentPrice'] = array(
+            'currencyId' => $this->_query(".//$ns:convertedCurrentPrice[1]/@currencyId[1]", 'string')
+        );
+
+        $this->_attributes['currentPrice'] = array(
+            'currencyId' => $this->_query(".//$ns:currentPrice[1]/@currencyId[1]", 'string')
+        );
     }
 }

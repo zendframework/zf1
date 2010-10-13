@@ -79,14 +79,6 @@ class Zend_Service_Ebay_Finding_ListingInfo extends Zend_Service_Ebay_Finding_Ab
     public $buyItNowPrice;
 
     /**
-     * Currency in which the monetary amount is specified.
-     *
-     * @link http://developer.ebay.com/DevZone/finding/CallRef/Enums/currencyIdList.html
-     * @var  string
-     */
-    public $buyItNowPrice_currencyId;
-
-    /**
      * The listing's Buy It Now Price (if any), converted into the currency of
      * the site to which you sent your search request.
      *
@@ -102,14 +94,6 @@ class Zend_Service_Ebay_Finding_ListingInfo extends Zend_Service_Ebay_Finding_Ab
      * @var float
      */
     public $convertedBuyItNowPrice;
-
-    /**
-     * Currency in which the monetary amount is specified.
-     *
-     * @link http://developer.ebay.com/DevZone/finding/CallRef/Enums/currencyIdList.html
-     * @var  string
-     */
-    public $convertedBuyItNowPrice_currencyId;
 
     /**
      * Time stamp specifying when the listing is scheduled to end, or the actual
@@ -207,15 +191,21 @@ class Zend_Service_Ebay_Finding_ListingInfo extends Zend_Service_Ebay_Finding_Ab
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->bestOfferEnabled                  = $this->_query(".//$ns:bestOfferEnabled[1]", 'boolean');
-        $this->buyItNowAvailable                 = $this->_query(".//$ns:buyItNowAvailable[1]", 'boolean');
-        $this->buyItNowPrice                     = $this->_query(".//$ns:buyItNowPrice[1]", 'float');
-        $this->buyItNowPrice_currencyId          = $this->_query(".//$ns:buyItNowPrice[1]/@currencyId[1]", 'string');
-        $this->convertedBuyItNowPrice            = $this->_query(".//$ns:convertedBuyItNowPrice[1]", 'float');
-        $this->convertedBuyItNowPrice_currencyId = $this->_query(".//$ns:convertedBuyItNowPrice[1]/@currencyId[1]", 'string');
-        $this->endTime                           = $this->_query(".//$ns:endTime[1]", 'string');
-        $this->gift                              = $this->_query(".//$ns:gift[1]", 'boolean');
-        $this->listingType                       = $this->_query(".//$ns:listingType[1]", 'string');
-        $this->startTime                         = $this->_query(".//$ns:startTime[1]", 'string');
+        $this->bestOfferEnabled       = $this->_query(".//$ns:bestOfferEnabled[1]", 'boolean');
+        $this->buyItNowAvailable      = $this->_query(".//$ns:buyItNowAvailable[1]", 'boolean');
+        $this->buyItNowPrice          = $this->_query(".//$ns:buyItNowPrice[1]", 'float');
+        $this->convertedBuyItNowPrice = $this->_query(".//$ns:convertedBuyItNowPrice[1]", 'float');
+        $this->endTime                = $this->_query(".//$ns:endTime[1]", 'string');
+        $this->gift                   = $this->_query(".//$ns:gift[1]", 'boolean');
+        $this->listingType            = $this->_query(".//$ns:listingType[1]", 'string');
+        $this->startTime              = $this->_query(".//$ns:startTime[1]", 'string');
+
+        $this->_attributes['buyItNowPrice'] = array(
+            'currencyId' => $this->_query(".//$ns:buyItNowPrice[1]/@currencyId[1]", 'string')
+        );
+
+        $this->_attributes['convertedBuyItNowPrice'] = array(
+            'currencyId' => $this->_query(".//$ns:convertedBuyItNowPrice[1]/@currencyId[1]", 'string')
+        );
     }
 }

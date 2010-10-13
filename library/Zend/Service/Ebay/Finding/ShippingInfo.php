@@ -43,14 +43,6 @@ class Zend_Service_Ebay_Finding_ShippingInfo extends Zend_Service_Ebay_Finding_A
     public $shippingServiceCost;
 
     /**
-     * Currency in which the monetary amount is specified.
-     *
-     * @link http://developer.ebay.com/DevZone/finding/CallRef/Enums/currencyIdList.html
-     * @var  string
-     */
-    public $shippingServiceCost_currencyId;
-
-    /**
      * The shipping method that was used for determining the cost of shipping.
      *
      * For example: flat rate, calculated, or free. The seller specifies the
@@ -123,9 +115,12 @@ class Zend_Service_Ebay_Finding_ShippingInfo extends Zend_Service_Ebay_Finding_A
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->shippingServiceCost            = $this->_query(".//$ns:shippingServiceCost[1]", 'float');
-        $this->shippingServiceCost_currencyId = $this->_query(".//$ns:shippingServiceCost[1]/@currencyId[1]", 'string');
-        $this->shippingType                   = $this->_query(".//$ns:shippingType[1]", 'string');
-        $this->shipToLocations                = $this->_query(".//$ns:shipToLocations", 'string', true);
+        $this->shippingServiceCost = $this->_query(".//$ns:shippingServiceCost[1]", 'float');
+        $this->shippingType        = $this->_query(".//$ns:shippingType[1]", 'string');
+        $this->shipToLocations     = $this->_query(".//$ns:shipToLocations", 'string', true);
+
+        $this->_attributes['shippingServiceCost'] = array(
+            'currencyId' => $this->_query(".//$ns:shippingServiceCost[1]/@currencyId[1]", 'string')
+        );
     }
 }

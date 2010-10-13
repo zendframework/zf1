@@ -59,22 +59,6 @@ class Zend_Service_Ebay_Finding_Aspect_Histogram_Container extends Zend_Service_
     public $aspect;
 
     /**
-     * Names of aspects that is part of a domain.
-     *
-     * Use array key to associate a name from this attribute to aspect set. This
-     * value is not returned if there are no matching aspects for the associated
-     * domain.
-     *
-     * For example, "Optical Zoom" or "Megapixels" could be aspects of the
-     * Digital Cameras domain. For the current aspect names associated with a
-     * specific item, refer to the aspectHistogramContainer returned for the
-     * respective item.
-     *
-     * @var string[]
-     */
-    public $aspect_name = array();
-
-    /**
      * A buy-side group of items, for example "Shoes.".
      *
      * Domains are extracted from item listing properties, such as the title,
@@ -103,9 +87,12 @@ class Zend_Service_Ebay_Finding_Aspect_Histogram_Container extends Zend_Service_
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->aspect_name       = $this->_query(".//$ns:aspect/@name", 'string', true);
         $this->domainDisplayName = $this->_query(".//$ns:domainDisplayName[1]", 'string');
         $this->domainName        = $this->_query(".//$ns:domainName[1]", 'string');
+
+        $this->_attributes['aspect'] = array(
+            'name' => $this->_query(".//$ns:aspect/@name", 'string', true)
+        );
 
         $nodes = $this->_xPath->query(".//$ns:aspect", $this->_dom);
         if ($nodes->length > 0) {

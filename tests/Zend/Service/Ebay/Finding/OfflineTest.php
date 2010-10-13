@@ -123,7 +123,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($object->errorId);
         $this->assertNotNull($object->message);
         $this->assertType('array', $object->parameter);
-        $this->assertType('array', $object->parameter_name);
+        $this->assertType('array', $object->attributes('parameter', 'name'));
         $this->assertNotNull($object->severity);
         $this->assertNotNull($object->subdomain);
 
@@ -146,7 +146,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
 
         $this->assertType('Zend_Service_Ebay_Finding_PaginationOutput', $response->paginationOutput);
         $this->assertType('Zend_Service_Ebay_Finding_Search_Result', $response->searchResult);
-        $this->assertNotNull($response->searchResult_count);
+        $this->assertNotNull($response->attributes('searchResult', 'count'));
     }
 
     public function testPaginationOutput()
@@ -203,7 +203,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $response->searchResult->item->seek(3);
         $object = $response->searchResult->item->current();
         $this->assertNotNull($object->productId);
-        $this->assertNotNull($object->productId_type);
+        $this->assertNotNull($object->attributes('productId', 'type'));
 
         // sub category
         $response->searchResult->item->seek(2);
@@ -213,7 +213,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         // missing attributes in XML
         //$this->assertNotNull($object->charityId);
         //$this->assertNotNull($object->distance);
-        //$this->assertNotNull($object->distance_unit);
+        //$this->assertNotNull($object->attributes('distance', 'unit'));
     }
 
     public function testListingInfo()
@@ -226,9 +226,9 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($object->bestOfferEnabled);
         $this->assertNotNull($object->buyItNowAvailable);
         $this->assertNotNull($object->buyItNowPrice);
-        $this->assertNotNull($object->buyItNowPrice_currencyId);
+        $this->assertNotNull($object->attributes('buyItNowPrice', 'currencyId'));
         $this->assertNotNull($object->convertedBuyItNowPrice);
-        $this->assertNotNull($object->convertedBuyItNowPrice_currencyId);
+        $this->assertNotNull($object->attributes('convertedBuyItNowPrice', 'currencyId'));
         $this->assertNotNull($object->endTime);
         $this->assertNotNull($object->gift);
         $this->assertNotNull($object->listingType);
@@ -269,9 +269,9 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $object = $response->searchResult->item->current()->sellingStatus;
         $this->assertNotNull($object->bidCount);
         $this->assertNotNull($object->convertedCurrentPrice);
-        $this->assertNotNull($object->convertedCurrentPrice_currencyId);
+        $this->assertNotNull($object->attributes('convertedCurrentPrice', 'currencyId'));
         $this->assertNotNull($object->currentPrice);
-        $this->assertNotNull($object->currentPrice_currencyId);
+        $this->assertNotNull($object->attributes('currentPrice', 'currencyId'));
         $this->assertNotNull($object->sellingState);
         $this->assertNotNull($object->timeLeft);
     }
@@ -284,7 +284,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $response->searchResult->item->seek(0);
         $object = $response->searchResult->item->current()->shippingInfo;
         $this->assertNotNull($object->shippingServiceCost);
-        $this->assertNotNull($object->shippingServiceCost_currencyId);
+        $this->assertNotNull($object->attributes('shippingServiceCost', 'currencyId'));
         $this->assertNotNull($object->shippingType);
         $this->assertType('array', $object->shipToLocations);
         $this->assertNotNull($object->shipToLocations[0]);
@@ -318,7 +318,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         // Zend_Service_Ebay_Finding_Aspect
         $object = $object->aspect->current();
         $this->assertType('Zend_Service_Ebay_Finding_Aspect_Histogram_Value_Set', $object->valueHistogram);
-        $this->assertType('array', $object->valueHistogram_valueName);
+        $this->assertType('array', $object->attributes('valueHistogram', 'valueName'));
 
         // Zend_Service_Ebay_Finding_Aspect_Histogram_Value
         $object = $object->valueHistogram->current();

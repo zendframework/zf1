@@ -90,17 +90,6 @@ class Zend_Service_Ebay_Finding_Error_Data extends Zend_Service_Ebay_Finding_Abs
     public $parameter;
 
     /**
-     * The name of the input parameter returned with the error.
-     *
-     * Inspecting the parameter (or its input value) will often aid in
-     * understanding the cause of the error. Not all error messages contain this
-     * value.
-     *
-     * @var string[]
-     */
-    public $parameter_name;
-
-    /**
      * Indicates whether the reported problem is fatal (an error) or is
      * less-severe (a warning). Review the error message details for information
      * on the cause.
@@ -153,14 +142,17 @@ class Zend_Service_Ebay_Finding_Error_Data extends Zend_Service_Ebay_Finding_Abs
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->category       = $this->_query(".//$ns:category[1]", 'string');
-        $this->domain         = $this->_query(".//$ns:domain[1]", 'string');
-        $this->errorId        = $this->_query(".//$ns:errorId[1]", 'integer');
-        $this->exceptionId    = $this->_query(".//$ns:exceptionId[1]", 'string');
-        $this->message        = $this->_query(".//$ns:message[1]", 'string');
-        $this->parameter      = $this->_query(".//$ns:parameter", 'string', true);
-        $this->parameter_name = $this->_query(".//$ns:parameter/@name", 'string', true);
-        $this->severity       = $this->_query(".//$ns:severity[1]", 'string');
-        $this->subdomain      = $this->_query(".//$ns:subdomain[1]", 'string');
+        $this->category    = $this->_query(".//$ns:category[1]", 'string');
+        $this->domain      = $this->_query(".//$ns:domain[1]", 'string');
+        $this->errorId     = $this->_query(".//$ns:errorId[1]", 'integer');
+        $this->exceptionId = $this->_query(".//$ns:exceptionId[1]", 'string');
+        $this->message     = $this->_query(".//$ns:message[1]", 'string');
+        $this->parameter   = $this->_query(".//$ns:parameter", 'string', true);
+        $this->severity    = $this->_query(".//$ns:severity[1]", 'string');
+        $this->subdomain   = $this->_query(".//$ns:subdomain[1]", 'string');
+
+        $this->_attributes['parameter'] = array(
+            'name' => $this->_query(".//$ns:parameter/@name", 'string', true)
+        );
     }
 }

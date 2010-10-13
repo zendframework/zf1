@@ -45,19 +45,6 @@ class Zend_Service_Ebay_Finding_Aspect extends Zend_Service_Ebay_Finding_Abstrac
     public $valueHistogram;
 
     /**
-     * Name of an aspect value.
-     *
-     * Use array key to associate a name from this attribute to value set.
-     *
-     * For example, "Short Sleeve" could be an aspect value of the Sleeve Style
-     * aspect in the Women's Dresses domain, or "Athletic" could be an aspect
-     * value of the Style aspect in the Men's Shoes domain.
-     *
-     * @var string[]
-     */
-    public $valueHistogram_valueName;
-
-    /**
      * @return void
      */
     protected function _init()
@@ -65,7 +52,9 @@ class Zend_Service_Ebay_Finding_Aspect extends Zend_Service_Ebay_Finding_Abstrac
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->valueHistogram_valueName = $this->_query(".//$ns:valueHistogram/@valueName", 'string', true);
+        $this->_attributes['valueHistogram'] = array(
+            'valueName' => $this->_query(".//$ns:valueHistogram/@valueName", 'string', true)
+        );
 
         $nodes = $this->_xPath->query(".//$ns:valueHistogram", $this->_dom);
         if ($nodes->length > 0) {

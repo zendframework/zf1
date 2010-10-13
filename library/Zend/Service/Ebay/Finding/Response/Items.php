@@ -64,17 +64,6 @@ class Zend_Service_Ebay_Finding_Response_Items extends Zend_Service_Ebay_Finding
     public $searchResult;
 
     /**
-     * The total number of items returned in the search response.
-     *
-     * This is often equal to the entriesPerPage value. If the count is less
-     * than the specified entriesPerPage, it indicates the end of the result
-     * set.
-     *
-     * @var integer
-     */
-    public $searchResult_count;
-
-    /**
      * @var Zend_Service_Ebay_Finding_Response_Items[]
      */
     protected static $_pageCache = array();
@@ -87,7 +76,9 @@ class Zend_Service_Ebay_Finding_Response_Items extends Zend_Service_Ebay_Finding
         parent::_init();
         $ns = Zend_Service_Ebay_Finding::XMLNS_FINDING;
 
-        $this->searchResult_count = $this->_query(".//$ns:searchResult[1]/@count[1]", 'string');
+        $this->_attributes['searchResult'] = array(
+            'count' => $this->_query(".//$ns:searchResult[1]/@count[1]", 'string')
+        );
 
         $node = $this->_xPath->query(".//$ns:searchResult[1]", $this->_dom)->item(0);
         if ($node) {

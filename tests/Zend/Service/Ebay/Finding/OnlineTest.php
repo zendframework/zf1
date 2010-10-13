@@ -77,17 +77,17 @@ class Zend_Service_Ebay_Finding_OnlineTest extends PHPUnit_Framework_TestCase
         foreach ($services as $service => $params) {
             $response = call_user_func_array(array($this->_finding, $service), $params);
             $this->assertTrue($response instanceof Zend_Service_Ebay_Finding_Response_Items);
-            if (!$item && $response->searchResult_count > 0) {
+            if (!$item && $response->attributes('searchResult', 'count') > 0) {
                 $item = $response->searchResult->item->current();
             }
-            if (!$category && $response->searchResult_count > 0) {
+            if (!$category && $response->attributes('searchResult', 'count') > 0) {
                 foreach ($response->searchResult->item as $node) {
                     if ($node->primaryCategory) {
                         $category = $node->primaryCategory;
                     }
                 }
             }
-            if (!$store && $response->searchResult_count > 0) {
+            if (!$store && $response->attributes('searchResult', 'count') > 0) {
                 foreach ($response->searchResult->item as $node) {
                     if ($node->storeInfo) {
                         $store = $node->storeInfo;

@@ -50,6 +50,11 @@ abstract class Zend_Service_Ebay_Finding_Abstract
     protected $_xPath;
 
     /**
+     * @var array
+     */
+    protected $_attributes = array();
+
+    /**
      * @param  DOMElement $dom
      * @return void
      */
@@ -58,6 +63,28 @@ abstract class Zend_Service_Ebay_Finding_Abstract
         $this->_dom = $dom;
         $this->_initXPath();
         $this->_init();
+    }
+
+    /**
+     * @param  string $tag
+     * @param  string $attribute
+     * @return mixed
+     */
+    public function attributes($tag, $attribute = null)
+    {
+        if (null === $attribute) {
+            // all attributes
+            if (array_key_exists($tag, $this->_attributes)) {
+                return $this->_attributes[$tag];
+            }
+            return array();
+        }
+
+        // a specific attribute
+        if (isset($this->_attributes[$tag][$attribute])) {
+            return $this->_attributes[$tag][$attribute];
+        }
+        return null;
     }
 
     /**

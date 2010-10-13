@@ -85,15 +85,6 @@ class Zend_Service_Ebay_Finding_Search_Item extends Zend_Service_Ebay_Finding_Ab
     public $distance;
 
     /**
-     * Unit of measure used in a distance calculation.
-     *
-     * Units can be in either kilometers or miles, depending on the Global ID.
-     *
-     * @var string
-     */
-    public $distance_unit;
-
-    /**
      * URL for the Gallery Plus image.
      *
      * The size of Gallery Plus images (up to 400 x 400 pixels) is bigger than
@@ -215,41 +206,6 @@ class Zend_Service_Ebay_Finding_Search_Item extends Zend_Service_Ebay_Finding_Ab
     public $productId;
 
     /**
-     * The nature of the identifier being used. For findItemsByProduct, search
-     * by a single type.
-     *
-     * Applicable values:
-     *
-     *     ReferenceID
-     *     The global reference ID (ePID) for an eBay catalog product. A
-     *     reference ID is a fixed reference to a product, regardless of
-     *     version. Use FindProducts in the Shopping API to determine valid ePID
-     *     values that you can use as input to findItemsByProduct. Each product
-     *     in the response includes its reference ID.
-     *
-     *     ISBN
-     *     ISBN-10 or ISBN-13 value for books. (The string length of ProductID
-     *     indicates whether the ID is 10 or 13 characters.) If you know a
-     *     book's ISBN, you can use this instead of the eBay Reference ID to
-     *     search for that book. Max length of corresponding value: 13
-     *
-     *     UPC
-     *     UPC value for products in Music (e.g., CDs), DVDs & Movies, and Video
-     *     Games categories (or domains). If you know a product's UPC, you can
-     *     use this instead of the eBay Reference ID to search for that product.
-     *     Max length of corresponding value: 12
-     *
-     *     EAN
-     *     EAN value for books. (This is used more commonly in European
-     *     countries.) If you know a book's EAN, you can use this instead of
-     *     the eBay Reference ID to search for that book. Max length of
-     *     corresponding value: 13
-     *
-     * @var string
-     */
-    public $productId_type;
-
-    /**
      * Details about the second category in which the item is listed.
      *
      * This element is not returned if the seller did not specify a secondary
@@ -342,7 +298,6 @@ class Zend_Service_Ebay_Finding_Search_Item extends Zend_Service_Ebay_Finding_Ab
         $this->charityId             = $this->_query(".//$ns:charityId[1]", 'integer');
         $this->country               = $this->_query(".//$ns:country[1]", 'string');
         $this->distance              = $this->_query(".//$ns:distance[1]", 'float');
-        $this->distance_unit         = $this->_query(".//$ns:distance[1]/@unit[1]", 'string');
         $this->galleryPlusPictureURL = $this->_query(".//$ns:galleryPlusPictureURL", 'string', true);
         $this->galleryURL            = $this->_query(".//$ns:galleryURL[1]", 'string');
         $this->globalId              = $this->_query(".//$ns:globalId[1]", 'string');
@@ -351,10 +306,16 @@ class Zend_Service_Ebay_Finding_Search_Item extends Zend_Service_Ebay_Finding_Ab
         $this->paymentMethod         = $this->_query(".//$ns:paymentMethod", 'string', true);
         $this->postalCode            = $this->_query(".//$ns:postalCode[1]", 'string');
         $this->productId             = $this->_query(".//$ns:productId[1]", 'string');
-        $this->productId_type        = $this->_query(".//$ns:productId[1]/@type[1]", 'string');
         $this->subtitle              = $this->_query(".//$ns:subtitle[1]", 'string');
         $this->title                 = $this->_query(".//$ns:title[1]", 'string');
         $this->viewItemURL           = $this->_query(".//$ns:viewItemURL[1]", 'string');
+
+        $this->_attributes['distance'] = array(
+            'unit' => $this->_query(".//$ns:distance[1]/@unit[1]", 'string')
+        );
+        $this->_attributes['productId'] = array(
+            'type' => $this->_query(".//$ns:productId[1]/@type[1]", 'string')
+        );
 
         $node = $this->_xPath->query(".//$ns:listingInfo[1]", $this->_dom)->item(0);
         if ($node) {
@@ -427,6 +388,7 @@ class Zend_Service_Ebay_Finding_Search_Item extends Zend_Service_Ebay_Finding_Ab
      */
     public function findItemsByProduct(Zend_Service_Ebay_Finding $proxy, $options = null)
     {
-        return $proxy->findItemsByProduct($this->productId, $this->productId_type, $options);
+        $type = $this->attributes('productId', 'type');
+        return $proxy->findItemsByProduct($this->productId, $type, $options);
     }
 }
