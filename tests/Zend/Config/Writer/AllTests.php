@@ -30,7 +30,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once 'Zend/Config/Writer/ArrayTest.php';
 require_once 'Zend/Config/Writer/IniTest.php';
+require_once 'Zend/Config/Writer/JsonTest.php';
 require_once 'Zend/Config/Writer/XmlTest.php';
+require_once 'Zend/Config/Writer/YamlTest.php';
 
 /**
  * @category   Zend
@@ -53,7 +55,9 @@ class Zend_Config_Writer_AllTests
 
         $suite->addTestSuite('Zend_Config_Writer_ArrayTest');
         $suite->addTestSuite('Zend_Config_Writer_IniTest');
+        $suite->addTestSuite('Zend_Config_Writer_JsonTest');
         $suite->addTestSuite('Zend_Config_Writer_XmlTest');
+        $suite->addTestSuite('Zend_Config_Writer_YamlTest');
 
         return $suite;
     }
