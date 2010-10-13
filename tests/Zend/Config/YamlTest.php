@@ -219,17 +219,23 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('3', $config->six->seven->{2}->nine);
     }
 
+    public function yamlDecoder($string)
+    {
+        return Zend_Config_Yaml::decode($string);
+    }
+
     public function testHonorsOptionsProvidedToConstructor()
     {
         $config = new Zend_Config_Yaml($this->_iniFileAllSectionsConfig, 'debug', array(
             'allow_modifications' => true,
             'skip_extends'        => true,
-            'yaml_decoder'        => array('Zend_Config_Yaml', 'decode'),
+            'yaml_decoder'        => array($this, 'yamlDecoder'),
             'foo'                 => 'bar', // ignored
         ));
         $this->assertNull($config->name); // verifies extends were skipped
         $config->foo = 'bar';
         $this->assertEquals('bar', $config->foo); // verifies allows modifications
+        $this->assertEquals(array($this, 'yamlDecoder'), $config->getYamlDecoder());
     }
 
     public function testConstructorRaisesExceptionWhenUnableToLoadFile()
