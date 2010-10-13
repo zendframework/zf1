@@ -90,6 +90,19 @@ class Zend_Tool_Project_Provider_Form extends Zend_Tool_Project_Provider_Abstrac
         return $profile->search($profileSearchParams);
     }
     
+    public function enable($module = null)
+    {
+        $this->_loadProfile(self::NO_PROFILE_THROW_EXCEPTION);
+
+        // determine if testing is enabled in the project
+        $testingEnabled = Zend_Tool_Project_Provider_Test::isTestingEnabled($this->_loadedProfile);
+
+        if (self::hasResource($this->_loadedProfile, $name, $module)) {
+            throw new Zend_Tool_Project_Provider_Exception('This project already has a form named ' . $name);
+        }
+        
+    }
+    
     /**
      * Create a new form
      *
