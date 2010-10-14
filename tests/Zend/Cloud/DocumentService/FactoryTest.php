@@ -64,7 +64,7 @@ class Zend_Cloud_DocumentService_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testGetAdapterWithConfig() {
         // SimpleDB adapter
-        $simpleDBAdapter = Zend_Cloud_DocumentService_Factory::getAdapter(
+        $simpleDbAdapter = Zend_Cloud_DocumentService_Factory::getAdapter(
                                     new Zend_Config(Zend_Cloud_DocumentService_Adapter_SimpleDbTest::getConfigArray())
                                 );
 
