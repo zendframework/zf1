@@ -30,11 +30,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 require_once 'Zend/Config/Ini.php';
 
 /**
- * @see Zend_Cloud_FactoryTest
- */
-require_once 'Zend/Cloud/FactoryTest.php';
-
-/**
  * @see Zend_Cloud_DocumentService_Factory
  */
 require_once 'Zend/Cloud/DocumentService/Factory.php';
@@ -49,7 +44,7 @@ require_once 'Zend/Cloud/DocumentService/Factory.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cloud
  */
-class Zend_Cloud_DocumentService_FactoryTest extends Zend_Cloud_FactoryTest
+class Zend_Cloud_DocumentService_FactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Runs the test methods of this class.
