@@ -36,7 +36,6 @@ require_once 'Zend/Http/UserAgent/Features/Adapter.php';
  */
 class Zend_Http_UserAgent_Features_Adapter_TeraWurfl implements Zend_Http_UserAgent_Features_Adapter
 {
-
     /**
      * Get features from request
      *
@@ -45,20 +44,28 @@ class Zend_Http_UserAgent_Features_Adapter_TeraWurfl implements Zend_Http_UserAg
      */
     public static function getFromRequest($request, array $config)
     {
-        if (!isset($config['terawurfl'])) {
-            require_once 'Zend/Http/UserAgent/Features/Exception.php';
-            throw new Zend_Http_UserAgent_Features_Exception('"TeraWurfl" configuration is not defined');
+        if (!class_exists('TeraWurfl')) {
+            // If TeraWurfl class not found, see if we can load it from 
+            // configuration
+            //
+            if (!isset($config['terawurfl'])) {
+                // No configuration
+                require_once 'Zend/Http/UserAgent/Features/Exception.php';
+                throw new Zend_Http_UserAgent_Features_Exception('"TeraWurfl" configuration is not defined');
+            }
+            
+            $config = $config['terawurfl'];
+
+             if (empty($config['terawurfl_lib_dir'])) {
+                // No lib_dir given
+                require_once 'Zend/Http/UserAgent/Features/Exception.php';
+                throw new Zend_Http_UserAgent_Features_Exception('The "terawurfl_lib_dir" parameter is not defined');
+            }
+
+            // Include the Tera-WURFL file
+            require_once ($config['terawurfl_lib_dir'] . '/TeraWurfl.php');
         }
         
-        $config = $config['terawurfl'];
-        
-        if (empty($config['terawurfl_lib_dir'])) {
-            require_once 'Zend/Http/UserAgent/Features/Exception.php';
-            throw new Zend_Http_UserAgent_Features_Exception('The "terawurfl_lib_dir" parameter is not defined');
-        }
-        
-        // Include the Tera-WURFL file
-        require_once ($config['terawurfl_lib_dir'] . '/TeraWurfl.php');
         
         // instantiate the Tera-WURFL object
         $wurflObj = new TeraWurfl();

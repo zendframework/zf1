@@ -36,7 +36,6 @@ require_once 'Zend/Http/UserAgent/Features/Adapter.php';
  */
 class Zend_Http_UserAgent_Features_Adapter_DeviceAtlas implements Zend_Http_UserAgent_Features_Adapter
 {
-
     /**
      * Get features from request
      *
@@ -45,25 +44,29 @@ class Zend_Http_UserAgent_Features_Adapter_DeviceAtlas implements Zend_Http_User
      */
     public static function getFromRequest($request, array $config)
     {
-        if (!isset($config['deviceatlas'])) {
-            require_once 'Zend/Http/UserAgent/Features/Exception.php';
-            throw new Zend_Http_UserAgent_Features_Exception('"DeviceAtlas" configuration is not defined');
+        if (!class_exists('Mobi_Mtld_DA_Api')) {
+            if (!isset($config['deviceatlas'])) {
+                require_once 'Zend/Http/UserAgent/Features/Exception.php';
+                throw new Zend_Http_UserAgent_Features_Exception('"DeviceAtlas" configuration is not defined');
+            }
         }
         
         $config = $config['deviceatlas'];
         
-        if (empty($config['deviceatlas_lib_dir'])) {
-            require_once 'Zend/Http/UserAgent/Features/Exception.php';
-            throw new Zend_Http_UserAgent_Features_Exception('The "deviceatlas_lib_dir" parameter is not defined');
+        if (!class_exists('Mobi_Mtld_DA_Api')) {
+            if (empty($config['deviceatlas_lib_dir'])) {
+                require_once 'Zend/Http/UserAgent/Features/Exception.php';
+                throw new Zend_Http_UserAgent_Features_Exception('The "deviceatlas_lib_dir" parameter is not defined');
+            }
+
+            // Include the Device Atlas file from the specified lib_dir
+            require_once ($config['deviceatlas_lib_dir'] . '/Mobi/Mtld/DA/Api.php');
         }
         
         if (empty($config['deviceatlas_data'])) {
             require_once 'Zend/Http/UserAgent/Features/Exception.php';
             throw new Zend_Http_UserAgent_Features_Exception('The "deviceatlas_data" parameter is not defined');
         }
-        
-        // Include the Device Atlas file
-        require_once ($config['deviceatlas_lib_dir'] . '/Mobi/Mtld/DA/Api.php');
         
         //load the device data-tree : e.g. 'json/DeviceAtlas.json
         $tree = Mobi_Mtld_DA_Api::getTreeFromFile($config['deviceatlas_data']);
@@ -72,5 +75,4 @@ class Zend_Http_UserAgent_Features_Adapter_DeviceAtlas implements Zend_Http_User
         
         return $properties;
     }
-
 }
