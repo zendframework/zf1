@@ -39,6 +39,7 @@ require_once 'Zend/Mail/ImapTest.php';
 require_once 'Zend/Mail/InterfaceTest.php';
 require_once 'Zend/Mail/MessageTest.php';
 require_once 'Zend/Mail/SmtpTest.php';
+require_once 'Zend/Mail/FileTransportTest.php';
 
 /**
  * @category   Zend
@@ -80,6 +81,7 @@ class Zend_Mail_AllTests
         if (defined('TESTS_ZEND_MAIL_SMTP_ENABLED') && constant('TESTS_ZEND_MAIL_SMTP_ENABLED') == true) {
             $suite->addTestSuite('Zend_Mail_SmtpTest');
         }
+        $suite->addTestSuite('Zend_Mail_FileTransportTest');
 
         return $suite;
     }
