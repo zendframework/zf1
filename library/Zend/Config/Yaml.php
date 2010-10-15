@@ -44,13 +44,13 @@ class Zend_Config_Yaml extends Zend_Config
      * @var boolean
      */
     protected $_skipExtends = false;
-    
+
     /**
      * What to call when we need to decode some YAML?
-     * 
+     *
      * @var callable
      */
-    protected $_yamlDecoder = array(__CLASS__, 'decode'); 
+    protected $_yamlDecoder = array(__CLASS__, 'decode');
 
     /**
      * Whether or not to ignore constants in parsed YAML
@@ -60,8 +60,8 @@ class Zend_Config_Yaml extends Zend_Config
 
     /**
      * Indicate whether parser should ignore constants or not
-     * 
-     * @param  bool $flag 
+     *
+     * @param  bool $flag
      * @return void
      */
     public static function setIgnoreConstants($flag)
@@ -71,7 +71,7 @@ class Zend_Config_Yaml extends Zend_Config
 
     /**
      * Whether parser should ignore constants or not
-     * 
+     *
      * @return bool
      */
     public static function ignoreConstants()
@@ -81,27 +81,27 @@ class Zend_Config_Yaml extends Zend_Config
 
     /**
      * Get callback for decoding YAML
-     * 
+     *
      * @return callable
      */
-    public function getYamlDecoder() 
+    public function getYamlDecoder()
     {
         return $this->_yamlDecoder;
     }
 
     /**
      * Set callback for decoding YAML
-     * 
+     *
      * @param  $yamlDecoder the decoder to set
      * @return Zend_Config_Yaml
      */
-    public function setYamlDecoder($yamlDecoder) 
+    public function setYamlDecoder($yamlDecoder)
     {
         if (!is_callable($yamlDecoder)) {
             require_once 'Zend/Config/Exception.php';
             throw new Zend_Config_Exception('Invalid parameter to setYamlDecoder() - must be callable');
         }
-        
+
         $this->_yamlDecoder = $yamlDecoder;
         return $this;
     }
@@ -182,7 +182,7 @@ class Zend_Config_Yaml extends Zend_Config
 
         // Reset original static state of ignore_constants
         self::setIgnoreConstants($staticIgnoreConstants);
-        
+
         if (null === $config) {
             // decode failed
             require_once 'Zend/Config/Exception.php';
@@ -198,7 +198,7 @@ class Zend_Config_Yaml extends Zend_Config
         } elseif (is_array($section)) {
             $dataArray = array();
             foreach ($section as $sectionName) {
-                if (!isset($config->$sectionName)) {
+                if (!isset($config[$sectionName])) {
                     require_once 'Zend/Config/Exception.php';
                     throw new Zend_Config_Exception(sprintf('Section "%s" cannot be found', $section));
                 }
@@ -255,12 +255,12 @@ class Zend_Config_Yaml extends Zend_Config
 
         return $config;
     }
-    
+
     /**
      * Very dumb YAML parser
-     * 
+     *
      * Until we have Zend_Yaml...
-     * 
+     *
      * @param  string $yaml YAML source
      * @return array Decoded data
      */
@@ -270,10 +270,10 @@ class Zend_Config_Yaml extends Zend_Config
         reset($lines);
         return self::_decodeYaml(0, $lines);
     }
-    
+
     /**
      * Service function to decode YAML
-     * 
+     *
      * @param  int $currentIndent Current indent level
      * @param  array $lines  YAML lines
      * @return array|string
@@ -298,18 +298,18 @@ class Zend_Config_Yaml extends Zend_Config
             if (strlen($line) == 0) {
                 continue;
             }
-            
+
             if ($indent < $currentIndent) {
                 // this level is done
                 prev($lines);
                 return $config;
             }
-            
+
             if (!$inIndent) {
                 $currentIndent = $indent;
-                $inIndent      = true; 
+                $inIndent      = true;
             }
-            
+
             if (preg_match("/(\w+):\s*(.*)/", $line, $m)) {
                 // key: value
                 if ($m[2]) {
@@ -353,8 +353,8 @@ class Zend_Config_Yaml extends Zend_Config
 
     /**
      * Replace any constants referenced in a string with their values
-     * 
-     * @param  string $value 
+     *
+     * @param  string $value
      * @return string
      */
     protected static function _replaceConstants($value)
@@ -369,7 +369,7 @@ class Zend_Config_Yaml extends Zend_Config
 
     /**
      * Get (reverse) sorted list of defined constant names
-     * 
+     *
      * @return array
      */
     protected static function _getConstants()
