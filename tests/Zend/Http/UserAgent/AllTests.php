@@ -38,7 +38,7 @@ require_once 'Zend/Http/UserAgent/Features/Adapter/WurflApiTest.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Http
  */
-class Zend_Http_AllTests
+class Zend_Http_UserAgent_AllTests
 {
     public static function main()
     {
