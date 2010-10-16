@@ -32,6 +32,7 @@ require_once 'Zend/Service/Amazon/Ec2/AllTests.php';
 require_once 'Zend/Service/Amazon/S3/AllTests.php';
 require_once 'Zend/Service/Amazon/SimpleDb/AllTests.php';
 require_once 'Zend/Service/Amazon/Sqs/AllTests.php';
+require_once 'Zend/Service/Amazon/Authentication/AllTests.php';
 
 /**
  * @category   Zend
