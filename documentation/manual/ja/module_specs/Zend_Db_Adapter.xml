@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21080 -->
+<!-- EN-Revision: 22921 -->
+<!-- Skip-EN-Revisions: 21358 -->
 <sect1 id="zend.db.adapter">
 
     <title>Zend_Db_Adapter</title>
@@ -30,9 +31,16 @@
     <itemizedlist>
         <listitem>
             <para>
-                IBM DB2 および Informix Dynamic Server (IDS) (<ulink url="http://www.php.net/pdo-ibm">pdo_ibm</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
+                <acronym>IBM</acronym> <acronym>DB2</acronym> および Informix Dynamic Server (<acronym>IDS</acronym>) (<ulink url="http://www.php.net/pdo-ibm">pdo_ibm</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
             </para>
         </listitem>
+
+        <listitem>
+            <para>
+                MariaDB (<ulink url="http://www.php.net/pdo-mysql">pdo_mysql</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
+            </para>
+        </listitem>
+
         <listitem>
             <para>
                 MySQL (<ulink url="http://www.php.net/pdo-mysql">pdo_mysql</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
@@ -40,7 +48,7 @@
         </listitem>
         <listitem>
             <para>
-                Microsoft SQL Server (<ulink url="http://www.php.net/pdo-dblib">pdo_dblib</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
+                Microsoft <acronym>SQL</acronym> Server (<ulink url="http://www.php.net/pdo-dblib">pdo_dblib</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
             </para>
         </listitem>
         <listitem>
@@ -69,6 +77,12 @@
     <itemizedlist>
         <listitem>
             <para>
+                MariaDB (<ulink url="http://www.php.net/mysqli">mysqli</ulink> <acronym>PHP</acronym> 拡張モジュールを使用)
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
                 MySQL (<ulink url="http://www.php.net/mysqli">mysqli</ulink> を使用します)
             </para>
         </listitem>
@@ -79,12 +93,12 @@
         </listitem>
         <listitem>
             <para>
-                IBM DB2 および DB2/i5 (<ulink url="http://www.php.net/ibm_db2">ibm_db2</ulink> を使用します)
+                <acronym>IBM</acronym> <acronym>DB2</acronym> および <acronym>DB2</acronym> i5 (<ulink url="http://www.php.net/ibm_db2">ibm_db2</ulink> を使用します)
             </para>
         </listitem>
         <listitem>
             <para>
-                Firebird/Interbase (<ulink url="http://www.php.net/ibase">php_interbase</ulink> を使用します)
+                Firebird (Interbase) (<ulink url="http://www.php.net/ibase">php_interbase</ulink> を使用します)
             </para>
         </listitem>
     </itemizedlist>
@@ -341,7 +355,7 @@ $db = Zend_Db::factory($config->database);
                 <para>
                     このオプションは、定数
                     <constant>Zend_Db::CASE_FOLDING</constant> で指定します。
-                    これは、<acronym>PDO</acronym> や IBM DB2 データベースドライバにおける
+                    これは、<acronym>PDO</acronym> や <acronym>IBM</acronym> <acronym>DB2</acronym> データベースドライバにおける
                     <constant>ATTR_CASE</constant> 属性に対応するもので、
                     結果セットの文字列キーの大文字小文字変換を指定します。
                     設定できる値は
@@ -660,7 +674,7 @@ $result = $db->fetchAll($sql, 2);
             <itemizedlist>
                 <listitem>
                     <para>
-                        <emphasis>Zend_Db::FETCH_ASSOC</emphasis>:
+                        <emphasis><constant>Zend_Db::FETCH_ASSOC</constant></emphasis>:
                         データを、連想配列の配列として返します。
                         配列のキーは、カラム名を文字列で表したものとなります。
                         これは、<classname>Zend_Db_Adapter</classname> クラスのデフォルトのフェッチモードです。
@@ -669,7 +683,7 @@ $result = $db->fetchAll($sql, 2);
                         select で取得する一覧の中に同名のカラムが含まれている場合
                         (たとえば複数テーブルを <acronym>JOIN</acronym> した場合など)
                         は、その名前のエントリはひとつしか含まれません。
-                        <acronym>FETCH_ASSOC</acronym> モードを使用する場合は、
+                        <constant>FETCH_ASSOC</constant> モードを使用する場合は、
                         <acronym>SELECT</acronym> クエリでカラムの別名を指定するなどして、
                         結果の配列におけるキーが一意になるようにしなければなりません。
                     </para>
@@ -679,7 +693,7 @@ $result = $db->fetchAll($sql, 2);
                         大文字小文字を指定するには、<constant>Zend_Db::CASE_FOLDING</constant>
                         オプションを使用します。これは、
                         アダプタのインスタンスを作成する際に使用します。
-                        <xref linkend="zend.db.adapter.connecting.parameters.example1" />
+                        <link linkend="zend.db.adapter.connecting.parameters.example1">この例</link>
                         を参照ください。
                     </para>
                 </listitem>
@@ -1012,8 +1026,8 @@ $id = $db->lastSequenceId('bugs_id_gen');
             </example>
 
             <para>
-                シーケンスをサポートしていない <acronym>RDBMS</acronym>、たとえば MySQL や
-                Microsoft SQL Server、SQLite などの場合、
+                シーケンスをサポートしていない <acronym>RDBMS</acronym>、たとえば MariaDB や MySQL、
+                Microsoft <acronym>SQL</acronym> Server、SQLite などの場合、
                 <methodname>lastInsertId()</methodname> メソッドの引数は無視されます。
                 このメソッドの返り値は、現在の接続で最後に実行された
                 <acronym>INSERT</acronym> 操作が生成した値となります。また、これらの <acronym>RDBMS</acronym> では
@@ -1655,7 +1669,7 @@ try {
                 </listitem>
                 <listitem>
                     <para>
-                        <constant>AUTO_INCREMENT</constant> - MySQL
+                        <constant>AUTO_INCREMENT</constant> - MySQL/MariaDB
                     </para>
                 </listitem>
                 <listitem>
@@ -1878,7 +1892,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        IBM DB2 は、シーケンスも自動インクリメントのキーも
+                        <acronym>IBM</acronym> <acronym>DB2</acronym> は、シーケンスも自動インクリメントのキーも
                         両方サポートしています。
                         したがって、<methodname>lastInsertId()</methodname>
                         への引数は指定してもしなくてもかまいません。引数を省略した場合は、
@@ -1910,7 +1924,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        MySQL はシーケンスをサポートしていません。したがって、
+                        MySQL 及び MariaDB はシーケンスをサポートしていません。したがって、
                         <methodname>lastInsertId()</methodname> に引数を指定してもそれは無視されます。
                         返り値は、常に自動インクリメントのキーの最後の値となります。
                         <methodname>lastSequenceId()</methodname> メソッドの返り値は
@@ -1988,6 +2002,12 @@ if (!is_null($version)) {
                 <listitem>
                     <para>
                         このアダプタは、<acronym>PHP</acronym> の sqlsrv 拡張モジュールを使用します。
+                    </para>
+                </listitem>
+
+                <listitem>
+                    <para>
+                        Microsoft <acronym>SQL</acronym> Server 2005 以降のみサポートされます。
                     </para>
                 </listitem>
 
@@ -2093,7 +2113,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        Microsoft SQL Server はシーケンスをサポートしていません。
+                        Microsoft <acronym>SQL</acronym> Server はシーケンスをサポートしていません。
                         したがって、
                         <methodname>lastInsertId()</methodname> に引数を指定してもそれは無視されます。
                         返り値は、常に自動インクリメントのキーの最後の値となります。
@@ -2119,7 +2139,7 @@ if (!is_null($version)) {
                         に接続した直後に <constant>QUOTED_IDENTIFIER ON</constant>
                         を設定します。これにより、<acronym>SQL</acronym> の識別子をクォートする際に
                         標準の区切り文字 (") を使用するようになります。
-                        SQL Server の独自仕様である角括弧によるクォートは使用しません。
+                        <acronym>SQL</acronym> Server の独自仕様である角括弧によるクォートは使用しません。
                     </para>
                 </listitem>
 
@@ -2162,7 +2182,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        MySQL はシーケンスをサポートしていません。したがって、
+                        MySQL 及び MariaDB はシーケンスをサポートしていません。したがって、
                         <methodname>lastInsertId()</methodname> に引数を指定してもそれは無視されます。
                         返り値は、常に自動インクリメントのキーの最後の値となります。
                         <methodname>lastSequenceId()</methodname> メソッドの返り値は
@@ -2302,7 +2322,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        Firebird/interbase は自動インクリメントのキーをサポートしていません。
+                        Firebird (interbase) は自動インクリメントのキーをサポートしていません。
                         シーケンスの名前を
                         <methodname>lastInsertId()</methodname> あるいは
                         <methodname>lastSequenceId()</methodname> に指定する必要があります。
@@ -2311,7 +2331,7 @@ if (!is_null($version)) {
 
                 <listitem>
                     <para>
-                        現在、Firebird/interbase アダプタでは <constant>Zend_Db::CASE_FOLDING</constant>
+                        現在、Firebird (interbase) アダプタでは <constant>Zend_Db::CASE_FOLDING</constant>
                         オプションをサポートしていません。
                         クォートしていない識別子は、自動的に大文字で返されます。
                     </para>
@@ -2327,7 +2347,7 @@ if (!is_null($version)) {
                     </para>
 
                     <para>
-                        php にバンドルされている <filename>gds32.dll</filename> (あるいは linux 環境でそれに相当するもの) をアップデートし、
+                        <acronym>PHP</acronym> にバンドルされている <filename>gds32.dll</filename> (あるいは linux 環境でそれに相当するもの) をアップデートし、
                         サーバと同じバージョンにしておくことを推奨します。
                         Firebird で <filename>gds32.dll</filename> に相当するものは <filename>fbclient.dll</filename> です。
                     </para>
