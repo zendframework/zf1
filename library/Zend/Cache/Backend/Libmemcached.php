@@ -128,10 +128,14 @@ class Zend_Cache_Backend_Libmemcached extends Zend_Cache_Backend implements Zend
                 $optConst = 'Memcached::OPT_' . strtoupper($name);
                 if (defined($optName)) {
                     $optId = constant($optConst);
+                } else {
+                    $this->_log("Unknown memcached client option '{$name}' ({$optConst})");
                 }
             }
             if ($optId) {
-                $this->_memcache->setOption($optId, $value);
+                if (!$this->_memcache->setOption($optId, $value)) {
+                    $this->_log("Setting memcached client option '{$optId}' failed");
+                }
             }
         }
 
