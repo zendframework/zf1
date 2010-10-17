@@ -53,7 +53,7 @@ class resources_languages_Zend_ValidateTest extends PHPUnit_Framework_TestCase
         // Show only a specific translation?
         $langs = 'all';
         if (defined('TESTS_ZEND_RESOURCES_TRANSLATIONS')) {
-            $langs = strtolower(constant('TESTS_ZEND_RESOURCES_TRANSLATIONS'));
+            $langs = constant('TESTS_ZEND_RESOURCES_TRANSLATIONS');
             if ($langs == 'en' || !Zend_Locale::isLocale($langs, true, false)) {
                 $langs = 'all';
             }
