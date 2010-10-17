@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20765 -->
+<!-- EN-Revision: 23103 -->
 <sect1 id="zend.config.writer.introduction">
     <title>Zend_Config_Writer</title>
 
@@ -9,7 +9,7 @@
         <classname>Zend_Config</classname> オブジェクトを書き出します。
         アダプタなしでも動作するので、使用するのも簡単です。
         デフォルトでは <classname>Zend_Config_Writer</classname>
-        には 3 種類のアダプタが同梱されており、全てファイル・ベースです。
+        には 4 種類のアダプタが同梱されており、全てファイル・ベースです。
         まず、<emphasis>filename</emphasis> や <emphasis>config</emphasis>
         のオプションを指定してライターのインスタンスを作成します。
         それからライターの <methodname>write()</methodname> メソッドをコールすると、
@@ -32,27 +32,24 @@
             </para>
         </listitem>
 
+         <listitem>
+             <para>
+                <classname>Zend_Config_Writer_Json</classname>
+            </para>
+        </listitem>
+
         <listitem>
             <para>
                 <classname>Zend_Config_Writer_Xml</classname>
             </para>
         </listitem>
+
+        <listitem>
+            <para>
+                <classname>Zend_Config_Writer_Yaml</classname>
+            </para>
+        </listitem>
     </itemizedlist>
-
-     <para>
-        <acronym>INI</acronym> ライターでは、セクションについてのレンダリング用のモードが２つあります。
-        既定では、トップレベルの構成節は、常にセクション名に含まれます。
-        <command>$writer->setRenderWithoutSections()</command> を呼ぶことにより、
-        オプションの全てが <acronym>INI</acronym> ファイルのグローバル名前空間に含まれます。
-        そして、セクションは使用されません。
-    </para>
-
-    <para>
-        加えて、<classname>Zend_Config_Writer_Ini</classname> にはオプションのパラメータ
-        <emphasis>nestSeparator</emphasis> が用意されています。
-        これは、ノードを区切る文字を定義します。デフォルトはドットひとつで、
-        これは <classname>Zend_Config_Ini</classname> のデフォルトと同じです。
-    </para>
 
     <para>
         <classname>Zend_Config</classname> オブジェクトを変更したり作成したりする際には、
@@ -149,12 +146,65 @@ $writer->write();
 
     <para>
         構成節の文字列を作成するために、ファイル・ベースのライタ
-        （ <acronym>INI</acronym> 、 <acronym>XML</acronym> 及び <acronym>PHP</acronym> 配列）
+        （ <acronym>INI</acronym> 、 <acronym>JSON</acronym>、<acronym>XML</acronym>、
+        <acronym>YAML</acronym> 及び <acronym>PHP</acronym> 配列）
         全てで内部的に <methodname>render()</methodname> が使用されます。
-        コンフィギュレーション・データの文字列表現にアクセスする必要があれば、
-        このメソッドを外部からも使用できます。
+        コンフィギュレーション・データの文字列表現にアクセスするために
+        このメソッドをそれぞれ使用できます。
     </para>
 
+    <sect2 id="zend.config.writer.introduction.ini-notes">
+        <title>INI ライター特有の注意</title>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <acronym>INI</acronym> ライターでは、セクションについてのレンダリング用のモードが２つあります。
+                    既定では、トップレベルの構成節は、常にセクション名に含まれます。
+                    <command>$writer->setRenderWithoutSections()</command> を呼ぶことにより、
+                    オプションの全てが <acronym>INI</acronym> ファイルのグローバル名前空間に含まれます。
+                    そして、セクションは使用されません。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <classname>Zend_Config_Writer_Ini</classname> にはオプションのパラメータ
+                    <emphasis>nestSeparator</emphasis> が用意されています。
+                    これは、ノードを区切る文字を定義します。デフォルトはドットひとつで、
+                    これは <classname>Zend_Config_Ini</classname> によりデフォルトで受け付けられます。
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="zend.config.writer.introduction.yaml-notes">
+        <title>YAML ライター特有の注意</title>
+
+        <para>
+            The <acronym>YAML</acronym> writer lets you optionally specify an alternate
+            <acronym>YAML</acronym> encoder to use. By default, one is shipped with the framework
+            that is suitable for most configuration tasks. If you find it insufficient, or wish to
+            use more advanced YAML, you may provide an alternate encoder callback.
+        </para>
+
+        <para>
+            The method for doing so is to use the
+            <methodname>Zend_Config_Writer_Yaml::setYamlEncoder()</methodname> method, passing it a
+            valid callback.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Use the Symfony Yaml Component:
+$writer = new Zend_Config_Writer_Yaml($filename);
+$writer->setYamlEncoder(array('sfYaml', 'dump'));
+]]></programlisting>
+
+        <para>
+            The above uses the Symfony Components' <classname>sfYaml</classname> component in order
+            to encode the configuration to <acronym>YAML</acronym>.
+        </para>
+    </sect2>
 </sect1>
 <!--
 vim:se ts=4 sw=4 et:
