@@ -121,54 +121,95 @@
                 <para>
                     The <acronym>WURFL</acronym> <ulink
                         url="http://sourceforge.net/projects/wurfl/files/WURFL%20PHP/1.1/wurfl-php-1.1.tar.gz/download">PHP
-                        API</ulink>. This includes the <filename>wurfl.xml</filename> file, which is
-                    the actual <acronym>WURFL</acronym> database.
+                        API</ulink>. This archive contains the most recent
+                    <filename>wurfl-latest.xml</filename> file and patches which constitute the
+                    actual <acronym>WURFL</acronym> database.
                 </para>
             </listitem>
         </itemizedlist>
 
         <para>
-            We suggest that you place this library in your "library" directory. Inflating the
-            archive will create a <filename>Wurfl/1.1/</filename> directory.
+            We suggest that you inflate this archive in your "library" directory. Inflating the
+            archive will create a <filename>wurfl-php-1.1</filename> directory.
         </para>
 
         <programlisting language="text">
-project
-|-- application
-|-- data
-|-- library
-|   |-- Wurfl
-|   |   |-- 1.1
-|   |   |   |-- resources
-|   |   |       |-- wurfl.xml
-|   |   |       `-- wurfl-config.php
+library
+|-- wurfl-php-1.1
+|   |-- COPYING
+|   |-- docs
+|   |-- examples
+|   |-- README
+|   |-- tests
+|   `-- WURFL
 </programlisting>
 
         <para>
-            Next, find the file <filename>resources/wurfl-config.php</filename> in your
-            <acronym>WURFL</acronym> library. The <acronym>WURFL</acronym> PHP API is designed to
-            cache data. As such, you will want to set the <varname>['persistence']['dir']</varname>
-            key. We recommend having these point to <filename>APPLICATION_PATH .
-                "/../data/wurfl/</filename>; you will need to create this directory if it does not
-            yet.
+            Next, create a data and cache directory for the <acronym>WURFL</acronym> database and
+            related cache files; this should be done from your project root (the directory
+            containing the <filename>application</filename> and <filename>library</filename>
+            directories). When you do so, make sure the directory is at least writable by the web
+            server user; the following makes it writable for all users.
         </para>
 
-        <programlisting language="php"><![CDATA[
-$configuration['persistence']['dir'] = APPLICATION_PATH . '/../data/wurfl';
+        <programlisting language="sh"><![CDATA[
+mkdir -p data/wurfl/cache
+chmod -R o+rwX data/worful/cache
 ]]></programlisting>
 
         <para>
-            Now, in your <filename>application.ini</filename>, add the following entries:
+            Now, copy the <acronym>WURFL</acronym> data from the inflated archive into your data
+            directory.
+        </para>
+
+        <programlisting language="sh"><![CDATA[
+cp library/wurfl-php-1.1/tests/resources/wurfl-latest.zip data/wurfl/
+cp library/wurfl-php-1.1/tests/resources/web_browsers_patch.xml data/wurfl/
+]]></programlisting>
+
+        <para>
+            Create a <acronym>WURFL</acronym> configuration file named
+            <filename>application/configs/wurfl-config.php</filename>, with the following contents:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php
+$resourcesDir            = dirname(__FILE__) . '/../../data/wurfl/';
+
+$wurfl['main-file']      = $resourcesDir  . 'wurfl-latest.zip';
+$wurfl['patches']        = array($resourcesDir . 'web_browsers_patch.xml');
+
+$persistence['provider'] = 'file';
+$persistence['dir']      = $resourcesDir . '/cache/';
+
+$cache['provider']       = null;
+
+$configuration['wurfl']       = $wurfl;
+$configuration['persistence'] = $persistence;
+$configuration['cache']       = $cache;
+]]></programlisting>
+
+        <para>
+            Finally, edit your <filename>application.ini</filename> to add the following lines to your
+            <varname>[production]</varname> section:
         </para>
 
         <programlisting language="ini">
 resources.useragent.wurflapi.wurfl_api_version = "1.1"
-resources.useragent.wurflapi.wurfl_lib_dir = APPLICATION_PATH "/../library/Wurfl/1.1"
-resources.useragent.wurflapi.wurfl_config_file = APPLICATION_PATH "/../library/Wurfl/1.1/resources/wurfl-config.php"
+resources.useragent.wurflapi.wurfl_lib_dir = APPLICATION_PATH "/../library/wurfl-php-1.1/WURFL/"
+resources.useragent.wurflapi.wurfl_config_file = APPLICATION_PATH "/configs/wurfl-config.php"
 </programlisting>
 
+        <note>
+            <para>
+                The trailing directory separator on the <constant>wurfl_lib_dir</constant> setting
+                is important. The <acronym>WURFL</acronym> API does no normalization, and expects
+                it to be there.
+            </para>
+        </note>
+
         <para>
-            At this point, everything is setup. The first request will populate the
+            At this point, everything is setup. The first request (from a mobile device) will populate the
             <acronym>WURFL</acronym> cache by parsing the <filename>resources/wurfl.xml</filename>
             file, and as such may take up to a minute. After that, lookups will be quite fast, and
             each request will contain detailed information on the user agent.
@@ -228,6 +269,18 @@ switch (true) {
     default:
         // use default
         break;
+}
+]]></programlisting>
+
+        <para>
+            Finally, each device will often have a large number of capabilities not immediately
+            represented in the device interface. You can query these using the
+            <methodname>hasFeature()</methodname> and <methodname>getFeature()</methodname> methods.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+if ($userAgent->hasFeature('mp3') && $userAgent->getFeature('mp3')) {
+    // embed HTML5 audio tag...
 }
 ]]></programlisting>
     </sect2>
