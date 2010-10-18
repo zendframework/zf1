@@ -70,6 +70,22 @@ interface Zend_Http_UserAgent_Device extends Serializable
     public function getAllGroups();
 
     /**
+     * Whether or not the device has a given feature
+     * 
+     * @param  string $feature 
+     * @return bool
+     */
+    public function hasFeature($feature);
+
+    /**
+     * Get the value of a specific device feature
+     * 
+     * @param  string $feature 
+     * @return mixed
+     */
+    public function getFeature($feature);
+
+    /**
      * Get the browser type
      * 
      * @return string
