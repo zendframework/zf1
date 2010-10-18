@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20872 -->
+<!-- EN-Revision: 22797 -->
 <sect1 id="zend.pdf.pages">
     <title>ページの操作</title>
     <sect2 id="zend.pdf.pages.creation">
@@ -21,16 +21,8 @@
             メソッドをコールします。このメソッドは <classname>Zend_Pdf_Page</classname>
             オブジェクトを返します。<methodname>Zend_Pdf::newPage()</methodname>
             の場合は、すでにドキュメントにアタッチされているページを作成するという点が異なります。
-            こうするとそのページを複数の <acronym>PDF</acronym> ドキュメントで使いまわすことができませんが、
-            多少高速になります
-            <footnote>
-                <para>
-                これは現在のバージョンの Zend Framework の制限事項であり、
-                将来のバージョンではなくなる予定です。
-                しかし、ドキュメント間でページを共有するには、
-                アタッチされていないページのほうが常によい結果となるでしょう。
-                </para>
-            </footnote>。どちらの手法を使用するかはあなたしだいです。
+            アタッチされたページは複製されない限り、他の <acronym>PDF</acronym> で使用できません。
+            詳しくは <link linkend="zend.pdf.pages.cloning">ページの複製</link> セクションをご覧ください。
         </para>
 
         <para>
@@ -85,12 +77,12 @@ unset($pdf->pages[$id]);
     <sect2 id="zend.pdf.pages.cloning">
         <title>ページの複製</title>
         <para>
-            既存の <acronym>PDF</acronym> ページを複製するには、新しい <classname>Zend_Pdf_Page</classname>
+            既存の <acronym>PDF</acronym> ページを繰り返すには、新しい <classname>Zend_Pdf_Page</classname>
             オブジェクトを作成する際に既存のページをパラメータとして指定します。
         </para>
 
         <example id="zend.pdf.pages.example-2">
-            <title>既存のページの複製</title>
+            <title>既存のページを繰り返す</title>
             <programlisting language="php"><![CDATA[
 ...
 // テンプレートページを別の変数に格納します
@@ -98,11 +90,13 @@ $template = $pdf->pages[$templatePageIndex];
 ...
 // 新しいページを追加します
 $page1 = new Zend_Pdf_Page($template);
+$page1->drawText('Some text...', $x, $y);
 $pdf->pages[] = $page1;
 ...
 
 // 別のページを追加します
 $page2 = new Zend_Pdf_Page($template);
+$page2->drawText('Another text...', $x, $y);
 $pdf->pages[] = $page2;
 ...
 
@@ -119,12 +113,60 @@ unset($pdf->pages[$templatePageIndex]);
 
         <caution>
             <para>
-                注意! 複製されたページは、テンプレートページと同じ
+                注意! 繰り返されたページは、テンプレートページと同じ
                 <acronym>PDF</acronym> リソースを共有します。つまり、
                 テンプレートページと同じドキュメントしか使用できません。
                 ドキュメントを修正したら、新しいページとして保存できます。
             </para>
         </caution>
+
+        <para>
+            <code>clone</code> operator may be used to create page which is not attached to any document.
+            It takes more time than duplicating page since it needs to copy all dependent objects
+            (used fonts, images and other resources), but it allows to use pages from different source
+            documents to create new one: 
+        </para>
+
+        <example id="zend.pdf.pages.example-3">
+            <title>既存のページを複製</title>
+
+            <programlisting language="php"><![CDATA[
+$page1 = clone $pdf1->pages[$templatePageIndex1];
+$page2 = clone $pdf2->pages[$templatePageIndex2];
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
+
+        <para>
+            If several template pages are planned to be used as templates then it could be more efficient 
+            to utilize <classname>Zend_Pdf_Resource_Extractor</classname> class which gives an ability 
+            to share resources between cloned pages - fonts, images, etc. (otherwise new resource copy 
+            will be created for each cloned page):  
+        </para>
+
+        <example id="zend.pdf.pages.example-4">
+            <title>
+                Cloning existing page using <classname>Zend_Pdf_Resource_Extractor</classname> class
+            </title>
+
+            <programlisting language="php"><![CDATA[
+$extractor = new Zend_Pdf_Resource_Extractor();
+....
+$page1 = $extractor->clonePage($pdf->pages[$templatePageIndex1]);
+$page2 = $extractor->clonePage($pdf->pages[$templatePageIndex2]);
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
     </sect2>
 </sect1>
 <!--
