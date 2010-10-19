@@ -479,20 +479,24 @@ class Zend_OpenId_Consumer_Storage_File extends Zend_OpenId_Consumer_Storage
         }
         try {
             if (!is_int($date) && !is_string($date)) {
-                foreach (glob($this->_dir . '/nonce_*') as $name) {
+                $nonceFiles = glob($this->_dir . '/nonce_*');
+                foreach ((array) $nonceFiles as $name) {
                     @unlink($name);
                 }
+                unset($nonceFiles);
             } else {
                 if (is_string($date)) {
                     $time = time($date);
                 } else {
                     $time = $date;
                 }
-                foreach (glob($this->_dir . '/nonce_*') as $name) {
+                $nonceFiles = glob($this->_dir . '/nonce_*');
+                foreach ((array) $nonceFiles as $name) {
                     if (filemtime($name) < $time) {
                         @unlink($name);
                     }
                 }
+                unset($nonceFiles);
             }
             if ($lock !== false) {
                 fclose($lock);

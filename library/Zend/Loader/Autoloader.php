@@ -560,7 +560,7 @@ class Zend_Loader_Autoloader
         $versionLen = strlen($version);
         $versions   = array();
         $dirs       = glob("$path/*", GLOB_ONLYDIR);
-        foreach ($dirs as $dir) {
+        foreach ((array) $dirs as $dir) {
             $dirName = substr($dir, strlen($path) + 1);
             if (!preg_match('/^(?:ZendFramework-)?(\d+\.\d+\.\d+((a|b|pl|pr|p|rc)\d+)?)(?:-minimal)?$/i', $dirName, $matches)) {
                 continue;
