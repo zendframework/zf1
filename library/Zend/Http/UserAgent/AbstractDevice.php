@@ -567,7 +567,9 @@ abstract class Zend_Http_UserAgent_AbstractDevice
                 } else {
                     $result['browser_version'] = $result['others']['detail'][count($result['others']['detail']) - 1][2];
                 }
-                $result['browser_language'] = trim($comment[3]);
+                if (isset($comment[3])) {
+                     $result['browser_language'] = trim($comment[3]);
+                }
                 
                 $last = $result['others']['detail'][count($result['others']['detail']) - 1][1];
                 

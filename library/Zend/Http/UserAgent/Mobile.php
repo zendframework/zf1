@@ -157,6 +157,12 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'wm5 pie', 
         'wms pie', 
         'xiino',
+        'wap',
+        'up/',
+        'psion',
+        'j2me',
+        'klondike',
+        'kbrowser'
     );
 
     /**
