@@ -354,11 +354,13 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         
         parent::_defineFeatures();
         
-        if (!empty($this->_aFeatures["mobile_browser"])) {
+        if (isset($this->_aFeatures["mobile_browser"])) {
             $this->setFeature("browser_name", $this->_aFeatures["mobile_browser"]);
+            $this->_browser = $this->_aFeatures["mobile_browser"];
         }
-        if (!empty($this->_aFeatures["mobile_browser_version"])) {
+        if (isset($this->_aFeatures["mobile_browser_version"])) {
             $this->setFeature("browser_version", $this->_aFeatures["mobile_browser_version"]);
+            $this->_browserVersion = $this->_aFeatures["mobile_browser_version"];
         }
         
         // markup
