@@ -70,9 +70,9 @@ class Zend_View_Helper_HeadTitle extends Zend_View_Helper_Placeholder_Container_
      */
     public function headTitle($title = null, $setType = null)
     {
-        if ($setType === null && is_null($this->getDefaultAttachOrder())) {
+        if ($setType === null && $this->getDefaultAttachOrder() === null) {
             $setType = Zend_View_Helper_Placeholder_Container_Abstract::APPEND;
-        } elseif ($setType === null && !is_null($this->getDefaultAttachOrder())) {
+        } elseif ($setType === null && $this->getDefaultAttachOrder() !== null) {
             $setType = $this->getDefaultAttachOrder();
         }
         $title = (string) $title;
