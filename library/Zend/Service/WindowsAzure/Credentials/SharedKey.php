@@ -115,7 +115,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 		}
 		
 		// Build canonicalized headers
-		if (!is_null($headers)) {
+		if ($headers !== null) {
 			foreach ($headers as $header => $value) {
 				if (is_bool($value)) {
 					$value = $value === true ? 'True' : 'False';
@@ -149,7 +149,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 			 && strtoupper($httpVerb) != Zend_Http_Client::HEAD) {
 			$contentLength = 0;
 			
-			if (!is_null($rawData)) {
+			if ($rawData !== null) {
 				$contentLength = strlen($rawData);
 			}
 		}

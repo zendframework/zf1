@@ -205,13 +205,13 @@ class Zend_Service_WindowsAzure_Storage
 			$this->_usePathStyleUri = true;
 		}
 		
-		if (is_null($this->_credentials)) {
+		if ($this->_credentials === null) {
 		    $this->_credentials = new Zend_Service_WindowsAzure_Credentials_SharedKey(
 		    	$this->_accountName, $this->_accountKey, $this->_usePathStyleUri);
 		}
 		
 		$this->_retryPolicy = $retryPolicy;
-		if (is_null($this->_retryPolicy)) {
+		if ($this->_retryPolicy === null) {
 		    $this->_retryPolicy = Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract::noRetry();
 		}
 		
@@ -257,7 +257,7 @@ class Zend_Service_WindowsAzure_Storage
 	public function setRetryPolicy(Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract $retryPolicy = null)
 	{
 		$this->_retryPolicy = $retryPolicy;
-		if (is_null($this->_retryPolicy)) {
+		if ($this->_retryPolicy === null) {
 		    $this->_retryPolicy = Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract::noRetry();
 		}
 	}
@@ -372,7 +372,7 @@ class Zend_Service_WindowsAzure_Storage
 		}
 			
 		// Clean headers
-		if (is_null($headers)) {
+		if ($headers === null) {
 		    $headers = array();
 		}
 		
@@ -421,7 +421,7 @@ class Zend_Service_WindowsAzure_Storage
 	 */
 	protected function _parseResponse(Zend_Http_Response $response = null)
 	{
-		if (is_null($response)) {
+		if ($response === null) {
 			throw new Zend_Service_WindowsAzure_Exception('Response should not be null.');
 		}
 		
@@ -503,7 +503,7 @@ class Zend_Service_WindowsAzure_Storage
 	protected function _parseMetadataElement($element = null)
 	{
 		// Metadata present?
-		if (!is_null($element) && isset($element->Metadata) && !is_null($element->Metadata)) {
+		if ($element !== null && isset($element->Metadata) && $element->Metadata !== null) {
 			return get_object_vars($element->Metadata);
 		}
 
@@ -521,7 +521,7 @@ class Zend_Service_WindowsAzure_Storage
 	    $tz = @date_default_timezone_get();
 	    @date_default_timezone_set('UTC');
 	    
-	    if (is_null($timestamp)) {
+	    if ($timestamp === null) {
 	        $timestamp = time();
 	    }
 	        
