@@ -387,6 +387,14 @@ class Zend_Application
                 $config = new Zend_Config_Xml($file, $environment);
                 break;
 
+            case 'json':
+                $config = new Zend_Config_Json($file, $environment);
+                break;
+
+            case 'yaml':
+                $config = new Zend_Config_Yaml($file, $environment);
+                break;
+
             case 'php':
             case 'inc':
                 $config = include $file;
