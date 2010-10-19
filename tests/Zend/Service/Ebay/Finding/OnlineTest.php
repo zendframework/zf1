@@ -44,9 +44,18 @@ class Zend_Service_Ebay_Finding_OnlineTest extends PHPUnit_Framework_TestCase
      */
     protected $_finding;
 
+    protected $_httpClientOriginal;
+
     protected function setUp()
     {
         $this->_finding = new Zend_Service_Ebay_Finding(constant('TESTS_ZEND_SERVICE_EBAY_ONLINE_APPID'));
+        $this->_httpClientOriginal = Zend_Rest_Client::getHttpClient();
+        Zend_Rest_Client::setHttpClient(new Zend_Http_Client());
+    }
+
+    public function tearDown()
+    {
+        Zend_Rest_Client::setHttpClient($this->_httpClientOriginal);
     }
 
     public function testInvalidAppId()
