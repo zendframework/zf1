@@ -30,9 +30,19 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
+ * @see Zend_Service_ShortUrl_IsGdTest
+ */
+require_once 'Zend/Service/ShortUrl/IsGdTest.php';
+
+/**
  * @see Zend_Service_ShortUrl_JdemCzTest
  */
 require_once 'Zend/Service/ShortUrl/JdemCzTest.php';
+
+/**
+ * @see Zend_Service_ShortUrl_MetamarkNetTest
+ */
+require_once 'Zend/Service/ShortUrl/MetamarkNetTest.php';
 
 /**
  * @see Zend_Service_ShortUrl_TinyUrlComTest
@@ -58,7 +68,9 @@ class Zend_Service_ShortUrl_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Service_ShortUrl');
 
+        $suite->addTestSuite('Zend_Service_ShortUrl_IsGdTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_JdemCzTest');
+        $suite->addTestSuite('Zend_Service_ShortUrl_MetamarkNetTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_TinyUrlComTest');
         
         return $suite;
