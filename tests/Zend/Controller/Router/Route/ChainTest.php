@@ -32,6 +32,9 @@ require_once 'Zend/Config.php';
 /** Zend_Controller_Router_Rewrite */
 require_once 'Zend/Controller/Router/Rewrite.php';
 
+/** Zend_Controller_Dispatcher_Standard */
+require_once 'Zend/Controller/Dispatcher/Standard.php';
+
 /** Zend_Controller_Router_Route_Chain */
 require_once 'Zend/Controller/Router/Route/Chain.php';
 
@@ -114,6 +117,31 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $res['foo']);
         $this->assertEquals(2, $res['bar']);
+    }
+
+    /**
+     * @group ZF-8812
+     */
+    public function testChainingMatchToDefaultValues()
+    {
+        $foo = new Zend_Controller_Router_Route(
+            ':foo',
+            array('foo' => 'bar'),
+            array('foo' => '[a-z]{3}')
+        );
+        
+        $bar = new Zend_Controller_Router_Route_Module(array(
+            'module' => 0,
+            'controller' => 1,
+            'action' => 2
+        ));
+        
+        $chain = $foo->chain($bar);
+
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/');
+        $res = $chain->match($request);
+
+        $this->assertTrue(is_array($res), 'Route did not match to default values.');
     }
 
     public function testChainingShortcutMatch()
@@ -426,8 +454,8 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         $router = new Zend_Controller_Router_Rewrite();
         $front = Zend_Controller_Front::getInstance();
         $front->resetInstance();
-        $front->setDispatcher(new Zend_Controller_Router_RewriteTest_Dispatcher());
-        $front->setRequest(new Zend_Controller_Router_RewriteTest_Request());
+        $front->setDispatcher(new Zend_Controller_Router_ChainTest_Dispatcher());
+        $front->setRequest(new Zend_Controller_Router_ChainTest_Request());
         $router->setFrontController($front);
 
         $router->addConfig(new Zend_Config($routes));
@@ -680,6 +708,22 @@ class Zend_Controller_Router_ChainTest_Request extends Zend_Controller_Request_H
         $return = $this->_host;
         if ($this->_port)  $return .= ':' . $this->_port;
         return $return;
+    }
+}
+
+/**
+ * Zend_Controller_Router_ChainTest_Dispatcher - dispatcher object for router testing
+ */
+class Zend_Controller_Router_ChainTest_Dispatcher extends Zend_Controller_Dispatcher_Standard
+{
+    public function getDefaultControllerName()
+    {
+        return 'defctrl';
+    }
+
+    public function getDefaultAction()
+    {
+        return 'defact';
     }
 }
 
