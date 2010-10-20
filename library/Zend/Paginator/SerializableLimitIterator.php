@@ -122,6 +122,7 @@ class Zend_Paginator_SerializableLimitIterator extends LimitIterator implements 
                 return null !== $current;
             } catch (OutOfBoundsException $e) {
                 // reset position in case of exception is assigned null
+                $this->rewind();
                 $this->seek($currentOffset);
                 return false;
             }
