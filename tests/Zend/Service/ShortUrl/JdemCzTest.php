@@ -39,7 +39,7 @@ class Zend_Service_ShortUrl_JdemCzTest extends PHPUnit_Framework_TestCase
      * @var Zend_Service_JdemCz
      */
     protected $_s;
-    
+
     /**
      * Creates a new Zend_Service_JdemCz object for each test method
      *
@@ -47,6 +47,8 @@ class Zend_Service_ShortUrl_JdemCzTest extends PHPUnit_Framework_TestCase
      */
     public function setUp ()
     {
+        Zend_Service_Abstract::setHttpClient(new Zend_Http_Client());
+
         $this->_s = new Zend_Service_ShortUrl_JdemCz();
     }
 
@@ -55,49 +57,49 @@ class Zend_Service_ShortUrl_JdemCzTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend_Service_ShortUrl_Exception');
         $this->_s->shorten('');
     }
-    
+
     public function testShortenIncorrectUrlException()
     {
         $this->setExpectedException('Zend_Service_ShortUrl_Exception');
         $this->_s->shorten('wrongAdress.cccc');
     }
-    
+
     public function testShorten()
     {
         $urls = array(
             'http://framework.zend.com/'           => 'http://jdem.cz/ab2l1',
             'http://framework.zend.com/manual/en/' => 'http://jdem.cz/ab3z7'
         );
-        
+
         foreach ($urls as $url => $shortenedUrl) {
             $this->assertEquals($shortenedUrl, $this->_s->shorten($url));
         }
     }
-    
+
     public function testUnshorten()
     {
         $urls = array(
             'http://framework.zend.com/'           => 'http://jdem.cz/ab2l1',
             'http://framework.zend.com/manual/en/' => 'http://jdem.cz/ab3z7'
         );
-        
+
         foreach ($urls as $url => $shortenedUrl) {
             $this->assertEquals($url, $this->_s->unshorten($shortenedUrl));
         }
     }
-    
+
     public function testUnshortenEmptyUrlException()
     {
         $this->setExpectedException('Zend_Service_ShortUrl_Exception');
         $this->_s->unshorten('');
     }
-    
+
     public function testUnshortenIncorrectUrlException()
     {
         $this->setExpectedException('Zend_Service_ShortUrl_Exception');
         $this->_s->unshorten('wrongAdress.cccc');
     }
-    
+
     public function testUnshortenWrongUrlException()
     {
         $this->setExpectedException('Zend_Service_ShortUrl_Exception');

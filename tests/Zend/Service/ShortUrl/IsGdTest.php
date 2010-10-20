@@ -47,6 +47,8 @@ class Zend_Service_ShortUrl_IsGdTest extends PHPUnit_Framework_TestCase
      */
     public function setUp ()
     {
+        Zend_Service_Abstract::setHttpClient(new Zend_Http_Client());
+
         $this->_s = new Zend_Service_ShortUrl_IsGd();
         $this->_s->getHttpClient()->resetParameters(true);
     }
