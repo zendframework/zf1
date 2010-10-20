@@ -419,10 +419,10 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
                        AND C.TABLE_NAME = k.TABLE_NAME
                        AND C.COLUMN_NAME = k.COLUMN_NAME)
                 WHERE "
-                 . $this->quoteInto('UPPER(C.TABLE_NAME) = ?', strtoupper($tableName));
+                . $this->quoteInto('UPPER(C.TABLE_NAME) = UPPER(?)', $tableName);
 
             if ($schemaName) {
-                $sql .= $this->quoteInto(' AND UPPER(C.TABLE_SCHEMA) = ?', strtoupper($schemaName));
+                $sql .= $this->quoteInto(' AND UPPER(C.TABLE_SCHEMA) = UPPER(?)', $schemaName);
             }
 
             $sql .= " ORDER BY C.ORDINAL_POSITION FOR FETCH ONLY";
