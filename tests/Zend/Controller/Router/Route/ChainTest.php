@@ -668,6 +668,123 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $res['controller']);
         $this->assertEquals('bar', $res['action']);
     }
+
+    /**
+     * @group ZF-7848
+     */
+    public function testChainingWithEmptyStaticRoutesMatchesCorrectly()
+    {
+        $adminRoute = new Zend_Controller_Router_Route('admin', array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ));
+        $indexRoute = new Zend_Controller_Router_Route_Static('', array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ));
+        $loginRoute = new Zend_Controller_Router_Route('login', array(
+            'module'     => 'admin',
+            'controller' => 'login',
+            'action'     => 'index',
+        ));
+        $emptyRoute    = $adminRoute->chain($indexRoute);
+        $nonEmptyRoute = $adminRoute->chain($loginRoute);
+
+        $request = new Zend_Controller_Request_Http();
+        $request->setPathInfo('/admin');
+        $values = $emptyRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ), $values);
+
+        $request->setPathInfo('/admin/');
+        $values = $emptyRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ), $values);
+
+        $request->setPathInfo('/admin/login');
+        $values = $nonEmptyRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'login',
+            'action'     => 'index',
+        ), $values);
+    }
+
+    /**
+     * @group ZF-7848
+     */
+    public function testChainingWithConfiguredEmptyStaticRoutesMatchesCorrectly()
+    {
+        $routes = array(
+            'admin' => array(
+                'route' => 'admin',
+                'defaults' => array(
+                    'module'     => 'admin',
+                    'controller' => 'index',
+                    'action'     => 'index',
+                ),
+                'chains' => array(
+                    'index' => array(
+                        'type'  => 'Zend_Controller_Router_Route_Static',
+                        'route' => '',
+                        'defaults' => array(
+                            'module'     => 'admin',
+                            'controller' => 'index',
+                            'action'     => 'index',
+                        ),
+                    ),
+                    'login' => array(
+                        'route' => 'login',
+                        'defaults' => array(
+                            'module'     => 'admin',
+                            'controller' => 'login',
+                            'action'     => 'index',
+                        ),
+                    ),
+
+                ),
+            ),
+        );
+        $config = new Zend_Config($routes);
+        $rewrite = new Zend_Controller_Router_Rewrite();
+        $rewrite->addConfig($config);
+        $routes = $rewrite->getRoutes();
+        $indexRoute = $rewrite->getRoute('admin-index');
+        $loginRoute = $rewrite->getRoute('admin-login');
+
+        $request = new Zend_Controller_Request_Http();
+        $request->setPathInfo('/admin');
+        $values = $indexRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ), $values);
+
+        $request->setPathInfo('/admin/');
+        $values = $indexRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'index',
+            'action'     => 'index',
+        ), $values);
+
+        $request->setPathInfo('/admin/login');
+        $values = $loginRoute->match($request);
+        $this->assertEquals(array(
+            'module'     => 'admin',
+            'controller' => 'login',
+            'action'     => 'index',
+        ), $values);
+    }
     
     protected function _getRouter()
     {
