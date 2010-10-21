@@ -54,7 +54,7 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'palmos', 
         'elaine', 
         'windows ce', 
-        ' ppc', 
+        'icab', 
         '_mms', 
         'ahong', 
         'archos', 
@@ -151,7 +151,7 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'vodafone', 
         'vodaphone', 
         'webos', 
-        'webpro', 
+        'wml', 
         'windows phone os 7', 
         'wireless', 
         'wm5 pie', 
@@ -173,6 +173,7 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'wml', 
         'vnd.rim', 
         'vnd.wap',
+        'j2me'
     );
 
     /**
@@ -285,12 +286,15 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
                 return true;
             }
         }
+        
         if (isset($server['http_x_wap_profile']) || isset($server['http_profile'])) {
             return true;
         }
 
-        if (self::_matchAgentAgainstSignatures($userAgent, self::$_haTerms)) {
-            return true;
+        if (isset($server['http_accept'])) {
+            if (self::_matchAgentAgainstSignatures($server['http_accept'], self::$_haTerms)) {
+                return true;
+            }
         }
 
         if (self::userAgentStart($userAgent)) {

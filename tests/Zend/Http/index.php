@@ -12,11 +12,12 @@ $config['wurflapi']['wurfl_config_file'] = dirname(__FILE__) . '/_files/Wurfl/re
 $config['terawurfl']['terawurfl_lib_dir'] = dirname(__FILE__) . '/_files/TeraWurfl_2.1.3/tera-WURFL/';
 $config['deviceatlas']['deviceatlas_lib_dir'] = dirname(__FILE__) . '/_files/DA_php_1.4.1/';
 $config['deviceatlas']['deviceatlas_data'] = dirname(__FILE__) . '/_files/DA_php_1.4.1/sample/json/20101014.json';
+/*
 $config['mobile']['features']['path']      = 'Zend/Http/UserAgent/Features/Adapter/TeraWurfl.php';
 $config['mobile']['features']['classname'] = 'Zend_Http_UserAgent_Features_Adapter_TeraWurfl';
 $config['mobile']['features']['path']      = 'Zend/Http/UserAgent/Features/Adapter/DeviceAtlas.php';
 $config['mobile']['features']['classname'] = 'Zend_Http_UserAgent_Features_Adapter_DeviceAtlas';
-
+*/
 $config['server'] = $_SERVER;
 
 if (!empty($_GET['userAgent'])) {

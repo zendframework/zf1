@@ -378,6 +378,53 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('10.00', $extract['browser_version']);
     }
 
+    public function testMatchMobileOtherHeaders()
+    {
+        
+        $userAgent = 'xxxxx';
+        $server = array(
+            'all_http' => '. opera Mini'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        $server = array(
+            'http_x_wap_profile' => 'http://device.sprintpcs.com/Sanyo/PL3100/1003QW.rdf'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        
+        $server = array(
+            'http_profile' => ''
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        
+        $server = array(
+            'http_accept' => 'midp'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        
+        $server = array(
+            'http_accept' => 'text/html, image/vnd.wap.wbmp, image/png, image/jpeg,
+image/gif, image/bmp, application/vnd.wap.wmlc,
+application/vnd.wap.xhtml+xml, application/xhtml+xml,
+application/vnd.wap.multipart.mixed, multipart/mixed,
+text/vnd.wap.wml, application/vnd.oma.dd+xml,
+text/vnd.sun.j2me.app-descriptor, application/java-archive,
+*,text/x-hdml,image/mng,image/x-mng,video/mng,video/x-mng,image/bmp,text/html'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        
+        $server = array(
+            'http_accept' => 'vnd.rim'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+        
+        $server = array(
+            'http_accept' => 'application/xhtml+xml, application/vnd.wap.xhtml+xml,
+application/x-pmd, application/vnd.phonecom.mmc-xml, audio/midi,
+audio/vnd.qcelp, application/xhtml+xml'
+        );
+        $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
+    }
+
     /** 
      * examples from http://en.wikipedia.org/wiki/List_of_user_agents_for_mobile_phones
      */
