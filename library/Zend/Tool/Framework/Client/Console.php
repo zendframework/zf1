@@ -119,8 +119,8 @@ class Zend_Tool_Framework_Client_Console
     
     public function setClassesToLoad($classesToLoad)
     {
-    	$this->_classesToLoad = $classesToLoad;
-    	return $this;
+        $this->_classesToLoad = $classesToLoad;
+        return $this;
     }
 
     /**
@@ -150,11 +150,11 @@ class Zend_Tool_Framework_Client_Console
             );
             
         if ($this->_classesToLoad) {
-        	if (is_string($this->_classesToLoad)) {
-        		$classesToLoad[] = $this->_classesToLoad;
-        	} elseif (is_array($this->_classesToLoad)) {
-        		$classesToLoad = array_merge($classesToLoad, $this->_classesToLoad);
-        	}
+            if (is_string($this->_classesToLoad)) {
+                $classesToLoad[] = $this->_classesToLoad;
+            } elseif (is_array($this->_classesToLoad)) {
+                $classesToLoad = array_merge($classesToLoad, $this->_classesToLoad);
+            }
         }
         
         // add classes to the basic loader from the config file basicloader.classes.1 ..
