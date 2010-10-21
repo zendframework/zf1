@@ -203,6 +203,26 @@ class Zend_Application_Resource_DbTest extends PHPUnit_Framework_TestCase
         $resource->init();
         $this->assertType('Zend_Cache_Core', Zend_Db_Table::getDefaultMetadataCache());
     }
+
+    /**
+     * @group ZF-6620
+     */
+    public function testSetOptionFetchMode()
+    {
+        $config = array(
+            'bootstrap' => $this->bootstrap,
+            'adapter' => 'PDO_SQLite',
+            'params'  => array(
+                'dbname'    => ':memory:',
+                'options'   => array(
+                    'fetchMode' => 'obj'
+                )
+            ),
+        );
+        $resource = new Zend_Application_Resource_Db($config);
+        $db = $resource->init();
+        $this->assertEquals($db->getFetchMode(), Zend_Db::FETCH_OBJ);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_DbTest::main') {

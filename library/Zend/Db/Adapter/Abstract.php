@@ -184,7 +184,8 @@ abstract class Zend_Db_Adapter_Abstract
 
         $options = array(
             Zend_Db::CASE_FOLDING           => $this->_caseFolding,
-            Zend_Db::AUTO_QUOTE_IDENTIFIERS => $this->_autoQuoteIdentifiers
+            Zend_Db::AUTO_QUOTE_IDENTIFIERS => $this->_autoQuoteIdentifiers,
+            Zend_Db::FETCH_MODE             => $this->_fetchMode,
         );
         $driverOptions = array();
 
@@ -234,6 +235,16 @@ abstract class Zend_Db_Adapter_Abstract
                     throw new Zend_Db_Adapter_Exception('Case must be one of the following constants: '
                         . 'Zend_Db::CASE_NATURAL, Zend_Db::CASE_LOWER, Zend_Db::CASE_UPPER');
             }
+        }
+
+        if (array_key_exists(Zend_Db::FETCH_MODE, $options)) {
+            if (is_string($options[Zend_Db::FETCH_MODE])) {
+                $constant = 'Zend_Db::FETCH_' . strtoupper($options[Zend_Db::FETCH_MODE]);
+                if(defined($constant)) {
+                    $options[Zend_Db::FETCH_MODE] = constant($constant);
+                }
+            }
+            $this->setFetchMode((int) $options[Zend_Db::FETCH_MODE]);
         }
 
         // obtain quoting property if there is one

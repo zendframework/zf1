@@ -43,6 +43,11 @@ class Zend_Db
     const CASE_FOLDING = 'caseFolding';
 
     /**
+     * Use the FETCH_MODE constant in the config of a Zend_Db_Adapter.
+     */
+    const FETCH_MODE = 'fetchMode';
+
+    /**
      * Use the AUTO_QUOTE_IDENTIFIERS constant in the config of a Zend_Db_Adapter.
      */
     const AUTO_QUOTE_IDENTIFIERS = 'autoQuoteIdentifiers';

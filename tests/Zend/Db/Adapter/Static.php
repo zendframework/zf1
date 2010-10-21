@@ -288,7 +288,8 @@ class Zend_Db_Adapter_Static extends Zend_Db_Adapter_Abstract
      */
     public function setFetchMode($mode)
     {
-        return;
+        $this->_fetchMode = $mode;
+        return $this;
     }
 
     /**

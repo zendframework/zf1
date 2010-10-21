@@ -380,6 +380,33 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @group ZF-6620
+     */
+    public function testDbConstructorSetOptionFetchMode()
+    {
+        $db = new Zend_Db_Adapter_Static(array('dbname' => 'dummy'));
+        $this->assertEquals($db->getFetchMode(), Zend_Db::FETCH_ASSOC);
+
+        $params = array(
+            'dbname' => 'dummy',
+            'options' => array(
+                Zend_Db::FETCH_MODE => 'obj'
+             )
+        );
+        $db = new Zend_Db_Adapter_Static($params);
+        $this->assertEquals($db->getFetchMode(), Zend_Db::FETCH_OBJ);
+
+        $params = array(
+            'dbname' => 'dummy',
+            'options' => array(
+                Zend_Db::FETCH_MODE => Zend_Db::FETCH_OBJ
+             )
+        );
+        $db = new Zend_Db_Adapter_Static($params);
+        $this->assertEquals($db->getFetchMode(), Zend_Db::FETCH_OBJ);
+    }
+
     protected function _isCaseSensitiveFileSystem()
     {
         if (self::$_isCaseSensitiveFileSystem === null) {

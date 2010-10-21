@@ -2094,4 +2094,20 @@ abstract class Zend_Db_Adapter_TestCommon extends Zend_Db_TestSetup
         unset($stmt);
         $this->_util->dropTable($tableName);
     }
+
+    /**
+     * @group ZF-6620
+     */
+    public function testAdapterOptionFetchMode()
+    {
+        $params = $this->_util->getParams();
+
+        $params['options'] = array(
+            Zend_Db::FETCH_MODE => 'obj'
+        );
+        $db = Zend_Db::factory($this->getDriver(), $params);
+        $select = $db->select()->from('zfproducts');
+        $row = $db->fetchRow($select);
+        $this->assertType('stdClass', $row);
+    }
 }
