@@ -97,10 +97,21 @@ class Zend_Tool_Project_Provider_Form extends Zend_Tool_Project_Provider_Abstrac
         // determine if testing is enabled in the project
         $testingEnabled = Zend_Tool_Project_Provider_Test::isTestingEnabled($this->_loadedProfile);
 
-        if (self::hasResource($this->_loadedProfile, $name, $module)) {
-            throw new Zend_Tool_Project_Provider_Exception('This project already has a form named ' . $name);
-        }
+        $formDirectoryResource = self::_getFormsDirectoryResource($this->_loadedProfile, $module);
         
+        if ($formDirectoryResource->isEnabled()) {
+            throw new Zend_Tool_Project_Provider_Exception('This project already has forms enabled.');
+        } else {
+            if ($this->_registry->getRequest()->isPretend()) {
+                $this->_registry->getResponse()->appendContent('Would enable forms directory at ' . $formDirectoryResource->getContext()->getPath());
+            } else {
+                $this->_registry->getResponse()->appendContent('Enabling forms directory at ' . $formDirectoryResource->getContext()->getPath());
+                $formDirectoryResource->setEnabled(true);
+                $formDirectoryResource->create();
+                $this->_storeProfile();                
+            }
+
+        }
     }
     
     /**
