@@ -66,32 +66,22 @@ class Zend_Tool_Project_Context_System_ProjectProvidersDirectory
     {
         return 'ProjectProvidersDirectory';
     }
-
-    /**
-     * init()
-     *
-     * @return Zend_Tool_Project_Context_System_ProjectProvidersDirectory
-     */
-    public function init()
+    
+    public function loadProviders(Zend_Tool_Framework_Registry_Interface $registry)
     {
-        parent::init();
-
         if (file_exists($this->getPath())) {
 
+            $providerRepository = $registry->getProviderRepository();
+            
             foreach (new DirectoryIterator($this->getPath()) as $item) {
-                if ($item->isFile()) {
-                    $loadableFiles[] = $item->getPathname();
+                if ($item->isFile() && (($suffixStart = strpos($item->getFilename(), 'Provider.php')) !== false)) {
+                    $className = substr($item->getFilename(), 0, $suffixStart+8);
+                    // $loadableFiles[$className] = $item->getPathname();
+                    include_once $item->getPathname();
+                    $providerRepository->addProvider(new $className());
                 }
             }
-
-            if ($loadableFiles) {
-
-                // @todo process and add the files to the system for usage.
-
-            }
         }
-
-        return $this;
     }
 
 }

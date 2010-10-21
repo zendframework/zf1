@@ -239,7 +239,10 @@ class Zend_Tool_Framework_Provider_Signature implements Zend_Tool_Framework_Regi
 
         if ($this->_name == null) {
             $className = get_class($this->_provider);
-            $name = substr($className, strrpos($className, '_')+1);
+            $name = $className;
+            if (strpos($name, '_')) {
+                $name = substr($name, strrpos($name, '_')+1);
+            }
             $name = preg_replace('#(Provider|Manifest)$#', '', $name);
             $this->_name = $name;
         }
