@@ -87,7 +87,7 @@ class Zend_Tool_Framework_System_Provider_Config extends Zend_Tool_Framework_Pro
 
         $config = array(
             'php' => array(
-                'includepath' => get_include_path(),
+                'include_path' => get_include_path(),
             ),
         );
         $writer->write($filename, new Zend_Config($config));
