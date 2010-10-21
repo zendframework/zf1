@@ -243,8 +243,11 @@ abstract class Zend_Tool_Project_Provider_Abstract
 
     protected function _hasProjectProviderDirectory($pathToProfileFile)
     {
-        // do some static analysis of the file so that we cna determin whether or not to incure
+        // do some static analysis of the file so that we can determin whether or not to incure
         // the cost of loading the profile before the system is fully bootstrapped
+        if (!file_exists($pathToProfileFile)) {
+            return false;
+        }
         
         $contents = file_get_contents($pathToProfileFile);
         if (strstr($contents, '<projectProvidersDirectory') === false) {
