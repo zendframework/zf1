@@ -335,8 +335,11 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
             $childOutlinesCount = abs($childOutlinesCount);
 
             $childDictionary = $dictionary->First;
-            for ($count = 0; $count < $childOutlinesCount; $count++) {
-                if ($childDictionary === null) {
+
+            $children = new SplObjectStorage();
+            while ($childDictionary !== null) {
+                // Check children structure for cyclic references
+                if ($children->contains($childDictionary)) {
                     require_once 'Zend/Pdf/Exception.php';
                     throw new Zend_Pdf_Exception('Outline childs load error.');
                 }
@@ -346,11 +349,6 @@ class Zend_Pdf_Outline_Loaded extends Zend_Pdf_Outline
                 }
 
                 $childDictionary = $childDictionary->Next;
-            }
-
-            if ($childDictionary !== null) {
-                require_once 'Zend/Pdf/Exception.php';
-                throw new Zend_Pdf_Exception('Outline childs load error.');
             }
 
             $this->_originalChildOutlines = $this->childOutlines;
