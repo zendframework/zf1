@@ -188,9 +188,6 @@ class Zend_Cloud_StorageService_Adapter_S3
     /**
      * Move an item in the storage service to a given path.
      *
-     * WARNING: This operation is *very* expensive for services that do not
-     * support moving an item natively.
-     *
      * @TODO Support streams for those services that don't support natively
      *
      * @param  string $sourcePath
@@ -201,10 +198,13 @@ class Zend_Cloud_StorageService_Adapter_S3
     public function moveItem($sourcePath, $destinationPath, $options = array()) 
     {
         try {
-            // TODO We *really* need to add support for object copying in the S3 adapter
-            $item = $this->fetch($sourcePath, $options);
-            $this->storeItem($item, $destinationPath, $options);
-            $this->deleteItem($sourcePath, $options);
+            $fullSourcePath = $this->_getFullPath($sourcePath, $options);
+            $fullDestPath   = $this->_getFullPath($destinationPath, $options);
+            return $this->_s3->moveObject(
+                $fullSourcePath,
+                $fullDestPath,
+                empty($options[self::METADATA]) ? null : $options[self::METADATA]
+            );
         } catch (Zend_Service_Amazon_S3_Exception  $e) { 
             throw new Zend_Cloud_StorageService_Exception('Error on move: '.$e->getMessage(), $e->getCode(), $e);
         }
