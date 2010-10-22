@@ -423,6 +423,23 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that isObjectAvailable() works if object name contains spaces
+     *
+     * @depends testCreateBucket
+     * @depends testObjectPath
+     *
+     * ZF-10017
+     */
+    public function testIsObjectAvailableWithSpacesInKey()
+    {
+        $this->_amazon->createBucket($this->_bucket);
+        $filedir = dirname(__FILE__)."/_files/";
+        $key = $this->_bucket.'/subdir/another dir with spaces/zftestfile.html';
+        $this->_amazon->putFile($filedir."testdata.html", $key);
+        $this->assertTrue($this->_amazon->isObjectAvailable($key));
+    }
+
+    /**
      * Test creating object with https
      *
      * ZF-7029

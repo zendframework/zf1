@@ -190,6 +190,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     public function isObjectAvailable($object)
     {
+        $object = $this->_fixupObjectName($object);
         $response = $this->_makeRequest('HEAD', $object);
 
         return ($response->getStatus() == 200);
