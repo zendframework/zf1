@@ -64,6 +64,10 @@ class Zend_Rest_TestController extends Zend_Rest_Controller
     {
         $this->testValue = 'getAction';
     }
+    public function headAction()
+    {
+        $this->testValue = 'headAction';
+    }
     public function postAction()
     {
         $this->testValue = 'postAction';
@@ -117,6 +121,8 @@ class Zend_Rest_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('indexAction', $this->_testController->testValue);
         $this->_testController->getAction();
         $this->assertEquals('getAction', $this->_testController->testValue);
+        $this->_testController->headAction();
+        $this->assertEquals('headAction', $this->_testController->testValue);
         $this->_testController->postAction();
         $this->assertEquals('postAction', $this->_testController->testValue);
         $this->_testController->putAction();

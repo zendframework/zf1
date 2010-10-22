@@ -48,6 +48,13 @@ abstract class Zend_Rest_Controller extends Zend_Controller_Action
     abstract public function getAction();
 
     /**
+     * The head action handles HEAD requests and receives an 'id' parameter; it
+     * should respond with the server resource state of the resource identified
+     * by the 'id' value.
+     */
+    abstract public function headAction();
+
+    /**
      * The post action handles POST requests; it should accept and digest a
      * POSTed resource representation and persist the resource state.
      */
