@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- EN-Revision: 20763 -->
-<!-- Reviewed: no -->
+<!-- Reviewed: 20763 -->
 <sect1 id="zend.auth.introduction">
     <title>Einführung</title>
 
     <para>
         <classname>Zend_Auth</classname> bietet eine <acronym>API</acronym> für das Authentifizieren
-        und enthält konkrete Authentifizierungs-Adapter für übliche Use Case Szenarien.
+        und enthält konkrete Authentifizierungs-Adapter für übliche Use-Case-Szenarien.
     </para>
 
     <para>
         <classname>Zend_Auth</classname> behandelt nur die
         <emphasis>Authentifizierung</emphasis> und nicht die
-        <emphasis>Authorisierung</emphasis>. Authentifizierung ist lose definiert als
-        das Ermitteln ob eine Entität aktuell das ist was Sie vorgibt zu sein (z.B.
-        Identifizierung), basierend auf einem Set von Zeugnissen. Authorisierung, der Prozess des
-        Entscheidens ob es einer Entität erlaubt wird auf andere Entitäten Zugriff zu erhalten,
+        <emphasis>Authorisierung</emphasis>. Authentifizierung ist frei definiert als
+        das Ermitteln, ob eine Entität aktuell das ist, was sie vorgibt zu sein (z.B.
+        Identifizierung), basierend auf einem Set von Anmeldedaten. Authorisierung, der Prozess des
+        Entscheidens, ob es einer Entität erlaubt wird, auf andere Entitäten Zugriff zu erhalten,
         oder um auf diesen Operationen durchzuführen, ist ausserhalb der Möglichkeit von
         <classname>Zend_Auth</classname>. Für weitere Informationen über Authorisierung und
         Zugriffskontrolle mit dem Zend Framework, sollte <link
@@ -25,10 +25,10 @@
     <note>
         <para>
             Die <classname>Zend_Auth</classname> Klasse implementiert das Singleton Pattern - nur
-            eine Instanz der Klasse ist vorhanden - durch Ihre statische
-            <methodname>getInstance()</methodname> Methode. Das bedeutet das die Verwendung des
-            <emphasis>new</emphasis> Operators und des <emphasis>clone</emphasis> Keywords mit der
-            <classname>Zend_Auth</classname> Klasse nicht funktioniert; stattdessen muß
+            eine Instanz der Klasse ist vorhanden - durch ihre statische
+            Methode <methodname>getInstance()</methodname>. Das bedeutet, dass die Verwendung des
+            Operators <emphasis>new</emphasis> und des Schlüsselworts <emphasis>clone</emphasis> mit der
+            Klasse <classname>Zend_Auth</classname> nicht funktioniert; stattdessen muß
             <methodname>Zend_Auth::getInstance()</methodname> verwendet werden.
         </para>
     </note>
@@ -37,27 +37,26 @@
         <title>Adapter</title>
 
         <para>
-            Ein <classname>Zend_Auth</classname> Adapter wird verwendet um sich gegenüber einem
-            speziellen Typ von Authentifizierungs Services zu authentifizieren, wie
-            <acronym>LDAP</acronym>, <acronym>RDBMS</acronym>, oder Datei-basierenden Speichern.
+            Ein <classname>Zend_Auth</classname>-Adapter wird verwendet, um sich gegenüber einem
+            speziellen Typ von Authentifizierungsdiensten zu authentifizieren, wie
+            <acronym>LDAP</acronym>, <acronym>RDBMS</acronym>, oder dateibasierenden Speichern.
             Verschiedene Adapter besitzen leicht unterschiedliche Optionen und Verhaltensweisen,
-            aber einige grundlegende Dinge sind für Authentifizierungs Adapter üblich. Zum Beispiel
-            das die Authentifizierung Zeugnisse akzeptiert werden (enthält auch vorgegebene
-            Identitäten), das Abfragen am Authentifizierungsservice durchgeführt werden, und das
-            Ergebnisse zurückgegeben werden, sind für <classname>Zend_Auth</classname> Adapter
-            üblich.
+            aber einige grundlegende Dinge haben Authentifizierungsadapter gemeinsam. Zum Beispiel
+            dass für die Authentifizierung Anmeldedaten akzeptiert werden (enthält auch vorgegebene
+            Identitäten), dass Abfragen am Authentifizierungsservice durchgeführt werden, und dass
+            Ergebnisse zurückgegeben werden, sind für <classname>Zend_Auth</classname>-Adapter
+            gebräuchlich.
         </para>
 
         <para>
-            Jede <classname>Zend_Auth</classname> Adapter Klasse implementiert
+            Jede <classname>Zend_Auth</classname>-Adapterklasse implementiert
             <classname>Zend_Auth_Adapter_Interface</classname>. Dieses Interface definiert eine
-            Methode, <methodname>authenticate()</methodname>, die eine Adapter Klasse
-            implementieren muß um eine Authentifizierungsanfrage auszuführen. Jede Adapter Klasse
-            muß vorher vorbereitet sein bevor <methodname>authenticate()</methodname> aufgerufen
-            wird. Diese Vorbereitung des Adapters enthält das Setzen der Zeugnisse (z.B.
-            Benutzername und Passwort) und die Definition von Werten für Adapter spezifische
-            Konfigurationoptionen, wie Datenbank Verbindungsdaten für einen Datenbank Tabellen
-            Adapter.
+            Methode <methodname>authenticate()</methodname>, die eine Adapterklasse
+            implementieren muß, um eine Authentifizierungsanfrage auszuführen. Jede Adapterklasse
+            muß vorher vorbereitet werden, bevor <methodname>authenticate()</methodname> aufgerufen
+            wird. Diese Vorbereitung des Adapters enthält das Setzen der Anmeldedaten (z.B.
+            Benutzername und Passwort) und die Definition von Werten für adapterspezifische
+            Konfigurationoptionen, wie Datenbankverbindungsdaten für einen Datenbank-Tabellen-Adapter.
         </para>
 
         <para>
@@ -97,8 +96,8 @@ class MyAuthAdapter implements Zend_Auth_Adapter_Interface
             Wie im Docblock angegeben, muß <methodname>authenticate()</methodname> eine Instanz von
             <classname>Zend_Auth_Result</classname> (oder einer von
             <classname>Zend_Auth_Result</classname> abgeleiteten Klassen) zurückgeben. Wenn aus
-            bestimmten Gründen eine Durchführung einer Authentifizierungs-Anfrage nicht möglich
-            ist, sollte <methodname>authenticate()</methodname> eine Ausnahme werfen die von
+            bestimmten Gründen eine Durchführung einer Authentifizierungsanfrage nicht möglich
+            ist, sollte <methodname>authenticate()</methodname> eine Ausnahme werfen, die von
             <classname>Zend_Auth_Adapter_Exception</classname> abgeleitet ist.
         </para>
     </sect2>
@@ -107,38 +106,38 @@ class MyAuthAdapter implements Zend_Auth_Adapter_Interface
         <title>Ergebnisse</title>
 
         <para>
-            <classname>Zend_Auth</classname> Adapter geben eine Instanz von
+            <classname>Zend_Auth</classname>-Adapter geben eine Instanz von
             <classname>Zend_Auth_Result</classname> mit Hilfe von
-            <methodname>authenticate()</methodname> zurück um die Ergebnisse des
-            Authentifizierungs-Versuches darzustellen. Adapter veröffentlichen das
-            <classname>Zend_Auth_Result</classname> Objekt bei der Erstellung, so das die folgenden
-            vier Methoden ein grundsätzliches Set von Benutzerbezogenen Operationen bieten die für
+            <methodname>authenticate()</methodname> zurück, um die Ergebnisse des
+            Authentifizierungsversuchs darzustellen. Adapter befüllen das
+            Objekt <classname>Zend_Auth_Result</classname> bei der Erstellung, so dass die folgenden
+            vier Methoden ein grundsätzliches Set von benutzerbezogenen Operationen bieten, die für
             die Ergebnisse von <classname>Zend_Auth</classname> Adapter üblich sind:
         </para>
 
         <itemizedlist>
             <listitem>
                 <para>
-                    <methodname>isValid()</methodname> - Gibt <constant>TRUE</constant> zurück wenn
-                    und nur wenn das Ergebnis einen erfolgreichen Authentifizierungs-Versuch
-                    repräsentiert
+                    <methodname>isValid()</methodname> - Gibt <constant>TRUE</constant> zurück, wenn
+                    und nur wenn das Ergebnis einen erfolgreichen Authentifizierungsversuch
+                    repräsentiert.
                 </para>
             </listitem>
 
             <listitem>
                 <para>
                     <methodname>getCode()</methodname> - Gibt einen konstanten
-                    <classname>Zend_Auth_Result</classname> Identifizierer damit der Typ des
-                    Authentifizierungs-Fehlers, oder des Erfolgs der stattgefunden hat,
-                    ermittelt werden kann. Das kann in Situationen verwendet werden in denen der
+                    <classname>Zend_Auth_Result</classname>-Identifizierer zurück, damit der Typ des
+                    Authentifizierungsfehlers, oder des Erfolgs der stattgefunden hat,
+                    ermittelt werden kann. Das kann in Situationen verwendet werden, in denen der
                     Entwickler die verschiedenen Ergebnistypen der Authentifizierung
                     unterschiedlich behandeln will. Das erlaubt es dem Entwickler zum Beispiel
-                    detailierte Statistiken über die Authentifizierungs-Ergebnisse zu erhalten.
+                    detailierte Statistiken über die Authentifizierungsergebnisse zu erhalten.
                     Eine andere Verwendung dieses Features ist es spezielle, benutzerdefinierte
                     Nachrichten anzubieten, um Benutzern eine bessere Usability zu ermöglichen,
-                    einfach dadurch das Entwickler dazu aufgerufen sind die Risiken solche
-                    defailierte Informationen Benutzern anzubieten, statt einer generellen
-                    Nachricht eines Authentifizierungs-Fehlers. Für weitere Informationen siehe
+                    einfach dadurch dass Entwickler dazu aufgerufen sind, die Risiken solche
+                    detaillierte Informationen Benutzern anzubieten, statt einer generellen
+                    Nachricht eines Authentifizierungsfehlers. Für weitere Informationen siehe
                     die Notiz anbei.
                 </para>
             </listitem>
@@ -146,25 +145,25 @@ class MyAuthAdapter implements Zend_Auth_Adapter_Interface
             <listitem>
                 <para>
                     <methodname>getIdentity()</methodname> - Gibt die Identität des
-                    Authentifizierungs-Versuchs zurück
+                    Authentifizierungsversuchs zurück
                 </para>
             </listitem>
 
             <listitem>
                 <para>
                     <methodname>getMessages()</methodname> - Gibt ein Array von Nachrichten
-                    zurück nach einem fehlgeschlagenen Authentifizierungs-Versuch
+                    zurück nach einem fehlgeschlagenen Authentifizierungsversuch
                 </para>
             </listitem>
         </itemizedlist>
 
         <para>
-            Ein Entwickler kann wünschen basierend auf dem Typ des Authentifizierungs-Ergebnisses zu
-            verzweigen um spezialisiertere Operationen durchzuführen. Einige Operationen die für
-            Entwickler nützlich sein können sind zum Beispiel das Sperren von Konten nachdem zu oft
-            ein falsches Passwort angegeben wurde, das markieren von IP Adressen nachdem zuviele
-            nicht existierende Identitäten angegeben wurden und das anbieten von speziellen,
-            benutzerdefinierten Nachrichten für Authentifizierungs-Ergebnisse an den Benutzer. Die
+            Ein Entwickler möchte basierend auf dem Typ des Authentifizierungsergebnisses zu
+            spezialisierteren Operationen verzweigen. Einige Operationen die für
+            Entwickler nützlich sein können, sind zum Beispiel das Sperren von Konten nachdem zu oft
+            ein falsches Passwort angegeben wurde, das Markieren von IP-Adressen, nachdem zuviele
+            nicht existierende Identitäten angegeben wurden und das Anbieten von speziellen,
+            benutzerdefinierten Nachrichten für Authentifizierungsergebnisse an den Benutzer. Die
             folgenden Ergebniscodes sind vorhanden:
         </para>
 
@@ -178,7 +177,7 @@ Zend_Auth_Result::FAILURE_UNCATEGORIZED
 ]]></programlisting>
 
         <para>
-            Das folgende Beispiel zeigt wie ein Entwickler anhand des Ergebniscodes verzweigen
+            Das folgende Beispiel zeigt, wie ein Entwickler anhand des Ergebniscodes verzweigen
             könnte:
         </para>
 
@@ -193,7 +192,7 @@ switch ($result->getCode()) {
         break;
 
     case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-        /** Was wegen ungültigen Zeugnissen machen **/
+        /** Was wegen ungültigen Anmeldededaten machen **/
         break;
 
     case Zend_Auth_Result::SUCCESS:
@@ -211,31 +210,31 @@ switch ($result->getCode()) {
         <title>Dauerhafte Identitäten</title>
 
         <para>
-            Eine Anfrage zu authentifizieren die Authentifizierungs Zeugnisse enthält ist per se
-            nützlich, aber auch wichtig um die Authentifizierungs Identität bearbeiten zu können
-            ohne das immer die Authentifizierungs Zeugnisse mit jeder Anfrage vorhanden sein müssen.
+            Eine Anfrage zu authentifizieren, die Anmeldedaten enthält ist per se
+            nützlich, aber auch wichtig, um die Authentifizierungs-Identität bearbeiten zu können,
+            ohne dass immer die Anmeldedaten bei jeder Anfrage vorhanden sein müssen.
         </para>
 
         <para>
             Trotzdem ist <acronym>HTTP</acronym> ein statusloses Protokoll, und Techniken wie
             Cookies und Sessions wurden entwickelt um Stati über mehrere Anfragen hinweg in
-            Server-seitigen Web Anwendungen zu erhalten.
+            server-seitigen Web-Anwendungen zu erhalten.
         </para>
 
         <sect3 id="zend.auth.introduction.persistence.default">
-            <title>Normale Persistenz in PHP Sessions</title>
+            <title>Normale Persistenz in PHP-Sessions</title>
 
             <para>
                  Standardmäßig bietet <classname>Zend_Auth</classname> dauerhafte Speicherung der
-                 Identität eines erfolgreichen Authentifizierungs Versuches durch Verwendung der
-                 <acronym>PHP</acronym> Session. Bei einem erfolgreichen Authentifizierungs Versuch
+                 Identität eines erfolgreichen Authentifizierungsversuches durch Verwendung der
+                 <acronym>PHP</acronym>-Session. Bei einem erfolgreichen Authentifizierungsversuch
                  speichert <methodname>Zend_Auth::authenticate()</methodname> die Identität des
-                 Authentifizierungs Ergebnisses im persistenten Speicher. Solange die Konfiguration
+                 Authentifizierungsergebnisses im persistenten Speicher. Solange die Konfiguration
                  nicht verändert wird, verwendet <classname>Zend_Auth</classname> eine
                  Speicherklasse die <classname>Zend_Auth_Storage_Session</classname> heißt und die
                  im Gegenzug <link linkend="zend.session"><classname>Zend_Session</classname></link>
                  verwendet. Eine eigene Klasse kann stattdessen verwendet werden, indem ein Objekt
-                 an <methodname>Zend_Auth::setStorage()</methodname> übergeben wird welches
+                 an <methodname>Zend_Auth::setStorage()</methodname> übergeben wird, welches
                  <classname>Zend_Auth_Storage_Interface</classname> implementiert.
             </para>
 
@@ -243,7 +242,7 @@ switch ($result->getCode()) {
                 <para>
                     Wenn das automatische persistente Speichern der Identität für einen bestimmten
                     Anwendungsfall nicht anwendbar ist, können Entwickler trotzdem die
-                    <classname>Zend_Auth</classname> Klasse weiterhin verwenden statt direkt eine
+                    <classname>Zend_Auth</classname> Klasse weiterhin verwenden, statt direkt eine
                     Adapterklasse anzusprechen.
                 </para>
             </note>
@@ -253,11 +252,11 @@ switch ($result->getCode()) {
 
                 <para>
                     <classname>Zend_Auth_Storage_Session</classname> verwendet einen Session
-                    Namensraum von '<classname>Zend_Auth</classname>'. Diese Namensraum kann
-                    überschrieben werden indem ein anderer Wert an den Konstruktor von
+                    Namensraum von '<classname>Zend_Auth</classname>'. Dieser Namensraum kann
+                    überschrieben werden, indem ein anderer Wert an den Konstruktor von
                     <classname>Zend_Auth_Storage_Session</classname> übergeben wird, und dieser Wert
                     wird intern an den Konstruktor von <classname>Zend_Session_Namespace</classname>
-                    weitergereicht. Das sollte vor einem Versuch einer Authentifizierung stattfinden
+                    weitergereicht. Das sollte vor einem Versuch einer Authentifizierung stattfinden,
                     da <methodname>Zend_Auth::authenticate()</methodname> die automatische
                     Speicherung der Identität durchführt.
                 </para>
@@ -292,7 +291,7 @@ $result = $auth->authenticate($authAdapter);
             </para>
 
             <example id="zend.auth.introduction.persistence.custom.example">
-                <title>Eine eigene Speicher Klasse verwenden</title>
+                <title>Eine eigene Speicherklasse verwenden</title>
 
                 <para>
                     Um eine andere Speicherklasse für die Persistenz von Identitäten zu verwenden
@@ -307,7 +306,7 @@ class MyStorage implements Zend_Auth_Storage_Interface
     /**
      * Gibt true zurück wenn und nur wenn der Speicher leer ist
      *
-     * @throws Zend_Auth_Storage_Exception Wenn es unmöglich ist festzustellen
+     * @throws Zend_Auth_Storage_Exception Wenn es unmöglich ist festzustellen,
      *                                     ob der Speicher leer ist
      * @return boolean
      */
@@ -321,9 +320,9 @@ class MyStorage implements Zend_Auth_Storage_Interface
     /**
      * Gibt den Inhalt des Speichers zurück
      *
-     * Das Verhalten ist undefiniert wenn der Speicher leer ist.
+     * Das Verhalten ist undefiniert, wenn der Speicher leer ist.
      *
-     * @throws Zend_Auth_Storage_Exception Wenn das Lesen von Lesen vom Speicher
+     * @throws Zend_Auth_Storage_Exception Wenn das Lesen vom Speicher
      *                                     unmöglich ist
      * @return mixed
      */
@@ -367,13 +366,13 @@ class MyStorage implements Zend_Auth_Storage_Interface
 ]]></programlisting>
 
                 <para>
-                    Um diese selbstgeschriebene Speicherklasse zu verwenden wird
-                    <methodname>Zend_Auth::setStorage()</methodname> aufgerufen bevor eine
+                    Um diese selbstgeschriebene Speicherklasse zu verwenden wird,
+                    <methodname>Zend_Auth::setStorage()</methodname> aufgerufen, bevor eine
                     Authentifizierungsanfrage stattfindet:
                 </para>
 
                 <programlisting language="php"><![CDATA[
-// Zend_Auth anweisen das die selbstdefinierte Speicherklasse verwendet wird
+// Zend_Auth anweisen, dass die selbstdefinierte Speicherklasse verwendet wird
 Zend_Auth::getInstance()->setStorage(new MyStorage());
 
 /**
@@ -391,7 +390,7 @@ $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         <title>Verwendung</title>
 
         <para>
-            Es gibt zwei vorhandene Wege um <classname>Zend_Auth</classname> Adapter zu verwenden:
+            Es gibt zwei vorhandene Wege um <classname>Zend_Auth</classname>-Adapter zu verwenden:
         </para>
 
         <orderedlist>
@@ -409,8 +408,8 @@ $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         </orderedlist>
 
         <para>
-            Das folgende Beispiel zeigt wie ein <classname>Zend_Auth</classname> Adapter indirekt
-            verwendet werden kann, durch die Verwendung der <classname>Zend_Auth</classname> Klasse:
+            Das folgende Beispiel zeigt, wie ein <classname>Zend_Auth</classname>-Adapter indirekt
+            verwendet werden kann, durch die Verwendung der Klasse <classname>Zend_Auth</classname>:
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -420,7 +419,7 @@ $auth = Zend_Auth::getInstance();
 // Authentifizierungs Adapter erstellen
 $authAdapter = new MyAuthAdapter($username, $password);
 
-// Authentifizierungs Versuch, das Ergebnis abspeichern
+// Authentifizierungsversuch, das Ergebnis abspeichern
 $result = $auth->authenticate($authAdapter);
 
 if (!$result->isValid()) {
@@ -438,7 +437,7 @@ if (!$result->isValid()) {
 
         <para>
             Sobald die Authentifizierung in einer Anfrage durchgeführt wurde, so wie im obigen
-            Beispiel, ist es sehr einfach zu Prüfen ob eine erfolgreich authentifizierte Identität
+            Beispiel, ist es sehr einfach zu prüfen, ob eine erfolgreich authentifizierte Identität
             existiert:
         </para>
 
@@ -451,9 +450,9 @@ if ($auth->hasIdentity()) {
 ]]></programlisting>
 
         <para>
-            Um eine Identität vom persistenten Speicher zu entfernen muß einfach die
-            <methodname>clearIdentity()</methodname> Methode verwendet werden. Das würde
-            typischerweise für die Implementierung einer "Abmelde" Operation in einer
+            Um eine Identität vom persistenten Speicher zu entfernen, muß einfach die
+            Methode <methodname>clearIdentity()</methodname> verwendet werden. Das würde
+            typischerweise für die Implementierung einer "Abmelde"-Operation in einer
             Anwendung Verwendung finden.
         </para>
 
@@ -464,19 +463,19 @@ Zend_Auth::getInstance()->clearIdentity();
         <para>
             Wenn die automatische Verwendung von persistenten Speichern für einen bestimmten
             Verwendungszweck unangebracht ist, kann ein Entwickler einfach die Verwendung der
-            <classname>Zend_Auth</classname> Klasse umgehen, und eine Adapter Klasse direkt
+            Klasse <classname>Zend_Auth</classname> umgehen, und eine Adapterklasse direkt
             verwenden. Die direkte Verwendung einer Adapterklasse enthält das Konfigurieren und
-            Vorbereiten eines Adapter Objektes und den Aufruf dessen
-            <methodname>authenticate()</methodname> Methode. Adapter-spezifische Details werden in
-            der Dokumentation jeden Adapters besprochen. Das folgende Beispeil verwendet
+            Vorbereiten eines Adapter-Objekts und den Aufruf dessen
+            Methode <methodname>authenticate()</methodname>. Adapter-spezifische Details werden in
+            der Dokumentation jedes Adapters besprochen. Das folgende Beispeil verwendet
             <classname>MyAuthAdapter</classname> direkt:
         </para>
 
         <programlisting language="php"><![CDATA[
-// Den Authentifizierungs Adapter erstellen
+// Den Authentifizierungsadapter erstellen
 $authAdapter = new MyAuthAdapter($username, $password);
 
-// Authentifizierungs Versuch, speichere das Ergebnis
+// Authentifizierungsversuch, speichere das Ergebnis
 $result = $authAdapter->authenticate();
 
 if (!$result->isValid()) {
