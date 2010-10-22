@@ -188,7 +188,10 @@ class Zend_Application_Resource_MultidbTest extends PHPUnit_Framework_TestCase
             'username' => 'dba',
             'charset' => null,
             'persistent' => false,
-            'options' => array('caseFolding' => 0, 'autoQuoteIdentifiers' => true),
+            'options' => array(
+                'caseFolding'          => 0,
+                'autoQuoteIdentifiers' => true,
+                'fetchMode'            => 2),
             'driver_options' => array());
         $this->assertEquals($expected, $res->getDb('db2')->getConfig());
 
