@@ -60,13 +60,12 @@ class Zend_Cache_LibmemcachedBackendTest extends Zend_Cache_CommonExtendedBacken
             'port'   => TESTS_ZEND_CACHE_LIBMEMCACHED_PORT,
             'weight' => TESTS_ZEND_CACHE_LIBMEMCACHED_WEIGHT
         );
-        $serverFail = array(
-            'host'   => 'not.exist',
-            'port'   => TESTS_ZEND_CACHE_LIBMEMCACHED_PORT,
-            'weight' => TESTS_ZEND_CACHE_LIBMEMCACHED_WEIGHT
-        );
         $options = array(
-            'servers' => array($serverValid, $serverFail)
+            'servers' => array($serverValid),
+            'client'  => array(
+                'no_block'                 => false, // set Memcached client option by name
+                Memcached::OPT_TCP_NODELAY => false, // set Memcached client option by value
+            ),
         );
         $this->_instance = new Zend_Cache_Backend_Libmemcached($options);
         parent::setUp($notag);
@@ -75,7 +74,7 @@ class Zend_Cache_LibmemcachedBackendTest extends Zend_Cache_CommonExtendedBacken
     public function tearDown()
     {
         parent::tearDown();
-        unset($this->_instance);
+        $this->_instance = null;
         // We have to wait after a memcached flush
         sleep(1);
     }
