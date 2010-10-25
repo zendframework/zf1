@@ -451,6 +451,14 @@ class Zend_Http_CookieTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-10506
+     */
+    public function testPregMatchIsQuoted()
+    {
+        $this->assertFalse(Zend_Http_Cookie::matchCookieDomain('foo.bar.com', 'www.foozbar.com'));
+    }
+
+    /**
      * Data Providers
      */
 
