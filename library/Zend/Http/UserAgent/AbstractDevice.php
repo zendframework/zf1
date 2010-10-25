@@ -90,6 +90,13 @@ abstract class Zend_Http_UserAgent_AbstractDevice
     protected $_aFeatures = array();
 
     /**
+     * Browser/Device features groups
+     *
+     * @var array
+     */
+    protected $_aGroup = array();
+
+    /**
      * Constructor
      *
      * @param  null|string|array $userAgent If array, restores from serialized version
@@ -121,6 +128,7 @@ abstract class Zend_Http_UserAgent_AbstractDevice
     {
         $spec = array(
             '_aFeatures'      => $this->_aFeatures,
+            '_aGroup'         => $this->_aGroup,
             '_browser'        => $this->_browser,
             '_browserVersion' => $this->_browserVersion,
             '_userAgent'      => $this->_userAgent,

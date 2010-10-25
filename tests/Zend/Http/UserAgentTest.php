@@ -551,4 +551,18 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('.foobar', $storage->getNamespace());
         $this->assertEquals('data', $storage->getMember());
     }
+
+    /**
+     * @group ZF-10595
+     */
+    public function testAGroupDefinedAndSerialized()
+    {
+        $config    = $this->config;
+        $userAgent = new Zend_Http_UserAgent($config);
+        $device    = $userAgent->getDevice();
+
+        $userAgent = unserialize(serialize($userAgent));
+        $device    = $userAgent->getDevice();
+        $groups = $device->getAllGroups();
+    }
 }
