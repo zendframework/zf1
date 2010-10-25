@@ -532,7 +532,7 @@ class Zend_Db_Select
      */
     public function having($cond, $value = null, $type = null)
     {
-	    if ($value) {
+        if ($value !== null) {
             $cond = $this->_adapter->quoteInto($cond, $value, $type);
         }
 
@@ -559,7 +559,7 @@ class Zend_Db_Select
      */
     public function orHaving($cond, $value = null, $type = null)
     {
-        if ($value) {
+        if ($value !== null) {
             $cond = $this->_adapter->quoteInto($cond, $value, $type);
         }
 

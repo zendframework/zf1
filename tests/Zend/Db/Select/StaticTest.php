@@ -603,6 +603,19 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
 	}
 
     /**
+     * @group ZF-10589
+     */
+    public function testHavingZero()
+    {
+        $select = $this->_select()
+                       ->columns(array('count' => 'COUNT(*)'))
+                       ->group('bug_id');
+
+        $select->having('COUNT(*) > ?', 0);
+        $this->assertEquals('SELECT "zfproducts".*, COUNT(*) AS "count" FROM "zfproducts" GROUP BY "bug_id" HAVING (COUNT(*) > 0)', $select->__toString());
+    }
+
+    /**
      * Test adding an ORDER BY clause to a Zend_Db_Select object.
      */
 
