@@ -839,6 +839,16 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
         $pathInfo = $request->getPathInfo();
         $this->assertEquals('/index/index', $pathInfo);
     }
+
+    /**
+     * @group ZF-10577
+     */
+    public function testGetHeaderWithEmptyValueReturnsEmptyString()
+    {
+        $_SERVER['HTTP_X_FOO'] = '';
+        
+        $this->assertSame('', $this->_request->getHeader('X-Foo'));
+    }
 }
 
 // Call Zend_Controller_Request_HttpTest::main() if this source file is executed directly.

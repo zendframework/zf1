@@ -979,7 +979,7 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
 
         // Try to get it from the $_SERVER array first
         $temp = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
-        if (!empty($_SERVER[$temp])) {
+        if (isset($_SERVER[$temp])) {
             return $_SERVER[$temp];
         }
 
@@ -987,7 +987,7 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
         // Apache
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
-            if (!empty($headers[$header])) {
+            if (isset($headers[$header])) {
                 return $headers[$header];
             }
             $header = strtolower($header);
