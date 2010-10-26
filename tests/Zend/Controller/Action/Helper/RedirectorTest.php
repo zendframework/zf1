@@ -417,17 +417,29 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
         $this->redirector->setUseAbsoluteUri(true);
         $this->redirector->gotoUrl('/bar/baz');
         $headers = $this->response->getHeaders();
-        $uri = false;
-        foreach ($headers as $header) {
-            if ('Location' == $header['name']) {
-                $uri = $header['value'];
-            }
-        }
-        if (!$uri) {
+
+        if (!($uri = $this->_parseLocationHeaderValue())) {
             $this->fail('No redirect header set in response');
         }
 
         $this->assertEquals('https://foobar.example.com:4443/bar/baz', $uri);
+    }
+
+    /**
+     * ZF-10163
+     */
+    public function testUseAbsoluteUriStripsPortFromServerHttpHost()
+    {
+        $_SERVER['HTTP_HOST']   = 'foobar.example.com:8080';
+        $_SERVER['SERVER_PORT'] = '8080';
+        $this->redirector->setUseAbsoluteUri(true);
+        $this->redirector->gotoUrl('/bar/baz');
+
+        if (!($uri = $this->_parseLocationHeaderValue())) {
+            $this->fail('No redirect header set in response');
+        }
+
+        $this->assertEquals('http://foobar.example.com:8080/bar/baz', $uri);
     }
 
     /**
@@ -525,6 +537,17 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
     }
 
     /**#@-*/
+
+    protected function _parseLocationHeaderValue()
+    {
+        $headers = $this->response->getHeaders();
+
+        foreach ($headers as $header) {
+            if ('Location' == $header['name']) {
+                return $header['value'];
+            }
+        }
+    }
 }
 
 /**

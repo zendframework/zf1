@@ -215,7 +215,10 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
             $port  = (isset($_SERVER['SERVER_PORT'])?$_SERVER['SERVER_PORT']:80);
             $uri   = $proto . '://' . $host;
             if ((('http' == $proto) && (80 != $port)) || (('https' == $proto) && (443 != $port))) {
-                $uri .= ':' . $port;
+                // do not append if HTTP_HOST already contains port
+                if (strrchr($host, ':') === false) {
+                    $uri .= ':' . $port;
+                }
             }
             $url = $uri . '/' . ltrim($url, '/');
         }
