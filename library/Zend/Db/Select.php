@@ -467,7 +467,7 @@ class Zend_Db_Select
      *
      * @param string   $cond  The WHERE condition.
      * @param mixed    $value OPTIONAL The value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param int      $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function where($cond, $value = null, $type = null)
@@ -484,7 +484,7 @@ class Zend_Db_Select
      *
      * @param string   $cond  The WHERE condition.
      * @param mixed    $value OPTIONAL The value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param int      $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      *
      * @see where()
@@ -527,7 +527,7 @@ class Zend_Db_Select
      *
      * @param string $cond The HAVING condition.
      * @param mixed    $value OPTIONAL The value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param int      $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function having($cond, $value = null, $type = null)
@@ -552,7 +552,7 @@ class Zend_Db_Select
      *
      * @param string $cond The HAVING condition.
      * @param mixed    $value OPTIONAL The value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param int      $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      *
      * @see having()
