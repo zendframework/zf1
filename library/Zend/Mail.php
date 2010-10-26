@@ -538,12 +538,11 @@ class Zend_Mail extends Zend_Mime_Message
      * Clear header from the message
      *
      * @param string $headerName
+     * @deprecated use public method directly
      */
     protected function _clearHeader($headerName)
     {
-        if (isset($this->_headers[$headerName])){
-            unset($this->_headers[$headerName]);
-        }
+        $this->clearHeader($headerName);
     }
 
     /**
@@ -633,6 +632,20 @@ class Zend_Mail extends Zend_Mime_Message
     }
 
     /**
+     * Clear header from the message
+     *
+     * @param string $headerName
+     * @return Zend_Mail Provides fluent inter
+     */
+    public function clearHeader($headerName)
+    {
+        if (isset($this->_headers[$headerName])){
+            unset($this->_headers[$headerName]);
+        }
+        return $this;
+    }
+
+    /**
      * Clears list of recipient email addresses
      *
      * @return Zend_Mail Provides fluent interface
@@ -642,9 +655,9 @@ class Zend_Mail extends Zend_Mime_Message
         $this->_recipients = array();
         $this->_to = array();
 
-        $this->_clearHeader('To');
-        $this->_clearHeader('Cc');
-        $this->_clearHeader('Bcc');
+        $this->clearHeader('To');
+        $this->clearHeader('Cc');
+        $this->clearHeader('Bcc');
 
         return $this;
     }
@@ -729,7 +742,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearFrom()
     {
         $this->_from = null;
-        $this->_clearHeader('From');
+        $this->clearHeader('From');
 
         return $this;
     }
@@ -742,7 +755,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearReplyTo()
     {
         $this->_replyTo = null;
-        $this->_clearHeader('Reply-To');
+        $this->clearHeader('Reply-To');
 
         return $this;
     }
@@ -894,7 +907,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearReturnPath()
     {
         $this->_returnPath = null;
-        $this->_clearHeader('Return-Path');
+        $this->clearHeader('Return-Path');
 
         return $this;
     }
@@ -940,7 +953,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearSubject()
     {
         $this->_subject = null;
-        $this->_clearHeader('Subject');
+        $this->clearHeader('Subject');
 
         return $this;
     }
@@ -1010,7 +1023,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearDate()
     {
         $this->_date = null;
-        $this->_clearHeader('Date');
+        $this->clearHeader('Date');
 
         return $this;
     }
@@ -1068,7 +1081,7 @@ class Zend_Mail extends Zend_Mime_Message
     public function clearMessageId()
     {
         $this->_messageId = null;
-        $this->_clearHeader('Message-Id');
+        $this->clearHeader('Message-Id');
 
         return $this;
     }

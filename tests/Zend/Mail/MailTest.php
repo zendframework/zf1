@@ -992,6 +992,22 @@ class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-10367
+     */
+    public function testClearHeader()
+    {
+        $mail = new Zend_Mail();
+
+        $mail->addHeader('foo', 'bar');
+        $headers = $mail->getHeaders();
+        $this->assertTrue(isset($headers['foo']));
+        
+        $mail->clearHeader('foo');
+        $headers = $mail->getHeaders();
+        $this->assertFalse(isset($headers['foo']));
+    }
+
     public static function dataSubjects()
     {
         return array(
