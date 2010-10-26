@@ -300,12 +300,12 @@ class Zend_Amf_Server implements Zend_Server_Interface
                 $source = $mapped;
             }
         }
-        $qualifiedName = empty($source) ? $method : $source.".".$method;
+        $qualifiedName = empty($source) ? $method : $source . '.' . $method;
 
         if (!isset($this->_table[$qualifiedName])) {
             // if source is null a method that was not defined was called.
             if ($source) {
-                $className = str_replace(".", "_", $source);
+                $className = str_replace('.', '_', $source);
                 if(class_exists($className, false) && !isset($this->_classAllowed[$className])) {
                     require_once 'Zend/Amf/Server/Exception.php';
                     throw new Zend_Amf_Server_Exception('Can not call "' . $className . '" - use setClass()');
@@ -318,7 +318,10 @@ class Zend_Amf_Server implements Zend_Server_Interface
                 }
                 // Add the new loaded class to the server.
                 $this->setClass($className, $source);
-            } else {
+            }
+
+            if (!isset($this->_table[$qualifiedName])) {
+                // Source is null or doesn't contain specified method
                 require_once 'Zend/Amf/Server/Exception.php';
                 throw new Zend_Amf_Server_Exception('Method "' . $method . '" does not exist');
             }
