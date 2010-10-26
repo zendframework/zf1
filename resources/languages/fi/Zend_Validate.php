@@ -77,13 +77,13 @@ return array(
 
     // Zend_Validate_EmailAddress
     "Invalid type given. String expected" => "Epäkelpo syöte. Pitäisi olla merkkijono",
-    "'%value%' is no valid email address in the basic format local-part@hostname" => "'%value%' on virheellinen sähköpostiosoite, ei vastaa muotoa paikallisosa@alue",
-    "'%hostname%' is no valid hostname for email address '%value%'" => "'%hostname%' on virheellinen verkkotunnus osoitteelle '%value%'",
+    "'%value%' is not a valid email address in the basic format local-part@hostname" => "'%value%' on virheellinen sähköpostiosoite, ei vastaa muotoa paikallisosa@alue",
+    "'%hostname%' is not a valid hostname for email address '%value%'" => "'%hostname%' on virheellinen verkkotunnus osoitteelle '%value%'",
     "'%hostname%' does not appear to have a valid MX record for the email address '%value%'" => "Osoitteen '%value%' verkkotunnukselle '%hostname%' ei löydy MX-tietuetta",
     "'%hostname%' is not in a routable network segment. The email address '%value%' should not be resolved from public network" => "'%hostname%' ei ole reititettävän verkon osa. Sähköpostiosoitetta '%value%' ei pitäisi selvittää julkisesta verkosta.",
     "'%localPart%' can not be matched against dot-atom format" => "Virheellinen paikallisosa, '%localPart%' ei ole verrattavissa dot-atom -muotoon",
     "'%localPart%' can not be matched against quoted-string format" => "Virheellinen paikallisosa, '%localPart%' ei ole verrattavissa quoted-string -muotoon",
-    "'%localPart%' is no valid local part for email address '%value%'" => "Sähköpostiosoitteen '%value%' paikallisosa '%localPart%' on virheellinen",
+    "'%localPart%' is not a valid local part for email address '%value%'" => "Sähköpostiosoitteen '%value%' paikallisosa '%localPart%' on virheellinen",
     "'%value%' exceeds the allowed length" => "Osoite '%value%' on liian pitkä",
 
     // Zend_Validate_File_Count
@@ -224,7 +224,7 @@ return array(
 
     // Zend_Validate_Isbn
     "Invalid type given. String or integer expected" => "Epäkelpo syöte. Pitäisi olla merkkijono tai kokonaisluku",
-    "'%value%' is no valid ISBN number" => "'%value%' ei ole käypä ISBN-numero",
+    "'%value%' is not a valid ISBN number" => "'%value%' ei ole käypä ISBN-numero",
 
     // Zend_Validate_LessThan
     "'%value%' is not less than '%max%'" => "'%value%' ei ole pienempi kuin '%max%'",
@@ -243,19 +243,19 @@ return array(
     "There was an internal error while using the pattern '%pattern%'" => "Sisäinen virhe käytettäessa muotoa '%pattern%'",
 
     // Zend_Validate_Sitemap_Changefreq
-    "'%value%' is no valid sitemap changefreq" => "'%value%' ei ole käypä sivukartan muutosnopeus",
+    "'%value%' is not a valid sitemap changefreq" => "'%value%' ei ole käypä sivukartan muutosnopeus",
     "Invalid type given. String expected" => "Epäkelpo syöte. Pitäisi olla merkkijono",
 
     // Zend_Validate_Sitemap_Lastmod
-    "'%value%' is no valid sitemap lastmod" => "'%value%' ei ole käypä arvo sivukartan viimeksimuokatuksi arvoksi",
+    "'%value%' is not a valid sitemap lastmod" => "'%value%' ei ole käypä arvo sivukartan viimeksimuokatuksi arvoksi",
     "Invalid type given. String expected" => "Epäkelpo syöte. Pitäisi olla merkkijono",
 
     // Zend_Validate_Sitemap_Loc
-    "'%value%' is no valid sitemap location" => "'%value%' ei ole käypä sivukartan sijainti",
+    "'%value%' is not a valid sitemap location" => "'%value%' ei ole käypä sivukartan sijainti",
     "Invalid type given. String expected" => "Epäkelpo syöte. Pitäisi olla merkkijono",
 
     // Zend_Validate_Sitemap_Priority
-    "'%value%' is no valid sitemap priority" => "'%value%' ei ole käypä sivukartan prioriteetti",
+    "'%value%' is not a valid sitemap priority" => "'%value%' ei ole käypä sivukartan prioriteetti",
     "Invalid type given. Numeric string, integer or float expected" => "Epäkelpo syöte. Pitäisi olla kokonaisluku tai liukuluku",
 
     // Zend_Validate_StringLength

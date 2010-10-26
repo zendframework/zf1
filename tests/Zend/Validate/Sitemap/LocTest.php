@@ -96,7 +96,7 @@ class Zend_Validate_Sitemap_LocTest extends PHPUnit_Framework_TestCase
         foreach ($values as $value) {
             $this->assertSame(false, $this->_validator->isValid($value));
             $messages = $this->_validator->getMessages();
-            $this->assertContains('is no valid', current($messages));
+            $this->assertContains('is not a valid', current($messages));
         }
     }
 

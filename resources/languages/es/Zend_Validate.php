@@ -77,13 +77,13 @@ return array(
 
     // Zend_Validate_EmailAddress
     "Invalid type given, value should be a string" => "El tipo especificado es incorrecto, el valor debería ser una cadena de texto",
-    "'%value%' is no valid email address in the basic format local-part@hostname" => "'%value%' no es una dirección de correo electrónico válida en el formato básico parte-local@dominio",
-    "'%hostname%' is no valid hostname for email address '%value%'" => "'%hostname%' no es un nombre de dominio válido para la dirección de correo electrónico '%value%'",
+    "'%value%' is not a valid email address in the basic format local-part@hostname" => "'%value%' no es una dirección de correo electrónico válida en el formato básico parte-local@dominio",
+    "'%hostname%' is not a valid hostname for email address '%value%'" => "'%hostname%' no es un nombre de dominio válido para la dirección de correo electrónico '%value%'",
     "'%hostname%' does not appear to have a valid MX record for the email address '%value%'" => "'%hostname%' no parece tener un registro MX válido para la dirección de correo electrónico '%value%'",
     "'%hostname%' is not in a routable network segment. The email address '%value%' should not be resolved from public network." => "'%hostname%' no es un segmento de red enrutable. La dirección de correo electrónico '%value%' no se debe poder resolver desde una red pública.",
     "'%localPart%' can not be matched against dot-atom format" => "'%localPart%' no se corresponde con el formato dot-atom",
     "'%localPart%' can not be matched against quoted-string format" => "'%localPart%' no se corresponde con el formato de cadena de texto entrecomillada",
-    "'%localPart%' is no valid local part for email address '%value%'" => "'%localPart%' no es una parte local válida para la dirección de correo electrónico '%value%'",
+    "'%localPart%' is not a valid local part for email address '%value%'" => "'%localPart%' no es una parte local válida para la dirección de correo electrónico '%value%'",
     "'%value%' exceeds the allowed length" => "'%value%' excede la longitud permitida",
 
     // Zend_Validate_File_Count
@@ -224,7 +224,7 @@ return array(
 
     // Zend_Validate_Isbn
     "Invalid type given, value should be string or integer" => "El tipo especificado es inválido, el valor debería ser una cadena de texto o un entero",
-    "'%value%' is no valid ISBN number" => "El número ISBN especificado ('%value%') no es válido",
+    "'%value%' is not a valid ISBN number" => "El número ISBN especificado ('%value%') no es válido",
 
     // Zend_Validate_LessThan
     "'%value%' is not less than '%max%'" => "'%value%' no es menor que '%max%'",
@@ -243,19 +243,19 @@ return array(
     "There was an internal error while using the pattern '%pattern%'" => "Se ha producido un error interno al usar el patrón '%pattern%' especificado",
 
     // Zend_Validate_Sitemap_Changefreq
-    "'%value%' is no valid sitemap changefreq" => "'%value%' no es una especificación válida de frecuencia de cambio",
+    "'%value%' is not a valid sitemap changefreq" => "'%value%' no es una especificación válida de frecuencia de cambio",
     "Invalid type given, the value should be a string" => "El tipo especificado es inválido, el valor debería ser una cadena de texto",
 
     // Zend_Validate_Sitemap_Lastmod
-    "'%value%' is no valid sitemap lastmod" => "'%value%' no es un lastmod de mapa web válido",
+    "'%value%' is not a valid sitemap lastmod" => "'%value%' no es un lastmod de mapa web válido",
     "Invalid type given, the value should be a string" => "El tipo especificado es inválido, el valor debería ser una cadena de texto",
 
     // Zend_Validate_Sitemap_Loc
-    "'%value%' is no valid sitemap location" => "'%value%' no es una ubicación de mapa web válida",
+    "'%value%' is not a valid sitemap location" => "'%value%' no es una ubicación de mapa web válida",
     "Invalid type given, the value should be a string" => "El tipo especificado es inválido, el valor debería ser una cadena de texto",
 
     // Zend_Validate_Sitemap_Priority
-    "'%value%' is no valid sitemap priority" => "'%value%' no es una prioridad de mapa web válida",
+    "'%value%' is not a valid sitemap priority" => "'%value%' no es una prioridad de mapa web válida",
     "Invalid type given, the value should be a integer, a float or a numeric string" => "El tipo especificado es inválido, el valor debería ser un entero, un float o una cadena de texto numérica",
 
     // Zend_Validate_StringLength

@@ -50,7 +50,7 @@ class Zend_Application_Resource_Session extends Zend_Application_Resource_Resour
      *
      * @param  array|string|Zend_Session_SaveHandler_Interface $saveHandler
      * @return Zend_Application_Resource_Session
-     * @throws Zend_Application_Resource_Exception When $saveHandler is no valid save handler
+     * @throws Zend_Application_Resource_Exception When $saveHandler is not a valid save handler
      */
     public function setSaveHandler($saveHandler)
     {
