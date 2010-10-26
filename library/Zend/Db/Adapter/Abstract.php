@@ -782,8 +782,6 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Fetches the first column of all SQL result rows as an array.
      *
-     * The first column in each row is used as the array key.
-     *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
