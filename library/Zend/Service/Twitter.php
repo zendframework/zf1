@@ -936,7 +936,7 @@ class Zend_Service_Twitter extends Zend_Rest_Client
      */
     protected function _validateScreenName($name)
     {
-        if (!preg_match('/^[a-zA-Z0-9_]{0,20}$/', $name)) {
+        if (!preg_match('/^[a-zA-Z0-9_]{0,15}$/', $name)) {
             require_once 'Zend/Service/Twitter/Exception.php';
             throw new Zend_Service_Twitter_Exception(
                 'Screen name, "' . $name
