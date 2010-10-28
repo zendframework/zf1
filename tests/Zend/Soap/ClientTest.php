@@ -223,6 +223,48 @@ class Zend_Soap_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('user_agent', $options);
     }
 
+    /**
+     * @group ZF-10524
+     */
+    public function testAllowNumericZeroAsValueForCacheWsdlOption()
+    {
+        $client = new Zend_Soap_Client();
+        $this->assertNull($client->getWsdlCache());
+        $options = $client->getOptions();
+        $this->assertArrayNotHasKey('cache_wsdl', $options);
+
+        $client->setWsdlCache(WSDL_CACHE_NONE);
+        $this->assertSame(WSDL_CACHE_NONE, $client->getWsdlCache());
+        $options = $client->getOptions();
+        $this->assertSame(WSDL_CACHE_NONE, $options['cache_wsdl']);
+
+        $client->setWsdlCache(null);
+        $this->assertNull($client->getWsdlCache());
+        $options = $client->getOptions();
+        $this->assertArrayNotHasKey('cache_wsdl', $options);
+    }
+
+    /**
+     * @group ZF-10524
+     */
+    public function testAllowNumericZeroAsValueForCompressionOptions()
+    {
+        $client = new Zend_Soap_Client();
+        $this->assertNull($client->getCompressionOptions());
+        $options = $client->getOptions();
+        $this->assertArrayNotHasKey('compression', $options);
+
+        $client->setCompressionOptions(SOAP_COMPRESSION_GZIP);
+        $this->assertSame(SOAP_COMPRESSION_GZIP, $client->getCompressionOptions());
+        $options = $client->getOptions();
+        $this->assertSame(SOAP_COMPRESSION_GZIP, $options['compression']);
+
+        $client->setCompressionOptions(null);
+        $this->assertNull($client->getCompressionOptions());
+        $options = $client->getOptions();
+        $this->assertArrayNotHasKey('compression', $options);
+    }
+
     public function testGetFunctions()
     {
         $server = new Zend_Soap_Server(dirname(__FILE__) . '/_files/wsdl_example.wsdl');
