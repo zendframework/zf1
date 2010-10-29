@@ -305,7 +305,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
 
         $nextTokenNode = $response->getSimpleXMLDocument()->ListDomainsResult->NextToken;
         $nextToken     = (string)$nextTokenNode;
-        $nextToken     = ''?null:$nextToken;
+        $nextToken     = (trim($nextToken) === '') ? null : $nextToken;
 
         return new Zend_Service_Amazon_SimpleDb_Page($data, $nextToken);
     }
