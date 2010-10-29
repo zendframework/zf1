@@ -64,7 +64,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     /**
      * The HTTP query server
      */
-    protected $_sdbEndpoint = 'sdb.amazonaws.com';
+    protected $_sdbEndpoint = 'sdb.amazonaws.com/';
 
     /**
      * Period after which HTTP request will timeout in seconds
