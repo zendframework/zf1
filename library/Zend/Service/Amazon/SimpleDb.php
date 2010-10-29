@@ -231,17 +231,19 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
             $params['Item.' . $itemIndex . '.ItemName'] = $name;
             $attributeIndex = 0;
             foreach ($attributes as $attribute) {
-                $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Name'] = $attribute->getName();
-                if (isset($replace[$itemIndex]) 
-                    && isset($replace[$itemIndex][$attributeIndex]) 
-                    && $replace[$itemIndex][$attributeIndex]
-                ) {
-                    $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Replace'] = 'true';
-                }
+                // attribute value cannot be array, so when several items are passed
+                // they are treated as separate values with the same attribute name
                 foreach($attribute->getValues() as $value) {
+                    $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Name'] = $attribute->getName();
                     $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Value'] = $value;
+                    if (isset($replace[$name]) 
+                        && isset($replace[$name][$attribute->getName()]) 
+                        && $replace[$name][$attribute->getName()]
+                    ) {
+                        $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Replace'] = 'true';
+                    }
+                    $attributeIndex++;
                 }
-                $attributeIndex++;
             }
             $itemIndex++;
         }

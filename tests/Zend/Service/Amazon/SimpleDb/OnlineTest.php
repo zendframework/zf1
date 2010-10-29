@@ -81,7 +81,7 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
 
     // Because Amazon uses an eventual consistency model, this test period may
     // help avoid *but not guarantee* false negatives
-    protected $_testWaitPeriod = 5;
+    protected $_testWaitPeriod = 2;
 
     /**
      * Sets up this test case
@@ -105,6 +105,8 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
         $this->_testItemNamePrefix = 'TestsZendServiceAmazonSimpleDbItem';
 
         $this->_testAttributeNamePrefix = 'TestsZendServiceAmazonSimpleDbAttribute';
+
+        $this->_wait();
     }
 
     public function testGetAttributes() {
@@ -124,6 +126,7 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
 
             // Now that everything's set up, test it
             $this->_amazon->putAttributes($domainName, $itemName, $attributes);
+            $this->_wait();
 
             // One attribute
             $results = $this->_amazon->getAttributes($domainName, $itemName, $attributeName1);
@@ -164,6 +167,7 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
 
             // Now that everything's set up, test it
             $this->_amazon->putAttributes($domainName, $itemName, $attributes);
+            $this->_wait();
 
             // Multiple attributes
             $results = $this->_amazon->getAttributes($domainName, $itemName);
