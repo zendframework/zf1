@@ -174,7 +174,7 @@ class Zend_InfoCard_Xml_Security
 
         $transformed_xml_binhash = pack("H*", sha1($transformed_xml));
 
-        if(!$this->_secureStringCompare($transformed_xml_binhash, $dValue)) {
+        if(!self::_secureStringCompare($transformed_xml_binhash, $dValue)) {
             require_once 'Zend/InfoCard/Xml/Security/Exception.php';
             throw new Zend_InfoCard_Xml_Security_Exception("Locally Transformed XML does not match XML Document. Cannot Verify Signature");
         }
@@ -302,7 +302,7 @@ class Zend_InfoCard_Xml_Security
         require_once 'Zend/InfoCard/Xml/Security/Exception.php';
         throw new Zend_InfoCard_Xml_Security_Exception("Invalid code path");
     }
-    
+
     /**
      * Securely compare two strings for equality while avoided C level memcmp()
      * optimisations capable of leaking timing information useful to an attacker
@@ -313,7 +313,7 @@ class Zend_InfoCard_Xml_Security
      * @param string $b
      * @return bool
      */
-    protected function _secureStringCompare($a, $b)
+    static protected function _secureStringCompare($a, $b)
     {
         if (strlen($a) !== strlen($b)) {
             return false;
