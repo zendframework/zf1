@@ -40,9 +40,9 @@
         <para>
             The <classname>Zend_Cloud_DocumentService_Adapter</classname> interface defines methods
             that each concrete document service adapter implements. The following adapters are
-            shipped with the Simple Cloud API: 
+            shipped with the Simple Cloud API:
         </para>
-        
+
         <itemizedlist>
             <listitem>
                 <para>
@@ -56,7 +56,7 @@
                 </para>
             </listitem>
         </itemizedlist>
-        
+
         <para>
             To instantiate a document service adapter, use the static method
             <methodname>Zend_Cloud_DocumentService_Factory::getAdapter()</methodname>, which accepts
@@ -64,7 +64,7 @@
             <varname>document_adapter</varname> key should specify the concrete adapter class by
             classname. Adapter-specific keys may also be passed in this configuration parameter.
         </para>
-        
+
         <example id="zend.cloud.documentservice.factory.example">
             <title>Example: Using the SimpleDB adapter</title>
 
@@ -219,7 +219,7 @@ $documents = Zend_Cloud_DocumentService_Factory::getAdapter(array(
                     </row>
                 </tbody>
             </tgroup>
-        </table>    
+        </table>
 
         <table frame='all' id="zend.cloud.documentservice.options.azure">
             <title>Zend_Cloud_DocumentService_Adapter_WindowsAzure Options</title>
@@ -385,7 +385,7 @@ $documents = Zend_Cloud_DocumentService_Factory::getAdapter(array(
             <classname>Zend_Cloud_DocumentService_Document</classname>.  Note that the document
             class does not validate the supplied IDs and data, and does not enforce compatibility
             with each adapter's requirements.
-        </para> 
+        </para>
 
         <para>
             The document fields can be accessed using keys as object properties and as array
@@ -415,9 +415,9 @@ class Zend_Cloud_DocumentService_Document
 {
     const KEY_FIELD = '_id';
 
-    /** 
-     * $fields may be an array or an object implementing ArrayAccess. 
-     * If no $id is provided, it will look for a field matching KEY_FIELD to 
+    /**
+     * $fields may be an array or an object implementing ArrayAccess.
+     * If no $id is provided, it will look for a field matching KEY_FIELD to
      * use as the identifier.
      */
     public function __construct($fields, $id = null);
@@ -429,7 +429,7 @@ class Zend_Cloud_DocumentService_Document
     public function setField($name, $value);
 
     /**
-     * These allow overloading, so you may access fields as if they were 
+     * These allow overloading, so you may access fields as if they were
      * native properties of the document
      */
     public function __get($name);
@@ -447,7 +447,7 @@ class Zend_Cloud_DocumentService_Document
         <note>
             <title>Windows Azure Document Identifiers</title>
 
-            <para> 
+            <para>
                 Windows Azure technically requires a combination of two fields to uniquely
                 identify documents: the <varname>PartitionKey</varname> and
                 <varname>RowKey</varname>, and as such, keys are fully qualified by the structure
@@ -521,19 +521,19 @@ $document = $documents->fetchDocument("mydata", $id);
 echo "Document ID: " . $document->getID() . "\n";
 foreach ($document->getFields() as $key => $value) {
     echo "Field $key is $value\n";
-}              
+}
 ]]></programlisting>
         </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.exceptions">
         <title>Exceptions</title>
 
         <para>
             If some error occurs in the document service,
             <classname>Zend_Cloud_DocumentService_Exception</classname> is thrown.  If the exception
-            was caused by the underlying service driver, you can use the 
-            <methodname>getClientException()</methodname> method to retrieve the original exception. 
+            was caused by the underlying service driver, you can use the
+            <methodname>getClientException()</methodname> method to retrieve the original exception.
         </para>
 
         <para>
@@ -542,7 +542,7 @@ foreach ($document->getFields() as $key => $value) {
             <classname>Zend_Cloud_OperationNotAvailableException</classname> exception is thrown.
         </para>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.create-collection">
         <title>Creating a collection</title>
 
@@ -563,7 +563,7 @@ $documents->createCollection("mydata");
             already exists, the service will do nothing and leave the existing collection untouched.
         </para>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.delete-collection">
         <title>Deleting a collection</title>
 
@@ -605,7 +605,7 @@ $documents->deleteCollection("mydata");
             names of collections belonging to the account you specified when you created the
             adapter.
         </para>
-        
+
         <example id="zend.cloud.documentservice.list-collections.example">
             <title>List collections</title>
 
@@ -617,7 +617,7 @@ foreach ($list as $collection) {
 ]]></programlisting>
         </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.insert">
         <title>Inserting a document</title>
 
@@ -626,7 +626,7 @@ foreach ($list as $collection) {
             <classname>Zend_Cloud_DocumentService_Document</classname> object or associative array
             of data, as well as the collection in which you are inserting it.
         </para>
-            
+
         <para>
             Many providers require that you provide a document ID with your document. If using a
             <classname>Zend_Cloud_DocumentService_Document</classname>, you can specify this by
@@ -656,9 +656,9 @@ $document = new Zend_Cloud_DocumentService_Document(array(
 // inserting into the "mydata" collection
 $documents->insertDocument("mydata", $document);
 ]]></programlisting>
-        </example>            
+        </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.replace">
         <title>Replacing a document</title>
 
@@ -696,7 +696,7 @@ $document = new Zend_Cloud_DocumentService_Document(array(
 ), "DocumentID");
 
 // Update the document as found in the "mydata" collection
-$documents->replaceDocument("mydata", $document);            
+$documents->replaceDocument("mydata", $document);
 ]]></programlisting>
 
             <para>
@@ -708,11 +708,11 @@ $documents->replaceDocument("mydata", $document);
 $docment->key4 = '4th value';
 
 // Update the document as found in the "mydata" collection
-$documents->replaceDocument("mydata", $document);            
+$documents->replaceDocument("mydata", $document);
 ]]></programlisting>
-        </example>            
+        </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.update">
         <title>Updating a document</title>
 
@@ -720,7 +720,7 @@ $documents->replaceDocument("mydata", $document);
             <emphasis>Updating</emphasis> a document changes the key/value pairs in an existing
             document. This operation does not share the <emphasis>replace</emphasis> semantics; the
             values of the keys that are not specified in the data set will not be changed. You must
-            provide both a document key and data, either via a 
+            provide both a document key and data, either via a
             <classname>Zend_Cloud_DocumentService_Document</classname> document or an array, to this
             method. If the key is null and a document object is provided, the document key is used.
         </para>
@@ -743,7 +743,7 @@ $documents->updateDocument("mydata", null, $document);
 // copy document to another ID
 $documents->updateDocument("mydata", "AnotherDocumentID", $document);
 ]]></programlisting>
-        </example>            
+        </example>
 
         <para>
             Amazon SimpleDB supports multi-value fields, so data updates will be merged with the old key
@@ -759,14 +759,14 @@ $documents->updateDocument("mydata", "AnotherDocumentID", $document);
 
             <programlisting language="php"><![CDATA[
 // key2 is overwritten, key3 is merged
-$documents->updateDocument('mydata', 'DocumentID', 
-    array('key2' => 'new value', 'key3' => 'additional value'), 
+$documents->updateDocument('mydata', 'DocumentID',
+    array('key2' => 'new value', 'key3' => 'additional value'),
     array('merge' => array('key3' => true))
 );
 ]]></programlisting>
         </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.delete">
         <title>Deleting a document</title>
 
@@ -780,11 +780,11 @@ $documents->updateDocument('mydata', 'DocumentID',
             <title>Deleting a document</title>
 
             <programlisting language="php"><![CDATA[
-$documents->deleteDocument("collectionName", "DocumentID");            
+$documents->deleteDocument("collectionName", "DocumentID");
 ]]></programlisting>
-        </example>            
+        </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.fetch">
         <title>Fetching a document</title>
 
@@ -804,9 +804,9 @@ foreach ($document->getFields() as $key => $value) {
     echo "Field $key is $value\n";
 }
 ]]></programlisting>
-        </example>            
+        </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.query">
         <title>Querying a collection</title>
 
@@ -825,18 +825,18 @@ foreach ($document->getFields() as $key => $value) {
 
             <programlisting language="php"><![CDATA[
 $docs = $documents->query(
-    "collectionName", 
+    "collectionName",
     "RowKey eq 'rowkey2' or RowKey eq 'rowkey2'"
 );
 
 foreach ($docs as $doc) {
     $id = $doc->getId();
-    echo "Found document with ID: " 
+    echo "Found document with ID: "
         . var_export($id, 1)
         . "\n";
-}            
+}
 ]]></programlisting>
-        </example>            
+        </example>
 
         <para>
             If using a structured query object, typically, you will retrieve it using the
@@ -857,12 +857,12 @@ $docs = $documents->query('collectionName', $query);
 
 foreach ($docs as $doc) {
     $id = $doc->getId();
-    echo "Found document with ID: " 
+    echo "Found document with ID: "
         . var_export($id, 1)
         . "\n";
-}            
+}
 ]]></programlisting>
-        </example>            
+        </example>
 
         <para>
             <classname>Zend_Cloud_DocumentService_Query</classname> classes do not limit which query
@@ -874,7 +874,7 @@ foreach ($docs as $doc) {
             <listitem>
                 <para>
                     <methodname>select()</methodname> - defines which fields are returned in the
-                    result. 
+                    result.
                 </para>
 
                 <note>
@@ -883,7 +883,7 @@ foreach ($docs as $doc) {
                         document.
                     </para>
                 </note>
-            </listitem> 
+            </listitem>
 
             <listitem>
                 <para>
@@ -920,7 +920,7 @@ foreach ($docs as $doc) {
                 <para>
                     <methodname>order()</methodname> - sorts the returned data by specified field.
                     Accepts two arguments - first is the field name and second is 'asc' or 'desc'
-                    specifying the sort direction. 
+                    specifying the sort direction.
                 </para>
 
                 <note>
@@ -931,7 +931,7 @@ foreach ($docs as $doc) {
             </listitem>
         </itemizedlist>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.select">
         <title>Creating a query</title>
 
@@ -951,14 +951,14 @@ $query = $documents->select()
 $docs = $documents->query('collectionName', $query);
 foreach ($docs as $doc) {
     $id = $doc->getId();
-    echo "Found document with ID: " 
+    echo "Found document with ID: "
         . var_export($id, 1)
         . "\n";
-}            
+}
 ]]></programlisting>
-        </example>            
+        </example>
     </sect2>
-    
+
     <sect2 id="zend.cloud.documentservice.adapter">
         <title>Accessing concrete adapters</title>
 
@@ -979,7 +979,7 @@ foreach ($docs as $doc) {
             <title>Using concrete adapters</title>
 
             <programlisting language="php"><![CDATA[
-// Since SimpleCloud Document API doesn't support batch upload, use concrete adapter 
+// Since SimpleCloud Document API doesn't support batch upload, use concrete adapter
 $amazonSdb = $documents->getAdapter();
 $amazonSdb->batchPutAttributes($items, 'collectionName');
 ]]></programlisting>

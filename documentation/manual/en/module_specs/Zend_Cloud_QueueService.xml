@@ -15,9 +15,9 @@
     <para>
         The interface <classname>Zend_Cloud_QueueService_Adapter</classname> defines the methods
         which concrete queue service adapters must implement. The following adapters are shipped
-        with the Simple Cloud API: 
+        with the Simple Cloud API:
     </para>
-    
+
     <itemizedlist>
         <listitem>
             <para>
@@ -40,12 +40,12 @@
             </para>
         </listitem>
     </itemizedlist>
-    
+
     <sect2 id="zend.cloud.queueservice.adapters">
         <title>Instantiating and Configuring QueueService Adapters</title>
 
         <para>
-            To instantiate a QueueService adapter, use the static method 
+            To instantiate a QueueService adapter, use the static method
             <methodname>Zend_Cloud_QueueService_Factory::getAdapter()</methodname>, which accepts
             either an array or a <classname>Zend_Config</classname> object. Three parameters apply
             to all adapters, while the remaining
@@ -78,7 +78,7 @@
                 </para>
             </listitem>
         </itemizedlist>
-        
+
         <example id="zend.cloud.queueservice.factory.example">
             <title>Instantiating an Amazon SQS adapter via the factory</title>
 
@@ -90,10 +90,10 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
 ));
 ]]></programlisting>
         </example>
-        
+
         <sect3 id="zend.cloud.queueservice.adapters.options">
             <title>Service-Specific Options</title>
-           
+
             <table frame='all' id="zend.cloud.queueservice.adapters.options.sqs">
                 <title>Zend_Cloud_QueueService_Adapter_Sqs Options</title>
 
@@ -132,7 +132,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
                             <entry>No</entry>
                             <entry><classname>Zend_Http_Client_Adapter_Socket</classname></entry>
                         </row>
-                        
+
                         <row>
                             <entry>http_adapter</entry>
                             <entry>HTTP adapter to use in all access operations</entry>
@@ -150,7 +150,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
                         </row>
                     </tbody>
                 </tgroup>
-            </table>    
+            </table>
 
             <table frame='all' id="zend.cloud.queueservice.adapters.options.azure">
                 <title>Zend_Cloud_QueueService_Adapter_WindowsAzure Options</title>
@@ -312,7 +312,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
             the queue, observing a first in, first out (FIFO) queue-style interface.
         </para>
     </sect2>
-    
+
     <sect2 id="zend.cloud.queueservice.exceptions">
         <title>Exceptions</title>
 
@@ -320,7 +320,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
             If some error occurs inside the storage service, a
             <classname>Zend_Cloud_QueueService_Exception</classname> is thrown. If the exception was
             caused by underlying service driver, you can use the
-            <methodname>getClientException()</methodname> method to retrieve the original exception. 
+            <methodname>getClientException()</methodname> method to retrieve the original exception.
         </para>
 
         <para>
@@ -329,7 +329,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
             <classname>Zend_Cloud_OperationNotAvailableException</classname> exception is thrown.
         </para>
     </sect2>
-    
+
     <sect2 id="zend.cloud.queueservice.create-queue">
         <title>Create a queue</title>
 
@@ -344,7 +344,7 @@ $queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
             <title>Creating a queue</title>
 
             <programlisting language="php"><![CDATA[
-$queueId = $queues->createQueue('my-queue');            
+$queueId = $queues->createQueue('my-queue');
 ]]></programlisting>
         </example>
     </sect2>
@@ -366,7 +366,7 @@ $queueId = $queues->createQueue('my-queue');
 
 // ... do stuff ...
 
-$queues->deleteQueue($queueId);        
+$queues->deleteQueue($queueId);
 ]]></programlisting>
         </example>
 
@@ -393,7 +393,7 @@ $queues->deleteQueue($queueId);
 $names = $queues->listQueues();
 foreach ($names as $name) {
     echo "Found queue $name\n";
-}        
+}
 ]]></programlisting>
         </example>
     </sect2>
@@ -412,7 +412,7 @@ foreach ($names as $name) {
 
             <programlisting language="php"><![CDATA[
 $queues->storeQueueMetadata($queueId, array(
-    'purpose'       => 'Operations', 
+    'purpose'       => 'Operations',
     'administrator' => 'joe@example.com',
 ));
 ]]></programlisting>
@@ -434,7 +434,7 @@ $queues->storeQueueMetadata($queueId, array(
 $metadata = $queues->fetchQueueMetadata($queueId);
 foreac h($metadata as $key => $value) {
     echo "Metadata $key: $value\n";
-}        
+}
 ]]></programlisting>
         </example>
     </sect2>
@@ -451,7 +451,7 @@ foreac h($metadata as $key => $value) {
               <title>Sending a message</title>
 
             <programlisting language="php"><![CDATA[
-$queues->sendMessage($queueId, "Hello world!");            
+$queues->sendMessage($queueId, "Hello world!");
 ]]></programlisting>
         </example>
     </sect2>
@@ -480,7 +480,7 @@ if (count($messages)) {
     }
 }
 
-// Get two messages            
+// Get two messages
 $messages = $queues->receiveMessages($queueId, 2);
 ]]></programlisting>
         </example>
@@ -508,7 +508,7 @@ $messages = $queues->receiveMessages($queueId, 2);
               <title>Deleting a message</title>
 
             <programlisting language="php"><![CDATA[
-// process and delete $max messages            
+// process and delete $max messages
 $messages = $queues->receiveMessages($queueId, $max);
 if (count($messages)) {
     foreach ($messages as $message) {
