@@ -47,29 +47,29 @@ class Zend_Config_Writer_Yaml extends Zend_Config_Writer_FileAbstract
     /**
      * Get callback for decoding YAML
      *
-	 * @return callable
-	 */
-	public function getYamlEncoder()
-	{
-		return $this->_yamlEncoder;
-	}
+     * @return callable
+     */
+    public function getYamlEncoder()
+    {
+        return $this->_yamlEncoder;
+    }
 
-	/**
-	 * Set callback for decoding YAML
-	 *
-	 * @param  $yamlEncoder the decoder to set
-	 * @return Zend_Config_Yaml
-	 */
-	public function setYamlEncoder($yamlEncoder)
-	{
-	    if (!is_callable($yamlEncoder)) {
+    /**
+     * Set callback for decoding YAML
+     *
+     * @param  $yamlEncoder the decoder to set
+     * @return Zend_Config_Yaml
+     */
+    public function setYamlEncoder($yamlEncoder)
+    {
+        if (!is_callable($yamlEncoder)) {
             require_once 'Zend/Config/Exception.php';
             throw new Zend_Config_Exception('Invalid parameter to setYamlEncoder - must be callable');
-	    }
+        }
 
-		$this->_yamlEncoder = $yamlEncoder;
-		return $this;
-	}
+        $this->_yamlEncoder = $yamlEncoder;
+        return $this;
+    }
 
     /**
      * Render a Zend_Config into a YAML config string.
@@ -77,7 +77,7 @@ class Zend_Config_Writer_Yaml extends Zend_Config_Writer_FileAbstract
      * @since 1.10
      * @return string
      */
-	public function render()
+    public function render()
     {
         $data        = $this->_config->toArray();
         $sectionName = $this->_config->getSectionName();
