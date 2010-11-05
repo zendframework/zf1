@@ -129,9 +129,45 @@ class Zend_Form_Decorator_ViewScriptTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('decorator.phtml', $this->decorator->getViewScript());
     }
 
+    public function testCanSetViewModule()
+    {
+        $this->testViewScriptNullByDefault();
+        $this->decorator->setViewModule('fooModule');
+        $this->assertEquals('fooModule', $this->decorator->getViewModule());
+    }
+
+    public function testCanSetViewModuleViaOption()
+    {
+        $this->testViewScriptNullByDefault();
+        $this->decorator->setOption('viewModule', 'fooModule');
+        $this->assertEquals('fooModule', $this->decorator->getViewModule());
+    }
+
+    public function testCanSetViewModuleViaElementAttribute()
+    {
+        $this->testViewScriptNullByDefault();
+        $this->getElement()->setAttrib('viewModule', 'fooModule');
+        $this->assertEquals('fooModule', $this->decorator->getViewModule());
+    }
+
     public function testRenderingRendersViewScript()
     {
         $this->testCanSetViewScriptViaElementAttribute();
+        $test = $this->decorator->render('');
+        $this->assertContains('This is content from the view script', $test);
+    }
+
+    public function testRenderingRendersViewScriptWithModule()
+    {
+        $this->testCanSetViewScriptViaElementAttribute();
+
+        $module = 'fooModule';
+
+        // add module to front controller so partial view helper can verify it exists
+        require_once 'Zend/Controller/Front.php';
+        Zend_Controller_Front::getInstance()->addControllerDirectory('', $module);
+
+        $this->getElement()->setAttrib('viewModule', $module);
         $test = $this->decorator->render('');
         $this->assertContains('This is content from the view script', $test);
     }
