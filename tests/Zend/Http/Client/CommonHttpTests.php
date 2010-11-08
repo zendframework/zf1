@@ -980,6 +980,23 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         
         $this->assertEquals($expect, strlen($response->getBody()));
     }
+
+    /**
+     * @group ZF-10645
+     */
+    public function testPutRequestsHonorSpecifiedContentType()
+    {
+        $this->client->setUri($this->baseuri . 'ZF10645-PutContentType.php');
+        $this->client->setMethod(Zend_Http_Client::PUT);
+        $data = array('foo' => 'bar');
+        $this->client->setRawData(http_build_query($data), 'text/html; charset=ISO-8859-1');
+
+        $response = $this->client->request();
+        $request  = $this->client->getLastRequest();
+
+        $this->assertContains('text/html; charset=ISO-8859-1', $request, $request);
+        $this->assertContains('REQUEST_METHOD: PUT', $response->getBody(), $response->getBody());
+    }
     
     /**
      * Internal helpder function to get the contents of test files

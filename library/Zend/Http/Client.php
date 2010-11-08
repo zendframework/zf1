@@ -1108,7 +1108,7 @@ class Zend_Http_Client
         }
 
         // Set the Content-Type header
-        if ($this->method == self::POST &&
+        if (($this->method == self::POST || $this->method == self::PUT) &&
            (! isset($this->headers[strtolower(self::CONTENT_TYPE)]) && isset($this->enctype))) {
 
             $headers[] = self::CONTENT_TYPE . ': ' . $this->enctype;
