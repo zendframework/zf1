@@ -34,9 +34,6 @@ require_once 'Zend/Mime.php';
 /** PHPUnit test case */
 require_once 'PHPUnit/Framework/TestCase.php';
 
-/** Zend_MailTest */
-require_once dirname(__FILE__) . '/MailTest.php';
-
 /**
  * @category   Zend
  * @package    Zend_Mime
