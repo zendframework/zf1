@@ -630,6 +630,28 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($twitter1->getLocalHttpClient() === $twitter2->getLocalHttpClient());
     }
     
+    /**
+     * @group ZF-10644
+     */
+    public function testStatusUserTimelineShouldHonorAllFlags()
+    {    
+        $params = array(
+            'screen_name'      => 'allzend',
+            'page'             => 1,
+            'include_rts'      => '1', 
+            'trim_user'        => '1', 
+            'include_entities' => '1',
+        );
+        $twitter = new Zend_Service_Twitter();
+        $twitter->setLocalHttpClient($this->_stubTwitter(
+            'statuses/user_timeline.xml', Zend_Http_Client::GET, 'user_timeline.twitter.xml',
+            $params
+        ));
+
+        // Assertions are part of mocking
+        $timeline = $twitter->statusUserTimeline($params);
+    }
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Service_TwitterTest2::main') {

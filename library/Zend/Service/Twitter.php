@@ -376,8 +376,11 @@ class Zend_Service_Twitter extends Zend_Rest_Client
      * - page: return page X of results
      * - count: how many statuses to return
      * - max_id: returns only statuses with an ID less than or equal to the specified ID
-     * - user_id: specfies the ID of the user for whom to return the user_timeline
+     * - user_id: specifies the ID of the user for whom to return the user_timeline
      * - screen_name: specfies the screen name of the user for whom to return the user_timeline
+     * - include_rts: whether or not to return retweets
+     * - trim_user: whether to return just the user ID or a full user object; omit to return full object
+     * - include_entities: whether or not to return entities nodes with tweet metadata
      *
      * @throws Zend_Http_Client_Exception if HTTP request fails or times out
      * @return Zend_Rest_Client_Result
@@ -415,6 +418,11 @@ class Zend_Service_Twitter extends Zend_Rest_Client
                     break;
                 case 'max_id':
                     $_params['max_id'] = $this->_validInteger($value);
+                    break;
+                case 'include_rts':
+                case 'trim_user':
+                case 'include_entities':
+                    $_params[strtolower($key)] = $value ? '1' : '0';
                     break;
                 default:
                     break;
