@@ -131,6 +131,17 @@ class Zend_Amf_Adobe_IntrospectorTest extends PHPUnit_Framework_TestCase
         $xml = $this->introspector->introspect('com.zend.framework.IntrospectorTest');
         $this->assertRegexp('/<type[^>]*(name="explicit")/', $xml, $xml);
     }
+
+    /**
+     * @group ZF-10365
+     */
+    public function testArgumentsWithArrayTypeHintsReflectedInReturnedXml()
+    {
+        require_once dirname(__FILE__) . '/TestAsset/ParameterHints.php';
+        $xml = $this->introspector->introspect('Zend.Amf.Adobe.TestAsset.ParameterHints');
+        $this->assertRegexp('/<argument[^>]*(name="arg1")[^>]*(type="Unknown\[\]")/', $xml, $xml);
+        $this->assertRegexp('/<argument[^>]*(name="arg2")[^>]*(type="Unknown\[\]")/', $xml, $xml);
+    }
 }
 
 class com_zend_framework_IntrospectorTest

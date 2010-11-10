@@ -306,6 +306,16 @@ abstract class Zend_Server_Reflection_Function_Abstract
         } else {
             $helpText = $function->getName();
             $return   = 'void';
+
+            // Try and auto-determine type, based on reflection
+            $paramTypesTmp = array();
+            foreach ($parameters as $i => $param) {
+                $paramType = 'mixed';
+                if ($param->isArray()) {
+                    $paramType = 'array';
+                }
+                $paramTypesTmp[$i] = $paramType;
+            }
         }
 
         // Set method description

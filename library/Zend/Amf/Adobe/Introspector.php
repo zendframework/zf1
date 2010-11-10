@@ -283,7 +283,12 @@ class Zend_Amf_Adobe_Introspector
             return 'Unknown';
         }
 
-        if (in_array($typename, array('int', 'integer', 'bool', 'boolean', 'float', 'string', 'object', 'Unknown', 'stdClass', 'array'))) {
+        // Arrays
+        if ('array' == $typename) {
+            return 'Unknown[]';
+        }
+
+        if (in_array($typename, array('int', 'integer', 'bool', 'boolean', 'float', 'string', 'object', 'Unknown', 'stdClass'))) {
             return $typename;
         }
 
