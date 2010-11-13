@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20854 -->
+<!-- EN-Revision: 21829 -->
 <sect1 id="zend.search.lucene.best-practice">
     <title>ベストプラクティス</title>
 
@@ -26,8 +26,9 @@
             を表します。もしドキュメントでこれらと同じ名前のフィールドを使っているのなら、
             そのフィールドにアクセスするには <methodname>getDocument()</methodname>
             メソッドを使う必要があります。
+        </para>
 
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $hits = $index->find($query);
 
 foreach ($hits as $hit) {
@@ -53,7 +54,6 @@ foreach ($hits as $hit) {
     $title = $hit->getDocument()->title;
 }
 ]]></programlisting>
-        </para>
     </sect2>
 
     <sect2 id="zend.search.lucene.best-practice.indexing-performance">
@@ -83,12 +83,13 @@ foreach ($hits as $hit) {
 
         <para>
             インデックスの最適化を行うには <methodname>optimize()</methodname> メソッドを使用します。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $index = Zend_Search_Lucene::open($indexPath);
 
 $index->optimize();
 ]]></programlisting>
-        </para>
 
         <para>
             インデックスの最適化はデータストリーム上で行われるので、
@@ -312,21 +313,26 @@ $index->optimize();
 
         <para>
             まずは、強制的にスコープ外に出す方法です。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $index = Zend_Search_Lucene::open($indexPath);
 
 ...
 
 unset($index);]]></programlisting>
-        </para>
 
         <para>
             そしてもうひとつは、スクリプトの終了前にコミット操作を行うことです。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $index = Zend_Search_Lucene::open($indexPath);
 
 $index->commit();
 ]]></programlisting>
+
+        <para>
             これについては、このドキュメントの
             "<link linkend="zend.search.lucene.advanced.static">応用: 静的プロパティとしてのインデックスの使用</link>"
             でも説明しています。
@@ -348,8 +354,10 @@ $index->commit();
 
         <para>
             これは <methodname>find()</methodname> メソッドよりも効率的です。
-            <programlisting language="php"><![CDATA[
-// find() メソッドでクエリ文字列を指定することによるドキュメントの取得
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// find() メソッドでクエリ文字列を指定してドキュメントを取得
 $query = $idFieldName . ':' . $docId;
 $hits  = $index->find($query);
 foreach ($hits as $hit) {
@@ -359,7 +367,7 @@ foreach ($hits as $hit) {
 }
 ...
 
-// find() メソッドでクエリ API を使用することによるドキュメントの取得
+// find() メソッドでクエリ API を使用してドキュメントを取得
 $term = new Zend_Search_Lucene_Index_Term($docId, $idFieldName);
 $query = new Zend_Search_Lucene_Search_Query_Term($term);
 $hits  = $index->find($query);
@@ -371,7 +379,7 @@ foreach ($hits as $hit) {
 
 ...
 
-// termDocs() メソッドによるドキュメントの取得
+// termDocs() メソッドでドキュメントを取得
 $term = new Zend_Search_Lucene_Index_Term($docId, $idFieldName);
 $docIds  = $index->termDocs($term);
 foreach ($docIds as $id) {
@@ -381,7 +389,6 @@ foreach ($docIds as $id) {
     ...
 }
 ]]></programlisting>
-        </para>
     </sect2>
 
     <sect2 id="zend.search.lucene.best-practice.memory-usage">
@@ -464,7 +471,9 @@ foreach ($docIds as $id) {
 
         <para>
             フィールドを作成するメソッドで、エンコーディングをオプションのパラメータによって指定できます。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $doc = new Zend_Search_Lucene_Document();
 $doc->addField(Zend_Search_Lucene_Field::Text('title',
                                               $title,
@@ -473,13 +482,17 @@ $doc->addField(Zend_Search_Lucene_Field::UnStored('contents',
                                                   $contents,
                                                   'utf-8'));
 ]]></programlisting>
+
+        <para>
             エンコーディングの指定をはっきりさせるという意味で、これが最も良い方法です。
         </para>
 
         <para>
             このエンコーディング指定を省略すると、現在のロケールをもとに判断を行ないます。
             ロケールの指定時に、言語だけでなく文字セットも指定できます。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 setlocale(LC_ALL, 'fr_FR');
 ...
 
@@ -489,7 +502,6 @@ setlocale(LC_ALL, 'de_DE.iso-8859-1');
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 ...
 ]]></programlisting>
-        </para>
 
         <para>
             クエリ文字列のエンコーディングも、同じ方式で指定します。
@@ -503,22 +515,27 @@ setlocale(LC_ALL, 'ja_JP.UTF-8');
         <para>
             検索の前にクエリのパースを行なう場合、
             エンコーディングはオプションのパラメータとして指定できます。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $query =
     Zend_Search_Lucene_Search_QueryParser::parse($queryStr, 'iso-8859-5');
 $hits = $index->find($query);
 ...
 ]]></programlisting>
-        </para>
 
         <para>
             デフォルトのエンコーディングを指定するには <methodname>setDefaultEncoding()</methodname>
             メソッドを使用します。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('iso-8859-1');
 $hits = $index->find($queryStr);
 ...
 ]]></programlisting>
+
+        <para>
             空の文字列は、'現在のロケール' を意味します。
         </para>
 
