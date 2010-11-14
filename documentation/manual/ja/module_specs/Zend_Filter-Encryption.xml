@@ -1,63 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21994 -->
+<!-- EN-Revision: 22821 -->
 <sect2 id="zend.filter.set.encrypt">
-    <title>Encrypt</title>
+    <title>Encrypt 及び Decrypt</title>
 
     <para>
-        このフィルタは、指定した設定で任意の文字列を暗号化します。
-        暗号化の際に、アダプタを使用します。実際には、<acronym>PHP</acronym> の
-        <classname>Mcrypt</classname> および <classname>OpenSSL</classname>
-        拡張モジュール用のアダプタを使用します。
+        これらのフィルタにより、与えられた文字列を暗号化したり復号化できます。
+        したがって、それらはアダプタを利用します。
+        実際には、<acronym>PHP</acronym> 由来の <classname>Mcrypt</classname>
+        および <classname>OpenSSL</classname> エクステンション用のアダプタを使用します。
     </para>
 
-    <para>
-        これら 2 つの暗号化手法はまったく異なる方式なので、
-        アダプタの使用法もそれぞれ異なります。
-        フィルタを初期化する際に、どのアダプタを使うかを選ばなければなりません。
-    </para>
-
-    <programlisting language="php"><![CDATA[
-// Mcrypt アダプタを使用します
-$filter1 = new Zend_Filter_Encrypt(array('adapter' => 'mcrypt'));
-
-// OpenSSL アダプタを使用します
-$filter2 = new Zend_Filter_Encrypt(array('adapter' => 'openssl'));
-]]></programlisting>
-
-    <para>
-        別のアダプタを設定するために <methodname>setAdapter()</methodname>
-        を使用することもできます。また <methodname>getAdapter()</methodname>
-        メソッドで、実際に設定されているアダプタを取得できます。
-    </para>
-
-    <programlisting language="php"><![CDATA[
-// Mcrypt アダプタを使用します
-$filter = new Zend_Filter_Encrypt();
-$filter->setAdapter('openssl');
-]]></programlisting>
-
-    <note>
-        <para>
-            <property>adapter</property> オプションを指定しなかったり setAdapter
-            を使用しなかったりした場合は、デフォルトで
-            <classname>Mcrypt</classname> アダプタを使用します。
-        </para>
-    </note>
-
-    <sect3 id="zend.filter.set.encrypt.mcrypt">
-        <title>Mcrypt での暗号化</title>
+    <sect3 id="zend.filter.set.encrypt.options">
+        <title>Zend_Filter_Encrypt および Zend_Filter_Decrypt でサポートされるオプション</title>
 
         <para>
-            <classname>Mcrypt</classname> 拡張モジュールをインストールすると、
-            <classname>Mcrypt</classname> アダプタが使えるようになります。
-            このアダプタは、初期化時のオプションとして以下をサポートしています。
+            <classname>Zend_Filter_Encrypt</classname> および
+            <classname>Zend_Filter_Decrypt</classname> では、下記のオプションがサポートされます。
         </para>
 
         <itemizedlist>
             <listitem>
                 <para>
-                    <emphasis>key</emphasis>: 暗号化用の鍵。
+                    <emphasis><property>adapter</property></emphasis>:
+                    使用する暗号化アダプタを設定します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>algorithm</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    使用するアルゴリズム
+                    <ulink url="http://php.net/mcrypt">PHP の mcrypt 暗号</ulink>
+                    であげられている暗号化アルゴリズムのいずれかでなければなりません。
+                    省略した場合のデフォルトは <property>blowfish</property> です。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>algorithm_directory</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    アルゴリズムが存在するディレクトリ。
+                    省略した場合のデフォルトは、mcrypt エクステンション内に設定されたパスです。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>compression</property></emphasis>:
+                    暗号化した値を圧縮するかどうか。既定値は圧縮なし。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>envelope</property></emphasis>:
+                    <classname>OpenSSL</classname> のみ。
+                    コンテンツを暗号化した人から受け取った、
+                    暗号化されたエンベロープ鍵。
+                    鍵ファイルのパスとファイル名を指定するか、
+                    あるいは単に鍵ファイルの内容そのものを指定することもできます。
+                    <property>package</property> オプションが設定された場合、
+                    このパラメータは省略できます。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>key</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    暗号化用の鍵。
                     入力を暗号化する際に使用します。
                     復号する際にも同じ鍵が必要です。
                 </para>
@@ -65,26 +79,10 @@ $filter->setAdapter('openssl');
 
             <listitem>
                 <para>
-                    <emphasis>algorithm</emphasis>: 使用するアルゴリズム。
-                    <ulink url="http://php.net/mcrypt">PHP マニュアルの mcrypt のページ</ulink>
-                    であげられている暗号化アルゴリズムのいずれかでなければなりません。
-                    省略した場合のデフォルトは 'blowfish' です。
-                </para>
-            </listitem>
-
-            <listitem>
-                <para>
-                    <emphasis>algorithm_directory</emphasis>:
-                    アルゴリズムが存在するディレクトリ。
-                    省略した場合のデフォルトは、mcrypt
-                    拡張モジュールで設定されているパスです。
-                </para>
-            </listitem>
-
-            <listitem>
-                <para>
-                    <emphasis>mode</emphasis>: 使用する暗号化モード。
-                    <ulink url="http://php.net/mcrypt">PHP マニュアルの mcrypt のページ</ulink>
+                    <emphasis><property>mode</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    使用する暗号化モード。
+                    <ulink url="http://php.net/mcrypt">PHP の mcrypt 暗号</ulink>
                     であげられているモードのいずれかでなければなりません。
                     省略した場合のデフォルトは 'cbc' です。
                 </para>
@@ -92,41 +90,112 @@ $filter->setAdapter('openssl');
 
             <listitem>
                 <para>
-                    <emphasis>mode_directory</emphasis>:
+                    <emphasis><property>mode_directory</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
                     モードが存在するディレクトリ。
                     省略した場合のデフォルトは、<classname>Mcrypt</classname>
                     拡張モジュールで設定されているパスです。
                 </para>
             </listitem>
 
+            <!-- TODO : to be tranlated -->
             <listitem>
                 <para>
-                    <emphasis>vector</emphasis>: 使用する初期化ベクトル。
-                    省略した場合はランダムなベクトルとなります。
+                    <emphasis><property>package</property></emphasis>:
+                    <classname>OpenSSL</classname> のみ。
+                    If the envelope key should be packed with the
+                    encrypted value. Default is <constant>FALSE</constant>.
                 </para>
             </listitem>
 
             <listitem>
                 <para>
-                    <emphasis>salt</emphasis>: キーを salt 値として使用するかどうか。
+                    <emphasis><property>private</property></emphasis>:
+                    <classname>OpenSSL</classname> のみ。
+                    コンテンツの暗号化に使用する、あなたの秘密鍵。
+                    鍵ファイルのパスとファイル名を指定するか、
+                    あるいは単に鍵ファイルの内容そのものを指定することもできます。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>public</property></emphasis>:
+                    <classname>OpenSSL</classname> のみ。
+                    暗号化したコンテンツを渡したい相手の公開鍵。
+                    複数の公開鍵を指定するには、配列を使用します。
+                    鍵ファイルのパスとファイル名を指定するか、
+                    あるいは単に鍵ファイルの内容そのものを指定することもできます。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>salt</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    キーを salt 値として使用するかどうか。
                     使用すると、暗号化に使用するキー自体も暗号化されます。
                     デフォルトは <constant>FALSE</constant> です。
                 </para>
             </listitem>
 
-            <!-- TODO : to be translated -->
             <listitem>
                 <para>
-                    <emphasis>compression</emphasis>: If the encrypted value should be compressed.
-                    Default is no compression. For details take a look into <link
-                        linkend="zend.filter.set.encrypt.openssl.compressed">compression for
-                        Openssl</link>.
+                    <emphasis><property>vector</property></emphasis>:
+                    <classname>MCrypt</classname> のみ。
+                    使用する初期化ベクトル。
+                    省略した場合はランダムなベクトルとなります。
                 </para>
             </listitem>
         </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.encrypt.adapterusage">
+        <title>アダプタの使用法</title>
 
         <para>
-            配列ではなく文字列を指定した場合は、その文字列を鍵として使用します。
+            これら 2 つの暗号化手法はまったく異なる方式なので、
+            アダプタの使用法もそれぞれ異なります。
+            フィルタを初期化する際に、どのアダプタを使うかを選ばなければなりません。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Mcrypt アダプタを使用します
+$filter1 = new Zend_Filter_Encrypt(array('adapter' => 'mcrypt'));
+
+// OpenSSL アダプタを使用します
+$filter2 = new Zend_Filter_Encrypt(array('adapter' => 'openssl'));
+]]></programlisting>
+
+        <para>
+            別のアダプタを設定するために <methodname>setAdapter()</methodname>
+            を使用することもできます。また <methodname>getAdapter()</methodname>
+            メソッドで、実際に設定されているアダプタを取得できます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Mcrypt アダプタを使用します
+$filter = new Zend_Filter_Encrypt();
+$filter->setAdapter('openssl');
+]]></programlisting>
+
+        <note>
+            <para>
+                <property>adapter</property> オプションを指定しなかったり <methodname>setAdapter()</methodname>
+                を使用しなかったりした場合は、デフォルトで
+                <classname>Mcrypt</classname> アダプタを使用します。
+            </para>
+        </note>
+    </sect3>
+
+    <sect3 id="zend.filter.set.encrypt.mcrypt">
+        <title>Mcrypt での暗号化</title>
+
+        <para>
+            <classname>Mcrypt</classname> 拡張モジュールをインストールすると、
+            <classname>Mcrypt</classname> アダプタが使えるようになります。
+            もしオプション配列の代わりに文字列を与えると、
+            文字列がキーとして使われます。
         </para>
 
         <para>
@@ -179,50 +248,56 @@ print $encrypted;
 ]]></programlisting>
     </sect3>
 
+    <sect3 id="zend.filter.set.encrypt.mcryptdecrypt">
+        <title>Mcrypt の復号</title>
+        <para>
+            <classname>Mcrypt</classname> で暗号化したコンテンツを復号するには、
+            暗号化を行った際に指定したオプションが必要です。
+        </para>
+
+        <para>
+            ここでひとつ暗号化時との大きな違いがあります。
+            暗号化の際にベクトルを指定しなかった場合は、コンテンツを暗号化した後で
+            フィルタの <methodname>getVector()</methodname> メソッドを使用してベクトルを取得する必要があります。
+            正しいベクトルがなければ、コンテンツを復号することはできません。
+        </para>
+
+        <para>
+            オプションを指定しさえすれば、復号は暗号化と同じくらい単純なことです。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// デフォルト設定の blowfish を使用します
+$filter = new Zend_Filter_Decrypt('myencryptionkey');
+
+// コンテンツの暗号化用ベクトルを設定します
+$filter->setVector('myvector');
+
+$decrypted = $filter->filter('encoded_text_normally_unreadable');
+print $decrypted;
+]]></programlisting>
+
+        <note>
+            <para>
+                mcrypt 拡張モジュールが使用できない場合は例外が発生することに注意しましょう。
+            </para>
+        </note>
+
+        <note>
+            <para>
+                また、インスタンス作成時あるいは <methodname>setEncryption()</methodname>
+                をコールした際にすべての設定がチェックされることにも注意しましょう。
+                設定内容に問題があることを mcrypt が検知すると、例外がスローされます。
+            </para>
+        </note>
+    </sect3>
+
     <sect3 id="zend.filter.set.encrypt.openssl">
         <title>OpenSSL での暗号化</title>
 
         <para>
             <classname>OpenSSL</classname> 拡張モジュールをインストールすると、
             <classname>OpenSSL</classname> アダプタが使えるようになります。
-            このアダプタは、初期化時のオプションとして以下をサポートしています。
-        </para>
-
-        <itemizedlist>
-            <listitem>
-                <para>
-                    <emphasis>public</emphasis>: 暗号化したコンテンツを渡したい相手の公開鍵。
-                    複数の公開鍵を指定するには、配列を使用します。
-                    鍵ファイルのパスとファイル名を指定するか、
-                    あるいは単に鍵ファイルの内容そのものを指定することもできます。
-                </para>
-            </listitem>
-
-            <listitem>
-                <para>
-                    <emphasis>private</emphasis>: コンテンツの暗号化に使用する、あなたの秘密鍵。
-                    鍵ファイルのパスとファイル名を指定するか、
-                    あるいは単に鍵ファイルの内容そのものを指定することもできます。
-                </para>
-            </listitem>
-
-            <!-- TODO : to be translated -->
-            <listitem>
-                <para>
-                    <emphasis>compression</emphasis>: If the encrypted value should be compressed.
-                    Default is no compression.
-                </para>
-            </listitem>
-
-            <listitem>
-                <para>
-                    <emphasis>package</emphasis>: If the envelope key should be packed with the
-                    encrypted value. Default is <constant>FALSE</constant>.
-                </para>
-            </listitem>
-        </itemizedlist>
-
-        <para>
             後から公開鍵を取得あるいは設定するには、<methodname>getPublicKey()</methodname>
             および <methodname>setPublicKey()</methodname> メソッドを使用します。
             秘密鍵についても、<methodname>getPrivateKey()</methodname> および <methodname>setPrivateKey()</methodname>
@@ -307,6 +382,7 @@ print $encrypted;
 // 復号の方法は Decrypt フィルタを参照ください
 ]]></programlisting>
 
+        <!-- TODO : to be translated -->
         <sect4 id="zend.filter.set.encrypt.openssl.simplified">
             <title>Simplified usage with Openssl</title>
 
@@ -321,7 +397,7 @@ print $encrypted;
             </para>
 
             <programlisting language="php"><![CDATA[
-// Use openssl and provide a private key
+// openssl を使用し、秘密鍵を指定します
 $filter = new Zend_Filter_Encrypt(array(
     'adapter' => 'openssl',
     'private' => '/path/to/mykey/private.pem',
@@ -332,7 +408,7 @@ $filter = new Zend_Filter_Encrypt(array(
 $encrypted = $filter->filter('text_to_be_encoded');
 print $encrypted;
 
-// For decryption look at the Decrypt filter
+// 復号の方法は Decrypt フィルタを参照ください
 ]]></programlisting>
 
             <para>
@@ -389,8 +465,80 @@ $filter2 = new Zend_Filter_Encrypt(array(
             </note>
         </sect4>
     </sect3>
-</sect2>
 
+    <sect3 id="zend.filter.set.encrypt.openssldecrypt">
+        <title>OpenSSL での復号</title>
+
+        <para>
+            <classname>OpenSSL</classname> での復号は、暗号化と同様にシンプルです。
+            しかし、コンテンツを暗号化した人からすべてのデータを受け取る必要があります。
+            下記の例をご覧ください。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// openssl を使用し、秘密鍵を指定します
+$filter = new Zend_Filter_Decrypt(array(
+    'adapter' => 'openssl',
+    'private' => '/path/to/mykey/private.pem'
+));
+
+// もちろん、初期化時にエンベロープ鍵を指定することもできます
+$filter->setEnvelopeKey(array(
+    '/key/from/encoder/first.pem',
+    '/key/from/encoder/second.pem'
+));
+]]></programlisting>
+
+        <note>
+            <para>
+                <classname>OpenSSL</classname> アダプタは、正しい鍵を渡さないと動作しないことに注意しましょう。
+            </para>
+        </note>
+
+        <para>
+            オプションで、パスフレーズを渡さなければ鍵を復号できないようにすることもできます。
+            そのために使用するのが <methodname>setPassphrase()</methodname> メソッドです。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// openssl を使用し、秘密鍵を指定します
+$filter = new Zend_Filter_Decrypt(array(
+    'adapter' => 'openssl',
+    'private' => '/path/to/mykey/private.pem'
+));
+
+// もちろん、初期化時にエンベロープ鍵を指定することもできます
+$filter->setEnvelopeKey(array(
+    '/key/from/encoder/first.pem',
+    '/key/from/encoder/second.pem'
+));
+$filter->setPassphrase('mypassphrase');
+]]></programlisting>
+
+        <para>
+            最後に、コンテンツを復号します。
+            暗号化したコンテンツの復号を行う完全な例は、このようになります。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// openssl を使用し、秘密鍵を指定します
+$filter = new Zend_Filter_Decrypt(array(
+    'adapter' => 'openssl',
+    'private' => '/path/to/mykey/private.pem'
+));
+
+// もちろん、初期化時にエンベロープ鍵を指定することもできます
+$filter->setEnvelopeKey(array(
+    '/key/from/encoder/first.pem',
+    '/key/from/encoder/second.pem'
+));
+$filter->setPassphrase('mypassphrase');
+
+$decrypted = $filter->filter('encoded_text_normally_unreadable');
+print $decrypted;
+]]></programlisting>
+    </sect3>
+</sect2>
 <!--
 vim:se ts=4 sw=4 et:
 -->
