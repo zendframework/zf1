@@ -77,7 +77,15 @@ class Zend_Cache_FileFrontendTest extends PHPUnit_Framework_TestCase {
         if (!$this->_instance3) {
             touch($this->_masterFile1, 123455);
             touch($this->_masterFile2, 123455);
-            $this->_instance3 = new Zend_Cache_Frontend_File(array('master_files' => array($this->_masterFile1, $this->_masterFile2)));
+            $this->_instance3 = new Zend_Cache_Frontend_File(
+                array(
+                    'master_files' => array(
+                        // ZF-10682: test Undefined offset: 0
+                        'file1' => $this->_masterFile1,
+                        'file2' => $this->_masterFile2
+                    )
+                )
+            );
             $this->_backend = new Zend_Cache_Backend_Test();
             $this->_instance3->setBackend($this->_backend);
         }
