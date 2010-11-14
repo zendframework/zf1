@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21740 -->
+<!-- EN-Revision: 22757 -->
 <sect1 id="zend.paginator.advanced">
     <title>高度な使用法</title>
 
@@ -36,7 +36,7 @@
 
         <para>
             これまでに SPL の
-            <ulink url="http://www.php.net/~helly/php/ext/spl/interfaceCountable.html"><code>Countable</code></ulink>
+            <ulink url="http://www.php.net/~helly/php/ext/spl/interfaceCountable.html">Countable</ulink>
             インターフェイスを使ったことがある方なら
             <methodname>count()</methodname> はおなじみでしょう。
             <classname>Zend_Paginator</classname> と組み合わせて使う場合、
@@ -53,11 +53,9 @@
             配列の場合はこのようになるでしょう。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 return array_slice($this->_array, $offset, $itemCountPerPage);
 ]]></programlisting>
-        </para>
 
         <para>
             同梱のアダプタ (すべて <classname>Zend_Paginator_Adapter_Interface</classname>
@@ -76,11 +74,9 @@ return array_slice($this->_array, $offset, $itemCountPerPage);
             <methodname>getPages()</methodname> メソッドが定義されています。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 public function getPages(Zend_Paginator $paginator, $pageRange = null);
 ]]></programlisting>
-        </para>
 
         <para>
             このメソッドは、いわゆる "ローカル" ページ
@@ -95,11 +91,9 @@ public function getPages(Zend_Paginator $paginator, $pageRange = null);
             次のようなコードで終わることになるでしょう。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 return $paginator->getPagesInRange($lowerBound, $upperBound);
 ]]></programlisting>
-        </para>
 
         <para>
             このコールには特別な意味はありません。
@@ -113,13 +107,11 @@ return $paginator->getPagesInRange($lowerBound, $upperBound);
             そのためには、次のようにします。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $prefix = 'My_Paginator_ScrollingStyle';
 $path   = 'My/Paginator/ScrollingStyle/';
 Zend_Paginator::addScrollingStylePrefixPath($prefix, $path);
 ]]></programlisting>
-        </para>
     </sect2>
 
     <sect2 id="zend.paginator.advanced.caching">
@@ -132,15 +124,13 @@ Zend_Paginator::addScrollingStylePrefixPath($prefix, $path);
             <methodname>setCache()</methodname> メソッドに <classname>Zend_Cache_Core</classname> のインスタンスを渡します。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $paginator = Zend_Paginator::factory($someData);
 $fO = array('lifetime' => 3600, 'automatic_serialization' => true);
 $bO = array('cache_dir'=>'/tmp');
 $cache = Zend_cache::factory('Core', 'File', $fO, $bO);
 Zend_Paginator::setCache($cache);
 ]]></programlisting>
-        </para>
 
         <para>
             <classname>Zend_Paginator</classname> が <classname>Zend_Cache_Core</classname> のインスタンスを受け取ると、
@@ -149,8 +139,7 @@ Zend_Paginator::setCache($cache);
             <methodname>setCacheEnable()</methodname> を使用します。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $paginator = Zend_Paginator::factory($someData);
 // $cache は Zend_Cache_Core のインスタンスです
 Zend_Paginator::setCache($cache);
@@ -158,7 +147,6 @@ Zend_Paginator::setCache($cache);
 $paginator->setCacheEnable(false);
 // キャッシュが無効になります
 ]]></programlisting>
-        </para>
 
         <para>
             キャッシュが設定されると、データは自動的に格納され、必要に応じて取り出されるようになります。
@@ -168,8 +156,7 @@ $paginator->setCacheEnable(false);
             ページ番号をパラメータとして渡すと、そのページのキャッシュを空にします。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $paginator = Zend_Paginator::factory($someData);
 Zend_Paginator::setCache($cache);
 $items = $paginator->getCurrentItems();
@@ -183,15 +170,13 @@ $paginator->clearPageItemCache(3);
 // すべてのキャッシュをクリアします
 $paginator->clearPageItemCache();
 ]]></programlisting>
-        </para>
 
         <para>
             1 ページあたりのアイテム数を変更すると、キャッシュ全体が空になります。
             キャッシュの内容が無効になるからです。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $paginator = Zend_Paginator::factory($someData);
 Zend_Paginator::setCache($cache);
 // アイテムを取得します
@@ -200,15 +185,13 @@ $items = $paginator->getCurrentItems();
 // すべてのキャッシュデータが消去されます
 $paginator->setItemCountPerPage(2);
 ]]></programlisting>
-        </para>
 
         <para>
             キャッシュ内のデータを見たり、直接アクセスしたりすることもできます。その場合には
             <methodname>getPageItemCache()</methodname> を使用します。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $paginator = Zend_Paginator::factory($someData);
 $paginator->setItemCountPerPage(3);
 Zend_Paginator::setCache($cache);
@@ -220,7 +203,6 @@ $otherItems = $paginator->getItemsPerPage(4);
 // キャッシュされたアイテムを二次元配列で取得します
 var_dump($paginator->getPageItemCache());
 ]]></programlisting>
-        </para>
     </sect2>
 
     <sect2 id="zend.paginator.advanced.aggregator">
@@ -237,8 +219,7 @@ var_dump($paginator->getPageItemCache());
             <classname>IteratorAggregate</classname> と同じ動きをします。
         </para>
 
-        <para>
-            <programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 interface Zend_Paginator_AdapterAggregate
 {
     /**
@@ -249,13 +230,12 @@ interface Zend_Paginator_AdapterAggregate
     public function getPaginatorAdapter();
 }
 ]]></programlisting>
-        </para>
 
         <para>
             このインターフェイスは小さく、ただ
             <classname>Zend_Paginator_Adapter_Abstract</classname>
             のインスタンスを返すだけのものです。このインスタンスは
-            <code>Zend_Paginator::factory</code> および Zend_Paginator
+            <methodname>Zend_Paginator::factory</methodname> および <classname>Zend_Paginator</classname>
             コンストラクタの両方で使用可能で、適切に処理されます。
         </para>
     </sect2>

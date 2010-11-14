@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20827 -->
+<!-- EN-Revision: 22748 -->
 <sect1 id="zend.memory.memory-objects">
 
     <title>メモリオブジェクト</title>
@@ -12,10 +12,11 @@
         <para>
             移動可能なメモリオブジェクトを作成するには、メモリマネージャの
             <methodname>create([$data])</methodname> メソッドを使用します。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $memObject = $memoryManager->create($data);
 ]]></programlisting>
-        </para>
 
         <para>
             "移動可能" とは、このオブジェクトがスワップされ、
@@ -33,10 +34,11 @@ $memObject = $memoryManager->create($data);
         <para>
             ロックされたメモリオブジェクトを作成するには、メモリマネージャの
             <methodname>createLocked([$data])</methodname> メソッドを使用します。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $memObject = $memoryManager->createLocked($data);
 ]]></programlisting>
-        </para>
 
         <para>
             "ロックされた" とは、このオブジェクトは決してスワップされず、
@@ -69,13 +71,14 @@ $memObject = $memoryManager->createLocked($data);
     </sect2>
 
     <sect2 id="zend.memory.memory-objects.value">
-
         <title>メモリコンテナの 'value' プロパティ</title>
 
         <para>
-            (移動可能な、あるいはロックされた) メモリコンテナの '<code>value</code>'
+            (移動可能な、あるいはロックされた) メモリコンテナの '<property>value</property>'
             プロパティを使用して、メモリオブジェクトのデータを扱います。
-            <programlisting language="php"><![CDATA[
+        </para>
+
+        <programlisting language="php"><![CDATA[
 $memObject = $memoryManager->create($data);
 
 echo $memObject->value;
@@ -88,7 +91,6 @@ echo ord($memObject->value[$index1]);
 
 $memObject->value = substr($memObject->value, $start, $length);
 ]]></programlisting>
-        </para>
 
         <para>
             メモリオブジェクトのデータにアクセスするもうひとつの方法として、
@@ -100,7 +102,6 @@ $memObject->value = substr($memObject->value, $start, $length);
     </sect2>
 
     <sect2 id="zend.memory.memory-objects.api">
-
         <title>メモリコンテナのインターフェイス</title>
 
         <para>
@@ -108,7 +109,6 @@ $memObject->value = substr($memObject->value, $start, $length);
         </para>
 
         <sect3 id="zend.memory.memory-objects.api.getRef">
-
             <title>getRef() メソッド</title>
 
             <programlisting language="php"><![CDATA[
@@ -139,7 +139,9 @@ public function &getRef();
                 これはアプリケーションから直接変更することになります。
                 つまり、データの内容を処理する際には <methodname>getRef()</methodname>
                 メソッドを使用するのがうまいやり方となります。
-                <programlisting language="php"><![CDATA[
+            </para>
+
+            <programlisting language="php"><![CDATA[
 $memObject = $memoryManager->create($data);
 
 $value = &$memObject->getRef();
@@ -149,22 +151,22 @@ for ($count = 0; $count < strlen($value); $count++) {
     ...
 }
 ]]></programlisting>
-            </para>
-
         </sect3>
 
         <sect3 id="zend.memory.memory-objects.api.touch">
-
             <title>touch() メソッド</title>
 
             <programlisting language="php"><![CDATA[
 public function touch();
 ]]></programlisting>
+
             <para>
                 <methodname>touch()</methodname> メソッドは
                 <methodname>getRef()</methodname> と同じように使用しなければなりません。
                 これは、オブジェクトの値が変更されたことを通知します。
-                <programlisting language="php"><![CDATA[
+            </para>
+
+            <programlisting language="php"><![CDATA[
 $memObject = $memoryManager->create($data);
 ...
 
@@ -180,13 +182,9 @@ for ($count = 0; $count < strlen($value); $count++) {
 
 $memObject->touch();
 ]]></programlisting>
-
-            </para>
-
         </sect3>
 
         <sect3 id="zend.memory.memory-objects.api.lock">
-
             <title>lock() メソッド</title>
 
             <programlisting language="php"><![CDATA[
@@ -205,7 +203,9 @@ public function lock();
             <para>
                 オブジェクトをメモリ内にロックすることで、ロックを解除するまでは
                 <methodname>getRef()</methodname> メソッドの返す参照が有効であることが保証されます。
-                <programlisting language="php"><![CDATA[
+            </para>
+
+            <programlisting language="php"><![CDATA[
 $memObject1 = $memoryManager->create($data1);
 $memObject2 = $memoryManager->create($data2);
 ...
@@ -224,12 +224,9 @@ $memObject1->touch();
 $memObject1->unlock();
 $memObject2->unlock();
 ]]></programlisting>
-            </para>
-
         </sect3>
 
         <sect3 id="zend.memory.memory-objects.api.unlock">
-
             <title>unlock() メソッド</title>
 
             <programlisting language="php"><![CDATA[
@@ -245,7 +242,6 @@ public function unlock();
         </sect3>
 
         <sect3 id="zend.memory.memory-objects.api.isLocked">
-
             <title>isLocked() メソッド</title>
 
             <programlisting language="php"><![CDATA[
@@ -263,7 +259,5 @@ public function isLocked();
             </para>
 
         </sect3>
-
     </sect2>
-
 </sect1>
