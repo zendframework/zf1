@@ -479,7 +479,11 @@ class Zend_Soap_AutoDiscover implements Zend_Server_Interface
         }
 
         // Add the binding operation
-        $operation = $wsdl->addBindingOperation($binding, $function->getName(),  $this->_operationBodyStyle, $this->_operationBodyStyle);
+        if($isOneWayMessage == false) {
+            $operation = $wsdl->addBindingOperation($binding, $function->getName(),  $this->_operationBodyStyle, $this->_operationBodyStyle);
+        } else {
+            $operation = $wsdl->addBindingOperation($binding, $function->getName(),  $this->_operationBodyStyle);
+        }
         $wsdl->addSoapOperation($operation, $uri . '#' .$function->getName());
 
         // Add the function name to the list
