@@ -26,6 +26,22 @@
 require_once 'Zend/Tool/Project/Context/Filesystem/File.php';
 
 /**
+ * @see Zend_Filter
+ */
+require_once 'Zend/Filter.php';
+
+/**
+ * @see Zend_Filter_Word_CamelCaseToDash
+ */
+require_once 'Zend/Filter/Word/CamelCaseToDash.php';
+
+/**
+ * @see Zend_Filter_StringToLower
+ */
+require_once 'Zend/Filter/StringToLower.php';
+
+
+/**
  * This class is the front most class for utilizing Zend_Tool_Project
  *
  * A profile is a hierarchical set of resources that keep track of
@@ -208,5 +224,5 @@ EOS;
             ->addFilter(new Zend_Filter_StringToLower());
         return $filter->filter($actionName);
     }
-    
+
 }
