@@ -317,11 +317,17 @@ class Zend_Soap_Wsdl
 
         if (is_array($fault)) {
             $node = $this->_dom->createElement('fault');
+            /**
+             * Note. Do we really need name attribute to be also set at wsdl:fault node???
+             * W3C standard doesn't mention it (http://www.w3.org/TR/wsdl#_soap:fault)
+             * But some real world WSDLs use it, so it may be required for compatibility reasons.
+             */
             if (isset($fault['name'])) {
                 $node->setAttribute('name', $fault['name']);
             }
-            $soap_node = $this->_dom->createElement('soap:body');
-            foreach ($output as $name => $value) {
+
+            $soap_node = $this->_dom->createElement('soap:fault');
+            foreach ($fault as $name => $value) {
                 $soap_node->setAttribute($name, $value);
             }
             $node->appendChild($soap_node);
