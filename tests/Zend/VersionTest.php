@@ -96,7 +96,7 @@ class Zend_VersionTest extends PHPUnit_Framework_TestCase
     {
         $actual = Zend_Version::getLatest();
         if ('not available' === $actual) {
-            $this->markIncomplete('http://framework.zend.com/ may be down');
+            $this->markTestIncomplete('http://framework.zend.com/ may be down');
         }
 
         $this->assertRegExp('/^[1-2](\.[0-9]+){2}/', $actual);
