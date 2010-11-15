@@ -284,7 +284,11 @@ class Zend_Tool_Project_ProfileTest extends PHPUnit_Framework_TestCase
 
         foreach (new RecursiveIteratorIterator($rdi, RecursiveIteratorIterator::CHILD_FIRST) as $dirIteratorItem) {
 
-            if (stristr($dirIteratorItem->getPathname(), '.svn')) {
+            $basename = $dirIteratorItem->getBasename();
+            if (stristr($dirIteratorItem->getPathname(), '.svn')
+                || '.' === $basename
+                || '..' === $basename)
+            {
                 continue;
             }
 
