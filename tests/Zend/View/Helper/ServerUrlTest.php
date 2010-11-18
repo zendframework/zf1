@@ -155,7 +155,9 @@ class Zend_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://example.com', $url->serverUrl(new stdClass()));
     }
 
-    // ZF-9919
+    /**
+     * @group ZF-9919
+     */
     public function testServerUrlWithScheme()
     {
         $_SERVER['HTTP_SCHEME'] = 'https';
@@ -164,7 +166,9 @@ class Zend_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('https://example.com', $url->serverUrl());
     }
 
-    // ZF-9919
+    /**
+     * @group ZF-9919
+     */
     public function testServerUrlWithPort()
     {
         $_SERVER['SERVER_PORT'] = 443;
