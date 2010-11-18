@@ -68,7 +68,13 @@ class Zend_Application_Resource_Frontcontroller extends Zend_Application_Resourc
                     break;
 
                 case 'moduledirectory':
-                    $front->addModuleDirectory($value);
+                    if (is_string($value)) {
+                        $front->addModuleDirectory($value);
+                    } elseif (is_array($value)) {
+                        foreach($value as $moduleDir) {
+                            $front->addModuleDirectory($moduleDir);
+                        }
+                    }
                     break;
 
                 case 'defaultcontrollername':
