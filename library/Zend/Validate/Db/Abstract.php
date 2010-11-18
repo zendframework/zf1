@@ -306,10 +306,12 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
              * Build select object
              */
             $select = new Zend_Db_Select($db);
-            $select->from($this->_table, array($this->_field), $this->_schema)
-                   ->where(
-                       $db->quoteIdentifier($this->_field, true).' = :value'
-                   );
+            $select->from($this->_table, array($this->_field), $this->_schema);
+            if ($db->supportsParameters('named')) {
+                $select->where($db->quoteIdentifier($this->_field, true).' = :value'); // named
+            } else {
+                $select->where($db->quoteIdentifier($this->_field, true).' = ?'); // positional
+            }
             if ($this->_exclude !== null) {
                 if (is_array($this->_exclude)) {
                     $select->where(
@@ -338,9 +340,11 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
         /**
          * Run query
          */
-        $result = $select->getAdapter()->fetchRow($select,
-                                                array('value' => $value),
-                                                Zend_Db::FETCH_ASSOC);
+        $result = $select->getAdapter()->fetchRow(
+            $select,
+            array('value' => $value), // this should work whether db supports positional or named params
+            Zend_Db::FETCH_ASSOC
+            );
 
         return $result;
     }
