@@ -270,9 +270,14 @@ abstract class Zend_XmlRpc_Value
                     return $value;
                 }
 
+                // @see http://framework.zend.com/issues/browse/ZF-8623
                 if ($value instanceof Zend_Crypt_Math_BigInteger) {
-                    require_once 'Zend/XmlRpc/Value/BigInteger.php';
-                    return new Zend_XmlRpc_Value_BigInteger($value);
+                    require_once 'Zend/XmlRpc/Value/Exception.php';
+                    throw new Zend_XmlRpc_Value_Exception(
+                        'Using Zend_Crypt_Math_BigInteger to get an ' .
+                        'instance of Zend_XmlRpc_Value_BigInteger is not ' .
+                        'available anymore.'
+                    );
                 }
 
                 if ($value instanceof Zend_Date or $value instanceof DateTime) {

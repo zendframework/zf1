@@ -149,50 +149,115 @@ class Zend_XmlRpc_ValueTest extends PHPUnit_Framework_TestCase
     }
 
     // BigInteger
-
+    
+    /**
+     * @group ZF-6445
+     * @group ZF-8623
+     */
+    public function testBigIntegerGetValue()
+    {
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        $bigInteger = new Zend_XmlRpc_Value_BigInteger($bigIntegerValue);
+        $this->assertSame($bigIntegerValue, $bigInteger->getValue());
+    }
+    
+    /**
+     * @group ZF-6445
+     */
+    public function testBigIntegerGetType()
+    {
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        $bigInteger = new Zend_XmlRpc_Value_BigInteger($bigIntegerValue);
+        $this->assertSame(Zend_XmlRpc_Value::XMLRPC_TYPE_I8, $bigInteger->getType());
+    }
+    
+    /**
+     * @group ZF-6445
+     */
+    public function testBigIntegerGeneratedXml()
+    {
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        $bigInteger = new Zend_XmlRpc_Value_BigInteger($bigIntegerValue);
+        
+        $this->assertEquals(
+            '<value><i8>' . $bigIntegerValue . '</i8></value>',
+            $bigInteger->saveXml()
+        );
+    }
+    
     /**
      * @group ZF-6445
      * @dataProvider Zend_XmlRpc_TestProvider::provideGenerators
      */
-    public function testMarshalBigIntegerFromFromXmlRpc(Zend_XmlRpc_Generator_GeneratorAbstract $generator)
+    public function testMarschalBigIntegerFromXmlRpc(Zend_XmlRpc_Generator_GeneratorAbstract $generator)
     {
         Zend_XmlRpc_Value::setGenerator($generator);
-        $bigInt = (string)(PHP_INT_MAX + 1);
-        $native = new Zend_Crypt_Math_BigInteger();
-        $native->init($bigInt);
-
-        $xmlStrings = array("<value><i8>$bigInt</i8></value>",
-                            "<value><ex:i8 xmlns:ex=\"http://ws.apache.org/xmlrpc/namespaces/extensions\">$bigInt</ex:i8></value>");
-
-        foreach ($xmlStrings as $xml) {
-            $value = Zend_XmlRpc_Value::getXmlRpcValue($xml, Zend_XmlRpc_Value::XML_STRING);
-            $this->assertEquals($native, $value->getValue());
-            $this->assertEquals('i8', $value->getType());
-            $this->assertEquals($this->wrapXml($xml), $value->saveXml());
-        }
+        
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        $bigInteger = new Zend_XmlRpc_Value_BigInteger($bigIntegerValue);
+        $bigIntegerXml = '<value><i8>' . $bigIntegerValue . '</i8></value>';
+        
+        $value = Zend_XmlRpc_Value::getXmlRpcValue(
+            $bigIntegerXml,
+            Zend_XmlRpc_Value::XML_STRING
+        );
+        
+        $this->assertSame($bigIntegerValue, $value->getValue());
+        $this->assertEquals(Zend_XmlRpc_Value::XMLRPC_TYPE_I8, $value->getType());
+        $this->assertEquals($this->wrapXml($bigIntegerXml), $value->saveXml());
     }
-
+    
+    /**
+     * @group ZF-6445
+     * @dataProvider Zend_XmlRpc_TestProvider::provideGenerators
+     */
+    public function testMarschalBigIntegerFromApacheXmlRpc(Zend_XmlRpc_Generator_GeneratorAbstract $generator)
+    {
+        Zend_XmlRpc_Value::setGenerator($generator);
+        
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        $bigInteger = new Zend_XmlRpc_Value_BigInteger($bigIntegerValue);
+        $bigIntegerXml = '<value><ex:i8 xmlns:ex="http://ws.apache.org/xmlrpc/namespaces/extensions">' . $bigIntegerValue . '</ex:i8></value>';
+        
+        $value = Zend_XmlRpc_Value::getXmlRpcValue(
+            $bigIntegerXml,
+            Zend_XmlRpc_Value::XML_STRING
+        );
+        
+        $this->assertSame($bigIntegerValue, $value->getValue());
+        $this->assertEquals(Zend_XmlRpc_Value::XMLRPC_TYPE_I8, $value->getType());
+        $this->assertEquals($this->wrapXml($bigIntegerXml), $value->saveXml());
+    }
+    
     /**
      * @group ZF-6445
      */
     public function testMarshalBigIntegerFromNative()
     {
-        $native = (string)(PHP_INT_MAX + 1);
-        $types = array(Zend_XmlRpc_Value::XMLRPC_TYPE_APACHEI8,
-                       Zend_XmlRpc_Value::XMLRPC_TYPE_I8);
-
-        $bigInt = new Zend_Crypt_Math_BigInteger();
-        $bigInt->init($native);
-
-        foreach ($types as $type) {
-            $value = Zend_XmlRpc_Value::getXmlRpcValue($native, $type);
-            $this->assertSame('i8', $value->getType());
-            $this->assertEquals($bigInt, $value->getValue());
+        $bigIntegerValue = (string)(PHP_INT_MAX + 42);
+        
+        $value = Zend_XmlRpc_Value::getXmlRpcValue(
+            $bigIntegerValue,
+            Zend_XmlRpc_Value::XMLRPC_TYPE_I8
+        );
+        
+        $this->assertEquals(Zend_XmlRpc_Value::XMLRPC_TYPE_I8, $value->getType());
+        $this->assertSame($bigIntegerValue, $value->getValue());
+    }
+    
+    /**
+     * @group ZF-6445
+     */
+    public function testMarschalBigIntegerFromCryptObjectThrowsException()
+    {
+        try {
+            Zend_XmlRpc_Value::getXmlRpcValue(new Zend_Crypt_Math_BigInteger);
+            $this->fail('expected Zend_XmlRpc_Value_Exception has not been thrown');
+        } catch (Zend_XmlRpc_Value_Exception $exception) {
+            if (strpos($exception->getMessage(), 'Zend_Crypt_Math_BigInteger') === false) {
+                $this->fail('caught Zend_XmlRpc_Value_Exception does not contain expected text');
+            }
         }
-
-        $value = Zend_XmlRpc_Value::getXmlRpcValue($bigInt);
-        $this->assertSame('i8', $value->getType());
-        $this->assertEquals($bigInt, $value->getValue());
     }
 
     // Double
