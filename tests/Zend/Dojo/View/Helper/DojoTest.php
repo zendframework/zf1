@@ -902,6 +902,16 @@ function() {
         $this->assertFalse($helper->registerDojoStylesheet());
     }
 
+    public function testJsonExpressionRenders()
+    {
+        $this->helper->addDijit('foo',
+                array('dojoType' => 'dijit.form.TextBox',
+                      'onChange' => new Zend_Json_Expr('function(){alert(\'foo\');}'),
+                      ));
+        $output = $this->helper->dijitsToJson();
+        $this->assertRegexp('#(function\\(\\){alert\\(\'foo\'\\);})#', $output);
+    }
+
     public function setupDojo()
     {
         $this->helper->requireModule('dijit.layout.ContentPane')

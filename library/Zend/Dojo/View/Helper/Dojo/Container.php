@@ -845,7 +845,7 @@ class Zend_Dojo_View_Helper_Dojo_Container
     public function dijitsToJson()
     {
         require_once 'Zend/Json.php';
-        return Zend_Json::encode($this->getDijits());
+        return Zend_Json::encode($this->getDijits(), false, array('enableJsonExprFinder' => true));
     }
 
     /**
