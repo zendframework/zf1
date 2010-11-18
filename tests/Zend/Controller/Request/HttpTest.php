@@ -886,6 +886,70 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
         
         $this->assertSame('', $this->_request->getHeader('X-Foo'));
     }
+    
+    
+    /**
+     * @group ZF-3527
+     */
+    public function testGetRequestUriShouldReturnDecodedUri()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $request->setBaseUrl( '%7Euser' );
+        $this->assertEquals( '~user', $request->getBaseUrl() );
+    }
+
+    /**
+     * @group ZF-3527
+     */
+    public function testPathInfoShouldRespectEncodedBaseUrl()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $request->setBaseUrl( '%7Euser' );
+        $_SERVER['REQUEST_URI'] = '~user/module/controller/action';
+        $pathInfo = $request->getPathInfo();
+
+        $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
+    }
+
+    /**
+     * @group ZF-3527
+     */
+    public function testPathInfoShouldRespectNonEncodedBaseUrl()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $request->setBaseUrl( '~user' );
+        $_SERVER['REQUEST_URI'] = '~user/module/controller/action';
+        $pathInfo = $request->getPathInfo();
+
+        $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
+    }
+
+    /**
+     * @group ZF-3527
+     */
+    public function testPathInfoShouldRespectEncodedRequestUri()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $request->setBaseUrl( '~user' );
+        $_SERVER['REQUEST_URI'] = '%7Euser/module/controller/action';
+        $pathInfo = $request->getPathInfo();
+
+        $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
+    }
+
+    /**
+     * @group ZF-3527
+     */
+    public function testPathInfoShouldRespectNonEncodedRequestUri()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $request->setBaseUrl( '~user' );
+        $_SERVER['REQUEST_URI'] = '~user/module/controller/action';
+        $pathInfo = $request->getPathInfo();
+
+        $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
+    }
+    
 }
 
 // Call Zend_Controller_Request_HttpTest::main() if this source file is executed directly.

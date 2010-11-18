@@ -551,7 +551,7 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
             $this->setBaseUrl();
         }
 
-        return $this->_baseUrl;
+        return urldecode($this->_baseUrl);
     }
 
     /**
@@ -622,6 +622,8 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
             if ($pos = strpos($requestUri, '?')) {
                 $requestUri = substr($requestUri, 0, $pos);
             }
+            
+            $requestUri = urldecode($requestUri);
 
             if (null !== $baseUrl
                 && ((!empty($baseUrl) && 0 === strpos($requestUri, $baseUrl)) 
