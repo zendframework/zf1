@@ -195,5 +195,19 @@ class Zend_Db_Profiler_Query
 
         return $this->_endedMicrotime - $this->_startedMicrotime;
     }
+
+    /**
+     * Get the time (in seconds) when the profiler started running.
+     *
+     * @return bool|float
+     */
+    public function getStartedMicrotime()
+    {
+        if(null === $this->_startedMicrotime) {
+            return false;
+        }
+
+        return $this->_startedMicrotime;
+    }
 }
 

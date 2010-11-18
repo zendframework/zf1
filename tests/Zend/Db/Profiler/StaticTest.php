@@ -496,6 +496,8 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
         $this->assertEquals(count($queries), count($queryProfiles));
 
         foreach ($queryProfiles as $queryId => $queryProfile) {
+            $this->assertNotNull($queryProfile->getStartedMicrotime());
+
             $this->assertTrue(isset($queries[$queryId]));
             $this->assertEquals($queries[$queryId]['sql'], $queryProfile->getQuery());
             $this->assertEquals($queries[$queryId]['typeExpected'], $queryProfile->getQueryType());
