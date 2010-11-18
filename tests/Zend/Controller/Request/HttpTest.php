@@ -435,6 +435,43 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame('', $this->_request->getBaseUrl());
     }
+    
+	/**
+     * Dataprovider for testing prefix paths in the base url
+     * @group ZF-10040
+     */
+    public function prefixProvider()
+    {
+        return array (
+            array (null), 
+            array ('/public'), 
+            array ('/publicite'), 
+            array ('/foo'),
+        );
+    }
+    /**
+     * @dataProvider prefixProvider
+     * @group ZF-10040
+     */
+	public function testBaseUrlSetsProperLocation($prefix)
+	{
+	    $_SERVER['REQUEST_URI']     = $prefix . '/index.php/news/3?var1=val1&var2=val2';
+	    $_SERVER['QUERY_STRING']    = 'var1=val1&var2=val2';
+        $_SERVER['SCRIPT_NAME']     = $prefix . '/index.php';
+        $_SERVER['PHP_SELF']        = $prefix . '/index.php/news/3';
+        $_SERVER['SCRIPT_FILENAME'] = '/var/web/html' . $prefix . '/index.php';
+        $_GET = array(
+            'var1' => 'val1',
+            'var2' => 'val2'
+        );
+		$request = new Zend_Controller_Request_Http();
+		if (null !== $prefix) {
+		    $request->setBasePath($prefix);
+		}
+		$this->assertEquals($prefix, $request->getBasePath());
+		$this->assertEquals($prefix . '/index.php', $request->getBaseUrl());
+		unset ($request);
+	}
 
     /*
      * Tests if an empty string gets returned when no basepath is set on the request.
