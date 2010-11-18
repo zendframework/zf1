@@ -83,6 +83,11 @@ abstract class Zend_Application_Resource_ResourceAbstract implements Zend_Applic
      */
     public function setOptions(array $options)
     {
+        if (array_key_exists('bootstrap', $options)) {
+            $this->setBootstrap($options['bootstrap']);
+            unset($options['bootstrap']);
+        }
+
         foreach ($options as $key => $value) {
             if (in_array(strtolower($key), $this->_skipOptions)) {
                 continue;
@@ -91,9 +96,6 @@ abstract class Zend_Application_Resource_ResourceAbstract implements Zend_Applic
             $method = 'set' . strtolower($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
-            }
-            if ('bootstrap' === $key) {
-                unset($options[$key]);
             }
         }
 
