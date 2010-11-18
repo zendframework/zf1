@@ -891,6 +891,29 @@ class Zend_SessionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-7196
+     * @runInSeparateProcess
+     */
+    public function testUnsettingNamespaceKeyWithoutUnsettingCompleteExpirationData()
+    {
+        $namespace = new Zend_Session_Namespace('DummyNamespace');
+
+        $namespace->foo = 23;
+        $namespace->bar = 42;
+
+        $namespace->setExpirationHops(1);
+
+        $sessionId = session_id();
+
+        session_write_close();
+        exec($this->_script . ' expireAll ' . $sessionId . ' DummyNamespace ZF-7196', $result, $returnValue);
+        session_start();
+
+        $result = $this->sortResult($result);
+        $this->assertSame(';bar === 42', $result);
+    }
+
+    /**
      * test expiration of namespace variables by hops; expect expiration of specified keys in the proper number of hops
      *
      * @return void

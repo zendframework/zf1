@@ -120,7 +120,7 @@ abstract class Zend_Session_Abstract
             unset(self::$_expiringData[$namespace]);
         } else {
             unset($_SESSION[$namespace][$name]);
-            unset(self::$_expiringData[$namespace]);
+            unset(self::$_expiringData[$namespace][$name]);
         }
 
         // if we remove the last value, remove namespace.
