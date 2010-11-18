@@ -53,7 +53,12 @@ abstract class Zend_Uri
      */
     public function __toString()
     {
-        return $this->getUri();
+        try {
+            return $this->getUri();
+        } catch (Exception $e) {
+            trigger_error($e->getMessage(), E_USER_WARNING);
+            return '';
+        }
     }
 
     /**

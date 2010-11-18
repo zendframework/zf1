@@ -134,6 +134,39 @@ class Zend_UriTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that if an exception is thrown when calling the __toString()
+     * method an empty string is returned and a Warning is triggered, instead 
+     * of a Fatal Error being triggered.
+     *
+     * @group ZF-10405
+     */
+    public function testToStringRaisesWarningWhenExceptionCaught()
+    {
+        $uri = Zend_Uri::factory('http://example.com', 'Zend_Uri_ExceptionCausing');
+        
+        set_error_handler(array($this, 'handleErrors'), E_USER_WARNING);
+
+        $text = sprintf('%s', $uri);
+
+        restore_error_handler();
+
+        $this->assertTrue(empty($text));
+        $this->assertTrue(isset($this->error));
+        $this->assertContains('Exception in getUri()', $this->error);
+
+    }
+
+    /**
+     * Error handler for testExceptionThrownInToString()
+     * 
+     * @group ZF-10405
+     */
+    public function handleErrors($errno, $errstr, $errfile = '', $errline = 0, array $errcontext = array())
+    {
+        $this->error = $errstr;
+    }
+
+    /**
      * Tests that an invalid $uri throws an exception and that the
      * message of that exception matches $regex.
      *
@@ -188,6 +221,15 @@ class Zend_Uri_Mock extends Zend_Uri
     protected function __construct($scheme, $schemeSpecific = '') { }
     public function getUri() { }
     public function valid() { }
+}
+class Zend_Uri_ExceptionCausing extends Zend_Uri
+{
+    protected function __construct($scheme, $schemeSpecific = '') { }
+    public function valid() { }
+    public function getUri()
+    {
+        throw new Exception('Exception in getUri()');
+    }
 }
 class Fake_Zend_Uri
 {
