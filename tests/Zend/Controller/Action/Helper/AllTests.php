@@ -69,6 +69,11 @@ class Zend_Controller_Action_Helper_AllTests
         $suite->addTestSuite('Zend_Controller_Action_Helper_UrlTest');
         $suite->addTestSuite('Zend_Controller_Action_Helper_ViewRendererTest');
 
+        if (version_compare(PHP_VERSION, '5.3', '>=')) {
+            require_once 'Zend/Controller/Action/Helper/NamespaceTest.php';
+            $suite->addTestSuite('Zend_Controller_Action_Helper_NamespaceTest');
+        }
+
         return $suite;
     }
 }

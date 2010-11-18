@@ -142,13 +142,15 @@ abstract class Zend_Controller_Action_Helper_Abstract
      */
     public function getName()
     {
-        $full_class_name = get_class($this);
-
-        if (strpos($full_class_name, '_') !== false) {
-            $helper_name = strrchr($full_class_name, '_');
-            return ltrim($helper_name, '_');
+        $fullClassName = get_class($this);
+        if (strpos($fullClassName, '_') !== false) {
+            $helperName = strrchr($fullClassName, '_');
+            return ltrim($helperName, '_');
+        } elseif (strpos($fullClassName, '\\') !== false) {
+            $helperName = strrchr($fullClassName, '\\');
+            return ltrim($helperName, '\\');
         } else {
-            return $full_class_name;
+            return $fullClassName;
         }
     }
 }
