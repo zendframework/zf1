@@ -20,6 +20,7 @@
  * @version    $Id$
  */
 
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Controller/Front.php';
 require_once 'Zend/View/Helper/ServerUrl.php';
@@ -152,5 +153,23 @@ class Zend_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
 
         $url = new Zend_View_Helper_ServerUrl();
         $this->assertEquals('http://example.com', $url->serverUrl(new stdClass()));
+    }
+
+    // ZF-9919
+    public function testServerUrlWithScheme()
+    {
+        $_SERVER['HTTP_SCHEME'] = 'https';
+        $_SERVER['HTTP_HOST'] = 'example.com';
+        $url = new Zend_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com', $url->serverUrl());
+    }
+
+    // ZF-9919
+    public function testServerUrlWithPort()
+    {
+        $_SERVER['SERVER_PORT'] = 443;
+        $_SERVER['HTTP_HOST'] = 'example.com';
+        $url = new Zend_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com', $url->serverUrl());
     }
 }
