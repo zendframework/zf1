@@ -74,7 +74,7 @@ class Zend_View_Helper_Json extends Zend_View_Helper_Abstract
         }
 
         $response = Zend_Controller_Front::getInstance()->getResponse();
-        $response->setHeader('Content-Type', 'application/json');
+        $response->setHeader('Content-Type', 'application/json', true);
         return $data;
     }
 }

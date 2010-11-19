@@ -98,9 +98,12 @@ class Zend_View_Helper_JsonTest extends PHPUnit_Framework_TestCase
         $found = false;
         foreach ($headers as $header) {
             if ('Content-Type' == $header['name']) {
+                if ($found) {
+                    $this->fail('Content-Type header has been set twice.');
+                    return null;
+                }
                 $found = true;
                 $value = $header['value'];
-                break;
             }
         }
         $this->assertTrue($found);
@@ -109,6 +112,16 @@ class Zend_View_Helper_JsonTest extends PHPUnit_Framework_TestCase
 
     public function testJsonHelperSetsResponseHeader()
     {
+        $this->helper->json('foobar');
+        $this->verifyJsonHeader();
+    }
+
+    /**
+     * @group ZF-10675
+     */
+    public function testJsonHelperReplacesContentTypeReponseHeaderIfAlreadySet()
+    {
+        $this->response->setHeader('Content-Type', 'text/html');
         $this->helper->json('foobar');
         $this->verifyJsonHeader();
     }
