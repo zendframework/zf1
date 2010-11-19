@@ -770,6 +770,18 @@ class Zend_Application_Bootstrap_BootstrapAbstractTest extends PHPUnit_Framework
         ));
         $this->assertEquals('baz', $application->getBootstrap()->getOption('FooBar'));
     }
+
+    /**
+     * @group ZF-8751
+     */
+    public function testPathDefaultZendXToPluginsResources()
+    {
+        $application = $this->application
+                            ->getBootstrap()
+                            ->getPluginLoader();
+
+        $this->assertEquals(1, count($application->getPaths('ZendX_Application_Resource_')));
+    }
 }
 
 class Zend_Application_Bootstrap_BootstrapAbstractTest_View
