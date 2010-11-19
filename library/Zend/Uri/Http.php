@@ -522,7 +522,7 @@ class Zend_Uri_Http extends Zend_Uri
     }
 
     /**
-     * Returns the path and filename portion of the URL, or FALSE if none.
+     * Returns the path and filename portion of the URL.
      *
      * @return string
      */
