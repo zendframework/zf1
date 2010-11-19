@@ -384,7 +384,7 @@ abstract class Zend_Barcode_Object_ObjectAbstract
     /**
      * Set factor applying to
      * thinBarWidth - thickBarWidth - barHeight - fontSize
-     * @param integer $value
+     * @param float $value
      * @return Zend_Barcode_Object
      * @throw Zend_Barcode_Object_Exception
      */
