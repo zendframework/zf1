@@ -685,6 +685,39 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('Invalid signature for method "add"', $e->getMessage());
         }
     }
+    
+    /**
+     * @group ZF-8580
+     */
+    public function testCallSelectsCorrectSignatureIfMoreThanOneIsAvailable()
+    {
+        $this->mockIntrospector();
+        
+        $this->mockedIntrospector
+             ->expects($this->exactly(2))
+             ->method('getMethodSignature')
+             ->with('get')
+             ->will($this->returnValue(array(
+                 array('parameters' => array('int')),
+                 array('parameters' => array('array'))
+             )));
+
+          $expectedResult = 'array';
+          $this->setServerResponseTo($expectedResult);
+
+          $this->assertSame(
+              $expectedResult,
+              $this->xmlrpcClient->call('get', array(array(1)))
+          );
+
+          $expectedResult = 'integer';
+          $this->setServerResponseTo($expectedResult);
+
+          $this->assertSame(
+              $expectedResult,
+              $this->xmlrpcClient->call('get', array(1))
+          );
+    }
 
     // Helpers
     public function setServerResponseTo($nativeVars)

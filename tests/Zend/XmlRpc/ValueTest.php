@@ -912,6 +912,83 @@ class Zend_XmlRpc_ValueTest extends PHPUnit_Framework_TestCase
         $xmlRpcValue = new Zend_XmlRpc_Value_String('foo');
         $this->assertSame($xmlRpcValue, Zend_XmlRpc_Value::getXmlRpcValue($xmlRpcValue));
     }
+    
+    public function testGetXmlRpcTypeByValue()
+    {
+        $this->assertSame(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_NIL,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(new Zend_XmlRpc_Value_Nil)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(new DateTime)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(new Zend_Date)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_STRUCT,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(array('foo' => 'bar'))
+        );
+        
+        $object = new stdClass;
+        $object->foo = 'bar';
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_STRUCT,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue($object)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_ARRAY,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(new stdClass)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_ARRAY,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(array(1, 3, 3, 7))
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_INTEGER,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(42)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_DOUBLE,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(13.37)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_BOOLEAN,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(true)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_BOOLEAN,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(false)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_NIL,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue(null)
+        );
+        
+        $this->assertEquals(
+            Zend_XmlRpc_Value::XMLRPC_TYPE_STRING,
+            Zend_XmlRpc_Value::getXmlRpcTypeByValue('Zend Framework')
+        );
+    }
+    
+    public function testGetXmlRpcTypeByValueThrowsExceptionOnInvalidValue()
+    {
+        $this->setExpectedException('Zend_XmlRpc_Value_Exception');
+        Zend_XmlRpc_Value::getXmlRpcTypeByValue(fopen(__FILE__, 'r'));
+    }
 
     // Custom Assertions and Helper Methods
 
