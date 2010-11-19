@@ -129,6 +129,15 @@ class Zend_View_Helper_FormSubmitTest extends PHPUnit_Framework_TestCase
         $test = $this->helper->formSubmit('foo', 'bar');
         $this->assertContains(' />', $test);
     }
+
+    /**
+     * @group ZF-10529
+     */
+    public function testDoesNotOutputEmptyId()
+    {
+        $test = $this->helper->formSubmit('', 'bar');
+        $this->assertNotContains('id=""', $test);
+    }
 }
 
 // Call Zend_View_Helper_FormSubmitTest::main() if this source file is executed directly.
