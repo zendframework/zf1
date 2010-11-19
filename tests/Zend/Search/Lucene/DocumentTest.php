@@ -209,7 +209,7 @@ class Zend_Search_Lucene_DocumentTest extends PHPUnit_Framework_TestCase
 
         $hits = $index->find('ZendFramework');
         $this->assertEquals(count($hits), 1);
-        
+
         unset($index);
         $this->_clearDirectory(dirname(__FILE__) . '/_index/_files');
     }
@@ -318,6 +318,15 @@ class Zend_Search_Lucene_DocumentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($xlsxDocument->getFieldValue('description'), 'This is a test document which can be used to demonstrate something.');
         $this->assertTrue($xlsxDocument->getFieldValue('body') != '');
         $this->assertTrue( strpos($xlsxDocument->getFieldValue('body'), 'ipsum') !== false );
+    }
+
+    /**
+     * @group ZF-10686
+     */
+    public function testLoadHtmlWithAttributesInTagHTML()
+    {
+        $doc = Zend_Search_Lucene_Document_Html::loadHTML('<HTML lang="en_US"><HEAD><TITLE>Page title</TITLE></HEAD><BODY>Document body.</BODY></HTML>');
+        $this->assertEquals('Page title ', $doc->title);
     }
 }
 
