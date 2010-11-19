@@ -120,4 +120,22 @@ class Zend_Filter_StringTrimTest extends PHPUnit_Framework_TestCase
     public function testZF7902()
     {
         $this->assertEquals('/', $this->_filter->filter('/'));
-    }}
+    }
+
+    /**
+     * @group ZF-10691
+     */
+    public function testSetParamCharListToConstructor()
+    {
+        require_once 'Zend/Config.php';
+        $config = new Zend_Config(array('charlist' => '&'));
+        $filter = new Zend_Filter_StringTrim($config);
+        $this->assertEquals('&', $filter->getCharList());
+
+        $filter = new Zend_Filter_StringTrim(array('charlist' => '&'));
+        $this->assertEquals('&', $filter->getCharList());
+
+        $filter = new Zend_Filter_StringTrim('&');
+        $this->assertEquals('&', $filter->getCharList());
+    }
+}
