@@ -123,10 +123,16 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
          * The following loop processes PNG chunks. 4 Byte Longs are packed first give the chunk length
          * followed by the chunk signature, a four byte code. IDAT and IEND are manditory in any PNG.
          */
-        while(($chunkLengthBytes = fread($imageFile, 4)) !== false) {
-            $chunkLengthtmp         = unpack('Ni', $chunkLengthBytes);
-            $chunkLength            = $chunkLengthtmp['i'];
-            $chunkType                      = fread($imageFile, 4);
+        while (!feof($imageFile)) {
+            $chunkLengthBytes = fread($imageFile, 4);
+            if ($chunkLengthBytes === false) {
+                require_once 'Zend/Pdf/Exception.php';
+                throw new Zend_Pdf_Exception('Error ocuured while image file reading.');
+            }
+
+            $chunkLengthtmp = unpack('Ni', $chunkLengthBytes);
+            $chunkLength    = $chunkLengthtmp['i'];
+            $chunkType      = fread($imageFile, 4);
             switch($chunkType) {
                 case 'IDAT': //Image Data
                     /*
