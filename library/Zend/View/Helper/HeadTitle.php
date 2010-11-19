@@ -139,7 +139,7 @@ class Zend_View_Helper_HeadTitle extends Zend_View_Helper_Placeholder_Container_
         return $this;
     }
 
-    /*
+    /**
      * Retrieve translation object
      *
      * If none is currently registered, attempts to pull it from the registry
