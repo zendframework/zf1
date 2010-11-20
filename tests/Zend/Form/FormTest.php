@@ -4388,6 +4388,15 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $html = $form->render($this->getView());
         $this->assertEquals(1, substr_count($html, 'Customer Type'), $html);
     }
+
+    public function testAddElementToDisplayGroupByElementInstance()
+    {
+        $element = new Zend_Form_Element_Text('foo');
+
+        $this->form->addElement($element);
+        $this->form->addDisplayGroup(array($element), 'bar');
+        $this->assertNotNull($this->form->getDisplayGroup('bar')->getElement('foo'));
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
