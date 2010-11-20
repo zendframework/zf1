@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 22745 -->
+<!-- EN-Revision: 23406 -->
 <sect1 id="zend.pdf.drawing">
     <title>描画</title>
 
@@ -206,7 +206,7 @@ public function drawEllipse($x1,
         テキストに対する描画操作も、<acronym>PDF</acronym> のページに対して行われます。
         ベースラインの x 座標および y 座標を指定することで、
         ページ内の任意の場所にテキストを 1 行描画できます。
-        現在のフォントおよびフォントサイズを使用して、描画操作が行われます
+        現在のフォント、フォントサイズおよびページの塗りつぶしの色を使用して、描画操作が行われます
         (詳細は、以下を参照ください)。
         </para>
         <programlisting language="php"><![CDATA[
@@ -231,6 +231,18 @@ $pdfPage->drawText('Hello world!', 72, 720);
 ...
 ]]></programlisting>
         </example>
+
+        <example id="zend.pdf.drawing.text-drawing.example-2">
+            <title>フォントの色を設定</title>
+
+            <programlisting language="php"><![CDATA[
+...
+$pdfPage->setFillColor(Zend_Pdf_Color_Html::color('#990000'))
+        ->drawText('Hello world (in red)!', 72, 720);
+....
+]]></programlisting>
+        </example>
+
         <para>
         デフォルトでは、現在のロケールのエンコーディングによって
         テキストの文字列が解釈されます。異なるエンコーディングを使用している場合
@@ -241,7 +253,7 @@ $pdfPage->drawText('Hello world!', 72, 720);
         <ulink url="http://www.php.net/manual/ja/function.iconv.php">iconv()</ulink>
         関数がサポートしているエンコーディングなら、すべて入力として使用することが可能です。
         </para>
-        <example id="zend.pdf.drawing.text-drawing.example-2">
+        <example id="zend.pdf.drawing.text-drawing.example-3">
             <title>UTF-8 でエンコードされた文字列をページに描画する</title>
             <programlisting language="php"><![CDATA[
 ...
