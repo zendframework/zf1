@@ -949,6 +949,15 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
     }
+
+    /**
+     * @group ZF-9899
+     */
+    public function testHostNameShouldBeEmpty()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $this->assertEquals('', $request->getHttpHost(), 'HttpHost should be :');
+    }
     
 }
 
