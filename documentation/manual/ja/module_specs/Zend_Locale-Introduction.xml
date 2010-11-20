@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 22743 -->
+<!-- EN-Revision: 22755 -->
 <sect1 id="zend.locale.introduction">
 
     <title>導入</title>
@@ -26,7 +26,7 @@
         システムに明示的なサポートを追加することを言います。
         たとえば言語の翻訳や、各地域の規約 (複数形の扱い、日付、時刻、通貨、名前、
         記号、並び順など) が該当します。
-        <code>L10n</code> と <code>I18n</code> は、お互い補完しあうものです。
+        <emphasis>L10n</emphasis> と <emphasis>I18n</emphasis> は、お互い補完しあうものです。
         Zend Framework では、いくつかのコンポーネントを組み合わせることで
         これらのサポートを提供しています。たとえば <classname>Zend_Locale</classname>、<classname>Zend_Date</classname>、
         <classname>Zend_Measure</classname>、<classname>Zend_Translate</classname>、<classname>Zend_Currency</classname>
@@ -101,11 +101,6 @@
                     について、各地域の標準文字列を取得します。
                 </para>
             </listitem>
-            <listitem>
-                <para>
-                    <code>TODO</code> - Localization of collations
-                </para>
-            </listitem>
         </itemizedlist>
 
     </sect2>
@@ -120,7 +115,7 @@
             通常は暗黙的に特定のロケール (そのアプリケーションの作者のロケール)
             を使用しています。
             クラスや関数が地域化されていることを、ここでは
-            <code>ロケールに対応している</code>ということにします。
+            <emphasis>ロケールに対応している</emphasis>ということにします。
             そのユーザがどの地域にいるのかを、どうやってコードで知るのでしょうか?
         </para>
 
@@ -141,7 +136,7 @@
             地理上の地域 (たとえば自宅あるいは勤務先の属する州など) です。
             Zend Framework が使用するロケール識別文字列は、
             国際的に定義されている言語と地域の略称で、
-            <code>language_REGION</code> という形式です。
+            <emphasis>language_REGION</emphasis> という形式です。
             言語および地域は、どちらも <acronym>ASCII</acronym> 文字列となります。
         </para>
 
@@ -156,10 +151,9 @@
         </note>
 
         <para>
-            アメリカのユーザの言語は <code>英語</code>、そして地域は <code>アメリカ</code>
-            です。そこで、ロケール識別子は "en_US" となります。
-            ドイツのユーザの言語は <code>ドイツ</code>、そして地域は <code>ドイツ</code>
-            です。そこで、ロケール識別子は "de_DE" となります。
+            アメリカのユーザの言語は英語で、地域は <constant>USA</constant> です。
+            そこで、ロケール識別子は "en_US" となります。
+            ドイツのユーザの言語はドイツ語で、地域はドイツです。そこで、ロケール識別子は "de_DE" となります。
             <ulink url="http://unicode.org/cldr/data/diff/supplemental/languages_and_territories.html">
             ロケールおよび地域の組み合わせの定義済みの一覧</ulink>
             を参考に、Zend Framework で使用するロケールを選択しましょう。
@@ -173,7 +167,7 @@ $locale = new Zend_Locale('de_DE'); // ドイツ語 _ ドイツ
         </example>
 
         <para>
-            アメリカに住むドイツ人は、言語は <code>ドイツ語</code> で地域は <code>アメリカ</code>
+            アメリカに住むドイツ人は、言語はドイツ語で地域は <constant>USA</constant>
             としたいかも知れません。しかし、このような非標準の組み合わせは、
             "ロケール" としては直接サポートしていません。
             そのかわりに、もし無効な組み合わせが使用されると、
@@ -209,10 +203,10 @@ $locale = new Zend_Locale('de_DE'); // ドイツ語 _ ドイツ
         <title>正しいロケールの選択</title>
 
         <para>
-            たいていの場合は、<methodname>new Zend_Locale()</methodname>
+            たいていの場合は、<command>new Zend_Locale()</command>
             とすると自動的に正しいロケールを選択します。
             これはユーザのウェブブラウザから送られてきた情報をもとに判断します。
-            しかし、<methodname>new Zend_Locale(Zend_Locale::ENVIRONMENT)</methodname>
+            しかし、<command>new Zend_Locale(Zend_Locale::ENVIRONMENT)</command>
             を使用すると、以下に示すようにホストサーバの環境設定から情報を取得するようになります。
         </para>
 
@@ -292,7 +286,7 @@ $locale3 = new Zend_Locale(Zend_Locale::FRAMEWORK);
             <orderedlist>
                 <listitem>
                     <para>
-                        <code>'browser'</code> - <classname>Zend_Locale</classname>
+                        '<property>browser</property>' - <classname>Zend_Locale</classname>
                         は、ユーザが使用するウェブブラウザが提供する情報を使用します。
                         これは、<acronym>PHP</acronym> のグローバル変数 <constant>$_SERVER['HTTP_ACCEPT_LANGUAGE']</constant>
                         で取得します。
@@ -302,13 +296,13 @@ $locale3 = new Zend_Locale(Zend_Locale::FRAMEWORK);
                         <classname>Zend_Locale</classname> は最初に見つけたロケールを使用します。
                         ブラウザがロケールを指定していなかったり、
                         あるいはコマンドラインからスクリプトを実行したりした場合は、
-                        代わりに自動ロケール <code>'environment'</code>
+                        代わりに自動ロケール '<property>environment</property>'
                         を使用してその結果を返します。
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <code>'environment'</code> - <classname>Zend_Locale</classname> は、
+                        '<property>environment</property>' - <classname>Zend_Locale</classname> は、
                         サーバが提供する情報を使用します。これは、<acronym>PHP</acronym> の内部関数
                         <methodname>setlocale()</methodname> で取得します。
                     </para>
@@ -316,13 +310,13 @@ $locale3 = new Zend_Locale(Zend_Locale::FRAMEWORK);
                         複数のロケールを指定している場合は、
                         <classname>Zend_Locale</classname> は最初に見つけたロケールを使用します。
                         サーバがロケールを指定していない場合は、
-                        代わりに自動ロケール <code>'browser'</code>
+                        代わりに自動ロケール '<property>browser</property>'
                         を使用してその結果を返します。
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <code>'auto'</code> - <classname>Zend_Locale</classname> は、
+                        '<property>auto</property>' - <classname>Zend_Locale</classname> は、
                         可能な限りの方法でロケールを検出しようとします。
                         まず最初にユーザが指定するロケールを探し、
                         それに失敗するとホストのロケールを探します。
@@ -540,7 +534,7 @@ Zend_Locale_Format::setOptions(array('locale' => 'en_US',
             ロケールの標準の定義を使用する場合は、オプション <constant>Zend_Locale_Format::STANDARD</constant>
             を指定します。<property>date_format</property> に <constant>Zend_Locale_Format::STANDARD</constant> を設定すると、
             実際に設定されているロケールの標準定義を使用します。
-            これを number_format に設定すると、このロケールの標準数値書式を使用します。
+            これを <property>number_format</property> に設定すると、このロケールの標準数値書式を使用します。
             また、locale に設定すると、この環境あるいはブラウザの標準のロケールを使用します。
         </para>
 
@@ -571,7 +565,7 @@ Zend_Locale_Format::setOptions(array('locale' => Zend_Locale_Format::STANDARD,
             <classname>Zend_Cache</classname> を使用します。<classname>Zend_Locale</classname>
             を使用している場合は、静的メソッド <methodname>Zend_Locale::setCache($cache)</methodname>
             を使用します。<classname>Zend_Locale_Format</classname> を高速化するには、
-            オプション <code>cache</code> を
+            オプション <property>cache</property> を
             <classname>Zend_Locale_Format::setOptions(array('cache' => $adapter));</classname>
             のように指定します。両方のクラスを使用している場合は <classname>Zend_Locale</classname>
             にのみキャッシュを設定します。そうしないと、
