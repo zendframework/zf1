@@ -582,6 +582,94 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mod/user/index/foo/bar is n!ice', $url);
     }
 
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_edit_with_module_appends_action_after_id()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('module'=>'mod', 'controller'=>'users', 'action'=>'edit', 'id'=>1);
+        $url = $route->assemble($params);
+        $this->assertEquals('mod/users/1/edit', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_edit_without_module_appends_action_after_id()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('controller'=>'users', 'action'=>'edit', 'id'=>1);
+        $url = $route->assemble($params);
+        $this->assertEquals('users/1/edit', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_new_with_module_appends_action()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('module'=>'mod', 'controller'=>'users', 'action'=>'new');
+        $url = $route->assemble($params);
+        $this->assertEquals('mod/users/new', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_new_without_module_appends_action()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('controller'=>'users', 'action'=>'new');
+        $url = $route->assemble($params);
+        $this->assertEquals('users/new', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_random_action_with_module_removes_action()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('module'=>'mod', 'controller'=>'users', 'action'=>'newbar');
+        $url = $route->assemble($params);
+        $this->assertNotEquals('mod/users/newbar', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_random_action_without_module_removes_action()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('controller'=>'users', 'action'=>'newbar');
+        $url = $route->assemble($params);
+        $this->assertNotEquals('users/newbar', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_with_module_honors_index_parameter_with_resource_id_and_extra_parameters()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('module'=>'mod', 'controller'=>'users', 'id' => 1, 'extra'=>'parameter', 'another' => 'parameter', 'index' => true);
+        $url = $route->assemble($params, false, false);
+        $this->assertEquals('mod/users/index/1/extra/parameter/another/parameter', $url);
+    }
+
+    /**
+     * @group ZF-9823
+     */
+    public function test_assemble_without_module_honors_index_parameter_with_resource_id_and_extra_parameters()
+    {
+        $route = new Zend_Rest_Route($this->_front, array(), array());
+        $params = array('controller'=>'users', 'id' => 1, 'extra'=>'parameter', 'another' => 'parameter', 'index' => true);
+        $url = $route->assemble($params, false, false);
+        $this->assertEquals('users/index/1/extra/parameter/another/parameter', $url);
+    }
+
     private function _buildRequest($method, $uri)
     {
         $request = new Zend_Controller_Request_HttpTestCase();
