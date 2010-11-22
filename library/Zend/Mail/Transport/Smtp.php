@@ -204,7 +204,7 @@ class Zend_Mail_Transport_Smtp extends Zend_Mail_Transport_Abstract
         }
 
         // Set sender email address
-        $this->_connection->mail($this->_mail->getFrom());
+        $this->_connection->mail($this->_mail->getReturnPath());
 
         // Set recipient forward paths
         foreach ($this->_mail->getRecipients() as $recipient) {

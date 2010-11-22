@@ -20,6 +20,11 @@
  * @version    $Id$
  */
 
+/** 
+ * Zend_Mail
+ */
+require_once 'Zend/Mail.php';
+
 /**
  * Zend_Mail_Protocol_Smtp
  */
@@ -40,7 +45,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Test helper for configuration when run standalone
  */
-require_once dirname(__FILE__).'/../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../TestHelper.php';
 
 /**
  * @category   Zend
@@ -50,11 +55,9 @@ require_once dirname(__FILE__).'/../../TestHelper.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Mail
  */
-class Zend_Mail_SmtpTest extends PHPUnit_Framework_TestCase
+class Zend_Mail_SmtpOfflineTest extends PHPUnit_Framework_TestCase
 {
     protected $_params;
-    protected $_transport;
-    protected $_connection;
 
     public function setUp()
     {
@@ -65,24 +68,24 @@ class Zend_Mail_SmtpTest extends PHPUnit_Framework_TestCase
                                'auth'     => TESTS_ZEND_MAIL_SMTP_AUTH);
     }
 
-    public function testTransportSetup()
+    /**
+     * @group ZF-8988
+     */
+    public function testReturnPathIsUsedAsMailFrom()
     {
-        try {
-            $this->_transport = new Zend_Mail_Transport_Smtp($this->_params['host'], $this->_params);
-        } catch (Exception $e) {
-            $this->fail('exception raised while creating smtp transport');
-        }
+        $connectionMock = $this->getMock('Zend_Mail_Protocol_Smtp');
+        $connectionMock->expects($this->once())
+                       ->method('mail')
+                       ->with('return@example.com');
 
-        try {
-            $this->_connection = new Zend_Mail_Protocol_Smtp($this->_params['host'], $this->_params['port']);
-            $this->_transport->setConnection($this->_connection);
-        } catch (Exception $e) {
-            $this->fail('exception raised while setting smtp transport connection');
-        }
+        $transport = new Zend_Mail_Transport_Smtp($this->_params['host'], $this->_params);
+        $transport->setConnection($connectionMock);
 
-        $this->_connection = $this->_transport->getConnection();
-        if (!($this->_connection instanceof Zend_Mail_Protocol_Abstract)) {
-            $this->fail('smtp transport connection is not an instance of protocol abstract');
-        }
+        $mail = new Zend_Mail();
+        $mail->setBodyText('This is a test.')
+             ->setFrom('from@example.com', 'from user')
+             ->setReturnPath('return@example.com');
+
+        $mail->send($transport);
     }
 }
