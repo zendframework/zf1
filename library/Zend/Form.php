@@ -354,7 +354,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         }
 
         $forbidden = array(
-            'Options', 'Config', 'PluginLoader', 'SubForms', 'View', 'Translator',
+            'Options', 'Config', 'PluginLoader', 'SubForms', 'Translator',
             'Attrib', 'Default',
         );
 
@@ -366,6 +366,9 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
 
             $method = 'set' . $normalized;
             if (method_exists($this, $method)) {
+                if($normalized == 'View' && !($value instanceof Zend_View_Interface)) {
+                    continue;
+                }
                 $this->$method($value);
             } else {
                 $this->setAttrib($key, $value);
