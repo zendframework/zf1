@@ -34,7 +34,7 @@ require_once 'Zend/Form/Decorator/Fieldset.php';
 require_once 'Zend/Form.php';
 require_once 'Zend/Form/Element.php';
 require_once 'Zend/View.php';
-
+require_once 'Zend/Form/Subform.php';
 /**
  * Test class for Zend_Form_Decorator_Fieldset
  *
@@ -218,6 +218,21 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
         $test = $this->decorator->render('content');
         $this->assertContains('<fieldset', $test, $test);
         $this->assertNotContains('helper="', $test);
+    }
+
+    /**
+     * @group ZF-10679
+     */
+    public function testFieldsetIdOverridesFormId()
+    {
+        $form = new Zend_Form();
+        $form->setName('bar')
+             ->setAttrib('id', 'form-id')
+             ->setView($this->getView());
+        $html = $this->decorator->setElement($form)
+                                ->setOption('id', 'fieldset-id')
+                                ->render('content');
+        $this->assertContains('<fieldset id="fieldset-id"', $html);
     }
 }
 
