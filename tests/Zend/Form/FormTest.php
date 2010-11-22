@@ -4397,6 +4397,26 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->form->addDisplayGroup(array($element), 'bar');
         $this->assertNotNull($this->form->getDisplayGroup('bar')->getElement('foo'));
     }
+
+    /**
+     * @group ZF-10149
+     */
+    public function testIfViewIsSetInTime()
+    {
+        try {
+            $form = new Zend_Form(array('view' => new MyTestView()));
+            $this->assertTrue($form->getView() instanceof MyTestView);
+
+            $form = new Zend_Form(array('view' => new StdClass()));
+            $this->assertNull($form->getView());
+
+            $result = $form->render();
+        }
+        catch (Zend_Form_Exception $e) {
+            $this->fail('Setting a view object using the options array should not throw an exception');
+        }
+        $this->assertNotEquals($result,'');
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
@@ -4437,6 +4457,11 @@ class Zend_Form_FormTest_AddToDisplayGroup extends Zend_Form_FormTest_WithDispla
         $this->addElement($element);
         $this->group1->addElement($element);
     }
+}
+
+class MyTestView extends Zend_View
+{
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Form_FormTest::main') {
