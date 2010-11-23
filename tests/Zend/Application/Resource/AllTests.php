@@ -38,7 +38,9 @@ require_once 'Zend/Application/Resource/MailTest.php';
 require_once 'Zend/Application/Resource/ModulesTest.php';
 require_once 'Zend/Application/Resource/MultidbTest.php';
 require_once 'Zend/Application/Resource/NavigationTest.php';
+require_once 'Zend/Application/Resource/RouterTest.php';
 require_once 'Zend/Application/Resource/SessionTest.php';
+require_once 'Zend/Application/Resource/TranslateTest.php';
 require_once 'Zend/Application/Resource/UseragentTest.php';
 require_once 'Zend/Application/Resource/ViewTest.php';
 
@@ -74,7 +76,9 @@ class Zend_Application_Resource_AllTests
         $suite->addTestSuite('Zend_Application_Resource_ModulesTest');
         $suite->addTestSuite('Zend_Application_Resource_MultidbTest');
         $suite->addTestSuite('Zend_Application_Resource_NavigationTest');
+        $suite->addTestSuite('Zend_Application_Resource_RouterTest');
         $suite->addTestSuite('Zend_Application_Resource_SessionTest');
+        $suite->addTestSuite('Zend_Application_Resource_TranslateTest');
         $suite->addTestSuite('Zend_Application_Resource_UseragentTest');
         $suite->addTestSuite('Zend_Application_Resource_ViewTest');
 
