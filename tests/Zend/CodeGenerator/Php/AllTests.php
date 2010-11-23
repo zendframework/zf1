@@ -35,6 +35,7 @@ require_once 'Zend/CodeGenerator/Php/FileTest.php';
 require_once 'Zend/CodeGenerator/Php/MethodTest.php';
 require_once 'Zend/CodeGenerator/Php/ParameterTest.php';
 require_once 'Zend/CodeGenerator/Php/PropertyTest.php';
+require_once 'Zend/CodeGenerator/Php/Property/DefaultValueTest.php';
 
 /**
  * @category   Zend
@@ -65,6 +66,7 @@ class Zend_CodeGenerator_Php_AllTests
         $suite->addTestSuite('Zend_CodeGenerator_Php_MethodTest');
         $suite->addTestSuite('Zend_CodeGenerator_Php_ParameterTest');
         $suite->addTestSuite('Zend_CodeGenerator_Php_PropertyTest');
+        $suite->addTestSuite('Zend_CodeGenerator_Php_Property_DefaultValueTest');
 
         return $suite;
     }
