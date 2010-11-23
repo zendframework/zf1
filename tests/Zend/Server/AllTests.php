@@ -29,6 +29,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'Zend/Server/DefinitionTest.php';
 require_once 'Zend/Server/Method/DefinitionTest.php';
 require_once 'Zend/Server/Method/CallbackTest.php';
+require_once 'Zend/Server/Method/ParameterTest.php';
 require_once 'Zend/Server/Method/PrototypeTest.php';
 
 require_once 'Zend/Server/ReflectionTest.php';
@@ -62,6 +63,7 @@ class Zend_Server_AllTests
         $suite->addTestSuite('Zend_Server_DefinitionTest');
         $suite->addTestSuite('Zend_Server_Method_DefinitionTest');
         $suite->addTestSuite('Zend_Server_Method_CallbackTest');
+        $suite->addTestSuite('Zend_Server_Method_ParameterTest');
         $suite->addTestSuite('Zend_Server_Method_PrototypeTest');
         $suite->addTestSuite('Zend_Server_ReflectionTest');
         $suite->addTestSuite('Zend_Server_Reflection_ClassTest');
