@@ -277,7 +277,7 @@ class Zend_Http_Cookie
      *
      * @param string $cookieStr
      * @param Zend_Uri_Http|string $refUri Reference URI for default values (domain, path)
-     * @param boolean $encodeValue Weither or not the cookie's value should be
+     * @param boolean $encodeValue Whether or not the cookie's value should be
      *                             passed through urlencode/urldecode
      * @return Zend_Http_Cookie A new Zend_Http_Cookie object or false on failure.
      */

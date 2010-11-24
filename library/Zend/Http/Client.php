@@ -1013,7 +1013,7 @@ class Zend_Http_Client
 
             // Load cookies into cookie jar
             if (isset($this->cookiejar)) {
-                $this->cookiejar->addCookiesFromResponse($response, $uri);
+                $this->cookiejar->addCookiesFromResponse($response, $uri, $this->config['encodecookies']);
             }
 
             // If we got redirected, look for the Location header

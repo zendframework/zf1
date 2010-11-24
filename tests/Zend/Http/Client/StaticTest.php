@@ -291,6 +291,50 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
     {
         $this->_client->setCookieJar('cookiejar');
     }
+    
+    /**
+     * Test that when the encodecookies flag is set to FALSE, cookies captured
+     * from a response by Zend_Http_CookieJar are not encoded
+     * 
+     * @group ZF-1850
+     */
+    public function testCaptureCookiesNoEncodeZF1850()
+    {
+        $cookieName = "cookieWithSpecialChars";
+        $cookieValue = "HID=XXXXXX&UN=XXXXXXX&UID=XXXXX";
+        
+        $adapter = new Zend_Http_Client_Adapter_Test();
+        $adapter->setResponse(
+        	"HTTP/1.0 200 OK\r\n" . 
+            "Content-type: text/plain\r\n" . 
+            "Content-length: 2\r\n" . 
+            "Connection: close\r\n" . 
+            "Set-Cookie: $cookieName=$cookieValue; path=/\r\n" . 
+            "\r\n" . 
+            "OK"
+        );
+        
+        $this->_client->setUri('http://example.example/test');
+        $this->_client->setConfig(array(
+            'adapter'       => $adapter,
+            'encodecookies' => false
+        ));
+        
+        $this->_client->setCookieJar();
+        
+        // First request is expected to set the cookie
+        $this->_client->request();
+        
+        // Next request should contain the cookie
+        $this->_client->request();
+        
+        $request = $this->_client->getLastRequest();
+        if (! preg_match("/^Cookie: $cookieName=([^;]+)/m", $request, $match)) {
+            $this->fail("Could not find cookie in request");
+        }
+        
+        $this->assertEquals($cookieValue, $match[1]);
+    }
 
     /**
      * Configuration Handling
