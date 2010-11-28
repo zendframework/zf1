@@ -224,7 +224,7 @@ class Zend_Soap_ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group ZF-10524
+     * @group ZF-10542
      */
     public function testAllowNumericZeroAsValueForCacheWsdlOption()
     {
@@ -245,7 +245,7 @@ class Zend_Soap_ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group ZF-10524
+     * @group ZF-10542
      */
     public function testAllowNumericZeroAsValueForCompressionOptions()
     {
