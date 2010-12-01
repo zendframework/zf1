@@ -33,6 +33,13 @@ require_once 'Zend/View/Helper/Abstract.php';
 class Zend_View_Helper_UserAgent extends Zend_View_Helper_Abstract
 {
     /**
+     * UserAgent instance
+     * 
+     * @var Zend_Http_UserAgent
+     */
+    protected $_userAgent = null;
+
+    /**
      * Helper method: retrieve or set UserAgent instance
      * 
      * @param  null|Zend_Http_UserAgent $userAgent 
