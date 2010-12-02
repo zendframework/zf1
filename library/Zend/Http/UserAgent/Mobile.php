@@ -224,7 +224,6 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'nec-', 
         'newt', 
         'noki', 
-        'oper', 
         'palm', 
         'pana', 
         'pant', 
