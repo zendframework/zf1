@@ -108,6 +108,23 @@ class Zend_Log_Writer_SyslogTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($instance instanceof Zend_Log_Writer_Syslog);
     }
+
+    /**
+     * @group ZF-10769
+     */
+    public function testPastFacilityViaConstructor()
+    {
+        $writer = new WriterSyslogCustom(array('facility' => LOG_USER));
+        $this->assertEquals(LOG_USER, $writer->getFacility());
+    }
+}
+
+class WriterSyslogCustom extends Zend_Log_Writer_Syslog
+{
+    public function getFacility()
+    {
+        return $this->_facility;
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Log_Writer_SyslogTest::main') {

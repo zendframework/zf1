@@ -103,7 +103,7 @@ class Zend_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
 
         $runInitializeSyslog = true;
         if (isset($params['facility'])) {
-            $this->_facility = $this->setFacility($params['facility']);
+            $this->setFacility($params['facility']);
             $runInitializeSyslog = false;
         }
 
