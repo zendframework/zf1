@@ -327,7 +327,7 @@ class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
 
 
     /**
-     * Issues the RSET command end validates answer
+     * Issues the RSET command and validates answer
      *
      * Can be used to restore a clean smtp communication state when a transaction has been cancelled or commencing a new transaction.
      *
@@ -346,7 +346,7 @@ class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
 
 
     /**
-     * Issues the NOOP command end validates answer
+     * Issues the NOOP command and validates answer
      *
      * Not used by Zend_Mail, could be used to keep a connection alive or check if it is still open.
      *
@@ -360,7 +360,7 @@ class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
 
 
     /**
-     * Issues the VRFY command end validates answer
+     * Issues the VRFY command and validates answer
      *
      * Not used by Zend_Mail.
      *

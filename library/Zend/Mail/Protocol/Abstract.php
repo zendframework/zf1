@@ -277,7 +277,7 @@ abstract class Zend_Mail_Protocol_Abstract
             throw new Zend_Mail_Protocol_Exception($errorStr);
         }
 
-        if (($result = stream_set_timeout($this->_socket, self::TIMEOUT_CONNECTION)) === false) {
+        if (($result = $this->_setStreamTimeout(self::TIMEOUT_CONNECTION)) === false) {
             /**
              * @see Zend_Mail_Protocol_Exception
              */
@@ -357,7 +357,7 @@ abstract class Zend_Mail_Protocol_Abstract
 
         // Adapters may wish to supply per-commend timeouts according to appropriate RFC
         if ($timeout !== null) {
-           stream_set_timeout($this->_socket, $timeout);
+            $this->_setStreamTimeout($timeout);
         }
 
         // Retrieve response
@@ -428,9 +428,20 @@ abstract class Zend_Mail_Protocol_Abstract
              * @see Zend_Mail_Protocol_Exception
              */
             require_once 'Zend/Mail/Protocol/Exception.php';
-            throw new Zend_Mail_Protocol_Exception($errMsg);
+            throw new Zend_Mail_Protocol_Exception($errMsg, $cmd);
         }
 
         return $msg;
+    }
+
+    /**
+     * Set stream timeout
+     *
+     * @param integer $timeout
+     * @return boolean
+     */
+    protected function _setStreamTimeout($timeout)
+    {
+       return stream_set_timeout($this->_socket, $timeout);
     }
 }
