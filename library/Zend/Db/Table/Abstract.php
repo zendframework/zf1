@@ -961,7 +961,7 @@ abstract class Zend_Db_Table_Abstract
      * You can elect to return only a part of this information by supplying its key name,
      * otherwise all information is returned as an array.
      *
-     * @param  $key The specific info part to return OPTIONAL
+     * @param  string $key The specific info part to return OPTIONAL
      * @return mixed
      */
     public function info($key = null)
