@@ -38,9 +38,9 @@ class Zend_Http_UserAgent_Feed extends Zend_Http_UserAgent_AbstractDevice
      * @var array
      */
     protected static $_uaSignatures = array(
-        'bloglines', 
-        'everyfeed', 
-        'feedfetcher', 
+        'bloglines',
+        'everyfeed',
+        'feedfetcher',
         'gregarius',
     );
 

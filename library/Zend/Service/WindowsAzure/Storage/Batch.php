@@ -41,42 +41,42 @@ class Zend_Service_WindowsAzure_Storage_Batch
 {	
     /**
      * Storage client the batch is defined on
-     * 
+     *
      * @var Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
      */
     protected $_storageClient = null;
-    
+
     /**
      * For table storage?
-     * 
+     *
      * @var boolean
      */
     protected $_forTableStorage = false;
-    
+
     /**
      * Base URL
-     * 
+     *
      * @var string
      */
     protected $_baseUrl;
-    
+
     /**
      * Pending operations
-     * 
+     *
      * @var unknown_type
      */
     protected $_operations = array();
-    
+
     /**
      * Does the batch contain a single select?
-     * 
+     *
      * @var boolean
      */
     protected $_isSingleSelect = false;
-    
+
     /**
      * Creates a new Zend_Service_WindowsAzure_Storage_Batch
-     * 
+     *
      * @param Zend_Service_WindowsAzure_Storage_BatchStorageAbstract $storageClient Storage client the batch is defined on
      */
     public function __construct(Zend_Service_WindowsAzure_Storage_BatchStorageAbstract $storageClient = null, $baseUrl = '')
@@ -85,7 +85,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
         $this->_baseUrl       = $baseUrl;
         $this->_beginBatch();
     }
-    
+
 	/**
 	 * Get base URL for creating requests
 	 *
@@ -95,17 +95,17 @@ class Zend_Service_WindowsAzure_Storage_Batch
 	{
 		return $this->_baseUrl;
 	}
-    
+
     /**
      * Starts a new batch operation set
-     * 
+     *
      * @throws Zend_Service_WindowsAzure_Exception
      */
     protected function _beginBatch()
     {
         $this->_storageClient->setCurrentBatch($this);
     }
-    
+
     /**
      * Cleanup current batch
      */
@@ -134,7 +134,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
 	    if ($forTableStorage) {
 	        $this->_forTableStorage = true;
 	    }
-	    
+	
 	    // Set _isSingleSelect
 	    if ($httpVerb == Zend_Http_Client::GET) {
 	        if (count($this->_operations) > 0) {
@@ -142,7 +142,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
 	        }
 	        $this->_isSingleSelect = true;
 	    }
-	    
+	
 	    // Clean path
 		if (strpos($path, '/') !== 0) {
 			$path = '/' . $path;
@@ -152,7 +152,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
 		if ($headers === null) {
 		    $headers = array();
 		}
-		    
+		
 		// URL encoding
 		$path           = Zend_Service_WindowsAzure_Storage::urlencode($path);
 		$queryString    = Zend_Service_WindowsAzure_Storage::urlencode($queryString);
@@ -164,7 +164,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
 		if ($rawData === null) {
 		    $rawData = '';
 		}
-		    
+		
 		// Add headers
 		if ($httpVerb != Zend_Http_Client::GET) {
     		$headers['Content-ID'] = count($this->_operations) + 1;
@@ -173,7 +173,7 @@ class Zend_Service_WindowsAzure_Storage_Batch
     		}
     		$headers['Content-Length'] = strlen($rawData);
 		}
-		    
+		
 		// Generate $operation
 		$operation = '';
 		$operation .= $httpVerb . ' ' . $requestUrl . ' HTTP/1.1' . "\n";
@@ -187,12 +187,12 @@ class Zend_Service_WindowsAzure_Storage_Batch
 		$operation .= $rawData;
 
 		// Store operation
-		$this->_operations[] = $operation;	        
+		$this->_operations[] = $operation;	
 	}
-    
+
     /**
      * Commit current batch
-     * 
+     *
      * @return Zend_Http_Response
      * @throws Zend_Service_WindowsAzure_Exception
      */
@@ -200,23 +200,23 @@ class Zend_Service_WindowsAzure_Storage_Batch
     {
         // Perform batch
         $response = $this->_storageClient->performBatch($this->_operations, $this->_forTableStorage, $this->_isSingleSelect);
-        
+
         // Dispose
         $this->_clean();
-        
+
         // Parse response
         $errors = null;
         preg_match_all('/<message (.*)>(.*)<\/message>/', $response->getBody(), $errors);
-        
+
         // Error?
         if (count($errors[2]) > 0) {
             throw new Zend_Service_WindowsAzure_Exception('An error has occured while committing a batch: ' . $errors[2][0]);
         }
-        
+
         // Return
         return $response;
     }
-    
+
     /**
      * Rollback current batch
      */
@@ -225,20 +225,20 @@ class Zend_Service_WindowsAzure_Storage_Batch
         // Dispose
         $this->_clean();
     }
-    
+
     /**
      * Get operation count
-     * 
+     *
      * @return integer
      */
     public function getOperationCount()
     {
         return count($this->_operations);
     }
-    
+
     /**
      * Is single select?
-     * 
+     *
      * @return boolean
      */
     public function isSingleSelect()

@@ -20,7 +20,7 @@
  */
 
 require_once 'Zend/Feed/Writer/Feed/FeedAbstract.php';
- 
+
  /**
  * @category   Zend
  * @package    Zend_Feed_Writer

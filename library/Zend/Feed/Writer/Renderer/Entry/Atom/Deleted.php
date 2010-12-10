@@ -36,8 +36,8 @@ class Zend_Feed_Writer_Renderer_Entry_Atom_Deleted
 {
     /**
      * Constructor
-     * 
-     * @param  Zend_Feed_Writer_Deleted $container 
+     *
+     * @param  Zend_Feed_Writer_Deleted $container
      * @return void
      */
     public function __construct (Zend_Feed_Writer_Deleted $container)
@@ -47,7 +47,7 @@ class Zend_Feed_Writer_Renderer_Entry_Atom_Deleted
 
     /**
      * Render atom entry
-     * 
+     *
      * @return Zend_Feed_Writer_Renderer_Entry_Atom
      */
     public function render()
@@ -56,21 +56,21 @@ class Zend_Feed_Writer_Renderer_Entry_Atom_Deleted
         $this->_dom->formatOutput = true;
         $entry = $this->_dom->createElement('at:deleted-entry');
         $this->_dom->appendChild($entry);
-        
+
         $entry->setAttribute('ref', $this->_container->getReference());
         $entry->setAttribute('when', $this->_container->getWhen()->get(Zend_Date::ISO_8601));
-        
+
         $this->_setBy($this->_dom, $entry);
         $this->_setComment($this->_dom, $entry);
-        
+
         return $this;
     }
-    
+
     /**
      * Set tombstone comment
-     * 
-     * @param  DOMDocument $dom 
-     * @param  DOMElement $root 
+     *
+     * @param  DOMDocument $dom
+     * @param  DOMElement $root
      * @return void
      */
     protected function _setComment(DOMDocument $dom, DOMElement $root)
@@ -84,12 +84,12 @@ class Zend_Feed_Writer_Renderer_Entry_Atom_Deleted
         $cdata = $dom->createCDATASection($this->getDataContainer()->getComment());
         $c->appendChild($cdata);
     }
-    
+
     /**
-     * Set entry authors 
-     * 
-     * @param  DOMDocument $dom 
-     * @param  DOMElement $root 
+     * Set entry authors
+     *
+     * @param  DOMDocument $dom
+     * @param  DOMElement $root
      * @return void
      */
     protected function _setBy(DOMDocument $dom, DOMElement $root)
@@ -117,5 +117,5 @@ class Zend_Feed_Writer_Renderer_Entry_Atom_Deleted
             $uri->appendChild($text);
         }
     }
-    
+
 }

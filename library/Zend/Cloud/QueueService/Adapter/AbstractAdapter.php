@@ -48,8 +48,8 @@ abstract class Zend_Cloud_QueueService_Adapter_AbstractAdapter
 
     /**
      * Set class to use for message objects
-     * 
-     * @param  string $class 
+     *
+     * @param  string $class
      * @return Zend_Cloud_QueueService_Adapter_AbstractAdapter
      */
     public function setMessageClass($class)
@@ -60,7 +60,7 @@ abstract class Zend_Cloud_QueueService_Adapter_AbstractAdapter
 
     /**
      * Get class to use for message objects
-     * 
+     *
      * @return string
      */
     public function getMessageClass()
@@ -70,8 +70,8 @@ abstract class Zend_Cloud_QueueService_Adapter_AbstractAdapter
 
     /**
      * Set class to use for message collection objects
-     * 
-     * @param  string $class 
+     *
+     * @param  string $class
      * @return Zend_Cloud_QueueService_Adapter_AbstractAdapter
      */
     public function setMessageSetClass($class)
@@ -82,7 +82,7 @@ abstract class Zend_Cloud_QueueService_Adapter_AbstractAdapter
 
     /**
      * Get class to use for message collection objects
-     * 
+     *
      * @return string
      */
     public function getMessageSetClass()

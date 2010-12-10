@@ -55,10 +55,10 @@ class Zend_Barcode
      * @throws Zend_Barcode_Exception
      */
     public static function factory(
-        $barcode, 
-        $renderer = 'image', 
-        $barcodeConfig = array(), 
-        $rendererConfig = array(), 
+        $barcode,
+        $renderer = 'image',
+        $barcodeConfig = array(),
+        $rendererConfig = array(),
         $automaticRenderError = true
     ) {
         /*
@@ -313,9 +313,9 @@ class Zend_Barcode
      * @param array | Zend_Config $rendererConfig
      */
     public static function render(
-        $barcode, 
-        $renderer, 
-        $barcodeConfig = array(), 
+        $barcode,
+        $renderer,
+        $barcodeConfig = array(),
         $rendererConfig = array()
     ) {
         self::factory($barcode, $renderer, $barcodeConfig, $rendererConfig)->render();
@@ -331,9 +331,9 @@ class Zend_Barcode
      * @return mixed
      */
     public static function draw(
-        $barcode, 
-        $renderer, 
-        $barcodeConfig = array(), 
+        $barcode,
+        $renderer,
+        $barcodeConfig = array(),
         $rendererConfig = array()
     ) {
         return self::factory($barcode, $renderer, $barcodeConfig, $rendererConfig)->draw();

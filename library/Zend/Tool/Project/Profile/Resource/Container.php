@@ -50,7 +50,7 @@ class Zend_Tool_Project_Profile_Resource_Container implements RecursiveIterator,
      * @var bool
      */
     protected $_appendable = true;
-    
+
     /**
      * @var array
      */
@@ -253,10 +253,10 @@ class Zend_Tool_Project_Profile_Resource_Container implements RecursiveIterator,
     {
         return (array_key_exists($name, $this->_attributes)) ? $this->_attributes[$name] : null;
     }
-    
+
     /**
      * hasAttribute()
-     * 
+     *
      * @param string $name
      * @return bool
      */

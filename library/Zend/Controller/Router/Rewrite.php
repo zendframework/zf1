@@ -381,7 +381,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
 
         // Find the matching route
         $routeMatched = false;
-        
+
         foreach (array_reverse($this->_routes, true) as $name => $route) {
             // TODO: Should be an interface method. Hack for 1.0 BC
             if (method_exists($route, 'isAbstract') && $route->isAbstract()) {
@@ -458,7 +458,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
             }
         }
 
-        // Use UNION (+) in order to preserve numeric keys 
+        // Use UNION (+) in order to preserve numeric keys
         $params = $userParams + $this->_globalParams;
 
         $route = $this->getRoute($name);

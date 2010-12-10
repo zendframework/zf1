@@ -38,8 +38,8 @@ class Zend_Http_UserAgent_Text extends Zend_Http_UserAgent_AbstractDevice
      * @var array
      */
     protected static $_uaSignatures = array(
-        'lynx', 
-        'retawq', 
+        'lynx',
+        'retawq',
         'w3m',
     );
 

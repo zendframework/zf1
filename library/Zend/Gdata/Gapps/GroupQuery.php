@@ -55,7 +55,7 @@ class Zend_Gdata_Gapps_GroupQuery extends Zend_Gdata_Gapps_Query
      * Create a new instance.
      *
      * @param string $domain (optional) The Google Apps-hosted domain to use
-     *          when constructing query URIs. 
+     *          when constructing query URIs.
      * @param string $groupId (optional) Value for the groupId property.
      * @param string $startGroupName (optional) Value for the
      *          startGroupName property.
@@ -210,15 +210,15 @@ class Zend_Gdata_Gapps_GroupQuery extends Zend_Gdata_Gapps_Query
         $uri  = Zend_Gdata_Gapps::APPS_BASE_FEED_URI;
         $uri .= Zend_Gdata_Gapps::APPS_GROUP_PATH;
         $uri .= '/' . $this->_domain;
-        
+
         if ($this->_groupId !== null) {
             $uri .= '/' . $this->_groupId;
         }
-        
+
         if(array_key_exists('member', $this->_params)) {
             $uri .= '/';
         }
-        
+
         $uri .= $this->getQueryString();
         return $uri;
     }

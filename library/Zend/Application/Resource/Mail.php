@@ -46,7 +46,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
     public function init() {
         return $this->getMail();
     }
-    
+
     /**
      *
      * @return Zend_Mail_Transport_Abstract|null
@@ -56,7 +56,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
         if (null === $this->_transport) {
             $options = $this->getOptions();
             foreach($options as $key => $option) {
-                $options[strtolower($key)] = $option;         
+                $options[strtolower($key)] = $option;
             }
             $this->setOptions($options);
 
@@ -73,14 +73,14 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
                     Zend_Mail::setDefaultTransport($this->_transport);
                 }
             }
-            
+
             $this->_setDefaults('from');
             $this->_setDefaults('replyTo');
         }
 
         return $this->_transport;
     }
-    
+
     protected function _setDefaults($type) {
         $key = strtolower('default' . $type);
         $options = $this->getOptions();
@@ -99,7 +99,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
             }
         }
     }
-    
+
     protected function _setupTransport($options)
     {
     	if(!isset($options['type'])) {
@@ -122,9 +122,9 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
                 }
             }
         }
-        
+
         unset($options['type']);
-        
+
         switch($transportName) {
             case 'Zend_Mail_Transport_Smtp':
                 if(!isset($options['host'])) {
@@ -132,7 +132,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
                         'A host is necessary for smtp transport,'
                         .' but none was given');
                 }
-                
+
                 $transport = new $transportName($options['host'], $options);
                 break;
             case 'Zend_Mail_Transport_Sendmail':

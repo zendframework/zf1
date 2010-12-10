@@ -655,7 +655,7 @@ class Zend_Acl
             }
             unset($rTarget);
         }
-        
+
         // normalize privileges to array
         if (null === $privileges) {
             $privileges = array();
@@ -726,7 +726,7 @@ class Zend_Acl
                                     }
                                     continue;
                                 }
-    
+
                                 if (isset($rules['allPrivileges']['type']) &&
                                     $type === $rules['allPrivileges']['type'])
                                 {
@@ -750,7 +750,7 @@ class Zend_Acl
                          * since null (all resources) was passed to this setRule() call, we need
                          * clean up all the rules for the global allResources, as well as the indivually
                          * set resources (per privilege as well)
-                         */ 
+                         */
                         foreach (array_merge(array(null), $allResources) as $resource) {
                             $rules =& $this->_getRules($resource, $role, true);
                             if (null === $rules) {
@@ -769,7 +769,7 @@ class Zend_Acl
                                     }
                                     continue;
                                 }
-    
+
                                 if (isset($rules['allPrivileges']['type']) && $type === $rules['allPrivileges']['type']) {
                                     unset($rules['allPrivileges']);
                                 }
@@ -1232,6 +1232,6 @@ class Zend_Acl
     {
         return array_keys($this->_resources);
     }
-    
+
 }
-    
+

@@ -81,10 +81,10 @@ class Zend_Log_Writer_Stream extends Zend_Log_Writer_Abstract
 
         $this->_formatter = new Zend_Log_Formatter_Simple();
     }
-    
+
     /**
      * Create a new instance of Zend_Log_Writer_Mock
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Mock
      * @throws Zend_Log_Exception
@@ -93,18 +93,18 @@ class Zend_Log_Writer_Stream extends Zend_Log_Writer_Abstract
     {
         $config = self::_parseConfig($config);
         $config = array_merge(array(
-            'stream' => null, 
+            'stream' => null,
             'mode'   => null,
         ), $config);
 
-        $streamOrUrl = isset($config['url']) ? $config['url'] : $config['stream']; 
-        
+        $streamOrUrl = isset($config['url']) ? $config['url'] : $config['stream'];
+
         return new self(
-            $streamOrUrl, 
+            $streamOrUrl,
             $config['mode']
         );
     }
-    
+
     /**
      * Close the stream resource.
      *

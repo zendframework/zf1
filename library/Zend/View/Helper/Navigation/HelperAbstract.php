@@ -377,7 +377,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
         } else {
             require_once 'Zend/View/Exception.php';
             $e = new Zend_View_Exception(sprintf(
-                '$role must be a string, null, or an instance of ' 
+                '$role must be a string, null, or an instance of '
                 .  'Zend_Acl_Role_Interface; %s given',
                 gettype($role)
             ));

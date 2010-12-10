@@ -66,12 +66,12 @@ class Zend_Log_Writer_Mock extends Zend_Log_Writer_Abstract
 
     /**
      * Create a new instance of Zend_Log_Writer_Mock
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Mock
      * @throws Zend_Log_Exception
      */
-    static public function factory($config) 
+    static public function factory($config)
     {
         return new self();
     }

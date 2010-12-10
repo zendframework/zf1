@@ -124,7 +124,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      *
      * @return Zend_Uri_Http
      */
-    public function getEndpoint() 
+    public function getEndpoint()
     {
     	return $this->_endpoint;
     }
@@ -133,7 +133,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * Get attributes API method
      *
      * @param string $domainName Domain name within database
-     * @param string 
+     * @param string
      */
     public function getAttributes(
         $domainName, $itemName, $attributeName = null
@@ -167,7 +167,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
                 $data = (string)$valueNodes;
             }
             if (isset($attributes[$name])) {
-                $attributes[$name]->addValue($data);    
+                $attributes[$name]->addValue($data);
             } else {
                 $attributes[$name] = new Zend_Service_Amazon_SimpleDb_Attribute($itemName, $name, $data);
             }
@@ -213,13 +213,13 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
 
     /**
      * Add many attributes at once
-     * 
-     * @param  array $items 
-     * @param  string $domainName 
-     * @param  array $replace 
+     *
+     * @param  array $items
+     * @param  string $domainName
+     * @param  array $replace
      * @return void
      */
-    public function batchPutAttributes($items, $domainName, array $replace = array()) 
+    public function batchPutAttributes($items, $domainName, array $replace = array())
     {
 
         $params               = array();
@@ -236,8 +236,8 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
                 foreach($attribute->getValues() as $value) {
                     $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Name'] = $attribute->getName();
                     $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Value'] = $value;
-                    if (isset($replace[$name]) 
-                        && isset($replace[$name][$attribute->getName()]) 
+                    if (isset($replace[$name])
+                        && isset($replace[$name][$attribute->getName()])
                         && $replace[$name][$attribute->getName()]
                     ) {
                         $params['Item.' . $itemIndex . '.Attribute.' . $attributeIndex . '.Replace'] = 'true';
@@ -253,13 +253,13 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
 
     /**
      * Delete attributes
-     * 
-     * @param  string $domainName 
-     * @param  string $itemName 
-     * @param  array $attributes 
+     *
+     * @param  string $domainName
+     * @param  string $itemName
+     * @param  array $attributes
      * @return void
      */
-    public function deleteAttributes($domainName, $itemName, array $attributes = array()) 
+    public function deleteAttributes($domainName, $itemName, array $attributes = array())
     {
         $params               = array();
 	    $params['Action']     = 'DeleteAttributes';
@@ -287,7 +287,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param $nextToken          int
      * @return array              0 or more domain names
      */
-    public function listDomains($maxNumberOfDomains = 100, $nextToken = null) 
+    public function listDomains($maxNumberOfDomains = 100, $nextToken = null)
     {
         $params                       = array();
 	    $params['Action']             = 'ListDomains';
@@ -318,7 +318,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param $domainName string Name of the domain for which metadata will be requested
      * @return array Key/value array of metadatum names and values.
      */
-    public function domainMetadata($domainName) 
+    public function domainMetadata($domainName)
     {
         $params               = array();
 	    $params['Action']     = 'DomainMetadata';
@@ -343,7 +343,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param $domainName	string	Valid domain name of the domain to create
      * @return 				boolean True if successful, false if not
      */
-	public function createDomain($domainName) 
+	public function createDomain($domainName)
 	{
         $params               = array();
 	    $params['Action']     = 'CreateDomain';
@@ -358,7 +358,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param 	$domainName string  Valid domain name of the domain to delete
      * @return 				boolean True if successful, false if not
      */
-	public function deleteDomain($domainName) 
+	public function deleteDomain($domainName)
 	{
 	    $params               = array();
 	    $params['Action']     = 'DeleteDomain';
@@ -374,7 +374,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param  null|string $nextToken
      * @return Zend_Service_Amazon_SimpleDb_Page
      */
-	public function select($selectExpression, $nextToken = null) 
+	public function select($selectExpression, $nextToken = null)
 	{
         $params                     = array();
 	    $params['Action']           = 'Select';
@@ -406,12 +406,12 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
 
         return new Zend_Service_Amazon_SimpleDb_Page($attributes, $nextToken);
     }
-    
+
 	/**
 	 * Quote SDB value
-	 * 
+	 *
 	 * Wraps it in ''
-	 * 
+	 *
 	 * @param string $value
 	 * @return string
 	 */
@@ -420,10 +420,10 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     	// wrap in single quotes and convert each ' inside to ''
     	return "'" . str_replace("'", "''", $value) . "'";
     }
-    
+
 	/**
 	 * Quote SDB column or table name
-	 * 
+	 *
 	 * Wraps it in ``
 	 * @param string $name
 	 * @return string
@@ -435,7 +435,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     	}
     	return "`$name`";
     }
-    
+
    /**
      * Sends a HTTP request to the SimpleDB service using Zend_Http_Client
      *

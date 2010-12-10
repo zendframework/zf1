@@ -178,7 +178,7 @@ class Zend_Application_Resource_Multidb extends Zend_Application_Resource_Resour
 
    /**
      * Set the default metadata cache
-     * 
+     *
      * @param string|Zend_Cache_Core $cache
      * @return Zend_Application_Resource_Multidb
      */

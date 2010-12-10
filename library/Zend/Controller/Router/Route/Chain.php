@@ -77,9 +77,9 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
         $values  = array();
 
         foreach ($this->_routes as $key => $route) {
-            if ($key > 0 
-                && $matchedPath !== null 
-                && $subPath !== '' 
+            if ($key > 0
+                && $matchedPath !== null
+                && $subPath !== ''
                 && $subPath !== false
             ) {
                 $separator = substr($subPath, 0, strlen($this->_separators[$key]));

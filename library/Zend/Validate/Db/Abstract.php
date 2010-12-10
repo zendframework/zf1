@@ -276,7 +276,7 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
 
     /**
      * Sets the select object to be used by the validator
-     * 
+     *
      * @param Zend_Db_Select $select
      * @return Zend_Validate_Db_Abstract
      */

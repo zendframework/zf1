@@ -59,7 +59,7 @@ class Zend_Service_WindowsAzure_Diagnostics_ConfigurationInstance
 
 	/**
 	 * Load configuration XML
-	 * 
+	 *
 	 * @param string $configurationXml Configuration XML
 	 */
 	public function loadXml($configurationXml)
@@ -132,7 +132,7 @@ class Zend_Service_WindowsAzure_Diagnostics_ConfigurationInstance
 	
 	/**
 	 * Create configuration XML
-	 * 
+	 *
 	 * @return string
 	 */
 	public function toXml()

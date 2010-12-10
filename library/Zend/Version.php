@@ -36,7 +36,7 @@ final class Zend_Version
 
     /**
      * The latest stable version Zend Framework available
-     * 
+     *
      * @var string
      */
     protected static $_lastestVersion;
@@ -60,7 +60,7 @@ final class Zend_Version
 
     /**
      * Fetches the version of the latest stable release
-     * 
+     *
      * @link http://framework.zend.com/download/latest
      * @return string
      */
@@ -69,7 +69,7 @@ final class Zend_Version
         if (null === self::$_lastestVersion) {
             self::$_lastestVersion = 'not available';
 
-            $handle = fopen('http://framework.zend.com/api/zf-version', 'r');        
+            $handle = fopen('http://framework.zend.com/api/zf-version', 'r');
             if (false !== $handle) {
                 self::$_lastestVersion = stream_get_contents($handle);
                 fclose($handle);

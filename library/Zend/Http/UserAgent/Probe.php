@@ -38,10 +38,10 @@ class Zend_Http_UserAgent_Probe extends Zend_Http_UserAgent_AbstractDevice
      * @var array
      */
     protected static $_uaSignatures = array(
-        'witbe', 
+        'witbe',
         'netvigie',
     );
-    
+
     /**
      * Comparison of the UserAgent chain and User Agent signatures
      *
@@ -54,7 +54,7 @@ class Zend_Http_UserAgent_Probe extends Zend_Http_UserAgent_AbstractDevice
         return self::_matchAgentAgainstSignatures($userAgent, self::$_uaSignatures);
     }
 
-    
+
     /**
      * Gives the current browser type
      *

@@ -26,7 +26,7 @@
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Application_Resource_UserAgent extends Zend_Application_Resource_ResourceAbstract 
+class Zend_Application_Resource_UserAgent extends Zend_Application_Resource_ResourceAbstract
 {
     /**
      * @var Zend_Http_UserAgent
@@ -35,10 +35,10 @@ class Zend_Application_Resource_UserAgent extends Zend_Application_Resource_Reso
 	
     /**
      * Intialize resource
-     * 
+     *
      * @return Zend_Http_UserAgent
      */
-    public function init() 
+    public function init()
     {
 		$userAgent = $this->getUserAgent();
 
@@ -57,10 +57,10 @@ class Zend_Application_Resource_UserAgent extends Zend_Application_Resource_Reso
 	
     /**
      * Get UserAgent instance
-     * 
+     *
      * @return Zend_Http_UserAgent
      */
-    public function getUserAgent() 
+    public function getUserAgent()
     {
 		if (null === $this->_userAgent) {
 			$options = $this->getOptions();

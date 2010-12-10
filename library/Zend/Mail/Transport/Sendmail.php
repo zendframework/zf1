@@ -74,14 +74,14 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
      */
     public function __construct($parameters = null)
     {
-        if ($parameters instanceof Zend_Config) { 
-            $parameters = $parameters->toArray(); 
+        if ($parameters instanceof Zend_Config) {
+            $parameters = $parameters->toArray();
         }
 
-        if (is_array($parameters)) { 
+        if (is_array($parameters)) {
             $parameters = implode(' ', $parameters);
         }
-        
+
         $this->parameters = $parameters;
     }
 
@@ -109,7 +109,7 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
             if(!is_string($this->parameters)) {
                 /**
                  * @see Zend_Mail_Transport_Exception
-                 * 
+                 *
                  * Exception is thrown here because
                  * $parameters is a public property
                  */

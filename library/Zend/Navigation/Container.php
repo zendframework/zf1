@@ -369,7 +369,7 @@ abstract class Zend_Navigation_Container implements RecursiveIterator, Countable
     public function toArray()
     {
         $pages = array();
-        
+
         $this->_dirtyIndex = true;
         $this->_sort();
         $indexes = array_keys($this->_index);

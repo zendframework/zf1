@@ -54,9 +54,9 @@ class Zend_Exception extends Exception
      * Overloading
      *
      * For PHP < 5.3.0, provides access to the getPrevious() method.
-     * 
-     * @param  string $method 
-     * @param  array $args 
+     *
+     * @param  string $method
+     * @param  array $args
      * @return mixed
      */
     public function __call($method, array $args)
@@ -76,8 +76,8 @@ class Zend_Exception extends Exception
     {
         if (version_compare(PHP_VERSION, '5.3.0', '<')) {
             if (null !== ($e = $this->getPrevious())) {
-                return $e->__toString() 
-                       . "\n\nNext " 
+                return $e->__toString()
+                       . "\n\nNext "
                        . parent::__toString();
             }
         }

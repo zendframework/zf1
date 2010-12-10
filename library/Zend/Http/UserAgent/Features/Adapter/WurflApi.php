@@ -26,7 +26,7 @@ require_once 'Zend/Http/UserAgent/Features/Adapter.php';
 
 /**
  * Features adapter build with the official WURFL PHP API
- * See installation instruction here : http://wurfl.sourceforge.net/nphp/ 
+ * See installation instruction here : http://wurfl.sourceforge.net/nphp/
  * Download : http://sourceforge.net/projects/wurfl/files/WURFL PHP/1.1/wurfl-php-1.1.tar.gz/download
  *
  * @package    Zend_Http
@@ -35,7 +35,7 @@ require_once 'Zend/Http/UserAgent/Features/Adapter.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Http_UserAgent_Features_Adapter_WurflApi
-    implements Zend_Http_UserAgent_Features_Adapter 
+    implements Zend_Http_UserAgent_Features_Adapter
 {
     const DEFAULT_API_VERSION = '1.1';
 
@@ -53,7 +53,7 @@ class Zend_Http_UserAgent_Features_Adapter_WurflApi
         }
 
         $config = $config['wurflapi'];
-        
+
         if (empty($config['wurfl_lib_dir'])) {
             require_once 'Zend/Http/UserAgent/Features/Exception.php';
             throw new Zend_Http_UserAgent_Features_Exception('The "wurfl_lib_dir" parameter is not defined');
@@ -62,11 +62,11 @@ class Zend_Http_UserAgent_Features_Adapter_WurflApi
             require_once 'Zend/Http/UserAgent/Features/Exception.php';
             throw new Zend_Http_UserAgent_Features_Exception('The "wurfl_config_file" parameter is not defined');
         }
-        
+
         if (empty($config['wurfl_api_version'])) {
             $config['wurfl_api_version'] = self::DEFAULT_API_VERSION;
         }
-        
+
         switch ($config['wurfl_api_version']) {
             case '1.0':
                 // Zend_Http_UserAgent::$config['wurfl_config_file'] must be an XML file
@@ -84,14 +84,14 @@ class Zend_Http_UserAgent_Features_Adapter_WurflApi
                                 ->wurflPatch($c['wurfl']['patches'])
                                 ->persistence($c['persistence']['provider'], $c['persistence']['dir']);
                 }
-                
+
                 $wurflManagerFactory = new WURFL_WURFLManagerFactory($wurflConfig);
                 $wurflManager = $wurflManagerFactory->create();
                 break;
             default:
                 require_once 'Zend/Http/UserAgent/Features/Exception.php';
                 throw new Zend_Http_UserAgent_Features_Exception(sprintf(
-                    'Unknown API version "%s"', 
+                    'Unknown API version "%s"',
                     $config['wurfl_api_version']
                 ));
         }

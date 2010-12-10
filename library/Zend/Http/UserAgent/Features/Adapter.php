@@ -20,7 +20,7 @@
  */
 
 /**
- * The interface required by all Zend_Browser_Features Adapter classes to implement. 
+ * The interface required by all Zend_Browser_Features Adapter classes to implement.
  *
  * @category   Zend
  * @package    Zend_Http

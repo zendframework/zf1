@@ -40,15 +40,15 @@ class Zend_Http_UserAgent_Checker extends Zend_Http_UserAgent_Desktop
      */
     protected static $_uaSignatures = array(
         'abilogic',
-        'checklink', 
-        'checker', 
-        'linksmanager', 
-        'mojoo', 
-        'notifixious', 
-        'ploetz', 
-        'zeller', 
-        'sitebar', 
-        'xenu', 
+        'checklink',
+        'checker',
+        'linksmanager',
+        'mojoo',
+        'notifixious',
+        'ploetz',
+        'zeller',
+        'sitebar',
+        'xenu',
         'sleuth',
     );
 

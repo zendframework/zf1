@@ -138,11 +138,11 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
 
     /**
      * The type of page to use when it wasn't set
-     * 
+     *
      * @var string
      */
     protected static $_defaultPageType;
-    
+
     // Initialization:
 
     /**
@@ -191,7 +191,7 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
         } elseif(self::getDefaultPageType()!= null) {
             $type = self::getDefaultPageType();
         }
-        
+
         if(isset($type)) {
             if (is_string($type) && !empty($type)) {
                 switch (strtolower($type)) {
@@ -1119,17 +1119,17 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
     }
-    
+
     public static function setDefaultPageType($type = null) {
         if($type !== null && !is_string($type)) {
             throw new Zend_Navigation_Exception(
                 'Cannot set default page type: type is no string but should be'
             );
         }
-        
+
         self::$_defaultPageType = $type;
     }
-    
+
     public static function getDefaultPageType() {
         return self::$_defaultPageType;
     }

@@ -51,14 +51,14 @@ class Zend_Form_Decorator_DtDdWrapper extends Zend_Form_Decorator_Abstract
      * <dd>$content</dd>
      *
      * $dtLabel can be set via 'dtLabel' option, defaults to '\&#160;'
-     * 
+     *
      * @param  string $content
      * @return string
      */
     public function render($content)
     {
         $elementName = $this->getElement()->getName();
-        
+
         $dtLabel = $this->getOption('dtLabel');
         if( null === $dtLabel ) {
             $dtLabel = '&#160;';

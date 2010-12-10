@@ -30,15 +30,15 @@ class Zend_Cloud_QueueService_Message
 {
     protected $_body;
     protected $_clientMessage;
-    
+
     /**
      * @param string $body Message text
      * @param $message Original message
      */
     function __construct($body, $message)
     {
-        $this->_body = $body;  
-        $this->_clientMessage = $message;      
+        $this->_body = $body;
+        $this->_clientMessage = $message;
     }
 
     /**
@@ -49,7 +49,7 @@ class Zend_Cloud_QueueService_Message
     {
         return $this->_body;
     }
-    
+
     /**
      * Get the original adapter-specific message
      */

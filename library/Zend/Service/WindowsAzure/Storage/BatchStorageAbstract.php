@@ -62,14 +62,14 @@ abstract class Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
 {	
     /**
      * Current batch
-     * 
+     *
      * @var Zend_Service_WindowsAzure_Storage_Batch
      */
     protected $_currentBatch = null;
-    
+
     /**
      * Set current batch
-     * 
+     *
      * @param Zend_Service_WindowsAzure_Storage_Batch $batch Current batch
      * @throws Zend_Service_WindowsAzure_Exception
      */
@@ -80,30 +80,30 @@ abstract class Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
         }
         $this->_currentBatch = $batch;
     }
-    
+
     /**
      * Get current batch
-     * 
+     *
      * @return Zend_Service_WindowsAzure_Storage_Batch
      */
     public function getCurrentBatch()
     {
         return $this->_currentBatch;
     }
-    
+
     /**
      * Is there a current batch?
-     * 
+     *
      * @return boolean
      */
     public function isInBatch()
     {
         return $this->_currentBatch !== null;
     }
-    
+
     /**
      * Starts a new batch operation set
-     * 
+     *
      * @return Zend_Service_WindowsAzure_Storage_Batch
      * @throws Zend_Service_WindowsAzure_Exception
      */
@@ -127,10 +127,10 @@ abstract class Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
 	    // Generate boundaries
 	    $batchBoundary = 'batch_' . md5(time() . microtime());
 	    $changesetBoundary = 'changeset_' . md5(time() . microtime());
-	    
+	
 	    // Set headers
 	    $headers = array();
-	    
+	
 		// Add version header
 		$headers['x-ms-version'] = $this->_apiVersion;
 		
@@ -157,7 +157,7 @@ abstract class Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
 		    $rawData .= '--' . $batchBoundary . "\n";
             $rawData .= 'Content-Type: application/http' . "\n";
             $rawData .= 'Content-Transfer-Encoding: binary' . "\n\n";
-            $rawData .= $operation; 
+            $rawData .= $operation;
             $rawData .= '--' . $batchBoundary . '--';
 		} else {
     		$rawData .= '--' . $batchBoundary . "\n";
@@ -172,7 +172,7 @@ abstract class Zend_Service_WindowsAzure_Storage_BatchStorageAbstract
                 	$rawData .= $operation;
         		}
         		$rawData .= '--' . $changesetBoundary . '--' . "\n";
-    		    		    
+    		    		
     		$rawData .= '--' . $batchBoundary . '--';
 		}
 

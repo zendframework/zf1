@@ -534,8 +534,8 @@ class Zend_Json_Server extends Zend_Server_Abstract
                 $reflection = new ReflectionFunction( $callback->getFunction() );
                 $refParams  = $reflection->getParameters();
             } else {
-                
-                $reflection = new ReflectionMethod( 
+
+                $reflection = new ReflectionMethod(
                     $callback->getClass(),
                     $callback->getMethod()
                 );
@@ -549,9 +549,9 @@ class Zend_Json_Server extends Zend_Server_Abstract
                 } elseif( $refParam->isOptional() ) {
                     $orderedParams[ $refParam->getName() ] = null;
                 } else {
-                    throw new Zend_Server_Exception( 
-                        'Missing required parameter: ' . $refParam->getName() 
-                    ); 
+                    throw new Zend_Server_Exception(
+                        'Missing required parameter: ' . $refParam->getName()
+                    );
                 }
             }
             $params = $orderedParams;

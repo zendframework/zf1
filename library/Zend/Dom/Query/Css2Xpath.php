@@ -121,8 +121,8 @@ class Zend_Dom_Query_Css2Xpath
 
         // Classes
         $expression = preg_replace(
-            '|\.([a-z][a-z0-9_-]*)|i', 
-            "[contains(concat(' ', normalize-space(@class), ' '), ' \$1 ')]", 
+            '|\.([a-z][a-z0-9_-]*)|i',
+            "[contains(concat(' ', normalize-space(@class), ' '), ' \$1 ')]",
             $expression
         );
 
@@ -134,8 +134,8 @@ class Zend_Dom_Query_Css2Xpath
 
     /**
      * Callback for creating equality expressions
-     * 
-     * @param  array $matches 
+     *
+     * @param  array $matches
      * @return string
      */
     protected static function _createEqualityExpression($matches)
@@ -145,25 +145,25 @@ class Zend_Dom_Query_Css2Xpath
 
     /**
      * Callback for creating expressions to match one or more attribute values
-     * 
-     * @param  array $matches 
+     *
+     * @param  array $matches
      * @return string
      */
     protected static function _normalizeSpaceAttribute($matches)
     {
-        return "[contains(concat(' ', normalize-space(@" . strtolower($matches[1]) . "), ' '), ' " 
+        return "[contains(concat(' ', normalize-space(@" . strtolower($matches[1]) . "), ' '), ' "
              . $matches[2] . " ')]";
     }
 
     /**
      * Callback for creating a strict "contains" expression
-     * 
-     * @param  array $matches 
+     *
+     * @param  array $matches
      * @return string
      */
     protected static function _createContainsExpression($matches)
     {
-        return "[contains(@" . strtolower($matches[1]) . ", '" 
+        return "[contains(@" . strtolower($matches[1]) . ", '"
              . $matches[2] . "')]";
     }
 }

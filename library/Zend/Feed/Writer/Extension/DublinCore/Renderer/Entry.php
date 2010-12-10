@@ -18,12 +18,12 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
- 
+
 /**
  * @see Zend_Feed_Writer_Extension_RendererAbstract
  */
 require_once 'Zend/Feed/Writer/Extension/RendererAbstract.php';
- 
+
 /**
  * @category   Zend
  * @package    Zend_Feed_Writer
@@ -42,10 +42,10 @@ class Zend_Feed_Writer_Extension_DublinCore_Renderer_Entry
      * @var bool
      */
     protected $_called = false;
-    
+
     /**
      * Render entry
-     * 
+     *
      * @return void
      */
     public function render()
@@ -58,23 +58,23 @@ class Zend_Feed_Writer_Extension_DublinCore_Renderer_Entry
             $this->_appendNamespaces();
         }
     }
-    
+
     /**
      * Append namespaces to entry
-     * 
+     *
      * @return void
      */
     protected function _appendNamespaces()
     {
         $this->getRootElement()->setAttribute('xmlns:dc',
-            'http://purl.org/dc/elements/1.1/');  
+            'http://purl.org/dc/elements/1.1/');
     }
 
     /**
      * Set entry author elements
-     * 
-     * @param  DOMDocument $dom 
-     * @param  DOMElement $root 
+     *
+     * @param  DOMDocument $dom
+     * @param  DOMElement $root
      * @return void
      */
     protected function _setAuthors(DOMDocument $dom, DOMElement $root)
@@ -88,7 +88,7 @@ class Zend_Feed_Writer_Extension_DublinCore_Renderer_Entry
             if (array_key_exists('name', $data)) {
                 $text = $dom->createTextNode($data['name']);
                 $author->appendChild($text);
-                $root->appendChild($author);   
+                $root->appendChild($author);
             }
         }
         $this->_called = true;

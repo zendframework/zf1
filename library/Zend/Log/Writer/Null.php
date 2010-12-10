@@ -42,10 +42,10 @@ class Zend_Log_Writer_Null extends Zend_Log_Writer_Abstract
     protected function _write($event)
     {
     }
-    
+
     /**
      * Create a new instance of Zend_Log_Writer_Null
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Null
      * @throws Zend_Log_Exception

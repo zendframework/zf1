@@ -272,7 +272,7 @@ class Zend_Pdf_StringParser
             }
 
             $this->offset += strcspn($this->data, $compare, $this->offset);
- 
+
             return substr($this->data, $start, $this->offset - $start);
         }
     }

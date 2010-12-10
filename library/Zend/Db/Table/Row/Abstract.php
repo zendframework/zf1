@@ -646,7 +646,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
     {
         return new ArrayIterator((array) $this->_data);
     }
-    
+
     /**
      * Returns the column/value data as an array.
      *

@@ -44,7 +44,7 @@ require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */ 
+ */
 class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
     extends Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 {
@@ -118,7 +118,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
 		    $requestDate = gmdate('D, d M Y H:i:s', time()) . ' GMT'; // RFC 1123
 		}
 
-		// Create string to sign   
+		// Create string to sign
 		$stringToSign   = array();
     	$stringToSign[] = $requestDate; // Date
     	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
@@ -135,7 +135,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
 	
 	/**
 	 * Prepare query string for signing
-	 * 
+	 *
 	 * @param  string $value Original query string
 	 * @return string        Query string for signing
 	 */
@@ -146,7 +146,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLite
 	        // If not found, no query string needed
 	        return '';
 	    } else {
-	        // If found, make sure it is the only parameter being used      
+	        // If found, make sure it is the only parameter being used
     		if (strlen($value) > 0 && strpos($value, '?') === 0) {
     			$value = substr($value, 1);
     		}

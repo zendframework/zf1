@@ -72,13 +72,13 @@ class Zend_Tool_Framework_Client_Config
 
         $this->_configFilepath = $configFilepath;
         $this->loadConfig($configFilepath);
-        
+
         return $this;
     }
 
     /**
      * Load the configuration from the given path.
-     * 
+     *
      * @param string $configFilepath
      */
     protected function loadConfig($configFilepath)
@@ -108,7 +108,7 @@ class Zend_Tool_Framework_Client_Config
 
     /**
      * Return the filepath of the configuration.
-     * 
+     *
      * @return string
      */
     public function getConfigFilepath()
@@ -118,7 +118,7 @@ class Zend_Tool_Framework_Client_Config
 
     /**
      * Get a configuration value.
-     * 
+     *
      * @param string $name
      * @param string $defaultValue
      * @return mixed

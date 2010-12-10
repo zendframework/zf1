@@ -36,8 +36,8 @@ class Zend_Cloud_QueueService_MessageSet implements Countable, IteratorAggregate
 
     /**
      * Constructor
-     * 
-     * @param  array $messages 
+     *
+     * @param  array $messages
      * @return void
      */
     public function __construct(array $messages)
@@ -48,7 +48,7 @@ class Zend_Cloud_QueueService_MessageSet implements Countable, IteratorAggregate
 
     /**
      * Countable: number of messages in collection
-     * 
+     *
      * @return int
      */
     public function count()
@@ -58,7 +58,7 @@ class Zend_Cloud_QueueService_MessageSet implements Countable, IteratorAggregate
 
     /**
      * IteratorAggregate: return iterable object
-     * 
+     *
      * @return Traversable
      */
     public function getIterator()

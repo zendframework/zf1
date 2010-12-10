@@ -46,9 +46,9 @@ class Zend_Serializer_Adapter_Json extends Zend_Serializer_Adapter_AdapterAbstra
 
     /**
      * Serialize PHP value to JSON
-     * 
-     * @param  mixed $value 
-     * @param  array $opts 
+     *
+     * @param  mixed $value
+     * @param  array $opts
      * @return string
      * @throws Zend_Serializer_Exception on JSON encoding exception
      */
@@ -66,9 +66,9 @@ class Zend_Serializer_Adapter_Json extends Zend_Serializer_Adapter_AdapterAbstra
 
     /**
      * Deserialize JSON to PHP value
-     * 
-     * @param  string $json 
-     * @param  array $opts 
+     *
+     * @param  string $json
+     * @param  array $opts
      * @return mixed
      */
     public function unserialize($json, array $opts = array())

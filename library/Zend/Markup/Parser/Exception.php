@@ -28,7 +28,7 @@ require_once 'Zend/Markup/Exception.php';
 /**
  * Exception class for Zend_Markup_Parser
  *
- * @category   Zend 
+ * @category   Zend
  * @uses       Zend_Markup_Exception
  * @package    Zend_Markup
  * @subpackage Parser

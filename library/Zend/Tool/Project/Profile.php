@@ -48,7 +48,7 @@ class Zend_Tool_Project_Profile extends Zend_Tool_Project_Profile_Resource_Conta
      * @var bool
      */
     protected static $_traverseEnabled = false;
-    
+
     /**
      * Constructor, standard usage would allow the setting of options
      *

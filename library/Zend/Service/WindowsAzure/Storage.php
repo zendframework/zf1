@@ -92,7 +92,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Current API version
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $_apiVersion = '2009-09-19';
@@ -134,42 +134,42 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract instance
-	 * 
+	 *
 	 * @var Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract
 	 */
 	protected $_retryPolicy = null;
 	
 	/**
 	 * Zend_Http_Client channel used for communication with REST services
-	 * 
+	 *
 	 * @var Zend_Http_Client
 	 */
 	protected $_httpClientChannel = null;
 	
 	/**
 	 * Use proxy?
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $_useProxy = false;
 	
 	/**
 	 * Proxy url
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $_proxyUrl = '';
 	
 	/**
 	 * Proxy port
-	 * 
+	 *
 	 * @var int
 	 */
 	protected $_proxyPort = 80;
 	
 	/**
 	 * Proxy credentials
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $_proxyCredentials = '';
@@ -231,7 +231,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Set the HTTP client channel to use
-	 * 
+	 *
 	 * @param Zend_Http_Client_Adapter_Interface|string $adapterInstance Adapter instance or adapter class name.
 	 */
 	public function setHttpClientChannel($adapterInstance = 'Zend_Http_Client_Adapter_Proxy')
@@ -241,7 +241,7 @@ class Zend_Service_WindowsAzure_Storage
 
     /**
      * Retrieve HTTP client channel
-     * 
+     *
      * @return Zend_Http_Client_Adapter_Interface
      */
     public function getHttpClientChannel()
@@ -264,7 +264,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Set proxy
-	 * 
+	 *
 	 * @param boolean $useProxy         Use proxy?
 	 * @param string  $proxyUrl         Proxy URL
 	 * @param int     $proxyPort        Proxy port
@@ -276,7 +276,7 @@ class Zend_Service_WindowsAzure_Storage
 	    $this->_proxyUrl         = $proxyUrl;
 	    $this->_proxyPort        = $proxyPort;
 	    $this->_proxyCredentials = $proxyCredentials;
-	    
+	
 	    if ($this->_useProxy) {
 	    	$credentials = explode(':', $this->_proxyCredentials);
 	    	
@@ -298,7 +298,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Returns the Windows Azure account name
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAccountName()
@@ -322,7 +322,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Set Zend_Service_WindowsAzure_Credentials_CredentialsAbstract instance
-	 * 
+	 *
 	 * @param Zend_Service_WindowsAzure_Credentials_CredentialsAbstract $credentials Zend_Service_WindowsAzure_Credentials_CredentialsAbstract instance to use for request signing.
 	 */
 	public function setCredentials(Zend_Service_WindowsAzure_Credentials_CredentialsAbstract $credentials)
@@ -335,7 +335,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Get Zend_Service_WindowsAzure_Credentials_CredentialsAbstract instance
-	 * 
+	 *
 	 * @return Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	 */
 	public function getCredentials()
@@ -386,7 +386,7 @@ class Zend_Service_WindowsAzure_Storage
 
 		// Add version header
 		$headers['x-ms-version'] = $this->_apiVersion;
-		    
+		
 		// URL encoding
 		$path           = self::urlencode($path);
 		$queryString    = self::urlencode($queryString);
@@ -412,7 +412,7 @@ class Zend_Service_WindowsAzure_Storage
 		return $response;
 	}
 	
-	/** 
+	/**
 	 * Parse result from Zend_Http_Response
 	 *
 	 * @param Zend_Http_Response $response Response from HTTP call
@@ -426,25 +426,25 @@ class Zend_Service_WindowsAzure_Storage
 		}
 		
         $xml = @simplexml_load_string($response->getBody());
-        
+
         if ($xml !== false) {
-            // Fetch all namespaces 
-            $namespaces = array_merge($xml->getNamespaces(true), $xml->getDocNamespaces(true)); 
-            
+            // Fetch all namespaces
+            $namespaces = array_merge($xml->getNamespaces(true), $xml->getDocNamespaces(true));
+
             // Register all namespace prefixes
-            foreach ($namespaces as $prefix => $ns) { 
+            foreach ($namespaces as $prefix => $ns) {
                 if ($prefix != '') {
                     $xml->registerXPathNamespace($prefix, $ns);
-                } 
-            } 
+                }
+            }
         }
-        
+
         return $xml;
 	}
 	
 	/**
 	 * Generate metadata headers
-	 * 
+	 *
 	 * @param array $metadata
 	 * @return HTTP headers containing metadata
 	 */
@@ -473,7 +473,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Parse metadata headers
-	 * 
+	 *
 	 * @param array $headers HTTP headers containing metadata
 	 * @return array
 	 */
@@ -496,7 +496,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Parse metadata XML
-	 * 
+	 *
 	 * @param SimpleXMLElement $parentElement Element containing the Metadata element.
 	 * @return array
 	 */
@@ -512,19 +512,19 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * Generate ISO 8601 compliant date string in UTC time zone
-	 * 
+	 *
 	 * @param int $timestamp
 	 * @return string
 	 */
-	public function isoDate($timestamp = null) 
-	{        
+	public function isoDate($timestamp = null)
+	{
 	    $tz = @date_default_timezone_get();
 	    @date_default_timezone_set('UTC');
-	    
+	
 	    if ($timestamp === null) {
 	        $timestamp = time();
 	    }
-	        
+	
 	    $returnValue = str_replace('+00:00', '.0000000Z', @date('c', $timestamp));
 	    @date_default_timezone_set($tz);
 	    return $returnValue;
@@ -532,7 +532,7 @@ class Zend_Service_WindowsAzure_Storage
 	
 	/**
 	 * URL encode function
-	 * 
+	 *
 	 * @param  string $value Value to encode
 	 * @return string        Encoded value
 	 */
@@ -552,17 +552,17 @@ class Zend_Service_WindowsAzure_Storage
         if (preg_match("/^[a-zA-Z0-9_@][a-zA-Z0-9_]*$/", $metadataName) === 0) {
             return false;
         }
-    
+
         if ($metadataName == '') {
             return false;
         }
 
         return true;
     }
-    
+
     /**
      * Builds a query string from an array of elements
-     * 
+     *
      * @param array     Array of elements
      * @return string   Assembled query string
      */

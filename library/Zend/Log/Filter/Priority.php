@@ -64,16 +64,16 @@ class Zend_Log_Filter_Priority extends Zend_Log_Filter_Abstract
 
     /**
      * Create a new instance of Zend_Log_Filter_Priority
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Filter_Priority
      * @throws Zend_Log_Exception
      */
-    static public function factory($config) 
+    static public function factory($config)
     {
         $config = self::_parseConfig($config);
         $config = array_merge(array(
-            'priority' => null, 
+            'priority' => null,
             'operator' => null,
         ), $config);
 
@@ -83,7 +83,7 @@ class Zend_Log_Filter_Priority extends Zend_Log_Filter_Abstract
         }
 
         return new self(
-            (int) $config['priority'], 
+            (int) $config['priority'],
             $config['operator']
         );
     }

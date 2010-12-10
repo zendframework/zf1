@@ -44,7 +44,7 @@ require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */ 
+ */
 class Zend_Service_WindowsAzure_Credentials_SharedKey
     extends Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 {
@@ -154,7 +154,7 @@ class Zend_Service_WindowsAzure_Credentials_SharedKey
 			}
 		}
 
-		// Create string to sign   
+		// Create string to sign
 		$stringToSign   = array();
 		$stringToSign[] = strtoupper($httpVerb); 									// VERB
     	$stringToSign[] = $this->_issetOr($headers, 'Content-Encoding', '');		// Content-Encoding

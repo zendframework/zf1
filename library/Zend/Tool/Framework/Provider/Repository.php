@@ -163,7 +163,7 @@ class Zend_Tool_Framework_Provider_Repository
         //foreach ($this->_unprocessedProviders as $providerName => $provider) {
         reset($this->_unprocessedProviders);
         while ($this->_unprocessedProviders) {
-            
+
             $providerName = key($this->_unprocessedProviders);
             $provider = array_shift($this->_unprocessedProviders);
 

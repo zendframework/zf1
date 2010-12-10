@@ -31,28 +31,28 @@ require_once 'Zend/Cloud/AbstractFactory.php';
 class Zend_Cloud_StorageService_Factory extends Zend_Cloud_AbstractFactory
 {
     const STORAGE_ADAPTER_KEY = 'storage_adapter';
-    
+
     /**
      * @var string Interface which adapter must implement to be considered valid
      */
     protected static $_adapterInterface = 'Zend_Cloud_StorageService_Adapter';
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     private function __construct()
     {
         // private ctor - should not be used
     }
-    
+
     /**
      * Retrieve StorageService adapter
-     * 
-     * @param  array $options 
+     *
+     * @param  array $options
      * @return void
      */
-    public static function getAdapter($options = array()) 
+    public static function getAdapter($options = array())
     {
         $adapter = parent::_getAdapter(self::STORAGE_ADAPTER_KEY, $options);
         if (!$adapter) {

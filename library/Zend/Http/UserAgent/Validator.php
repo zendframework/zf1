@@ -38,14 +38,14 @@ class Zend_Http_UserAgent_Validator extends Zend_Http_UserAgent_Desktop
      * @var array
      */
     protected static $_uaSignatures = array(
-        'htmlvalidator', 
-        'csscheck', 
-        'cynthia', 
-        'htmlparser', 
-        'validator', 
-        'jfouffa', 
-        'jigsaw', 
-        'w3c_validator', 
+        'htmlvalidator',
+        'csscheck',
+        'cynthia',
+        'htmlparser',
+        'validator',
+        'jfouffa',
+        'jigsaw',
+        'w3c_validator',
         'wdg_validator',
     );
 

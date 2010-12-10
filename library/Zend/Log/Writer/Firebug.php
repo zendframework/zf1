@@ -80,10 +80,10 @@ class Zend_Log_Writer_Firebug extends Zend_Log_Writer_Abstract
 
         $this->_formatter = new Zend_Log_Formatter_Firebug();
     }
-   
+
     /**
      * Create a new instance of Zend_Log_Writer_Firebug
-     * 
+     *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Firebug
      * @throws Zend_Log_Exception

@@ -218,7 +218,7 @@ class Zend_Filter_Compress_Zip extends Zend_Filter_Compress_CompressAbstract
         if (!empty($target) && !is_dir($target)) {
             $target = dirname($target);
         }
-        
+
         if (!empty($target)) {
             $target = rtrim($target, '/\\') . DIRECTORY_SEPARATOR;
         }
@@ -249,8 +249,8 @@ class Zend_Filter_Compress_Zip extends Zend_Filter_Compress_CompressAbstract
                         );
                 }
             }
-        }    
-        
+        }
+
         $res = @$zip->extractTo($target);
         if ($res !== true) {
             require_once 'Zend/Filter/Exception.php';

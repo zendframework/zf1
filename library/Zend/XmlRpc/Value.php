@@ -254,7 +254,7 @@ abstract class Zend_XmlRpc_Value
 
     /**
      * Get XML-RPC type for a PHP native variable
-     * 
+     *
      * @static
      * @param mixed $value
      * @return string
@@ -314,7 +314,7 @@ abstract class Zend_XmlRpc_Value
                 );
             }
         }
-        
+
         switch (self::getXmlRpcTypeByValue($value))
         {
             case self::XMLRPC_TYPE_DATETIME:

@@ -257,7 +257,7 @@ class Zend_OpenId_Provider_Storage_File extends Zend_OpenId_Provider_Storage
             fclose($lock);
             return false;
         }
-        try { 
+        try {
             $f = @fopen($name, 'r');
             if ($f === false) {
                 fclose($lock);

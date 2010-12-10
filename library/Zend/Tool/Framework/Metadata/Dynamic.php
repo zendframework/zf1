@@ -36,7 +36,7 @@ require_once 'Zend/Tool/Framework/Metadata/Attributable.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Tool_Framework_Metadata_Dynamic 
+class Zend_Tool_Framework_Metadata_Dynamic
     implements Zend_Tool_Framework_Metadata_Interface, Zend_Tool_Framework_Metadata_Attributable
 {
 
@@ -66,7 +66,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
             $this->setOptions($options);
         }
     }
-    
+
     public function setOptions(Array $options = array())
     {
         foreach ($options as $optName => $optValue) {
@@ -74,10 +74,10 @@ class Zend_Tool_Framework_Metadata_Dynamic
             $this->{$methodName}($optValue);
         }
     }
-    
+
     /**
      * setType()
-     * 
+     *
      * @param $type
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
@@ -86,7 +86,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
         $this->_type = $type;
         return $this;
     }
-    
+
     /**
      * getType()
      *
@@ -101,7 +101,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
 
     /**
      * setName()
-     * 
+     *
      * @param $name
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
@@ -110,7 +110,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
         $this->_name = $name;
         return $this;
     }
-    
+
     /**
      * getName()
      *
@@ -125,7 +125,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
 
     /**
      * setValue()
-     * 
+     *
      * @param $value
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
@@ -134,7 +134,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
         $this->_value = $value;
         return $this;
     }
-    
+
     /**
      * getValue()
      *

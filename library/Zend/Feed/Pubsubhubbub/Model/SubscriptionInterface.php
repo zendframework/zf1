@@ -29,7 +29,7 @@
  */
 interface Zend_Feed_Pubsubhubbub_Model_SubscriptionInterface
 {
-    
+
     /**
      * Save subscription to RDMBS
      *
@@ -37,23 +37,23 @@ interface Zend_Feed_Pubsubhubbub_Model_SubscriptionInterface
      * @return bool
      */
     public function setSubscription(array $data);
-    
+
     /**
      * Get subscription by ID/key
-     * 
-     * @param  string $key 
+     *
+     * @param  string $key
      * @return array
      */
     public function getSubscription($key);
 
     /**
      * Determine if a subscription matching the key exists
-     * 
-     * @param  string $key 
+     *
+     * @param  string $key
      * @return bool
      */
     public function hasSubscription($key);
-    
+
     /**
      * Delete a subscription
      *
@@ -61,5 +61,5 @@ interface Zend_Feed_Pubsubhubbub_Model_SubscriptionInterface
      * @return bool
      */
     public function deleteSubscription($key);
-    
+
 }

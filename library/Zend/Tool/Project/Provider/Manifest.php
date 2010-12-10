@@ -43,33 +43,33 @@ class Zend_Tool_Project_Provider_Manifest implements
     public function getProviders()
     {
         // the order here will represent what the output will look like when iterating a manifest
-        
+
         return array(
             // top level project & profile providers
             'Zend_Tool_Project_Provider_Profile',
             'Zend_Tool_Project_Provider_Project',
-        
+
             // app layer provider
             'Zend_Tool_Project_Provider_Application',
-        
+
             // MVC layer providers
             'Zend_Tool_Project_Provider_Model',
             'Zend_Tool_Project_Provider_View',
             'Zend_Tool_Project_Provider_Controller',
             'Zend_Tool_Project_Provider_Action',
-            
+
             // hMVC provider
             'Zend_Tool_Project_Provider_Module',
-        
+
             // application problem providers
             'Zend_Tool_Project_Provider_Form',
             'Zend_Tool_Project_Provider_Layout',
             'Zend_Tool_Project_Provider_DbAdapter',
             'Zend_Tool_Project_Provider_DbTable',
-            
+
             // provider within project provider
             'Zend_Tool_Project_Provider_ProjectProvider',
-            
+
         );
     }
 }

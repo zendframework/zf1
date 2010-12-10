@@ -48,7 +48,7 @@ class Zend_Cloud_DocumentService_DocumentSet implements Countable, IteratorAggre
 
     /**
      * Countable: number of documents in set
-     * 
+     *
      * @return int
      */
     public function count()
@@ -58,7 +58,7 @@ class Zend_Cloud_DocumentService_DocumentSet implements Countable, IteratorAggre
 
     /**
      * IteratorAggregate: retrieve iterator
-     * 
+     *
      * @return Traversable
      */
     public function getIterator()

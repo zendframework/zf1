@@ -57,7 +57,7 @@ class Zend_Feed_Pubsubhubbub
      */
     const VERIFICATION_MODE_SYNC  = 'sync';
     const VERIFICATION_MODE_ASYNC = 'async';
-    
+
     /**
      * Subscription States
      */

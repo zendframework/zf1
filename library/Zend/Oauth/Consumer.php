@@ -182,9 +182,9 @@ class Zend_Oauth_Consumer extends Zend_Oauth
      * @throws Zend_Oauth_Exception on invalid authorization token, non-matching response authorization token, or unprovided authorization token
      */
     public function getAccessToken(
-        $queryData, 
+        $queryData,
         Zend_Oauth_Token_Request $token,
-        $httpMethod = null, 
+        $httpMethod = null,
         Zend_Oauth_Http_AccessToken $request = null
     ) {
         $authorizedToken = new Zend_Oauth_Token_AuthorizedRequest($queryData);

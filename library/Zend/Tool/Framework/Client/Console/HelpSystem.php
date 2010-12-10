@@ -271,7 +271,7 @@ class Zend_Tool_Framework_Client_Console_HelpSystem
                     $this->_respondWithProviderName($providerMetadata);
                     $providerNameDisplayed = true;
                 }
-                
+
                 if ($includeAllSpecialties || $isSingleSpecialProviderAction) {
 
                     foreach ($providerSignature->getSpecialties() as $specialtyName) {
@@ -303,7 +303,7 @@ class Zend_Tool_Framework_Client_Console_HelpSystem
 
                     }
                 }
-                
+
                 // reset the special flag for single provider action with specialty
                 $isSingleSpecialProviderAction = false;
 

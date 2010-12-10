@@ -49,7 +49,7 @@ class Zend_Feed_Pubsubhubbub_Subscriber_Callback
      * @var string
      */
     protected $_feedUpdate = null;
-    
+
     /**
      * Holds a manually set subscription key (i.e. identifies a unique
      * subscription) which is typical when it is not passed in the query string
@@ -59,14 +59,14 @@ class Zend_Feed_Pubsubhubbub_Subscriber_Callback
      * @var string
      */
     protected $_subscriptionKey = null;
-    
+
     /**
      * After verification, this is set to the verified subscription's data.
      *
      * @var array
      */
     protected $_currentSubscriptionData = null;
-    
+
     /**
      * Set a subscription key to use for the current callback request manually.
      * Required if usePathParameter is enabled for the Subscriber.
@@ -155,9 +155,9 @@ class Zend_Feed_Pubsubhubbub_Subscriber_Callback
             return false;
         }
         $required = array(
-            'hub_mode', 
+            'hub_mode',
             'hub_topic',
-            'hub_challenge', 
+            'hub_challenge',
             'hub_verify_token',
         );
         foreach ($required as $key) {

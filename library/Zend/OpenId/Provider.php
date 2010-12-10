@@ -778,7 +778,7 @@ class Zend_OpenId_Provider
         }
         return $ret;
     }
-    
+
     /**
      * Securely compare two strings for equality while avoided C level memcmp()
      * optimisations capable of leaking timing information useful to an attacker

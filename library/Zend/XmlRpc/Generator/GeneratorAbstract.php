@@ -47,7 +47,7 @@ abstract class Zend_XmlRpc_Generator_GeneratorAbstract
      * Start XML element
      *
      * Method opens a new XML element with an element name and an optional value
-     * 
+     *
      * @param string $name XML tag name
      * @param string $value Optional value of the XML tag
      * @return Zend_XmlRpc_Generator_Abstract Fluent interface
@@ -86,7 +86,7 @@ abstract class Zend_XmlRpc_Generator_GeneratorAbstract
 
     /**
      * Return encoding
-     * 
+     *
      * @return string
      */
     public function getEncoding()
@@ -143,7 +143,7 @@ abstract class Zend_XmlRpc_Generator_GeneratorAbstract
 
     /**
      * End XML element
-     * 
+     *
      * @param string $name
      */
     abstract protected function _closeElement($name);

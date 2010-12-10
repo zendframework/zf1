@@ -161,8 +161,8 @@ abstract class Zend_Mail_Protocol_Abstract
     }
 
     /**
-     * Set the maximum log size 
-     * 
+     * Set the maximum log size
+     *
      * @param integer $maximumLog Maximum log size
      * @return void
      */
@@ -170,18 +170,18 @@ abstract class Zend_Mail_Protocol_Abstract
     {
         $this->_maximumLog = (int) $maximumLog;
     }
-    
-    
+
+
     /**
-     * Get the maximum log size 
-     * 
+     * Get the maximum log size
+     *
      * @return int the maximum log size
      */
     public function getMaximumLog()
     {
         return $this->_maximumLog;
     }
-    
+
 
     /**
      * Create a connection to the remote host

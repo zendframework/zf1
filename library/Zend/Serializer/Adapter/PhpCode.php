@@ -34,9 +34,9 @@ class Zend_Serializer_Adapter_PhpCode extends Zend_Serializer_Adapter_AdapterAbs
 {
     /**
      * Serialize PHP using var_export
-     * 
-     * @param  mixed $value 
-     * @param  array $opts 
+     *
+     * @param  mixed $value
+     * @param  array $opts
      * @return string
      */
     public function serialize($value, array $opts = array())
@@ -48,9 +48,9 @@ class Zend_Serializer_Adapter_PhpCode extends Zend_Serializer_Adapter_AdapterAbs
      * Deserialize PHP string
      *
      * Warning: this uses eval(), and should likely be avoided.
-     * 
-     * @param  string $code 
-     * @param  array $opts 
+     *
+     * @param  string $code
+     * @param  array $opts
      * @return mixed
      * @throws Zend_Serializer_Exception on eval error
      */

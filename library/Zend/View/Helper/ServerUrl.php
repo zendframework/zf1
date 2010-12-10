@@ -59,7 +59,7 @@ class Zend_View_Helper_ServerUrl
                 $scheme = 'https';
                 break;
             default:
-            $scheme = 'http';   
+            $scheme = 'http';
         }
         $this->setScheme($scheme);
 

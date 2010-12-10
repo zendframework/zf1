@@ -23,7 +23,7 @@ require_once 'Zend/Cloud/AbstractFactory.php';
 
 /**
  * Class implementing working with Azure queries in a structured way
- * 
+ *
  * TODO Look into preventing a query injection attack.
  *
  * @category   Zend
@@ -43,21 +43,21 @@ class Zend_Cloud_DocumentService_Factory extends Zend_Cloud_AbstractFactory
 
     /**
      * Constructor
-     * 
+     *
      * @return void
      */
     private function __construct()
     {
         // private ctor - should not be used
     }
-    
+
     /**
      * Retrieve an adapter instance
-     * 
-     * @param array $options 
+     *
+     * @param array $options
      * @return void
      */
-    public static function getAdapter($options = array()) 
+    public static function getAdapter($options = array())
     {
         $adapter = parent::_getAdapter(self::DOCUMENT_ADAPTER_KEY, $options);
         if (!$adapter) {

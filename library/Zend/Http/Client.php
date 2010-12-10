@@ -911,10 +911,10 @@ class Zend_Http_Client
                 require_once 'Zend/Http/Client/Exception.php';
                 throw new Zend_Http_Client_Exception("Could not open temp file {$this->_stream_name}");
         }
-        
+
         return $fp;
     }
-    
+
     /**
      * Send the HTTP request and return an HTTP response object
      *

@@ -100,7 +100,7 @@ class Zend_Tool_Framework_Manifest_Repository
                 if (is_string($provider)) {
                     $provider = new $provider();
                 }
-                
+
                 if (!$provider instanceof Zend_Tool_Framework_Provider_Interface) {
                     require_once 'Zend/Tool/Framework/Manifest/Exception.php';
                     throw new Zend_Tool_Framework_Manifest_Exception(
@@ -183,7 +183,7 @@ class Zend_Tool_Framework_Manifest_Repository
                         }
                         $metadata = new Zend_Tool_Framework_Metadata_Dynamic($metadata);
                     }
-                    
+
                     if (!$metadata instanceof Zend_Tool_Framework_Metadata_Interface) {
                         require_once 'Zend/Tool/Framework/Manifest/Exception.php';
                         throw new Zend_Tool_Framework_Manifest_Exception(

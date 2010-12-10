@@ -90,8 +90,8 @@ class Zend_Dom_Query
 
     /**
      * Set document encoding
-     * 
-     * @param  string $encoding 
+     *
+     * @param  string $encoding
      * @return Zend_Dom_Query
      */
     public function setEncoding($encoding)
@@ -102,7 +102,7 @@ class Zend_Dom_Query
 
     /**
      * Get document encoding
-     * 
+     *
      * @return null|string
      */
     public function getEncoding()
@@ -205,7 +205,7 @@ class Zend_Dom_Query
 
     /**
      * Get any DOMDocument errors found
-     * 
+     *
      * @return false|array
      */
     public function getDocumentErrors()

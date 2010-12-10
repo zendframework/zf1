@@ -61,7 +61,7 @@ abstract class Zend_Tool_Framework_Client_Abstract implements Zend_Tool_Framewor
 
     public function __construct($options = array())
     {
-        // require autoloader 
+        // require autoloader
         Zend_Loader_Autoloader::getInstance();
 
         // this might look goofy, but this is setting up the
@@ -70,7 +70,7 @@ abstract class Zend_Tool_Framework_Client_Abstract implements Zend_Tool_Framewor
         $registry->setClient($this);
 
         // NOTE: at this moment, $this->_registry should contain the registry object
-        
+
         if ($options) {
             $this->setOptions($options);
         }
@@ -110,7 +110,7 @@ abstract class Zend_Tool_Framework_Client_Abstract implements Zend_Tool_Framewor
 
         $manifest = $this->_registry->getManifestRepository();
         $manifest->addManifest(new Zend_Tool_Framework_Client_Manifest());
-        
+
         // setup the debug log
         if (!$this->_debugLogger instanceof Zend_Log) {
             require_once 'Zend/Log.php';
@@ -177,10 +177,10 @@ abstract class Zend_Tool_Framework_Client_Abstract implements Zend_Tool_Framewor
         $this->_registry = $registry;
         return $this;
     }
-    
+
     /**
      * getRegistry();
-     * 
+     *
      * @return Zend_Tool_Framework_Registry_Interface
      */
     public function getRegistry()
@@ -317,7 +317,7 @@ abstract class Zend_Tool_Framework_Client_Abstract implements Zend_Tool_Framewor
 
         $this->_handleDispatchExecution($provider, $methodName, $callParameters);
     }
-    
+
     protected function _handleDispatchExecution($class, $methodName, $callParameters)
     {
         if (method_exists($class, $methodName)) {

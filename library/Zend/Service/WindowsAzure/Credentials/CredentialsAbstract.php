@@ -34,7 +34,7 @@ require_once 'Zend/Service/WindowsAzure/Credentials/Exception.php';
  * @package    Zend_Service_WindowsAzure
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */ 
+ */
 abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 {
 	/**
@@ -173,7 +173,7 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	
 	/**
 	 * Prepare query string for signing
-	 * 
+	 *
 	 * @param  string $value Original query string
 	 * @return string        Query string for signing
 	 */
@@ -181,13 +181,13 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	{
 	    // Return value
 	    $returnValue = array();
-	    
+	
 	    // Prepare query string
 	    $queryParts = $this->_makeArrayOfQueryString($value);
 	    foreach ($queryParts as $key => $value) {
 	    	$returnValue[] = $key . '=' . $value;
 	    }
-	    
+	
 	    // Return
 	    if (count($returnValue) > 0) {
 	    	return '?' . implode('&', $returnValue);
@@ -198,7 +198,7 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	
 	/**
 	 * Make array of query string
-	 * 
+	 *
 	 * @param  string $value Query string
 	 * @return array         Array of key/value pairs
 	 */
@@ -207,7 +207,7 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 		// Returnvalue
 		$returnValue = array();
 		
-	    // Remove front ?     
+	    // Remove front ?
    		if (strlen($value) > 0 && strpos($value, '?') === 0) {
     		$value = substr($value, 1);
     	}
@@ -231,7 +231,7 @@ abstract class Zend_Service_WindowsAzure_Credentials_CredentialsAbstract
 	
 	/**
 	 * Returns an array value if the key is set, otherwide returns $valueIfNotSet
-	 * 
+	 *
 	 * @param array $array
 	 * @param mixed $key
 	 * @param mixed $valueIfNotSet

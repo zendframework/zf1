@@ -62,7 +62,7 @@ class Zend_Text_MultiByte
                     $cutLength = null;
                 } else {
                     $nextChar = iconv_substr($string, $width, 1, $charset);
-                    
+
                     if ($breakWidth === 1) {
                         $nextBreak = $nextChar;
                     } else {

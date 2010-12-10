@@ -140,7 +140,7 @@ class Zend_Tool_Framework_Client_Manifest
                 if ($specialty == '_Global') {
                     continue;
                 }
-                
+
                 $metadatas[] = new Zend_Tool_Framework_Metadata_Tool(array(
                     'name'            => 'normalizedSpecialtyName',
                     'value'           => $lowerFilter->filter($specialty),
