@@ -406,4 +406,16 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
             }
         }
     }
+
+    /**
+     * Ensure that a trailing "." in a hostname (but not ip) is permitted
+     *
+     * @group ZF-6363
+     */
+    public function testTrailingDot()
+    {
+        $this->assertTrue($this->_validator->isValid('example.com.'));
+        $this->assertFalse($this->_validator->isValid('example.com..'));
+        $this->assertFalse($this->_validator->isValid('1.2.3.4.'));
+    }
 }
