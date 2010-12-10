@@ -82,11 +82,11 @@ class Zend_Service_WindowsAzure_Storage_BlobInstance
      * @param array   $metadata        Key/value pairs of meta data
      */
     public function __construct($containerName, $name, $snapshotId, $etag, $lastModified, $url = '', $size = 0, $contentType = '', $contentEncoding = '', $contentLanguage = '', $cacheControl = '', $blobType = '', $leaseStatus = '', $isPrefix = false, $metadata = array())
-    {	
+    {    
         $this->_data = array(
             'container'        => $containerName,
             'name'             => $name,
-        	'snapshotid'	   => $snapshotId,
+            'snapshotid'       => $snapshotId,
             'etag'             => $etag,
             'lastmodified'     => $lastModified,
             'url'              => $url,

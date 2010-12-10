@@ -376,11 +376,11 @@ class Zend_Db_Statement_Sqlsrv extends Zend_Db_Statement
             require_once 'Zend/Db/Statement/Sqlsrv/Exception.php';
             throw new Zend_Db_Statement_Sqlsrv_Exception(sqlsrv_errors());
         }
-		
-		// reset column keys
-		$this->_keys = null;
+        
+        // reset column keys
+        $this->_keys = null;
 
-		return true;
+        return true;
     }
 
     /**
@@ -411,8 +411,8 @@ class Zend_Db_Statement_Sqlsrv extends Zend_Db_Statement
 
         return $num_rows;
     }
-	
-	/**
+    
+    /**
      * Returns an array containing all of the result set rows.
      *
      * @param int $style OPTIONAL Fetch mode.

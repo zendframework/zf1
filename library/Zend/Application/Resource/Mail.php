@@ -102,10 +102,10 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
 
     protected function _setupTransport($options)
     {
-    	if(!isset($options['type'])) {
-    		$options['type'] = 'sendmail';
-    	}
-    	
+        if(!isset($options['type'])) {
+            $options['type'] = 'sendmail';
+        }
+        
         $transportName = $options['type'];
         if(!Zend_Loader_Autoloader::autoload($transportName))
         {

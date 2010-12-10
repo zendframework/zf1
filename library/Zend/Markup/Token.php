@@ -260,7 +260,7 @@ class Zend_Markup_Token
         return $this->_children;
     }
 
-	/**
+    /**
      * Does this token have any children
      *
      * @return bool

@@ -53,7 +53,7 @@ class Zend_Service_Amazon_SimpleDb_Attribute
         }
     }
 
-	/**
+    /**
      * Return the item name to which the attribute belongs
      *
      * @return string
@@ -63,7 +63,7 @@ class Zend_Service_Amazon_SimpleDb_Attribute
         return $this->_itemName;
     }
 
-	/**
+    /**
      * Retrieve attribute values
      *
      * @return array
@@ -73,7 +73,7 @@ class Zend_Service_Amazon_SimpleDb_Attribute
         return $this->_values;
     }
 
-	/**
+    /**
      * Retrieve the attribute name
      *
      * @return string

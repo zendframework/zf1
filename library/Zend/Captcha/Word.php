@@ -131,7 +131,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
      *
      * @return string
      */
-	public function getSessionClass()
+    public function getSessionClass()
     {
         return $this->_sessionClass;
     }
@@ -217,17 +217,17 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
         return $this->_timeout;
     }
 
-	/**
-	 * Sets if session should be preserved on generate()
-	 *
-	 * @param $keepSession Should session be kept on generate()?
-	 * @return Zend_Captcha_Word
-	 */
-	public function setKeepSession($keepSession)
-	{
-		$this->_keepSession = $keepSession;
-		return $this;
-	}
+    /**
+     * Sets if session should be preserved on generate()
+     *
+     * @param $keepSession Should session be kept on generate()?
+     * @return Zend_Captcha_Word
+     */
+    public function setKeepSession($keepSession)
+    {
+        $this->_keepSession = $keepSession;
+        return $this;
+    }
 
     /**
      * Numbers should be included in the pattern?
@@ -239,9 +239,9 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
         return $this->_useNumbers;
     }
 
-	/**
-	 * Set if numbers should be included in the pattern
-	 *
+    /**
+     * Set if numbers should be included in the pattern
+     *
      * @param $_useNumbers numbers should be included in the pattern?
      * @return Zend_Captcha_Word
      */
@@ -250,8 +250,8 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
         $this->_useNumbers = $_useNumbers;
         return $this;
     }
-	
-	/**
+    
+    /**
      * Get session object
      *
      * @return Zend_Session_Namespace

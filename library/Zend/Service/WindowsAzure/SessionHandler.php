@@ -57,7 +57,7 @@ class Zend_Service_WindowsAzure_SessionHandler
      * @var string
      */
     protected $_sessionTablePartition;
-	
+    
     /**
      * Creates a new Zend_Service_WindowsAzure_SessionHandler instance
      *
@@ -66,20 +66,20 @@ class Zend_Service_WindowsAzure_SessionHandler
      * @param string $sessionTablePartition Session table partition
      */
     public function __construct(Zend_Service_WindowsAzure_Storage_Table $tableStorage, $sessionTable = 'phpsessions', $sessionTablePartition = 'sessions')
-	{
-	    // Set properties
-		$this->_tableStorage = $tableStorage;
-		$this->_sessionTable = $sessionTable;
-		$this->_sessionTablePartition = $sessionTablePartition;
-	}
-	
-	/**
-	 * Registers the current session handler as PHP's session handler
-	 *
-	 * @return boolean
-	 */
-	public function register()
-	{
+    {
+        // Set properties
+        $this->_tableStorage = $tableStorage;
+        $this->_sessionTable = $sessionTable;
+        $this->_sessionTablePartition = $sessionTablePartition;
+    }
+    
+    /**
+     * Registers the current session handler as PHP's session handler
+     *
+     * @return boolean
+     */
+    public function register()
+    {
         return session_set_save_handler(array($this, 'open'),
                                         array($this, 'close'),
                                         array($this, 'read'),
@@ -87,8 +87,8 @@ class Zend_Service_WindowsAzure_SessionHandler
                                         array($this, 'destroy'),
                                         array($this, 'gc')
         );
-	}
-	
+    }
+    
     /**
      * Open the session store
      *
@@ -96,14 +96,14 @@ class Zend_Service_WindowsAzure_SessionHandler
      */
     public function open()
     {
-    	// Make sure table exists
-    	$tableExists = $this->_tableStorage->tableExists($this->_sessionTable);
-    	if (!$tableExists) {
-		    $this->_tableStorage->createTable($this->_sessionTable);
-		}
-		
-		// Ok!
-		return true;
+        // Make sure table exists
+        $tableExists = $this->_tableStorage->tableExists($this->_sessionTable);
+        if (!$tableExists) {
+            $this->_tableStorage->createTable($this->_sessionTable);
+        }
+        
+        // Ok!
+        return true;
     }
 
     /**

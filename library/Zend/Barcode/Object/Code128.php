@@ -48,9 +48,9 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
     protected $_withChecksum = true;
 
     /**
-	 * @var array
-	 */
-	protected $_convertedText = array();
+     * @var array
+     */
+    protected $_convertedText = array();
 
     protected $_codingMap = array(
                  0 => "11011001100",   1 => "11001101100",   2 => "11001100110",
@@ -192,7 +192,7 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
         $characterLength = 11 * $this->_barThinWidth * $this->_factor;
         $convertedChars = count($this->_convertToBarcodeChars($this->getText()));
         if ($this->_withChecksum) {
-        	$convertedChars++;
+            $convertedChars++;
         }
         $encodedData = $convertedChars * $characterLength;
         // ...except the STOP character (13)
@@ -220,7 +220,7 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
         $convertedChars = $this->_convertToBarcodeChars($this->getText());
 
         if ($this->_withChecksum) {
-        	$convertedChars[] = $this->getChecksum($this->getText());
+            $convertedChars[] = $this->getChecksum($this->getText());
         }
 
         // STOP CHARACTER
@@ -245,17 +245,17 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
      */
     protected static function _isDigit($string, $pos, $length = 2)
     {
-	    if ($pos + $length > strlen($string)) {
-	       return false;
-	    }
+        if ($pos + $length > strlen($string)) {
+           return false;
+        }
 
-		for ($i = $pos; $i < $pos + $length; $i++) {
-		      if (!is_numeric($string[$i])) {
-		          return false;
-		      }
-		}
-		return true;
-	}
+        for ($i = $pos; $i < $pos + $length; $i++) {
+              if (!is_numeric($string[$i])) {
+                  return false;
+              }
+        }
+        return true;
+    }
 
     /**
      * Convert string to barcode string
@@ -263,14 +263,14 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
      */
     protected function _convertToBarcodeChars($string)
     {
-    	$string = (string) $string;
-    	if (!strlen($string)) {
-    		return array();
-    	}
+        $string = (string) $string;
+        if (!strlen($string)) {
+            return array();
+        }
 
-    	if (isset($this->_convertedText[md5($string)])) {
-    		return $this->_convertedText[md5($string)];
-    	}
+        if (isset($this->_convertedText[md5($string)])) {
+            return $this->_convertedText[md5($string)];
+        }
 
         $currentCharset = null;
         $sum = 0;
@@ -363,17 +363,17 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
      */
     public function getChecksum($text)
     {
-    	$tableOfChars = $this->_convertToBarcodeChars($text);
+        $tableOfChars = $this->_convertToBarcodeChars($text);
 
-    	$sum = $tableOfChars[0];
-    	unset($tableOfChars[0]);
+        $sum = $tableOfChars[0];
+        unset($tableOfChars[0]);
 
-    	$k = 1;
-    	foreach ($tableOfChars as $char) {
-    		$sum += ($k++) * $char;
-    	}
+        $k = 1;
+        foreach ($tableOfChars as $char) {
+            $sum += ($k++) * $char;
+        }
 
-    	$checksum = $sum % 103;
+        $checksum = $sum % 103;
 
         return $checksum;
     }
@@ -385,7 +385,7 @@ class Zend_Barcode_Object_Code128 extends Zend_Barcode_Object_ObjectAbstract
      */
     protected function _validateText($value, $options = array())
     {
-    	// @TODO: add code128 validator
-    	return true;
+        // @TODO: add code128 validator
+        return true;
     }
 }

@@ -124,17 +124,17 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
         }
     }
 
-	/**
- 	 * Retrieve the array of all configuration options
- 	 *
- 	 * @return array
- 	 */
- 	public function getConfig()
- 	{
- 	    return $this->config;
- 	}
+    /**
+      * Retrieve the array of all configuration options
+      *
+      * @return array
+      */
+     public function getConfig()
+     {
+         return $this->config;
+     }
 
- 	/**
+     /**
      * Set the stream context for the TCP connection to the server
      *
      * Can accept either a pre-existing stream context resource, or an array
@@ -405,7 +405,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                 } while ($chunksize > 0);
             } else {
                 $this->close();
-		require_once 'Zend/Http/Client/Adapter/Exception.php';
+        require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception('Cannot handle "' .
                     $headers['transfer-encoding'] . '" transfer encoding');
             }
