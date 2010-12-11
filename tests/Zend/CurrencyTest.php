@@ -825,4 +825,14 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         $currency = new Zend_Currency(array('value' => 1000, 'locale' => 'de_AT'));
         $this->assertEquals('€ 2.000,00', $currency->toCurrency(null, array('value' => 2000)));
     }
+
+    /**
+     * @group ZF-10751
+     */
+    public function testSetService()
+    {
+        $currency = new Zend_Currency();
+        $currency->setService('Zend_Currency_Service');
+        $this->assertTrue($currency->getService() instanceof Zend_Currency_Service);
+    }
 }

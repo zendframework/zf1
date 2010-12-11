@@ -794,7 +794,7 @@ class Zend_Currency
             if (!class_exists($service)) {
                 $file = str_replace('_', DIRECTORY_SEPARATOR, $service) . '.php';
                 if (Zend_Loader::isReadable($file)) {
-                    Zend_Loader::loadClass($class);
+                    Zend_Loader::loadClass($service);
                 }
             }
 
