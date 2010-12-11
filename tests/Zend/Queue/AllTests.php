@@ -49,6 +49,7 @@ require_once 'Zend/Queue/Stomp/ClientTest.php';
 
 // Message Queues dependent on Stomp
 require_once 'Zend/Queue/Adapter/ActivemqTest.php';
+require_once 'Zend/Queue/Adapter/ActivemqOfflineTest.php';
 
 /**
  * @category   Zend
@@ -94,6 +95,7 @@ class Zend_Queue_AllTests
 
         // Message Queues dependent on Stomp
         $suite->addTestSuite('Zend_Queue_Adapter_ActivemqTest');
+        $suite->addTestSuite('Zend_Queue_Adapter_ActivemqOfflineTest');
 
         return $suite;
     }

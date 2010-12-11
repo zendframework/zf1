@@ -63,13 +63,13 @@ class Zend_Queue_Adapter_ActivemqTest extends Zend_Queue_Adapter_AdapterTest
     {
         $driverOptions = array();
         if (defined('TESTS_ZEND_QUEUE_ACTIVEMQ_HOST')) {
-            $driverOptions['host'] = TESTS_ZEND_QUEUE_APACHEMQ_HOST;
+            $driverOptions['host'] = TESTS_ZEND_QUEUE_ACTIVEMQ_HOST;
         }
         if (defined('TESTS_ZEND_QUEUE_ACTIVEMQ_PORT')) {
-            $driverOptions['port'] = TESTS_ZEND_QUEUE_APACHEMQ_PORT;
+            $driverOptions['port'] = TESTS_ZEND_QUEUE_ACTIVEMQ_PORT;
         }
         if (defined('TESTS_ZEND_QUEUE_ACTIVEMQ_SCHEME')) {
-            $driverOptions['scheme'] = TESTS_ZEND_QUEUE_APACHEMQ_SCHEME;
+            $driverOptions['scheme'] = TESTS_ZEND_QUEUE_ACTIVEMQ_SCHEME;
         }
         return array('driverOptions' => $driverOptions);
     }

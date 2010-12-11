@@ -148,11 +148,21 @@ abstract class Zend_Queue_Adapter_AdapterTest extends PHPUnit_Framework_TestCase
         try {
             $queue = new Zend_Queue($this->getAdapterName(), $config);
         } catch (Zend_Queue_Exception $e) {
-            $this->markTestSkipped();
+            $this->markTestSkipped($e->getMessage());
             restore_error_handler();
             return false;
         }
-        restore_error_handler();
+
+        // a PHP level error occurred, mark test as failed with error as reason
+        // (misconfigured test? undefined constant?)
+        if ($this->error) {
+            $err = error_get_last();
+            $this->markTestFailed($err['message']);
+            restore_error_handler();
+            return false;
+        }
+
+        restore_error_handler();        
 
         return $queue;
     }
