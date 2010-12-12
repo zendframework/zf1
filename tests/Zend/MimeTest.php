@@ -97,6 +97,7 @@ class Zend_MimeTest extends PHPUnit_Framework_TestCase
         $mail->addTo('test@email.com');
 
         // test with generic transport
+        require_once 'Mail/MailTest.php';
         $mock = new Zend_Mail_Transport_Sendmail_Mock();
         $mail->send($mock);
         $body = quoted_printable_decode($mock->body);
