@@ -21,7 +21,7 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Application_Resource_MailTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Zend_Application_Resource_MultidbTest::main');
 }
 
 /**
@@ -249,6 +249,6 @@ class Zend_Application_Resource_MultidbTest extends PHPUnit_Framework_TestCase
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_LogTest::main') {
-    Zend_Application_Resource_LogTest::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_MultidbTest::main') {
+    Zend_Application_Resource_MultidbTest::main();
 }
