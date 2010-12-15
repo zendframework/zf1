@@ -47,6 +47,18 @@ require_once 'Zend/Queue/Adapter/AdapterTest.php';
 class Zend_Queue_Adapter_ActivemqTest extends Zend_Queue_Adapter_AdapterTest
 {
     /**
+     * Test setup
+     */
+    public function setUp()
+    {
+        if (!TESTS_ZEND_QUEUE_ACTIVEMQ_ENABLED) {
+            $this->markTestSkipped('TESTS_ZEND_QUEUE_ACTIVEMQ_ENABLED is not enabled in TestConfiguration.php');
+        }
+        parent::setUp();
+    }
+
+
+    /**
      * getAdapterName() is an method to help make AdapterTest work with any
      * new adapters
      *
