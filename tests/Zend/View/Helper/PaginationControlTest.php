@@ -57,7 +57,6 @@ class Zend_View_Helper_PaginationControlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite = new PHPUnit_Framework_TestSuite("Zend_View_Helper_PaginationControlTest");
         PHPUnit_TextUI_TestRunner::run($suite);

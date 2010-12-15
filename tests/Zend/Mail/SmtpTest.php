@@ -33,11 +33,6 @@ require_once 'Zend/Mail/Transport/Smtp.php';
 
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * Test helper for configuration when run standalone
  */
 require_once dirname(__FILE__).'/../../TestHelper.php';

@@ -48,7 +48,6 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Form_Element_HashTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

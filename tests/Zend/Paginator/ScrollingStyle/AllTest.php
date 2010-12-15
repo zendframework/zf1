@@ -33,7 +33,6 @@ require_once 'Zend/Paginator/ScrollingStyle/All.php';
 /**
  * @see PHPUnit_Framework_TestCase
  */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @category   Zend

@@ -36,11 +36,6 @@ require_once 'Zend/Mail/Storage/Mbox.php';
 require_once 'Zend/Mime/Decode.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage UnitTests

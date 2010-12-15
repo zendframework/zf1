@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 }
 
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Form/Element/Submit.php';
 require_once 'Zend/Form.php';
@@ -54,7 +52,6 @@ class Zend_Form_Element_SubmitTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Form_Element_SubmitTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

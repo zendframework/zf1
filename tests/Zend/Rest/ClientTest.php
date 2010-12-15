@@ -28,9 +28,6 @@ require_once 'Zend/Rest/Client.php';
 /** Zend_Http_Client_Adapter_Test */
 require_once 'Zend/Http/Client/Adapter/Test.php';
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /**
  * Test cases for Zend_Rest_Client
  *

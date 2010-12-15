@@ -39,7 +39,6 @@ require_once 'Zend/Db.php';
 /**
  * PHPUnit_Framework_TestCase
  */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 
 

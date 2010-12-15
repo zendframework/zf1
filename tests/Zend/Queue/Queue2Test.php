@@ -28,9 +28,6 @@
  * an exception.
  */
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /** TestHelp.php */
 require_once dirname(__FILE__) . '/../../TestHelper.php';
 

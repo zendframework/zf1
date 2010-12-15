@@ -43,7 +43,6 @@ require_once 'Zend/Paginator/AdapterAggregate.php';
 /**
  * @see PHPUnit_Framework_TestCase
  */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @see Zend_Config_Xml

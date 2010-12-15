@@ -33,8 +33,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     );
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Controller/Front.php';
 require_once 'Zend/Controller/Action/HelperBroker.php';
@@ -63,7 +61,6 @@ class Zend_Controller_Plugin_BrokerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Plugin_BrokerTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

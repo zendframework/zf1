@@ -25,11 +25,6 @@
  */
 require_once 'Zend/Locale/Data.php';
 
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 
 /**
  * @category   Zend

@@ -22,7 +22,6 @@
 
 require_once 'Zend/Crypt/DiffieHellman.php';
 require_once 'Zend/Crypt/Math/BigInteger.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @category   Zend

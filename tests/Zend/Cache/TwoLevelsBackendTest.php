@@ -32,11 +32,6 @@ require_once 'Zend/Cache/Backend/TwoLevels.php';
 require_once 'CommonExtendedBackendTest.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests

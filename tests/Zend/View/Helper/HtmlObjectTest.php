@@ -54,7 +54,6 @@ class Zend_View_Helper_HtmlObjectTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_View_Helper_HtmlObjectTest");
         PHPUnit_TextUI_TestRunner::run($suite);

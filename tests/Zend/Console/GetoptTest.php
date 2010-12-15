@@ -31,11 +31,6 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
 require_once 'Zend/Console/Getopt.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Console_Getopt
  * @subpackage UnitTests

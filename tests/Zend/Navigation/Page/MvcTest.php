@@ -20,7 +20,6 @@
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Navigation/Page/Mvc.php';
 require_once 'Zend/Controller/Request/Http.php';
 require_once 'Zend/Controller/Router/Route.php';

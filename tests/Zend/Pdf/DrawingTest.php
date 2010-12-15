@@ -45,9 +45,6 @@ require_once 'Zend/Pdf/Image.php';
 require_once 'Zend/Pdf/Font.php';
 
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /**
  * @category   Zend
  * @package    Zend_Pdf

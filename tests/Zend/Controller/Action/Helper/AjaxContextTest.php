@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Controller_Action_Helper_AjaxContextTest::main");
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Controller/Action/Helper/AjaxContext.php';
 
@@ -62,7 +60,6 @@ class Zend_Controller_Action_Helper_AjaxContextTest extends PHPUnit_Framework_Te
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Action_Helper_AjaxContextTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

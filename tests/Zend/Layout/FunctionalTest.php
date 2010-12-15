@@ -47,7 +47,6 @@ class Zend_Layout_FunctionalTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
         $result = PHPUnit_TextUI_TestRunner::run($suite);

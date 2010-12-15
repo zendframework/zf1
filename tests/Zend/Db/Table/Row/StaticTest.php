@@ -20,7 +20,6 @@
  * @version    $Id $
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @see Zend_Db_Table_Row_TestMockRow

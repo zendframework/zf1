@@ -26,11 +26,6 @@
 require_once 'Zend/Serializer/Adapter/Amf0.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Serializer
  * @subpackage UnitTests

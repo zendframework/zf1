@@ -27,11 +27,6 @@
 require_once 'Zend/Measure/Torque.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Measure
  * @subpackage UnitTests

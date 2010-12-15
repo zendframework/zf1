@@ -6,8 +6,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'OauthTest.php';
 require_once 'Oauth/ConsumerTest.php';

@@ -31,11 +31,6 @@ require_once 'Zend/Mail/Storage/Mbox.php';
 require_once 'Zend/Config.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * Maildir class, which uses old message class
  *
  * @category   Zend

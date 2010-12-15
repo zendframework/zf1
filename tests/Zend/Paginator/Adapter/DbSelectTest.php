@@ -34,7 +34,6 @@ require_once 'Zend/Debug.php';
 /**
  * @see PHPUnit_Framework_TestCase
  */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 require_once dirname(__FILE__) . '/../_files/TestTable.php';
 

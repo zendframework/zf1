@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 }
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 /** Zend_View_Helper_Doctype */
 require_once 'Zend/View/Helper/Doctype.php';
@@ -65,7 +63,6 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_View_Helper_DoctypeTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

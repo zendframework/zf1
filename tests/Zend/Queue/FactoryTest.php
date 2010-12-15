@@ -20,9 +20,6 @@
  * @version    $Id$
  */
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /** Zend_Queue */
 require_once 'Zend/Queue.php';
 

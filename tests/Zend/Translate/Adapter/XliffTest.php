@@ -26,11 +26,6 @@
 require_once 'Zend/Translate/Adapter/Xliff.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Translate
  * @subpackage UnitTests

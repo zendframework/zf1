@@ -26,8 +26,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Controller_Action_Helper_NamespaceTest::main');
 }
 
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPUnit/Framework/TestSuite.php';
 
 /**
  * Test class for Zend_Controller_Action_Helper_Abstract.
@@ -50,7 +48,6 @@ class Zend_Controller_Action_Helper_NamespaceTest extends PHPUnit_Framework_Test
      */
     public static function main()
     {
-        require_once 'PHPUnit/TextUI/TestRunner.php';
         $suite  = new PHPUnit_Framework_TestSuite('Zend_Controller_Action_Helper_NamespaceTest');
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }

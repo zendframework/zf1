@@ -35,11 +35,6 @@ require_once 'Zend/Uri.php';
  */
 require_once 'Zend/Uri/Http.php';
 
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 
 /**
  * @category   Zend

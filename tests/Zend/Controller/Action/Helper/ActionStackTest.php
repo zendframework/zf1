@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Controller_Action_Helper_ActionStackTest::main");
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Controller/Action/Helper/ActionStack.php';
 require_once 'Zend/Controller/Front.php';
@@ -66,7 +64,6 @@ class Zend_Controller_Action_Helper_ActionStackTest extends PHPUnit_Framework_Te
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Action_Helper_ActionStackTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

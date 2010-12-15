@@ -22,7 +22,6 @@
 
 require_once 'Zend/Db/Table/TestCommon.php';
 
-require_once 'PHPUnit/Framework/TestCase.php';
 
 
 

@@ -52,7 +52,6 @@ class Zend_Rest_ServerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Rest_ServerTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

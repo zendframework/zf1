@@ -26,11 +26,6 @@
 require_once 'Zend/Measure/Cooking/Volume.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Measure
  * @subpackage UnitTests

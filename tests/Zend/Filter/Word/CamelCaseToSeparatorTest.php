@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Filter_Word_CamelCaseToSeparatorTest::main");
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Filter/Word/CamelCaseToSeparator.php';
 
@@ -50,7 +48,6 @@ class Zend_Filter_Word_CamelCaseToSeparatorTest extends PHPUnit_Framework_TestCa
      * @static
      */
     public static function main() {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Filter_Word_CamelCaseToSeparatorTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

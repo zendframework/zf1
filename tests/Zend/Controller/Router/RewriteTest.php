@@ -50,10 +50,6 @@ require_once 'Zend/Controller/Router/Route/Hostname.php';
 /** Zend_Uri_Http */
 require_once 'Zend/Uri/Http.php';
 
-/** PHPUnit test case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-require_once 'PHPUnit/Runner/Version.php';
 
 /**
  * @category   Zend
@@ -76,7 +72,6 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Router_RewriteTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

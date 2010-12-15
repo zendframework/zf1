@@ -31,11 +31,6 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 require_once 'Zend/Http/Response.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * Zend_Http_Response unit tests
  *
  * @category   Zend

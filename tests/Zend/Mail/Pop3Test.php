@@ -36,11 +36,6 @@ require_once 'Zend/Mail/Protocol/Pop3.php';
 require_once 'Zend/Config.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage UnitTests

@@ -19,8 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id$
  */
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/XmlRpc/Value.php';
 require_once 'Zend/XmlRpc/Value/Scalar.php';

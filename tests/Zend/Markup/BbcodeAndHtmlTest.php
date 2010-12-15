@@ -55,7 +55,6 @@ class Zend_Markup_BbcodeAndHtmlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Markup_MarkupTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

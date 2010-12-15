@@ -41,9 +41,6 @@ require_once 'Zend/Translate.php';
 /** @see Zend_Registry */
 require_once 'Zend/Registry.php';
 
-/** PHPUnit test case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /**
  * @category   Zend
  * @package    Zend_Controller

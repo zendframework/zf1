@@ -20,7 +20,6 @@
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Service/Amazon/Abstract.php';
 
 /**

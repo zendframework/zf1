@@ -51,7 +51,6 @@ class Zend_View_Helper_FormTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_View_Helper_FormTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

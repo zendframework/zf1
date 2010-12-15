@@ -26,11 +26,6 @@
 require_once 'Zend/Mime/Message.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Mime
  * @subpackage UnitTests

@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 }
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/View.php';
 require_once 'Zend/View/Helper/Placeholder.php';

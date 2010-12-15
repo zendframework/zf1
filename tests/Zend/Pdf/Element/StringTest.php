@@ -31,11 +31,6 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 require_once 'Zend/Pdf/Element/String.php';
 
 /**
- * PHPUnit Test Case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Pdf
  * @subpackage UnitTests

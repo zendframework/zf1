@@ -26,8 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Filter_Word_SeparatorToSeparatorTest::main");
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Filter/Word/SeparatorToSeparator.php';
 
@@ -51,7 +49,6 @@ class Zend_Filter_Word_SeparatorToSeparatorTest extends PHPUnit_Framework_TestCa
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Filter_Word_SeparatorToSeparatorTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

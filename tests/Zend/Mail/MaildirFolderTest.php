@@ -30,11 +30,6 @@ require_once 'Zend/Mail/Storage/Folder/Maildir.php';
  */
 require_once 'Zend/Config.php';
 
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 
 /**
  * @category   Zend

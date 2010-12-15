@@ -24,7 +24,6 @@ require_once realpath(dirname(__FILE__) . '/../../../') . '/TestHelper.php';
 
 require_once 'Zend/Http/Client.php';
 require_once 'Zend/Http/Client/Adapter/Test.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * Exercises Zend_Http_Client_Adapter_Test

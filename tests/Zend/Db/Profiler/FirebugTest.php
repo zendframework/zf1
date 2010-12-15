@@ -26,7 +26,6 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /** PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /** Zend_Db */
 require_once 'Zend/Db.php';
@@ -73,7 +72,6 @@ class Zend_Db_Profiler_FirebugTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Db_Profiler_FirebugTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

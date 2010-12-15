@@ -21,8 +21,6 @@
  */
 
 require_once 'Zend/Server/Reflection/Class.php';
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPUnit/Framework/IncompleteTestError.php';
 
 require_once 'Zend/Server/Reflection.php';
 

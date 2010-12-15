@@ -32,8 +32,6 @@ if (!defined("PHPUnit_MAIN_METHOD"))
     );
 }
 
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 require_once 'Zend/Controller/Plugin/ErrorHandler.php';
 require_once 'Zend/Controller/Request/Http.php';
@@ -84,7 +82,6 @@ class Zend_Controller_Plugin_ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
 
         $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Plugin_ErrorHandlerTest");
         $result = PHPUnit_TextUI_TestRunner::run($suite);

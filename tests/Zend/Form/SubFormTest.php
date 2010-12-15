@@ -25,8 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once dirname(__FILE__) . '/../../TestHelper.php';
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
 
 // error_reporting(E_ALL);
 
@@ -46,7 +44,6 @@ class Zend_Form_SubFormTest extends PHPUnit_Framework_TestCase
 {
     public static function main()
     {
-        require_once "PHPUnit/TextUI/TestRunner.php";
         $suite  = new PHPUnit_Framework_TestSuite('Zend_Form_SubFormTest');
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }

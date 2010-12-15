@@ -22,11 +22,6 @@ require_once 'Zend/Log/Writer/Null.php';
 require_once 'CommonBackendTest.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @package    Zend_Cache
  * @subpackage UnitTests
  */

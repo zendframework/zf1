@@ -23,11 +23,6 @@
 require_once realpath(dirname(__FILE__) . '/../../../') . '/TestHelper.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Http_Client
  * @subpackage UnitTests

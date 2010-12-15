@@ -26,11 +26,6 @@
 require_once 'Zend/Search/Lucene/Field.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Search_Lucene
  * @subpackage UnitTests

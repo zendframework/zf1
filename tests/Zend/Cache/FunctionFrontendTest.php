@@ -27,11 +27,6 @@ require_once 'Zend/Cache.php';
 require_once 'Zend/Cache/Frontend/Function.php';
 require_once 'Zend/Cache/Backend/Test.php';
 
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 function foobar($param1, $param2) {
     echo "foobar_output($param1, $param2)";
     return "foobar_return($param1, $param2)";

@@ -25,7 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Amf_AuthTest::main");
 }
 
-require_once 'PHPUnit/Framework/TestCase.php';
 require_once dirname(__FILE__) . '/../../TestHelper.php';
 require_once 'Zend/Amf/Server.php';
 require_once 'Zend/Amf/Request.php';

@@ -21,11 +21,6 @@
  */
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @see Zend_Cache_CommonBackendTest
  */
 require_once 'CommonBackendTest.php';

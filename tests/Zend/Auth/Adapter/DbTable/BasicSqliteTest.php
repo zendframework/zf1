@@ -25,7 +25,6 @@ require_once dirname(__FILE__) . '/../../../../TestHelper.php';
 /**
  * PHPUnit_Framework_TestCase
  */
-require_once 'PHPUnit/Framework/TestCase.php';
 
 
 /**

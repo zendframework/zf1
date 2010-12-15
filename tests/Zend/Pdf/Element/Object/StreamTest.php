@@ -26,11 +26,6 @@
 require_once 'Zend/Pdf/Element/Object/Stream.php';
 
 /**
- * PHPUnit Test Case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Pdf
  * @subpackage UnitTests

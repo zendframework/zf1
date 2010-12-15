@@ -42,9 +42,6 @@ require_once 'Zend/Pdf/RecursivelyIteratableObjectsContainer.php';
 require_once 'Zend/Pdf/ElementFactory.php';
 
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 
 /**
  * @category   Zend

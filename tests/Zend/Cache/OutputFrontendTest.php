@@ -28,11 +28,6 @@ require_once 'Zend/Cache/Frontend/Output.php';
 require_once 'Zend/Cache/Backend/Test.php';
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
