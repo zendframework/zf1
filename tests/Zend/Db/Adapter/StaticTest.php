@@ -26,8 +26,6 @@
  */
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
  * @see Zend_Db
  */

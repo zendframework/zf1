@@ -30,8 +30,6 @@ require_once 'Zend/Db/Adapter/TestCommon.php';
  */
 require_once 'Zend/Db/Adapter/Sqlsrv.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
  * @category   Zend
  * @package    Zend_Db
@@ -441,7 +439,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
 
         $this->assertTrue($db->setTransactionIsolationLevel(), "Setting to default should work by passsing null or nothing");
     }
-    
+
     /**
      * @group ZF-9252
      * @see zf-trunk/tests/Zend/Db/Adapter/Zend_Db_Adapter_TestCommon#testAdapterLimit()
@@ -463,7 +461,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
             'Expecting to get product_id 1');
 
     }
-    
+
     /**
      * @group ZF-9252
      * @see zf-trunk/tests/Zend/Db/Adapter/Zend_Db_Adapter_TestCommon#testAdapterLimitOffset()
@@ -471,7 +469,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
     public function testAdapterLimitOffset()
     {
         parent::testAdapterLimitOffset();
-        
+
         $products = $this->_db->quoteIdentifier('zfproducts');
         $product_id = $this->_db->quoteIdentifier('product_id');
 
@@ -483,7 +481,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
             'Expecting row count to be 1');
         $this->assertEquals(2, $result[0]['product_id'],
             'Expecting to get product_id 2');
-    } 
+    }
 
     /**
      * @group ZF-8148
@@ -499,7 +497,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
         $result = $stmt->fetchAll();
         $this->assertEquals(1, count($result),
             'Expecting row count to be 1');
-    }  
+    }
 
     /**
      * @group ZF-8148
@@ -517,7 +515,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
             'Expecting row count to be 1');
         $this->assertEquals(1, $result[0]['product_id'],
             'Expecting to get product_id 1');
-    }     
+    }
 
     /**
      * @group ZF-8148
@@ -535,8 +533,8 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
             'Expecting row count to be 1');
         $this->assertEquals(2, $result[0]['product_id'],
             'Expecting to get product_id 2');
-    }  
-    
+    }
+
     /**
      * @group ZF-8901
      */
@@ -554,7 +552,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
             'Expecting row count to be 1');
         $this->assertEquals(2, $result[0]['product_id'],
             'Expecting to get product_id 2');
-    }    
+    }
 
     public function getDriver()
     {

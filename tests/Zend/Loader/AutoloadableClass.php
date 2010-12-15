@@ -28,8 +28,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'PHPUnit/Util/Filter.php';
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 class Zend_Loader_AutoloadableClass
 {

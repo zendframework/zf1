@@ -23,13 +23,11 @@
 /*
  * Include PHPUnit dependencies
  */
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Framework/IncompleteTestError.php';
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/Runner/Version.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-require_once 'PHPUnit/Util/Filter.php';
+if (!fopen('PHPUnit/Autoload.php', 'r', true)) {
+    require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
+} else {
+    require_once 'PHPUnit/Autoload.php'; // >= of PHPUnit 3.5.5
+}
 
 /*
  * Set error reporting to the level to which Zend Framework code must comply.
@@ -66,28 +64,6 @@ if (is_readable($zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php')) {
 } else {
     require_once $zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php.dist';
 }
-
-if (defined('TESTS_GENERATE_REPORT') && TESTS_GENERATE_REPORT === true &&
-    version_compare(PHPUnit_Runner_Version::id(), '3.1.6', '>=')) {
-
-    /*
-     * Add Zend Framework library/ directory to the PHPUnit code coverage
-     * whitelist. This has the effect that only production code source files
-     * appear in the code coverage report and that all production code source
-     * files, even those that are not covered by a test yet, are processed.
-     */
-    PHPUnit_Util_Filter::addDirectoryToWhitelist($zfCoreLibrary);
-
-    /*
-     * Omit from code coverage reports the contents of the tests directory
-     */
-    foreach (array('.php', '.phtml', '.csv', '.inc') as $suffix) {
-        PHPUnit_Util_Filter::addDirectoryToFilter($zfCoreTests, $suffix);
-    }
-    PHPUnit_Util_Filter::addDirectoryToFilter(PEAR_INSTALL_DIR);
-    PHPUnit_Util_Filter::addDirectoryToFilter(PHP_LIBDIR);
-}
-
 
 /**
  * Start output buffering, if enabled

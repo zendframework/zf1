@@ -26,7 +26,8 @@
  */
 require_once 'Zend/Db/Table/TestSetup.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 require_once 'Zend/Db/Table/Row.php';
 
@@ -887,15 +888,15 @@ abstract class Zend_Db_Table_Row_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertTrue($row instanceof Traversable);
         $this->assertTrue($row instanceof IteratorAggregate);
         $this->assertType('ArrayIterator', $row->getIterator());
-        
+
         $count=0;
         foreach ($row as $columnValue) {
             $count++;
         }
-        
+
         $this->assertEquals(8, $count, 'The row was iterated, there should be 8 columns iterated');
     }
-    
+
 
     /**
      * Utility methods below

@@ -32,7 +32,8 @@ require_once dirname(__FILE__) . '/../../../../TestHelper.php';
 /**
  * Exclude from code coverage report
  */
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * @see Zend_Service_Amazon_SimpleDb_OfflineTest

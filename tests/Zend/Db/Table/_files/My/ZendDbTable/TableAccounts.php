@@ -33,7 +33,7 @@ require_once 'Zend/Db/Table/Abstract.php';
 require_once 'TableBugs.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
 
 
 /**

@@ -32,7 +32,6 @@ require_once 'Zend/Db/Table/TestSetup.php';
 require_once 'Zend/Loader.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 
 /**
@@ -1257,11 +1256,11 @@ abstract class Zend_Db_Table_Relationships_TestCommon extends Zend_Db_Table_Test
         $table = $this->_getTable('My_ZendDbTable_TableSpecial', $options);
         return $table;
     }
-    
+
     /**
      * Ensure that the related table returned from the ManyToManyRowset only contains
      * the proper columns for the table.
-     * 
+     *
      * @group ZF-3709
      */
     public function testTableRelationshipReturnsOnlyTheColumnsInTargetTable()

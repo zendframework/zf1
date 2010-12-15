@@ -29,7 +29,8 @@ require_once dirname(__FILE__) . '/../../../TestHelper.php';
 /**
  * Exclude from code coverage report
  */
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * Patch for default timezone in PHP >= 5.1.0

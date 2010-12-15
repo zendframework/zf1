@@ -35,8 +35,6 @@ require_once 'TableBugsCustom.php';
 
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 
 /**
  * @category   Zend

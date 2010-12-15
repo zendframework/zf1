@@ -31,10 +31,6 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 require_once 'Zend/Locale.php';
 require_once 'Zend/Currency.php';
 
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework.php';
 
 /**
  * @category   Zend

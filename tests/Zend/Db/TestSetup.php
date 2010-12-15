@@ -41,13 +41,8 @@ require_once 'Zend/Db.php';
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 
-/**
- * PHPUnit_Util_Filter
- */
-require_once 'PHPUnit/Util/Filter.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 
 /**

@@ -26,7 +26,8 @@
  */
 require_once 'Zend/Validate/Abstract.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * Mock file for testbed

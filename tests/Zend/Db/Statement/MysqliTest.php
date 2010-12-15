@@ -22,7 +22,6 @@
 
 require_once 'Zend/Db/Statement/TestCommon.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
  * @category   Zend
@@ -144,10 +143,10 @@ class Zend_Db_Statement_MysqliTest extends Zend_Db_Statement_TestCommon
         $result = $stmt->fetch();
         $this->assertFalse($result);
     }
-    
+
 	/**
 	 * Test to verify valid report of issue
-	 * 
+	 *
      * @group ZF-8986
      */
     public function testNumberOfBoundParamsDoesNotMatchNumberOfTokens()
@@ -160,7 +159,7 @@ class Zend_Db_Statement_MysqliTest extends Zend_Db_Statement_TestCommon
     		'object_long'   => 'REAL',
         ));
         $tableName = $this->_util->getTableName('zf_objects');
-        
+
         $numRows = $this->_db->insert($tableName, array (
         	'object_id' => 1,
         	'object_type' => 1,
@@ -168,11 +167,11 @@ class Zend_Db_Statement_MysqliTest extends Zend_Db_Statement_TestCommon
         	'object_lati' => 1.12345,
         	'object_long' => 1.54321,
         ));
-        
+
         $sql = 'SELECT object_id, object_type, object_status,'
-             . ' object_lati, object_long FROM ' . $tableName 
+             . ' object_lati, object_long FROM ' . $tableName
              . ' WHERE object_id = ?';
-             
+
         try {
         	$stmt = $this->_db->query($sql, 1);
         } catch (Exception $e) {

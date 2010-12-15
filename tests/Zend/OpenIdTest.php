@@ -31,13 +31,6 @@ require_once dirname(__FILE__) . '/../TestHelper.php';
  */
 require_once 'Zend/OpenId.php';
 
-
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework.php';
-
-
 /**
  * Zend_OpenId_ResponseHelper
  */

@@ -22,7 +22,6 @@
 
 require_once 'Zend/Db/Select/TestCommon.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
  * @category   Zend

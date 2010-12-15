@@ -30,8 +30,6 @@ require_once 'Zend/Db/Adapter/TestCommon.php';
  */
 require_once 'Zend/Db/Adapter/Db2.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
 /**
  * @category   Zend
  * @package    Zend_Db

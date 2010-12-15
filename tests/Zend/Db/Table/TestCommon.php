@@ -36,7 +36,8 @@ require_once 'Zend/Registry.php';
  */
 require_once 'Zend/Db/Table.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 
 /**

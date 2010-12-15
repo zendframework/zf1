@@ -20,8 +20,8 @@
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Util/Filter.php';
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 require_once 'Zend/Controller/Action.php';
 
@@ -93,4 +93,13 @@ class HelperBrokerController extends Zend_Controller_Action
         $this->getResponse()->appendBody(get_class($this->_helper->TestHelper));
     }
 
+    public function testCanLoadNamespacedHelperAction()
+    {
+        try {
+            $helper = $this->_helper->getHelper('NamespacedHelper');
+            $this->getResponse()->appendBody(get_class($helper));
+        } catch (Exception $e) {
+            $this->getResponse()->appendBody($e->getMessage());
+        }
+    }
 }

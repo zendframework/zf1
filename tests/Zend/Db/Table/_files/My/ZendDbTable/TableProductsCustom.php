@@ -28,7 +28,8 @@
 require_once 'TableProducts.php';
 require_once 'TableBugsProductsCustom.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 
 /**

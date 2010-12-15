@@ -33,9 +33,6 @@ require_once 'Zend/Db/Adapter/Db2Test.php';
 require_once 'Zend/Db/Adapter/Pdo/Ibm.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
-
 /**
  * @category   Zend
  * @package    Zend_Db

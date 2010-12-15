@@ -26,7 +26,8 @@
  */
 require_once 'Zend/Db/TestUtil/Pdo/Oci.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * @category   Zend

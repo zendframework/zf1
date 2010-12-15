@@ -25,7 +25,8 @@
  */
 require_once 'Zend/Db/TestUtil/Mysqli.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * @category   Zend

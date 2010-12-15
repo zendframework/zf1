@@ -48,6 +48,11 @@ require_once 'Zend/Controller/Action/Helper/Redirector.php';
 class Zend_Controller_Action_HelperBrokerTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Zend_Controller_Front
+     */
+    protected $front;
+
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -70,8 +75,8 @@ class Zend_Controller_Action_HelperBrokerTest extends PHPUnit_Framework_TestCase
                     ->throwExceptions(true);
         Zend_Controller_Action_HelperBroker::resetHelpers();
 
-        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-        $viewRenderer->setActionController();
+        //$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+        //$viewRenderer->setActionController();
     }
 
     public function testLoadingAndReturningHelper()
@@ -318,6 +323,20 @@ class Zend_Controller_Action_HelperBrokerTest extends PHPUnit_Framework_TestCase
         $loader = Zend_Controller_Action_HelperBroker::getPluginLoader();
         $paths  = $loader->getPaths('Zend_Controller_Action_Helper');
         $this->assertFalse(empty($paths));
+    }
+
+    public function testCanLoadNamespacedHelper()
+    {
+        $this->front->setControllerDirectory(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files')
+            ->setResponse(new Zend_Controller_Response_Cli())
+            ->returnResponse(true);
+
+        $path = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files/Helpers';
+        Zend_Controller_Action_HelperBroker::addPath($path, 'MyApp\Controller\Action\Helper\\');
+
+        $request  = new Zend_Controller_Request_Http('http://framework.zend.com/helper-broker/test-can-load-namespaced-helper/');
+        $response = $this->front->dispatch($request);
+        $this->assertEquals('MyApp\Controller\Action\Helper\NamespacedHelper', $response->getBody());
     }
 
     /**

@@ -25,13 +25,6 @@
  */
 require_once 'Zend/OpenId/Provider.php';
 
-
-/**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework.php';
-
-
 /**
  * Zend_OpenId_ResponseHelper
  */

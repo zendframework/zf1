@@ -31,7 +31,7 @@ require_once dirname(__FILE__) . '/../../../../../TestHelper.php';
 require_once 'Zend/Db/Table/Relationships/TestCommon.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
 
 
 /**

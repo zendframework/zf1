@@ -26,7 +26,8 @@
  */
 require_once 'Zend/Db/Table/Row/Abstract.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * @category   Zend

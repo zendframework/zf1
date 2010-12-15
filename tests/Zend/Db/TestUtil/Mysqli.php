@@ -27,7 +27,7 @@
 require_once 'Zend/Db/TestUtil/Common.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
 
 
 /**

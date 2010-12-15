@@ -27,7 +27,7 @@
 require_once 'Zend/Db/Table/TestSetup.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
 
 
 /**
@@ -292,7 +292,7 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
     }
 
 
-    
+
     /**
      * @group ZF-8486
      */
@@ -303,16 +303,16 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         foreach ($rowset as $row) {
             $lastRow = $row;
         }
-        
+
         $numRows = $rowset->count();
         $this->assertEquals(4, $numRows);
-        
+
         $rowset->seek(3);
         $seekLastRow = $rowset->current();
-        
+
         $this->assertSame($lastRow, $seekLastRow);
     }
-    
+
     /**
      * @group ZF-8486
      */
@@ -321,11 +321,11 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $table = $this->_table['bugs'];
         $rowset = $table->fetchAll('bug_id IN (1,2,3,4)', 'bug_id ASC');
         $rowset->seek(3);
-        
+
         $this->setExpectedException('Zend_Db_Table_Rowset_Exception', 'Illegal index 4');
         $rowset->seek(4);
     }
-    
+
     /**
      * @group ZF-8486
      */
@@ -334,9 +334,9 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $table = $this->_table['bugs'];
         $rowset = $table->fetchAll('bug_id IN (1,2,3,4)', 'bug_id ASC');
         $rowset->getRow(3);
-        
+
         $this->setExpectedException('Zend_Db_Table_Rowset_Exception', 'No row could be found at position 4');
         $rowset->getRow(4);
     }
-    
+
 }

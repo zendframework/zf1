@@ -21,8 +21,6 @@
  */
 
 require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPUnit/Util/Filter.php';
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
  * @see Zend_Db_Table_Row_TestMockRow
@@ -41,9 +39,6 @@ require_once dirname(__FILE__) . '/../_files/My/ZendDbTable/Row/TestMockRow.php'
  */
 class Zend_Db_Table_Row_StaticTest extends PHPUnit_Framework_TestCase
 {
-
-
-
     public function testTableRowTransformColumnNotUsedInConstructor()
     {
         $data = array(

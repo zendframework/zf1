@@ -25,7 +25,8 @@
  */
 require_once 'Zend/Db/TestUtil/Db2.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 /**
  * @category   Zend

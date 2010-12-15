@@ -33,7 +33,8 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
 /**
  * Exclude from code coverage report
  */
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+
+
 
 
 require_once 'Zend/Barcode/FactoryTest.php';
@@ -88,9 +89,9 @@ class Zend_Barcode_AllTests
         $suite->addTestSuite('Zend_Barcode_FactoryTest');
 
         $suite->addTestSuite('Zend_Barcode_Object_Code39Test');
-        
+
         $suite->addTestSuite('Zend_Barcode_Object_Code128Test');
-        
+
         $suite->addTestSuite('Zend_Barcode_Object_Code25Test');
         $suite->addTestSuite('Zend_Barcode_Object_Code25interleavedTest');
         $suite->addTestSuite('Zend_Barcode_Object_Itf14Test');

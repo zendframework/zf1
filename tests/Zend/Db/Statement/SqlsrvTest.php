@@ -22,7 +22,6 @@
 
 require_once 'Zend/Db/Statement/TestCommon.php';
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 /**
  * @category   Zend
@@ -90,7 +89,7 @@ class Zend_Db_Statement_SqlsrvTest extends Zend_Db_Statement_TestCommon
 
         $stmt->closeCursor();
     }
-    
+
     /*
      * @group ZF-8138
      */
@@ -99,32 +98,32 @@ class Zend_Db_Statement_SqlsrvTest extends Zend_Db_Statement_TestCommon
         $products   = $this->_db->quoteIdentifier('zfproducts');
         $product_id = $this->_db->quoteIdentifier('product_id');
         $product_name = $this->_db->quoteIdentifier('product_name');
-        
+
         $products_procedure   = $this->_db->quoteIdentifier('#InsertIntoProducts');
-        
+
         $prodecure = "CREATE PROCEDURE $products_procedure
                                     @ProductName varchar(100)
                    AS
                        BEGIN
                              -- insert row (result set 1)
-                             INSERT INTO $products 
+                             INSERT INTO $products
                                          ($product_name)
                                     VALUES
                                          (@ProductName);
-                            
+
                              -- Get results (result set 2)
                              SELECT * FROM $products;
                        END";
-        
+
         // create procedure
         $this->_db->query($prodecure);
 
         $stmt  = $this->_db->query('{call ' . $products_procedure .'(?)}', array('Product'));
 
         $result1 = $stmt->rowCount();
-        
+
         $this->assertEquals(1, $result1, 'Expected 1 row to be inserted');
-        
+
         $stmt->nextRowset();
 
         $result2 = $stmt->fetchAll();
@@ -134,22 +133,22 @@ class Zend_Db_Statement_SqlsrvTest extends Zend_Db_Statement_TestCommon
 
         $stmt->closeCursor();
     }
-	
+
 	/*
      * @group ZF-7559
      */
     public function testStatementWithProcedure()
     {
         $products   = $this->_db->quoteIdentifier('zfproducts');
-        
+
         $products_procedure   = $this->_db->quoteIdentifier('#GetProducts');
-        
+
         $prodecure = "CREATE PROCEDURE $products_procedure
                    AS
                        BEGIN
                              SELECT * FROM $products;
                        END";
-        
+
         // create procedure
         $this->_db->query($prodecure);
 

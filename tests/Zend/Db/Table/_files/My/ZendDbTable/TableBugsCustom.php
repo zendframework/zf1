@@ -31,7 +31,6 @@ require_once 'TableAccountsCustom.php';
 
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 
 /**

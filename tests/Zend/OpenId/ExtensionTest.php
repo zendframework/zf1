@@ -28,11 +28,6 @@ require_once 'Zend/OpenId/Extension/Sreg.php';
 
 
 /**
- * PHPUnit test case
- */
-require_once 'PHPUnit/Framework.php';
-
-/**
  * @category   Zend
  * @package    Zend_OpenId
  * @subpackage UnitTests

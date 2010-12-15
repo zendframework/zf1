@@ -27,9 +27,6 @@
 require_once 'Zend/Db/TestSetup.php';
 
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-
-
 /**
  * @category   Zend
  * @package    Zend_Db
