@@ -20,24 +20,6 @@
  * @version    $Id$
  */
 
-
-/** Test helper */
-// require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-// Do not include TestHelper.php since it takes too much time
-// Directly include part of it
-$zfRoot        = dirname(dirname(dirname(dirname(__FILE__))));
-$zfCoreLibrary = "$zfRoot/library";
-$zfCoreTests   = "$zfRoot/tests";
-
-$path = array(
-    $zfCoreLibrary,
-    $zfCoreTests,
-    get_include_path()
-    );
-set_include_path(implode(PATH_SEPARATOR, $path));
-
-
 /**
  * @see Zend_Session
  */

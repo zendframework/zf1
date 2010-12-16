@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Feed/Writer/Renderer/Feed/Rss.php';
 require_once 'Zend/Feed/Reader.php';
 require_once 'Zend/Version.php';
@@ -44,9 +42,9 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_validWriter = new Zend_Feed_Writer_Feed;
-        
+
         $this->_validWriter->setType('rss');
-        
+
         $this->_validWriter->setTitle('This is a test feed.');
         $this->_validWriter->setDescription('This is a test description.');
         $this->_validWriter->setLink('http://www.example.com');
@@ -97,7 +95,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('This is a test entry.', $entry->getTitle());
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -108,7 +106,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $this->_validEntry->remove('description');
         $atomFeed->render();
     }
-    
+
     public function testEntryTitleCharDataEncoding()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -125,7 +123,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('This is a test entry description.', $entry->getDescription());
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -136,7 +134,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $this->_validEntry->remove('title');
         $atomFeed->render();
     }
-    
+
     public function testEntryDescriptionCharDataEncoding()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -145,7 +143,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('<>&\'"áéíóú', $entry->getDescription());
     }
-    
+
     public function testEntryContentHasBeenSet()
     {
         $this->_validEntry->setContent('This is test entry content.');
@@ -154,7 +152,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('This is test entry content.', $entry->getContent());
     }
-    
+
     public function testEntryContentCharDataEncoding()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -199,7 +197,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $author = $entry->getAuthor();
         $this->assertEquals(array('name'=>'Jane'), $entry->getAuthor());
     }
-    
+
     public function testEntryAuthorCharDataEncoding()
     {
         $this->_validEntry->addAuthor('<>&\'"áéíóú', 'jane@example.com', 'http://www.example.com/jane');
@@ -209,7 +207,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $author = $entry->getAuthor();
         $this->assertEquals(array('name'=>'<>&\'"áéíóú'), $entry->getAuthor());
     }
-    
+
     public function testEntryHoldsAnyEnclosureAdded()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -251,7 +249,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         ));
         $renderer->render();
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -265,7 +263,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         ));
         $renderer->render();
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -288,7 +286,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6', $entry->getId());
     }
-    
+
     public function testEntryIdHasBeenSetWithPermaLinkAsFalseWhenNotUri()
     {
         $this->markTestIncomplete('Untest due to ZFR potential bug');
@@ -301,7 +299,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals($entry->getLink(), $entry->getId());
     }
-    
+
     public function testCommentLinkRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -310,7 +308,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals('http://www.example.com/id/1', $entry->getCommentLink());
     }
-    
+
     public function testCommentCountRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -319,7 +317,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $entry = $feed->current();
         $this->assertEquals(22, $entry->getCommentCount());
     }
-    
+
     public function testCommentFeedLinksRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
@@ -333,7 +331,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://www.example.com/rss/id/1', $entry->getCommentFeedLink('rss'));
         //$this->assertEquals('http://www.example.com/atom/id/1', $entry->getCommentFeedLink('atom'));
     }
-    
+
     public function testCategoriesCanBeSet()
     {
         $this->_validEntry->addCategories(array(
@@ -349,7 +347,7 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, (array) $entry->getCategories());
     }
-    
+
     /**
      * @group ZFWCHARDATA01
      */

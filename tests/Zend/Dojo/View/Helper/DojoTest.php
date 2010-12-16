@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Dojo_View_Helper_DojoTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /** Zend_Dojo_View_Helper_Dojo */
 require_once 'Zend/Dojo/View/Helper/Dojo.php';
 

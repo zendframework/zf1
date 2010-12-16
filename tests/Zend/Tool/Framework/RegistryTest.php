@@ -21,11 +21,6 @@
  */
 
 /**
- * @see TestHelper.php
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_Tool_Framework_Registry
  */
 require_once 'Zend/Tool/Framework/Registry.php';

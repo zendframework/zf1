@@ -28,9 +28,6 @@
  * an exception.
  */
 
-/** TestHelp.php */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Queue/Adapter/AdapterTest.php';
 
 /**

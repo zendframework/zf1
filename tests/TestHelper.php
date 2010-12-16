@@ -23,6 +23,7 @@
 /*
  * Include PHPUnit dependencies
  */
+@require_once 'PHPUnit/Framework.php';
 if (!@fopen('PHPUnit/Autoload.php', 'r', true)) {
     require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
 } else {

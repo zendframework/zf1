@@ -20,13 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/** PHPUnit_Framework_TestCase */
-
 /** Zend_Db */
 require_once 'Zend/Db.php';
 

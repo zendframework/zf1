@@ -22,7 +22,6 @@
 
 // Call Zend_Controller_ActionTest::main() if this source file is executed directly.
 if (!defined("PHPUnit_MAIN_METHOD")) {
-    require_once dirname(__FILE__) . '/../../TestHelper.php';
     define("PHPUnit_MAIN_METHOD", "Zend_Controller_ActionTest::main");
 }
 
@@ -228,7 +227,7 @@ class Zend_Controller_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($params['foo']));
         $this->assertEquals('bar', $params['foo']);
     }
-    
+
     /**
      * @group ZF-5163
      */
@@ -237,12 +236,12 @@ class Zend_Controller_ActionTest extends PHPUnit_Framework_TestCase
         $this->_controller->setParam('foo', 'bar');
         $this->_controller->setParam('bar', 0);
         $this->_controller->setParam('baz', null);
-        
+
         $this->assertEquals('bar', $this->_controller->getParam('foo', -1));
         $this->assertEquals(0, $this->_controller->getParam('bar', -1));
         $this->assertEquals(-1, $this->_controller->getParam('baz', -1));
     }
-	
+
 	/**
      * @group ZF-9179
      */
@@ -567,7 +566,7 @@ class Zend_Controller_ActionTest_TestController extends Zend_Controller_Action
         $this->_setParam($key, $value);
         return $this;
     }
-    
+
     public function getParam($key, $default)
     {
         return $this->_getParam($key, $default);

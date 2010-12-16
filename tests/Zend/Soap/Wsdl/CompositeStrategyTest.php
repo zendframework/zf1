@@ -24,8 +24,6 @@
  * @subpackage UnitTests
  */
 
-require_once dirname(__FILE__)."/../../../TestHelper.php";
-
 /** Zend_Soap_Wsdl */
 require_once 'Zend/Soap/Wsdl.php';
 

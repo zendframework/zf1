@@ -22,12 +22,6 @@
 
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-
-/**
  * @category   Zend
  * @package    Zend_Service_Amazon_S3
  * @subpackage UnitTests

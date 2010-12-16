@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_Adapter_FileSystemTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_StorageService_TestCase
  */
@@ -43,7 +41,7 @@ require_once 'Zend/Cloud/StorageService/Adapter/FileSystem.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cloud_StorageService_Adapter_FileSystemTest 
+class Zend_Cloud_StorageService_Adapter_FileSystemTest
     extends Zend_Cloud_StorageService_TestCase
 {
 	/**
@@ -63,7 +61,7 @@ class Zend_Cloud_StorageService_Adapter_FileSystemTest
      *
      * @return void
      */
-    public function setUp() 
+    public function setUp()
     {
         parent::setUp();
         // No need to wait
@@ -73,32 +71,32 @@ class Zend_Cloud_StorageService_Adapter_FileSystemTest
         // If the test directory exists, remove it and replace it
         if (file_exists($path)) {
             $this->_rmRecursive($path);
-        } 
+        }
         mkdir($path, 0755);
     }
-    
+
     public function testGetClient()
     {
-    	$this->assertTrue(is_string($this->_commonStorage->getClient())); 
+    	$this->assertTrue(is_string($this->_commonStorage->getClient()));
     }
-    
+
     public function testNoParams()
     {
 		$this->markTestSkipped('No config params needed for FileSystem');
     }
 
     // TODO: Create a custom test for FileSystem that checks fetchMetadata() with file system MD.
-    public function testFetchMetadata() 
+    public function testFetchMetadata()
     {
         $this->markTestIncomplete('FileSystem doesn\'t support writable metadata.');
     }
 
-    public function testStoreMetadata() 
+    public function testStoreMetadata()
     {
         $this->markTestSkipped('FileSystem doesn\'t support writable metadata.');
     }
 
-    public function testDeleteMetadata() 
+    public function testDeleteMetadata()
     {
         $this->markTestSkipped('FileSystem doesn\'t support writable metadata.');
     }
@@ -108,7 +106,7 @@ class Zend_Cloud_StorageService_Adapter_FileSystemTest
      *
      * @return void
      */
-    public function tearDown() 
+    public function tearDown()
     {
         $path = $this->_config->local_directory;
 
@@ -120,7 +118,7 @@ class Zend_Cloud_StorageService_Adapter_FileSystemTest
         parent::tearDown();
     }
 
-    protected function _rmRecursive($path) 
+    protected function _rmRecursive($path)
     {
         // Tidy up the path
         $path = realpath($path);
@@ -139,7 +137,7 @@ class Zend_Cloud_StorageService_Adapter_FileSystemTest
         }
     }
 
-    protected function _getConfig() 
+    protected function _getConfig()
     {
         $config = new Zend_Config(array(
             Zend_Cloud_StorageService_Factory::STORAGE_ADAPTER_KEY        => 'Zend_Cloud_StorageService_Adapter_Filesystem',

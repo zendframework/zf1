@@ -20,8 +20,6 @@
  * @version    $Id $
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Http/Client.php';
 require_once 'Zend/Gdata.php';
 require_once 'Zend/Gdata/App/MediaEntry.php';

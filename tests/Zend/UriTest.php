@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
-/**
  * Zend_Uri
  */
 require_once 'Zend/Uri.php';
@@ -135,7 +130,7 @@ class Zend_UriTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests that if an exception is thrown when calling the __toString()
-     * method an empty string is returned and a Warning is triggered, instead 
+     * method an empty string is returned and a Warning is triggered, instead
      * of a Fatal Error being triggered.
      *
      * @group ZF-10405
@@ -143,7 +138,7 @@ class Zend_UriTest extends PHPUnit_Framework_TestCase
     public function testToStringRaisesWarningWhenExceptionCaught()
     {
         $uri = Zend_Uri::factory('http://example.com', 'Zend_Uri_ExceptionCausing');
-        
+
         set_error_handler(array($this, 'handleErrors'), E_USER_WARNING);
 
         $text = sprintf('%s', $uri);
@@ -158,7 +153,7 @@ class Zend_UriTest extends PHPUnit_Framework_TestCase
 
     /**
      * Error handler for testExceptionThrownInToString()
-     * 
+     *
      * @group ZF-10405
      */
     public function handleErrors($errno, $errstr, $errfile = '', $errline = 0, array $errcontext = array())

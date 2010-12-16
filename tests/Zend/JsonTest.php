@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
-/**
  * @see Zend_Json
  */
 require_once 'Zend/Json.php';
@@ -720,7 +715,7 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('Test is not yet finished.');
     }
-    
+
     /**
      * @group ZF-8663
      */
@@ -728,12 +723,12 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
     {
         $source = "</foo><foo>bar</foo>";
         $target = '"<\\/foo><foo>bar<\\/foo>"';
-        
+
         // first test ext/json
         Zend_Json::$useBuiltinEncoderDecoder = false;
         $this->assertEquals($target, Zend_Json::encode($source));
     }
-    
+
     /**
      * @group ZF-8663
      */
@@ -741,12 +736,12 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
     {
         $source = "</foo><foo>bar</foo>";
         $target = '"<\\/foo><foo>bar<\\/foo>"';
-        
+
         // first test ext/json
         Zend_Json::$useBuiltinEncoderDecoder = true;
         $this->assertEquals($target, Zend_Json::encode($source));
     }
-    
+
     /**
      * @group ZF-8918
      * @expectedException Zend_Json_Exception

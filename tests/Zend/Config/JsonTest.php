@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Zend_Config_Json
  */
 require_once 'Zend/Config/Json.php';
@@ -180,17 +175,17 @@ class Zend_Config_JsonTest extends PHPUnit_Framework_TestCase
         }
     }
 
-   
+
     public function testCanLoadConfigWithNoSections()
     {
         $config = new Zend_Config_Json($this->_iniFileNoSectionsConfig);
-        
+
         $this->assertEquals('all', $config->hostname);
         $this->assertEquals('two', $config->one->two);
         $this->assertEquals('4', $config->one->three->four);
         $this->assertEquals('5', $config->one->three->five);
     }
-    
+
     public function testRaisesExceptionOnInvalidJsonMarkup()
     {
         $this->setExpectedException('Zend_Json_Exception', 'Syntax error');

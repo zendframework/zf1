@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Service_Twitter_TwitterSearchTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Service_Twitter_Search */
 require_once 'Zend/Service/Twitter/Search.php';
 

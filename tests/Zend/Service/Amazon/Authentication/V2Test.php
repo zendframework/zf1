@@ -20,9 +20,6 @@
  * @version    $Id: AllTests.php 11973 2008-10-15 16:00:56Z matthew $
  */
 
-
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Service/Amazon/Authentication/V2.php';
 
 /**

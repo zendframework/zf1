@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_InfoCard_XmlParsingTest::main");
 }
 
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
-
 require_once 'Zend/InfoCard/Xml/EncryptedData.php';
 require_once 'Zend/InfoCard/Xml/SecurityTokenReference.php';
 

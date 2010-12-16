@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
-/**
  * These const values control some testing behavior.
  * They may be defined here or in TestConfiguration.php.
  */

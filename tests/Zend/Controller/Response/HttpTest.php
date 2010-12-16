@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 // Call Zend_Controller_Response_HttpTest::main() if this source file is executed directly.
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Controller_Response_HttpTest::main');
@@ -133,7 +128,7 @@ class Zend_Controller_Response_HttpTest extends PHPUnit_Framework_TestCase
 
         $this->_response->clearHeader('Connection');
         $updated_headers  = $this->_response->getHeaders();
-        
+
         $this->assertFalse($original_headers == $updated_headers);
     }
 
@@ -166,7 +161,7 @@ class Zend_Controller_Response_HttpTest extends PHPUnit_Framework_TestCase
 
         $this->_response->clearRawHeader('HTTP/1.0 404 Not Found');
         $updatedHeadersRaw  = $this->_response->getRawHeaders();
-        
+
         $this->assertFalse($originalHeadersRaw == $updatedHeadersRaw);
     }
 

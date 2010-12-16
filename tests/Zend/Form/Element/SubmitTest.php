@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Form_Element_SubmitTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Form/Element/Submit.php';
 require_once 'Zend/Form.php';
 require_once 'Zend/Registry.php';
@@ -192,7 +190,7 @@ class Zend_Form_Element_SubmitTest extends PHPUnit_Framework_TestCase
         $submit = new Zend_Form_Element_Submit('foo', 'label');
         $submit->setTranslator($translate);
         $submit->setValue($translations['label']);
-        
+
         $this->assertTrue($submit->isChecked());
 
         $submit->setValue('label');
@@ -227,7 +225,7 @@ class Zend_Form_Element_SubmitTest extends PHPUnit_Framework_TestCase
         $this->assertContains('bar', $html);
         $this->assertNotContains('baz', $html);
     }
-    
+
     public function testSetDefaultIgnoredToTrueWhenNotDefined()
     {
         $this->assertTrue($this->element->getIgnore());
@@ -245,7 +243,7 @@ class Zend_Form_Element_SubmitTest extends PHPUnit_Framework_TestCase
             $this->markTestIncomplete('Error occurs for PHP 5.1.4 on Windows');
         }
     }
-    
+
     /**
      * Prove the fluent interface on Zend_Form_Element_Submit::loadDefaultDecorators
      *

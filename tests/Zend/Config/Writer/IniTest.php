@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Config
  */
 require_once 'Zend/Config.php';
@@ -246,7 +241,7 @@ ECS;
             $this->assertContains('Value can not contain double quotes "', $expected->getMessage());
         }
     }
-    
+
     /**
      * @group ZF-6289
      */
@@ -259,10 +254,10 @@ ECS;
             'four'  => array('type' => 'section'),
             'five'  => 'element'
         ));
-        
+
         $writer = new Zend_Config_Writer_Ini;
         $iniString = $writer->setConfig($config)->render($config);
-        
+
         $expected = <<<ECS
 one = "element"
 three = "element"
@@ -275,7 +270,7 @@ type = "section"
 
 
 ECS;
-        
+
         $this->assertEquals(
             $expected,
             $iniString

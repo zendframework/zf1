@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-/**
  * @see Zend_Cloud_DocumentService_Adapter_SimpleDbTest
  */
 require_once 'Zend/Cloud/DocumentService/Adapter/SimpleDbTest.php';

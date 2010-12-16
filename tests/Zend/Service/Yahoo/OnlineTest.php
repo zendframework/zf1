@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_Service_Yahoo
  */
 require_once 'Zend/Service/Yahoo.php';

@@ -21,12 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-
-/**
  * @see Zend_Auth
  */
 require_once 'Zend/Auth.php';

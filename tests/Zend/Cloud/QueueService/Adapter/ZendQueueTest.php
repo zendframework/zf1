@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_QueueService_Adapter_ZendQueueTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_QueueServiceTestCase
  */
@@ -43,7 +41,7 @@ require_once 'Zend/Cloud/QueueService/Adapter/ZendQueue.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cloud_QueueService_Adapter_ZendQueueTest 
+class Zend_Cloud_QueueService_Adapter_ZendQueueTest
     extends Zend_Cloud_QueueService_TestCase
 {
     /**
@@ -54,7 +52,7 @@ class Zend_Cloud_QueueService_Adapter_ZendQueueTest
      */
     protected $_waitPeriod = 0;
 	protected $_clientType = 'Zend_Queue';
-    
+
 	/**
      * Runs the test methods of this class.
      *
@@ -67,13 +65,13 @@ class Zend_Cloud_QueueService_Adapter_ZendQueueTest
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    public function testPeekMessages() 
+    public function testPeekMessages()
     {
         $this->markTestSkipped('ZendQueue does not currently support peeking messages');
     }
-    
-    protected function _getConfig() 
-    {        
+
+    protected function _getConfig()
+    {
         $config = new Zend_Config(array(
             Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY => 'Zend_Cloud_QueueService_Adapter_ZendQueue',
             Zend_Cloud_QueueService_Adapter_ZendQueue::ADAPTER => 'Array'
@@ -81,7 +79,7 @@ class Zend_Cloud_QueueService_Adapter_ZendQueueTest
 
         return $config;
     }
-    
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Cloud_QueueService_Adapter_ZendQueueTest::main') {

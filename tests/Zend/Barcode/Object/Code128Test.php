@@ -20,8 +20,6 @@
  * @version    $Id: Code25Test.php 21667 2010-03-28 17:45:14Z mikaelkael $
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-
 require_once dirname(__FILE__) . '/TestCommon.php';
 
 require_once 'Zend/Barcode/Object/Code128.php';

@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_FactoryTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /**
  * @see Zend_Config_Ini
  */
@@ -138,7 +136,7 @@ class Zend_Cloud_StorageService_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Zend_Cloud_StorageService_Adapter_WindowsAzure', get_class($azureAdapter));
     }
 
-    public function testGetAdapterWithArray() 
+    public function testGetAdapterWithArray()
     {
         // No need to overdo it; we'll test the array config with just one adapter.
         $fileSystemConfig = array(

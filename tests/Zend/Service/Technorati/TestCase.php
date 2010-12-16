@@ -22,17 +22,6 @@
 
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
- * Exclude from code coverage report
- */
-
-
-
-/**
  * Patch for default timezone in PHP >= 5.1.0
  */
 if (!ini_get('date.timezone')) {

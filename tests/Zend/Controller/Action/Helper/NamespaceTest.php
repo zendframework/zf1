@@ -22,7 +22,6 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    require_once dirname(__FILE__) . '/../../../../TestHelper.php';
     define('PHPUnit_MAIN_METHOD', 'Zend_Controller_Action_Helper_NamespaceTest::main');
 }
 
@@ -51,7 +50,7 @@ class Zend_Controller_Action_Helper_NamespaceTest extends PHPUnit_Framework_Test
         $suite  = new PHPUnit_Framework_TestSuite('Zend_Controller_Action_Helper_NamespaceTest');
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
-    
+
     /**
      * @group ZF-10158
      */

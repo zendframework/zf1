@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Loader_Autoloader
  */
 require_once 'Zend/Loader/Autoloader.php';
@@ -117,7 +112,7 @@ class Zend_Application_Resource_LocaleTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(Zend_Registry::isRegistered('Foo_Bar'));
         $this->assertSame(Zend_Registry::get('Foo_Bar'), $locale);
     }
-    
+
     public function testOptionsPassedToResourceAreUsedToSetLocaleState1()
     {
         $options = array(
@@ -128,7 +123,7 @@ class Zend_Application_Resource_LocaleTest extends PHPUnit_Framework_TestCase
         $resource->setBootstrap($this->bootstrap);
         $resource->init();
         $locale   = $resource->getLocale();
-        
+
         // This test will fail if your configured locale is kok_IN
         $this->assertFalse('kok_IN' == $locale->__toString());
         $this->assertSame(Zend_Registry::get('Zend_Locale'), $locale);

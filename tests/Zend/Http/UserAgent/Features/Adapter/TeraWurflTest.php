@@ -19,8 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once dirname(__FILE__) . '/../../../../../TestHelper.php';
-
 /**
  * Zend_Http_UserAgent
  */
@@ -57,7 +55,7 @@ class Zend_Http_UserAgent_Features_Adapter_TeraWurflTest extends PHPUnit_Framewo
         $this->assertEquals('false',       $wurfl['is_tablet']);
         $this->assertEquals('iPhone',      $wurfl['model_name']);
         $this->assertEquals('Apple',       $wurfl['brand_name']);
-        
+
         $request['http_user_agent'] = 'SonyEricssonK700i/R2AC SEMC-Browser/4.0.2 Profile/MIDP-2.0 Configuration/CLDC-1.1';
         $wurfl = Zend_Http_UserAgent_Features_Adapter_TeraWurfl::getFromRequest($request, $this->config);
         $this->assertEquals('http://wap.sonyericsson.com/UAprof/K700iR101.xml', $wurfl['uaprof']);

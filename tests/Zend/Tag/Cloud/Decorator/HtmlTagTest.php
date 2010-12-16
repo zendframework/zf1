@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Tag_Cloud_Decorator_HtmlTagTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Tag/Item.php';
 require_once 'Zend/Tag/ItemList.php';
 require_once 'Zend/Tag/Cloud/Decorator/HtmlTag.php';

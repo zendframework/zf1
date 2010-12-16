@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Log_Writer_FirebugTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Log */
 require_once 'Zend/Log.php';
 
@@ -348,7 +343,7 @@ class Zend_Log_Writer_FirebugTest extends PHPUnit_Framework_TestCase
             }
 
         }
-    }    
+    }
 }
 
 class Zend_Log_Writer_FirebugTest_Formatter extends Zend_Log_Formatter_Firebug

@@ -20,8 +20,6 @@
  * @version    $Id: JsonTest.php 12081 2008-10-22 19:07:55Z norm2782 $
  */
 
-require_once dirname ( __FILE__ ) . '/../../TestHelper.php';
-
 require_once 'Zend/Config.php';
 require_once 'Zend/Http/UserAgent.php';
 require_once 'Zend/Http/UserAgent/Mobile.php';
@@ -60,7 +58,7 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $this->server['server_port']          = '80';
         $this->server['remote_addr']          = '127.0.0.1';
         $this->server['server_protocol']      = 'HTTP/1.1';
-        
+
         $this->config                         = array(
             'server' => &$this->server,
             'storage'               => array(
@@ -79,7 +77,7 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $config['server']['server_software'] = 'Apache/2';
         $userAgent = new Zend_Http_UserAgent($config);
         $device    = $userAgent->getDevice();
-        
+
         $this->assertEquals('desktop', $userAgent->getBrowserType());
         $this->assertEquals('Internet Explorer', $device->getFeature('browser_name'));
         $this->assertEquals('7.0', $device->getFeature('browser_version'));

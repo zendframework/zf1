@@ -20,11 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Service/WindowsAzure/Credentials/AllTests.php';
 require_once 'Zend/Service/WindowsAzure/Diagnostics/AllTests.php';
 require_once 'Zend/Service/WindowsAzure/RetryPolicyTest.php';
@@ -56,7 +51,7 @@ class Zend_Service_WindowsAzure_AllTests
 
         $suite->addTest(Zend_Service_WindowsAzure_Credentials_AllTests::suite());
         $suite->addTest(Zend_Service_WindowsAzure_Diagnostics_AllTests::suite());
-        
+
         $suite->addTestSuite('Zend_Service_WindowsAzure_RetryPolicyTest');
         $suite->addTestSuite('Zend_Service_WindowsAzure_StorageTest');
         $suite->addTestSuite('Zend_Service_WindowsAzure_BlobStorageTest');

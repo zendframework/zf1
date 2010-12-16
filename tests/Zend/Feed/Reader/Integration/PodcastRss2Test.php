@@ -20,7 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
 require_once 'Zend/Feed/Reader.php';
 
 /**
@@ -49,7 +48,7 @@ class Zend_Feed_Reader_Integration_PodcastRss2Test extends PHPUnit_Framework_Tes
         }
         Zend_Date::setOptions(array('format_type'=>'iso'));
     }
-    
+
     public function teardown()
     {
         Zend_Date::setOptions($this->_options);

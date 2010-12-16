@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Form_ElementTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 // error_reporting(E_ALL);
 
 require_once 'Zend/Form/Element.php';
@@ -2049,7 +2047,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($messages));
         $this->assertEquals('foo', array_shift($messages));
     }
-    
+
     /**
      * @group ZF-9275
      */
@@ -2058,21 +2056,21 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $registryTranslations = array('alphaInvalid' => 'Registry message');
         $registryTranslate = new Zend_Translate('array', $registryTranslations);
         Zend_Registry::set('Zend_Translate', $registryTranslate);
-        
+
         $validatorTranslations = array('alphaInvalid' => 'Validator message');
         $validatorTranslate = new Zend_Translate('array', $validatorTranslations);
         Zend_Validate_Abstract::setDefaultTranslator($validatorTranslate);
-        
+
         $elementTranslations = array('alphaInvalid' => 'Element message');
         $elementTranslate = new Zend_Translate('array', $elementTranslations);
-       
+
         // the default validate translator should beat the registry one
         $this->element->addValidator('Alpha');
         $this->assertFalse($this->element->isValid(123));
         $messages = $this->element->getMessages();
         $this->assertEquals('Validator message', $messages['alphaInvalid']);
     }
-    
+
     /**
      * @group ZF-9275
      */
@@ -2081,14 +2079,14 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $registryTranslations = array('alphaInvalid' => 'Registry message');
         $registryTranslate = new Zend_Translate('array', $registryTranslations);
         Zend_Registry::set('Zend_Translate', $registryTranslate);
-        
+
         $validatorTranslations = array('alphaInvalid' => 'Validator message');
         $validatorTranslate = new Zend_Translate('array', $validatorTranslations);
         Zend_Validate_Abstract::setDefaultTranslator($validatorTranslate);
-        
+
         $elementTranslations = array('alphaInvalid' => 'Element message');
         $elementTranslate = new Zend_Translate('array', $elementTranslations);
-        
+
         $this->element->addValidator('Alpha');
         $this->element->setTranslator($elementTranslate);
         $this->assertFalse($this->element->isValid(123));
@@ -2104,18 +2102,18 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $formTranslations = array('alphaInvalid' => 'Form message');
         $formTranslate = new Zend_Translate('array', $formTranslations);
         Zend_Form::setDefaultTranslator($formTranslate);
-        
+
         $validatorTranslations = array('alphaInvalid' => 'Validator message');
         $validatorTranslate = new Zend_Translate('array', $validatorTranslations);
         Zend_Validate_Abstract::setDefaultTranslator($validatorTranslate);
-        
+
         // the default validate translator should beat the registry one
         $this->element->addValidator('Alpha');
         $this->assertFalse($this->element->isValid(123));
         $messages = $this->element->getMessages();
         $this->assertEquals('Form message', $messages['alphaInvalid']);
     }
-    
+
     /**
      * @group ZF-9275
      */
@@ -2123,10 +2121,10 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     {
         $elementTranslations = array('alphaInvalid' => 'Element message');
         $elementTranslate = new Zend_Translate('array', $elementTranslations);
-        
+
         $validatorTranslations = array('alphaInvalid' => 'Direct validator message');
         $validatorTranslate = new Zend_Translate('array', $validatorTranslations);
-        
+
         $validator = new Zend_Validate_Alpha();
         $validator->setTranslator($validatorTranslate);
         $this->element->addValidator($validator);
@@ -2222,7 +2220,7 @@ class Zend_Form_ElementTest_ArrayFilter implements Zend_Filter_Interface
         $validator = $username->getValidator('regex');
         $this->assertTrue($validator->zfBreakChainOnFailure);
     }
-    
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Form_ElementTest::main') {

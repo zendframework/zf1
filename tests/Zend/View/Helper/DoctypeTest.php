@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_View_Helper_DoctypeTest::main");
 }
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-
 /** Zend_View_Helper_Doctype */
 require_once 'Zend/View/Helper/Doctype.php';
 
@@ -156,7 +154,7 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
             $this->assertFalse($doctype->isHtml5());
 		}
 	}
-	
+
 	public function testCanRegisterCustomHtml5Doctype() {
 		$doctype = $this->helper->doctype('<!DOCTYPE html>');
         $this->assertEquals('CUSTOM', $doctype->getDoctype());

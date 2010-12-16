@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-/**
  * @see Zend_Cloud_QueueService_Adapter_SqsTest
  */
 require_once 'Zend/Cloud/QueueService/Adapter/SqsTest.php';

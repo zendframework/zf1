@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Filter_HtmlEntities
  */
 require_once 'Zend/Filter/HtmlEntities.php';
@@ -194,7 +189,7 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
     {
         $input  = "A 'single' and " . '"double"';
         $result = "A 'single' and &quot;double&quot;";
-        
+
         $this->_filter->setQuoteStyle(ENT_COMPAT);
         $this->assertEquals($result, $this->_filter->filter($input));
     }

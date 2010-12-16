@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_QueueService_Adapter_WindowsAzureTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_QueueServiceTestCase
  */
@@ -53,7 +51,7 @@ class Zend_Cloud_QueueService_Adapter_WindowsAzureTest extends Zend_Cloud_QueueS
      */
     protected $_waitPeriod = 10;
 	protected $_clientType = 'Zend_Service_WindowsAzure_Storage_Queue';
-    
+
 	/**
      * Runs the test methods of this class.
      *
@@ -75,17 +73,17 @@ class Zend_Cloud_QueueService_Adapter_WindowsAzureTest extends Zend_Cloud_QueueS
     {
         parent::setUp();
         $this->_wait();
-    }    
-    
-    protected function _getConfig() 
+    }
+
+    protected function _getConfig()
     {
         if (!defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') ||
             !constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') ||
             !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME') ||
             !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTKEY')) {
-            $this->markTestSkipped("Windows Azure access not configured, skipping test");        
-        }        
-        
+            $this->markTestSkipped("Windows Azure access not configured, skipping test");
+        }
+
         $config = new Zend_Config(array(
             Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY => 'Zend_Cloud_QueueService_Adapter_WindowsAzure',
             Zend_Cloud_QueueService_Adapter_WindowsAzure::ACCOUNT_NAME => constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME'),

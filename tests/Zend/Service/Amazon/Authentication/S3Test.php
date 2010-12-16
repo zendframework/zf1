@@ -20,8 +20,6 @@
  * @version    $Id: AllTests.php 11973 2008-10-15 16:00:56Z matthew $
  */
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Service/Amazon/Authentication/S3.php';
 
 /**
@@ -35,7 +33,7 @@ require_once 'Zend/Service/Amazon/Authentication/S3.php';
  */
 class Zend_Service_Amazon_Authentication_S3Test extends PHPUnit_Framework_TestCase
 {
-    
+
     /**
      * @var Zend_Service_Amazon_Authentication_S3
      */
@@ -47,12 +45,12 @@ class Zend_Service_Amazon_Authentication_S3Test extends PHPUnit_Framework_TestCa
     protected function setUp()
     {
         parent::setUp();
-        
+
         // TODO Auto-generated Zend_Service_Amazon_Authentication_S3Test::setUp()
-        
+
 
         $this->Zend_Service_Amazon_Authentication_S3 = new Zend_Service_Amazon_Authentication_S3('0PN5J17HBGZHT7JJ3X82', 'uV3F3YluFJax1cknvbcGwgjvx4QpvB+leU8dUj2o', '2006-03-01');
-    
+
     }
 
     /**
@@ -61,19 +59,19 @@ class Zend_Service_Amazon_Authentication_S3Test extends PHPUnit_Framework_TestCa
     protected function tearDown()
     {
         // TODO Auto-generated Zend_Service_Amazon_Authentication_S3Test::tearDown()
-        
+
 
         $this->Zend_Service_Amazon_Authentication_S3 = null;
-        
+
         parent::tearDown();
     }
 
-    
+
     public function testGetGeneratesCorrectSignature()
     {
         $headers = array();
         $headers['Date'] = "Tue, 27 Mar 2007 19:36:42 +0000";
-        
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('GET', 'http://s3.amazonaws.com/johnsmith/photos/puppy.jpg', $headers);
 
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:soqB4L9flQ6AHG4d5FVnKj26D2s=', $headers['Authorization']);
@@ -83,14 +81,14 @@ class Zend_Service_Amazon_Authentication_S3Test extends PHPUnit_Framework_TestCa
 Tue, 27 Mar 2007 19:36:42 +0000
 //johnsmith/photos/puppy.jpg");
     }
-    
+
     public function testPutGeneratesCorrectSignature()
     {
         $headers = array();
         $headers['Date'] = "Tue, 27 Mar 2007 21:15:45 +0000";
         $headers['Content-Type'] = "image/jpeg";
         $headers['Content-Length'] = 94328;
-        
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('PUT', 'http://s3.amazonaws.com/johnsmith/photos/puppy.jpg', $headers);
 
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:88cf7BdpjrBlCsIiWWLn8wLpWzI=', $headers['Authorization']);
@@ -100,12 +98,12 @@ image/jpeg
 Tue, 27 Mar 2007 21:15:45 +0000
 //johnsmith/photos/puppy.jpg");
     }
-    
+
     public function testListGeneratesCorrectSignature()
     {
         $headers = array();
         $headers['Date'] = "Tue, 27 Mar 2007 19:42:41 +0000";
-        
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('GET', 'http://s3.amazonaws.com/johnsmith/?prefix=photos&max-keys=50&marker=puppy', $headers);
 
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:pm3Adv2BIFCCJiUSikcLcGYFtiA=', $headers['Authorization']);
@@ -115,12 +113,12 @@ Tue, 27 Mar 2007 21:15:45 +0000
 Tue, 27 Mar 2007 19:42:41 +0000
 //johnsmith/");
     }
-    
+
     public function testFetchGeneratesCorrectSignature()
     {
         $headers = array();
         $headers['Date'] = "Tue, 27 Mar 2007 19:44:46 +0000";
-        
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('GET', 'http://s3.amazonaws.com/johnsmith/?acl', $headers);
 
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:TCNlZPuxY41veihZbxjnjw8P93w=', $headers['Authorization']);
@@ -130,15 +128,15 @@ Tue, 27 Mar 2007 19:42:41 +0000
 Tue, 27 Mar 2007 19:44:46 +0000
 //johnsmith/?acl");
     }
-    
+
     public function testDeleteGeneratesCorrectSignature()
     {
-        
+
         $headers = array();
         $headers['x-amz-date'] = "Tue, 27 Mar 2007 21:20:26 +0000";
-        
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('DELETE', 'http://s3.amazonaws.com/johnsmith/photos/puppy.jpg', $headers);
-        
+
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:O9AsSXUIowhjTiJC5escAqjsAyk=', $headers['Authorization']);
         $this->assertEquals($ret, "DELETE
 
@@ -147,7 +145,7 @@ Tue, 27 Mar 2007 19:44:46 +0000
 x-amz-date:Tue, 27 Mar 2007 21:20:26 +0000
 //johnsmith/photos/puppy.jpg");
     }
-    
+
     public function testUploadGeneratesCorrectSignature()
     {
         $headers = array();
@@ -162,10 +160,10 @@ x-amz-date:Tue, 27 Mar 2007 21:20:26 +0000
         $headers['Content-Disposition'] = "attachment; filename=database.dat";
         $headers['Content-Encoding'] = "gzip";
         $headers['Content-Length'] = "5913339";
-        
-        
+
+
         $ret = $this->Zend_Service_Amazon_Authentication_S3->generateSignature('PUT', 'http://s3.amazonaws.com/static.johnsmith.net/db-backup.dat.gz', $headers);
-        
+
         $this->assertEquals('AWS 0PN5J17HBGZHT7JJ3X82:IQh2zwCpX2xqRgP2rbIkXL/GVbA=', $headers['Authorization']);
         $this->assertEquals($ret, "PUT
 4gJE4saaMU4BqNR0kLY+lw==

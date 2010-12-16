@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Filter_Int
  */
 require_once 'Zend/Filter/Null.php';

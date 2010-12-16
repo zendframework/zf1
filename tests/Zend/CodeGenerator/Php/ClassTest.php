@@ -21,11 +21,6 @@
  */
 
 /**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_CodeGenerator_Php_Class
  */
 require_once 'Zend/CodeGenerator/Php/Class.php';

@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__)."/../../TestHelper.php";
-
 /** Zend_Soap_AutoDiscover */
 require_once 'Zend/Soap/AutoDiscover.php';
 

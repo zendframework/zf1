@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Memory_MemoryTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 /** Zend_Memory */
 require_once 'Zend/Memory.php';
 

@@ -19,8 +19,6 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Feed/Pubsubhubbub/Subscriber.php';
 require_once 'Zend/Feed/Pubsubhubbub/Model/Subscription.php';
 
@@ -37,9 +35,9 @@ class Zend_Feed_Pubsubhubbub_SubscriberTest extends PHPUnit_Framework_TestCase
 {
 
     protected $_subscriber = null;
-    
+
     protected $_adapter = null;
-    
+
     protected $_tableGateway = null;
 
     public function setUp()
@@ -331,7 +329,7 @@ class Zend_Feed_Pubsubhubbub_SubscriberTest extends PHPUnit_Framework_TestCase
     {
         $this->_subscriber->getStorage();
     }
-    
+
     protected function _getCleanMock($className) {
         $class = new ReflectionClass($className);
         $methods = $class->getMethods();

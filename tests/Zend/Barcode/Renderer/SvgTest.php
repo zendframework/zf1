@@ -20,8 +20,6 @@
  * @version    $Id: SvgTest.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-
 require_once dirname(__FILE__) . '/TestCommon.php';
 
 require_once 'Zend/Barcode/Renderer/Svg.php';
@@ -81,7 +79,7 @@ class Zend_Barcode_Renderer_SvgTest extends Zend_Barcode_Renderer_TestCommon
     {
         $this->_renderer->setWidth(-1);
     }
-    
+
     public function testGoodSvgResource()
     {
         $svgResource = new DOMDocument();

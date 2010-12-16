@@ -20,11 +20,6 @@
  * @version    $Id $
  */
 
-/**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** requires */
 require_once 'Zend/Reflection/Parameter.php';
 require_once 'Zend/CodeGenerator/Php/Parameter.php';

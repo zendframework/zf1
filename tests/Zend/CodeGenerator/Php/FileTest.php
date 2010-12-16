@@ -20,11 +20,6 @@
  * @version    $Id $
  */
 
-/**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** requires here */
 require_once 'Zend/CodeGenerator/Php/File.php';
 require_once 'Zend/Reflection/File.php';
@@ -131,9 +126,9 @@ EOS;
 <?php
 /**
  * File header here
- * 
+ *
  * @author Ralph Schindler <ralph.schindler@zend.com>
- * 
+ *
  */
 
 
@@ -141,18 +136,18 @@ EOS;
 
 /**
  * class docblock
- * 
+ *
  * @package Zend_Reflection_TestSampleSingleClass
- * 
+ *
  */
 class Zend_Reflection_TestSampleSingleClass
 {
 
     /**
      * Enter description here...
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function someMethod()
     {

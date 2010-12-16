@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Acl.php';
 require_once 'Zend/Acl/Resource.php';
 require_once 'Zend/Acl/Role.php';
@@ -1257,7 +1255,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($allowed);
     }
-    
+
     /**
      * @group ZF-8468
      */
@@ -1268,10 +1266,10 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         } catch(PHPUnit_Framework_Error $e) {
             return;
         }
-        
+
         $this->fail('An expected notice has not been raised');
     }
-    
+
     /**
      * @group ZF-8468
      */
@@ -1287,7 +1285,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $expected = array('guest', 'staff','editor','administrator');
         $this->assertEquals($expected, $this->_acl->getRoles());
     }
-    
+
     /**
      * @group ZF-8468
      */
@@ -1300,7 +1298,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $expected = array('someResource', 'someOtherResource');
         $this->assertEquals($expected, $this->_acl->getResources());
     }
-    
+
     /**
      * @group ZF-9643
      */
@@ -1317,11 +1315,11 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $this->_acl->removeAllow('guest', 'newsletter', 'read');
         $this->assertTrue($this->_acl->isAllowed('guest', 'blogpost', 'read'));
         $this->assertFalse($this->_acl->isAllowed('guest', 'newsletter', 'read'));
-        
+
         $this->_acl->removeAllow('guest', null, 'read');
         $this->assertFalse($this->_acl->isAllowed('guest', 'blogpost', 'read'));
         $this->assertFalse($this->_acl->isAllowed('guest', 'newsletter', 'read'));
-        
+
         // ensure allow null/all resoures works
         $this->_acl->allow('guest', null, 'read');
         $this->assertTrue($this->_acl->isAllowed('guest', 'blogpost', 'read'));
@@ -1336,7 +1334,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $this->_acl->addRole('guest');
         $this->_acl->addResource('blogpost');
         $this->_acl->addResource('newsletter');
-        
+
         $this->_acl->allow();
         $this->_acl->deny('guest', 'blogpost', 'read');
         $this->_acl->deny('guest', 'newsletter', 'read');
@@ -1346,17 +1344,17 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $this->_acl->removeDeny('guest', 'newsletter', 'read');
         $this->assertFalse($this->_acl->isAllowed('guest', 'blogpost', 'read'));
         $this->assertTrue($this->_acl->isAllowed('guest', 'newsletter', 'read'));
-        
+
         $this->_acl->removeDeny('guest', null, 'read');
         $this->assertTrue($this->_acl->isAllowed('guest', 'blogpost', 'read'));
         $this->assertTrue($this->_acl->isAllowed('guest', 'newsletter', 'read'));
-        
+
         // ensure deny null/all resources works
         $this->_acl->deny('guest', null, 'read');
         $this->assertFalse($this->_acl->isAllowed('guest', 'blogpost', 'read'));
         $this->assertFalse($this->_acl->isAllowed('guest', 'newsletter', 'read'));
     }
-    
+
     /**
      * @group ZF-10649
      */
@@ -1364,12 +1362,12 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
     {
         $this->_acl->addRole('guest');
         $this->_acl->addResource('blogpost');
-        
+
         $this->_acl->allow('guest');
         $this->assertTrue($this->_acl->isAllowed('guest'));
         $this->assertTrue($this->_acl->isAllowed('guest', 'blogpost'));
         $this->assertTrue($this->_acl->isAllowed('guest', 'blogpost', 'read'));
-        
+
         $this->_acl->deny('guest');
         $this->assertFalse($this->_acl->isAllowed('guest'));
         $this->assertFalse($this->_acl->isAllowed('guest', 'blogpost'));

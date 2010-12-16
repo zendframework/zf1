@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Config
  */
 require_once 'Zend/Config.php';
@@ -138,7 +133,7 @@ class Zend_Config_Writer_ArrayTest extends PHPUnit_Framework_TestCase
         $expected .= "    1 => 'foo',\n";
         $expected .= "  ),\n";
         $expected .= ");\n";
-        
+
         $this->assertEquals($expected, $configString);
     }
 }

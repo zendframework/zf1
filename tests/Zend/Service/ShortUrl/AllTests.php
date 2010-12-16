@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_Service_ShortUrl_IsGdTest
  */
 require_once 'Zend/Service/ShortUrl/IsGdTest.php';
@@ -72,7 +67,7 @@ class Zend_Service_ShortUrl_AllTests
         $suite->addTestSuite('Zend_Service_ShortUrl_JdemCzTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_MetamarkNetTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_TinyUrlComTest');
-        
+
         return $suite;
     }
 }

@@ -31,12 +31,6 @@ require_once 'Zend/Mail/Protocol/Smtp.php';
  */
 require_once 'Zend/Mail/Transport/Smtp.php';
 
-
-/**
- * Test helper for configuration when run standalone
- */
-require_once dirname(__FILE__).'/../../TestHelper.php';
-
 /**
  * @category   Zend
  * @package    Zend_Mail

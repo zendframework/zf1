@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Tool/Framework/Loader/IncludePathLoader.php';
 require_once 'Zend/Tool/Framework/Manifest/Repository.php';
 require_once 'Zend/Tool/Framework/Action/Repository.php';

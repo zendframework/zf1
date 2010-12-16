@@ -25,11 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Log_Writer_MailTest::main");
 }
 
-/**
- * Test helper
- */
-require_once realpath(dirname(__FILE__) . '/../../..') . '/TestHelper.php';
-
 /** Zend_Layout */
 require_once 'Zend/Layout.php';
 
@@ -47,6 +42,10 @@ require_once 'Zend/Mail/Transport/Exception.php';
 
 /** Zend_View_Exception */
 require_once 'Zend/View/Exception.php';
+
+/** For some reason these classed have to be manually loaded, because PHPUnit fails to autoload them */
+require_once 'PHPUnit/Framework/MockObject/Stub/Exception.php';
+
 
 /**
  * @category   Zend

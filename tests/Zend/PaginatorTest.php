@@ -26,11 +26,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
-/**
  * @see Zend_Paginator
  */
 require_once 'Zend/Paginator.php';

@@ -20,11 +20,6 @@
  * @version    $Id $
  */
 
-/**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/CodeGenerator/Php/Property.php';
 
 require_once 'Zend/Reflection/Class.php';
@@ -90,7 +85,7 @@ EOS;
 
         $targetSource = $property->generate();
         $targetSource = str_replace("\r", '', $targetSource);
-            
+
         $this->assertEquals($expectedSource, $targetSource);
     }
 
@@ -233,7 +228,7 @@ EOS;
 
         $this->assertEquals($code, $defaultValue->generate());
     }
-    
+
     /**
      * @group ZF-8849
      */
@@ -244,7 +239,7 @@ EOS;
             'name'         => 'ZF8849',
             'const'        => true
         ));
-        
+
         $this->assertEquals(
             $property->generate(),
             "    const ZF8849 = '1.337';"

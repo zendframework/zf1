@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_FactoryTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /**
  * @see Zend_Config_Ini
  */
@@ -66,7 +64,7 @@ class Zend_Cloud_QueueService_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_string(Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY));
     }
 
-    public function testGetAdapterWithConfig() 
+    public function testGetAdapterWithConfig()
     {
         // SQS adapter
         $sqsConfig = new Zend_Config_Ini(realpath(dirname(__FILE__) . '/_files/config/sqs.ini'));
@@ -84,7 +82,7 @@ class Zend_Cloud_QueueService_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Zend_Cloud_QueueService_Adapter_WindowsAzure', get_class($azureAdapter));
     }
 
-    public function testGetAdapterWithArray() 
+    public function testGetAdapterWithArray()
     {
         // No need to overdo it; we'll test the array config with just one adapter.
         $zqConfig = array(Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY =>

@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Loader_Autoloader
  */
 require_once 'Zend/Loader/Autoloader.php';
@@ -136,7 +131,7 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
         $options = array('contentType' => $contentType);
         $resource = new Zend_Application_Resource_View($options);
         $headMetaHelper = $resource->init()->headMeta();
- 
+
         $actual = null;
         $container = $headMetaHelper->getContainer();
         foreach ($container as $item) {
@@ -151,7 +146,7 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
         Zend_View_Helper_Placeholder_Registry::getRegistry()
             ->deleteContainer('Zend_View_Helper_HeadMeta');
     }
-    
+
     /**
      * @group ZF-10343
      */
@@ -182,7 +177,7 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
         $registry->deleteContainer('Zend_View_Helper_HeadMeta');
         $registry->deleteContainer('Zend_View_Helper_Doctype');
     }
-	
+
     /**
      * @group ZF-10343
      */

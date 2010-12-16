@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_QueueService_Adapter_SqsTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_QueueServiceTestCase
  */
@@ -53,7 +51,7 @@ class Zend_Cloud_QueueService_Adapter_SqsTest extends Zend_Cloud_QueueService_Te
      */
     protected $_waitPeriod = 10;
 	protected $_clientType = 'Zend_Service_Amazon_Sqs';
-    
+
 	/**
      * Runs the test methods of this class.
      *
@@ -71,7 +69,7 @@ class Zend_Cloud_QueueService_Adapter_SqsTest extends Zend_Cloud_QueueService_Te
      *
      * @return void
      */
-    public function setUp() 
+    public function setUp()
     {
         parent::setUp();
         // Isolate the tests from slow deletes
@@ -130,16 +128,16 @@ class Zend_Cloud_QueueService_Adapter_SqsTest extends Zend_Cloud_QueueService_Te
         $this->markTestSkipped('SQS does not currently support storing metadata');
     }
 
-    protected function _getConfig() 
+    protected function _getConfig()
     {
-        if (!defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED') 
-            || !constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED') 
-            || !defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEYID') 
+        if (!defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED')
+            || !defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEYID')
             || !defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_SECRETKEY')
         ) {
-            $this->markTestSkipped("Amazon SQS access not configured, skipping test");        
-        }        
-        
+            $this->markTestSkipped("Amazon SQS access not configured, skipping test");
+        }
+
         $config = new Zend_Config(array(
             Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY => 'Zend_Cloud_QueueService_Adapter_Sqs',
             Zend_Cloud_QueueService_Adapter_Sqs::AWS_ACCESS_KEY => constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEYID'),

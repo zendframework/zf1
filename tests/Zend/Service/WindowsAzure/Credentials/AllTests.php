@@ -20,11 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedKeyTest.php';
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedKeyLiteTest.php';
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedAccessSignatureTest.php';
@@ -46,7 +41,7 @@ class Zend_Service_WindowsAzure_Credentials_AllTests
         $suite->addTestSuite('Zend_Service_WindowsAzure_Credentials_SharedKeyTest');
         $suite->addTestSuite('Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest');
         $suite->addTestSuite('Zend_Service_WindowsAzure_Credentials_SharedAccessSignatureTest');
-        
+
         return $suite;
     }
 }

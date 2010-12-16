@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Application_ApplicationTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 /** Zend_Loader_Autoloader */
 require_once 'Zend/Loader/Autoloader.php';
 

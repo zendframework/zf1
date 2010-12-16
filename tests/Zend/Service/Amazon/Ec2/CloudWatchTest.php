@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Service/Amazon/Ec2/CloudWatch.php';
 require_once 'Zend/Http/Client.php';
 require_once 'Zend/Http/Client/Adapter/Test.php';
@@ -209,10 +204,10 @@ class Zend_Service_Amazon_Ec2_CloudWatchTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($arrReturn, $return);
     }
-    
+
     public function testZF8149()
     {
-        
+
         $rawHttpResponse = "HTTP/1.1 200 OK\r\n"
                     . "Date: Fri, 24 Oct 2008 17:24:52 GMT\r\n"
                     . "Server: hi\r\n"
@@ -263,7 +258,7 @@ class Zend_Service_Amazon_Ec2_CloudWatchTest extends PHPUnit_Framework_TestCase
                     ."  </ResponseMetadata>\r\n"
                     ."</GetMetricStatisticsResponse>";
         $this->adapter->setResponse($rawHttpResponse);
-        
+
         $return = $this->Zend_Service_Amazon_Ec2_CloudWatch->getMetricStatistics(
             array(
             	'MeasureName' => 'CPUUtilization',
@@ -273,40 +268,40 @@ class Zend_Service_Amazon_Ec2_CloudWatchTest extends PHPUnit_Framework_TestCase
              	'EndTime'=>      '2009-11-19T21:56:57+00:00'
            )
         );
-        
+
         $arrReturn = array (
           'label' => 'CPUUtilization',
-          'datapoints' => 
+          'datapoints' =>
           array (
-            0 => 
+            0 =>
             array (
               'Timestamp' => '2009-11-19T21:52:00Z',
               'Unit' => 'Percent',
               'Samples' => '1.0',
               'Average' => '0.09',
             ),
-            1 => 
+            1 =>
             array (
               'Timestamp' => '2009-11-19T21:55:00Z',
               'Unit' => 'Percent',
               'Samples' => '1.0',
               'Average' => '0.18',
             ),
-            2 => 
+            2 =>
             array (
               'Timestamp' => '2009-11-19T21:54:00Z',
               'Unit' => 'Percent',
               'Samples' => '1.0',
               'Average' => '0.09',
             ),
-            3 => 
+            3 =>
             array (
               'Timestamp' => '2009-11-19T21:51:00Z',
               'Unit' => 'Percent',
               'Samples' => '1.0',
               'Average' => '0.18',
             ),
-            4 => 
+            4 =>
             array (
               'Timestamp' => '2009-11-19T21:53:00Z',
               'Unit' => 'Percent',
@@ -315,7 +310,7 @@ class Zend_Service_Amazon_Ec2_CloudWatchTest extends PHPUnit_Framework_TestCase
             ),
           ),
         );
-        
+
         $this->assertSame($arrReturn, $return);
     }
 

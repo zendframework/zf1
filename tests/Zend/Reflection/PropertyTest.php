@@ -21,11 +21,6 @@
  */
 
 /**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Reflection_Property
  */
 require_once 'Zend/Reflection/Property.php';

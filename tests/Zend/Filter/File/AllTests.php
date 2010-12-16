@@ -20,8 +20,6 @@
  * @version    $Id: AllTests.php 16225 2009-06-21 20:34:55Z thomas $
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Filter_File_AllTests::main');
 }

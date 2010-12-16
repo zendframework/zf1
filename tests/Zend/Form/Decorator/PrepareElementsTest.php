@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Form_Decorator_PrepareElementsTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Form/Decorator/PrepareElements.php';
 require_once 'Zend/Form.php';
 require_once 'Zend/Form/SubForm.php';

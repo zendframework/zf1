@@ -25,8 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_View_Helper_GravatarTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /**
  * @see Zend_View_Helper_Gravatar
  */
@@ -108,7 +106,7 @@ class Zend_View_Helper_GravatarTest extends PHPUnit_Framework_TestCase
         $view   = new Zend_View();
         $view->doctype()->setDoctype(strtoupper("HTML5"));
         $object->setView($view);
-        
+
         $this->assertRegExp('/[^\/]>$/',
             $this->_object->gravatar('example@example.com')->__toString());
     }
@@ -142,7 +140,7 @@ class Zend_View_Helper_GravatarTest extends PHPUnit_Framework_TestCase
             "http://www.example.com/images/avatar/example.png",
             Zend_View_Helper_Gravatar::DEFAULT_MONSTERID,
         );
-        
+
         foreach ($img as $value) {
             $this->_object->setDefaultImg($value);
             $this->assertEquals(urlencode($value), $this->_object->getDefaultImg());
@@ -240,7 +238,7 @@ class Zend_View_Helper_GravatarTest extends PHPUnit_Framework_TestCase
     public function testAutoDetectLocationOnIis()
     {
         $_SERVER['HTTPS'] = "off";
-        
+
         $this->assertRegExp('/src="http:\/\/www.gravatar.com\/avatar\/[a-z0-9]{32}.+"/',
                 $this->_object->gravatar("example@example.com")->__toString());
     }

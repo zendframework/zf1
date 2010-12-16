@@ -21,11 +21,6 @@
  */
 
 /**
- * @see TestHelper.php
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-/**
  * @see Zend_Tool_Framework_Action_Base
  */
 require_once 'Zend/Tool/Framework/Manifest/Metadata.php';

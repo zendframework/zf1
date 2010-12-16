@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_NavigationTest::main');
 }
 
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
 /**
  * Zend_Navigation
  */
@@ -45,13 +43,13 @@ class Zend_NavigationTest extends PHPUnit_Framework_TestCase
      * @var     Zend_Navigation
      */
     private $_navigation;
-    
+
     protected function setUp()
     {
         parent::setUp();
         $this->_navigation = new Zend_Navigation();
     }
-    
+
     protected function tearDown()
     {
         $this->_navigation = null;
@@ -70,7 +68,7 @@ class Zend_NavigationTest extends PHPUnit_Framework_TestCase
 
     /**
      * Testing that navigation order is done correctly
-     * 
+     *
      * @group   ZF-8337
      * @group   ZF-8313
      */
@@ -86,12 +84,12 @@ class Zend_NavigationTest extends PHPUnit_Framework_TestCase
         $page1->setOrder(1);
         $page3->setOrder(0);
         $page2->setOrder(2);
-        
+
         $pages = $this->_navigation->toArray();
         $this->assertSame(3, count($pages));
         $this->assertEquals('page3', $pages[0]['uri']);
         $this->assertEquals('page1', $pages[1]['uri']);
         $this->assertEquals('page2', $pages[2]['uri']);
     }
-    
+
 }

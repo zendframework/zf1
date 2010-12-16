@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Json_Server_ResponseTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Json/Server/Response.php';
 require_once 'Zend/Json/Server/Error.php';
 require_once 'Zend/Json.php';

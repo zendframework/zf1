@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Form_SubFormTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 // error_reporting(E_ALL);
 
 require_once 'Zend/Form/SubForm.php';

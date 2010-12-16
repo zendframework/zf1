@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Wildfire_WildfireTest::main');
 }
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 /** Zend_Wildfire_Channel_HttpHeaders */
 require_once 'Zend/Wildfire/Channel/HttpHeaders.php';
 
@@ -156,13 +154,13 @@ class Zend_Wildfire_WildfireTest extends PHPUnit_Framework_TestCase
         $this->_request->setUserAgentExtensionEnabled(false);
 
         $this->assertFalse($channel->isReady(true));
-        
+
         $this->_request->setUserAgentExtensionEnabled(true, 'User-Agent');
-        
+
         $this->assertTrue($channel->isReady(true));
 
         $this->_request->setUserAgentExtensionEnabled(true, 'X-FirePHP-Version');
-        
+
         $this->assertTrue($channel->isReady(true));
     }
 
@@ -179,11 +177,11 @@ class Zend_Wildfire_WildfireTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($channel->isReady());
 
         $this->_request->setUserAgentExtensionEnabled(true, 'User-Agent');
-        
+
         $this->assertTrue($channel->isReady());
 
         $this->_request->setUserAgentExtensionEnabled(true, 'X-FirePHP-Version');
-        
+
         $this->assertTrue($channel->isReady());
     }
 

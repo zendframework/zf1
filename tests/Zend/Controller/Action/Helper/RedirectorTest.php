@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Controller_Action_Helper_RedirectorTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Controller/Front.php';
 require_once 'Zend/Controller/Action.php';
 require_once 'Zend/Controller/Action/HelperBroker.php';
@@ -503,7 +501,7 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
         $this->assertNotContains('https://', $test);
         $this->assertEquals('http://localhost/bar/baz', $test);
     }
-    
+
     /**
      * @group ZF-9859
      */
@@ -514,7 +512,7 @@ class Zend_Controller_Action_Helper_RedirectorTest extends PHPUnit_Framework_Tes
         $setGotoUrl = $this->redirector->setGotoUrl($url);
         $this->assertSame($gotoUrl, $setGotoUrl);
     }
-    
+
     /**
      * @group ZF-10364
      */

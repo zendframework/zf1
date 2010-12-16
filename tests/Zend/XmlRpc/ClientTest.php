@@ -19,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id$
  */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
 
 require_once 'Zend/XmlRpc/Client.php';
 
@@ -664,7 +663,7 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->xmlrpcClient->call('method'));
         $this->assertSame($expectedUserAgent, $this->httpClient->getHeader('user-agent'));
     }
-    
+
     /**
      * @group ZF-8478
      */
@@ -675,7 +674,7 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
         	$introspector = new Zend_XmlRpc_Client_ServerIntrospection(
                 new Test_XmlRpc_Client('http://localhost/')
             );
-            
+
             $signature = $introspector->getMethodSignature('add');
             if (!is_array($signature)) {
                 $this->fail('Expected exception has not been thrown');
@@ -685,14 +684,14 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('Invalid signature for method "add"', $e->getMessage());
         }
     }
-    
+
     /**
      * @group ZF-8580
      */
     public function testCallSelectsCorrectSignatureIfMoreThanOneIsAvailable()
     {
         $this->mockIntrospector();
-        
+
         $this->mockedIntrospector
              ->expects($this->exactly(2))
              ->method('getMethodSignature')

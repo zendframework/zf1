@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__)."/../../TestHelper.php";
-
 /** Zend_Soap_Server */
 require_once 'Zend/Soap/Server.php';
 
@@ -93,7 +91,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $server = new Zend_Soap_Server(null, array(
             'features' => SOAP_SINGLE_ELEMENT_ARRAYS
         ));
-        
+
         $this->assertEquals(
             SOAP_SINGLE_ELEMENT_ARRAYS,
             $server->getSoapFeatures()

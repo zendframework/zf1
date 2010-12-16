@@ -21,11 +21,6 @@
  */
 
 /**
- * TestHelper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Zend_Pdf_Element_String
  */
 require_once 'Zend/Pdf/Element/String.php';

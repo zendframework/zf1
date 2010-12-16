@@ -26,11 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Zend_Text_MultiByte
  */
 require_once 'Zend/Text/MultiByte.php';

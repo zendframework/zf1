@@ -24,11 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Log_Formatter_SimpleTest::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Log_Formatter_Simple */
 require_once 'Zend/Log/Formatter/Simple.php';
 

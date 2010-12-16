@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * @see Zend_Paginator_ScrollingStyle_Elastic
  */
 require_once 'Zend/Paginator/ScrollingStyle/Elastic.php';

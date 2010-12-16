@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-
 require_once 'Zend/Feed/Writer/Deleted.php';
 
 /**
@@ -58,7 +56,7 @@ class Zend_Feed_Writer_DeletedTest extends PHPUnit_Framework_TestCase
         $entry = new Zend_Feed_Writer_Deleted;
         $this->assertTrue(is_null($entry->getReference()));
     }
-    
+
     public function testSetWhenDefaultsToCurrentTime()
     {
         $entry = new Zend_Feed_Writer_Deleted;
@@ -82,7 +80,7 @@ class Zend_Feed_Writer_DeletedTest extends PHPUnit_Framework_TestCase
         $myDate = new Zend_Date('1234567890', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($entry->getWhen()));
     }
-    
+
     public function testSetWhenThrowsExceptionOnInvalidParameter()
     {
         $entry = new Zend_Feed_Writer_Deleted;
@@ -92,13 +90,13 @@ class Zend_Feed_Writer_DeletedTest extends PHPUnit_Framework_TestCase
         } catch (Zend_Feed_Exception $e) {
         }
     }
-    
+
     public function testGetWhenReturnsNullIfDateNotSet()
     {
         $entry = new Zend_Feed_Writer_Deleted;
         $this->assertTrue(is_null($entry->getWhen()));
     }
-    
+
     public function testAddsByNameFromArray()
     {
         $entry = new Zend_Feed_Writer_Deleted;

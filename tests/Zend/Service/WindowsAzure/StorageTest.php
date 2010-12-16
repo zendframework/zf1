@@ -20,11 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Service_WindowsAzure_Storage */
 require_once 'Zend/Service/WindowsAzure/Storage.php';
 
@@ -47,7 +42,7 @@ class Zend_Service_WindowsAzure_StorageTest extends PHPUnit_Framework_TestCase
         $storage = new Zend_Service_WindowsAzure_Storage();
         $this->assertEquals('http://127.0.0.1:10000/devstoreaccount1', $storage->getBaseUrl());
     }
-    
+
     /**
      * Test constructor for production
      */

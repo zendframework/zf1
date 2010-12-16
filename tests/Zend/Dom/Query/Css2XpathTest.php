@@ -20,7 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
 require_once 'Zend/Dom/Query/Css2Xpath.php';
 
 /**

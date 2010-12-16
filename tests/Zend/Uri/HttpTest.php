@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * @see Zend_Uri
  */
 require_once 'Zend/Uri.php';
@@ -46,12 +41,12 @@ require_once 'Zend/Uri/Http.php';
  */
 class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
 {
-    
+
     public function setup()
     {
         Zend_Uri::setConfig(array('allow_unwise' => false));
     }
-    
+
     /**
      * Tests for proper URI decomposition
      */
@@ -237,7 +232,7 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
             'http://example.com/?q=^',
             'http://example.com/?q=`',
         );
-        
+
         foreach ($unwise as $uri) {
             $this->assertFalse(Zend_Uri::check($uri), "failed for URI $uri");
         }

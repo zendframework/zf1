@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Zend_Console_Getopt
  */
 require_once 'Zend/Console/Getopt.php';
@@ -273,7 +268,7 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
         unset($opts->a);
         $this->assertFalse(isset($opts->a));
     }
-    
+
     /**
      * @group ZF-5948
      */
@@ -289,7 +284,7 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Parameter #1 to setArguments should be an array",
                 $e->getMessage());
         }
-        
+
         try {
             $opts->addArguments('-b');
             $this->fail('Expected to catch a Zend_Console_Getopt_Exception');
@@ -299,7 +294,7 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Parameter #1 to addArguments should be an array",
                 $e->getMessage());
         }
-        
+
     }
 
     public function testGetoptAddArguments()

@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Zend_Config_Ini
  */
 require_once 'Zend/Config/Yaml.php';
@@ -198,7 +193,7 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         }
 
     }
-    
+
     public function testZF2285_MultipleKeysOfTheSameName()
     {
         $config = new Zend_Config_Yaml($this->_iniFileSameNameKeysConfig, null);

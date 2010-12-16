@@ -28,9 +28,6 @@
  * an exception.
  */
 
-/** TestHelp.php */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Queue */
 require_once 'Zend/Queue.php';
 
@@ -159,7 +156,7 @@ abstract class Zend_Queue_Adapter_AdapterTest extends PHPUnit_Framework_TestCase
             return false;
         }
 
-        restore_error_handler();        
+        restore_error_handler();
 
         return $queue;
     }

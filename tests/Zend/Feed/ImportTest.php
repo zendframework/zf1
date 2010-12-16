@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Feed
  */
 require_once 'Zend/Feed.php';
@@ -219,7 +214,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
         $feed = Zend_Feed::importArray($this->_getFullArray(), 'rss');
         $this->assertType('Zend_Feed_Rss', $feed);
     }
-    
+
     /**
      * Test the import of a RSS feed from an array
      * @group ZF-5833

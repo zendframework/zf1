@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Translate_Adapter_ArrayTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /**
  * Zend_Translate_Adapter_Array
  */

@@ -20,11 +20,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Validate_Isbn
  */
 require_once 'Zend/Validate/Isbn.php';

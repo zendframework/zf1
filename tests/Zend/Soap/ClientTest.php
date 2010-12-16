@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Soap_ClientTest::main');
 }
 
-require_once dirname(__FILE__)."/../../TestHelper.php";
-
 /** Zend_Soap_Server */
 require_once 'Zend/Soap/Server.php';
 

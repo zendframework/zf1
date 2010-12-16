@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Loader_Autoloader
  */
 require_once 'Zend/Loader/Autoloader.php';
@@ -346,7 +341,7 @@ class Zend_Application_Resource_FrontcontrollerTest extends PHPUnit_Framework_Te
         $front = $resource->getFrontController();
         $this->assertNull($front->getBaseUrl());
     }
-    
+
     /**
      * @group ZF-9044
      */
@@ -365,7 +360,7 @@ class Zend_Application_Resource_FrontcontrollerTest extends PHPUnit_Framework_Te
             5 => 'Zend_Controller_Plugin_PutHandler',
             10 => 'Zend_Controller_Plugin_ErrorHandler',
         );
-        
+
         $resource = new Zend_Application_Resource_Frontcontroller(array(
             'plugins' => $plugins
         ));
@@ -373,7 +368,7 @@ class Zend_Application_Resource_FrontcontrollerTest extends PHPUnit_Framework_Te
         $resource->init();
         $front = $resource->getFrontController();
         $plugins = $front->getPlugins();
-        
+
         $this->assertEquals(count($expected), count($plugins));
         foreach($expected as $index => $class) {
         	$this->assertEquals($class, get_class($plugins[$index]));

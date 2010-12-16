@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /** Zend_Controller_Router_Route */
 require_once 'Zend/Controller/Router/Route/Static.php';
 

@@ -19,8 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once dirname(__FILE__) . '/../../../../../TestHelper.php';
-
 require_once 'Zend/Http/UserAgent/Features/Adapter/DeviceAtlas.php';
 
 /**
@@ -35,7 +33,7 @@ class Zend_Http_UserAgent_Features_Adapter_DeviceAtlasTest extends PHPUnit_Frame
 
     public function setUp()
     {
-        if (!constant('TESTS_ZEND_HTTP_USERAGENT_DEVICEATLAS_LIB_DIR') 
+        if (!constant('TESTS_ZEND_HTTP_USERAGENT_DEVICEATLAS_LIB_DIR')
             || !constant('TESTS_ZEND_HTTP_USERAGENT_DEVICEATLAS_DATA_FILE')
         ) {
             $this->markTestSkipped('Requires Device Atlas library');
@@ -56,7 +54,7 @@ class Zend_Http_UserAgent_Features_Adapter_DeviceAtlasTest extends PHPUnit_Frame
         $this->assertEquals('iPhone',                    $deviceAtlas['model']);
         $this->assertEquals('Mozilla/5.0 (iPhone; U; C', $deviceAtlas['_matched']);
         $this->assertEquals('Apple',                     $deviceAtlas['vendor']);
-        
+
         $request['http_user_agent'] = 'SonyEricssonK700i/R2AC SEMC-Browser/4.0.2 Profile/MIDP-2.0 Configuration/CLDC-1.1';
         $deviceAtlas = Zend_Http_UserAgent_Features_Adapter_DeviceAtlas::getFromRequest($request, $this->config);
         $this->assertEquals(20000,               $deviceAtlas['memoryLimitMarkup']);

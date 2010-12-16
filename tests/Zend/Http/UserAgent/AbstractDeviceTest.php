@@ -19,8 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /**
  * Zend_Http_UserAgent
  */
@@ -56,65 +54,65 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('5.0.1', $extract['browser_version']);
         $this->assertEquals('Windows Server 2003', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10gin_lib.cc';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
         $this->assertEquals('Safari Mobile', $extract['browser_name']);
         $this->assertEquals('4.0.4', $extract['browser_version']);
         $this->assertEquals('iPhone OS', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_4_11; hu-hu) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('4.0.4', $extract['browser_version']);
         $this->assertEquals('PPC Mac OS X 10_4_11', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
         $this->assertEquals('Safari Mobile', $extract['browser_name']);
         $this->assertEquals('4.0.4', $extract['browser_version']);
         $this->assertEquals('iPhone OS', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; pt-pt) AppleWebKit/418.9.1 (KHTML, like Gecko) Safari/419.3';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('2.0', $extract['browser_version']);
         $this->assertEquals('PPC Mac OS X', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; fr-ch) AppleWebKit/312.1.1 (KHTML, like Gecko) Safari/312';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('1.3', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; fr) AppleWebKit/312.5.2 (KHTML, like Gecko) Safari/312.3.3';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('1.3', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; fr-fr) AppleWebKit/85.7 (KHTML, like Gecko) Safari/85.5';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('1.0', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-gb) AppleWebKit/85.8.5 (KHTML, like Gecko) Safari/85.8.1';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('1.0', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/124 (KHTML, like Gecko) Safari/125';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('1.2', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/418.9 (KHTML, like Gecko) Safari/419.3';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
         $this->assertEquals('2.0', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/412.6.2 (KHTML, like Gecko) Safari/412.2.2';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari', $extract['browser_name']);
@@ -129,56 +127,56 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('9.0', $extract['browser_version']);
         $this->assertEquals('Windows 7', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; FDM; OfficeLiveConnector.1.4; OfficeLivePatch.1.3; .NET CLR 1.1.4322)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('8.0', $extract['browser_version']);
         $this->assertEquals('Windows 7', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('7.0', $extract['browser_version']);
         $this->assertEquals('Windows 7', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('7.0', $extract['browser_version']);
         $this->assertEquals('Windows Vista', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.0 (Windows; MSIE 7.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('7.0', $extract['browser_version']);
         $this->assertEquals('Windows XP', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/45.0 (compatible; MSIE 6.0; Windows NT 5.1)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('6.0', $extract['browser_version']);
         $this->assertEquals('Windows XP', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.2; .NET CLR 1.1.4322)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('5.5', $extract['browser_version']);
         $this->assertEquals('Windows Server 2003', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 5.12; Mac_PowerPC)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Internet Explorer', $extract['browser_name']);
         $this->assertEquals('5.12', $extract['browser_version']);
         $this->assertEquals('Mac_PowerPC', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 4.5; Windows 98; )';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
@@ -194,31 +192,31 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Firefox', $extract['browser_name']);
         $this->assertEquals('4.0', $extract['browser_version']);
         $this->assertEquals('Windows 7', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; nb-NO; rv:1.9.2.4) Gecko/20100611 Firefox/3.6.4 (.NET CLR 3.5.30729)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Firefox', $extract['browser_name']);
         $this->assertEquals('3.6.4', $extract['browser_version']);
         $this->assertEquals('Windows XP', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.6) Gecko/2009020518 Ubuntu/9.04 (jaunty) Firefox/3.0.6';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Firefox', $extract['browser_name']);
         $this->assertEquals('3.0.6', $extract['browser_version']);
         $this->assertEquals('Linux i686', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686 (x86_64); en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Firefox', $extract['browser_name']);
         $this->assertEquals('2.0.0.9', $extract['browser_version']);
         $this->assertEquals('Linux i686 (x86_64)', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.8) Gecko/20071019 Fedora/2.0.0.8-1.fc7 Firefox/2.0.0.8';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Firefox', $extract['browser_name']);
         $this->assertEquals('2.0.0.8', $extract['browser_version']);
         $this->assertEquals('Linux i686', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.1) Gecko/20060313 Debian/1.5.dfsg+1.5.0.1-4 Firefox/1.5.0.1';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Firefox', $extract['browser_name']);
@@ -232,32 +230,32 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
         $this->assertEquals('2.0b4', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.4pre) Gecko/20070521 Camino/1.6a1pre';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Camino', $extract['browser_name']);
         $this->assertEquals('1.6a1pre', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.0.7) Gecko/2009021910 MEGAUPLOAD 1.0';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
         $this->assertEquals('1.9.0.7', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.6) Gecko/2009020911';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
         $this->assertEquals('1.9.0.6', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.001 (X11; U; Linux i686; rv:1.8.1.6; de-ch) Gecko/25250101 (ubuntu-feisty)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
         $this->assertEquals('1.8.1.6', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.18) Gecko/20081029';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
         $this->assertEquals('1.8.1.18', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i586; de-AT; rv:1.4) Gecko/20030908 Debian/1.4-4';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $extract['browser_name']);
@@ -272,14 +270,14 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Chrome', $extract['browser_name']);
         $this->assertEquals('6.0.481.0', $extract['browser_version']);
         $this->assertEquals('Windows Server 2003', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/534.7 (KHTML, like Gecko) Chrome/7.0.514.0 Safari/534.7';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
         $this->assertEquals('Chrome', $extract['browser_name']);
         $this->assertEquals('7.0.514.0', $extract['browser_version']);
         $this->assertEquals('Windows XP', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.1 (KHTML, like Gecko) Chrome/6.0.416.0 Safari/534.1';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $extract['browser_engine']);
@@ -296,27 +294,27 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Netscape', $extract['browser_name']);
         $this->assertEquals('9.0.0.3', $extract['browser_version']);
         $this->assertEquals('Windows XP', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.2) Gecko/20050208 Netscape/7.20';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Gecko', $extract['browser_engine']);
         $this->assertEquals('Netscape', $extract['browser_name']);
         $this->assertEquals('7.20', $extract['browser_version']);
         $this->assertEquals('Windows 2000', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows; U; Windows NT 5.0; fr-FR; rv:0.9.4) Gecko/20011128 Netscape6/6.2.1';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Gecko', $extract['browser_engine']);
         $this->assertEquals('Netscape', $extract['browser_name']);
         $this->assertEquals('6.2.1', $extract['browser_version']);
         $this->assertEquals('Windows 2000', $extract['device_os_name']);
-        
+
         $userAgent = 'Mozilla/4.79 [en] (X11; U; SunOS 5.7 sun4u)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Netscape', $extract['browser_name']);
         $this->assertEquals('4.79', $extract['browser_version']);
         $this->assertEquals('SunOS 5.7 sun4u', $extract['device_os_token']);
-        
+
         $userAgent = 'Mozilla/4.04 [fr] (Macintosh; I; PPC, Nav)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Netscape', $extract['browser_name']);
@@ -331,46 +329,46 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Presto', $extract['browser_engine']);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.99', $extract['browser_version']);
-        
+
         $userAgent = 'Opera/9.80 (J2ME/MIDP; Opera Mini/5.0 (Windows; U; Windows NT 5.1; en) AppleWebKit/886; U; en) Presto/2.4.15';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Presto', $extract['browser_engine']);
         $this->assertEquals('opera mini', strtolower($extract['browser_name']));
-        
+
         $userAgent = 'Opera/9.70 (Linux ppc64 ; U; en) Presto/2.2.1';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Presto', $extract['browser_engine']);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.70', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/5.0 (Windows NT 5.1; U; en-GB; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.61';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Gecko', $extract['browser_engine']);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.61', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux x86_64; en) Opera 9.60';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.60', $extract['browser_version']);
-        
+
         $userAgent = 'Opera/9.52 (Windows NT 6.0; U; Opera/9.52 (X11; Linux x86_64; U); en)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.52', $extract['browser_version']);
-        
+
         $userAgent = 'Opera/9.20 (Windows NT 6.0; U; de)';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('9.20', $extract['browser_version']);
-        
+
         $userAgent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; ru) Opera 8.54';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('MSIE', $extract['browser_engine']);
         $this->assertEquals('Opera', $extract['browser_name']);
         $this->assertEquals('8.54', $extract['browser_version']);
-        
+
         $userAgent = 'Opera/9.80 (Windows NT 5.1; U; zh-cn) Presto/2.2.15 Version/10.00';
         $extract = Zend_Http_UserAgent_Desktop::extractFromUserAgent($userAgent);
         $this->assertEquals('Presto', $extract['browser_engine']);
@@ -380,7 +378,7 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
 
     public function testMatchMobileOtherHeaders()
     {
-        
+
         $userAgent = 'xxxxx';
         $server = array(
             'all_http' => '. opera Mini'
@@ -390,17 +388,17 @@ class Zend_Http_UserAgent_AbstractDeviceTest extends PHPUnit_Framework_TestCase
             'http_x_wap_profile' => 'http://device.sprintpcs.com/Sanyo/PL3100/1003QW.rdf'
         );
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
-        
+
         $server = array(
             'http_profile' => ''
         );
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
-        
+
         $server = array(
             'http_accept' => 'midp'
         );
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
-        
+
         $server = array(
             'http_accept' => 'text/html, image/vnd.wap.wbmp, image/png, image/jpeg,
 image/gif, image/bmp, application/vnd.wap.wmlc,
@@ -411,12 +409,12 @@ text/vnd.sun.j2me.app-descriptor, application/java-archive,
 *,text/x-hdml,image/mng,image/x-mng,video/mng,video/x-mng,image/bmp,text/html'
         );
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
-        
+
         $server = array(
             'http_accept' => 'vnd.rim'
         );
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
-        
+
         $server = array(
             'http_accept' => 'application/xhtml+xml, application/vnd.wap.xhtml+xml,
 application/x-pmd, application/vnd.phonecom.mmc-xml, audio/midi,
@@ -425,7 +423,7 @@ audio/vnd.qcelp, application/xhtml+xml'
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, $server));
     }
 
-    /** 
+    /**
      * examples from http://en.wikipedia.org/wiki/List_of_user_agents_for_mobile_phones
      */
     public function testMatchMobile()
@@ -10031,23 +10029,23 @@ audio/vnd.qcelp, application/xhtml+xml'
         $this->assertTrue(Zend_Http_UserAgent_Mobile::match($userAgent, array(
             'HTTP_USER_AGENT' => $userAgent
         )));
-        
+
     }
 
     public function testMatchBot()
     {
         $userAgent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
         $this->assertTrue(Zend_Http_UserAgent_Bot::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'Googlebot/2.1 (+http://www.googlebot.com/bot.html)';
         $this->assertTrue(Zend_Http_UserAgent_Bot::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)';
         $this->assertTrue(Zend_Http_UserAgent_Bot::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'YahooSeeker/1.2 (compatible; Mozilla 4.0; MSIE 5.5; yahooseeker at yahoo-inc dot com ; http://help.yahoo.com/help/us/shop/merchant/)';
         $this->assertTrue(Zend_Http_UserAgent_Bot::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'Mozilla/4.0 compatible ZyBorg/1.0 (wn.zyborg@looksmart.net; http://www.WISEnutbot.com)';
         $this->assertTrue(Zend_Http_UserAgent_Bot::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
     }
@@ -10056,7 +10054,7 @@ audio/vnd.qcelp, application/xhtml+xml'
     {
         $userAgent = 'Mozilla/5.0 (compatible; AbiLogicBot/1.0; +http://www.abilogic.com/bot.html)';
         $this->assertTrue(Zend_Http_UserAgent_Checker::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'W3C-checklink/4.5 [4.160] libwww-perl/5.823';
         $this->assertTrue(Zend_Http_UserAgent_Checker::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
     }
@@ -10065,7 +10063,7 @@ audio/vnd.qcelp, application/xhtml+xml'
     {
         $userAgent = 'Mozilla/5.0 (PLAYSTATION 3; 1.10)';
         $this->assertTrue(Zend_Http_UserAgent_Console::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'Opera/9.30 (Nintendo Wii; U; ; 2071; Wii Shop Channel/1.0; en)';
         $this->assertTrue(Zend_Http_UserAgent_Console::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
     }
@@ -10086,10 +10084,10 @@ audio/vnd.qcelp, application/xhtml+xml'
     {
         $userAgent = 'Offline Explorer/2.5';
         $this->assertTrue(Zend_Http_UserAgent_Offline::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'Wget/1.9.1';
         $this->assertTrue(Zend_Http_UserAgent_Offline::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'WebCopier v3.2a';
         $this->assertTrue(Zend_Http_UserAgent_Offline::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
     }
@@ -10108,7 +10106,7 @@ audio/vnd.qcelp, application/xhtml+xml'
     {
         $userAgent = 'Lynx/2.8.6rel.4 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.8k';
         $this->assertTrue(Zend_Http_UserAgent_Text::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
-        
+
         $userAgent = 'w3m/0.5.1+cvs-1.968';
         $this->assertTrue(Zend_Http_UserAgent_Text::match($userAgent,array('HTTP_USER_AGENT'=>$userAgent)));
     }

@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Zend_Mail
  */
 require_once 'Zend/Mail.php';
@@ -1002,7 +997,7 @@ class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
         $mail->addHeader('foo', 'bar');
         $headers = $mail->getHeaders();
         $this->assertTrue(isset($headers['foo']));
-        
+
         $mail->clearHeader('foo');
         $headers = $mail->getHeaders();
         $this->assertFalse(isset($headers['foo']));

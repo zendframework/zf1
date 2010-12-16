@@ -20,11 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Service/WindowsAzure/Diagnostics/ManagerTest.php';
 
 /**
@@ -43,7 +38,7 @@ class Zend_Service_WindowsAzure_Diagnostics_AllTests
         $suite = new PHPUnit_Framework_TestSuite();
 
         $suite->addTestSuite('Zend_Service_WindowsAzure_Diagnostics_ManagerTest');
-        
+
         return $suite;
     }
 }

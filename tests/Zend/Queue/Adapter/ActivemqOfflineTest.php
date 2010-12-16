@@ -20,9 +20,6 @@
  * @version    $Id: ActivemqTest.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
-/** TestHelp.php */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 require_once 'Zend/Queue/Adapter/Activemq.php';
 require_once 'Zend/Queue/Stomp/Client.php';
 require_once 'Zend/Queue/Stomp/Frame.php';

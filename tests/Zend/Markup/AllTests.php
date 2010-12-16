@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Markup_AllTests::main');
 }
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Markup/BbcodeAndHtmlTest.php';
 require_once 'Zend/Markup/TextileAndHtmlTest.php';
 require_once 'Zend/Markup/ParserIntegrityTest.php';

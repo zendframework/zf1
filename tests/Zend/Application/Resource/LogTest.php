@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Loader_Autoloader
  */
 require_once 'Zend/Loader/Autoloader.php';
@@ -127,7 +122,7 @@ class Zend_Application_Resource_LogTest extends PHPUnit_Framework_TestCase
         rewind($stream);
         $this->assertContains($message, stream_get_contents($stream));
     }
-    
+
     /**
      * @group ZF-8602
      */

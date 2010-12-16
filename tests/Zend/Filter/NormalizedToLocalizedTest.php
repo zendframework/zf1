@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * @see Zend_Filter_NormalizedToLocalized
  */
 require_once 'Zend/Filter/NormalizedToLocalized.php';

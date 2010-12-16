@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_Adapter_WindowsAzureTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_StorageService_TestCase
  */
@@ -59,17 +57,17 @@ class Zend_Cloud_StorageService_Adapter_WindowsAzureTest extends Zend_Cloud_Stor
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    protected function _getConfig() 
+    protected function _getConfig()
     {
-        if (!defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') 
-            || !constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') 
-            || !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME') 
-            || !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTKEY') 
+        if (!defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED')
+            || !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME')
+            || !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTKEY')
             || !defined('TESTS_ZEND_CLOUD_STORAGE_WINDOWSAZURE_CONTAINER')
         ) {
-            $this->markTestSkipped("Windows Azure access not configured, skipping test");        
-        }        
-        
+            $this->markTestSkipped("Windows Azure access not configured, skipping test");
+        }
+
         $config = new Zend_Config(array(
             Zend_Cloud_StorageService_Factory::STORAGE_ADAPTER_KEY => 'Zend_Cloud_StorageService_Adapter_WindowsAzure',
             Zend_Cloud_StorageService_Adapter_WindowsAzure::ACCOUNT_NAME => constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME'),

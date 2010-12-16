@@ -19,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
 /**
  * @see Zend_Cloud_QueueService_Adapter
  */
@@ -77,12 +76,12 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
         $this->_config = $this->_getConfig();
         $this->_commonQueue = Zend_Cloud_QueueService_Factory::getAdapter($this->_config);
     }
-    
+
     public function testGetClient()
     {
-    	$this->assertTrue(is_a($this->_commonQueue->getClient(), $this->_clientType)); 
+    	$this->assertTrue(is_a($this->_commonQueue->getClient(), $this->_clientType));
     }
-    
+
     public function testCreateQueue()
     {
         try {
@@ -262,7 +261,7 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
             $texts = array($tests[0]->getBody(), $tests[1]->getBody());
             $this->assertContains($message1, $texts);
             $this->assertContains($message2, $texts);
-            
+
             $this->_commonQueue->deleteQueue($queueURL);
         } catch (Exception $e) {
             if (isset($queueURL)) {
@@ -299,7 +298,7 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
             $receivedMessages2 = $this->_commonQueue->receiveMessages($queueURL);
             $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages2);
 		    $this->assertEquals(0, count($receivedMessages2));
-			
+
 		    $this->_commonQueue->deleteQueue($queueURL);
         } catch (Exception $e) {
             if(isset($queueURL)) $this->_commonQueue->deleteQueue($queueURL);
@@ -345,7 +344,7 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
 
     /**
      * Get adapter configuration for concrete test
-     * 
+     *
      * @returns Zend_Config
      */
     abstract protected function _getConfig();

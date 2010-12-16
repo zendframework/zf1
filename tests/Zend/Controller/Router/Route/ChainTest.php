@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Controller_Router_Route_ChainTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /** Zend_Config */
 require_once 'Zend/Config.php';
 
@@ -128,13 +126,13 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
             array('foo' => 'bar'),
             array('foo' => '[a-z]{3}')
         );
-        
+
         $bar = new Zend_Controller_Router_Route_Module(array(
             'module' => 0,
             'controller' => 1,
             'action' => 2
         ));
-        
+
         $chain = $foo->chain($bar);
 
         $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/');
@@ -784,7 +782,7 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
             'action'     => 'index',
         ), $values);
     }
-    
+
     protected function _getRouter()
     {
         $router = new Zend_Controller_Router_Rewrite();

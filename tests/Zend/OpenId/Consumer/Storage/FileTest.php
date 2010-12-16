@@ -20,12 +20,6 @@
  * @version    $Id$
  */
 
-
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_OpenId_Consumer_Storage_File
  */

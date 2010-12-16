@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_Session_SaveHandler_DbTable
  */
 require_once 'Zend/Session/SaveHandler/DbTable.php';

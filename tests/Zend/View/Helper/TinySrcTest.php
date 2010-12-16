@@ -23,7 +23,6 @@
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_View_Helper_TinySrcTest::main');
 }
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
  * @see Zend_View_Helper_TinySrc

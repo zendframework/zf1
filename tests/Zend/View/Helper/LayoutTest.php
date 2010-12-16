@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_View_Helper_LayoutTest::main");
 }
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/TestHelper.php';
-
 require_once 'Zend/View/Helper/Layout.php';
 require_once 'Zend/Layout.php';
 require_once 'Zend/Controller/Front.php';

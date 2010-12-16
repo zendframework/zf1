@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** @see Zend_Service_ReCaptcha_Response */
 require_once 'Zend/Service/ReCaptcha/Response.php';
 

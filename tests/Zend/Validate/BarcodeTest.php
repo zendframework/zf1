@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 /** Zend_Validate_Barcode */
 require_once 'Zend/Validate/Barcode.php';
 

@@ -20,11 +20,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Test helpers
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Service_WindowsAzure_Storage_DynamicTableEntity */
 require_once 'Zend/Service/WindowsAzure/Storage/DynamicTableEntity.php';
 
@@ -38,7 +33,7 @@ require_once 'Zend/Service/WindowsAzure/Storage/DynamicTableEntity.php';
  */
 class Zend_Service_WindowsAzure_DynamicTableEntityTest extends PHPUnit_Framework_TestCase
 {
-    
+
     /**
      * Test constructor
      */
@@ -48,7 +43,7 @@ class Zend_Service_WindowsAzure_DynamicTableEntityTest extends PHPUnit_Framework
         $this->assertEquals('partition1', $target->getPartitionKey());
         $this->assertEquals('000001',     $target->getRowKey());
     }
-    
+
     /**
      * Test get Azure values
      */
@@ -62,15 +57,15 @@ class Zend_Service_WindowsAzure_DynamicTableEntityTest extends PHPUnit_Framework
         $this->assertEquals('Name',       $result[0]->Name);
         $this->assertEquals('Name',       $result[0]->Value);
         $this->assertEquals('Edm.String', $result[0]->Type);
-        
+
         $this->assertEquals('Age',        $result[1]->Name);
         $this->assertEquals(25,           $result[1]->Value);
         $this->assertEquals('Edm.Int32',  $result[1]->Type);
-        
+
         $this->assertEquals('partition1', $result[2]->Value);
         $this->assertEquals('000001',     $result[3]->Value);
     }
-    
+
     /**
      * Test set Azure values
      */
@@ -83,7 +78,7 @@ class Zend_Service_WindowsAzure_DynamicTableEntityTest extends PHPUnit_Framework
             'Age' => 25,
             'Visible' => true
         );
-        
+
         $target = new Zend_Service_WindowsAzure_Storage_DynamicTableEntity();
         $target->setAzureValues($values);
         $target->setAzurePropertyType('Age', 'Edm.Int32');

@@ -23,8 +23,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Feed_Pubsubhubbub_AllTests::main');
 }
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Feed/Pubsubhubbub/PubsubhubbubTest.php';
 require_once 'Zend/Feed/Pubsubhubbub/PublisherTest.php';
 require_once 'Zend/Feed/Pubsubhubbub/SubscriberTest.php';

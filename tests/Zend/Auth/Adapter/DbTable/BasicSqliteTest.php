@@ -20,13 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-/**
- * PHPUnit_Framework_TestCase
- */
-
-
 /**
  * @see Zend_Db_Adapter_Pdo_Sqlite
  */
@@ -398,9 +391,9 @@ class Zend_Auth_Adapter_DbTable_BasicSqliteTest extends PHPUnit_Framework_TestCa
     }
     /**
      * Test to see same usernames with different passwords can not authenticate
-     * when flag is not set. This is the current state of 
+     * when flag is not set. This is the current state of
      * Zend_Auth_Adapter_DbTable (up to ZF 1.10.6)
-     * 
+     *
      * @group   ZF-7289
      */
     public function testEqualUsernamesDifferentPasswordShouldNotAuthenticateWhenFlagIsNotSet()
@@ -410,7 +403,7 @@ class Zend_Auth_Adapter_DbTable_BasicSqliteTest extends PHPUnit_Framework_TestCa
             'password' => 'my_otherpass',
             'real_name' => 'Test user 2',
         ));
-        
+
         // test if user 1 can authenticate
         $this->_adapter->setIdentity('my_username')
                        ->setCredential('my_password');
@@ -422,7 +415,7 @@ class Zend_Auth_Adapter_DbTable_BasicSqliteTest extends PHPUnit_Framework_TestCa
     /**
      * Test to see same usernames with different passwords can authenticate when
      * a flag is set
-     * 
+     *
      * @group   ZF-7289
      */
     public function testEqualUsernamesDifferentPasswordShouldAuthenticateWhenFlagIsSet()
@@ -432,7 +425,7 @@ class Zend_Auth_Adapter_DbTable_BasicSqliteTest extends PHPUnit_Framework_TestCa
             'password' => 'my_otherpass',
             'real_name' => 'Test user 2',
         ));
-        
+
         // test if user 1 can authenticate
         $this->_adapter->setIdentity('my_username')
                        ->setCredential('my_password')
@@ -442,10 +435,10 @@ class Zend_Auth_Adapter_DbTable_BasicSqliteTest extends PHPUnit_Framework_TestCa
             $result->getMessages()));
         $this->assertTrue($result->isValid());
         $this->assertEquals('my_username', $result->getIdentity());
-        
+
         $this->_adapter = null;
         $this->_setupAuthAdapter();
-        
+
         // test if user 2 can authenticate
         $this->_adapter->setIdentity('my_username')
                        ->setCredential('my_otherpass')

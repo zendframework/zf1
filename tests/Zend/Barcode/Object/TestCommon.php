@@ -20,14 +20,6 @@
  * @version    $Id$
  */
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
- * Test helper
- */
 require_once dirname(__FILE__) . '/_files/BarcodeTest.php';
 
 /**

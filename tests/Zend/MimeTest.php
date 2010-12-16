@@ -20,11 +20,6 @@
  * @version    $Id $
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 /** Zend_Mail */
 require_once 'Zend/Mail.php';
 

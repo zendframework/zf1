@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-/** 
+/**
  * Zend_Mail
  */
 require_once 'Zend/Mail.php';
@@ -29,12 +29,6 @@ require_once 'Zend/Mail.php';
  * Zend_Mail_Protocol_Smtp
  */
 require_once 'Zend/Mail/Protocol/Smtp.php';
-
-
-/**
- * Test helper for configuration when run standalone
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
 
 /**
  * @category   Zend
@@ -224,9 +218,9 @@ class Zend_Mail_SmtpProtocolTest extends PHPUnit_Framework_TestCase
 
         $expectedDialog[] = 'QUIT';
         $expectedDialog[] = $p->responseBuffer[] = '221 goodbye';
-        
+
         $this->_protocol->quit();
-        
+
         $this->assertEquals($expectedDialog, $this->_protocol->dialog);
     }
 
@@ -354,7 +348,7 @@ class ProtocolMock extends Zend_Mail_Protocol_Smtp
     {
         $this->_socket = tmpfile();
     }
-    
+
     protected function _send($request)
     {
         $this->dialog[] = $request;

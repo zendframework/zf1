@@ -20,11 +20,6 @@
  * @version    $Id $
  */
 
-/**
- * @see TestHelper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** requires */
 require_once 'Zend/Reflection/Method.php';
 require_once 'Zend/CodeGenerator/Php/Method.php';
@@ -102,9 +97,9 @@ class Zend_CodeGenerator_Php_MethodTest extends PHPUnit_Framework_TestCase
         $target = <<<EOS
     /**
      * Enter description here...
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function someMethod()
     {

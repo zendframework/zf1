@@ -20,8 +20,6 @@
  * @version    $Id: $
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Service_LiveDocx_MailMergeTest::main');
 }
@@ -67,7 +65,7 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('LiveDocx tests disabled');
             return;
         }
-        
+
         $this->phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
         $this->phpLiveDocx->setUsername(TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME)
                           ->setPassword(TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD);
@@ -97,18 +95,18 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
         $phpLiveDocx->setUsername(TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME);
         $phpLiveDocx->setPassword(TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD);
-        $this->assertTrue($phpLiveDocx->logIn()); 
+        $this->assertTrue($phpLiveDocx->logIn());
     }
-    
+
     public function testLoginUsernamePasswordSoapClient()
     {
         $phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
         $phpLiveDocx->setUsername(TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME);
         $phpLiveDocx->setPassword(TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD);
         $phpLiveDocx->setSoapClient(new Zend_Soap_Client(self::ENDPOINT));
-        $this->assertTrue($phpLiveDocx->logIn()); 
-    }    
-        
+        $this->assertTrue($phpLiveDocx->logIn());
+    }
+
     /**
      * @expectedException Zend_Service_LiveDocx_Exception
      */
@@ -119,7 +117,7 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $phpLiveDocx->setPassword('phpunitInvalidPassword');
         $phpLiveDocx->logIn();
     }
-    
+
     /**
      * @expectedException Zend_Service_LiveDocx_Exception
      */
@@ -130,30 +128,30 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $phpLiveDocx->setPassword('phpunitInvalidPassword');
         $phpLiveDocx->setSoapClient(new Zend_Soap_Client(self::ENDPOINT));
         $phpLiveDocx->logIn();
-    }    
-    
+    }
+
     public function testConstructorOptionsUsernamePassword()
-    {    
+    {
         $phpLiveDocx = new Zend_Service_LiveDocx_MailMerge(
             array (
                 'username' => TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME,
                 'password' => TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD
             )
-        );   
-        $this->assertTrue($phpLiveDocx->logIn()); 
+        );
+        $this->assertTrue($phpLiveDocx->logIn());
     }
-    
+
     public function testConstructorOptionsUsernamePasswordSoapClient()
-    {    
+    {
         $phpLiveDocx = new Zend_Service_LiveDocx_MailMerge(
             array (
                 'username' => TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME,
                 'password' => TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD,
                 'soapClient' => new Zend_Soap_Client(self::ENDPOINT)
             )
-        );   
-        $this->assertTrue($phpLiveDocx->logIn()); 
-    }    
+        );
+        $this->assertTrue($phpLiveDocx->logIn());
+    }
 
     // -------------------------------------------------------------------------
 
@@ -362,7 +360,7 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
     }
 
     // -------------------------------------------------------------------------
-    
+
     public function testGetTemplateFormats()
     {
         $expectedResults = array('doc' , 'docx' , 'rtf' , 'txd');
@@ -386,7 +384,7 @@ class Zend_Service_LiveDocx_MailMergeTest extends PHPUnit_Framework_TestCase
         $expectedResults = array('bmp' , 'gif' , 'jpg' , 'png' , 'tiff');
         $this->assertEquals($expectedResults, $this->phpLiveDocx->getImageExportFormats());
     }
-   
+
     // -------------------------------------------------------------------------
 
     public function testGetBitmaps()

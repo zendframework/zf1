@@ -26,11 +26,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../TestHelper.php';
-
-/**
  * Zend_Loader
  */
 require_once 'Zend/Loader.php';

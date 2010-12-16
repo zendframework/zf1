@@ -26,11 +26,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * @see Zend_Validate_File_Sha1
  */
 require_once 'Zend/Validate/File/Sha1.php';

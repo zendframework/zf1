@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../') . '/TestHelper.php';
-
 require_once 'Zend/Http/Client.php';
 require_once 'Zend/Http/Client/Adapter/Test.php';
 

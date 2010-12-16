@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Form_FormTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 // error_reporting(E_ALL);
 
 require_once 'Zend/Form.php';
@@ -1112,7 +1110,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->form->isArray());
     }
 
-    /** 
+    /**
      * @group ZF-6741
      */
     public function testUseIdForDdTagByDefault()
@@ -1561,8 +1559,8 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
                              ->quo->addValidator('Identical',
                                                  false,
                                                  array('quo Value'));
-        
-        // This is setting elementsBelongTo point into the middle of 
+
+        // This is setting elementsBelongTo point into the middle of
         // a chain of another SubForms elementsBelongTo
         $this->form->addSubForm(new Zend_Form_SubForm(), 'duh')
                    ->duh->setElementsBelongTo('foo[zoo]')            // foo[zoo] !!!!
@@ -1587,8 +1585,8 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
                                                array('foo' =>
                                                      array('foo' => 'foo Value',
                                                            'quo' => 'quo Value'),
-                                                     'baz' => 
-                                                     array('baz' => 
+                                                     'baz' =>
+                                                     array('baz' =>
                                                            array('baz' =>
                                                                  array('baz' => 'baz Value')))),
                                                'zoo' =>
@@ -1599,8 +1597,8 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
                                                array('foo' =>
                                                      array('foo' => 'foo Invalid',
                                                            'quo' => 'quo Value'),
-                                                     'baz' => 
-                                                     array('baz' => 
+                                                     'baz' =>
+                                                     array('baz' =>
                                                            array('baz' =>
                                                                  array('baz' => 'baz Value')))),
                                                'zoo' =>
@@ -1608,11 +1606,11 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
                                                      'iek' => 'iek Invalid'))),
                       'partial' => array('foo' =>
                                          array('foo' =>
-                                               array('baz' => 
-                                                     array('baz' => 
+                                               array('baz' =>
+                                                     array('baz' =>
                                                            array('baz' =>
                                                                  array('baz' => 'baz Value'))),
-                                                    'foo' => 
+                                                    'foo' =>
                                                      array('quo' => 'quo Value')),
                                                'zoo' =>
                                                array('zoo' => 'zoo Value'))));
@@ -1623,13 +1621,13 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     {
         $data = $this->_setup9350();
         $this->assertTrue($this->form->isValid($data['valid']));
-    } 
+    }
 
     public function testIsValidPartialEqualSubFormAndElementName()
     {
         $data = $this->_setup9350();
         $this->assertTrue($this->form->isValidPartial($data['partial']));
-    } 
+    }
 
     public function testPopulateWithElementsBelongTo()
     {
@@ -1707,9 +1705,9 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
                                          array(2 =>
                                                array(0 =>
                                                      array('quo' => 'quo Value')))));
-        return $data;                      
+        return $data;
     }
-    
+
     public function testGetErrorsNumericalSubForms()
     {
         $data = $this->_setup9401();
@@ -1717,7 +1715,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $err = $this->form->getErrors();
         $this->assertTrue(is_array($err['f'][2]['foo']) && !empty($err['f'][2]['foo']));
     }
-    
+
     public function testGetMessagesNumericalSubForms()
     {
         $data = $this->_setup9401();
@@ -1780,21 +1778,21 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->form->isValidPartial($data['valid']));
         $this->assertSame('foo Value', $this->form->foo->getValue());
     }
-  
+
     public function testPopulateWithBelongsTo()
     {
         $data = $this->_setup9607();
         $this->form->populate($data['valid']);
         $this->assertSame('foo Value', $this->form->foo->getValue());
     }
-  
+
     public function testGetValuesWithBelongsTo()
     {
         $data = $this->_setup9607();
         $this->form->populate($data['valid']);
         $this->assertSame($data['valid'], $this->form->getValues());
     }
-  
+
     public function testGetValidValuesWithBelongsTo()
     {
         $data = $this->_setup9607();
@@ -1827,8 +1825,8 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->form->isValid(array());
 
         $err = $this->form->getErrors();
-        $msg = $this->form->getMessages(); 
-        
+        $msg = $this->form->getMessages();
+
         $this->assertTrue(is_array($err['f'][$e]) && is_array($err['f'][$s][$e]));
         $this->assertTrue(is_array($msg['f'][$e]) && is_array($msg['f'][$s][$e]));
     }
@@ -4241,13 +4239,13 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $messages = $this->form->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertEquals('Element message', $messages['foo']['isEmpty']);
-        
+
         $this->assertFalse($this->form->isValidPartial(array('foo'=>'')));
         $messages = $this->form->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertEquals('Element message', $messages['foo']['isEmpty']);
-    }  
-    
+    }
+
     /**
      * @group ZF-9364
      */
@@ -4270,14 +4268,14 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($messages));
         $this->assertEquals('Element message', $messages['foo']['isEmpty']);
         $this->assertEquals('Form message', $messages['bar']['isEmpty']);
-        
+
         $this->assertFalse($this->form->isValidPartial(array('foo'=>'', 'bar'=>'')));
         $messages = $this->form->getMessages();
         $this->assertEquals(2, count($messages));
         $this->assertEquals('Element message', $messages['foo']['isEmpty']);
         $this->assertEquals('Form message', $messages['bar']['isEmpty']);
     }
-    
+
     /**
      * @group ZF-9364
      */
@@ -4288,16 +4286,16 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         );
         $formTranslations = array(
             'isEmpty' => 'Form message',
-        );        
+        );
         $elementTranslations = array(
             'isEmpty' => 'Element message',
         );
         $defaultTranslate = new Zend_Translate('array', $defaultTranslations);
         $formTranslate = new Zend_Translate('array', $formTranslations);
         $elementTranslate = new Zend_Translate('array', $elementTranslations);
-        
+
         Zend_Registry::set('Zend_Translate', $defaultTranslate);
-        $this->form->setTranslator($formTranslate);        
+        $this->form->setTranslator($formTranslate);
         $this->form->addElement('text', 'foo', array('required'=>true, 'translator'=>$elementTranslate));
         $this->form->addElement('text', 'bar', array('required'=>true));
 
@@ -4306,7 +4304,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($messages));
         $this->assertEquals('Element message', $messages['foo']['isEmpty']);
         $this->assertEquals('Form message', $messages['bar']['isEmpty']);
-        
+
         $this->assertFalse($this->form->isValidPartial(array('foo'=>'', 'bar'=>'')));
         $messages = $this->form->getMessages();
         $this->assertEquals(2, count($messages));
@@ -4321,10 +4319,10 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     {
         $defaultTranslations = array('isEmpty' => 'Default message');
         $subformTranslations = array('isEmpty' => 'SubForm message');
-                
+
         $defaultTranslate = new Zend_Translate('array', $defaultTranslations);
         $subformTranslate = new Zend_Translate('array', $subformTranslations);
-        
+
         Zend_Registry::set('Zend_Translate', $defaultTranslate);
         $this->form->addSubForm(new Zend_Form_SubForm(), 'subform');
         $this->form->subform->setTranslator($subformTranslate);
@@ -4333,7 +4331,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->form->isValid(array('subform' => array('foo'=>''))));
         $messages = $this->form->getMessages();
         $this->assertEquals('SubForm message', $messages['subform']['foo']['isEmpty']);
-        
+
         $this->assertFalse($this->form->isValidPartial(array('subform' => array('foo'=>''))));
         $messages = $this->form->getMessages();
         $this->assertEquals('SubForm message', $messages['subform']['foo']['isEmpty']);

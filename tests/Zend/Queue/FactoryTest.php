@@ -32,8 +32,6 @@ require_once 'Zend/Queue/Adapter/Db.php';
 require_once 'Zend/Queue/Adapter/Memcacheq.php';
 require_once 'Zend/Queue/Adapter/ActivemqTest.php';
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 /**
  * @category   Zend
  * @package    Zend_Queue

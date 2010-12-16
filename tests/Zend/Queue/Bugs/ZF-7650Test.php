@@ -24,9 +24,6 @@
  * This code specifically tests for ZF-7650
  */
 
-/** TestHelp.php */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Queue */
 require_once 'Zend/Queue.php';
 

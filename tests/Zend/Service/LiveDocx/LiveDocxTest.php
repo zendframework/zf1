@@ -20,8 +20,6 @@
  * @version    $Id: $
  */
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Service_LiveDocx_LiveDocxTest::main');
 }
@@ -58,22 +56,22 @@ class Zend_Service_LiveDocX_LiveDocxTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('LiveDocx tests disabled');
             return;
         }
-        
+
         $this->phpLiveDocx = new Zend_Service_LiveDocx_MailMerge();
         $this->phpLiveDocx->setUsername(TESTS_ZEND_SERVICE_LIVEDOCX_USERNAME)
                           ->setPassword(TESTS_ZEND_SERVICE_LIVEDOCX_PASSWORD);
 
         foreach ($this->phpLiveDocx->listTemplates() as $template) {
             $this->phpLiveDocx->deleteTemplate($template['filename']);
-        }        
+        }
     }
-    
+
     public function tearDown ()
     {
 	if (isset($this->phpLiveDocx)) {
 	    foreach ($this->phpLiveDocx->listTemplates() as $template) {
 		$this->phpLiveDocx->deleteTemplate($template['filename']);
-	    }   
+	    }
 	    unset($this->phpLiveDocx);
 	}
     }
@@ -86,7 +84,7 @@ class Zend_Service_LiveDocX_LiveDocxTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('doc', $this->phpLiveDocx->getFormat('document123.doc'));
         $this->assertEquals('doc', $this->phpLiveDocx->getFormat('document.123.doc'));
     }
-    
+
     public function testGetVersion ()
     {
         $expectedResults = '2.0';

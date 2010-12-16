@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 require_once 'Zend/Feed/Writer/Renderer/Feed/Atom.php';
 require_once 'Zend/Feed/Reader.php';
 require_once 'Zend/Version.php';
@@ -44,9 +42,9 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
     public function setUp()
     {
         $this->_validWriter = new Zend_Feed_Writer_Feed;
-        
+
         $this->_validWriter->setType('atom');
-        
+
         $this->_validWriter->setTitle('This is a test feed.');
         $this->_validWriter->setDescription('This is a test description.');
         $this->_validWriter->setDateModified(1234567890);
@@ -104,7 +102,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('This is a test entry.', $entry->getTitle());
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -133,7 +131,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('<p class="xhtml:">This is test content for <em>xhtml:</em></p>', $entry->getContent());
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -152,7 +150,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals(1234567890, $entry->getDateModified()->get(Zend_Date::TIMESTAMP));
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -190,7 +188,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
             'email'=>'jane@example.com',
             'uri'=>'http://www.example.com/jane'), $entry->getAuthor());
     }
-    
+
     public function testEntryHoldsAnyEnclosureAdded()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
@@ -215,7 +213,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6', $entry->getId());
     }
-    
+
     public function testEntryIdHasBeenSetUsingSimpleTagUri()
     {
         $this->_validEntry->setId('tag:example.org,2010:/foo/bar/');
@@ -224,7 +222,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('tag:example.org,2010:/foo/bar/', $entry->getId());
     }
-    
+
     public function testEntryIdHasBeenSetUsingComplexTagUri()
     {
         $this->_validEntry->setId('tag:diveintomark.org,2004-05-27:/archives/2004/05/27/howto-atom-linkblog');
@@ -241,7 +239,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals($entry->getLink(), $entry->getId());
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -252,7 +250,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $this->_validEntry->remove('link');
         $atomFeed->render();
     }
-    
+
     /**
      * @expectedException Zend_Feed_Exception
      */
@@ -264,7 +262,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $this->_validEntry->setId('not-a-uri');
         $atomFeed->render();
     }
-    
+
     public function testCommentLinkRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
@@ -273,7 +271,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals('http://www.example.com/id/1', $entry->getCommentLink());
     }
-    
+
     public function testCommentCountRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
@@ -282,7 +280,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         $entry = $feed->current();
         $this->assertEquals(22, $entry->getCommentCount());
     }
-    
+
     public function testCategoriesCanBeSet()
     {
         $this->_validEntry->addCategories(array(
@@ -299,7 +297,7 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         );
         $this->assertEquals($expected, (array) $entry->getCategories());
     }
-    
+
     public function testCommentFeedLinksRendered()
     {
         $renderer = new Zend_Feed_Writer_Renderer_Feed_Atom($this->_validWriter);
@@ -313,5 +311,5 @@ class Zend_Feed_Writer_Renderer_Entry_AtomTest extends PHPUnit_Framework_TestCas
         //$this->assertEquals('http://www.example.com/rss/id/1', $entry->getCommentFeedLink('rss'));
         $this->assertEquals('http://www.example.com/atom/id/1', $entry->getCommentFeedLink('atom'));
     }
-    
+
 }

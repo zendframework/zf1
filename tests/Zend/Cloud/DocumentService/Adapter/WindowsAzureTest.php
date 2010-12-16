@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_DocumentService_Adapter_WindowsAzureTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_DocumentServiceTestCase
  */
@@ -52,7 +50,7 @@ require_once 'Zend/Config.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest 
+class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
     extends Zend_Cloud_DocumentService_TestCase
 {
     /**
@@ -62,9 +60,9 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
      * @var int
      */
     protected $_waitPeriod = 10;
-    
+
     protected $_clientType = 'Zend_Service_WindowsAzure_Storage_Table';
-    
+
 	/**
      * Runs the test methods of this class.
      *
@@ -77,7 +75,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    public function testQueryStructOrder() 
+    public function testQueryStructOrder()
     {
         try {
             parent::testQueryStructOrder();
@@ -86,7 +84,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
             $this->markTestSkipped('Azure query sorting not implemented yet');
         }
     }
-    
+
     static function getConfigArray()
     {
          return array(
@@ -99,28 +97,28 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
             Zend_Cloud_DocumentService_Adapter_WindowsAzure::PROXY_CREDENTIALS => constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_STORAGE_PROXY_CREDENTIALS'),
         );
     }
-    
-    protected function _getConfig() 
+
+    protected function _getConfig()
     {
         if (!defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') ||
             !constant('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ENABLED') ||
             !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTNAME') ||
             !defined('TESTS_ZEND_SERVICE_WINDOWSAZURE_ONLINE_ACCOUNTKEY')) {
-            $this->markTestSkipped("Windows Azure access not configured, skipping test");        
-        }        
-        
+            $this->markTestSkipped("Windows Azure access not configured, skipping test");
+        }
+
         $config = new Zend_Config(self::getConfigArray());
 
         return $config;
     }
-    
+
     protected function _getDocumentData()
     {
-        return array( 
+        return array(
             array(
 	        	parent::ID_FIELD => array("Amazon", "0385333498"),
 	        	"name" =>	"The Sirens of Titan",
-	        	"author" =>	"Kurt Vonnegut", 
+	        	"author" =>	"Kurt Vonnegut",
 	        	"year"	=> 1959,
 	        	"pages" =>	336,
 	        	"keyword" => "Book"
@@ -128,7 +126,7 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
             array(
 	        	parent::ID_FIELD => array("Amazon", "0802131786"),
 	        	"name" =>	"Tropic of Cancer",
-	        	"author" =>	"Henry Miller", 
+	        	"author" =>	"Henry Miller",
 	        	"year"	=> 1934,
 	        	"pages" =>	318,
 	        	"keyword" => "Book"
@@ -136,21 +134,21 @@ class Zend_Cloud_DocumentService_Adapter_WindowsAzureTest
             array(
 	        	parent::ID_FIELD => array("Amazon", "B000T9886K"),
 	        	"name" =>	"In Between",
-	        	"author" =>	"Paul Van Dyk", 
+	        	"author" =>	"Paul Van Dyk",
 	        	"year"	=> 2007,
 	        	"keyword" => "CD"
 	        	),
 	       array(
 	        	parent::ID_FIELD => array("Amazon", "1579124585"),
 	        	"name" =>	"The Right Stuff",
-	        	"author" =>	"Tom Wolfe", 
+	        	"author" =>	"Tom Wolfe",
 	        	"year"	=> 1979,
 	        	"pages" =>	304,
 	        	"keyword" => "Book"
 	        	),
         );
     }
-    
+
     protected function _queryString($domain, $s1, $s2)
     {
         $k1 = $s1[1];

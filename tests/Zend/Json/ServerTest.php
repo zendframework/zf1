@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Json_ServerTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 require_once 'Zend/Json/Server.php';
 require_once 'Zend/Json/Server/Request.php';
 require_once 'Zend/Json/Server/Response.php';
@@ -327,7 +325,7 @@ class Zend_Json_ServerTest extends PHPUnit_Framework_TestCase
                      ->setAutoEmitResponse( false );
         $request = $this->server->getRequest();
         $request->setMethod('bar')
-                ->setParams( array( 
+                ->setParams( array(
                     'three' => 3,
                     'two'   => 2,
                     'one'   => 1
@@ -348,7 +346,7 @@ class Zend_Json_ServerTest extends PHPUnit_Framework_TestCase
                      ->setAutoEmitResponse( false );
         $request = $this->server->getRequest();
         $request->setMethod('bar')
-                ->setParams( array( 
+                ->setParams( array(
                     'three' => 3,
                     'one'   => 1,
                     'two'   => 2,

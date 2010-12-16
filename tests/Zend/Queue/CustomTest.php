@@ -25,9 +25,6 @@
  * documentation code.
  */
 
-/** TestHelp.php */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 /** Custom_Queue */
 require_once 'Custom/Queue.php';
 

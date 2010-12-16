@@ -20,10 +20,6 @@
  * @version    $Id$
  */
 
-/** Test helper */
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
-
 /** Zend_Controller_Router_Route_Module */
 require_once 'Zend/Controller/Router/Route/Module.php';
 

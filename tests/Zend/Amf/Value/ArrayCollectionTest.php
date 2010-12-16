@@ -23,7 +23,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Amf_Value_ArrayCollectionTest::main');
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
 require_once 'Zend/Amf/Value/Messaging/ArrayCollection.php';
 
 /**
@@ -78,7 +77,7 @@ class Zend_Amf_Value_ArrayCollectionTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorArrayCollectionTwo()
     {
-        $this->_arrayCollection = new Zend_Amf_Value_Messaging_ArrayCollectionTwo($this->_data);
+        $this->_arrayCollection = new Zend_Amf_Value_Messaging_ArrayCollection($this->_data);
         $this->assertEquals('bar2', $this->_arrayCollection[1]['bar']);
     }
 

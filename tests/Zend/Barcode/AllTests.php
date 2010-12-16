@@ -25,18 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Feed_AllTests::main');
 }
 
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
- * Exclude from code coverage report
- */
-
-
-
-
 require_once 'Zend/Barcode/FactoryTest.php';
 
 require_once 'Zend/Barcode/Object/Code39Test.php';

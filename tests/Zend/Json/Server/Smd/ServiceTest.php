@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Json_Server_Smd_ServiceTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 require_once 'Zend/Json/Server/Smd/Service.php';
 require_once 'Zend/Json/Server/Smd.php';
 require_once 'Zend/Json.php';

@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Form_Element_CaptchaTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
 /** Zend_Form_Element_Captcha */
 require_once 'Zend/Form/Element/Captcha.php';
 

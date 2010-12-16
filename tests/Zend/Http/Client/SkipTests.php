@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once realpath(dirname(__FILE__) . '/../../../') . '/TestHelper.php';
-
 /**
  * @category   Zend
  * @package    Zend_Http_Client

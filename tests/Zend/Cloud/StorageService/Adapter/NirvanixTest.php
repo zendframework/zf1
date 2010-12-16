@@ -24,8 +24,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_Adapter_NirvanixTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../../../TestHelper.php';
-
 /**
  * @see Zend_Cloud_StorageService_TestCase
  */
@@ -58,13 +56,13 @@ class Zend_Cloud_StorageService_Adapter_NirvanixTest extends Zend_Cloud_StorageS
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    public function testFetchItemStream() 
+    public function testFetchItemStream()
     {
         // The Nirvanix client library doesn't support streams
         $this->markTestSkipped('The Nirvanix client library doesn\'t support streams.');
     }
 
-    public function testStoreItemStream() 
+    public function testStoreItemStream()
     {
         // The Nirvanix client library doesn't support streams
         $this->markTestSkipped('The Nirvanix client library doesn\'t support streams.');
@@ -75,24 +73,24 @@ class Zend_Cloud_StorageService_Adapter_NirvanixTest extends Zend_Cloud_StorageS
      *
      * @return void
      */
-    public function setUp() 
+    public function setUp()
     {
         parent::setUp();
         $this->_waitPeriod = 5;
     }
 
-    protected function _getConfig() 
+    protected function _getConfig()
     {
-        if (!defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ENABLED') 
-            || !constant('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ENABLED') 
-            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_USERNAME') 
-            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ACCESSKEY') 
-            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_PASSWORD') 
+        if (!defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ENABLED')
+            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_USERNAME')
+            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_ACCESSKEY')
+            || !defined('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_PASSWORD')
             || !defined('TESTS_ZEND_CLOUD_STORAGE_NIRVANIX_DIRECTORY')
         ) {
-            $this->markTestSkipped("Windows Azure access not configured, skipping test");        
-        }        
-        
+            $this->markTestSkipped("Windows Azure access not configured, skipping test");
+        }
+
         $config = new Zend_Config(array(
             Zend_Cloud_StorageService_Factory::STORAGE_ADAPTER_KEY       => 'Zend_Cloud_StorageService_Adapter_Nirvanix',
             Zend_Cloud_StorageService_Adapter_Nirvanix::USERNAME         => constant('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_USERNAME'),
@@ -100,7 +98,7 @@ class Zend_Cloud_StorageService_Adapter_NirvanixTest extends Zend_Cloud_StorageS
             Zend_Cloud_StorageService_Adapter_Nirvanix::PASSWORD         => constant('TESTS_ZEND_SERVICE_NIRVANIX_ONLINE_PASSWORD'),
             Zend_Cloud_StorageService_Adapter_Nirvanix::REMOTE_DIRECTORY => constant('TESTS_ZEND_CLOUD_STORAGE_NIRVANIX_DIRECTORY'),
         ));
-        
+
         return $config;
     }
 }

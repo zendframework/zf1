@@ -25,8 +25,6 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Captcha_FigletTest::main");
 }
 
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
 require_once 'Zend/Form/Element/Captcha.php';
 require_once 'Zend/Captcha/Adapter.php';
 require_once 'Zend/Config.php';
@@ -129,7 +127,7 @@ class Zend_Captcha_FigletTest extends PHPUnit_Framework_TestCase
         $expect = sprintf('for="comment-%s-input"', $this->element->getName());
         $this->assertRegexp("/<label [^>]*?$expect/", $html, $html);
     }
-    
+
     public function testTimeoutPopulatedByDefault()
     {
         $ttl = $this->captcha->getTimeout();
@@ -298,7 +296,7 @@ class Zend_Captcha_FigletTest extends PHPUnit_Framework_TestCase
         $input = array("id" => $this->captcha->getId(), "input" => $this->captcha->getWord());
         $this->assertTrue($this->element->isValid($input));
     }
-    
+
     /**
      * @group ZF-5728
      */

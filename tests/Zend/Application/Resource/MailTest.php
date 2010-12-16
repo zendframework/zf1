@@ -25,11 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../../TestHelper.php';
-
-/**
  * Zend_Loader_Autoloader
  */
 require_once 'Zend/Loader/Autoloader.php';
@@ -71,7 +66,7 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         Zend_Mail::clearDefaultTransport();
-        
+
         // Restore original autoloaders
         $loaders = spl_autoload_functions();
         foreach ($loaders as $loader) {
@@ -130,9 +125,9 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
         $resource->setOptions($options);
 
         $resource->init();
-        $this->assertNull(Zend_Mail::getDefaultTransport()); 
+        $this->assertNull(Zend_Mail::getDefaultTransport());
     }
-    
+
     public function testDefaultFromAndReplyTo()
     {
         $options = array('defaultfrom'    => array('email' => 'foo@example.com',
@@ -154,15 +149,15 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaultTransport() {
         $options = array('transport' => array(//'type' => 'sendmail', // dont define type
-                                              'register' => true)); 
+                                              'register' => true));
         $resource = new Zend_Application_Resource_Mail(array());
         $resource->setBootstrap($this->bootstrap);
         $resource->setOptions($options);
 
         $resource->init();
-        $this->assertTrue(Zend_Mail::getDefaultTransport() instanceof Zend_Mail_Transport_Sendmail);        
+        $this->assertTrue(Zend_Mail::getDefaultTransport() instanceof Zend_Mail_Transport_Sendmail);
     }
-    
+
     /**
     * @group ZF-8811
     */
@@ -178,7 +173,7 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($options['defaultFroM'], Zend_Mail::getDefaultFrom());
         $this->assertEquals($options['defAultReplyTo'], Zend_Mail::getDefaultReplyTo());
     }
-    
+
     /**
      * @group ZF-8981
      */
@@ -190,7 +185,7 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
         $resource->setOptions($options);
 
         $resource->init();
-        $this->assertTrue(Zend_Mail::getDefaultTransport() instanceof Zend_Mail_Transport_Sendmail);       
+        $this->assertTrue(Zend_Mail::getDefaultTransport() instanceof Zend_Mail_Transport_Sendmail);
     }
 
     /**
@@ -216,7 +211,7 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($resource->init() instanceof Zend_Application_Resource_mailTestCAsE);
     }
-    
+
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_MailTest::main') {

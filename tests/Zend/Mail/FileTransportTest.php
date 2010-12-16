@@ -21,11 +21,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Zend_Mail
  */
 require_once 'Zend/Mail.php';
@@ -34,6 +29,9 @@ require_once 'Zend/Mail.php';
  * Zend_Mail_Transport_File
  */
 require_once 'Zend/Mail/Transport/File.php';
+
+/** For some reason these classed have to be manually loaded, because PHPUnit fails to autoload them */
+require_once 'PHPUnit/Framework/SyntheticError.php';
 
 /**
  * @category   Zend
