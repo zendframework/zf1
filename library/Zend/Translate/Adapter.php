@@ -464,7 +464,7 @@ abstract class Zend_Translate_Adapter {
     /**
      * Returns the available languages from this adapter
      *
-     * @return array
+     * @return array|null
      */
     public function getList()
     {
