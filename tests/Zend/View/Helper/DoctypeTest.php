@@ -117,7 +117,7 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
 
     public function testIsXhtmlReturnsTrueForXhtmlDoctypes()
     {
-        foreach (array('XHTML1_STRICT', 'XHTML1_TRANSITIONAL', 'XHTML1_FRAMESET', 'XHTML5') as $type) {
+        foreach (array('XHTML1_STRICT', 'XHTML1_TRANSITIONAL', 'XHTML1_FRAMESET', 'XHTML1_RDFA', 'XHTML5') as $type) {
             $doctype = $this->helper->doctype($type);
             $this->assertEquals($type, $doctype->getDoctype());
             $this->assertTrue($doctype->isXhtml());

@@ -21,6 +21,7 @@
         <listitem><para><constant>XHTML1_STRICT</constant></para></listitem>
         <listitem><para><constant>XHTML1_TRANSITIONAL</constant></para></listitem>
         <listitem><para><constant>XHTML1_FRAMESET</constant></para></listitem>
+        <listitem><para><constant>XHTML1_RDFA</constant></para></listitem>
         <listitem><para><constant>XHTML_BASIC1</constant></para></listitem>
         <listitem><para><constant>HTML4_STRICT</constant></para></listitem>
         <listitem><para><constant>HTML4_LOOSE</constant></para></listitem>
@@ -86,7 +87,7 @@ if ($view->doctype()->isXhtml()) {
 ]]></programlisting>
 
         <para>
-            You can also check if the doctype represents an <acronym>HTML5</acronym> document
+            You can also check if the doctype represents an <acronym>HTML5</acronym> document.
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -94,6 +95,49 @@ if ($view->doctype()->isHtml5()) {
     // do something differently
 }
 ]]></programlisting>
+    </example>
+
+    <example id="zend.view.helpers.initial.doctype.xhtml1_rdfa">
+        <title>Choosing a Doctype to Use with the Open Graph Protocol</title>
+
+        <para>
+            If you would like to implement the <ulink url="http://opengraphprotocol.org/">
+            Open Graph Protocol</ulink>, it is best to specify the XHTML1_RDFA doctype.
+            This doctype allows a developer to use the <ulink url="http://www.w3.org/TR/xhtml-rdfa-primer/">
+            Resource Description Framework</ulink> within an <acronym>XHTML</acronym> document.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$doctypeHelper = new Zend_View_Helper_Doctype();
+$doctypeHelper->doctype('XHTML1_RDFA');
+]]></programlisting>
+
+        <para>
+        It is not required to use the XHTML1_RDFA doctype to enable the Open Graph Protocol, but it is required to enable the namespaces inside the html tag:
+        </para>
+
+        <programlisting language="html"><![CDATA[
+$doctype = $view->doctype()->getDoctype();
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
+]]></programlisting>
+
+        <para>
+            In the above example, we specifed two namespaces in the html tag. One for the Open Graph and another for <ulink url="http://developers.facebook.com/docs/opengraph">
+            Facebook Open Graph</ulink>.
+        </para>
+        
+        <para>
+            Here is how to specify a meta tag with a property:
+        </para>
+        
+        <programlisting language="html"><![CDATA[
+<meta property="og:type" content="musician" />
+]]></programlisting>
+
+        <para>
+            We set the property to og:type. The og references the Open Graph namespace we specified in the html tag. The content identifies the page as being about a musician.
+        </para>
+
     </example>
 </sect3>
 <!--
