@@ -323,11 +323,12 @@ class Zend_Wildfire_Plugin_FirePhp implements Zend_Wildfire_Plugin_Interface
      * Starts a group in the Firebug Console
      *
      * @param string $title The title of the group
+     * @param array $options OPTIONAL Setting 'Collapsed' to true will initialize group collapsed instead of expanded
      * @return TRUE if the group instruction was added to the response headers or buffered.
      */
-    public static function group($title)
+    public static function group($title, $options=array())
     {
-        return self::send(null, $title, self::GROUP_START);
+        return self::send(null, $title, self::GROUP_START, $options);
     }
 
     /**
@@ -486,6 +487,12 @@ class Zend_Wildfire_Plugin_FirePhp implements Zend_Wildfire_Plugin_Interface
         } else {
             unset($meta['File']);
             unset($meta['Line']);
+        }
+
+        if ($meta['Type'] == self::GROUP_START) {
+            if (isset($options['Collapsed'])) {
+                $meta['Collapsed'] = ($options['Collapsed'])?'true':'false';
+            }
         }
 
         if ($meta['Type'] == self::DUMP) {

@@ -603,6 +603,54 @@ class Zend_Wildfire_WildfireTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_response->verifyHeaders($headers));
     }
 
+    /**
+     * @group ZF-10761
+     */
+    public function testMessageGroupsWithCollapsedTrueOption()
+    {
+        $this->_setupWithFrontController();
+ 
+        Zend_Wildfire_Plugin_FirePhp::group('Test Group', array('Collapsed' => true));
+        Zend_Wildfire_Plugin_FirePhp::send('Test Message');
+        Zend_Wildfire_Plugin_FirePhp::groupEnd();
+
+        $this->_controller->dispatch();
+
+        $headers = array();
+        $headers['X-Wf-Protocol-1'] = 'http://meta.wildfirehq.org/Protocol/JsonStream/0.2';
+        $headers['X-Wf-1-Structure-1'] = 'http://meta.firephp.org/Wildfire/Structure/FirePHP/FirebugConsole/0.1';
+        $headers['X-Wf-1-Plugin-1'] = 'http://meta.firephp.org/Wildfire/Plugin/ZendFramework/FirePHP/1.6.2';
+        $headers['X-Wf-1-1-1-1'] = '69|[{"Type":"GROUP_START","Label":"Test Group","Collapsed":"true"},null]|';
+        $headers['X-Wf-1-1-1-2'] = '31|[{"Type":"LOG"},"Test Message"]|';
+        $headers['X-Wf-1-1-1-3'] = '27|[{"Type":"GROUP_END"},null]|';
+
+        $this->assertTrue($this->_response->verifyHeaders($headers));
+    }
+
+    /**
+     * @group ZF-10761
+     */
+    public function testMessageGroupsWithCollapsedFalseOption()
+    {
+        $this->_setupWithFrontController();
+ 
+        Zend_Wildfire_Plugin_FirePhp::group('Test Group', array('Collapsed' => false));
+        Zend_Wildfire_Plugin_FirePhp::send('Test Message');
+        Zend_Wildfire_Plugin_FirePhp::groupEnd();
+
+        $this->_controller->dispatch();
+
+        $headers = array();
+        $headers['X-Wf-Protocol-1'] = 'http://meta.wildfirehq.org/Protocol/JsonStream/0.2';
+        $headers['X-Wf-1-Structure-1'] = 'http://meta.firephp.org/Wildfire/Structure/FirePHP/FirebugConsole/0.1';
+        $headers['X-Wf-1-Plugin-1'] = 'http://meta.firephp.org/Wildfire/Plugin/ZendFramework/FirePHP/1.6.2';
+        $headers['X-Wf-1-1-1-1'] = '70|[{"Type":"GROUP_START","Label":"Test Group","Collapsed":"false"},null]|';
+        $headers['X-Wf-1-1-1-2'] = '31|[{"Type":"LOG"},"Test Message"]|';
+        $headers['X-Wf-1-1-1-3'] = '27|[{"Type":"GROUP_END"},null]|';
+
+        $this->assertTrue($this->_response->verifyHeaders($headers));
+    }
+
     public function testMessageComparison()
     {
         $label = 'Message';

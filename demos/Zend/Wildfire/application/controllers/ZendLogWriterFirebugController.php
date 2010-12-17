@@ -21,6 +21,9 @@
 /** Zend_Controller_Action */
 require_once 'Zend/Controller/Action.php';
 
+/** Zend_Wildfire_Plugin_FirePhp */
+require_once 'Zend/Wildfire/Plugin/FirePhp.php';
+
 /**
  * Tests for Zend_Log_Writer_Firebug
  *
@@ -58,6 +61,18 @@ class ZendLogWriterFirebugController extends Zend_Controller_Action
         $logger->table($table);
     }
 
+    public function testgroupedloggingAction()
+    {
+        $logger = Zend_Registry::get('logger');
+
+        Zend_Wildfire_Plugin_FirePhp::group("Collapsed Group", array('Collapsed' => true));
+            $logger->log('Message in collapsed group', Zend_Log::DEBUG);
+        Zend_Wildfire_Plugin_FirePhp::groupEnd();
+
+        Zend_Wildfire_Plugin_FirePhp::group("Expanded Group", array('Collapsed' => false));
+            $logger->log('Message in expanded group', Zend_Log::DEBUG);
+        Zend_Wildfire_Plugin_FirePhp::groupEnd();
+    }
 
     public function testerrorcontrollerAction()
     {

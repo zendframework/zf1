@@ -1,7 +1,7 @@
 <?php
 
-require_once('Zend/Loader.php');
-Zend_Loader::registerAutoload();
+require_once('Zend/Loader/Autoloader.php');
+Zend_Loader_Autoloader::getInstance();
 
 switch($_GET['Example']) {
 
