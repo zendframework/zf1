@@ -768,6 +768,7 @@ class Zend_Application_Bootstrap_BootstrapAbstractTest extends PHPUnit_Framework
 
     /**
      * @group ZF-8751
+     * @group ZF-10842
      */
     public function testPathDefaultZendXToPluginsResources()
     {
@@ -775,7 +776,8 @@ class Zend_Application_Bootstrap_BootstrapAbstractTest extends PHPUnit_Framework
                             ->getBootstrap()
                             ->getPluginLoader();
 
-        $this->assertEquals(1, count($application->getPaths('ZendX_Application_Resource_')));
+        $paths = $application->getPaths('ZendX_Application_Resource_');
+        $this->assertEquals('ZendX/Application/Resource/', $paths[0]);
     }
 }
 
