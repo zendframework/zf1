@@ -117,7 +117,8 @@ $doctypeHelper->doctype('XHTML1_RDFA');
         </para>
 
         <programlisting language="html"><![CDATA[
-$doctype = $view->doctype()->getDoctype();
+<?php echo $this->doctype() ?>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
 ]]></programlisting>
 
@@ -138,6 +139,24 @@ $doctype = $view->doctype()->getDoctype();
             We set the property to og:type. The og references the Open Graph namespace we specified in the html tag. The content identifies the page as being about a musician.
         </para>
 
+        <para>
+            Here is who you check if the doctype includes <acronym>RFDa</acronym> in the document.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->doctype() ?>
+
+<?php if ($view->doctype()->isRdfa()): ?>
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml">
+
+<?php else: ?>
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+
+<?php endif; ?>
+]]></programlisting>
+        
     </example>
 </sect3>
 <!--

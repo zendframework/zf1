@@ -198,6 +198,15 @@ class Zend_View_Helper_Doctype extends Zend_View_Helper_Abstract
     public function isHtml5() {
         return (stristr($this->doctype(), '<!DOCTYPE html>') ? true : false);
     }
+    
+    /**
+     * Is doctype RDFa?
+     *
+     * @return booleean
+     */
+    public function isRdfa() {
+        return (stristr($this->getDoctype(), 'rdfa') ? true : false);
+    }
 
     /**
      * String representation of doctype

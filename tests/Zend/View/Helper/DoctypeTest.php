@@ -155,6 +155,22 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
+    public function testIsRdfa()
+    {
+        $doctype = $this->helper->doctype('XHTML1_RDFA');
+        $this->assertTrue($doctype->isRdfa());
+
+        // built-in doctypes
+        foreach (array('HTML4_STRICT', 'HTML4_LOOSE', 'HTML4_FRAMESET', 'XHTML1_STRICT', 'XHTML1_TRANSITIONAL', 'XHTML1_FRAMESET') as $type) {
+            $doctype = $this->helper->doctype($type);
+            $this->assertFalse($doctype->isRdfa());
+        }
+
+        // custom doctype
+        $doctype = $this->helper->doctype('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 10.0 Strict//EN" "http://framework.zend.com/foo/DTD/html10-custom.dtd">');
+        $this->assertFalse($doctype->isRdfa());
+    }
+
 	public function testCanRegisterCustomHtml5Doctype() {
 		$doctype = $this->helper->doctype('<!DOCTYPE html>');
         $this->assertEquals('CUSTOM', $doctype->getDoctype());
