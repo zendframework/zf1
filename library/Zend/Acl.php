@@ -1218,6 +1218,11 @@ class Zend_Acl
     }
 
     /**
+     * Returns an array of registered roles.
+     *
+     * Note that this method does not return instances of registered roles,
+     * but only the role identifiers.
+     *
      * @return array of registered roles
      */
     public function getRoles()
