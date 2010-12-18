@@ -48,7 +48,7 @@ class Zend_XmlRpc_Value_DateTime extends Zend_XmlRpc_Value_Scalar
      *
      * @var string
      */
-    protected $_isoFormatString = 'YYYYMMddTHH:mm:ss';
+    protected $_isoFormatString = 'yyyyMMddTHH:mm:ss';
 
     /**
      * Set the value of a dateTime.iso8601 native type
