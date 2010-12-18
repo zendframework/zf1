@@ -64,6 +64,7 @@ class Zend_Http_UserAgent_Bot extends Zend_Http_UserAgent_AbstractDevice
         'gigabot',
         'girafabot',
         'google',
+        'htdig',
         'infoseek',
         'inktomi',
         'java',
