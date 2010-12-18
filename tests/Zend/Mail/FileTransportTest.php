@@ -30,9 +30,6 @@ require_once 'Zend/Mail.php';
  */
 require_once 'Zend/Mail/Transport/File.php';
 
-/** For some reason these classed have to be manually loaded, because PHPUnit fails to autoload them */
-require_once 'PHPUnit/Framework/SyntheticError.php';
-
 /**
  * @category   Zend
  * @package    Zend_Mail
