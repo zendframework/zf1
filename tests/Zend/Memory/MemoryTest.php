@@ -88,6 +88,39 @@ class Zend_Memory_MemoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($memoryManager instanceof Zend_Memory_Manager);
         unset($memoryManager);
     }
+
+    /**
+     * @group ZF-9883
+     * @dataProvider Zend_Memory_MemoryTest::providerCacheBackend
+     */
+    public function testFactoryCacheBackendStandards($backend)
+    {
+        try {
+            $memoryManager = Zend_Memory::factory($backend);
+        } catch(Zend_Cache_Exception $exception) {
+            $this->markTestSkipped($exception->getMessage());
+        }
+        $this->assertTrue($memoryManager instanceof Zend_Memory_Manager);
+    }
+
+    /**
+     * @group ZF-9883
+     */
+    public function providerCacheBackend()
+    {
+        return array(
+            array('Apc'),
+            array('File'),
+            array('Libmemcached'),
+            array('Memcached'),
+            array('Sqlite'),
+            array('TwoLevels'),
+            array('Xcache'),
+            array('ZendPlatform'),
+            array('ZendServer_Disk'),
+            array('ZendServer_ShMem')
+        );
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Memory_MemoryTest::main') {
