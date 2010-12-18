@@ -85,7 +85,7 @@ class Zend_View_Helper_Placeholder_Registry
     {
         $key = (string) $key;
 
-        $this->_items[$key] = new $this->_containerClass(array());
+        $this->_items[$key] = new $this->_containerClass($value);
         return $this->_items[$key];
     }
 

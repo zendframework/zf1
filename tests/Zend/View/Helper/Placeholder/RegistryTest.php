@@ -207,10 +207,29 @@ class Zend_View_Helper_Placeholder_RegistryTest extends PHPUnit_Framework_TestCa
         $registered = Zend_Registry::get(Zend_View_Helper_Placeholder_Registry::REGISTRY_KEY);
         $this->assertSame($registry, $registered);
     }
+
+    /**
+     * @group ZF-10793
+     */
+    public function testSetValueCreateContainer()
+    {
+        $this->registry->setContainerClass('Zend_View_Helper_Placeholder_RegistryTest_Container');
+        $data = array(
+            'ZF-10793'
+        );
+        $container = $this->registry->createContainer('foo', $data);
+        $this->assertEquals(array('ZF-10793'), $container->data);
+    }
 }
 
 class Zend_View_Helper_Placeholder_RegistryTest_Container extends Zend_View_Helper_Placeholder_Container_Abstract
 {
+    public $data = array();
+
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
 }
 
 class Zend_View_Helper_Placeholder_RegistryTest_BogusContainer
