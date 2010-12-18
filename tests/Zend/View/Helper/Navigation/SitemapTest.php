@@ -217,14 +217,14 @@ class Zend_View_Helper_Navigation_SitemapTest
     public function testThrowExceptionOnInvalidLoc()
     {
         $nav = clone $this->_nav2;
-        $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w.'));
+        $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w..'));
 
         try {
             $this->_helper->render($nav);
         } catch (Zend_View_Exception $e) {
             $expected = sprintf(
                     'Encountered an invalid URL for Sitemap XML: "%s"',
-                    'http://w.');
+                    'http://w..');
             $actual = $e->getMessage();
             $this->assertEquals($expected, $actual);
             return;
