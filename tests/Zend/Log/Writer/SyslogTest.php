@@ -112,6 +112,24 @@ class Zend_Log_Writer_SyslogTest extends PHPUnit_Framework_TestCase
         $writer = new WriterSyslogCustom(array('facility' => LOG_USER));
         $this->assertEquals(LOG_USER, $writer->getFacility());
     }
+
+    /**
+     * @group ZF-8382
+     */
+    public function testWriteWithFormatter()
+    {
+        $event = array(
+        	'message' => 'tottakai',
+            'priority' => Zend_Log::ERR
+        );
+
+        $writer = Zend_Log_Writer_Syslog::factory(array());
+        require_once 'Zend/Log/Formatter/Simple.php';
+        $formatter = new Zend_Log_Formatter_Simple('%message% (this is a test)');
+        $writer->setFormatter($formatter);
+
+        $writer->write($event);
+    }
 }
 
 class WriterSyslogCustom extends Zend_Log_Writer_Syslog

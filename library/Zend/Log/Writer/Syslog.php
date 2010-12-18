@@ -252,6 +252,11 @@ class Zend_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
             $this->_initializeSyslog();
         }
 
-        syslog($priority, $event['message']);
+        $message = $event['message'];
+        if ($this->_formatter instanceof Zend_Log_Formatter_Interface) {
+            $message = $this->_formatter->format($event);
+        }
+
+        syslog($priority, $message);
     }
 }
