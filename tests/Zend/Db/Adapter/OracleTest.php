@@ -288,6 +288,18 @@ class Zend_Db_Adapter_OracleTest extends Zend_Db_Adapter_TestCommon
         $this->assertEquals(2, $result->$col_name);
     }
 
+    /**
+     * @group ZF-10829
+     */
+    public function testAdapterGetPersistentConnection()
+    {
+        $params = $this->_util->getParams();
+        $params['persistent'] = 1;
+        $db = Zend_Db::factory($this->getDriver(), $params);
+        $db->getConnection();
+        $this->assertTrue($db->isConnected());
+    }
+
     public function testAdapterInsert()
     {
         $row = array (

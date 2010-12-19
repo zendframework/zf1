@@ -147,8 +147,9 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function isConnected()
     {
         return ((bool) (is_resource($this->_connection)
-                     && get_resource_type($this->_connection) == 'oci8 connection'));
-    }
+                    && (get_resource_type($this->_connection) == 'oci8 connection'
+                     || get_resource_type($this->_connection) == 'oci8 persistent connection')));
+        }
 
     /**
      * Force the connection to close.
