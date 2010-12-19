@@ -114,12 +114,10 @@ EOS;
 
     public function testFromReflectionFile()
     {
-        ///$this->markTestSkipped('skipme');
         $file = dirname(__FILE__) . '/_files/TestSampleSingleClass.php';
 
         require_once $file;
         $codeGenFileFromDisk = Zend_CodeGenerator_Php_File::fromReflection(new Zend_Reflection_File($file));
-
         $codeGenFileFromDisk->getClass()->setMethod(array('name' => 'foobar'));
 
         $expectedOutput = <<<EOS
@@ -168,6 +166,114 @@ EOS;
 
         $this->assertEquals($expectedOutput, $codeGenFileFromDisk->generate());
 
+    }
+
+    /**
+     * @group ZF-7369
+     * @group ZF-6982
+     */
+    public function testFromReflectionFileKeepsIndents()
+    {
+        $file = dirname(__FILE__) . '/_files/TestClassWithCodeInMethod.php';
+
+        require_once $file;
+        $codeGenFileFromDisk = Zend_CodeGenerator_Php_File::fromReflection(new Zend_Reflection_File($file));
+
+        $expectedOutput = <<<EOS
+<?php
+/**
+ * File header here
+ *
+ * @author Ralph Schindler <ralph.schindler@zend.com>
+ */
+
+
+
+/**
+ * class docblock
+ *
+ * @package Zend_Reflection_TestClassWithCodeInMethod
+ */
+class Zend_Reflection_TestClassWithCodeInMethod
+{
+
+    /**
+     * Enter description here...
+     *
+     * @return bool
+     */
+    public function someMethod()
+    {
+        /* test test */
+        \$foo = 'bar';
+    }
+
+}
+
+
+EOS;
+
+        $this->assertEquals($expectedOutput, $codeGenFileFromDisk->generate());
+    }
+
+    /**
+     * @group ZF-7369
+     * @group ZF-6982
+     */
+    public function testFromReflectionFilePreservesIndentsWhenAdditionalMethodAdded()
+    {
+        $file = dirname(__FILE__) . '/_files/TestClassWithCodeInMethod.php';
+
+        require_once $file;
+        $codeGenFileFromDisk = Zend_CodeGenerator_Php_File::fromReflection(new Zend_Reflection_File($file));
+        $codeGenFileFromDisk->getClass()->setMethod(array('name' => 'foobar'));
+        
+        $expectedOutput = <<<EOS
+<?php
+/**
+ * File header here
+ *
+ * @author Ralph Schindler <ralph.schindler@zend.com>
+ *
+ */
+
+
+
+
+/**
+ * class docblock
+ *
+ * @package Zend_Reflection_TestClassWithCodeInMethod
+ *
+ */
+class Zend_Reflection_TestClassWithCodeInMethod
+{
+
+    /**
+     * Enter description here...
+     *
+     * @return bool
+     *
+     */
+    public function someMethod()
+    {
+        /* test test */
+        \$foo = 'bar';
+    }
+
+    public function foobar()
+    {
+    }
+
+
+}
+
+
+
+
+EOS;
+
+        $this->assertEquals($expectedOutput, $codeGenFileFromDisk->generate());
     }
 
     public function testFileLineEndingsAreAlwaysLineFeed()

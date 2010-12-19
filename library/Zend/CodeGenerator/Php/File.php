@@ -97,7 +97,7 @@ class Zend_CodeGenerator_Php_File extends Zend_CodeGenerator_Php_Abstract
     }
 
     /**
-     * fromReflectedFilePath() - use this if you intend on generating code generation objects based on the same file.
+     * fromReflectedFileName() - use this if you intend on generating code generation objects based on the same file.
      * This will keep previous changes to the file in tact during the same PHP process
      *
      * @param string $filePath
