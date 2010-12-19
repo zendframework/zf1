@@ -211,7 +211,11 @@ class Zend_CodeGenerator_Php_Docblock extends Zend_CodeGenerator_Php_Abstract
         $content = wordwrap($content, 80, self::LINE_FEED);
         $lines = explode(self::LINE_FEED, $content);
         foreach ($lines as $line) {
-            $output .= $indent . ' * ' . $line . self::LINE_FEED;
+            $output .= $indent . ' *';
+            if ($line) {
+                $output .= " $line";
+            }
+            $output .= self::LINE_FEED;
         }
         $output .= $indent . ' */' . self::LINE_FEED;
         return $output;

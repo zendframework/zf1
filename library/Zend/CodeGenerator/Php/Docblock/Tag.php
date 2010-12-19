@@ -178,7 +178,11 @@ class Zend_CodeGenerator_Php_Docblock_Tag extends Zend_CodeGenerator_Php_Abstrac
      */
     public function generate()
     {
-        return '@' . $this->_name . ' ' . $this->_description;
+        $tag = '@' . $this->_name;
+        if ($this->_description) {
+            $tag .= ' ' . $this->_description;
+        }
+        return $tag;
     }
 
 }
