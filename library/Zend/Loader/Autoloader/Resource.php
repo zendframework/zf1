@@ -206,6 +206,12 @@ class Zend_Loader_Autoloader_Resource implements Zend_Loader_Autoloader_Interfac
      */
     public function setOptions(array $options)
     {
+        // Set namespace first, see ZF-10836
+        if (isset($options['namespace'])) {
+            $this->setNamespace($options['namespace']);
+            unset($options['namespace']);
+        }
+
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
