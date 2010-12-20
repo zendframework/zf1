@@ -252,6 +252,28 @@ class Zend_Validate_File_UploadTest extends PHPUnit_Framework_TestCase
         $validator->setFiles($files);
         $this->assertEquals($files, $validator->getFiles());
     }
+
+    /**
+     * @group ZF-10738
+     */
+    public function testGetFilesReturnsEmptyArrayWhenFilesSuperglobalIsNull()
+    {
+        $_FILES = NULL;
+        $validator = new Zend_Validate_File_Upload();
+        $validator->setFiles();
+        $this->assertEquals(array(), $validator->getFiles());
+    }
+
+    /**
+     * @group ZF-10738
+     */
+    public function testGetFilesReturnsEmptyArrayAfterSetFilesIsCalledWithNull()
+    {
+        $validator = new Zend_Validate_File_Upload();
+        $validator->setFiles(NULL);
+        $this->assertEquals(array(), $validator->getFiles());
+    }
+
 }
 
 // Call Zend_Validate_File_UploadTest::main() if this source file is executed directly.
