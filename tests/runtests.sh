@@ -58,7 +58,7 @@ while [ -n "$1" ] ; do
      PHPUNIT_GROUPS="${PHPUNIT_GROUPS:+"$PHPUNIT_GROUPS,"}Zend_Search_Lucene" 
      shift ;;
 
-    Zend*)
+    Zend*|ZF-*)
      PHPUNIT_GROUPS="${PHPUNIT_GROUPS:+"$PHPUNIT_GROUPS,"}$1" 
      shift ;;
 
