@@ -1052,7 +1052,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
      * Ensures that the $onlyParents argument to inheritsRole() works
      *
      * @return void
-     * @see    http://framework.zend.com/issues/browse/ZF-2502
+     * @group ZF-2502
      */
     public function testRoleInheritanceSupportsCheckingOnlyParents()
     {
@@ -1066,7 +1066,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
      * Ensures that the solution for ZF-2234 works as expected
      *
      * @return void
-     * @see    http://framework.zend.com/issues/browse/ZF-2234
+     * @group ZF-2234
      */
     public function testAclInternalDFSMethodsBehaveProperly()
     {

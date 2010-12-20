@@ -102,7 +102,7 @@ class Zend_Validate_IdenticalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-6953
+     * @group ZF-6953
      */
     public function testValidatingAgainstEmptyToken()
     {
@@ -111,7 +111,7 @@ class Zend_Validate_IdenticalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-7128
+     * @group ZF-7128
      */
     public function testValidatingAgainstNonStrings()
     {

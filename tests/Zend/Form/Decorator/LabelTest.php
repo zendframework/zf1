@@ -211,7 +211,7 @@ class Zend_Form_Decorator_LabelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3538
+     * @group ZF-3538
      */
     public function testRenderShouldNotUtilizeElementClass()
     {

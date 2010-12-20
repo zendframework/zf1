@@ -109,7 +109,7 @@ class Zend_Form_Decorator_FormTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3643
+     * @group ZF-3643
      */
     public function testShouldPreferFormIdAttributeOverFormName()
     {

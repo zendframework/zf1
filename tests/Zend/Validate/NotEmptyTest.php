@@ -530,7 +530,7 @@ class Zend_Validate_NotEmptyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3236
+     * @group ZF-3236
      */
     public function testStringWithZeroShouldNotBeTreatedAsEmpty()
     {

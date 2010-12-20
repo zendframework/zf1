@@ -142,7 +142,6 @@ class Zend_Dojo_View_Helper_CheckBoxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-4006
      * @group ZF-4006
      */
     public function testElementShouldUseCheckedValueForCheckboxInput()

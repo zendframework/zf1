@@ -182,7 +182,7 @@ class Zend_Dojo_Form_Element_RadioButtonTest extends PHPUnit_Framework_TestCase
     }
 
     /**#+
-     * @see ZF-3286
+     * @group ZF-3286
      */
     public function testShouldRegisterInArrayValidatorByDefault()
     {

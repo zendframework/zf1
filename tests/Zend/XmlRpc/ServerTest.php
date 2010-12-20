@@ -601,7 +601,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2872
+     * @group ZF-2872
      */
     public function testCanMarshalBase64Requests()
     {

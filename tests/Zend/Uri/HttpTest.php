@@ -79,7 +79,7 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
      * Make sure an exception is thrown when trying to use fromString() with a
      * non-HTTP scheme
      *
-     * @see http://framework.zend.com/issues/browse/ZF-4395
+     * @group ZF-4395
      *
      * @expectedException Zend_Uri_Exception
      */

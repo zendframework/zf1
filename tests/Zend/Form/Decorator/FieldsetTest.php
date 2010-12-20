@@ -127,7 +127,7 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-7054
+     * @group ZF-7054
      */
     public function testCustomIdSupersedesElementId()
     {
@@ -141,7 +141,7 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2981
+     * @group ZF-2981
      */
     public function testActionAndMethodAttributesShouldNotBePresentInFieldsetTag()
     {
@@ -157,7 +157,7 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
     }
 
     /**#@+
-     * @see ZF-3731
+     * @group ZF-3731
      */
     public function testIdShouldBePrefixedWithFieldset()
     {
@@ -184,7 +184,7 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
     /**#@-*/
 
     /**
-     * @see ZF-3728
+     * @group ZF-3728
      */
     public function testEnctypeAttributeShouldNotBePresentInFieldsetTag()
     {
@@ -200,7 +200,7 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3499
+     * @group ZF-3499
      */
     public function testHelperAttributeShouldNotBePresentInFieldsetTag()
     {

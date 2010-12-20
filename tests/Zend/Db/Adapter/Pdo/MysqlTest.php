@@ -105,7 +105,7 @@ class Zend_Db_Adapter_Pdo_MysqlTest extends Zend_Db_Adapter_Pdo_TestCommon
     /**
      * Ensures that driver_options are properly passed along to PDO
      *
-     * @see    http://framework.zend.com/issues/browse/ZF-285
+     * @group ZF-285
      * @return void
      */
     public function testAdapterDriverOptions()

@@ -186,8 +186,7 @@ class Zend_Db_Adapter_Pdo_SqliteTest extends Zend_Db_Adapter_Pdo_TestCommon
     }
 
     /**
-     * @return void
-     * @see    http://framework.zend.com/issues/browse/ZF-2293
+     * @group ZF-2293
      */
     public function testAdapterSupportsLengthInTableMetadataForVarcharFields()
     {

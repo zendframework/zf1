@@ -269,8 +269,8 @@ class Zend_View_Helper_PartialLoopTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3350
-     * @see ZF-3352
+     * @group ZF-3350
+     * @group ZF-3352
      */
     public function testShouldNotCastToArrayIfObjectIsTraversable()
     {
@@ -296,7 +296,7 @@ class Zend_View_Helper_PartialLoopTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3083
+     * @group ZF-3083
      */
     public function testEmptyArrayPassedToPartialLoopShouldNotThrowException()
     {
@@ -319,7 +319,7 @@ class Zend_View_Helper_PartialLoopTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2737
+     * @group ZF-2737
      * @link http://framework.zend.com/issues/browse/ZF-2737
      */
     public function testPartialLoopIncramentsPartialCounter()
@@ -344,7 +344,7 @@ class Zend_View_Helper_PartialLoopTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-5174
+     * @group ZF-5174
      * @link http://framework.zend.com/issues/browse/ZF-5174
      */
     public function testPartialLoopPartialCounterResets()

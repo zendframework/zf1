@@ -137,7 +137,7 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
     /**
      * No explicit assertions; just checking for error conditions
      *
-     * @see ZF-2847
+     * @group ZF-2847
      */
     public function testTranslationShouldNotRaiseWarningsWithNestedGroups()
     {
@@ -162,7 +162,6 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see   ZF-3953
      * @group ZF-3953
      */
     public function testUsingZeroAsValueShouldSelectAppropriateOption()
@@ -202,7 +201,7 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
      * Test isValid() on select elements without optgroups. This
      * ensures fixing ZF-3985 doesn't break existing functionality.
      *
-     * @see ZF-3985
+     * @group ZF-3985
      */
     public function testIsValidWithPlainOptions()
     {

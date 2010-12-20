@@ -144,7 +144,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2230
+     * @group ZF-2230
      */
     public function testDoesNotRenderHiddenElementsForCheckboxArray()
     {
@@ -156,7 +156,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3149
+     * @group ZF-3149
      */
     public function testShouldRenderHiddenElementShowingUncheckedOptionForNonArrayNames()
     {
@@ -213,7 +213,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3149
+     * @group ZF-3149
      */
     public function testCheckedAttributeNotRenderedIfItEvaluatesToFalse()
     {
@@ -228,7 +228,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3149
+     * @group ZF-3149
      */
     public function testShouldCheckValueIfValueMatchesCheckedOption()
     {
@@ -242,7 +242,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3149
+     * @group ZF-3149
      */
     public function testShouldOnlySetValueIfValueMatchesCheckedOption()
     {
@@ -251,7 +251,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3149
+     * @group ZF-3149
      */
     public function testShouldNotCheckValueIfValueDoesNotMatchCheckedOption()
     {
@@ -274,7 +274,7 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
    /**
-    * @see ZF-6467
+    * @group ZF-6467
     */
    public function testShouldNotShowHiddenFieldIfDisableIsTrue()
    {

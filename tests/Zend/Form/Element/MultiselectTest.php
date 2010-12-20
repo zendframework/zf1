@@ -151,7 +151,7 @@ class Zend_Form_Element_MultiselectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2824
+     * @group ZF-2824
      */
     public function testCanSetMultiOptionsUsingAssocArraysWithKeyValueKeys()
     {
@@ -176,7 +176,7 @@ class Zend_Form_Element_MultiselectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2824
+     * @group ZF-2824
      */
     public function testCanSetMultiOptionsUsingConfigWithKeyValueKeys()
     {

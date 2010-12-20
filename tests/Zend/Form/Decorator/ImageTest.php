@@ -155,7 +155,7 @@ class Zend_Form_Decorator_ImageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2714
+     * @group ZF-2714
      */
     public function testImageElementAttributesPassedWithDecoratorOptionsToViewHelper()
     {

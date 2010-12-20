@@ -93,7 +93,7 @@ class Zend_View_Helper_FieldsetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2913
+     * @group ZF-2913
      */
     public function testEmptyLegendShouldNotRenderLegendTag()
     {

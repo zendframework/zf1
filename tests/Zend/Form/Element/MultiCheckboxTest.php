@@ -157,7 +157,7 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2830
+     * @group ZF-2830
      */
     public function testRenderingMulticheckboxCreatesCorrectArrayNotation()
     {
@@ -170,7 +170,7 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2828
+     * @group ZF-2828
      */
     public function testCanPopulateCheckboxOptionsFromPostedData()
     {
@@ -219,7 +219,7 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**#+
-     * @see ZF-3286
+     * @group ZF-3286
      */
     public function testShouldRegisterInArrayValidatorByDefault()
     {

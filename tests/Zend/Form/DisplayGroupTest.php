@@ -312,7 +312,7 @@ class Zend_Form_DisplayGroupTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3069
+     * @group ZF-3069
      */
     public function testRemovingNamedDecoratorsShouldWork()
     {
@@ -360,7 +360,7 @@ class Zend_Form_DisplayGroupTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3494
+     * @group ZF-3494
      */
     public function testGetViewShouldNotReturnNullWhenViewRendererIsActive()
     {

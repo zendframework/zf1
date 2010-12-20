@@ -74,7 +74,7 @@ class Zend_View_Helper_FormPasswordTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-1666
+     * @group ZF-1666
      */
     public function testCanDisableElement()
     {
@@ -88,7 +88,7 @@ class Zend_View_Helper_FormPasswordTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-1666
+     * @group ZF-1666
      */
     public function testDisablingElementDoesNotRenderHiddenElements()
     {
@@ -121,7 +121,7 @@ class Zend_View_Helper_FormPasswordTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2860
+     * @group ZF-2860
      */
     public function testShouldRenderValueWhenRenderPasswordFlagPresentAndTrue()
     {
@@ -130,7 +130,7 @@ class Zend_View_Helper_FormPasswordTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2860
+     * @group ZF-2860
      */
     public function testRenderPasswordAttribShouldNeverBeRendered()
     {

@@ -95,7 +95,7 @@ class Zend_Form_SubFormTest extends PHPUnit_Framework_TestCase
     // Bugfixes
 
     /**
-     * @see ZF-2883
+     * @group ZF-2883
      */
     public function testDisplayGroupsShouldInheritSubFormNamespace()
     {
@@ -112,7 +112,7 @@ class Zend_Form_SubFormTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3272
+     * @group ZF-3272
      */
     public function testRenderedSubFormDtShouldContainNoBreakSpace()
     {

@@ -182,7 +182,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2851
+     * @group ZF-2851
      */
     public function testSetNameShouldNotAllowEmptyString()
     {
@@ -313,7 +313,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2862
+     * @group ZF-2862
      */
     public function testBreakChainOnFailureFlagsForExistingValidatorsRemainSetWhenNotEmptyValidatorAutoInserted()
     {
@@ -848,7 +848,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**#@+
-     * @see ZF-2988
+     * @group ZF-2988
      */
     public function testSettingErrorMessageShouldOverrideValidationErrorMessages()
     {
@@ -1385,7 +1385,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3597
+     * @group ZF-3597
      */
     public function testAddingConcreteDecoratorShouldHonorOrder()
     {
@@ -1449,7 +1449,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3069
+     * @group ZF-3069
      */
     public function testRemovingNamedDecoratorsShouldWork()
     {
@@ -1516,7 +1516,7 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3376
+     * @group ZF-3376
      */
     public function testSetDecoratorsShouldAcceptReturnOfGetDecorators()
     {
@@ -2201,7 +2201,7 @@ class Zend_Form_ElementTest_ArrayFilter implements Zend_Filter_Interface
     }
 
     /**
-     * @see ZF-6822
+     * @group ZF-6822
      */
     public function testValidatorByUsingStringNotation()
     {

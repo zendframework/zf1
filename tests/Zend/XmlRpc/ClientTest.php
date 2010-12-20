@@ -153,7 +153,7 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2090
+     * @group ZF-2090
      */
     public function testSuccessfullyDetectsEmptyArrayParameterAsArray()
     {
@@ -174,7 +174,7 @@ class Zend_XmlRpc_ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-1412
+     * @group ZF-1412
      *
      * @return void
      */

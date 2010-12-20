@@ -134,7 +134,7 @@ class Zend_View_Helper_HtmlListTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * @see ZF-5018
+     * @group ZF-5018
      */
     public function testMakeNestedUnorderedList()
     {
@@ -150,7 +150,7 @@ class Zend_View_Helper_HtmlListTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * @see ZF-5018
+     * @group ZF-5018
      */
     public function testMakeNestedDeepUnorderedList()
     {
@@ -193,7 +193,7 @@ class Zend_View_Helper_HtmlListTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2527
+     * @group ZF-2527
      */
     public function testEscapeFlagHonoredForMultidimensionalLists()
     {
@@ -207,7 +207,7 @@ class Zend_View_Helper_HtmlListTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2527
+     * @group ZF-2527
      * Added the s modifier to match newlines after @see ZF-5018
      */
     public function testAttribsPassedIntoMultidimensionalLists()
@@ -223,7 +223,7 @@ class Zend_View_Helper_HtmlListTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2870
+     * @group ZF-2870
      */
     public function testEscapeFlagShouldBePassedRecursively()
     {

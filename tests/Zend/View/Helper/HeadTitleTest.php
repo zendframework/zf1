@@ -221,7 +221,7 @@ class Zend_View_Helper_HeadTitleTest extends PHPUnit_Framework_TestCase
     }
 
    /**
-    * @see ZF-8036
+    * @group ZF-8036
     */
     public function testHeadTitleZero()
     {

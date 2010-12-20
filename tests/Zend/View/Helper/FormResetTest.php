@@ -91,7 +91,7 @@ class Zend_View_Helper_FormResetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-2845
+     * @group ZF-2845
      */
     public function testShouldAllowDisabling()
     {

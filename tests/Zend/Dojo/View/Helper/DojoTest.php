@@ -799,7 +799,6 @@ function() {
     }
 
     /**
-     * @see   ZF-3962
      * @group ZF-3962
      */
     public function testHelperShouldAllowDisablingParseOnLoadWithDeclarativeStyle()

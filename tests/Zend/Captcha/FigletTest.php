@@ -113,7 +113,6 @@ class Zend_Captcha_FigletTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * @see ZF-8268
      * @group ZF-8268
      */
     public function testLabelIdIsCorrect()

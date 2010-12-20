@@ -99,7 +99,7 @@ class Zend_View_Helper_FormTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see ZF-3832
+     * @group ZF-3832
      */
     public function testEmptyIdShouldNotRenderIdAttribute()
     {

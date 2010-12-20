@@ -116,7 +116,7 @@ class Zend_Dojo_Form_Element_FilteringSelectTest extends PHPUnit_Framework_TestC
     }
 
     /**#@+
-     * @see ZF-3286
+     * @group ZF-3286
      */
     public function testShouldRegisterInArrayValidatorWhenNoStoreProvided()
     {
