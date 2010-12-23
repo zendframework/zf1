@@ -53,7 +53,7 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
      */
     public function addFilter($filter)
     {
-        if (is_integer($filter)) {
+        if (is_int($filter)) {
             $filter = new Zend_Log_Filter_Priority($filter);
         }
 
