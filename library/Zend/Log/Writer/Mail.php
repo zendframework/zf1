@@ -185,6 +185,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
      *
      * @param array $config
      * @return Zend_Mail
+     * @throws Zend_Log_Exception
      */
     protected static function _constructMailFromConfig(array $config)
     {
@@ -233,6 +234,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
      *
      * @param array $config
      * @return Zend_Layout
+     * @throws Zend_Log_Exception
      */
     protected function _constructLayoutFromConfig(array $config)
     {
@@ -331,6 +333,7 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
      *
      * @param  string $subject Subject prepend text.
      * @return Zend_Log_Writer_Mail
+     * @throws Zend_Log_Exception
      */
     public function setSubjectPrependText($subject)
     {

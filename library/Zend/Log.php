@@ -84,7 +84,7 @@ class Zend_Log
 
     /**
      *
-     * @var array
+     * @var array|boolean
      */
     protected $_errorHandlerMap        = false;
 
@@ -98,6 +98,7 @@ class Zend_Log
      * Class constructor.  Create a new logger
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
+     * @return void
      */
     public function __construct(Zend_Log_Writer_Abstract $writer = null)
     {
@@ -115,6 +116,7 @@ class Zend_Log
      *
      * @param  array|Zend_Config Array or instance of Zend_Config
      * @return Zend_Log
+     * @throws Zend_Log_Exception
      */
     static public function factory($config = array())
     {
@@ -147,6 +149,7 @@ class Zend_Log
      *
      * @param  array $spec config array with writer spec
      * @return Zend_Log_Writer_Abstract
+     * @throws Zend_Log_Exception
      */
     protected function _constructWriterFromConfig($config)
     {
@@ -174,6 +177,7 @@ class Zend_Log
      *
      * @param  array|Zend_Config $config Zend_Config or Array
      * @return Zend_Log_Filter_Interface
+     * @throws Zend_Log_Exception
      */
     protected function _constructFilterFromConfig($config)
     {
@@ -198,6 +202,7 @@ class Zend_Log
      * @param mixed $config Zend_Config or Array
      * @param string $namespace
      * @return object
+     * @throws Zend_Log_Exception
      */
     protected function _constructFromConfig($type, $config, $namespace)
     {
@@ -237,6 +242,7 @@ class Zend_Log
      * @param string $type filter|writer
      * @param string $defaultNamespace
      * @return string full classname
+     * @throws Zend_Log_Exception
      */
     protected function getClassName($config, $type, $defaultNamespace)
     {
@@ -261,7 +267,7 @@ class Zend_Log
      * @param  string   $message   Message to log
      * @param  integer  $priority  Priority of message
      * @return array Event array
-     **/
+     */
     protected function _packEvent($message, $priority)
     {
         return array_merge(array(
@@ -387,7 +393,7 @@ class Zend_Log
      *
      * @param  string   $name      Name of priority
      * @param  integer  $priority  Numeric priority
-     * @throws Zend_Log_InvalidArgumentException
+     * @throws Zend_Log_Exception
      */
     public function addPriority($name, $priority)
     {
@@ -410,12 +416,13 @@ class Zend_Log
      * Before a message will be received by any of the writers, it
      * must be accepted by all filters added with this method.
      *
-     * @param  int|Zend_Log_Filter_Interface $filter
-     * @return void
+     * @param  int|Zend_Config|array|Zend_Log_Filter_Interface $filter
+     * @return Zend_Log
+     * @throws Zend_Log_Exception
      */
     public function addFilter($filter)
     {
-        if (is_integer($filter)) {
+        if (is_int($filter)) {
             /** @see Zend_Log_Filter_Priority */
             require_once 'Zend/Log/Filter/Priority.php';
             $filter = new Zend_Log_Filter_Priority($filter);
@@ -438,7 +445,7 @@ class Zend_Log
      * message and writing it out to storage.
      *
      * @param  mixed $writer Zend_Log_Writer_Abstract or Config array
-     * @return void
+     * @return Zend_Log
      */
     public function addWriter($writer)
     {
@@ -464,7 +471,7 @@ class Zend_Log
      *
      * @param  $name    Name of the field
      * @param  $value   Value of the field
-     * @return void
+     * @return Zend_Log
      */
     public function setEventItem($name, $value)
     {

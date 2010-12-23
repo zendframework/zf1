@@ -49,11 +49,12 @@ class Zend_Log_Filter_Priority extends Zend_Log_Filter_Abstract
      *
      * @param  integer  $priority  Priority
      * @param  string   $operator  Comparison operator
+     * @return void
      * @throws Zend_Log_Exception
      */
-    public function __construct($priority, $operator = NULL)
+    public function __construct($priority, $operator = null)
     {
-        if (! is_integer($priority)) {
+        if (! is_int($priority)) {
             require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception('Priority must be an integer');
         }
@@ -67,7 +68,6 @@ class Zend_Log_Filter_Priority extends Zend_Log_Filter_Abstract
      *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Filter_Priority
-     * @throws Zend_Log_Exception
      */
     static public function factory($config)
     {

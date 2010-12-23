@@ -34,12 +34,12 @@ require_once 'Zend/Log/Formatter/Interface.php';
 class Zend_Log_Formatter_Xml implements Zend_Log_Formatter_Interface
 {
     /**
-     * @var Relates XML elements to log data field keys.
+     * @var string Name of root element
      */
     protected $_rootElement;
 
     /**
-     * @var Relates XML elements to log data field keys.
+     * @var array Relates XML elements to log data field keys.
      */
     protected $_elementMap;
 
@@ -52,8 +52,9 @@ class Zend_Log_Formatter_Xml implements Zend_Log_Formatter_Interface
      * Class constructor
      *
      * @param string $rootElement Name of root element
-     * @param array $elementMap
+     * @param array $elementMap Relates XML elements to log data field keys
      * @param string $encoding Encoding to use (defaults to UTF-8)
+     * @return void
      */
     public function __construct($rootElement = 'logEntry', $elementMap = null, $encoding = 'UTF-8')
     {

@@ -43,9 +43,9 @@ require_once 'Zend/Wildfire/Plugin/FirePhp.php';
  */
 class Zend_Log_Writer_Firebug extends Zend_Log_Writer_Abstract
 {
-
     /**
      * Maps logging priorities to logging display styles
+     *
      * @var array
      */
     protected $_priorityStyles = array(Zend_Log::EMERG  => Zend_Wildfire_Plugin_FirePhp::ERROR,
@@ -59,18 +59,22 @@ class Zend_Log_Writer_Firebug extends Zend_Log_Writer_Abstract
 
     /**
      * The default logging style for un-mapped priorities
+     *
      * @var string
      */
     protected $_defaultPriorityStyle = Zend_Wildfire_Plugin_FirePhp::LOG;
 
     /**
      * Flag indicating whether the log writer is enabled
+     *
      * @var boolean
      */
     protected $_enabled = true;
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -86,7 +90,6 @@ class Zend_Log_Writer_Firebug extends Zend_Log_Writer_Abstract
      *
      * @param  array|Zend_Config $config
      * @return Zend_Log_Writer_Firebug
-     * @throws Zend_Log_Exception
      */
     static public function factory($config)
     {

@@ -40,6 +40,7 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
 
     /**
      * Formats the log message before writing.
+     *
      * @var Zend_Log_Formatter_Interface
      */
     protected $_formatter;
@@ -48,7 +49,7 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
      * Add a filter specific to this writer.
      *
      * @param  Zend_Log_Filter_Interface  $filter
-     * @return void
+     * @return Zend_Log_Writer_Abstract
      */
     public function addFilter($filter)
     {
@@ -69,7 +70,7 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
     /**
      * Log a message to this writer.
      *
-     * @param  array     $event  log data event
+     * @param  array $event log data event
      * @return void
      */
     public function write($event)
@@ -88,7 +89,7 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
      * Set a new formatter for this writer
      *
      * @param  Zend_Log_Formatter_Interface $formatter
-     * @return void
+     * @return Zend_Log_Writer_Abstract
      */
     public function setFormatter(Zend_Log_Formatter_Interface $formatter)
     {
