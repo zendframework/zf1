@@ -807,12 +807,23 @@ abstract class Zend_Db_Table_Abstract
             //get db configuration
             $dbConfig = $this->_db->getConfig();
 
+            $port = isset($dbConfig['options']['port'])
+                  ? ':'.$dbConfig['options']['port']
+                  : (isset($dbConfig['port'])
+                  ? ':'.$dbConfig['port']
+                  : null);
+
+            $host = isset($dbConfig['options']['host'])
+                  ? ':'.$dbConfig['options']['host']
+                  : (isset($dbConfig['host'])
+                  ? ':'.$dbConfig['host']
+                  : null);
+
             // Define the cache identifier where the metadata are saved
             $cacheId = md5( // port:host/dbname:schema.table (based on availabilty)
-                (isset($dbConfig['options']['port']) ? ':'.$dbConfig['options']['port'] : null)
-                . (isset($dbConfig['options']['host']) ? ':'.$dbConfig['options']['host'] : null)
-                . '/'.$dbConfig['dbname'].':'.$this->_schema.'.'.$this->_name
-                );
+                    $port . $host . '/'. $dbConfig['dbname'] . ':'
+                  . $this->_schema. '.' . $this->_name
+            );
         }
 
         // If $this has no metadata cache or metadata cache misses

@@ -1639,4 +1639,52 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
     {
         return array('stuff' => 'information');
     }
+
+    /**
+     * @group ZF-7042
+     * @group ZF-10778
+     */
+    public function testCacheIdGeneratedToMetadata()
+    {
+        /**
+         * @see Zend_Cache
+         */
+        require_once 'Zend/Cache.php';
+
+        /**
+         * @see Zend_Cache_Backend_BlackHole
+         */
+        require_once 'Zend/Cache/Backend/BlackHole.php';
+
+        Zend_Db_Table::setDefaultAdapter($this->_db);
+        $dbConfig     = $this->_db->getConfig();
+        $cacheId = md5(
+                (isset($dbConfig['port']) ? ':'.$dbConfig['port'] : null)
+                . (isset($dbConfig['host']) ? ':'.$dbConfig['host'] : null)
+                . '/'.$dbConfig['dbname'].':.cache_metadata'
+                );
+
+        $metadata = array('id' => array('PRIMARY' => true));
+        $cacheBackend = $this->getMock('Zend_Cache_Backend_BlackHole');
+        $cacheBackend->expects($this->any())
+                     ->method('load')
+                     ->with($this->equalTo($cacheId))
+                     ->will($this->returnValue($metadata));
+
+        $cache = Zend_Cache::factory('Core', $cacheBackend, array('automatic_serialization' => false));
+        Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
+
+        $this->_util->createTable('cache_metadata', array(
+            'id'   => 'IDENTITY',
+            'name' => 'VARCHAR(32)'
+        ));
+        $configTable = array(
+            'name'    => 'cache_metadata',
+            'primary' => 'id'
+        );
+        $table = new Zend_Db_Table($configTable);
+        $table->info(Zend_Db_Table::METADATA);
+        $this->_util->dropTable('cache_metadata');
+        Zend_Db_Table_Abstract::setDefaultMetadataCache(null);
+    }
 }
