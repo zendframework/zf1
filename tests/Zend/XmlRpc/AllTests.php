@@ -24,6 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_XmlRpc_AllTests::main');
 }
 
+require_once 'Zend/XmlRpc/BigIntegerValueTest.php';
 require_once 'Zend/XmlRpc/ValueTest.php';
 require_once 'Zend/XmlRpc/RequestTest.php';
 require_once 'Zend/XmlRpc/Request/HttpTest.php';
@@ -54,6 +55,7 @@ class Zend_XmlRpc_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_XmlRpc');
 
+        $suite->addTestSuite('Zend_XmlRpc_BigIntegerValueTest');
         $suite->addTestSuite('Zend_XmlRpc_ValueTest');
         $suite->addTestSuite('Zend_XmlRpc_RequestTest');
         $suite->addTestSuite('Zend_XmlRpc_Request_HttpTest');
