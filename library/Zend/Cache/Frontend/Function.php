@@ -104,8 +104,7 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
             ob_start();
             ob_implicit_flush(false);
             $return = call_user_func_array($callback, $parameters);
-            $output = ob_get_contents();
-            ob_end_clean();
+            $output = ob_get_clean();
             $data = array($output, $return);
             $this->save($data, $id, $tags, $specificLifetime, $priority);
         }

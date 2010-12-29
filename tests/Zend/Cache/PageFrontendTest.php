@@ -164,8 +164,7 @@ class Zend_Cache_PageFrontendTest extends PHPUnit_Framework_TestCase {
             echo('foobar');
             ob_end_flush();
         }
-        $data = ob_get_contents();
-        ob_end_clean();
+        $data = ob_get_clean();
         ob_implicit_flush(true);
         $this->assertEquals('foo', $data);
     }
@@ -178,8 +177,7 @@ class Zend_Cache_PageFrontendTest extends PHPUnit_Framework_TestCase {
             echo('foobar');
             ob_end_flush();
         }
-        $data = ob_get_contents();
-        ob_end_clean();
+        $data = ob_get_clean();
         ob_implicit_flush(true);
         $this->assertEquals('foobar', $data);
     }
@@ -193,8 +191,7 @@ class Zend_Cache_PageFrontendTest extends PHPUnit_Framework_TestCase {
             echo('foobar');
             ob_end_flush();
         }
-        $data = ob_get_contents();
-        ob_end_clean();
+        $data = ob_get_clean();
         ob_implicit_flush(true);
         $this->assertEquals('DEBUG HEADER : This is a cached page !foo', $data);
     }

@@ -196,8 +196,7 @@ class Zend_ConfigTest extends PHPUnit_Framework_TestCase
 
         ob_start();
         print_r($config->toArray());
-        $contents = ob_get_contents();
-        ob_end_clean();
+        $contents = ob_get_clean();
 
         $this->assertContains('Array', $contents);
         $this->assertContains('[hostname] => all', $contents);
