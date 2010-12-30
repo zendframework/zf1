@@ -21,12 +21,11 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Formatter_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Formatter_FirebugTest::main');
 }
 
-require_once 'Zend/Log/Formatter/FirebugTest.php';
-require_once 'Zend/Log/Formatter/SimpleTest.php';
-require_once 'Zend/Log/Formatter/XmlTest.php';
+/** Zend_Log_Formatter_Firebug */
+require_once 'Zend/Log/Formatter/Firebug.php';
 
 /**
  * @category   Zend
@@ -35,27 +34,30 @@ require_once 'Zend/Log/Formatter/XmlTest.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Log
- * @group      Zend_Log_Formatter
  */
-class Zend_Log_Formatter_AllTests
+class Zend_Log_Formatter_FirebugTest extends PHPUnit_Framework_TestCase
 {
     public static function main()
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    public static function suite()
+    public function testFormat()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Log_Formatter');
+        $event = array(
+            'timestamp' => date('c'),
+        	'message' => 'tottakai',
+            'priority' => 2,
+        	'priorityName' => 'CRIT'
+        );
+        $formatter = new Zend_Log_Formatter_Firebug();
+        $output = $formatter->format($event);
 
-        $suite->addTestSuite('Zend_Log_Formatter_FirebugTest');
-        $suite->addTestSuite('Zend_Log_Formatter_SimpleTest');
-        $suite->addTestSuite('Zend_Log_Formatter_XmlTest');
-
-        return $suite;
+        $this->assertEquals('tottakai', $output);
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_AllTests::main') {
-    Zend_Log_Formatter_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_FirebugTest::main') {
+    Zend_Log_Formatter_FirebugTest::main();
 }
