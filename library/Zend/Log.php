@@ -72,6 +72,12 @@ class Zend_Log
 
     /**
      *
+     * @var string
+     */
+    protected $_defaultFormatterNamespace = 'Zend_Log_Formatter';
+
+    /**
+     *
      * @var callback
      */
     protected $_origErrorHandler       = null;
@@ -169,6 +175,11 @@ class Zend_Log
             $writer->addFilter($filter);
         }
 
+        if (isset($config['formatterName'])) {
+            $formatter = $this->_constructFormatterFromConfig($config);
+            $writer->setFormatter($formatter);
+        }
+
         return $writer;
     }
 
@@ -193,6 +204,29 @@ class Zend_Log
         }
 
         return $filter;
+    }
+
+   /**
+     * Construct formatter object from configuration array or Zend_Config object
+     *
+     * @param  array|Zend_Config $config Zend_Config or Array
+     * @return Zend_Log_Formatter_Interface
+     * @throws Zend_Log_Exception
+     */
+    protected function _constructFormatterFromConfig($config)
+    {
+        $formatter = $this->_constructFromConfig('formatter', $config, $this->_defaultFormatterNamespace);
+
+        if (!$formatter instanceof Zend_Log_Formatter_Interface) {
+             $formatterName = is_object($formatter)
+                         ? get_class($formatter)
+                         : 'The specified formatter';
+            /** @see Zend_Log_Exception */
+            require_once 'Zend/Log/Exception.php';
+            throw new Zend_Log_Exception($formatterName . ' does not implement Zend_Log_Formatter_Interface');
+        }
+
+        return $formatter;
     }
 
     /**
@@ -228,7 +262,7 @@ class Zend_Log
         if (!$reflection->implementsInterface('Zend_Log_FactoryInterface')) {
             require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception(
-                'Driver does not implement Zend_Log_FactoryInterface and can not be constructed from config.'
+                $className . ' does not implement Zend_Log_FactoryInterface and can not be constructed from config.'
             );
         }
 

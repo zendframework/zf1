@@ -451,6 +451,46 @@ class Zend_Log_LogTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('EMERG', $mock->events[0]['priorityName']);
         $this->assertFalse(array_key_exists(1, $mock->events));
     }
+
+    /**
+     * @group ZF-9176
+     */
+    public function testLogConstructFromConfigFormatter()
+    {
+        $config = array(
+        	'log' => array(
+	        	'test' => array(
+		            'writerName'    => 'Mock',
+		            'formatterName' => 'Simple',
+		            'formatterParams' => array(
+		                'format' => '%timestamp% (%priorityName%): %message%'
+		            )
+	            )
+            )
+        );
+
+        $logger = Zend_Log::factory($config['log']);
+        $logger->log('custom message', Zend_Log::INFO);
+    }
+
+	/**
+     * @group ZF-9176
+     */
+    public function testLogConstructFromConfigCustomFormatter()
+    {
+        $config = array(
+        	'log' => array(
+	        	'test' => array(
+		            'writerName'    => 'Mock',
+		            'formatterName' => 'Mock',
+        			'formatterNamespace' => 'Custom_Formatter'
+	            )
+            )
+        );
+
+        $logger = Zend_Log::factory($config['log']);
+        $logger->log('custom message', Zend_Log::INFO);
+    }
 }
 
 class Zend_Log_Writer_NotExtendedWriterAbstract implements Zend_Log_FactoryInterface
@@ -463,6 +503,18 @@ class Zend_Log_Writer_NotExtendedWriterAbstract implements Zend_Log_FactoryInter
 class Zend_Log_Filter_NotImplementsFilterInterface implements Zend_Log_FactoryInterface
 {
     public static function factory($config)
+    {
+    }
+}
+
+class Custom_Formatter_Mock extends Zend_Log_Formatter_Abstract
+{
+    public static function factory($config)
+    {
+        return new self;
+    }
+
+    public function format($event)
     {
     }
 }

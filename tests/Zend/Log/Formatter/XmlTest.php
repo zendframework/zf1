@@ -100,6 +100,43 @@ class Zend_Log_Formatter_XmlTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('&amp;amp', $line);
     }
+
+    public function testConstructorWithArray()
+    {
+        $options = array(
+            'rootElement' => 'log',
+            'elementMap' => array(
+                'word' => 'message',
+                'priority' => 'priority'
+            )
+        );
+        $event = array(
+            'message' => 'tottakai',
+            'priority' => 4
+        );
+        $expected = '<log><word>tottakai</word><priority>4</priority></log>';
+
+        $formatter = new Zend_Log_Formatter_Xml($options);
+        $output = $formatter->format($event);
+        $this->assertContains($expected, $output);
+        $this->assertEquals('UTF-8', $formatter->getEncoding());
+    }
+
+    /**
+     * @group ZF-9176
+     */
+    public function testFactory()
+    {
+        $options = array(
+            'rootElement' => 'log',
+            'elementMap' => array(
+                'timestamp' => 'timestamp',
+                'response' => 'message'
+            )
+        );
+        $formatter = Zend_Log_Formatter_Xml::factory($options);
+        $this->assertType('Zend_Log_Formatter_Xml', $formatter);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_XmlTest::main') {

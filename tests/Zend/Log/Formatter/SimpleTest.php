@@ -111,6 +111,18 @@ class Zend_Log_Formatter_SimpleTest extends PHPUnit_Framework_TestCase
         $line = $f->format($fields);
         $this->assertContains('object', $line);
     }
+
+    /**
+     * @group ZF-9176
+     */
+    public function testFactory()
+    {
+        $options = array(
+            'format' => '%timestamp% [%priority%]: %message% -- %info%'
+        );
+        $formatter = Zend_Log_Formatter_Simple::factory($options);
+        $this->assertType('Zend_Log_Formatter_Simple', $formatter);
+    }
 }
 
 class Zend_Log_Formatter_SimpleTest_TestObject1 {
