@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Form_FormTest::main');
 }
 
-// error_reporting(E_ALL);
-
 require_once 'Zend/Form.php';
 
 require_once 'Zend/Config.php';
@@ -2819,7 +2817,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertSame($data, $this->form->getValidValues($data));
     }
 
-    /**#@+
+    /**
      * @group ZF-2988
      */
     public function testSettingErrorMessageShouldOverrideValidationErrorMessages()
@@ -3638,7 +3636,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertRegexp('#<tr><td>Foo</td><td>.*?<input[^>]+>.*?</td><td>sample description</td></tr>#s', $html, $html);
     }
 
-    /**#@+
+    /**
      * @group ZF-3228
      */
     public function testShouldAllowSpecifyingSpecificElementsToDecorate()
@@ -4387,13 +4385,31 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, substr_count($html, 'Customer Type'), $html);
     }
 
+    /**
+     * @group ZF-10491
+     * @group ZF-10734
+     * @group ZF-10731
+     */
     public function testAddElementToDisplayGroupByElementInstance()
     {
         $element = new Zend_Form_Element_Text('foo');
+        $elementTwo = new Zend_Form_Element_Text('baz-----');
 
-        $this->form->addElement($element);
-        $this->form->addDisplayGroup(array($element), 'bar');
-        $this->assertNotNull($this->form->getDisplayGroup('bar')->getElement('foo'));
+        $this->form->addElements(array($element, $elementTwo));
+        $this->form->addDisplayGroup(array($element, $elementTwo), 'bar');
+
+        $displayGroup = $this->form->getDisplayGroup('bar');
+        $this->assertNotNull($displayGroup->getElement('foo'));
+        $this->assertNotNull($displayGroup->getElement('baz'));
+
+        // clear display groups and elements
+        $this->form->clearDisplayGroups()
+                   ->clearElements();
+
+        $this->form->addDisplayGroup(array($element, $elementTwo), 'bar');
+        $displayGroup = $this->form->getDisplayGroup('bar');
+        $this->assertNotNull($displayGroup->getElement('foo'));
+        $this->assertNotNull($displayGroup->getElement('baz'));
     }
 
     /**

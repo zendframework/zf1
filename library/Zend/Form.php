@@ -1786,7 +1786,11 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         $group = array();
         foreach ($elements as $element) {
             if($element instanceof Zend_Form_Element) {
-                $element = $element->getId();
+                $elementName = $element->getName();
+                if (!isset($this->_elements[$elementName])) {
+                    $this->addElement($element);
+                }
+                $element = $elementName;
             }
 
             if (isset($this->_elements[$element])) {
