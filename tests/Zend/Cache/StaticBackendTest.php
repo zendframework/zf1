@@ -112,7 +112,7 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         $res = $this->_instance->save('data to cache', bin2hex('/foo'), array('tag1', 'tag2'), 10);
         $this->assertTrue($res);
     }
-    
+
     public function testSaveWithSpecificExtension()
     {
         $res = $this->_instance->save(serialize(array('data to cache', 'xml')), bin2hex('/foo2'));
@@ -150,7 +150,7 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         $this->assertTrue($this->_instance->test(bin2hex('/foo')));
         unlink($this->_instance->getOption('public_dir') . '/foo.xml');
     }
-    
+
     public function testRemovalWithSpecificExtension()
     {
         $res = $this->_instance->save(serialize(array('data to cache', 'xml')), bin2hex('/foo3'), array('tag1'));
@@ -240,6 +240,22 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         $this->assertTrue($this->_instance->clean('all'));
         $this->assertFalse($this->_instance->test(bin2hex('bar')));
         $this->assertFalse($this->_instance->test(bin2hex('bar2')));
+    }
+
+    /**
+     * @group ZF-10558
+     */
+    public function testRemoveRecursively()
+    {
+        @mkdir($this->_cache_dir . '/issues/zf10558', 0777, true);
+        $id = '/issues/zf10558';
+        $pathFile = $this->_cache_dir . $id . '/index.html';
+        file_put_contents($pathFile, '<strong>foo</strong>');
+
+        $this->_instance->removeRecursively($id);
+        $this->assertFileNotExists($pathFile);
+        $this->assertFileNotExists(dirname($pathFile));
+        rmdir($this->_cache_dir . '/issues/');
     }
 
 

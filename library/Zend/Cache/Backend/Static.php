@@ -343,14 +343,16 @@ class Zend_Cache_Backend_Static
             if (!is_writable($directory)) {
                 return false;
             }
-            foreach (new DirectoryIterator($directory) as $file) {
-                if (true === $file->isFile()) {
-                    if (false === unlink($file->getPathName())) {
-                        return false;
+            if (is_dir($directory)) {
+                foreach (new DirectoryIterator($directory) as $file) {
+                    if (true === $file->isFile()) {
+                        if (false === unlink($file->getPathName())) {
+                            return false;
+                        }
                     }
                 }
             }
-            rmdir(dirname($path));
+            rmdir($directory);
         }
         if (file_exists($file)) {
             if (!is_writable($file)) {
@@ -551,9 +553,12 @@ class Zend_Cache_Backend_Static
 
     /**
      * Decode a request URI from the provided ID
+     *
+     * @param string $id
+     * @return string
      */
     protected function _decodeId($id)
     {
-        return pack('H*', $id);;
+        return pack('H*', $id);
     }
 }
