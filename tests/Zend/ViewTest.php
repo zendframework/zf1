@@ -940,7 +940,7 @@ class Zend_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2742
+     * @group ZF-2742
      */
     public function testGetHelperWorksWithPredefinedClassNames()
     {

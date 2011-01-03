@@ -417,7 +417,7 @@ a {
     }
 
     /**
-     * @issue ZF-5435
+     * @group ZF-5435
      */
     public function testContainerMaintainsCorrectOrderOfItems()
     {

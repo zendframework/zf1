@@ -2137,7 +2137,7 @@ class Zend_Feed_Reader_Entry_RssTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-7908
+     * @group ZF-7908
      */
     public function testGetsDateModifiedFromRss20_UnrecognisedGmtFormat()
     {

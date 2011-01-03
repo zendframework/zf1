@@ -102,7 +102,7 @@ class Zend_Service_Nirvanix_Namespace_ImfsTest extends Zend_Service_Nirvanix_Fun
     }
 
     /**
-     * @issue ZF-6860
+     * @group ZF-6860
      */
     public function testDestinationPathFormatSentToServiceAsParameterUsesUnixConvention()
     {

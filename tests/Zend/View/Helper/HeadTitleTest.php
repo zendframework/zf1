@@ -183,7 +183,7 @@ class Zend_View_Helper_HeadTitleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2918
+     * @group ZF-2918
      * @link http://framework.zend.com/issues/browse/ZF-2918
      */
     public function testZF2918()
@@ -196,7 +196,7 @@ class Zend_View_Helper_HeadTitleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-3577
+     * @group ZF-3577
      * @link http://framework.zend.com/issues/browse/ZF-3577
      */
     public function testZF3577()

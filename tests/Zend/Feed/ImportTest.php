@@ -449,7 +449,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-5903
+     * @group ZF-5903
      */
     public function testFindFeedsIncludesUriAsArrayKey()
     {

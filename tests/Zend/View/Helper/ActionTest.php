@@ -279,7 +279,7 @@ class Zend_View_Helper_ActionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2716
+     * @group ZF-2716
      */
     public function testActionWithPartialsUseOfViewRendererReturnsToOriginatingViewState()
     {
@@ -299,7 +299,7 @@ class Zend_View_Helper_ActionTest extends PHPUnit_Framework_TestCase
     /**
      * Future ViewRenderer State issues should be included in this test.
      *
-     * @issue ZF-2846
+     * @group ZF-2846
      */
     public function testActionReturnsViewRendererToOriginalState()
     {

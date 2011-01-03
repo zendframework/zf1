@@ -406,7 +406,7 @@ document.write(bar.strlen());');
     }
 
     /**
-     * @issue ZF-3928
+     * @group ZF-3928
      * @link http://framework.zend.com/issues/browse/ZF-3928
      */
     public function testTurnOffAutoEscapeDoesNotEncodeAmpersand()
@@ -431,7 +431,7 @@ document.write(bar.strlen());');
     }
 
     /**
-     * @issue ZF-5435
+     * @group ZF-5435
      */
     public function testContainerMaintainsCorrectOrderOfItems()
     {

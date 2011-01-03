@@ -408,7 +408,7 @@ class Zend_Controller_Router_Route_RegexTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2301
+     * @group ZF-2301
      */
     public function testAssemblyOfRouteWithMergedMatchedParts()
     {

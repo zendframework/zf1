@@ -161,7 +161,7 @@ class Zend_View_Helper_FormErrorsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-3477
+     * @group ZF-3477
      * @link http://framework.zend.com/issues/browse/ZF-3477
      */
     public function testCanSetClassAttribute()

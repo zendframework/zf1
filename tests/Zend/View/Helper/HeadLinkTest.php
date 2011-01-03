@@ -409,7 +409,7 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-3928
+     * @group ZF-3928
      * @link http://framework.zend.com/issues/browse/ZF-3928
      */
     public function testTurnOffAutoEscapeDoesNotEncodeAmpersand()
@@ -440,7 +440,7 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-5435
+     * @group ZF-5435
      */
     public function testContainerMaintainsCorrectOrderOfItems()
     {
@@ -460,7 +460,7 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-10345
+     * @group ZF-10345
      */
     public function testIdAttributeIsSupported()
     {

@@ -368,7 +368,7 @@ class Zend_Loader_PluginLoaderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2741
+     * @group ZF-2741
      */
     public function testWin32UnderscoreSpacedShortNamesWillLoad()
     {

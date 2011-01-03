@@ -418,7 +418,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2663
+     * @group ZF-2663
      */
     public function testSetNameDoesntClobber()
     {
@@ -435,7 +435,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-2663
+     * @group ZF-2663
      */
     public function testSetNameDoesntClobberPart2()
     {
@@ -453,7 +453,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-3780
+     * @group ZF-3780
      * @link http://framework.zend.com/issues/browse/ZF-3780
      */
     public function testPlacesMetaTagsInProperOrder()
@@ -469,7 +469,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-5435
+     * @group ZF-5435
      */
     public function testContainerMaintainsCorrectOrderOfItems()
     {
@@ -490,7 +490,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
 	/**
-	 * @issue ZF-7722
+	 * @group ZF-7722
 	 */
 	public function testCharsetValidateFail()
 	{
@@ -504,7 +504,7 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @issue ZF-7722
+	 * @group ZF-7722
 	 */
 	public function testCharset() {
 		$view = new Zend_View();

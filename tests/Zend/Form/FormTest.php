@@ -577,7 +577,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-7067
+     * @group ZF-7067
      */
     public function testCanSetActionWithGetParams()
     {

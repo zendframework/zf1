@@ -366,7 +366,7 @@ class Zend_View_Helper_FormRadioTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-5681
+     * @group ZF-5681
      */
     public function testRadioLabelDoesNotContainHardCodedStyle()
     {

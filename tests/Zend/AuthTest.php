@@ -37,7 +37,7 @@ require_once 'Zend/Auth/Adapter/Interface.php';
 require_once 'Zend/Session.php';
 
 /**
- * @issue ZF-7882 - temp solution provided by {@link http://www.alexatnet.com/node/12}
+ * @group ZF-7882 - temp solution provided by {@link http://www.alexatnet.com/node/12}
  */
 Zend_Session::start();
 

@@ -89,7 +89,7 @@ class Zend_Feed_ArrayAccessTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-5354
+     * @group ZF-5354
      */
     public function testGetsLinkWithEmptyOrMissingRelAsAlternateRel()
     {

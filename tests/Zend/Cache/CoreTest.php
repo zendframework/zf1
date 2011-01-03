@@ -62,7 +62,7 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-7568
+     * @group ZF-7568
      */
     public function testConstructorCorrectCallWithZendConfig()
     {
@@ -72,7 +72,7 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @issue ZF-7568
+     * @group ZF-7568
      */
     public function testSettingOptionsWithZendConfig()
     {
