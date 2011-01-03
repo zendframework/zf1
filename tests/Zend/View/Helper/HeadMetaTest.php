@@ -363,6 +363,61 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-9743
+     */
+    public function testPropertyIsSupportedWithRdfaDoctype()
+    {
+        $this->view->doctype('XHTML1_RDFA');
+        $this->helper->headMeta('foo', 'og:title', 'property');
+        $this->assertEquals('<meta property="og:title" content="foo" />',
+                            $this->helper->toString()
+                           );
+    }
+
+    /**
+     * @group ZF-9743
+     */
+    public function testPropertyIsNotSupportedByDefaultDoctype()
+    {
+        try {
+            $this->helper->headMeta('foo', 'og:title', 'property');
+            $this->fail('meta property attribute should not be supported on default doctype');
+        } catch (Zend_View_Exception $e) {
+            $this->assertContains('Invalid value passed', $e->getMessage());
+        }
+    }
+
+    /**
+     * @group ZF-9743
+     * @depends testPropertyIsSupportedWithRdfaDoctype
+     */
+    public function testOverloadingAppendPropertyAppendsMetaTagToStack()
+    {
+        $this->view->doctype('XHTML1_RDFA');
+        $this->_testOverloadAppend('property');
+    }
+
+    /**
+     * @group ZF-9743
+     * @depends testPropertyIsSupportedWithRdfaDoctype
+     */
+    public function testOverloadingPrependPropertyPrependsMetaTagToStack()
+    {
+        $this->view->doctype('XHTML1_RDFA');
+        $this->_testOverloadPrepend('property');
+    }
+
+    /**
+     * @group ZF-9743
+     * @depends testPropertyIsSupportedWithRdfaDoctype
+     */
+    public function testOverloadingSetPropertyOverwritesMetaTagStack()
+    {
+        $this->view->doctype('XHTML1_RDFA');
+        $this->_testOverloadSet('property');
+    }
+
+    /**
      * @issue ZF-2663
      */
     public function testSetNameDoesntClobber()
