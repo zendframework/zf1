@@ -20,20 +20,26 @@
  * @version    $Id$
  */
 
-/*
+/**
  * Include PHPUnit dependencies
  */
-@require_once 'PHPUnit/Framework.php';
-if (!@fopen('PHPUnit/Autoload.php', 'r', true)) {
-    require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
+require_once 'PHPUnit/Runner/Version.php';
+
+$phpunitVersion = PHPUnit_Runner_Version::id();
+if ($phpunitVersion == '@package_version@' || version_compare($phpunitVersion, '3.5.5', '>=')) {
+    if (version_compare($phpunitVersion, '3.6.0', '>=')) {
+        echo 'This verison of PHPUnit is not supported in Zend Framework 1.x unit tests.';
+        exit(1);
+    }
+    require_once 'PHPUnit/Autoload.php'; // >= PHPUnit 3.5.5
 } else {
-    require_once 'PHPUnit/Autoload.php'; // >= of PHPUnit 3.5.5
+    require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
 }
 
 /*
  * Set error reporting to the level to which Zend Framework code must comply.
  */
-error_reporting( E_ALL | E_STRICT );
+error_reporting(E_ALL | E_STRICT);
 
 /*
  * Determine the root, library, and tests directories of the framework
