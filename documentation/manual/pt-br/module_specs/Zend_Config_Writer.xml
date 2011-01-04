@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 20765 -->
+<!-- EN-Revision: 23103 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.config.writer.introduction">
     <title>Zend_Config_Writer</title>
@@ -8,11 +8,11 @@
         <classname>Zend_Config_Writer</classname> lhe dá a capacidade de escrever arquivos de
         configuração a partir de objetos <classname>Zend_Config</classname>. Ele funciona com
         adaptadores separados do sistema e muito fáceis de usar. Por padrão, o
-        <classname>Zend_Config_Writer</classname> vêm embarcado com três adaptadores, que são todos
-        baseados em arquivos. Você instanciará um escritor com opções específicas, que podem ser
-        <emphasis>filename</emphasis> e <emphasis>config</emphasis>. Em seguida, você irá chamar o
-        método <methodname>write()</methodname> do escritor e o arquivo de configuração será criado.
-        Você também pode fornecer <varname>$filename</varname> e <varname>$config</varname>
+        <classname>Zend_Config_Writer</classname> vêm embarcado com quatro adaptadores, que são
+        todos baseados em arquivos. Você instanciará um escritor com opções específicas, que podem
+        ser <emphasis>filename</emphasis> e <emphasis>config</emphasis>. Em seguida, você irá chamar
+        o método <methodname>write()</methodname> do escritor e o arquivo de configuração será
+        criado. Você também pode fornecer <varname>$filename</varname> e <varname>$config</varname>
         diretamente ao método <methodname>write()</methodname>. Atualmente os escritores que se
         seguem são fornecidos com <classname>Zend_Config_Writer</classname>:
     </para>
@@ -32,25 +32,22 @@
 
         <listitem>
             <para>
+                <classname>Zend_Config_Writer_Json</classname>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
                 <classname>Zend_Config_Writer_Xml</classname>
             </para>
         </listitem>
+
+        <listitem>
+            <para>
+                <classname>Zend_Config_Writer_Yaml</classname>
+            </para>
+        </listitem>
     </itemizedlist>
-
-    <para>
-        O escritor <acronym>INI</acronym> possui dois modos de renderização no que diz respeito às
-        seções. Por padrão, a configuração de maior nível é sempre escrita em nomes de seção.
-        Chamando <command>$writer->setRenderWithoutSections();</command> todas as opções estarão
-        escritas em um namespace global do arquivo <acronym>INI</acronym> e nenhuma seção será
-        aplicada.
-    </para>
-
-    <para>
-        O <classname>Zend_Config_Writer_Ini</classname> tem como adicional, a opção de parâmetro
-        <emphasis>nestSeparator</emphasis>, que define o caractere com que os nós são separados.
-        O padrão é um ponto simples, como é o padrão também para
-        <classname>Zend_Config_Ini</classname>.
-    </para>
 
     <para>
         Ao modificar ou criar um objeto <classname>Zend_Config</classname>, há algumas coisas que se
@@ -146,11 +143,65 @@ $writer->write();
     </note>
 
     <para>
-        Para todos os escritores baseados em arquivo (<acronym>INI</acronym>, <acronym>XML</acronym>
-        e Matriz <acronym>PHP</acronym>) internamente o <methodname>render()</methodname> é usado
-        para construir a string de configuração. Este método também pode ser usado externamente caso
-        precise acessar a string de representação dos dados de configuração.
+        Para todos os escritores baseados em arquivo (<acronym>INI</acronym>,
+        <acronym>JSON</acronym>, <acronym>XML</acronym>, <acronym>YAML</acronym> e Matriz
+        <acronym>PHP</acronym>) internamente o <methodname>render()</methodname> é usado para
+        construir a string de configuração. Este método pode ser usado de forma independente para
+        acessar a string de representação dos dados de configuração.
     </para>
+
+    <sect2 id="zend.config.writer.introduction.ini-notes">
+        <title>Notes specific to the INI writer</title>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    The <acronym>INI</acronym> writer has two modes for rendering with regard to
+                    sections.  By default the top-level configuration is always written into section
+                    names.  By calling <command>$writer->setRenderWithoutSections();</command> all
+                    options are written into the global namespace of the <acronym>INI</acronym> file
+                    and no sections are applied.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <classname>Zend_Config_Writer_Ini</classname> has an additional option parameter
+                    <emphasis>nestSeparator</emphasis>, which defines with which character the
+                    single nodes are separated. The default is a single dot, which is accepted by
+                    <classname>Zend_Config_Ini</classname> by default.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="zend.config.writer.introduction.yaml-notes">
+        <title>Notes specific to the YAML writer</title>
+
+        <para>
+            The <acronym>YAML</acronym> writer lets you optionally specify an alternate
+            <acronym>YAML</acronym> encoder to use. By default, one is shipped with the framework
+            that is suitable for most configuration tasks. If you find it insufficient, or wish to
+            use more advanced YAML, you may provide an alternate encoder callback.
+        </para>
+
+        <para>
+            The method for doing so is to use the
+            <methodname>Zend_Config_Writer_Yaml::setYamlEncoder()</methodname> method, passing it a
+            valid callback.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Use the Symfony Yaml Component:
+$writer = new Zend_Config_Writer_Yaml($filename);
+$writer->setYamlEncoder(array('sfYaml', 'dump'));
+]]></programlisting>
+
+        <para>
+            The above uses the Symfony Components' <classname>sfYaml</classname> component in order
+            to encode the configuration to <acronym>YAML</acronym>.
+        </para>
+    </sect2>
 </sect1>
 <!--
 vim:se ts=4 sw=4 et:
