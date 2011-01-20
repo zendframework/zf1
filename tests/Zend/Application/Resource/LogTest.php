@@ -145,6 +145,44 @@ class Zend_Application_Resource_LogTest extends PHPUnit_Framework_TestCase
         $resource->setBootstrap($this->bootstrap);
         $resource->init();
     }
+
+    /**
+     * @group ZF-9790
+     */
+    public function testInitializationWithFilterAndFormatter()
+    {
+        $stream = fopen('php://memory', 'w+');
+        $options = array(
+            'memory' => array(
+                'writerName' => 'Stream',
+                'writerParams' => array(
+                     'stream' => $stream,
+                ),
+                'filterName' => 'Priority',
+                'filterParams' => array(
+                    'priority' => Zend_Log::INFO,
+                ),
+                'formatterName' => 'Simple',
+                'formatterParams' => array(
+                    'format' => '%timestamp%: %message%',
+                )
+            )
+        );
+        $message = 'tottakai';
+
+        $resource = new Zend_Application_Resource_Log($options);
+        $resource->setBootstrap($this->bootstrap);
+        $log = $resource->init();
+
+        $this->assertType('Zend_Log', $log);
+
+        $log->log($message, Zend_Log::INFO);
+        rewind($stream);
+        $contents = stream_get_contents($stream);
+
+        $this->assertStringEndsWith($message, $contents);
+        $this->assertRegexp('/\d\d:\d\d:\d\d/', $contents);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_LogTest::main') {
