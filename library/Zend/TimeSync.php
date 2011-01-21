@@ -233,7 +233,7 @@ class Zend_TimeSync implements IteratorAggregate
      * facade and will try to return the date from the first server that
      * returns a valid result.
      *
-     * @param   $locale - OPTIONAL locale
+     * @param   Zend_Locale $locale - OPTIONAL locale
      * @return  object
      * @throws  Zend_TimeSync_Exception
      */

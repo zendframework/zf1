@@ -147,7 +147,7 @@ class Zend_Service_LiveDocx
      * Set options
      * One or more of username, password, soapClient
      *
-     * @param  $options
+     * @param  array $options
      * @return Zend_Service_LiveDocx
      * @since  LiveDocx 1.2
      */

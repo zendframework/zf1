@@ -78,7 +78,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
     /**
      * setType()
      *
-     * @param $type
+     * @param string $type
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
     public function setType($type)
@@ -102,7 +102,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
     /**
      * setName()
      *
-     * @param $name
+     * @param string $name
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
     public function setName($name)
@@ -126,7 +126,7 @@ class Zend_Tool_Framework_Metadata_Dynamic
     /**
      * setValue()
      *
-     * @param $value
+     * @param mixed $value
      * @return Zend_Tool_Framework_Metadata_Dynamic
      */
     public function setValue($value)

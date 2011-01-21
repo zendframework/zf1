@@ -76,7 +76,7 @@ class Zend_Service_Nirvanix_Namespace_Base
     /**
      * Class constructor.
      *
-     * @param  $options  array  Options and dependency injection
+     * @param array $options Options and dependency injection
      */
     public function __construct($options = array())
     {

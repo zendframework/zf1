@@ -216,7 +216,7 @@ class Zend_Mail_Storage_Mbox extends Zend_Mail_Storage_Abstract
      * Supported parameters are:
      *   - filename filename of mbox file
      *
-     * @param  $params array mail reader specific parameters
+     * @param array $params mail reader specific parameters
      * @throws Zend_Mail_Storage_Exception
      */
     public function __construct($params)

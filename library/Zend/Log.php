@@ -503,8 +503,8 @@ class Zend_Log
     /**
      * Set an extra item to pass to the log writers.
      *
-     * @param  $name    Name of the field
-     * @param  $value   Value of the field
+     * @param  string $name    Name of the field
+     * @param  string $value   Value of the field
      * @return Zend_Log
      */
     public function setEventItem($name, $value)

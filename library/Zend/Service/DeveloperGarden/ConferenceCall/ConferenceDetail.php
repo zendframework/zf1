@@ -90,7 +90,7 @@ class Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
     /**
      * set the description of this conference
      *
-     * @param $description the $description to set
+     * @param string $description the $description to set
      * @return Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
      */
     public function setDescription($description)

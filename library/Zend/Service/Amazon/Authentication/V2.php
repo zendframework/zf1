@@ -77,7 +77,7 @@ class Zend_Service_Amazon_Authentication_V2 extends Zend_Service_Amazon_Authenti
 
     /**
      * Set http request type to POST or GET
-     * @param $method string
+     * @param string $method
      */
     public function setHttpMethod($method = "POST") {
         $this->_httpMethod = strtoupper($method);

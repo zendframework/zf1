@@ -294,10 +294,10 @@ class Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
      * rx = longitude right bottom
      * ry = latitude right bottom
      *
-     * @param $lx
-     * @param $ly
-     * @param $rx
-     * @param $ry
+     * @param float $lx
+     * @param float $ly
+     * @param float $rx
+     * @param float $ry
      * @return Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
      */
     public function setRectangle($lx, $ly, $rx, $ry)
@@ -416,8 +416,8 @@ class Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
      * sets a category filter
      *
      * @see http://www.suchen.de/kategorie-katalog
-     * @param $category
-     * @return unknown_type
+     * @param string $category
+     * @return Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
      */
     public function setCategory($category = null)
     {

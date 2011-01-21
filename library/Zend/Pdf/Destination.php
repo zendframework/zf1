@@ -43,7 +43,7 @@ abstract class Zend_Pdf_Destination extends Zend_Pdf_Target
      * Load Destination object from a specified resource
      *
      * @internal
-     * @param $destinationArray
+     * @param Zend_Pdf_Element $resource
      * @return Zend_Pdf_Destination
      */
     public static function load(Zend_Pdf_Element $resource)

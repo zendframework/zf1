@@ -507,7 +507,7 @@ abstract class Zend_XmlRpc_Value
     }
 
     /**
-     * @param $xml
+     * @param string $xml
      * @return void
      */
     protected function _setXML($xml)

@@ -93,7 +93,7 @@ class Zend_Config_Yaml extends Zend_Config
     /**
      * Set callback for decoding YAML
      *
-     * @param  $yamlDecoder the decoder to set
+     * @param  callable $yamlDecoder the decoder to set
      * @return Zend_Config_Yaml
      */
     public function setYamlDecoder($yamlDecoder)

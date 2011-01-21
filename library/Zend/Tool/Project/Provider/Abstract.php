@@ -118,9 +118,9 @@ abstract class Zend_Tool_Project_Provider_Abstract
      *    - if an enpoint variable has been registered in teh client registry - key=workingDirectory
      *    - if an ENV variable with the key ZFPROJECT_PATH is found
      *
-     * @param $loadProfileFlag bool Whether or not to throw an exception when no profile is found
-     * @param $projectDirectory string The project directory to use to search
-     * @param $searchParentDirectories bool Whether or not to search upper level direcotries
+     * @param bool   $loadProfileFlag         Whether or not to throw an exception when no profile is found
+     * @param string $projectDirectory        The project directory to use to search
+     * @param bool   $searchParentDirectories Whether or not to search upper level direcotries
      * @return Zend_Tool_Project_Profile
      */
     protected function _loadProfile($loadProfileFlag = self::NO_PROFILE_THROW_EXCEPTION, $projectDirectory = null, $searchParentDirectories = true)

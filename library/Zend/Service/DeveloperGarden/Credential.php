@@ -134,7 +134,7 @@ class Zend_Service_DeveloperGarden_Credential
      * if $withRealm == true we combine username and realm like
      * username@realm
      *
-     * @param $boolean withRealm
+     * @param bool $withRealm
      * @return string|null
      */
     public function getUsername($withRealm = false)

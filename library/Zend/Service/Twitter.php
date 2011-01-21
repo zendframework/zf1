@@ -923,8 +923,7 @@ class Zend_Service_Twitter extends Zend_Rest_Client
 
     /**
      * Protected function to validate that the integer is valid or return a 0
-     * @param $int
-     * @throws Zend_Http_Client_Exception if HTTP request fails or times out
+     * @param mixed $int
      * @return integer
      */
     protected function _validInteger($int)

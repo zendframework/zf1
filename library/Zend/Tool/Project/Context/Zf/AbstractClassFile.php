@@ -37,8 +37,8 @@ abstract class Zend_Tool_Project_Context_Zf_AbstractClassFile extends Zend_Tool_
     /**
      * getFullClassName()
      *
-     * @param $localClassName
-     * @param $classContextName
+     * @param string $localClassName
+     * @param string $classContextName
      */
     public function getFullClassName($localClassName, $classContextName = null)
     {

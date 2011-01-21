@@ -125,7 +125,7 @@ class Zend_Service_DeveloperGarden_Request_ConferenceCall_CreateConferenceReques
     /**
      * sets $account
      *
-     * @param $account
+     * @param int $account
      * @return Zend_Service_DeveloperGarden_Request_ConferenceCall_CreateConferenceRequest
      */
     public function setAccount($account = null)

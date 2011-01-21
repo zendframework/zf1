@@ -259,9 +259,10 @@ print(Demos_Zend_Service_LiveDocx_Helper::wrapLine(PHP_EOL . $message . PHP_EOL 
 /**
  * Print result line
  *
- * @param $counter
- * @param $testString
- * @param $testResult
+ * @param int    $counter
+ * @param string $testString
+ * @param mixed  $testResult
+ * @return void
  */
 function printLine($counter, $testString, $testResult)
 {

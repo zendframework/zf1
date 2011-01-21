@@ -66,7 +66,7 @@ class Zend_Application_Resource_Db extends Zend_Application_Resource_ResourceAbs
     /**
      * Set the adapter
      *
-     * @param  $adapter string
+     * @param  string $adapter
      * @return Zend_Application_Resource_Db
      */
     public function setAdapter($adapter)
@@ -88,7 +88,7 @@ class Zend_Application_Resource_Db extends Zend_Application_Resource_ResourceAbs
     /**
      * Set the adapter params
      *
-     * @param  $adapter string
+     * @param  string $adapter
      * @return Zend_Application_Resource_Db
      */
     public function setParams(array $params)

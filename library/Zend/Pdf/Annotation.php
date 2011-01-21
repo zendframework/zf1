@@ -220,7 +220,7 @@ abstract class Zend_Pdf_Annotation
      * Load Annotation object from a specified resource
      *
      * @internal
-     * @param $destinationArray
+     * @param Zend_Pdf_Element $resource
      * @return Zend_Pdf_Annotation
      */
     public static function load(Zend_Pdf_Element $resource)

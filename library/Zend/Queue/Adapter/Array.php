@@ -344,7 +344,7 @@ class Zend_Queue_Adapter_Array extends Zend_Queue_Adapter_AdapterAbstract
      * sets the underlying _data array
      * $queue->getAdapter()->setData($data);
      *
-     * @param $data array
+     * @param array $data
      * @return $this;
      */
     public function setData($data)

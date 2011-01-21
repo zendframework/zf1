@@ -193,10 +193,10 @@ class Zend_Service_StrikeIron_Base
      * on what was originally called.
      *
      * @see    __call()
-     * @param  $result  Raw result returned from SOAPClient_>__soapCall()
-     * @param  $method  Method name that was passed to SOAPClient->__soapCall()
-     * @param  $params  Method parameters that were passed to SOAPClient->__soapCall()
-     * @return mixed    Transformed result
+     * @param  object $result  Raw result returned from SOAPClient_>__soapCall()
+     * @param  string $method  Method name that was passed to SOAPClient->__soapCall()
+     * @param  array  $params  Method parameters that were passed to SOAPClient->__soapCall()
+     * @return mixed  Transformed result
      */
     protected function _transformResult($result, $method, $params)
     {

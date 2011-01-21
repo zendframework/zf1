@@ -149,7 +149,6 @@ if (is_dir($tempDirectory)) {
 /**
  * Create a random string
  * 
- * @param $length
  * @return string
  */
 function randomString()
@@ -172,7 +171,7 @@ function randomString()
 /**
  * Recursively remove directory
  * 
- * @param $dir
+ * @param string $dir
  * @return void
  */
 function recursiveRemoveDirectory($dir)
@@ -197,9 +196,9 @@ function recursiveRemoveDirectory($dir)
  * $outputFilename, using concatenation processor (external 3rd party command
  * line tool) specified in $processor
  * 
- * @param $inputFilenames
- * @param $outputFilename
- * @param $processor
+ * @param array  $inputFilenames
+ * @param array  $outputFilename
+ * @param string $processor
  * @return boolean
  */
 function concatenatePdfFilenames($inputFilenames, $outputFilename, $processor = EXEC_PDFTK)

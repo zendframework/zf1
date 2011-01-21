@@ -74,9 +74,9 @@ abstract class Zend_Measure_Abstract
     /**
      * Zend_Measure_Abstract is an abstract class for the different measurement types
      *
-     * @param  $value  mixed  - Value as string, integer, real or float
-     * @param  $type   type   - OPTIONAL a measure type f.e. Zend_Measure_Length::METER
-     * @param  $locale locale - OPTIONAL a Zend_Locale Type
+     * @param  mixed       $value  Value as string, integer, real or float
+     * @param  int         $type   OPTIONAL a measure type f.e. Zend_Measure_Length::METER
+     * @param  Zend_Locale $locale OPTIONAL a Zend_Locale Type
      * @throws Zend_Measure_Exception
      */
     public function __construct($value, $type = null, $locale = null)

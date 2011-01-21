@@ -214,7 +214,7 @@ class Zend_Wildfire_Plugin_FirePhp implements Zend_Wildfire_Plugin_Interface
     /**
      * Get or create singleton instance
      *
-     * @param $skipCreate boolean True if an instance should not be created
+     * @param bool $skipCreate True if an instance should not be created
      * @return Zend_Wildfire_Plugin_FirePhp
      */
     public static function getInstance($skipCreate=false)

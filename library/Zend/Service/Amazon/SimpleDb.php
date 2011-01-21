@@ -283,8 +283,8 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     /**
      * List domains
      *
-     * @param $maxNumberOfDomains int
-     * @param $nextToken          int
+     * @param int $maxNumberOfDomains
+     * @param int $nextToken
      * @return array              0 or more domain names
      */
     public function listDomains($maxNumberOfDomains = 100, $nextToken = null)
@@ -315,7 +315,7 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     /**
      * Retrieve domain metadata
      *
-     * @param $domainName string Name of the domain for which metadata will be requested
+     * @param string $domainName Name of the domain for which metadata will be requested
      * @return array Key/value array of metadatum names and values.
      */
     public function domainMetadata($domainName)
@@ -340,8 +340,8 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     /**
      * Create a new domain
      *
-     * @param $domainName    string    Valid domain name of the domain to create
-     * @return                 boolean True if successful, false if not
+     * @param string $domainName Valid domain name of the domain to create
+     * @return boolean True if successful, false if not
      */
     public function createDomain($domainName)
     {
@@ -355,8 +355,8 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
     /**
      * Delete a domain
      *
-     * @param     $domainName string  Valid domain name of the domain to delete
-     * @return                 boolean True if successful, false if not
+     * @param string $domainName Valid domain name of the domain to delete
+     * @return boolean True if successful, false if not
      */
     public function deleteDomain($domainName)
     {

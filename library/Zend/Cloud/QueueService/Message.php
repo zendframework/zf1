@@ -33,7 +33,7 @@ class Zend_Cloud_QueueService_Message
 
     /**
      * @param string $body Message text
-     * @param $message Original message
+     * @param string $message Original message
      */
     function __construct($body, $message)
     {

@@ -207,7 +207,7 @@ abstract class Zend_Service_DeveloperGarden_Request_SendSms_SendSmsAbstract
     /**
      * sets a new accounts
      *
-     * @param $account the $account to set
+     * @param int $account the $account to set
      * @return Zend_Service_DeveloperGarden_Request_SendSms_SendSmsAbstract
      */
     public function setAccount($account)

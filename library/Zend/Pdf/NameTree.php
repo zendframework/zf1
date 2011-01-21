@@ -46,7 +46,7 @@ class Zend_Pdf_NameTree implements ArrayAccess, Iterator, Countable
     /**
      * Object constructor
      *
-     * @param $rootDictionary root of name dictionary
+     * @param Zend_Pdf_Element $rootDictionary root of name dictionary
      */
     public function __construct(Zend_Pdf_Element $rootDictionary)
     {

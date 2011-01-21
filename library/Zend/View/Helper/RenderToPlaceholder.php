@@ -40,8 +40,8 @@ class Zend_View_Helper_RenderToPlaceholder extends Zend_View_Helper_Abstract
      * Renders a template and stores the rendered output as a placeholder
      * variable for later use.
      *
-     * @param $script The template script to render
-     * @param $placeholder The placeholder variable name in which to store the rendered output
+     * @param string $script The template script to render
+     * @param string $placeholder The placeholder variable name in which to store the rendered output
      * @return void
      */
     public function renderToPlaceholder($script, $placeholder)

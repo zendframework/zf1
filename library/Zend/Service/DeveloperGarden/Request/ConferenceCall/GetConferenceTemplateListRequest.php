@@ -58,7 +58,7 @@ class Zend_Service_DeveloperGarden_Request_ConferenceCall_GetConferenceTemplateL
     /**
      * sets $ownerId
      *
-     * @param $ownerId
+     * @param int $ownerId
      * @return Zend_Service_DeveloperGarden_Request_ConferenceCall_GetConferenceTemplateListRequest
      */
     public function setOwnerId($ownerId)

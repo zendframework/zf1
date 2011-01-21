@@ -78,7 +78,7 @@ abstract class Zend_Search_Lucene_Search_Weight
     /**
      * Assigns the query normalization factor to this.
      *
-     * @param $norm
+     * @param float $norm
      */
     abstract public function normalize($norm);
 }

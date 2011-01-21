@@ -157,8 +157,8 @@ class ZF
     /**
      * _detectHomeDirectory() - detect the home directory in a variety of different places
      * 
-     * @param $mustExist Should the returned value already exist in the file system
-     * @param $returnMessages Should it log messages for output later
+     * @param bool $mustExist Should the returned value already exist in the file system
+     * @param bool $returnMessages Should it log messages for output later
      * @return string
      */
     protected function _detectHomeDirectory($mustExist = true, $returnMessages = true)
@@ -215,8 +215,8 @@ class ZF
     /**
      * _detectStorageDirectory() - Detect where the storage directory is from a variaty of possiblities
      * 
-     * @param $mustExist Should the returned value already exist in the file system
-     * @param $returnMessages Should it log messages for output later
+     * @param bool $mustExist Should the returned value already exist in the file system
+     * @param bool $returnMessages Should it log messages for output later
      * @return string
      */
     protected function _detectStorageDirectory($mustExist = true, $returnMessages = true)
@@ -251,8 +251,8 @@ class ZF
     /**
      * _detectConfigFile() - Detect config file location from a variety of possibilities
      * 
-     * @param $mustExist Should the returned value already exist in the file system
-     * @param $returnMessages Should it log messages for output later
+     * @param bool $mustExist Should the returned value already exist in the file system
+     * @param bool $returnMessages Should it log messages for output later
      * @return string
      */
     protected function _detectConfigFile($mustExist = true, $returnMessages = true)
@@ -602,8 +602,8 @@ EOS;
     /**
      * _logMessage() - Internal method used to log setup and information messages.
      * 
-     * @param $message
-     * @param $storeMessage
+     * @param string $message
+     * @param bool   $storeMessage
      * @return void
      */
     protected function _logMessage($message, $storeMessage = true)

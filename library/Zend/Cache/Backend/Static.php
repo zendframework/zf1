@@ -540,7 +540,7 @@ class Zend_Cache_Backend_Static
      * Detect an octal string and return its octal value for file permission ops
      * otherwise return the non-string (assumed octal or decimal int already)
      *
-     * @param $val The potential octal in need of conversion
+     * @param string $val The potential octal in need of conversion
      * @return int
      */
     protected function _octdec($val)

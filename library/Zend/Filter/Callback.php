@@ -130,7 +130,7 @@ class Zend_Filter_Callback implements Zend_Filter_Interface
     /**
      * Calls the filter per callback
      *
-     * @param $value mixed Options for the set callback
+     * @param mixed $value Options for the set callback
      * @return mixed       Result from the filter which was callbacked
      */
     public function filter($value)

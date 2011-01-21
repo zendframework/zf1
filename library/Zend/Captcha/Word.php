@@ -220,7 +220,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
     /**
      * Sets if session should be preserved on generate()
      *
-     * @param $keepSession Should session be kept on generate()?
+     * @param bool $keepSession Should session be kept on generate()?
      * @return Zend_Captcha_Word
      */
     public function setKeepSession($keepSession)
@@ -242,7 +242,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
     /**
      * Set if numbers should be included in the pattern
      *
-     * @param $_useNumbers numbers should be included in the pattern?
+     * @param bool $_useNumbers numbers should be included in the pattern?
      * @return Zend_Captcha_Word
      */
     public function setUseNumbers($_useNumbers)

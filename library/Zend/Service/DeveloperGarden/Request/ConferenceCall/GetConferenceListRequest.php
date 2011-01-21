@@ -93,7 +93,7 @@ class Zend_Service_DeveloperGarden_Request_ConferenceCall_GetConferenceListReque
     /**
      * sets $ownerId
      *
-     * @param $ownerId
+     * @param int $ownerId
      * @return Zend_Service_DeveloperGarden_Request_ConferenceCall_GetConferenceListRequest
      */
     public function setOwnerId($ownerId)

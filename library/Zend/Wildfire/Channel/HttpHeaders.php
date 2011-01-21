@@ -115,7 +115,7 @@ class Zend_Wildfire_Channel_HttpHeaders extends Zend_Controller_Plugin_Abstract 
     /**
      * Get or create singleton instance
      *
-     * @param $skipCreate boolean True if an instance should not be created
+     * @param bool $skipCreate True if an instance should not be created
      * @return Zend_Wildfire_Channel_HttpHeaders
      */
     public static function getInstance($skipCreate=false)
