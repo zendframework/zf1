@@ -112,6 +112,7 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'novarra-vision',
         'nuvifone',
         'openweb',
+        'oper',
         'opwv',
         'palmsource',
         'pdxgw',
@@ -173,7 +174,7 @@ class Zend_Http_UserAgent_Mobile extends Zend_Http_UserAgent_AbstractDevice
         'wml',
         'vnd.rim',
         'vnd.wap',
-        'j2me'
+        'j2me',
     );
 
     /**
