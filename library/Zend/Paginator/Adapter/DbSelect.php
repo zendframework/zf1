@@ -100,7 +100,9 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
         if ($rowCount instanceof Zend_Db_Select) {
             $columns = $rowCount->getPart(Zend_Db_Select::COLUMNS);
 
-            $countColumnPart = $columns[0][1];
+            $countColumnPart = empty($columns[0][2])
+                             ? $columns[0][1]
+                             : $columns[0][2];
 
             if ($countColumnPart instanceof Zend_Db_Expr) {
                 $countColumnPart = $countColumnPart->__toString();

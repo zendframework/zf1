@@ -473,4 +473,26 @@ class Zend_Paginator_Adapter_DbSelectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $adapter->getCountSelect()->__toString());
         $this->assertEquals(250, $adapter->count());
     }
+
+    /**
+     * @group ZF-10884
+     */
+    public function testSetRowCountWithAlias()
+    {
+        $select = $this->_db->select();
+        $select->from('test', array(
+            Zend_Paginator_Adapter_DbSelect::ROW_COUNT_COLUMN => new Zend_Db_Expr('COUNT(DISTINCT number)')
+        ));
+
+        $this->_db->setProfiler(true);
+        $adapter = new Zend_Paginator_Adapter_DbSelect($this->_db->select());
+        $adapter->setRowCount($select);
+        $adapter->count();
+
+        $expected = 'SELECT COUNT(DISTINCT number) AS "zend_paginator_row_count" FROM "test"';
+        $lastQuery = $this->_db->getProfiler()
+                         ->getLastQueryProfile()
+                         ->getQuery();
+        $this->assertEquals($expected, $lastQuery);
+    }
 }
