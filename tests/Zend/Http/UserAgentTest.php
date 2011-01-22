@@ -565,4 +565,17 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $device    = $userAgent->getDevice();
         $groups = $device->getAllGroups();
     }
+
+    /**
+     * @group ZF-10665
+     */
+    public function testDontDieOnSerialization()
+    {
+        $config    = $this->config;
+        $userAgent = new Zend_Http_UserAgent($config);
+
+        // If this code doesn't throw a fatal error the test passed.
+        $userAgent->setUserAgent('userAgentTest');
+        $userAgent->serialize();
+    }
 }
