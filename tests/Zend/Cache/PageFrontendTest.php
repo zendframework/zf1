@@ -195,5 +195,16 @@ class Zend_Cache_PageFrontendTest extends PHPUnit_Framework_TestCase {
         ob_implicit_flush(true);
         $this->assertEquals('DEBUG HEADER : This is a cached page !foo', $data);
     }
+
+    /**
+     * @group ZF-10952
+     */
+    public function testNootice()
+    {
+        $regex = array('^/article/' => array('cache' => false));
+        $this->_instance->setOption('regexps', $regex);
+        $this->_instance->setOption('caching', false);
+        $this->_instance->start('zf10952');
+    }
 }
 

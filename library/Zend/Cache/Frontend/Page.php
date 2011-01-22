@@ -243,9 +243,11 @@ class Zend_Cache_Frontend_Page extends Zend_Cache_Core
     {
         $this->_cancel = false;
         $lastMatchingRegexp = null;
-        foreach ($this->_specificOptions['regexps'] as $regexp => $conf) {
-            if (preg_match("`$regexp`", $_SERVER['REQUEST_URI'])) {
-                $lastMatchingRegexp = $regexp;
+        if (isset($_SERVER['REQUEST_URI'])) {
+            foreach ($this->_specificOptions['regexps'] as $regexp => $conf) {
+                if (preg_match("`$regexp`", $_SERVER['REQUEST_URI'])) {
+                    $lastMatchingRegexp = $regexp;
+                }
             }
         }
         $this->_activeOptions = $this->_specificOptions['default_options'];
