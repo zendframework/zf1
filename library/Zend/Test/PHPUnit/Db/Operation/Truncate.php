@@ -89,7 +89,7 @@ class Zend_Test_PHPUnit_Db_Operation_Truncate implements PHPUnit_Extensions_Data
      */
     protected function _truncate(Zend_Db_Adapter_Abstract $db, $tableName)
     {
-        $tableName = $db->quoteIdentifier($tableName);
+        $tableName = $db->quoteIdentifier($tableName, true);
         if($db instanceof Zend_Db_Adapter_Pdo_Sqlite) {
             $db->query('DELETE FROM '.$tableName);
         } else if($db instanceof Zend_Db_Adapter_Db2) {
