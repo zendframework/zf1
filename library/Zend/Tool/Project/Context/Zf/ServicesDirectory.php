@@ -36,22 +36,20 @@ require_once 'Zend/Tool/Project/Context/Filesystem/Directory.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Tool_Project_Context_Zf_ApisDirectory extends Zend_Tool_Project_Context_Filesystem_Directory
+class Zend_Tool_Project_Context_Zf_ServicesDirectory extends Zend_Tool_Project_Context_Filesystem_Directory
 {
-
     /**
      * @var string
      */
-    protected $_filesystemName = 'apis';
+    protected $_filesystemName = 'services';
 
     /**
-     * getName()
+     * Defined by Zend_Tool_Project_Context_Interface
      *
      * @return string
      */
     public function getName()
     {
-        return 'ApisDirectory';
+        return 'ServicesDirectory';
     }
-
 }

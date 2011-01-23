@@ -126,7 +126,6 @@ class Zend_Tool_Project_Provider_Project
     <projectDirectory>
         <projectProfileFile />
         <applicationDirectory>
-            <apisDirectory enabled="false" />
             <configsDirectory>
                 <applicationConfigFile type="ini" />
             </configsDirectory>
@@ -140,6 +139,7 @@ class Zend_Tool_Project_Provider_Project
             <layoutsDirectory enabled="false" />
             <modelsDirectory />
             <modulesDirectory enabled="false" />
+            <servicesDirectory enabled="false" />
             <viewsDirectory>
                 <viewScriptsDirectory>
                     <viewControllerScriptsDirectory forControllerName="Index">
