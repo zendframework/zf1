@@ -397,7 +397,7 @@ class Zend_Cache_Core
             if ($this->_options['logging']) {
                 $this->_log("Zend_Cache_Core::save() : impossible to save cache (id=$id)");
             }
-            $this->remove($id);
+            $this->_backend->remove($id);
             return false;
         }
         if ($this->_options['write_control']) {

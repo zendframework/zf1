@@ -284,13 +284,15 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
 
     public function testSaveCorrectCallButFileCorruption()
     {
+        $cacheIdPrefix = 'cacheIdPrefix';
+        $this->_instance->setOption('cache_id_prefix', $cacheIdPrefix);
         $res = $this->_instance->save('data', 'false', array('tag1', 'tag2'));
         $logs = $this->_backend->getAllLogs();
         $expected1 = array(
             'methodName' => 'save',
             'args' => array(
                 0 => 'data',
-                1 => 'false',
+                1 => $cacheIdPrefix . 'false',
                 2 => array(
                     0 => 'tag1',
                     1 => 'tag2'
@@ -300,7 +302,7 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
         $expected2 = array(
             'methodName' => 'remove',
             'args' => array(
-                0 => 'false'
+                0 => $cacheIdPrefix.'false'
             )
         );
         $this->assertFalse($res);
