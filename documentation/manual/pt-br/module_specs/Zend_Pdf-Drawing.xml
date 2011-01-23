@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 22745 -->
+<!-- EN-Revision: 23406 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.pdf.drawing">
     <title>Desenhando</title>
@@ -226,8 +226,9 @@ public function drawEllipse($x1,
         <para>
             As operações de desenho de texto também existem no contexto de uma página
             <acronym>PDF</acronym>. Você pode desenhar uma linha de texto em qualquer posição da
-            página ao fornecer as coordenadas x e y. A fonte e o tamanho da fonte atuais são usadas
-            para a operação de desenho (veja a descrição detalhada abaixo).
+            página ao fornecer as coordenadas x e y. A fonte, tamanho da fonte e a cor de
+            preenchimento de página atuais são usadas para a operação de desenho de texto (veja a
+            descrição detalhada abaixo).
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -246,12 +247,23 @@ public function drawText($text, $x, $y, $charEncoding = '');
 ]]></programlisting>
 
         <example id="zend.pdf.drawing.text-drawing.example-1">
-            <title>Desenhar uma string na página</title>
+            <title>Desenha uma string na página</title>
 
             <programlisting language="php"><![CDATA[
 ...
 $pdfPage->drawText('Olá mundo!', 72, 720);
 ...
+]]></programlisting>
+        </example>
+
+        <example id="zend.pdf.drawing.text-drawing.example-2">
+            <title>Define a cor da fonte</title>
+
+            <programlisting language="php"><![CDATA[
+...
+$pdfPage->setFillColor(Zend_Pdf_Color_Html::color('#990000'))
+        ->drawText('Hello world (in red)!', 72, 720);
+....
 ]]></programlisting>
         </example>
 
@@ -266,8 +278,8 @@ $pdfPage->drawText('Olá mundo!', 72, 720);
             <acronym>PHP</acronym>:
         </para>
 
-        <example id="zend.pdf.drawing.text-drawing.example-2">
-            <title>Desenhar uma string codificada em UTF-8 em uma página</title>
+        <example id="zend.pdf.drawing.text-drawing.example-3">
+            <title>Desenha uma string codificada em UTF-8 em uma página</title>
 
             <programlisting language="php"><![CDATA[
 ...
