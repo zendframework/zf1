@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21825 -->
+<!-- EN-Revision: 23610 -->
 <sect3 id="zend.view.helpers.initial.doctype">
     <title>Doctype ヘルパー</title>
 
@@ -23,6 +23,7 @@
         <listitem><para><constant>XHTML1_STRICT</constant></para></listitem>
         <listitem><para><constant>XHTML1_TRANSITIONAL</constant></para></listitem>
         <listitem><para><constant>XHTML1_FRAMESET</constant></para></listitem>
+        <listitem><para><constant>XHTML1_RDFA</constant></para></listitem>
         <listitem><para><constant>XHTML_BASIC1</constant></para></listitem>
         <listitem><para><constant>HTML4_STRICT</constant></para></listitem>
         <listitem><para><constant>HTML4_LOOSE</constant></para></listitem>
@@ -72,7 +73,6 @@ $doctypeHelper->doctype('XHTML1_STRICT');
             doctype を知りたくなったら、オブジェクトの
             <methodname>getDoctype()</methodname> をコールします。
             このオブジェクトは、ヘルパーを起動した際に取得できるものです。
-            invoking the helper.
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -91,16 +91,72 @@ if ($view->doctype()->isXhtml()) {
 }
 ]]></programlisting>
 
-        <!-- TODO : to be translated -->
         <para>
-            You can also check if the doctype represents an <acronym>HTML5</acronym> document
+            doctype が <acronym>HTML5</acronym> 文書を表すかどうかチェックすることもできます。
         </para>
 
         <programlisting language="php"><![CDATA[
 if ($view->doctype()->isHtml5()) {
-    // do something differently
+    // 何かをします
 }
 ]]></programlisting>
+    </example>
+
+    <example id="zend.view.helpers.initial.doctype.xhtml1_rdfa">
+        <title>Open Graph プロトコルで使用する Doctype を選択</title>
+
+        <para>
+            <ulink url="http://opengraphprotocol.org/">Open Graph プロトコル</ulink>を実装するには、
+            XHTML1_RDFA doctype を指定するでしょう。この doctype により、開発者は
+            <acronym>XHTML</acronym> 文書内で<ulink
+                url="http://www.w3.org/TR/xhtml-rdfa-primer/">Resource Description Framework</ulink>
+            を使用できるようになります。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$doctypeHelper = new Zend_View_Helper_Doctype();
+$doctypeHelper->doctype('XHTML1_RDFA');
+]]></programlisting>
+
+        <para>
+        'property' メタタグ属性が Open Graph プロトコル仕様の通りに使用されると、
+        RDFa doctype により、XHTMLでの検証が可能になります。
+        ビュースクリプト内部の例です。
+        </para>
+
+        <programlisting language="html"><![CDATA[
+<?php echo $this->doctype('XHTML1_RDFA'); ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://opengraphprotocol.org/schema/">
+<head>
+   <meta property="og:type" content="musician" />
+]]></programlisting>
+
+        <para>
+            前記の例では、property に og:type を設定しました。
+            og は、HTMLタグで指定した Open Graph 名前空間を参照します。
+            content は、そのページが musician （音楽家）についてのものであることを特定します。
+            サポートされるプロパティについては、<ulink
+                url="http://opengraphprotocol.org/">Open Graph プロトコル・ドキュメント</ulink>
+            をご覧下さい。<link
+                linkend="zend.view.helpers.initial.headmeta">HeadMeta ヘルパー</link>は、
+            それらの Open Graph プロトコルのメタタグをプログラム的に設定するために使用されるかもしれません。
+        </para>
+
+        <para>
+            これは、もし XHTML1_RDFA に設定された場合にチェックする方法です。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      <?php if ($view->doctype()->isRdfa()): ?>
+      xmlns:og="http://opengraphprotocol.org/schema/"
+      xmlns:fb="http://www.facebook.com/2008/fbml"
+      <?php endif; ?>
+>
+]]></programlisting>
+        
     </example>
 </sect3>
 <!--

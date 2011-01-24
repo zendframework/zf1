@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20876 -->
+<!-- EN-Revision: 23643 -->
 <sect1 id="performance.database">
     <title>Zend_Dbパフォーマンス</title>
 
@@ -91,8 +91,8 @@
             <para>
                 もし<acronym>SQL</acronym>が変数の引数を必要とする場合、
                 <acronym>SQL</acronym>にプレースホルダーを用意してください。
-                そして、<acronym>SQL</acronym>に値を挿入するために <methodname>vsprintf</methodname>
-                と <methodname>array_walk</methodname> の組み合わせを利用してください。
+                そして、<acronym>SQL</acronym>に値を挿入するために <methodname>vsprintf()</methodname>
+                と <methodname>array_map()</methodname> の組み合わせを利用してください。
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -100,7 +100,7 @@
 // $this->getAdapter() を使ってそれを参照します
 $sql = vsprintf(
     self::SELECT_FOO,
-    array_walk($values, array($adapter, 'quoteInto'))
+    array_map(array($adapter, 'quoteInto'), $values)
 );
 ]]></programlisting>
         </sect3>
