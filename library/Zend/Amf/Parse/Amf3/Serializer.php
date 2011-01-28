@@ -236,9 +236,11 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
             return $this;
         }
 
-        $ref = array_search($string, $this->_referenceStrings, true);
-        if($ref === false){
-            $this->_referenceStrings[] = $string;
+        $ref = array_key_exists($string, $this->_referenceStrings) 
+             ? $this->_referenceStrings[$string] 
+             : false;
+        if ($ref === false){
+            $this->_referenceStrings[$string] = count($this->_referenceStrings);
             $this->writeBinaryString($string);
         } else {
             $ref <<= 1;
@@ -386,7 +388,10 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
             $object = &$objectByVal;
         }
 
-        $ref = array_search($object, $this->_referenceObjects,true);
+        $hash = spl_object_hash($object);
+        $ref = array_key_exists($hash, $this->_referenceObjects) 
+             ? $this->_referenceObjects[$hash] 
+             : false;
 
         // quickly handle object references
         if ($ref !== false){
@@ -394,7 +399,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
             $this->writeInteger($ref);
             return true;
         }
-        $this->_referenceObjects[] = $object;
+        $this->_referenceObjects[$hash] = count($this->_referenceObjects);
         return false;
     }
 
