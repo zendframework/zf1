@@ -178,7 +178,7 @@ class Zend_Rest_Route extends Zend_Controller_Router_Route_Module
                 $specialGetTarget = 'edit';
                 $params['id'] = $path[$pathElementCount-2];
             } elseif ($pathElementCount == 1) {
-                $params['id'] = urldecode(array_shift($path));
+                $params['id'] = array_shift($path);
             } elseif ($pathElementCount == 0 && !isset($params['id'])) {
                 $specialGetTarget = 'index';
             }
@@ -186,8 +186,8 @@ class Zend_Rest_Route extends Zend_Controller_Router_Route_Module
             // Digest URI params
             if ($numSegs = count($path)) {
                 for ($i = 0; $i < $numSegs; $i = $i + 2) {
-                    $key = urldecode($path[$i]);
-                    $val = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
+                    $key = $path[$i];
+                    $val = isset($path[$i + 1]) ? $path[$i + 1] : null;
                     $params[$key] = $val;
                 }
             }

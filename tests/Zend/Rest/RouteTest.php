@@ -185,6 +185,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('active', $values['status']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_GET_user_index_withParam_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/user/index/the%2Bemail%40address/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('default', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('index', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['the+email@address']);
+    }
+
     public function test_RESTfulApp_GET_project_byIdentifier()
     {
         $request = $this->_buildRequest('GET', '/project/zendframework');
@@ -224,6 +240,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('zend framework', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_GET_project_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/project/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('default', $values['module']);
+        $this->assertEquals('project', $values['controller']);
+        $this->assertEquals('get', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulApp_HEAD_project_byIdentifier()
     {
         $request = $this->_buildRequest('HEAD', '/project/lcrouch');
@@ -234,6 +266,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('default', $values['module']);
         $this->assertEquals('project', $values['controller']);
         $this->assertEquals('head', $values['action']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_HEAD_project_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('HEAD', '/project/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('default', $values['module']);
+        $this->assertEquals('project', $values['controller']);
+        $this->assertEquals('head', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulApp_GET_project_edit()
@@ -249,6 +297,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('zendframework', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_GET_project_edit_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/project/email%2Btest%40example.com/edit');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('default', $values['module']);
+        $this->assertEquals('project', $values['controller']);
+        $this->assertEquals('edit', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulApp_PUT_user_byIdentifier()
     {
         $request = $this->_buildRequest('PUT', '/mod/user/lcrouch');
@@ -260,6 +324,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('put', $values['action']);
         $this->assertEquals('lcrouch', $values['id']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_PUT_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('PUT', '/mod/user/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('put', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulApp_POST_user()
@@ -287,6 +367,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lcrouch', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_DELETE_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('DELETE', '/mod/user/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('delete', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulApp_POST_user_with_identifier_doesPUT()
     {
         $request = $this->_buildRequest('POST', '/mod/user/lcrouch');
@@ -298,6 +394,22 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('put', $values['action']);
         $this->assertEquals('lcrouch', $values['id']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_POST_user_with_identifier_urlencodedWithPlusSymbol_doesPUT()
+    {
+        $request = $this->_buildRequest('POST', '/mod/user/email%2Btest%40example.com');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('put', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulApp_overload_POST_with_method_param_PUT()
@@ -327,6 +439,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lcrouch', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_overload_POST_with_http_header_DELETE_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('POST', '/mod/user/email%2Btest%40example.com');
+        $request->setHeader('X-HTTP-Method-Override', 'DELETE');
+        $values = $this->_invokeRouteMatch($request);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('delete', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulApp_route_chaining()
     {
         $request = $this->_buildRequest('GET', '/api/user/lcrouch');
@@ -347,6 +476,29 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("lcrouch", $routedRequest->getParam("id"));
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulApp_route_chaining_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/api/user/email%2Btest%40example.com');
+        $this->_front->setRequest($request);
+
+        $router = $this->_front->getRouter();
+        $router->removeDefaultRoutes();
+
+        $nonRESTRoute = new Zend_Controller_Router_Route('api');
+        $RESTRoute = new Zend_Rest_Route($this->_front);
+        $router->addRoute("api", $nonRESTRoute->chain($RESTRoute));
+
+        $routedRequest = $router->route($request);
+
+        $this->assertEquals("default", $routedRequest->getParam("module"));
+        $this->assertEquals("user", $routedRequest->getParam("controller"));
+        $this->assertEquals("get", $routedRequest->getParam("action"));
+        $this->assertEquals("email+test@example.com", $routedRequest->getParam("id"));
+    }
+
     public function test_RESTfulModule_GET_user_index()
     {
         $request = $this->_buildRequest('GET', '/mod/user/index');
@@ -360,6 +512,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('index', $values['action']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulModule_GET_user_index_withParam_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/mod/user/index/the%2Bemail%40address/email%2Btest%40example.com');
+        $config = array('mod');
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('index', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['the+email@address']);
+    }
+
     public function test_RESTfulModule_GET_user()
     {
         $request = $this->_buildRequest('GET', '/mod/user/1234');
@@ -371,6 +540,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mod', $values['module']);
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('get', $values['action']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulModule_GET_user_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod');
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('get', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulModule_POST_user()
@@ -409,6 +595,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lcrouch', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulModule_PUT_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('PUT', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod');
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('put', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulModule_DELETE_user_byIdentifier()
     {
         $request = $this->_buildRequest('DELETE', '/mod/user/lcrouch');
@@ -421,6 +624,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('delete', $values['action']);
         $this->assertEquals('lcrouch', $values['id']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulModule_DELETE_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('DELETE', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod');
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('delete', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulController_GET_user_index()
@@ -465,6 +685,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mod', $values['module']);
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('get', $values['action']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulController_GET_user_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('GET', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod'=>array('user'));
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('get', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_RESTfulController_POST_user()
@@ -521,6 +758,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('lcrouch', $values['id']);
     }
 
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulController_PUT_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('PUT', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod'=>array('user'));
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('put', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
+    }
+
     public function test_RESTfulController_DELETE_user_byIdentifier()
     {
         $request = $this->_buildRequest('DELETE', '/mod/user/lcrouch');
@@ -533,6 +787,23 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('user', $values['controller']);
         $this->assertEquals('delete', $values['action']);
         $this->assertEquals('lcrouch', $values['id']);
+    }
+
+    /**
+     * @group ZF-10964
+     */
+    public function test_RESTfulController_DELETE_user_byIdentifier_urlencodedWithPlusSymbol()
+    {
+        $request = $this->_buildRequest('DELETE', '/mod/user/email%2Btest%40example.com');
+        $config = array('mod');
+        $values = $this->_invokeRouteMatch($request, $config);
+
+        $this->assertType('array', $values);
+        $this->assertTrue(isset($values['module']));
+        $this->assertEquals('mod', $values['module']);
+        $this->assertEquals('user', $values['controller']);
+        $this->assertEquals('delete', $values['action']);
+        $this->assertEquals('email+test@example.com', $values['id']);
     }
 
     public function test_assemble_plain_ignores_action()
