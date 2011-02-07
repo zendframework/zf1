@@ -308,7 +308,7 @@ class Zend_Cache_Backend_Static
         } else {
             $extension = $this->_options['file_extension'];
         }
-        if (empty($fileName)) {
+        if ($fileName === '') {
             $fileName = $this->_options['index_filename'];
         }
         $pathName = $this->_options['public_dir'] . dirname($id);
@@ -333,7 +333,7 @@ class Zend_Cache_Backend_Static
             Zend_Cache::throwException('Invalid cache id: does not match expected public_dir path');
         }
         $fileName = basename($id);
-        if (empty($fileName)) {
+        if ($fileName === '') {
             $fileName = $this->_options['index_filename'];
         }
         $pathName  = $this->_options['public_dir'] . dirname($id);
