@@ -130,6 +130,15 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         rmdir($this->_instance->getOption('public_dir') . '/foo');
     }
 
+    public function testFilename0()
+    {
+        $res = $this->_instance->save('content', bin2hex('/0'));
+        $this->assertTrue($res);
+
+        $this->assertTrue($this->_instance->test(bin2hex('/0')));
+        $this->assertEquals('content', $this->_instance->load(bin2hex('/0')));
+    }
+
     public function testDirectoryUmaskAsString()
     {
         $this->_instance->setOption('cache_directory_umask', '777');
