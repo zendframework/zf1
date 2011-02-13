@@ -488,7 +488,9 @@ class Zend_Auth_Adapter_Ldap implements Zend_Auth_Adapter_Interface
 
         $returnObject = new stdClass();
 
-        $omitAttribs = array_map('strtolower', $omitAttribs);
+        $returnAttribs = array_map('strtolower', $returnAttribs);
+        $omitAttribs   = array_map('strtolower', $omitAttribs);
+        $returnAttribs = array_diff($returnAttribs, $omitAttribs);
 
         $entry = $this->getLdap()->getEntry($this->_authenticatedDn, $returnAttribs, true);
         foreach ($entry as $attr => $value) {
