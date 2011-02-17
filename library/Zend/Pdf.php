@@ -210,6 +210,14 @@ class Zend_Pdf
     protected static $_inheritableAttributes = array('Resources', 'MediaBox', 'CropBox', 'Rotate');
 
     /**
+     * True if the object is a newly created PDF document (affects save() method behavior)
+     * False otherwise
+     *
+     * @var boolean
+     */
+    protected $_isNewDocument = true;
+
+    /**
      * Request used memory manager
      *
      * @return Zend_Memory_Manager
@@ -262,7 +270,8 @@ class Zend_Pdf
     /**
      * Render PDF document and save it.
      *
-     * If $updateOnly is true, then it only appends new section to the end of file.
+     * If $updateOnly is true and it's not a new document, then it only
+     * appends new section to the end of file.
      *
      * @param string $filename
      * @param boolean $updateOnly
@@ -348,6 +357,8 @@ class Zend_Pdf
 
                 $this->_originalProperties = $this->properties;
             }
+
+            $this->_isNewDocument = false;
         } else {
             $this->_pdfHeaderVersion = Zend_Pdf::PDF_VERSION;
 
@@ -1174,7 +1185,8 @@ class Zend_Pdf
 
     /**
      * Render the completed PDF to a string.
-     * If $newSegmentOnly is true, then only appended part of PDF is returned.
+     * If $newSegmentOnly is true and it's not a new document,
+     * then only appended part of PDF is returned.
      *
      * @param boolean $newSegmentOnly
      * @param resource $outputStream
@@ -1183,6 +1195,12 @@ class Zend_Pdf
      */
     public function render($newSegmentOnly = false, $outputStream = null)
     {
+        if ($this->_isNewDocument) {
+            // Drop full document first time even $newSegmentOnly is set to true
+            $newSegmentOnly = false;
+            $this->_isNewDocument = false;
+        }
+
         // Save document properties if necessary
         if ($this->properties != $this->_originalProperties) {
             $docInfo = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
