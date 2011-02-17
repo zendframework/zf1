@@ -647,6 +647,16 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $timeline = $twitter->statusUserTimeline($params);
     }
 
+    /**
+     * @group ZF-11023
+     */
+    public function testConstructorPassedObjectZendConfig()
+    {
+        require_once 'Zend/Config.php';
+        $config = new Zend_Config(array('username' => 'zf'));
+        $twitter = new Zend_Service_Twitter($config);
+        $this->assertEquals('zf', $twitter->getUsername());
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Service_TwitterTest2::main') {
