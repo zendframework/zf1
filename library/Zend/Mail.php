@@ -1264,8 +1264,7 @@ class Zend_Mail extends Zend_Mime_Message
             return $email;
         } else {
             $encodedName = $this->_encodeHeader($name);
-            if ($encodedName === $name &&
-                    ((strpos($name, '@') !== false) || (strpos($name, ',') !== false))) {
+            if ($encodedName === $name  &&  strcspn($name, '()<>[]:;@\\,') != strlen($name)) {
                 $format = '"%s" <%s>';
             } else {
                 $format = '%s <%s>';
