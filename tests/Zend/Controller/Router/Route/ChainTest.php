@@ -783,6 +783,38 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         ), $values);
     }
 
+    /**
+     * @group ZF-7368
+     */
+    public function testChainingStaticDynamicMatchToDefaults()
+    {
+        $foo = new Zend_Controller_Router_Route_Static('foo');
+        $bar = new Zend_Controller_Router_Route(':bar', array('bar' => 0));
+        $chain = $foo->chain($bar);
+
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/foo');
+        $res = $chain->match($request);
+
+        $this->assertType('array', $res, 'Route did not match');
+        $this->assertEquals(0, $res['bar']);
+    }
+
+    /**
+     * @group ZF-7368
+     */
+    public function testChainingStaticDynamicMatchToParams()
+    {
+        $foo = new Zend_Controller_Router_Route_Static('foo');
+        $bar = new Zend_Controller_Router_Route(':bar', array('bar' => 1));
+        $chain = $foo->chain($bar);
+
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/foo/2');
+        $res = $chain->match($request);
+
+        $this->assertType('array', $res, 'Route did not match');
+        $this->assertEquals(2, $res['bar']);
+    }
+
     protected function _getRouter()
     {
         $router = new Zend_Controller_Router_Rewrite();
