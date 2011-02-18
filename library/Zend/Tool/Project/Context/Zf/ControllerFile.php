@@ -134,7 +134,7 @@ class Zend_Tool_Project_Context_Zf_ControllerFile extends Zend_Tool_Project_Cont
                                 'body' => <<<EOS
 \$errors = \$this->_getParam('error_handler');
 
-if (!\$errors) {
+if (!\$errors || !\$errors instanceof ArrayObject) {
     \$this->view->message = 'You have reached the error page';
     return;
 }
