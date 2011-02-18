@@ -495,4 +495,18 @@ class Zend_Paginator_Adapter_DbSelectTest extends PHPUnit_Framework_TestCase
                          ->getQuery();
         $this->assertEquals($expected, $lastQuery);
     }
+
+    /**
+     * @group ZF-7434
+     */
+    public function testGroupByOneColumnWithZendExpr()
+    {
+        $select = $this->_db->select();
+        $select->from('test', 'testgroup')
+               ->group(new Zend_Db_Expr('testgroup'));
+
+        $adapter = new Zend_Paginator_Adapter_DbSelect($select);
+
+        $this->assertEquals(2, $adapter->count());
+    }
 }

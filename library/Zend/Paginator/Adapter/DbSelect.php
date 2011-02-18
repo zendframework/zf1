@@ -229,8 +229,7 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
 
                     $groupPart = $column;
                 }
-            } else if (!empty($groupParts) && $groupParts[0] !== Zend_Db_Select::SQL_WILDCARD &&
-                       !($groupParts[0] instanceof Zend_Db_Expr)) {
+            } else if (!empty($groupParts)) {
                 $groupPart = $db->quoteIdentifier($groupParts[0], true);
             }
 
