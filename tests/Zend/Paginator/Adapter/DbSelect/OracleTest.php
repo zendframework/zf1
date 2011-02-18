@@ -86,6 +86,14 @@ class Zend_Paginator_Adapter_DbSelect_OracleTest extends Zend_Paginator_Adapter_
      */
     protected function tearDown ()
     {
+        if (! extension_loaded('oci8')) {
+            $this->markTestSkipped('Oci8 extension is not loaded');
+        }
+
+        if (! TESTS_ZEND_DB_ADAPTER_ORACLE_ENABLED) {
+            $this->markTestSkipped('Oracle is required');
+        }
+
         $this->_dropTable();
         $this->_db = null;
         $this->_adapter = null;
