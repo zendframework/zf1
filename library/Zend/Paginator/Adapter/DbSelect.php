@@ -216,7 +216,8 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
              * the original query and use it as a subquery os the COUNT query.
              */
             if (($isDistinct && count($columnParts) > 1) || count($groupParts) > 1 || !empty($havingParts)) {
-                $rowCount = $db->select()->from($this->_select);
+                $rowCount->reset(Zend_Db_Select::ORDER);
+                $rowCount = $db->select()->from($rowCount);
             } else if ($isDistinct) {
                 $part = $columnParts[0];
 
