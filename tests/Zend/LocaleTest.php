@@ -849,6 +849,17 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
         $value = new Zend_Locale('TR');
         $this->assertEquals('tr_TR', $value->toString());
     }
+    /**
+     * @group ZF-11072
+     */
+    public function testTranslationReturnsZeroAsNumber()
+    {
+        $this->assertFalse(Zend_Locale::getTranslation('USD', 'CurrencyFraction'));
+        $this->assertEquals('0', Zend_Locale::getTranslation('JPY', 'CurrencyFraction'));
+		$this->assertEquals('2', Zend_Locale::getTranslation('CHF', 'CurrencyFraction'));
+		$this->assertEquals('3', Zend_Locale::getTranslation('BHD', 'CurrencyFraction'));
+		$this->assertEquals('2', Zend_Locale::getTranslation('DEFAULT', 'CurrencyFraction'));
+    }
 
     /**
      * Ignores a raised PHP error when in effect, but throws a flag to indicate an error occurred

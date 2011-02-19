@@ -666,7 +666,7 @@ class Zend_Locale
         require_once 'Zend/Locale/Data.php';
         $locale = self::findLocale($locale);
         $result = Zend_Locale_Data::getContent($locale, $path, $value);
-        if (empty($result) === true) {
+        if (empty($result) === true && '0' !== $result) {
             return false;
         }
 
