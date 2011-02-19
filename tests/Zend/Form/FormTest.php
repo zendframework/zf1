@@ -4431,6 +4431,26 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         }
         $this->assertNotEquals($result,'');
     }
+    
+    /**
+     * @group ZF-11088
+     */
+    public function testAddErrorOnElementMakesFormInvalidAndReturnsCustomError()
+    {
+        $element = new Zend_Form_Element_Text('foo');
+        $errorString = 'This element made a booboo';
+        $element->addError($errorString);
+        $errorMessages = $element->getErrorMessages();
+        $this->assertSame(1, count($errorMessages));
+        $this->assertSame($errorString, $errorMessages[0]);
+        
+        $element2 = new Zend_Form_Element_Text('bar');
+        $this->form->addElement($element2);
+        $this->form->getElement('bar')->addError($errorString);
+        $errorMessages2 = $this->form->getElement('bar')->getErrorMessages();
+        $this->assertSame(1, count($errorMessages2));
+        $this->assertSame($errorString, $errorMessages2[0]);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
