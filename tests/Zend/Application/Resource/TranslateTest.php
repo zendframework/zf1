@@ -172,7 +172,7 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
         $resource->init();
 
         $this->assertType('Zend_Cache_Core', Zend_Translate::getCache());
-        Zend_Translate::clearCache();
+        Zend_Translate::removeCache();
     }
 
     /**
