@@ -82,7 +82,7 @@ class Zend_Cloud_DocumentService_Adapter_SimpleDb
         );
 
         if (isset($options[self::HTTP_ADAPTER])) {
-            $this->_sqs->getHttpClient()->setAdapter($options[self::HTTP_ADAPTER]);
+            $this->_simpleDb->getHttpClient()->setAdapter($options[self::HTTP_ADAPTER]);
         }
 
         if (isset($options[self::DOCUMENT_CLASS])) {
