@@ -491,6 +491,38 @@ class Zend_Log_LogTest extends PHPUnit_Framework_TestCase
         $logger = Zend_Log::factory($config['log']);
         $logger->log('custom message', Zend_Log::INFO);
     }
+
+    /**
+     * @group ZF-10990
+     */
+    public function testFactoryShouldSetTimestampFormat()
+    {
+        $config = array(
+            'timestampFormat' => 'Y-m-d',
+            'mock' => array(
+                'writerName' => 'Mock'
+            )
+        );
+        $logger = Zend_Log::factory($config);
+
+        $this->assertEquals('Y-m-d', $logger->getTimestampFormat());
+    }
+
+    /**
+     * @group ZF-10990
+     */
+    public function testFactoryShouldKeepDefaultTimestampFormat()
+    {
+        $config = array(
+            'timestampFormat' => '',
+            'mock' => array(
+                'writerName' => 'Mock'
+            )
+        );
+        $logger = Zend_Log::factory($config);
+
+        $this->assertEquals('c', $logger->getTimestampFormat());
+    }
 }
 
 class Zend_Log_Writer_NotExtendedWriterAbstract implements Zend_Log_FactoryInterface

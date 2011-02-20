@@ -138,6 +138,13 @@ class Zend_Log
 
         $log = new self;
 
+        if (array_key_exists('timestampFormat', $config)) {
+            if (null != $config['timestampFormat'] && '' != $config['timestampFormat']) {
+                $log->setTimestampFormat($config['timestampFormat']);
+            }
+            unset($config['timestampFormat']);
+        }
+
         if (!is_array(current($config))) {
             $log->addWriter(current($config));
         } else {
