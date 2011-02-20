@@ -24,8 +24,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Form_ElementTest::main');
 }
 
-// error_reporting(E_ALL);
-
 require_once 'Zend/Form/Element.php';
 
 require_once 'Zend/Config.php';
@@ -2159,35 +2157,6 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $t2 = $this->element->getDecorators();
         $this->assertEquals($t1, $t2);
     }
-}
-
-class Zend_Form_ElementTest_Decorator extends Zend_Form_Decorator_Abstract
-{
-}
-
-class Zend_Form_ElementTest_Element extends Zend_Form_Element
-{
-    public function init()
-    {
-        $this->setDisableLoadDefaultDecorators(true);
-    }
-}
-
-class Zend_Form_ElementTest_ArrayFilter implements Zend_Filter_Interface
-{
-    public function filter($value)
-    {
-        $value = array_filter($value, array($this, '_filter'));
-        return $value;
-    }
-
-    protected function _filter($value)
-    {
-        if (is_array($value)) {
-            return array_filter($value, array($this, '_filter'));
-        }
-        return (strstr($value, 'ba'));
-    }
 
     /**
      * Check array notation for validators
@@ -2220,7 +2189,35 @@ class Zend_Form_ElementTest_ArrayFilter implements Zend_Filter_Interface
         $validator = $username->getValidator('regex');
         $this->assertTrue($validator->zfBreakChainOnFailure);
     }
+}
 
+class Zend_Form_ElementTest_Decorator extends Zend_Form_Decorator_Abstract
+{
+}
+
+class Zend_Form_ElementTest_Element extends Zend_Form_Element
+{
+    public function init()
+    {
+        $this->setDisableLoadDefaultDecorators(true);
+    }
+}
+
+class Zend_Form_ElementTest_ArrayFilter implements Zend_Filter_Interface
+{
+    public function filter($value)
+    {
+        $value = array_filter($value, array($this, '_filter'));
+        return $value;
+    }
+
+    protected function _filter($value)
+    {
+        if (is_array($value)) {
+            return array_filter($value, array($this, '_filter'));
+        }
+        return (strstr($value, 'ba'));
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Form_ElementTest::main') {
