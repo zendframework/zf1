@@ -128,6 +128,60 @@ class Zend_Application_Resource_LocaleTest extends PHPUnit_Framework_TestCase
         $this->assertFalse('kok_IN' == $locale->__toString());
         $this->assertSame(Zend_Registry::get('Zend_Locale'), $locale);
     }
+
+    /**
+     * @group ZF-7058
+     */
+    public function testSetCache()
+    {
+        $cache = Zend_Cache::factory('Core', 'Black Hole', array(
+            'lifetime' => 120,
+            'automatic_serialization' => true
+        ));
+
+        $config = array(
+            'default' => 'fr_FR',
+            'cache' => $cache,
+        );
+        $resource = new Zend_Application_Resource_Locale($config);
+        $resource->init();
+        $backend = Zend_Locale::getCache()->getBackend();
+        $this->assertInstanceOf('Zend_Cache_Backend_BlackHole', $backend);
+        Zend_Locale::removeCache();
+    }
+
+    /**
+     * @group ZF-7058
+     */
+    public function testSetCacheFromCacheManager()
+    {
+        $configCache = array(
+            'memory' => array(
+                'frontend' => array(
+                    'name' => 'Core',
+                    'options' => array(
+                        'lifetime' => 120,
+                        'automatic_serialization' => true
+                    )
+                ),
+                'backend' => array(
+                    'name' => 'Black Hole'
+                )
+            )
+        );
+        $this->bootstrap->registerPluginResource('cachemanager', $configCache);
+        $this->assertFalse(Zend_Locale::hasCache());
+
+        $config = array(
+            'bootstrap' => $this->bootstrap,
+            'cache' => 'memory',
+        );
+        $resource = new Zend_Application_Resource_Locale($config);
+        $resource->init();
+
+        $this->assertTrue(Zend_Locale::hasCache());
+        Zend_Locale::removeCache();
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_LocaleTest::main') {
