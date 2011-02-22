@@ -138,6 +138,18 @@ class Zend_Form_Decorator_FormErrorsTest extends PHPUnit_Framework_TestCase
         $this->assertSame($content, $this->decorator->render($content));
     }
 
+    public function testNotGeneratingSubformErrorMarkupWrappingWhenNoErrors()
+    {
+        $form1 = new Zend_Form_SubForm();
+        $form2 = new Zend_Form();
+        $form2->addSubForm($form1, 'sub');
+        $form2->setView($this->getView());
+        $this->decorator->setElement($form2);
+
+        $content = 'test content';
+        $this->assertSame($content, $this->decorator->render($content));
+    }
+
     public function testRenderRendersAllErrorMessages()
     {
         $this->setupForm();
@@ -288,6 +300,7 @@ class Zend_Form_Decorator_FormErrorsTest extends PHPUnit_Framework_TestCase
         $html = $this->form->render();
         $this->assertNotContains('form-badness', $html);
     }
+
 
     /**
      * @dataProvider markupOptionMethodsProvider
