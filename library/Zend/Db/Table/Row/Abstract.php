@@ -540,7 +540,15 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
          * Do this only if primary key value(s) were changed.
          */
         if (count($pkDiffData) > 0) {
-            $this->_doUpdateCascade(); // broken out for overriding
+            $depTables = $this->_getTable()->getDependentTables();
+            if (!empty($depTables)) {
+                $pkNew = $this->_getPrimaryKey(true);
+                $pkOld = $this->_getPrimaryKey(false);
+                foreach ($depTables as $tableClass) {
+                    $t = $this->_getTableFromString($tableClass);
+                    $t->_cascadeUpdate($this->getTableClass(), $pkOld, $pkNew);
+                }
+            }
         }
 
         /**
@@ -577,19 +585,6 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
         }
 
         return $primaryKey;
-    }
-    
-    protected function _doUpdateCascade()
-    {
-        $depTables = $this->_getTable()->getDependentTables();
-        if (!empty($depTables)) {
-            $pkNew = $this->_getPrimaryKey(true);
-            $pkOld = $this->_getPrimaryKey(false);
-            foreach ($depTables as $tableClass) {
-                $t = $this->_getTableFromString($tableClass);
-                $t->_cascadeUpdate($this->getTableClass(), $pkOld, $pkNew);
-            }
-        }
     }
 
     /**
