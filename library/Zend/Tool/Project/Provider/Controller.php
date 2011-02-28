@@ -139,7 +139,7 @@ class Zend_Tool_Project_Provider_Controller
                 $indexActionViewResource = Zend_Tool_Project_Provider_View::createResource($this->_loadedProfile, 'index', $name, $module);
             }
             if ($testingEnabled) {
-                $testControllerResource = Zend_Tool_Project_Provider_Test::createApplicationResource($this->_loadedProfile, $name, 'index', $module);
+                $testActionResource = Zend_Tool_Project_Provider_Test::createApplicationResource($this->_loadedProfile, $name, 'index', $module);
             }
 
         } catch (Exception $e) {
@@ -169,8 +169,8 @@ class Zend_Tool_Project_Provider_Controller
                 $response->appendContent('Would create a view script for the index action method at ' . $indexActionViewResource->getContext()->getPath());
             }
 
-            if ($testControllerResource) {
-                $response->appendContent('Would create a controller test file at ' . $testControllerResource->getContext()->getPath());
+            if ($testActionResource) {
+                $response->appendContent('Would create a controller test file at ' . $testActionResource->getParentResource()->getContext()->getPath());
             }
 
         } else {
@@ -185,9 +185,10 @@ class Zend_Tool_Project_Provider_Controller
                 $indexActionViewResource->create();
             }
 
-            if ($testControllerResource) {
-                $response->appendContent('Creating a controller test file at ' . $testControllerResource->getContext()->getPath());
-                $testControllerResource->create();
+            if ($testActionResource) {
+                $response->appendContent('Creating a controller test file at ' . $testActionResource->getParentResource()->getContext()->getPath());
+                $testActionResource->getParentResource()->create();
+                $testActionResource->create();
             }
 
             $this->_storeProfile();

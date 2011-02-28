@@ -306,8 +306,9 @@ class ZF
         ini_set('display_errors', true);
         
         // support the changing of the current working directory, necessary for some providers
-        if (isset($_ENV['ZEND_TOOL_CURRENT_WORKING_DIRECTORY'])) {
-            chdir($_ENV['ZEND_TOOL_CURRENT_WORKING_DIRECTORY']);
+        $cwd = getenv('ZEND_TOOL_CURRENT_WORKING_DIRECTORY');
+        if ($cwd != '' && realpath($cwd)) {
+            chdir($cwd);
         }
         
         if (!$this->_configFile) {

@@ -131,6 +131,10 @@ class Zend_Tool_Project_Provider_Action
 
         $this->_loadProfile();
 
+        // determine if testing is enabled in the project
+        require_once 'Zend/Tool/Project/Provider/Test.php';
+        $testingEnabled = Zend_Tool_Project_Provider_Test::isTestingEnabled($this->_loadedProfile);
+        
         // Check that there is not a dash or underscore, return if doesnt match regex
         if (preg_match('#[_-]#', $name)) {
             throw new Zend_Tool_Project_Provider_Exception('Action names should be camel cased.');
@@ -149,8 +153,12 @@ class Zend_Tool_Project_Provider_Action
             throw new Zend_Tool_Project_Provider_Exception('This controller (' . $controllerName . ') already has an action named (' . $name . ')');
         }
 
-        $actionMethod = self::createResource($this->_loadedProfile, $name, $controllerName, $module);
+        $actionMethodResource = self::createResource($this->_loadedProfile, $name, $controllerName, $module);
 
+        if ($testingEnabled) {
+            $testActionMethodResource = Zend_Tool_Project_Provider_Test::createApplicationResource($this->_loadedProfile, $controllerName, $name, $module);
+        }
+        
         // get request/response object
         $request = $this->_registry->getRequest();
         $response = $this->_registry->getResponse();
@@ -181,14 +189,25 @@ class Zend_Tool_Project_Provider_Action
         if ($request->isPretend()) {
             $response->appendContent(
                 'Would create an action named ' . $name .
-                ' inside controller at ' . $actionMethod->getParentResource()->getContext()->getPath()
+                ' inside controller at ' . $actionMethodResource->getParentResource()->getContext()->getPath()
                 );
+                
+            if ($testActionMethodResource) {
+                $response->appendContent('Would create an action test in ' . $testActionMethodResource->getParentResource()->getContext()->getPath());
+            }
+                
         } else {
             $response->appendContent(
                 'Creating an action named ' . $name .
-                ' inside controller at ' . $actionMethod->getParentResource()->getContext()->getPath()
+                ' inside controller at ' . $actionMethodResource->getParentResource()->getContext()->getPath()
                 );
-            $actionMethod->create();
+            $actionMethodResource->create();
+            
+            if ($testActionMethodResource) {
+                $response->appendContent('Creating an action test in ' . $testActionMethodResource->getParentResource()->getContext()->getPath());
+                $testActionMethodResource->create();
+            }
+            
             $this->_storeProfile();
         }
 

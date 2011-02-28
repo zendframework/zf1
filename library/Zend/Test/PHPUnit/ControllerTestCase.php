@@ -19,11 +19,14 @@
  * @version    $Id$
  */
 
-/** @see PHPUnit_Framework_TestCase */
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /** @see PHPUnit_Runner_Version */
 require_once 'PHPUnit/Runner/Version.php';
+
+/**
+ * Depending on version, include the proper PHPUnit support
+ * @see PHPUnit_Autoload
+ */
+require_once (version_compare(PHPUnit_Runner_Version::id(), '3.5.0', '>=')) ? 'PHPUnit/Autoload.php' : 'PHPUnit/Framework.php';
 
 /** @see Zend_Controller_Front */
 require_once 'Zend/Controller/Front.php';
@@ -1154,6 +1157,38 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
             $this->_query = new Zend_Dom_Query;
         }
         return $this->_query;
+    }
+    
+    /**
+     * URL Helper
+     * 
+     * @param array $urlOptions
+     * @param string $name
+     * @param bool $reset
+     * @param bool $encode
+     */
+    public function url($urlOptions = array(), $name = null, $reset = false, $encode = true)
+    {
+        $frontController = $this->getFrontController();
+        $router = $frontController->getRouter();
+        if (!$router instanceof Zend_Controller_Router_Rewrite) {
+            throw new Exception('This url helper utility function only works when the router is of type Zend_Controller_Router_Rewrite');
+        }
+        if (count($router->getRoutes()) == 0) {
+            $router->addDefaultRoutes();
+        }
+        return $router->assemble($urlOptions, $name, $reset, $encode);
+    }
+    
+    public function urlizeOptions($urlOptions, $actionControllerModuleOnly = true)
+    {
+        $ccToDash = new Zend_Filter_Word_CamelCaseToDash();
+        foreach ($urlOptions as $n => $v) {
+            if (in_array($n, array('action', 'controller', 'module'))) {
+                $urlOptions[$n] = $ccToDash->filter($v);
+            }
+        }
+        return $urlOptions;
     }
 
     /**

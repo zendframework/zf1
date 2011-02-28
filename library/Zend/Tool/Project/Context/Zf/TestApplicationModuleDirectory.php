@@ -17,13 +17,13 @@
  * @subpackage Framework
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: TestApplicationControllerDirectory.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
 /**
- * @see Zend_Tool_Project_Context_Filesystem_File
+ * @see Zend_Tool_Project_Context_Filesystem_Directory
  */
-require_once 'Zend/Tool/Project/Context/Filesystem/File.php';
+require_once 'Zend/Tool/Project/Context/Filesystem/Directory.php';
 
 /**
  * This class is the front most class for utilizing Zend_Tool_Project
@@ -36,13 +36,31 @@ require_once 'Zend/Tool/Project/Context/Filesystem/File.php';
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Tool_Project_Context_Zf_TestPHPUnitConfigFile extends Zend_Tool_Project_Context_Filesystem_File
+class Zend_Tool_Project_Context_Zf_TestApplicationModuleDirectory extends Zend_Tool_Project_Context_Filesystem_Directory
 {
+
 
     /**
      * @var string
      */
-    protected $_filesystemName = 'phpunit.xml';
+    protected $_forModuleName = null;
+
+    /**
+     * @var string
+     */
+    protected $_filesystemName = 'moduleDirectory';
+
+    /**
+     * init()
+     *
+     * @return Zend_Tool_Project_Context_Zf_ControllerFile
+     */
+    public function init()
+    {
+        $this->_filesystemName = $this->_forModuleName = $this->_resource->getAttribute('forModuleName');
+        parent::init();
+        return $this;
+    }
 
     /**
      * getName()
@@ -51,31 +69,30 @@ class Zend_Tool_Project_Context_Zf_TestPHPUnitConfigFile extends Zend_Tool_Proje
      */
     public function getName()
     {
-        return 'TestPHPUnitConfigFile';
+        return 'TestApplicationModuleDirectory';
     }
-    
-    public function getContents()
-    {
-        return <<<EOS
-<phpunit bootstrap="./bootstrap.php">
-    <testsuite name="Application Test Suite">
-        <directory>./application</directory>
-    </testsuite>
-    <testsuite name="Library Test Suite">
-        <directory>./library</directory>
-    </testsuite>
-    
-    <filter>
-        <!-- If Zend Framework is inside your project's library, uncomment this filter -->
-        <!-- 
-        <whitelist>
-            <directory suffix=".php">../../library/Zend</directory>
-        </whitelist>
-        -->
-    </filter>
-</phpunit>
 
-EOS;
+    /**
+     * getPersistentAttributes
+     *
+     * @return array
+     */
+    public function getPersistentAttributes()
+    {
+        return array(
+            'forModuleName' => $this->getForModuleName()
+            );
     }
+
+    /**
+     * getModuleName()
+     *
+     * @return string
+     */
+    public function getForModuleName()
+    {
+        return $this->_forModuleName;
+    }
+    
 
 }
