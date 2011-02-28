@@ -112,10 +112,22 @@ class Zend_Tool_Project_Provider_Controller
     {
         $this->_loadProfile(self::NO_PROFILE_THROW_EXCEPTION);
 
+        // get request & response
+        $request = $this->_registry->getRequest();
+        $response = $this->_registry->getResponse();
+        
         // determine if testing is enabled in the project
         require_once 'Zend/Tool/Project/Provider/Test.php';
         $testingEnabled = Zend_Tool_Project_Provider_Test::isTestingEnabled($this->_loadedProfile);
 
+        if ($testingEnabled && !Zend_Tool_Project_Provider_Test::isPHPUnitAvailable()) {
+            $testingEnabled = false;
+            $response->appendContent(
+                'Note: PHPUnit is required in order to generate controller test stubs.',
+                array('color' => array('yellow'))
+                );
+        }
+        
         if (self::hasResource($this->_loadedProfile, $name, $module)) {
             throw new Zend_Tool_Project_Provider_Exception('This project already has a controller named ' . $name);
         }
@@ -127,10 +139,6 @@ class Zend_Tool_Project_Provider_Controller
 
         $originalName = $name;
         $name = ucfirst($name);
-
-        // get request & response
-        $request = $this->_registry->getRequest();
-        $response = $this->_registry->getResponse();
 
         try {
             $controllerResource = self::createResource($this->_loadedProfile, $name, $module);

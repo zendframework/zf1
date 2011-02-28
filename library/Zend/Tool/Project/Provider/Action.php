@@ -131,9 +131,21 @@ class Zend_Tool_Project_Provider_Action
 
         $this->_loadProfile();
 
+        // get request/response object
+        $request = $this->_registry->getRequest();
+        $response = $this->_registry->getResponse();
+        
         // determine if testing is enabled in the project
         require_once 'Zend/Tool/Project/Provider/Test.php';
         $testingEnabled = Zend_Tool_Project_Provider_Test::isTestingEnabled($this->_loadedProfile);
+        
+        if ($testingEnabled && !Zend_Tool_Project_Provider_Test::isPHPUnitAvailable()) {
+            $testingEnabled = false;
+            $response->appendContent(
+                'Note: PHPUnit is required in order to generate controller test stubs.',
+                array('color' => array('yellow'))
+                );
+        }
         
         // Check that there is not a dash or underscore, return if doesnt match regex
         if (preg_match('#[_-]#', $name)) {
@@ -158,10 +170,6 @@ class Zend_Tool_Project_Provider_Action
         if ($testingEnabled) {
             $testActionMethodResource = Zend_Tool_Project_Provider_Test::createApplicationResource($this->_loadedProfile, $controllerName, $name, $module);
         }
-        
-        // get request/response object
-        $request = $this->_registry->getRequest();
-        $response = $this->_registry->getResponse();
 
         // alert the user about inline converted names
         $tense = (($request->isPretend()) ? 'would be' : 'is');
