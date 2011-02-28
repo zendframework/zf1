@@ -40,6 +40,7 @@ require_once 'Zend/Cache/SkipTests.php';
 require_once 'Zend/Cache/SqliteBackendTest.php';
 require_once 'Zend/Cache/StaticBackendTest.php';
 require_once 'Zend/Cache/TwoLevelsBackendTest.php';
+require_once 'Zend/Cache/WinCacheBackendTest.php';
 require_once 'Zend/Cache/XcacheBackendTest.php';
 require_once 'Zend/Cache/ZendPlatformBackendTest.php';
 require_once 'Zend/Cache/ZendServerDiskTest.php';
@@ -107,6 +108,22 @@ class Zend_Cache_AllTests
             $suite->addTestSuite('Zend_Cache_ApcBackendTest');
         }
 
+    	/*
+         * Check if WinCache tests are enabled, and if extension is available.
+         */
+        if (!defined('TESTS_ZEND_CACHE_WINCACHE_ENABLED') ||
+            constant('TESTS_ZEND_CACHE_WINCACHE_ENABLED') === false) {
+            $skipTest = new Zend_Cache_WinCacheBackendTest_SkipTests();
+            $skipTest->message = 'Tests are not enabled in TestConfiguration.php';
+            $suite->addTest($skipTest);
+        } else if (!extension_loaded('wincache')) {
+            $skipTest = new Zend_Cache_WinCacheBackendTest_SkipTests();
+            $skipTest->message = "Extension 'wincache' is not loaded";
+            $suite->addTest($skipTest);
+        } else {
+            $suite->addTestSuite('Zend_Cache_WinCacheBackendTest');
+        }
+        
         /*
          * Check if Xcache tests are enabled, and if extension is available.
          */
@@ -133,7 +150,7 @@ class Zend_Cache_AllTests
             $suite->addTest($skipTest);
         } else if (!extension_loaded('memcache')) {
             $skipTest = new Zend_Cache_MemcachedBackendTest_SkipTests();
-            $skipTest->message = "Extension 'APC' is not loaded";
+            $skipTest->message = "Extension 'memcache' is not loaded";
             $suite->addTest($skipTest);
         } else {
             if (!defined('TESTS_ZEND_CACHE_MEMCACHED_HOST')) {
@@ -222,6 +239,22 @@ class Zend_Cache_AllTests
             $suite->addTestSuite('Zend_Cache_ZendServerShMemTest');
         }
 
+    	/*
+         * Check if WinCache tests are enabled, and if extension is available.
+         */
+        if (!defined('TESTS_ZEND_CACHE_WINCACHE_ENABLED') ||
+            constant('TESTS_ZEND_CACHE_WINCACHE_ENABLED') === false) {
+            $skipTest = new Zend_Cache_TwoLevelsBackendTest_SkipTests();
+            $skipTest->message = 'Tests are not enabled in TestConfiguration.php';
+            $suite->addTest($skipTest);
+        } else if (!extension_loaded('wincache')) {
+            $skipTest = new Zend_Cache_TwoLevelsBackendTest_SkipTests();
+            $skipTest->message = "Extension 'wincache' is not loaded";
+            $suite->addTest($skipTest);
+        } else {
+            $suite->addTestSuite('Zend_Cache_TwoLevelsBackendTest');
+        }
+        
         return $suite;
     }
 }
