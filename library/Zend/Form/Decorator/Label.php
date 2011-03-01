@@ -58,6 +58,12 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
     protected $_tag;
 
     /**
+     * Class for the HTML tag with which to surround label
+     * @var string
+     */
+    protected $_tagClass;
+
+    /**
      * Set element ID
      *
      * @param  string $id
@@ -126,6 +132,43 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
         }
 
         return $this->_tag;
+    }
+
+    /**
+     * Set the class to apply to the HTML tag with which to surround label
+     *
+     * @param  string $tagClass
+     * @return Zend_Form_Decorator_Label
+     */
+    public function setTagClass($tagClass)
+    {
+        if (empty($tagClass)) {
+            $this->_tagClass = null;
+        } else {
+            $this->_tagClass = (string) $tagClass;
+        }
+
+        $this->removeOption('tagClass');
+
+        return $this;
+    }
+
+    /**
+     * Get the class to apply to the HTML tag, if any, with which to surround label
+     *
+     * @return void
+     */
+    public function getTagClass()
+    {
+        if (null === $this->_tagClass) {
+            $tagClass = $this->getOption('tagClass');
+            if (null !== $tagClass) {
+                $this->removeOption('tagClass');
+                $this->setTagClass($tagClass);
+            }
+        }
+
+        return $this->_tagClass;
     }
 
     /**
@@ -297,6 +340,7 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
         $separator = $this->getSeparator();
         $placement = $this->getPlacement();
         $tag       = $this->getTag();
+        $tagClass  = $this->getTagClass();
         $id        = $this->getId();
         $class     = $this->getClass();
         $options   = $this->getOptions();
@@ -316,8 +360,14 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
         if (null !== $tag) {
             require_once 'Zend/Form/Decorator/HtmlTag.php';
             $decorator = new Zend_Form_Decorator_HtmlTag();
-            $decorator->setOptions(array('tag' => $tag,
-                                         'id'  => $id . '-label'));
+            if (null !== $this->_tagClass) {
+                $decorator->setOptions(array('tag'   => $tag,
+                                             'id'    => $id . '-label',
+                                             'class' => $tagClass));
+            } else {
+                $decorator->setOptions(array('tag'   => $tag,
+                                             'id'    => $id . '-label'));
+            }
 
             $label = $decorator->render($label);
         }

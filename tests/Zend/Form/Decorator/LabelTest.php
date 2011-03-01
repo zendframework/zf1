@@ -20,6 +20,7 @@
  * @version    $Id$
  */
 
+ 
 // Call Zend_Form_Decorator_LabelTest::main() if this source file is executed directly.
 if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Form_Decorator_LabelTest::main");
@@ -307,6 +308,20 @@ class Zend_Form_Decorator_LabelTest extends PHPUnit_Framework_TestCase
         $this->decorator->setTag('');
         $tag = $this->decorator->getTag();
         $this->assertTrue( NULL === $tag, $tag );
+    }
+    
+
+    /**
+     * @group ZF-4841
+     */
+    public function testSettingTagClassToEmptyValueShouldSetTagClassToNull()
+    {
+        $element = new Zend_Form_Element_Text('foo', array('label' => 'Foo'));
+        $this->decorator->setElement($element)
+                        ->setOptions(array('tag' => 'dt'));
+        $this->decorator->setTagClass('');
+        $tagClass = $this->decorator->getTagClass();
+        $this->assertTrue( NULL === $tagClass, $tagClass );
     }
 }
 
