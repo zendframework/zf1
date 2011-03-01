@@ -67,7 +67,6 @@ class Zend_Dojo_View_Helper_Textarea extends Zend_Dojo_View_Helper_Dijit
             $attribs['id']    = $id;
         }
         $attribs['name']  = $id;
-        $attribs['type']  = $this->_elementType;
 
         $attribs = $this->_prepareDijit($attribs, $params, 'textarea');
 

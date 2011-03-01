@@ -124,6 +124,12 @@ class Zend_Dojo_View_Helper_TextareaTest extends PHPUnit_Framework_TestCase
         $html = $this->helper->textarea('foo[bar]', '', array(), array('id' => 'foo-bar'));
         $this->assertContains('id="foo-bar"', $html);
     }
+
+    public function testGeneratedMarkupShouldNotIncludeTypeAttribute()
+    {
+        $html = $this->getElement();
+        $this->assertNotRegexp('/type="text/', $html, $html);
+    }
 }
 
 // Call Zend_Dojo_View_Helper_TextareaTest::main() if this source file is executed directly.
