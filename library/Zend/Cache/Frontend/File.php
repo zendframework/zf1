@@ -110,7 +110,11 @@ class Zend_Cache_Frontend_File extends Zend_Cache_Core
         clearstatcache();
         $i = 0;
         foreach ($masterFiles as $masterFile) {
-            $mtime = @filemtime($masterFile);
+            if (file_exists($masterFile)) {
+                $mtime = filemtime($masterFile);
+            } else {
+                $mtime = false;
+            }
 
             if (!$this->_specificOptions['ignore_missing_master_files'] && !$mtime) {
                 Zend_Cache::throwException('Unable to read master_file : ' . $masterFile);
