@@ -166,7 +166,7 @@ class Zend_Tool_Project_Context_Zf_ViewScriptFile extends Zend_Tool_Project_Cont
   </pre>
 
   <h3>Request Parameters:</h3>
-  <pre><?php echo htmlspecialchars(var_export(\$this->request->getParams(), true), ENT_QUOTES, "UTF-8") ?>
+  <pre><?php echo \$this->escape(var_export(\$this->request->getParams(), true)) ?>
   </pre>
 
   <?php endif ?>
