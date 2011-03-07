@@ -64,7 +64,7 @@ class Zend_Service_Amazon_SimpleDb_AllTests
 
         if (defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED')
             && constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ENABLED')
-            && defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEY')
+            && defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEYID')
             && defined('TESTS_ZEND_SERVICE_AMAZON_ONLINE_SECRETKEY')
         ) {
             $suite->addTestSuite('Zend_Service_Amazon_SimpleDb_OnlineTest');

@@ -79,6 +79,13 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
     protected $_testWaitPeriod = 2;
 
     /**
+     * Maximum attempts performed in request()
+     *
+     * @var int
+     */
+    protected $_testWaitRetries = 3;
+
+    /**
      * Sets up this test case
      *
      * @return void
@@ -86,7 +93,7 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_amazon = new Zend_Service_Amazon_SimpleDb(
-            constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEY'),
+            constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_ACCESSKEYID'),
             constant('TESTS_ZEND_SERVICE_AMAZON_ONLINE_SECRETKEY')
         );
 
@@ -104,10 +111,35 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
         $this->_wait();
     }
 
+    /**
+     * Wrapper around remote calls to retry, apply wait, etc.
+     *
+     * @param string $method SimpleDB method name
+     * @param array $args Method argument list
+     * @return void
+     */
+    public function request($method, $args = array())
+    {
+        $response = null;
+        for ($try = 1; $try <= $this->_testWaitRetries; $try++) {
+            try {
+                $this->_wait();
+                $response = call_user_func_array(array($this->_amazon, $method), $args);
+                break;
+            } catch (Zend_Service_Amazon_SimpleDb_Exception $e) {
+                // Only retry after throtte-related error
+                if (false === strpos($e->getMessage(), 'currently unavailable')) {
+                    throw $e;
+                }
+            }
+        }
+        return $response;
+    }
+
     public function testGetAttributes() {
         $domainName = $this->_testDomainNamePrefix . '_testGetAttributes';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
             $itemName = $this->_testItemNamePrefix . '_testGetAttributes';
             $attributeName1 = $this->_testAttributeNamePrefix . '_testGetAttributes1';
@@ -120,35 +152,34 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             );
 
             // Now that everything's set up, test it
-            $this->_amazon->putAttributes($domainName, $itemName, $attributes);
-            $this->_wait();
+            $this->request('putAttributes', array($domainName, $itemName, $attributes));
 
             // One attribute
-            $results = $this->_amazon->getAttributes($domainName, $itemName, $attributeName1);
+            $results = $this->request('getAttributes', array($domainName, $itemName, $attributeName1));
             $this->assertEquals(1, count($results));
             $attribute = current($results);
             $this->assertEquals($attributeName1, $attribute->getName());
             $this->assertEquals($attributeValue1, current($attribute->getValues()));
 
             // Multiple attributes
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(2, count($results));
             $this->assertTrue(array_key_exists($attributeName1, $results));
             $this->assertTrue(array_key_exists($attributeName2, $results));
             $this->assertEquals($attributeValue1, current($results[$attributeName1]->getValues()));
             $this->assertEquals($attributeValue2, current($results[$attributeName2]->getValues()));
 
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
 
     public function testPutAttributes() {
         $domainName = $this->_testDomainNamePrefix . '_testPutAttributes';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
             $itemName = $this->_testItemNamePrefix . '_testPutAttributes';
             $attributeName1 = $this->_testAttributeNamePrefix . '_testPutAttributes1';
@@ -161,27 +192,26 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             );
 
             // Now that everything's set up, test it
-            $this->_amazon->putAttributes($domainName, $itemName, $attributes);
-            $this->_wait();
+            $this->request('putAttributes', array($domainName, $itemName, $attributes));
 
             // Multiple attributes
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(2, count($results));
             $this->assertTrue(array_key_exists($attributeName1, $results));
             $this->assertTrue(array_key_exists($attributeName2, $results));
             $this->assertEquals($attributes[$attributeName1], $results[$attributeName1]);
             $this->assertEquals($attributes[$attributeName2], $results[$attributeName2]);
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
 
     public function testBatchPutAttributes() {
         $domainName = $this->_testDomainNamePrefix . '_testBatchPutAttributes';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
             $itemName1 = $this->_testItemNamePrefix . '_testBatchPutAttributes1';
             $itemName2 = $this->_testItemNamePrefix . '_testBatchPutAttributes2';
@@ -215,19 +245,18 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-            $this->assertEquals(array(), $this->_amazon->getAttributes($domainName, $itemName1));
-            $this->_amazon->batchPutAttributes($items, $domainName, $replace);
-            $this->_wait();
+            $this->assertEquals(array(), $this->request('getAttributes', array($domainName, $itemName1)));
+            $this->request('batchPutAttributes', array($items, $domainName, $replace));
 
-            $result = $this->_amazon->getAttributes($domainName, $itemName1, $attributeName1);
+            $result = $this->request('getAttributes', array($domainName, $itemName1, $attributeName1));
 
             $this->assertTrue(array_key_exists($attributeName1, $result));
             $this->assertEquals($attributeName1, $result[$attributeName1]->getName());
             $this->assertEquals($attributeValue1, current($result[$attributeName1]->getValues()));
-            $result = $this->_amazon->getAttributes($domainName, $itemName2, $attributeName4);
+            $result = $this->request('getAttributes', array($domainName, $itemName2, $attributeName4));
             $this->assertTrue(array_key_exists($attributeName4, $result));
             $this->assertEquals(2, count($result[$attributeName4]->getValues()));
-            $result = $this->_amazon->getAttributes($domainName, $itemName2);
+            $result = $this->request('getAttributes', array($domainName, $itemName2));
             $this->assertEquals(2, count($result));
             $this->assertTrue(array_key_exists($attributeName3, $result));
             $this->assertEquals($attributeName3, $result[$attributeName3]->getName());
@@ -244,39 +273,37 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             $items[$itemName1][$attributeName1]->setValues(array($newAttributeValue1));
             $items[$itemName2][$attributeName4]->setValues(array($newAttributeValue4));
 
-            $this->_amazon->batchPutAttributes($items, $domainName, $replace);
-            $this->_wait();
+            $this->request('batchPutAttributes', array($items, $domainName, $replace));
 
-            $result = $this->_amazon->getAttributes($domainName, $itemName1, $attributeName1);
+            $result = $this->request('getAttributes', array($domainName, $itemName1, $attributeName1));
             $this->assertEquals(array($newAttributeValue1, $attributeValue1), $result[$attributeName1]->getValues());
 
-            $result = $this->_amazon->getAttributes($domainName, $itemName2, $attributeName4);
+            $result = $this->request('getAttributes', array($domainName, $itemName2, $attributeName4));
             $this->assertEquals(array($newAttributeValue4, $attributeValue4, $attributeValue5), $result[$attributeName4]->getValues());
 
             $replace[$itemName1][$attributeName1] = true;
             $replace[$itemName2][$attributeName4] = true;
 
-            $this->_amazon->batchPutAttributes($items, $domainName, $replace);
-            $this->_wait();
+            $this->request('batchPutAttributes', array($items, $domainName, $replace));
 
-            $result = $this->_amazon->getAttributes($domainName, $itemName1, $attributeName1);
+            $result = $this->request('getAttributes', array($domainName, $itemName1, $attributeName1));
             $this->assertEquals($items[$itemName1][$attributeName1], $result[$attributeName1]);
 
-            $result = $this->_amazon->getAttributes($domainName, $itemName2, $attributeName4);
+            $result = $this->request('getAttributes', array($domainName, $itemName2, $attributeName4));
             $this->assertEquals($items[$itemName2][$attributeName4], $result[$attributeName4]);
-            $this->assertEquals($items[$itemName1], $this->_amazon->getAttributes($domainName, $itemName1));
+            $this->assertEquals($items[$itemName1], $this->request('getAttributes', array($domainName, $itemName1)));
 
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
 
     public function testDeleteAttributes() {
         $domainName = $this->_testDomainNamePrefix . '_testDeleteAttributes';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
             $itemName = $this->_testItemNamePrefix . '_testDeleteAttributes';
             $attributeName1 = $this->_testAttributeNamePrefix . '_testDeleteAttributes1';
@@ -295,10 +322,9 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             );
 
             // Now that everything's set up, test it
-            $this->_amazon->putAttributes($domainName, $itemName, $attributes);
-            $this->_wait();
+            $this->request('putAttributes', array($domainName, $itemName, $attributes));
 
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(4, count($results));
             $this->assertTrue(array_key_exists($attributeName1, $results));
             $this->assertTrue(array_key_exists($attributeName2, $results));
@@ -309,10 +335,9 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($attributeValue3, current($results[$attributeName3]->getValues()));
             $this->assertEquals($attributeValue4, current($results[$attributeName4]->getValues()));
 
-            $this->_amazon->deleteAttributes($domainName, $itemName, array($attributes[0]));
-            $this->_wait();
+            $this->request('deleteAttributes', array($domainName, $itemName, array($attributes[0])));
 
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(3, count($results));
             $this->assertTrue(array_key_exists($attributeName2, $results));
             $this->assertTrue(array_key_exists($attributeName3, $results));
@@ -321,24 +346,22 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($attributeValue3, current($results[$attributeName3]->getValues()));
             $this->assertEquals($attributeValue4, current($results[$attributeName4]->getValues()));
 
-            $this->_amazon->deleteAttributes($domainName, $itemName, array($attributes[1], $attributes[2]));
-            $this->_wait();
+            $this->request('deleteAttributes', array($domainName, $itemName, array($attributes[1], $attributes[2])));
 
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(1, count($results));
             $this->assertTrue(array_key_exists($attributeName4, $results));
             $this->assertEquals($attributeValue4, current($results[$attributeName4]->getValues()));
 
 
-            $this->_amazon->deleteAttributes($domainName, $itemName, array($attributes[3]));
-            $this->_wait();
+            $this->request('deleteAttributes', array($domainName, $itemName, array($attributes[3])));
 
-            $results = $this->_amazon->getAttributes($domainName, $itemName);
+            $results = $this->request('getAttributes', array($domainName, $itemName));
             $this->assertEquals(0, count($results));
 
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
@@ -349,26 +372,44 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             // Create some domains
             for($i = 1; $i <= 3; $i++) {
                 $domainName = $this->_testDomainNamePrefix . '_testListDomains' . $i;
-                $this->_amazon->deleteDomain($domainName);
-                $this->_amazon->createDomain($domainName);
+                $this->request('deleteDomain', array($domainName));
+                $this->request('createDomain', array($domainName));
             }
-            $this->_wait();
 
-            $page = $this->_amazon->listDomains(3);
+            $page = $this->request('listDomains', array(3));
             $this->assertEquals(3, count($page->getData()));
             // Amazon returns an empty page as the last page :/
-            $this->assertTrue($page->isLast());
-            $this->assertEquals(1, count($this->_amazon->listDomains(1, $page->getToken())));
+            $isLast = $page->isLast();
+            if (!$isLast) {
+              // The old isLast() assertTrue failed in full suite runs. Token often
+              // decodes to 'TestsZendServiceAmazonSimpleDbDomain_testPutAttributes'
+              // which no longer exists. Instead of a plain assertTrue, which seemed
+              // to pass only in single-case runs, we'll make sure the token's
+              // presence is worth a negative.
+              $token = $page->getToken();
+              if ($token) {
+                $tokenDomainName = base64_decode($token);
+                if (false !== strpos($tokenDomainName, $this->_testDomainNamePrefix)) {
+                  try {
+                    $this->request('domainMetadata', array($tokenDomainName));
+                    $this->fail('listDomains call with 3 domain maximum did not return last page');
+                  } catch (Exception $e) {
+                    $this->assertContains('The specified domain does not exist', $e->getMessage());
+                  }
+                }
+              }
+            }
+            $this->assertEquals(1, count($this->request('listDomains', array(1, $page->getToken()))));
 
-            $page = $this->_amazon->listDomains(4);
+            $page = $this->request('listDomains', array(4));
             $this->assertEquals(3, count($page->getData()));
             $this->assertTrue($page->isLast());
 
-            $page = $this->_amazon->listDomains(2);
+            $page = $this->request('listDomains', array(2));
             $this->assertEquals(2, count($page->getData()));
             $this->assertFalse($page->isLast());
 
-            $nextPage = $this->_amazon->listDomains(100, $page->getToken());
+            $nextPage = $this->request('listDomains', array(100, $page->getToken()));
             $this->assertEquals(1, count($nextPage->getData()));
             // Amazon returns an empty page as the last page :/
             $this->assertTrue($nextPage->isLast());
@@ -376,13 +417,13 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             // Delete the domains
             for($i = 1; $i <= 3; $i++) {
                 $domainName = $this->_testDomainNamePrefix . '_testListDomains' . $i;
-                $this->_amazon->deleteDomain($domainName);
+                $this->request('deleteDomain', array($domainName));
             }
         } catch(Exception $e) {
             // Delete the domains
             for($i = 1; $i <= 3; $i++) {
                 $domainName = $this->_testDomainNamePrefix . '_testListDomains' . $i;
-                $this->_amazon->deleteDomain($domainName);
+                $this->request('deleteDomain', array($domainName));
             }
             throw $e;
         }
@@ -390,10 +431,10 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
 
     public function testDomainMetadata() {
         $domainName = $this->_testDomainNamePrefix . '_testDomainMetadata';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
-            $metadata = $this->_amazon->domainMetadata($domainName);
+            $metadata = $this->request('domainMetadata', array($domainName));
             $this->assertTrue(is_array($metadata));
             $this->assertGreaterThan(0, count($metadata));
             $this->assertTrue(array_key_exists('ItemCount', $metadata));
@@ -411,42 +452,42 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(array_key_exists('Timestamp', $metadata));
 
             // Delete the domain
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
 
 	public function testCreateDomain() {
 	    $domainName = $this->_testDomainNamePrefix . '_testCreateDomain';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
-            $domainListPage = $this->_amazon->listDomains();
+            $domainListPage = $this->request('listDomains');
             $this->assertContains($domainName, $domainListPage->getData());
             // Delete the domain
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
 
 	public function testDeleteDomain() {
 	    $domainName = $this->_testDomainNamePrefix . '_testDeleteDomain';
-        $this->_amazon->deleteDomain($domainName);
-        $this->_amazon->createDomain($domainName);
+        $this->request('deleteDomain', array($domainName));
+        $this->request('createDomain', array($domainName));
         try {
-            $domainListPage = $this->_amazon->listDomains();
+            $domainListPage = $this->request('listDomains');
             $this->assertContains($domainName, $domainListPage->getData());
             $this->assertNull($domainListPage->getToken());
             // Delete the domain
-            $this->_amazon->deleteDomain($domainName);
-            $domainListPage = $this->_amazon->listDomains();
+            $this->request('deleteDomain', array($domainName));
+            $domainListPage = $this->request('listDomains');
             $this->assertNotContains($domainName, $domainListPage->getData());
         } catch(Exception $e) {
-            $this->_amazon->deleteDomain($domainName);
+            $this->request('deleteDomain', array($domainName));
             throw $e;
         }
     }
@@ -463,7 +504,7 @@ class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
 
-        // $this->_amazon->deleteDomain($this->_testDomainNamePrefix);
+        // $this->request('deleteDomain', array($this->_testDomainNamePrefix));
         // Delete domains
 
         unset($this->_amazon);
