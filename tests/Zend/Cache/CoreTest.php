@@ -519,6 +519,17 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
         $this->assertContains('id6', $ids);
     }
 
+    public function testLoggerSanity()
+    {
+        $this->_instance = new Zend_Cache_Core(array(
+            'logging' => true
+        ));
+        $this->_instance->setBackend($this->_backend);
+
+        $logger = $this->_instance->getOption('logger');
+        $this->assertType('Zend_Log', $logger);
+    }
+
     /**
      * @group ZF-10189
      */
