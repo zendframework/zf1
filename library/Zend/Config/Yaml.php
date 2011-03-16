@@ -284,7 +284,7 @@ class Zend_Config_Yaml extends Zend_Config
         $config   = array();
         $inIndent = false;
         while (list($n, $line) = each($lines)) {
-            $lineno = $n+1;
+            $lineno = $n + 1;
             if (strlen($line) == 0) {
                 continue;
             }
@@ -313,7 +313,7 @@ class Zend_Config_Yaml extends Zend_Config
 
             if (preg_match("/(\w+):\s*(.*)/", $line, $m)) {
                 // key: value
-                if ($m[2]) {
+                if (strlen($m[2])) {
                     // simple key: value
                     $value = $m[2];
                     // Check for booleans and constants
