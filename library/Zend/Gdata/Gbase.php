@@ -63,12 +63,12 @@ class Zend_Gdata_Gbase extends Zend_Gdata
     /**
      * Path to the customer items feeds on the Google Base server.
      */
-    const GBASE_ITEM_FEED_URI = 'http://www.google.com/base/feeds/items';
+    const GBASE_ITEM_FEED_URI = 'https://www.google.com/base/feeds/items';
 
     /**
      * Path to the snippets feeds on the Google Base server.
      */
-    const GBASE_SNIPPET_FEED_URI = 'http://www.google.com/base/feeds/snippets';
+    const GBASE_SNIPPET_FEED_URI = 'https://www.google.com/base/feeds/snippets';
 
     /**
      * Authentication service name for Google Base

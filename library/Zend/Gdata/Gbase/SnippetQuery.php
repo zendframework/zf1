@@ -47,7 +47,7 @@ class Zend_Gdata_Gbase_SnippetQuery extends Zend_Gdata_Gbase_Query
     /**
      * Path to the snippets feeds on the Google Base server.
      */
-    const BASE_SNIPPET_FEED_URI = 'http://www.google.com/base/feeds/snippets';
+    const BASE_SNIPPET_FEED_URI = 'https://www.google.com/base/feeds/snippets';
 
     /**
      * The default URI for POST methods
