@@ -177,7 +177,7 @@ class Zend_Tool_Project_Provider_Controller
                 $response->appendContent('Would create a view script for the index action method at ' . $indexActionViewResource->getContext()->getPath());
             }
 
-            if ($testActionResource) {
+            if ($testingEnabled) {
                 $response->appendContent('Would create a controller test file at ' . $testActionResource->getParentResource()->getContext()->getPath());
             }
 
@@ -193,7 +193,7 @@ class Zend_Tool_Project_Provider_Controller
                 $indexActionViewResource->create();
             }
 
-            if ($testActionResource) {
+            if ($testingEnabled) {
                 $response->appendContent('Creating a controller test file at ' . $testActionResource->getParentResource()->getContext()->getPath());
                 $testActionResource->getParentResource()->create();
                 $testActionResource->create();
