@@ -41,6 +41,34 @@ require_once 'Zend/Loader.php';
  */
 class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @group ZF-11142, ZF-8446, ZF-9289
+     */
+    public function testTwoValidatorsInChainShowCorrectError()
+    {
+        require_once 'Zend/Validate/NotEmpty.php';
+        require_once 'Zend/Validate/Float.php';
+        $validators = array(
+            'field1'  => array(
+                    'NotEmpty', 'Float',
+                    'presence'  => 'required',
+                    'messages'  => array(
+                        'Field1 is empty',
+                        array(Zend_Validate_Float::NOT_FLOAT => "Field1 must be a number.")
+                    )
+                ),
+            'field2'    => array(
+                    'presence' => 'required'
+                )
+        );
+        
+        $data = array('field1' => 0.0, 'field2' => '');
+        $input = new Zend_Filter_Input(null, $validators, $data);
+        $this->assertFalse($input->isValid());
+        $messages = $input->getMessages();
+        $this->assertSame($messages['field2']["isEmpty"], "You must give a non-empty value for field 'field2'");
+        $this->assertSame('Field1 is empty', $messages['field1'][Zend_Validate_NotEmpty::IS_EMPTY], 'custom message not shown');
+    }
 
     public function testFilterDeclareSingle()
     {

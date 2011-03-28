@@ -801,6 +801,9 @@ class Zend_Filter_Input
             $this->_data = array();
             return;
         }
+        
+        // remember the default not empty message in case we want to temporarily change it        
+        $preserveDefaultNotEmptyMessage = $this->_defaults[self::NOT_EMPTY_MESSAGE];
 
         foreach ($this->_validatorRules as $ruleName => &$validatorRule) {
             /**
@@ -844,6 +847,8 @@ class Zend_Filter_Input
             } else if (!is_array($validatorRule[self::MESSAGES])) {
                 $validatorRule[self::MESSAGES] = array($validatorRule[self::MESSAGES]);
             } else if (array_intersect_key($validatorList, $validatorRule[self::MESSAGES])) {
+                // this seems pointless... it just re-adds what it already has...
+                // I can disable all this and not a single unit test fails...
                 // There are now corresponding numeric keys in the validation rule messages array
                 // Treat it as a named messages list for all rule validators
                 $unifiedMessages = $validatorRule[self::MESSAGES];
@@ -876,6 +881,10 @@ class Zend_Filter_Input
                         }
 
                         if ($validator instanceof Zend_Validate_NotEmpty) {
+                            /* we are changing the defaults here, this is alright if all subsequent validators are also a not empty
+                            * validator, but it goes wrong if one of them is not AND is required!!!
+                            * that is why we restore the default value at the end of this loop
+                            */ 
                             $this->_defaults[self::NOT_EMPTY_MESSAGE] = $value;
                         }
                     }
@@ -897,7 +906,12 @@ class Zend_Filter_Input
             } else {
                 $this->_validateRule($validatorRule);
             }
+            
+            // reset the default not empty message
+            $this->_defaults[self::NOT_EMPTY_MESSAGE] = $preserveDefaultNotEmptyMessage;
         }
+        
+
 
         /**
          * Unset fields in $_data that have been added to other arrays.
