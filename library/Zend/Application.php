@@ -376,9 +376,12 @@ class Zend_Application
     protected function _loadConfig($file)
     {
         $environment = $this->getEnvironment();
-        $suffix      = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $suffix      = pathinfo($file, PATHINFO_EXTENSION);
+        $suffix      = ($suffix === 'dist')
+                     ? pathinfo(basename($file, ".$suffix"), PATHINFO_EXTENSION)
+                     : $suffix;
 
-        switch ($suffix) {
+        switch (strtolower($suffix)) {
             case 'ini':
                 $config = new Zend_Config_Ini($file, $environment);
                 break;

@@ -285,6 +285,25 @@ class Zend_Application_ApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-10898
+     */
+    public function testPassingStringIniDistfileConfigPathOptionToConstructorShouldLoadOptions()
+    {
+        $application = new Zend_Application('testing', dirname(__FILE__) . '/_files/appconfig.ini.dist');
+        $this->assertTrue($application->hasOption('foo'));
+    }
+
+    /**
+     * @group ZF-10898
+     */
+    public function testPassingArrayOptionsWithConfigKeyDistfileShouldLoadOptions()
+    {
+        $application = new Zend_Application('testing', array('bar' => 'baz', 'config' => dirname(__FILE__) . '/_files/appconfig.ini.dist'));
+        $this->assertTrue($application->hasOption('foo'));
+        $this->assertTrue($application->hasOption('bar'));
+    }
+
+    /**
      * @group ZF-10568
      */
     public function testPassingStringYamlConfigPathOptionToConstructorShouldLoadOptions()
