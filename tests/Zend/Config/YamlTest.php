@@ -89,7 +89,7 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $config->special->null);
         $this->assertType('string', $config->special->false);
         $this->assertEquals('', $config->special->false);
-        $this->assertInternalType('string', $config->special->zero);
+        $this->assertType('string', $config->special->zero);
         $this->assertEquals('0', $config->special->zero);
     }
 
