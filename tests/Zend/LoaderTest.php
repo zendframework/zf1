@@ -361,7 +361,7 @@ class Zend_LoaderTest extends PHPUnit_Framework_TestCase
             'Expected Zend_Loader_AutoloadableClass to be loaded');
 
         // and we verify it is the correct type
-        $this->assertType('Zend_Loader_AutoloadableClass', $obj,
+        $this->assertInstanceOf('Zend_Loader_AutoloadableClass', $obj,
             'Expected to instantiate Zend_Loader_AutoloadableClass, got '.get_class($obj));
 
         spl_autoload_unregister($function);
