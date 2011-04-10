@@ -318,6 +318,17 @@ class Zend_Form_Decorator_FormErrorsTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-11151
+     */
+    public function testOptionShowCustomFormErrors()
+    {
+        $this->decorator
+             ->setOption('showCustomFormErrors', true);
+
+        $this->assertTrue($this->decorator->getShowCustomFormErrors());
+    }
+
     public function markupOptionMethodsProvider()
     {
         return array(

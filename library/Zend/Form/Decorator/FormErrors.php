@@ -351,7 +351,7 @@ class Zend_Form_Decorator_FormErrors extends Zend_Form_Decorator_Abstract
     public function getShowCustomFormErrors()
     {
         if (null === $this->_showCustomFormErrors) {
-            if (null === ($how =  $this->getOption('showCustomFormErrors'))) {
+            if (null === ($show =  $this->getOption('showCustomFormErrors'))) {
                 $this->setShowCustomFormErrors($this->_defaults['showCustomFormErrors']);
             } else {
                 $this->setShowCustomFormErrors($show);
