@@ -341,6 +341,7 @@ class Zend_Text_Table
             }
 
             require_once 'Zend/Text/Table/Row.php';
+            require_once 'Zend/Text/Table/Column.php';
 
             $data   = $row;
             $row    = new Zend_Text_Table_Row();
