@@ -509,4 +509,32 @@ class Zend_Paginator_Adapter_DbSelectTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(2, $adapter->count());
     }
+
+    /**
+     * @group ZF-10704
+     */
+    public function testObjectSelectWithBind()
+    {
+        $select = $this->_db->select();
+        $select->from('test', array('number'))
+               ->where('number = ?')
+               ->distinct(true)
+               ->bind(array(250));
+
+        $adapter = new Zend_Paginator_Adapter_DbSelect($select);
+        $this->assertEquals(1, $adapter->count());
+
+        $select->reset(Zend_Db_Select::DISTINCT);
+        $select2 = clone $select;
+        $select2->reset(Zend_Db_Select::WHERE)
+                ->where('number = 500');
+
+        $selectUnion = $this->_db
+                           ->select()
+                           ->bind(array(250));
+
+        $selectUnion->union(array($select, $select2));
+        $adapter = new Zend_Paginator_Adapter_DbSelect($selectUnion);
+        $this->assertEquals(2, $adapter->count());
+    }
 }

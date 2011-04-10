@@ -203,7 +203,10 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
         if (!empty($unionParts)) {
             $expression = new Zend_Db_Expr($countPart . $countColumn);
 
-            $rowCount = $db->select()->from($rowCount, $expression);
+            $rowCount = $db
+                            ->select()
+                            ->bind($rowCount->getBind())
+                            ->from($rowCount, $expression);
         } else {
             $columnParts = $rowCount->getPart(Zend_Db_Select::COLUMNS);
             $groupParts  = $rowCount->getPart(Zend_Db_Select::GROUP);
@@ -217,7 +220,10 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
              */
             if (($isDistinct && count($columnParts) > 1) || count($groupParts) > 1 || !empty($havingParts)) {
                 $rowCount->reset(Zend_Db_Select::ORDER);
-                $rowCount = $db->select()->from($rowCount);
+                $rowCount = $db
+                               ->select()
+                               ->bind($rowCount->getBind())
+                               ->from($rowCount);
             } else if ($isDistinct) {
                 $part = $columnParts[0];
 
