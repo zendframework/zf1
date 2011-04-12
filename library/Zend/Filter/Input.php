@@ -885,7 +885,13 @@ class Zend_Filter_Input
                             * validator, but it goes wrong if one of them is not AND is required!!!
                             * that is why we restore the default value at the end of this loop
                             */ 
-                            $this->_defaults[self::NOT_EMPTY_MESSAGE] = $value;
+                            if (is_array($value)) {
+                                $temp = $value; // keep the original value
+                                $this->_defaults[self::NOT_EMPTY_MESSAGE] = array_pop($temp);
+                                unset($temp);
+                            } else {
+                                $this->_defaults[self::NOT_EMPTY_MESSAGE] = $value;
+                            }
                         }
                     }
 

@@ -41,6 +41,66 @@ require_once 'Zend/Loader.php';
  */
 class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 {
+
+     /**
+      * @group ZF-8446
+      * The issue reports about nested error messages. This is to assure these do not occur.
+      * 
+      * Example:
+      * Expected Result
+      *      array(2) {
+      *        ["field1"] => array(1) {
+      *          ["isEmpty"] => string(20) "'field1' is required"
+      *        }
+      *        ["field2"] => array(1) {
+      *          ["isEmpty"] => string(36) "Value is required and can't be empty"
+      *        }
+      *      }
+      *  Actual Result
+      *      array(2) {
+      *        ["field1"] => array(1) {
+      *          ["isEmpty"] => array(1) {
+      *            ["isEmpty"] => string(20) "'field1' is required"
+      *          }
+      *        }
+      *        ["field2"] => array(1) {
+      *          ["isEmpty"] => array(1) {
+      *            ["isEmpty"] => string(20) "'field1' is required"
+      *          }
+      *        }
+      *      }
+     */
+    public function testNoNestedMessageArrays()
+    {
+        require_once 'Zend/Validate/NotEmpty.php';
+        $data = array(
+            'field1' => '',
+            'field2' => ''
+        );
+        
+        $validators = array(
+            'field1' => array(
+                new Zend_Validate_NotEmpty(),
+                Zend_Filter_Input::MESSAGES => array(
+                    array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => '\'field1\' is required'
+                    )
+                )
+            ),
+        
+            'field2' => array(
+                new Zend_Validate_NotEmpty()
+            )
+        );
+        
+        $input = new Zend_Filter_Input( null, $validators, $data );
+        
+        $this->assertFalse($input->isValid());
+        $messages = $input->getMessages();
+        $this->assertFalse(is_array($messages['field1']['isEmpty']), 'oh oh, we  may have got nested messages');
+        $this->assertTrue(isset($messages['field1']['isEmpty']), 'oh no, we not even got the normally expected messages');
+    }
+    
     /**
      * @group ZF-11142, ZF-8446, ZF-9289
      */
