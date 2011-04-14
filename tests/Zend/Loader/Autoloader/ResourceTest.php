@@ -411,7 +411,7 @@ class Zend_Loader_Autoloader_ResourceTest extends PHPUnit_Framework_TestCase
      * @group ZF-8364
      * @group ZF-6727
      */
-    public function testAuloaderResourceGetClassPathReturnFalse()
+    public function testAutoloaderResourceGetClassPathReturnFalse()
     {
         $this->loader->addResourceTypes(array(
             'model' => array('path' => 'models', 'namespace' => 'Model'),
@@ -453,6 +453,18 @@ class Zend_Loader_Autoloader_ResourceTest extends PHPUnit_Framework_TestCase
 
         // Check that autoloaders are configured the same
         $this->assertEquals($loader1, $loader2);
+    }
+
+    /**
+     * @group ZF-11219
+     */
+    public function testMatchesMultiLevelNamespaces()
+    {
+        $this->loader->setNamespace('Foo_Bar')
+            ->setBasePath(dirname(__FILE__) . '/_files')
+            ->addResourceType('model', 'models', 'Model');
+        $path = $this->loader->getClassPath('Foo_Bar_Model_Baz');
+        $this->assertEquals(dirname(__FILE__) . '/_files/models/Baz.php', $path, var_export($path, 1));
     }
 }
 
