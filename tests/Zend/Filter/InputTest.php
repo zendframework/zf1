@@ -42,6 +42,44 @@ require_once 'Zend/Loader.php';
 class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @group ZF-11267
+     * If we pass in a validator instance that has a preset custom message, this
+     * message should be used.
+     */
+    function testIfCustomMessagesOnValidatorInstancesCanBeUsed()
+    {
+        // test with a Digits validator
+        require_once 'Zend/Validate/Digits.php';
+        require_once 'Zend/Validate/NotEmpty.php';
+        $data = array('field1' => 'invalid data');
+        $customMessage = 'Hey, that\'s not a Digit!!!';
+        $validator = new Zend_Validate_Digits();
+        $validator->setMessage($customMessage, 'notDigits');
+        $this->assertFalse($validator->isValid('foo'), 'standalone validator thinks \'foo\' is a valid digit');
+        $messages = $validator->getMessages();
+        $this->assertSame($messages['notDigits'], $customMessage, 'stanalone validator does not have custom message');
+        $validators = array('field1' => $validator);
+        $input = new Zend_Filter_Input(null, $validators, $data);
+        $this->assertFalse($input->isValid(), 'invalid input is valid');
+        $messages = $input->getMessages();
+        $this->assertSame($messages['field1']['notDigits'], $customMessage, 'The custom message is not used');
+        
+        // test with a NotEmpty validator
+        $data = array('field1' => '');
+        $customMessage = 'You should really supply a value...';
+        $validator = new Zend_Validate_NotEmpty();
+        $validator->setMessage($customMessage, 'isEmpty');
+        $this->assertFalse($validator->isValid(''), 'standalone validator thinks \'\' is not empty');
+        $messages = $validator->getMessages();
+        $this->assertSame($messages['isEmpty'], $customMessage, 'stanalone NotEmpty validator does not have custom message');
+        $validators = array('field1' => $validator);
+        $input = new Zend_Filter_Input(null, $validators, $data);
+        $this->assertFalse($input->isValid(), 'invalid input is valid');
+        $messages = $input->getMessages();
+        $this->assertSame($messages['field1']['isEmpty'], $customMessage, 'For the NotEmpty validator the custom message is not used');
+    }
+    
+    /**
      * 
      * If setAllowEmpty(true) is called, all fields are optional, but fields with
      * a NotEmpty validator attached to them, should contain a non empty value.
