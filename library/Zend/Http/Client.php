@@ -1019,6 +1019,10 @@ class Zend_Http_Client
             // If we got redirected, look for the Location header
             if ($response->isRedirect() && ($location = $response->getHeader('location'))) {
 
+                // Avoid problems with buggy servers that add whitespace at the
+                // end of some headers (See ZF-11283)
+                $location = trim($location);
+                
                 // Check whether we send the exact same request again, or drop the parameters
                 // and send a GET request
                 if ($response->getStatus() == 303 ||
@@ -1030,7 +1034,7 @@ class Zend_Http_Client
                 }
 
                 // If we got a well formed absolute URI
-                if (Zend_Uri_Http::check($location)) {
+                if (($scheme = substr($location, 0, 6)) && ($scheme == 'http:/' || $scheme == 'https:')) {
                     $this->setHeaders('host', null);
                     $this->setUri($location);
 

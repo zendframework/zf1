@@ -627,6 +627,36 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
 			return;
 		}
     }
+    
+	/**
+     * Test that we can handle trailing space in location header
+     * 
+     * @group ZF-11283
+     * @link http://framework.zend.com/issues/browse/ZF-11283
+     */
+    public function testRedirectWithTrailingSpaceInLocationHeaderZF11283()
+    {
+        $this->_client->setUri('http://example.com/');
+        $this->_client->setAdapter('Zend_Http_Client_Adapter_Test');
+        
+        $adapter = $this->_client->getAdapter(); /* @var $adapter Zend_Http_Client_Adapter_Test */
+        
+        $adapter->setResponse(<<<RESPONSE
+HTTP/1.1 302 Redirect
+Content-Type: text/html; charset=UTF-8
+Location: /test   
+Server: Microsoft-IIS/7.0
+Date: Tue, 19 Apr 2011 11:23:48 GMT
+
+RESPONSE
+        );
+
+        $res = $this->_client->request('GET');
+        
+        $lastUri = $this->_client->getUri();
+        
+        $this->assertEquals("/test", $lastUri->getPath());
+    }
 
     /**
      * Data providers
