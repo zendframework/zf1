@@ -128,9 +128,9 @@ class AuthController extends Zend_Controller_Action
     {
         $db = $this->_getParam('db');
 
-        $loginForm = new Default_Form_Auth_Login($_POST);
+        $loginForm = new Default_Form_Auth_Login();
 
-        if ($loginForm->isValid()) {
+        if ($loginForm->isValid($_POST)) {
 
             $adapter = new Zend_Auth_Adapter_DbTable(
                 $db,
@@ -148,7 +148,7 @@ class AuthController extends Zend_Controller_Action
 
             if ($result->isValid()) {
                 $this->_helper->FlashMessenger('Successful Login');
-                $this->redirect('/');
+                $this->_redirect('/');
                 return;
             }
 
