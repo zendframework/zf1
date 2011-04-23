@@ -71,7 +71,7 @@ class Zend_Form_Element_File extends Zend_Form_Element_Xhtml
     /**
      * Load default decorators
      *
-     * @return void
+     * @return Zend_Form_Element_File
      */
     public function loadDefaultDecorators()
     {

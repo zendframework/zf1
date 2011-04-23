@@ -253,7 +253,7 @@ class Zend_Form_Element_Captcha extends Zend_Form_Element_Xhtml
     /**
      * Load default decorators
      *
-     * @return void
+     * @return Zend_Form_Element_Captcha
      */
     public function loadDefaultDecorators()
     {

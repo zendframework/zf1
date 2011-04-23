@@ -657,7 +657,7 @@ class Zend_Form_DisplayGroup implements Iterator,Countable
     /**
      * Load default decorators
      *
-     * @return void
+     * @return Zend_Form_DisplayGroup
      */
     public function loadDefaultDecorators()
     {

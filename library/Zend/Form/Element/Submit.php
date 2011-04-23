@@ -108,7 +108,7 @@ class Zend_Form_Element_Submit extends Zend_Form_Element_Xhtml
      *
      * Uses only 'Submit' and 'DtDdWrapper' decorators by default.
      *
-     * @return void
+     * @return Zend_Form_Element_Submit
      */
     public function loadDefaultDecorators()
     {

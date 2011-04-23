@@ -55,7 +55,7 @@ class Zend_Form_Element_Image extends Zend_Form_Element_Xhtml
     /**
      * Load default decorators
      *
-     * @return void
+     * @return Zend_Form_Element_Image
      */
     public function loadDefaultDecorators()
     {

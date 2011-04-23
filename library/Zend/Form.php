@@ -3276,7 +3276,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     /**
      * Load the default decorators
      *
-     * @return void
+     * @return Zend_Form
      */
     public function loadDefaultDecorators()
     {
