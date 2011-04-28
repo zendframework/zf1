@@ -262,6 +262,15 @@ class Zend_Dojo_Form_Element_EditorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->element->getDijitParam('updateInterval'), $this->element->getUpdateInterval());
         $this->assertEquals(300, $this->element->getUpdateInterval());
     }
+    
+    public function testCanAddMultipleSeparatorsToEditor()
+    {
+        $this->element->setPlugins(array('undo', '|', 'bold', '|', 'italic'));
+        
+        $plugins = $this->element->getPlugins();
+        $this->assertEquals(5, count($plugins));
+    }
+    
 }
 
 // Call Zend_Dojo_Form_Element_EditorTest::main() if this source file is executed directly.

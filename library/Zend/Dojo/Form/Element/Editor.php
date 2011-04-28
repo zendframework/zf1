@@ -247,7 +247,7 @@ class Zend_Dojo_Form_Element_Editor extends Zend_Dojo_Form_Element_Dijit
     {
         $plugin = (string) $plugin;
         $plugins = $this->getPlugins();
-        if (in_array($plugin, $plugins)) {
+        if (in_array($plugin, $plugins) && $plugin !== '|') {
             return $this;
         }
 
