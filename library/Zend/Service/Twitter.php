@@ -362,6 +362,14 @@ class Zend_Service_Twitter extends Zend_Rest_Client
                 case 'page':
                     $_params['page'] = (int) $value;
                     break;
+                case 'max_id':
+                    $_params['max_id'] = $this->_validInteger($value);
+                    break;
+                case 'include_rts':
+                case 'trim_user':
+                case 'include_entities':
+                    $_params[strtolower($key)] = $value ? '1' : '0';
+                    break;                    
                 default:
                     break;
             }

@@ -648,6 +648,27 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-11014
+     */
+    public function testStatusFriendsTimelineShouldHonorAllFlags()
+    {
+        $params = array(
+            'page'             => 3,
+            'include_rts'      => '1',
+            'trim_user'        => '1',
+            'include_entities' => '1',
+        );
+        $twitter = new Zend_Service_Twitter();
+        $twitter->setLocalHttpClient($this->_stubTwitter(
+            'statuses/friends_timeline.xml', Zend_Http_Client::GET, 'statuses.friends_timeline.page.xml',
+            $params
+        ));  
+
+        // Assertions are part of mocking
+        $timeline = $twitter->statusFriendsTimeline($params);
+    }
+
+    /**
      * @group ZF-11023
      */
     public function testConstructorPassedObjectZendConfig()
@@ -657,6 +678,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $twitter = new Zend_Service_Twitter($config);
         $this->assertEquals('zf', $twitter->getUsername());
     }
+          
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Service_TwitterTest2::main') {
