@@ -4451,6 +4451,16 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertSame(1, count($errorMessages2));
         $this->assertSame($errorString, $errorMessages2[0]);
     }
+    
+    /**
+     * @group ZF-10865
+     * @expectedException Zend_Form_Exception
+     */
+    public function testExceptionThrownWhenAddElementsIsGivenNullValue()
+    {
+        $form = new Zend_Form();
+        $form->addElement(NULL);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
