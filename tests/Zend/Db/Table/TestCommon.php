@@ -671,6 +671,28 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertEquals($insertResult, $lastInsertId);
         $this->assertEquals(5, $lastInsertId);
     }
+    
+    /**
+     * @group ZF-3837
+     */
+    public function testTableInsertWhenAutoIncrementFieldIsAnEmptyStringShouldProduceNewAutoIncrementValue()
+    {
+        $table = $this->_table['bugs'];
+        $row = array (
+            'bug_id'          => '',
+            'bug_description' => 'New bug',
+            'bug_status'      => 'NEW',
+            'created_on'      => '2007-04-02',
+            'updated_on'      => '2007-04-02',
+            'reported_by'     => 'micky',
+            'assigned_to'     => 'goofy',
+            'verified_by'     => 'dduck'
+        );
+        $insertResult = $table->insert($row);
+        $lastInsertId = $this->_db->lastInsertId();
+        $this->assertEquals($insertResult, $lastInsertId);
+        $this->assertEquals(5, $lastInsertId);
+    }
 
     public function testTableInsertWithSchema()
     {
