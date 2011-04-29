@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21829 -->
+<!-- EN-Revision: 23886 -->
 <sect1 id="zend.log.overview">
     <title>概要</title>
 
@@ -91,8 +91,8 @@ $logger->log('Informational message', Zend_Log::INFO);
 ]]></programlisting>
 
       <para>
-      <methodname>log()</methodname> メソッドの最初のパラメータはメッセージを表す文字列で、
-      二番目のパラメータは優先度を表す整数値です。
+      <methodname>log()</methodname> メソッドの最初のパラメータは文字列の <property>message</property> で、
+      二番目のパラメータは整数の <property>priority</property> です。
       優先度は、ログのインスタンスが理解できる形式の値のいずれかでなければなりません。
       これについては次の節で説明します。
       </para>
@@ -154,7 +154,7 @@ DEBUG   = 7;  // デバッグ (Debug): デバッグメッセージ
 
     <para>
       これらの優先度は適当に指定しているわけではありません。
-      もとは BSD の <code>syslog</code> プロトコルに由来するもので、
+      もとは BSD の syslog プロトコルに由来するもので、
       <ulink url="http://tools.ietf.org/html/rfc3164">RFC-3164</ulink>
       で示されています。それぞれの名前と優先度番号は、<acronym>PHP</acronym> におけるもうひとつのログ記録システムである
       <ulink url="http://pear.php.net/package/log">PEAR Log</ulink>
@@ -185,7 +185,7 @@ $logger->addPriority('FOO', 8);
 
     <para>
       上の例では、新しい優先度 <constant>FOO</constant> を
-      <code>8</code> という値で定義しています。これで、次のようにして新しい優先度でログ出力できるようになります。
+      '8' という値で定義しています。これで、次のようにして新しい優先度でログ出力できるようになります。
     </para>
 
       <programlisting language="php"><![CDATA[
@@ -205,13 +205,13 @@ $logger->foo('Foo Message');
       <methodname>log()</methodname> メソッドやその仲間をコールした際に、
       ログのイベントが作成されます。これは単純な連想配列で、
       ライターに渡されるイベントの内容を表します。この配列には、
-      <code>timestamp</code>、<code>message</code>、<code>priority</code> および
-      <code>priorityName</code> のキーが常に存在します。
+      <property>timestamp</property>、<property>message</property>、<property>priority</property> および
+      <property>priorityName</property> のキーが常に存在します。
     </para>
 
     <para>
-      <code>event</code> 配列の作成は完全に透過的です。
-      しかし、<code>event</code> 配列について知っておかないと、
+      <property>event</property> 配列の作成は完全に透過的です。
+      しかし、<property>event</property> 配列について知っておかないと、
       上で示した既存のセットに含まれない項目を追加できません。
     </para>
 
@@ -225,7 +225,7 @@ $logger->setEventItem('pid', getmypid());
 ]]></programlisting>
 
     <para>
-      上の例は、<code>pid</code> という名前の新しい項目を作成して現在のプロセスの
+      上の例は、<property>pid</property> という名前の新しい項目を作成して現在のプロセスの
       PID を格納します。新しい値が設定されると、他のすべてのイベントデータと同様に
       すべてのライターから自動的にアクセス可能となります。項目を上書きするには、
       もう一度好きなときに <methodname>setEventItem()</methodname> メソッドをコールします。
