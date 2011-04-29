@@ -315,7 +315,7 @@ class Zend_Config_Yaml extends Zend_Config
                 // key: value
                 if (strlen($m[2])) {
                     // simple key: value
-                    $value = $m[2];
+                    $value = rtrim(preg_replace("/#.*$/", "", $m[2]));
                     // Check for booleans and constants
                     if (preg_match('/^(t(rue)?|on|y(es)?)$/i', $value)) {
                         $value = true;
