@@ -933,6 +933,20 @@ class Zend_Rest_RouteTest extends PHPUnit_Framework_TestCase
         $url = $route->assemble($params, false, false);
         $this->assertEquals('users/index/1/extra/parameter/another/parameter', $url);
     }
+    /**
+     * @group ZF-9115
+     */
+    public function test_request_get_user_params()
+    {
+        $uri = Zend_Uri::factory('http://localhost.com/user/index?a=1&b=2');
+        $request = new Zend_Controller_Request_Http($uri);
+        $request->setParam('test', 5);
+        $config = array('mod'=>array('user'));
+        $this->_invokeRouteMatch($request, $config);
+        $this->assertEquals(array("test"=>5), $request->getUserParams());
+        $this->assertEquals(array("test"=>5,"a"=>1,"b"=>2), $request->getParams());
+    }
+
 
     private function _buildRequest($method, $uri)
     {
