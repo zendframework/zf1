@@ -412,4 +412,22 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_validator->isValid('example.com..'));
         $this->assertFalse($this->_validator->isValid('1.2.3.4.'));
     }
+    
+    /**
+     * @group ZF-11334
+     * @see http://www.ietf.org/rfc/rfc2732.txt
+     */
+    public function testSupportsIpv6AddressesWhichContainHexDigitF()
+    {
+        $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+        
+        $this->assertTrue($validator->isValid('FEDC:BA98:7654:3210:FEDC:BA98:7654:3210'));
+        $this->assertTrue($validator->isValid('1080:0:0:0:8:800:200C:417A'));
+        $this->assertTrue($validator->isValid('3ffe:2a00:100:7031::1'));
+        $this->assertTrue($validator->isValid('1080::8:800:200C:417A'));
+        $this->assertTrue($validator->isValid('::192.9.5.5'));
+        $this->assertTrue($validator->isValid('::FFFF:129.144.52.38'));
+        $this->assertTrue($validator->isValid('2010:836B:4179::836B:4179'));
+    }
+
 }
