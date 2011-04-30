@@ -430,4 +430,19 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
         ), $uri->getQueryAsArray());
         $this->assertEquals('a=1&c=3', $uri->getQuery());
     }
+    
+    /**
+     * @group ZF-11188
+     * @see http://www.ietf.org/rfc/rfc2732.txt
+     */
+    public function testParserSupportsLiteralIpv6AddressesInUri()
+    {
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/index.html')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[1080:0:0:0:8:800:200C:417A]/index.html')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[3ffe:2a00:100:7031::1]')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[1080::8:800:200C:417A]/foo')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[::192.9.5.5]/ipng')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[::FFFF:129.144.52.38]:80/index.html')->valid());
+      $this->assertTrue(Zend_Uri_Http::fromString('http://[2010:836B:4179::836B:4179]')->valid());
+    }
 }
