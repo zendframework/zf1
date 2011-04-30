@@ -839,6 +839,25 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         $body = $this->response->getBody();
         $this->assertContains('SampleZfHelper invoked', $body, 'Received ' . $body);
     }
+    
+    /**
+     * @group ZF-11127
+     */
+    public function testViewSuffixInstanceNotSharedWhenViewHelperIsCloned()
+    {
+        $a = new Zend_Controller_Action_Helper_ViewRenderer();
+        $a->init();
+        $a->setViewSuffix('A');
+        
+        $this->assertEquals('A', $a->getViewSuffix());
+        
+        $b = clone $a;        
+        $this->assertEquals('A', $b->getViewSuffix());
+        $b->setViewSuffix('B');
+        
+        $this->assertEquals('B', $b->getViewSuffix());
+        $this->assertNotEquals('B', $a->getViewSuffix());
+    }
 
     protected function _normalizePath($path)
     {
