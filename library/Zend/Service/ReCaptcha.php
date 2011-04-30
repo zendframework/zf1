@@ -45,21 +45,21 @@ class Zend_Service_ReCaptcha extends Zend_Service_Abstract
      *
      * @var string
      */
-    const API_SERVER = 'http://api.recaptcha.net';
+    const API_SERVER = 'http://www.google.com/recaptcha/api';
 
     /**
      * URI to the secure API
      *
      * @var string
      */
-    const API_SECURE_SERVER = 'https://api-secure.recaptcha.net';
+    const API_SECURE_SERVER = 'https://www.google.com/recaptcha/api';
 
     /**
      * URI to the verify server
      *
      * @var string
      */
-    const VERIFY_SERVER = 'http://api-verify.recaptcha.net/verify';
+    const VERIFY_SERVER = 'http://www.google.com/recaptcha/api/verify';
 
     /**
      * Public key used when displaying the captcha
@@ -384,6 +384,8 @@ class Zend_Service_ReCaptcha extends Zend_Service_Abstract
 
             throw new Zend_Service_ReCaptcha_Exception('Missing public key');
         }
+
+        var_dump(self::API_SERVER);
 
         $host = self::API_SERVER;
 
