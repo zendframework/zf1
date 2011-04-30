@@ -5669,6 +5669,16 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $date = new Zend_Date(array('year' => 2008, 'month' => 10, 'day' => 12));
         $this->assertEquals('2008年10月12日', $date->get(Zend_Date::DATE_LONG, 'zh'));
     }
+    /** 
+     * @group ZF-10492
+     */
+    public function test_farFutureDate()
+    {
+        $t = '2041-08-01 00:00:00';
+        $date = new Zend_Date($t, 'yyyy-MM-dd HH:mm:ss');
+        $this->assertEquals($t, $date->toString('yyyy-MM-dd HH:mm:ss'));
+    }
+
 }
 
 class Zend_Date_TestHelper extends Zend_Date
