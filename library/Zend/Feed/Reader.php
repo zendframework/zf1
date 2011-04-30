@@ -266,6 +266,10 @@ class Zend_Feed_Reader
                     $cache->save($response->getHeader('Last-Modified'), $cacheId.'_lastmodified');
                 }
             }
+            if (empty($responseXml)) {
+                require_once 'Zend/Feed/Exception.php';
+                throw new Zend_Feed_Exception('Feed failed to load, got empty response body');
+            }
             return self::importString($responseXml);
         } elseif ($cache) {
             $data = $cache->load($cacheId);
@@ -279,6 +283,10 @@ class Zend_Feed_Reader
             }
             $responseXml = $response->getBody();
             $cache->save($responseXml, $cacheId);
+            if (empty($responseXml)) {
+                require_once 'Zend/Feed/Exception.php';
+                throw new Zend_Feed_Exception('Feed failed to load, got empty response body');
+            }
             return self::importString($responseXml);
         } else {
             $response = $client->request('GET');
@@ -286,7 +294,12 @@ class Zend_Feed_Reader
                 require_once 'Zend/Feed/Exception.php';
                 throw new Zend_Feed_Exception('Feed failed to load, got response code ' . $response->getStatus());
             }
-            $reader = self::importString($response->getBody());
+            $responseXml = $response->getBody();
+            if (empty($responseXml)) {
+                require_once 'Zend/Feed/Exception.php';
+                throw new Zend_Feed_Exception('Feed failed to load, got empty response body');
+            }
+            $reader = self::importString($responseXml);
             $reader->setOriginalSourceUri($uri);
             return $reader;
         }
@@ -320,6 +333,7 @@ class Zend_Feed_Reader
      */
     public static function importString($string)
     {
+        
         $libxml_errflag = libxml_use_internal_errors(true);
         $dom = new DOMDocument;
         $status = $dom->loadXML($string);
