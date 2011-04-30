@@ -149,7 +149,7 @@ class Zend_Log_Formatter_Xml extends Zend_Log_Formatter_Abstract
             if($key == "message") {
                 $value = htmlspecialchars($value, ENT_COMPAT, $enc);
             }
-            $elt->appendChild(new DOMElement($key, $value));
+            $elt->appendChild(new DOMElement($key, (string)$value));
         }
 
         $xml = $dom->saveXML();
