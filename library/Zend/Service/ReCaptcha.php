@@ -385,8 +385,6 @@ class Zend_Service_ReCaptcha extends Zend_Service_Abstract
             throw new Zend_Service_ReCaptcha_Exception('Missing public key');
         }
 
-        var_dump(self::API_SERVER);
-
         $host = self::API_SERVER;
 
         if ((bool) $this->_params['ssl'] === true) {
