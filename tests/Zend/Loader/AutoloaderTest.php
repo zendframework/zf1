@@ -405,6 +405,20 @@ class Zend_Loader_AutoloaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array($this, 'autoloadSecondLevel'), $al);
     }
 
+    /**
+     * @group ZF-10136
+     */
+    public function testMergedAutoloadersWithoutNamespace()
+    {
+        $this->autoloader
+             ->pushAutoloader('autoloadOne')
+             ->pushAutoloader('autoloadSecond');
+
+        $class = 'Zend_Autoloader_Test';
+        $autoloaders = $this->autoloader->getClassAutoloaders($class);
+        $this->assertEquals(3, count($autoloaders));
+    }
+
     public function addTestIncludePath()
     {
         set_include_path(dirname(__FILE__) . '/_files/' . PATH_SEPARATOR . $this->includePath);

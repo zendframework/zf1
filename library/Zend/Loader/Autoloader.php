@@ -352,7 +352,13 @@ class Zend_Loader_Autoloader
         }
 
         // Add non-namespaced autoloaders
-        $autoloaders = $autoloaders + $this->getNamespaceAutoloaders('');
+        $autoloadersNonNamespace = $this->getNamespaceAutoloaders('');
+        if (count($autoloadersNonNamespace)) {
+            foreach ($autoloadersNonNamespace as $ns) {
+                $autoloaders[] = $ns;
+            }
+            unset($autoloadersNonNamespace);
+        }
 
         // Add fallback autoloader
         if (!$namespace && $this->isFallbackAutoloader()) {
