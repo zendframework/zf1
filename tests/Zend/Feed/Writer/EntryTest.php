@@ -519,6 +519,16 @@ class Zend_Feed_Writer_EntryTest extends PHPUnit_Framework_TestCase
         $entry->setCommentCount('10');
         $this->assertEquals(10, $entry->getCommentCount());
     }
+    
+    /**
+     * @group ZF-11150
+     */
+    public function testSetCommentCountAcceptsZero()
+    {
+        $entry = new Zend_Feed_Writer_Entry();
+        $entry->setCommentCount(0);
+        $this->assertEquals(0, $entry->getCommentCount());
+    }
 
     public function testSetCommentCountThrowsExceptionOnInvalidEmptyParameter()
     {

@@ -295,7 +295,7 @@ class Zend_Feed_Writer_Entry
      */
     public function setCommentCount($count)
     {
-        if (empty($count) || !is_numeric($count) || (int) $count < 0) {
+        if ( !is_numeric($count) || (int) $count < 0) {
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception('Invalid parameter: "count" must be a non-empty integer number');
         }
