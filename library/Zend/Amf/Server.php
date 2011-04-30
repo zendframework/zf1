@@ -510,6 +510,7 @@ class Zend_Amf_Server implements Zend_Server_Interface
         {
             try {
                 if ($handleAuth) {
+                    $message = '';
                     if ($this->_handleAuth(
                         $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->userid,
                         $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->password)) {
