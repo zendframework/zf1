@@ -165,6 +165,21 @@ class Zend_Controller_Response_HttpTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($originalHeadersRaw == $updatedHeadersRaw);
     }
 
+       /**
+        * @group ZF-6038
+        */
+    public function testClearRawHeaderThatDoesNotExist()
+    {
+        $this->_response->setRawHeader('HTTP/1.0 404 Not Found');
+        $this->_response->setRawHeader('HTTP/1.0 401 Unauthorized');
+        $originalHeadersRaw = $this->_response->getRawHeaders();
+
+        $this->_response->clearRawHeader('HTTP/1.0 403 Forbidden');
+        $updatedHeadersRaw  = $this->_response->getRawHeaders();
+
+        $this->assertTrue($originalHeadersRaw == $updatedHeadersRaw);
+    }
+
     public function testClearAllHeaders()
     {
         $this->_response->setRawHeader('HTTP/1.0 404 Not Found');

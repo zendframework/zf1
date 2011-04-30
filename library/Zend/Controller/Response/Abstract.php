@@ -257,7 +257,9 @@ abstract class Zend_Controller_Response_Abstract
         }
 
         $key = array_search($headerRaw, $this->_headersRaw);
-        unset($this->_headersRaw[$key]);
+        if ($key !== false) {
+            unset($this->_headersRaw[$key]);
+        }
 
         return $this;
     }
