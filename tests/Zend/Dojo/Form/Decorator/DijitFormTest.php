@@ -75,7 +75,7 @@ class Zend_Dojo_Form_Decorator_DijitFormTest extends PHPUnit_Framework_TestCase
         Zend_Registry::_unsetInstance();
         Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
 
-        $this->view   = $this->getView();
+        $this->view      = $this->getView();
         $this->decorator = new Zend_Dojo_Form_Decorator_DijitForm();
         $this->element   = $this->getElement();
         $this->element->setView($this->view);
@@ -125,6 +125,25 @@ class Zend_Dojo_Form_Decorator_DijitFormTest extends PHPUnit_Framework_TestCase
     {
         $html = $this->decorator->render('');
         $this->assertContains('dojoType="dijit.form.Form"', $html);
+    }
+
+    public function testRenderingShouldEnforceFormName()
+    {
+        $element = new Zend_Dojo_Form();
+        $element->setAttribs(array(
+            'style'  => 'width: 300px; height: 500px;',
+            'class'  => 'someclass',
+            'dijitParams' => array(
+                'labelAttr' => 'foobar',
+                'typeAttr'  => 'barbaz',
+            ),
+        ));
+        $element->setView($this->view);
+        $decorator = new Zend_Dojo_Form_Decorator_DijitForm();
+        $decorator->setElement($element);
+
+        $html = $decorator->render('');
+        $this->assertRegexp('/id=".{1,}"/', $html, $html);
     }
 }
 
