@@ -211,6 +211,15 @@ class Zend_Dojo_View_Helper_EditorTest extends PHPUnit_Framework_TestCase
         $html = $this->helper->editor('foo');
         $this->assertRegexp('#<noscript><textarea[^>]*>#', $html, $html);
     }
+
+    /**
+     * @group ZF-11315
+     */
+    public function testHiddenInputShouldBeRenderedLast()
+    {
+        $html = $this->helper->editor('foo');
+        $this->assertRegexp('#</noscript><input#', $html, $html);
+    }
 }
 
 // Call Zend_Dojo_View_Helper_EditorTest::main() if this source file is executed directly.

@@ -121,8 +121,7 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Dijit
 
         $attribs = $this->_prepareDijit($attribs, $params, 'textarea');
 
-        $html  = '<input' . $this->_htmlAttribs($hiddenAttribs) . $this->getClosingBracket();
-        $html .= '<div' . $this->_htmlAttribs($attribs) . '>'
+        $html  = '<div' . $this->_htmlAttribs($attribs) . '>'
                . $value
                . "</div>\n";
 
@@ -132,6 +131,8 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Dijit
                . $this->view->formTextarea($hiddenId, $value, $attribs)
                . '</noscript>';
 
+        $html  .= '<input' . $this->_htmlAttribs($hiddenAttribs) . $this->getClosingBracket();
+        
         return $html;
     }
 
