@@ -77,12 +77,7 @@ abstract class Zend_Dojo_View_Helper_Slider extends Zend_Dojo_View_Helper_Dijit
         }
 
         $content = '';
-        // check required for IE
-        if (null === $value) {
-            $params['value'] = $params['minimum'];
-        } else {
-            $params['value'] = $value;
-        }
+        $attribs['value'] = $value;
 
         if (!array_key_exists('onChange', $attribs)) {
             $attribs['onChange'] = "dojo.byId('" . $id . "').value = arguments[0];";
