@@ -100,6 +100,10 @@ class Zend_Dojo_View_Helper_ComboBox extends Zend_Dojo_View_Helper_Dijit
             return $html;
         }
 
+        // required for correct type casting in declerative mode 
+        if (isset($params['autocomplete'])) {
+            $params['autocomplete'] = ($params['autocomplete']) ? 'true' : 'false';
+        }
         // do as normal select
         $attribs = $this->_prepareDijit($attribs, $params, 'element');
         return $this->view->formSelect($id, $value, $attribs, $options);
