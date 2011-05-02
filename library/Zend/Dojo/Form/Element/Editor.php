@@ -446,11 +446,11 @@ class Zend_Dojo_Form_Element_Editor extends Zend_Dojo_Form_Element_Dijit
      */
     public function setMinHeight($minHeight)
     {
-        if (!preg_match('/^\d+(em)?$/i', $minHeight)) {
+        if (!preg_match('/^\d+(em|px|%)?$/i', $minHeight)) {
             require_once 'Zend/Form/Element/Exception.php';
             throw new Zend_Form_Element_Exception('Invalid minHeight provided; must be integer or CSS measurement');
         }
-        if ('em' != substr($minHeight, -2)) {
+        if (!preg_match('/(em|px|%)$/', $minHeight)) {
             $minHeight .= 'em';
         }
         return $this->setDijitParam('minHeight', $minHeight);
