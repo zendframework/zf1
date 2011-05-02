@@ -76,6 +76,17 @@ abstract class Zend_View_Helper_HtmlElement extends Zend_View_Helper_Abstract
     }
 
     /**
+     * Is doctype strict?
+     *
+     * @return boolean
+     */
+    protected function _isStrictDoctype()
+    {
+        $doctype = $this->view->doctype();
+        return $doctype->isStrict();
+    }
+    
+    /**
      * Converts an associative array to a string of tag attributes.
      *
      * @access public

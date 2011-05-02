@@ -55,9 +55,20 @@ class Zend_View_Helper_Form extends Zend_View_Helper_FormElement
         if (array_key_exists('id', $attribs) && empty($attribs['id'])) {
             unset($attribs['id']);
         }
+        
+        if (!empty($name) && !($this->_isXhtml() && $this->_isStrictDoctype())) {
+            $name = ' name="' . $this->view->escape($name) . '"';
+        } else {
+            $name = '';
+        }
+        
+        if ( array_key_exists('name', $attribs) && empty($attribs['id'])) {
+            unset($attribs['id']);
+        }
 
         $xhtml = '<form'
                . $id
+               . $name
                . $this->_htmlAttribs($attribs)
                . '>';
 

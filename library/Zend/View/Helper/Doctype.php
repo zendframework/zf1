@@ -189,6 +189,24 @@ class Zend_View_Helper_Doctype extends Zend_View_Helper_Abstract
     {
         return (stristr($this->getDoctype(), 'xhtml') ? true : false);
     }
+
+    /**
+     * Is doctype strict?
+     *
+     * @return boolean
+     */
+    public function isStrict()
+    {
+        switch ( $this->getDoctype() )
+        {
+            case self::XHTML1_STRICT:
+            case self::XHTML11:
+            case self::HTML4_STRICT:
+                return true;
+            default: 
+                return false;
+        }
+    }
     
     /**
      * Is doctype HTML5? (HeadMeta uses this for validation)
