@@ -294,9 +294,9 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
             }
         }
 
-        $params['module']     = $module;
-        $params['controller'] = $controller;
-        $params['action']     = $action;
+        $params[$request->getModuleKey()]     = $module;
+        $params[$request->getControllerKey()] = $controller;
+        $params[$request->getActionKey()]     = $action;
 
         $router = $this->getFrontController()->getRouter();
         $url    = $router->assemble($params, 'default', true);
