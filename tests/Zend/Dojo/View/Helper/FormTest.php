@@ -127,6 +127,12 @@ class Zend_Dojo_View_Helper_FormTest extends PHPUnit_Framework_TestCase
         $html = $this->helper->form('foo', array('id' => 'bar'));
         $this->assertRegexp('/<form[^>]*(id="bar")/', $html);
     }
+    
+    public function testShouldNotRenderClosingTagIfContentIsFalse()
+    {
+        $html = $this->helper->form('foo');
+        $this->assertNotRegexp('/<\/form>/', $html);
+    }
 }
 
 // Call Zend_Dojo_View_Helper_FormTest::main() if this source file is executed directly.
