@@ -198,6 +198,24 @@ class Zend_Dojo_Form_Element_NumberSpinnerTest extends PHPUnit_Framework_TestCas
         $this->assertRegexp('/\'min\':\s*5/', $html, $html);
         $this->assertRegexp('/\'max\':\s*10/', $html, $html);
     }
+    
+    public function testSmallAndLargeDeltaCanBeSetAsDecimalValues()
+    {
+        $this->element->setSmallDelta(20.5);
+        $this->assertEquals(20.5, $this->element->getSmallDelta());
+        
+        $this->element->setLargeDelta(50.5);
+        $this->assertEquals(50.5, $this->element->getLargeDelta());
+    }
+    
+    public function testMinAndMaxValuesCanBeSetAsDecimalValues()
+    {
+        $this->element->setMin(20.5);
+        $this->assertEquals(20.5, $this->element->getMin());
+        
+        $this->element->setMax(50.5);
+        $this->assertEquals(50.5, $this->element->getMax());
+    }
 }
 
 // Call Zend_Dojo_Form_Element_NumberSpinnerTest::main() if this source file is executed directly.

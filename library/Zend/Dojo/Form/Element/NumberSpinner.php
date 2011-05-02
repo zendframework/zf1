@@ -92,7 +92,7 @@ class Zend_Dojo_Form_Element_NumberSpinner extends Zend_Dojo_Form_Element_Valida
      */
     public function setLargeDelta($delta)
     {
-        $this->setDijitParam('largeDelta', (int) $delta);
+        $this->setDijitParam('largeDelta', (float) $delta);
         return $this;
     }
 
@@ -114,7 +114,7 @@ class Zend_Dojo_Form_Element_NumberSpinner extends Zend_Dojo_Form_Element_Valida
      */
     public function setSmallDelta($delta)
     {
-        $this->setDijitParam('smallDelta', (int) $delta);
+        $this->setDijitParam('smallDelta', (float) $delta);
         return $this;
     }
 
@@ -187,7 +187,7 @@ class Zend_Dojo_Form_Element_NumberSpinner extends Zend_Dojo_Form_Element_Valida
         if ($this->hasDijitParam('constraints')) {
             $constraints = $this->getDijitParam('constraints');
         }
-        $constraints['min'] = (int) $value;
+        $constraints['min'] = (float) $value;
         $this->setDijitParam('constraints', $constraints);
         return $this;
     }
@@ -221,7 +221,7 @@ class Zend_Dojo_Form_Element_NumberSpinner extends Zend_Dojo_Form_Element_Valida
         if ($this->hasDijitParam('constraints')) {
             $constraints = $this->getDijitParam('constraints');
         }
-        $constraints['max'] = (int) $value;
+        $constraints['max'] = (float) $value;
         $this->setDijitParam('constraints', $constraints);
         return $this;
     }
