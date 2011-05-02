@@ -227,7 +227,6 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
         $unwise = array(
             'http://example.com/?q={',
             'http://example.com/?q=}',
-            'http://example.com/?q=|',
             'http://example.com/?q=\\',
             'http://example.com/?q=^',
             'http://example.com/?q=`',
@@ -248,7 +247,6 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
         $unwise = array(
             'http://example.com/?q={',
             'http://example.com/?q=}',
-            'http://example.com/?q=|',
             'http://example.com/?q=\\',
             'http://example.com/?q=^',
             'http://example.com/?q=`',
@@ -429,6 +427,16 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
             'c' => 3
         ), $uri->getQueryAsArray());
         $this->assertEquals('a=1&c=3', $uri->getQuery());
+    }
+    
+    /**
+     * @group ZF-11060
+     */
+    public function testAcceptsPipeCharacterAsPartOfUri()
+    {
+        $uri = Zend_Uri_Http::fromString('http://www.example.com/map?apistyle=a|b|c');
+        $this->assertType('Zend_Uri_Http', $uri);
+        $this->assertEquals('apistyle=a|b|c', $uri->getQuery());
     }
     
     /**
