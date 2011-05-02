@@ -246,7 +246,8 @@ class Zend_Oauth_Client extends Zend_Http_Client
             $oauthHeaderValue = $this->getToken()->toHeader(
                 $this->getUri(true),
                 $this->_config,
-                $this->_getSignableParametersAsQueryString()
+                $this->_getSignableParametersAsQueryString(),
+                $this->getRealm()
             );
             $this->setHeaders('Authorization', $oauthHeaderValue);
         } elseif ($requestScheme == Zend_Oauth::REQUEST_SCHEME_POSTBODY) {

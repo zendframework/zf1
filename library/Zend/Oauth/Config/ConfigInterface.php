@@ -72,4 +72,8 @@ interface Zend_Oauth_Config_ConfigInterface
     public function setToken(Zend_Oauth_Token $token);
 
     public function getToken();
+
+    public function setRealm($realm);
+
+    public function getRealm();
 }

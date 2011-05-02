@@ -98,4 +98,44 @@ class Zend_OauthTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('GET', $client->getRequestMethod());
         $this->assertEquals('http://www.example.com', $client->getSiteUrl());
     }
+
+    /**
+     * @group ZF-10851
+     */
+    public function testOauthClientAcceptsRealmConfigurationOption()
+    {
+        $options = array(
+            'realm'			=> 'http://www.example.com'
+        );
+
+        require_once 'Zend/Oauth/Client.php';
+        $client = new Zend_Oauth_Client($options);
+        $this->assertEquals('http://www.example.com', $client->getRealm());
+    }
+
+    /**
+     * @group ZF-10851
+     */
+    public function testOauthClientPreparationWithRealmConfigurationOption()
+    {
+        require_once "Zend/Oauth/Token/Access.php";
+        
+        $options = array(
+            'requestMethod' => 'GET',
+            'siteUrl'       => 'http://www.example.com',
+            'realm'			=> 'someRealm'
+        );
+        $token = new Zend_Oauth_Token_Access();
+
+        require_once 'Zend/Oauth/Client.php';
+        $client = new Zend_Oauth_Client($options);
+        $this->assertEquals(NULL,$client->getHeader('Authorization'));
+        
+        $client->setToken($token);
+        $client->setUri('http://oauth.example.com');
+        $client->prepareOauth();
+        
+        $this->assertNotContains('realm=""',$client->getHeader('Authorization'));
+        $this->assertContains('realm="someRealm"',$client->getHeader('Authorization'));
+    }
 }
