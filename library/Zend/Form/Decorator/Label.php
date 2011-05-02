@@ -285,7 +285,7 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
     /**
      * Get label to render
      *
-     * @return void
+     * @return string
      */
     public function getLabel()
     {
