@@ -132,6 +132,8 @@ class Zend_Dojo_Form_Element_ValidationTextBox extends Zend_Dojo_Form_Element_Te
      */
     public function setConstraints(array $constraints)
     {
+        $tmp = $this->getConstraints();
+        $constraints = array_merge($tmp, $constraints);
         array_walk_recursive($constraints, array($this, '_castBoolToString'));
         $this->setDijitParam('constraints', $constraints);
         return $this;

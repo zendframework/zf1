@@ -178,6 +178,15 @@ class Zend_Dojo_Form_Element_ValidationTextBoxTest extends PHPUnit_Framework_Tes
         $html = $this->element->render();
         $this->assertContains('dojoType="dijit.form.ValidationTextBox"', $html);
     }
+    
+    public function testSettingMultipleConstraintsShouldNotOverridePreviousConstraints()
+    {
+        $this->element->setConstraint('foo', 'bar');
+        
+        $this->element->setConstraints(array('spam' => 'ham'));
+        
+        $this->assertEquals('bar', $this->element->getConstraint('foo'));
+    }
 }
 
 // Call Zend_Dojo_Form_Element_ValidationTextBoxTest::main() if this source file is executed directly.
