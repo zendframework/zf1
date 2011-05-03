@@ -323,9 +323,9 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
     public function testAllowsInlineCommentsInValuesUsingHash()
     {
         $config = new Zend_Config_Yaml($this->_yamlInlineCommentsConfig, null);
-        $this->assertInstanceOf('Zend_Config', $config->resources);
-        $this->assertInstanceOf('Zend_Config', $config->resources->frontController);
-        $this->assertInternalType(
+        $this->assertType('Zend_Config', $config->resources);
+        $this->assertType('Zend_Config', $config->resources->frontController);
+        $this->assertType(
             'string', 
             $config->resources->frontController->controllerDirectory
         );
