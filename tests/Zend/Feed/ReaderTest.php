@@ -325,22 +325,15 @@ class Zend_Feed_ReaderTest extends PHPUnit_Framework_TestCase
      */
     public function testImportingUriWithEmptyResponseBodyTriggersException()
     {
-        try
-        {
-            $currClient = Zend_Feed_Reader::getHttpClient();
-            $testAdapter = new Zend_Http_Client_Adapter_Test();
-            $testAdapter->setResponse(new Zend_Http_Response(200,array(),''));
-            Zend_Feed_Reader::setHttpClient(new Zend_Http_Client(null, array(
-                'adapter'=>$testAdapter
-            )));
-        } catch(Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $currClient = Zend_Feed_Reader::getHttpClient();
+        $testAdapter = new Zend_Http_Client_Adapter_Test();
+        $testAdapter->setResponse(new Zend_Http_Response(200,array(),''));
+        Zend_Feed_Reader::setHttpClient(new Zend_Http_Client(null, array(
+            'adapter'=>$testAdapter
+        )));
         
-        try {
-            $result = Zend_Feed_Reader::import('http://www.example.com');
-            $this->fail('Expected exception Zend_Feed_Exception on empty response body');
-        } catch (Zend_Feed_Exception $e) {}        
+        $this->setExpectedException('Zend_Feed_Exception', 'Feed failed to load');
+        $result = Zend_Feed_Reader::import('http://www.example.com');
     }
 
     protected function _getTempDirectory()
