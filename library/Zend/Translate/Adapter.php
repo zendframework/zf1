@@ -212,6 +212,11 @@ abstract class Zend_Translate_Adapter {
         } else if (!is_array($options)) {
             $options = array('content' => $options);
         }
+        
+        if (!isset($options['content']) || empty($options['content'])) {
+            require_once 'Zend/Translate/Exception.php';
+            throw new Zend_Translate_Exception("Required option 'content' is missing");
+        }
 
         $originate = null;
         if (!empty($options['locale'])) {
