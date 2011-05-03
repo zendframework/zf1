@@ -307,9 +307,27 @@ class Zend_Db_Adapter_Pdo_MysqlTest extends Zend_Db_Adapter_Pdo_TestCommon
         $this->assertEquals(1, $result[0]['product_id']);
     }
 
+    /**
+     * @group ZF-11304
+     */
+    public function testAdapterIncludesCharsetInsideGeneratedPdoDsn()
+    {
+        $adapter = new ZendTest_Db_Adapter_Pdo_Mysql(array('dbname' => 'foo', 'charset' => 'XYZ', 'username' => 'bar', 'password' => 'foo'));
+        $this->assertEquals('mysql:dbname=foo;charset=XYZ', $adapter->_dsn());
+    }
+    
     public function getDriver()
     {
         return 'Pdo_Mysql';
     }
 
 }
+
+class ZendTest_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
+{
+    public function _dsn()
+    {
+        return parent::_dsn();
+    }
+}
+

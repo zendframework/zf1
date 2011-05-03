@@ -77,6 +77,19 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
     );
 
     /**
+     * Override _dsn() and ensure that charset is incorporated in mysql
+     * @see Zend_Db_Adapter_Pdo_Abstract::_dsn()
+     */
+    protected function _dsn()
+    {
+        $dsn = parent::_dsn();
+        if (isset($this->_config['charset'])) {
+            $dsn .= ';charset=' . $this->_config['charset'];
+        }
+        return $dsn;
+    }
+    
+    /**
      * Creates a PDO object and connects to the database.
      *
      * @return void
