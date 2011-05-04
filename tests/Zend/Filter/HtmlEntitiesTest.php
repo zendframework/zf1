@@ -208,4 +208,43 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
         $this->_filter->setQuoteStyle(ENT_NOQUOTES);
         $this->assertEquals($result, $this->_filter->filter($input));
     }
+
+    /**
+     * @group ZF-11344
+     */
+    public function testCorrectsForEncodingMismatch()
+    {
+        $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-text.txt');
+
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // we want to test the returned value
+        set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
+        $result = $this->_filter->filter($string);
+        restore_error_handler();
+
+        $this->assertTrue(strlen($result) > 0);
+    }
+
+    /**
+     * @group ZF-11344
+     */
+    public function testStripsUnknownCharactersWhenEncodingMismatchDetected()
+    {
+        $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-text.txt');
+
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // we want to test the returned value
+        set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
+        $result = $this->_filter->filter($string);
+        restore_error_handler();
+
+        $this->assertContains('&quot;&quot;', $result);
+    }
+
+    /**
+     * Null error handler; used when wanting to ignore specific error types
+     */
+    public function errorHandler($errno, $errstr)
+    {
+    }
 }
