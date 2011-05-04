@@ -1035,6 +1035,44 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertEquals('New bug', $row->bug_description);
     }
 
+    /**
+     * @group ZF-8944
+     * @group ZF-10598
+     * @group ZF-11253
+     */
+    public function testTableFetchRowOffset()
+    {
+        $reported_by = $this->_db->quoteIdentifier('reported_by', true);
+
+        $table = $this->_table['bugs'];
+        $row = $table->fetchRow(array("$reported_by = ?" => 'goofy'), null, 1);
+        $this->assertType('Zend_Db_Table_Row_Abstract', $row,
+            'Expecting object of type Zend_Db_Table_Row_Abstract, got '.get_class($row));
+        $bug_id = $this->_db->foldCase('bug_id');
+        $this->assertEquals(2, $row->$bug_id);
+    }
+
+    /**
+     * @group ZF-8944
+     * @group ZF-10598
+     * @group ZF-11253
+     */
+    public function testTableFetchRowOffsetSelect()
+    {
+        $reported_by = $this->_db->quoteIdentifier('reported_by', true);
+
+        $table = $this->_table['bugs'];
+        $select = $table->select()
+            ->where("$reported_by = ?", 'goofy')
+            ->limit(1, 1);
+
+        $row = $table->fetchRow($select);
+        $this->assertType('Zend_Db_Table_Row_Abstract', $row,
+            'Expecting object of type Zend_Db_Table_Row_Abstract, got '.get_class($row));
+        $bug_id = $this->_db->foldCase('bug_id');
+        $this->assertEquals(2, $row->$bug_id);
+    }
+
     public function testTableFetchRow()
     {
         $table = $this->_table['bugs'];

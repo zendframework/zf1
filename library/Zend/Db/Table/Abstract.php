@@ -1363,10 +1363,11 @@ abstract class Zend_Db_Table_Abstract
      *
      * @param string|array|Zend_Db_Table_Select $where  OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
      * @param string|array                      $order  OPTIONAL An SQL ORDER clause.
+     * @param int                               $offset OPTIONAL An SQL OFFSET value.
      * @return Zend_Db_Table_Row_Abstract|null The row results per the
      *     Zend_Db_Adapter fetch mode, or null if no row found.
      */
-    public function fetchRow($where = null, $order = null)
+    public function fetchRow($where = null, $order = null, $offset = null)
     {
         if (!($where instanceof Zend_Db_Table_Select)) {
             $select = $this->select();
@@ -1379,10 +1380,10 @@ abstract class Zend_Db_Table_Abstract
                 $this->_order($select, $order);
             }
 
-            $select->limit(1);
+            $select->limit(1, ((is_numeric($offset)) ? (int) $offset : null));
 
         } else {
-            $select = $where->limit(1);
+            $select = $where->limit(1, $where->getPart(Zend_Db_Select::LIMIT_OFFSET));
         }
 
         $rows = $this->_fetch($select);
