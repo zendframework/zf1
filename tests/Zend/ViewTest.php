@@ -1147,6 +1147,15 @@ class Zend_ViewTest extends PHPUnit_Framework_TestCase
         $paths = $view->getScriptPaths();
         $this->assertContains($path, $paths, var_export($paths, 1));
     }
+    
+    /**
+     * @group ZF-10042
+     */
+    public function testConstructViewObjectWithInitialVariables()
+    {
+        $view = new Zend_View(array('assign' => array('foo' => 'bar')));
+        $this->assertEquals('bar', $view->foo);
+    }
 }
 
 /**

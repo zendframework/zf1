@@ -78,6 +78,9 @@ class Zend_Application_Resource_View extends Zend_Application_Resource_ResourceA
             if (isset($options['contentType'])) {
                 $this->_view->headMeta()->appendHttpEquiv('Content-Type', $options['contentType']);
             }
+            if (isset($options['assign']) && is_array($options['assign'])) {
+                $this->_view->assign($options['assign']);
+            }
         }
         return $this->_view;
     }

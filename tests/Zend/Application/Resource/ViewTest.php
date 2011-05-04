@@ -208,7 +208,27 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
         $registry->deleteContainer('Zend_View_Helper_HeadMeta');
         $registry->deleteContainer('Zend_View_Helper_Doctype');
     }
+    
+    /**
+     * @group ZF-10042
+     */
+    public function testAssignmentsAreSet()
+    {
+        $options = array(
+            'assign' => array(
+                'foo' => 'barbapapa',
+                'bar' => 'barbazoo',
+            )
+        );
+        $resource = new Zend_Application_Resource_View($options);
+        $view = $resource->init();
+ 
+        $this->assertEquals('barbapapa', $view->foo);
+        $this->assertEquals('barbazoo', $view->bar);
+    }
+
 }
+
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_ViewTest::main') {
     Zend_Application_Resource_ViewTest::main();

@@ -221,6 +221,14 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
             $this->setLfiProtection($config['lfiProtectionOn']);
         }
 
+        if (array_key_exists('assign', $config)
+            && is_array($config['assign'])
+        ) {
+            foreach ($config['assign'] as $key => $value) {
+                $this->assign($key, $value);
+            }
+        }
+
         $this->init();
     }
 
