@@ -217,7 +217,7 @@ class Zend_Mail_MessageTest extends PHPUnit_Framework_TestCase
 
     public function testDecodeString()
     {
-        $string = '"Peter Müller" <peter-mueller@example.com>';
+        $string = '"Peter M=C3=BCller" <peter-mueller@example.com>';
         $is     = Zend_Mime_Decode::decodeQuotedPrintable($string);
         $should = quoted_printable_decode($string);
         $this->assertEquals($is, $should);
