@@ -83,11 +83,12 @@ class Zend_Controller_Request_Apache404Test extends PHPUnit_Framework_TestCase
 
     /**
      * @group ZF-3057
+     * @group ZF-9776
      */
     public function testRedirectQueryStringShouldBeParsedIntoGetVars()
     {
         $_SERVER['REDIRECT_URL']         = '/foo/bar';
-        $_SERVER['REDIRECT_QUERYSTRING'] = 'baz=bat&bat=delta';
+        $_SERVER['REDIRECT_QUERY_STRING'] = 'baz=bat&bat=delta';
         $_SERVER['REQUEST_URI']          = '/baz/bat';
 
         $request = new Zend_Controller_Request_Apache404();
