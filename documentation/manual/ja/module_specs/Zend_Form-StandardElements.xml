@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 21825 -->
+<!-- EN-Revision: 23995 -->
 <sect1 id="zend.form.standardElements">
     <title>Zend Framework に同梱されている標準のフォーム要素</title>
 
@@ -157,7 +157,7 @@ $element = new Zend_Form_Element_Captcha('foo', array(
 
         <para>
             さらに、値を設定するとチェックボックスの
-            <code>checked</code> プロパティも設定されます。
+            <property>checked</property> プロパティも設定されます。
             この内容を確認するには、<methodname>isChecked()</methodname>
             を使用するか、単純にそのプロパティにアクセスします。
             <methodname>setChecked($flag)</methodname> メソッドを使用すると、
@@ -182,12 +182,12 @@ $element = new Zend_Form_Element_Captcha('foo', array(
             <link
                 linkend="zend.file.transfer.introduction">Zend_File_Transfer</link>
             を内部で使用してこの機能を実現しており、
-            <code>FormFile</code> ビューヘルパーと
-            <code>File</code> デコレータでフォーム要素を表示しています。
+            <classname>FormFile</classname> ビューヘルパーと
+            <classname>File</classname> デコレータでフォーム要素を表示しています。
         </para>
 
         <para>
-            デフォルトでは、<code>Http</code> 転送アダプタを使用します。
+            デフォルトでは、<classname>Http</classname> 転送アダプタを使用します。
             これは <code>$_FILES</code> 配列の中身を読み取り、
             バリデータやフィルタを使用できるようにします。
             フォーム要素にアタッチされたバリデータおよびアダプタが、
@@ -263,6 +263,32 @@ $location = $form->foo->getFileName();
                 <methodname>getValue()</methodname> ではアップロードしたファイル名だけしか取得できません。
                 完全パスを取得することはできません。完全な情報が欲しい場合は、
                 <methodname>getFileName()</methodname> をコールすればパスおよびファイル名が得られます。
+            </para>
+        </note>
+
+        <note>
+            <title>getFileName() の返り値</title>
+
+            <!-- TODO : to be translated -->
+            <para>
+                The result returned by the getFileName() method will change depending on how many files the Zend_Form_Element_File uploaded:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        A single file: string containing the single file name.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Multiple files: an array, where each item is a string containing a single file name.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        No files: an empty array
+                    </para>
+                </listitem>
+            </itemizedlist>
             </para>
         </note>
 
@@ -527,7 +553,7 @@ $form->addElement('hash', 'no_csrf_foo', array('salt' => 'unique'));
             <methodname>setImageValue()</methodname> アクセサ
             (あるいは設定キー 'imageValue') でオプションとして設定できます。
             その要素に設定された値が
-            <code>imageValue</code> とマッチした場合、アクセサ
+            <property>imageValue</property> とマッチした場合、アクセサ
             <methodname>isChecked()</methodname> は <constant>TRUE</constant> を返します。
         </para>
 
@@ -536,7 +562,7 @@ $form->addElement('hash', 'no_csrf_foo', array('salt' => 'unique'));
             <link linkend="zend.form.standardDecorators.image">Image
             デコレータ</link> でレンダリングを行います
             (それ以外に標準のデコレータ Errors、HtmlTag および Label も使用します)。
-            オプションのタグを <code>Image</code> デコレータに指定すると、
+            オプションのタグを <classname>Image</classname> デコレータに指定すると、
             それで image 要素をラップできます。
         </para>
     </sect2>
@@ -562,13 +588,13 @@ $form->addElement('hash', 'no_csrf_foo', array('salt' => 'unique'));
         </para>
 
         <para>
-            デフォルトでは、この要素は <code>InArray</code>
+            デフォルトでは、この要素は <classname>InArray</classname>
             バリデータを登録します。このバリデータは、
             登録されたオプションの配列のキーに対して検証を行います。
             この振る舞いを無効にするには
             <methodname>setRegisterInArrayValidator(false)</methodname>
             をコールするか、あるいは設定キー
-            <code>registerInArrayValidator</code>
+            <property>registerInArrayValidator</property>
             に <constant>FALSE</constant> 値を渡します。
         </para>
 
@@ -622,13 +648,13 @@ $element->setValue(array('bar', 'bat'));
         <title>Zend_Form_Element_Multiselect</title>
 
         <para>
-            <acronym>XHTML</acronym> の <code>select</code> 要素には 'multiple'
+            <acronym>XHTML</acronym> の <emphasis>select</emphasis> 要素には 'multiple'
             属性を指定できます。
             これは、普通の要素ではなく複数項目を選択できる要素を表します。
             <classname>Zend_Form_Element_Multiselect</classname> は、
             <link
                 linkend="zend.form.standardElements.select">Zend_Form_Element_Select</link>
-            を継承して <code>multiple</code> 要素を 'multiple'
+            を継承して <property>multiple</property> 要素を 'multiple'
             に設定したものです。基底クラス <classname>Zend_Form_Element_Multi</classname>
             を継承したその他のクラスと同様、以下のメソッドでオプションを操作できます。
         </para>
@@ -656,13 +682,13 @@ $element->setValue(array('bar', 'bat'));
         </para>
 
         <para>
-            デフォルトでは、この要素は <code>InArray</code>
+            デフォルトでは、この要素は <classname>InArray</classname>
             バリデータを登録します。このバリデータは、
             登録されたオプションの配列のキーに対して検証を行います。
             この振る舞いを無効にするには
             <methodname>setRegisterInArrayValidator(false)</methodname>
             をコールするか、あるいは設定キー
-            <code>registerInArrayValidator</code>
+            <property>registerInArrayValidator</property>
             に <constant>FALSE</constant> 値を渡します。
         </para>
     </sect2>
@@ -694,17 +720,17 @@ $element->setValue(array('bar', 'bat'));
             <classname>Zend_Form_Element_Radio</classname> は規定クラス
             <classname>Zend_Form_Element_Multi</classname> を継承したもので、
             複数のオプションを指定できます。そして、それを表示するために
-            <code>formRadio</code> ビューヘルパーを使用します。
+            <emphasis>formRadio</emphasis> ビューヘルパーを使用します。
         </para>
 
         <para>
-            デフォルトでは、この要素は <code>InArray</code>
+            デフォルトでは、この要素は <classname>InArray</classname>
             バリデータを登録します。このバリデータは、
             登録されたオプションの配列のキーに対して検証を行います。
             この振る舞いを無効にするには
             <methodname>setRegisterInArrayValidator(false)</methodname>
             をコールするか、あるいは設定キー
-            <code>registerInArrayValidator</code>
+            <property>registerInArrayValidator</property>
             に <constant>FALSE</constant> 値を渡します。
         </para>
 
@@ -761,13 +787,13 @@ $element->setValue(array('bar', 'bat'));
         </para>
 
         <para>
-            デフォルトでは、この要素は <code>InArray</code>
+            デフォルトでは、この要素は <classname>InArray</classname>
             バリデータを登録します。このバリデータは、
             登録されたオプションの配列のキーに対して検証を行います。
             この振る舞いを無効にするには
             <methodname>setRegisterInArrayValidator(false)</methodname>
             をコールするか、あるいは設定キー
-            <code>registerInArrayValidator</code>
+            <property>registerInArrayValidator</property>
             に <constant>FALSE</constant> 値を渡します。
         </para>
 

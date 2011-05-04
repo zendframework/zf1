@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 20792 -->
+<!-- EN-Revision: 23977 -->
 <sect1 id="zend.json.xml2json">
     <title>XML から JSON への変換</title>
     <para>
@@ -15,7 +15,7 @@
     <para>
         <classname>Zend_Json</classname> には、静的関数 <methodname>Zend_Json::fromXml()</methodname>
         が搭載されています。この関数は、<acronym>XML</acronym> を受け取って <acronym>JSON</acronym> を作成します。
-        入力パラメータには、任意の <acronym>XML</acronym> 文字列を渡すことができます。
+        入力パラメータには、任意の <acronym>XML</acronym> 文字列を渡せます。
         また、オプションのパラメータで論理値を渡し、
         変換処理中に <acronym>XML</acronym> の属性を無視するかどうかを指定できます。
         このパラメータを省略した場合のデフォルトの挙動は、
@@ -37,7 +37,7 @@ $jsonContents = Zend_Json::fromXml($xmlStringContents, true);
         それ以上の深さに達した場合は <classname>Zend_Json_Exception</classname>
         をスローします。Zend Framework の
         tests ディレクトリ内には <acronym>XML</acronym> ファイルがいくつか入っているので、
-        それらを用いると xml2json の機能を確かめることができます。
+        それらを用いると xml2json の機能を確認できます。
     </para>
 
     <para>
@@ -113,12 +113,66 @@ $jsonContents = Zend_Json::fromXml($xmlStringContents, true);
 }
 ]]></programlisting>
 
-    <para>
-        xml2json の機能についての詳細は、
-        <ulink url="http://tinyurl.com/2tfa8z">Zend_xml2json のプロポーザル</ulink>
-        を参照ください。
-    </para>
+<sect2 id="zend.json.xml2json.changes">
+    <title>変更内容</title>
 
+    <sect3 id="zend.json.xml2json.changes.1-11-6">
+        <title>1.11.6 での変更内容</title>
+
+        <!-- TODO : to be translated -->
+        <para>
+            Starting from the release 1.11.6 the <methodname>Zend_Json::fromXml()</methodname> function
+            has been rewritten from scratch in order to manage XML element with attributes, text value
+            and sub-elements (see the <ulink url="http://framework.zend.com/issues/browse/ZF-3257">ZF-3257</ulink>).
+        </para>
+
+        <para>
+            For instance, if you have an XML document like this:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+    <b id="foo"/>
+    bar
+</a>
+]]></programlisting>
+
+            <para>
+                <methodname>Zend_Json::fromXml()</methodname> から返される
+                <acronym>JSON</acronym> 出力文字列はこうです。
+            </para>
+
+            <programlisting language="php"><![CDATA[
+{
+   "a" : {
+      "b" : {
+         "@attributes" : {
+            "id" : "foo"
+         }
+      },
+      "@text" : "bar"
+   }
+}
+]]></programlisting>
+
+            <!-- TODO : to be translated -->
+            <para>
+                The idea is to use a special key value (@text) to store the text value of an XML element,
+                only if this element contains attributes or sub-elements (as in the previous examples).
+                If you have a simple XML element with only a text value, like this:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<a>foo</a>
+]]></programlisting>
+
+            <para>
+                the JSON will be {"a":"foo"} that is quite intuitive, instead of {"a":{"@text":"foo"}}.
+            </para>
+    </sect3>
+</sect2>
 </sect1>
 <!--
 vim:se ts=4 sw=4 et:
