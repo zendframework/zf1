@@ -242,6 +242,25 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-11344
+     */
+    public function testRaisesExceptionIfEncodingMismatchDetectedAndFinalStringIsEmpty()
+    {
+        $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-dash-only.txt');
+
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // we want to test the returned value
+        // Also, explicit try, so that we don't mess up PHPUnit error handlers
+        set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
+        try {
+            $result = $this->_filter->filter($string);
+            $this->fail('Expected exception from single non-utf-8 character');
+        } catch (Zend_Filter_Exception $e) {
+            $this->assertTrue($e instanceof Zend_Filter_Exception);
+        }
+    }
+
+    /**
      * Null error handler; used when wanting to ignore specific error types
      */
     public function errorHandler($errno, $errstr)
