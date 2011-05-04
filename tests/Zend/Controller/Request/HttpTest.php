@@ -948,6 +948,20 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals( '/module/controller/action', $pathInfo, $pathInfo);
     }
+    
+    /**
+     * @group ZF-3527
+     * @group ZF-10964
+     * @group ZF-10787
+     */
+    public function testPathInfoShouldNotDecodeRequestParams()
+    {
+        $request = new Zend_Controller_Request_Http();
+        $_SERVER['REQUEST_URI'] = '/module/controller/action/param/escaped%2Fstring';
+        $pathInfo = $request->getPathInfo();
+    
+        $this->assertEquals( '/module/controller/action/param/escaped%2Fstring', $pathInfo, $pathInfo);
+    }
 
     /**
      * @group ZF-9899
