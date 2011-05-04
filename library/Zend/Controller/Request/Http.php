@@ -624,8 +624,6 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
             if ($pos = strpos($requestUri, '?')) {
                 $requestUri = substr($requestUri, 0, $pos);
             }
-        
-            $requestUriDecoded = urldecode($requestUri);
             
             $pathInfo = '';
             
