@@ -47,7 +47,7 @@ class Zend_Tool_Project_Provider_DbAdapter
 
     protected $_sectionName = 'production';
 
-    public function configure($dsn = null, /* $interactivelyPrompt = false, */ $sectionName = 'production')
+    public function configure($dsn = null, /* $interactivelyPrompt = false, */ $sectionName = 'production', $forceOverwrite = false)
     {
         $profile = $this->_loadProfile(self::NO_PROFILE_THROW_EXCEPTION);
 
@@ -69,7 +69,9 @@ class Zend_Tool_Project_Provider_DbAdapter
             throw new Zend_Tool_Project_Exception('The config does not have a ' . $this->_sectionName . ' section.');
         }
 
-        if (isset($this->_config->{$this->_sectionName}->resources->db)) {
+        if (isset($this->_config->{$this->_sectionName}->resources->db) && $forceOverwrite === true) {
+            unset($this->_config->{$this->_sectionName}->resources->db);
+        } else {
             throw new Zend_Tool_Project_Exception('The config already has a db resource configured in section ' . $this->_sectionName . '.');
         }
 
