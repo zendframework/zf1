@@ -618,7 +618,7 @@ function setReminder($client, $eventId, $minutes=15)
         $reminder = $gc->newReminder();
         $reminder->setMinutes($minutes);
         $reminder->setMethod($method);
-        $when->reminder = array($reminder);
+        $when->reminders = array($reminder);
     }
     $eventNew = $event->save();
     return $eventNew;
