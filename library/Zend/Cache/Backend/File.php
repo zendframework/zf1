@@ -268,14 +268,15 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      * Clean some cache records
      *
      * Available modes are :
-     * 'all' (default)  => remove all cache entries ($tags is not used)
-     * 'old'            => remove too old cache entries ($tags is not used)
-     * 'matchingTag'    => remove cache entries matching all given tags
-     *                     ($tags can be an array of strings or a single string)
-     * 'notMatchingTag' => remove cache entries not matching one of the given tags
-     *                     ($tags can be an array of strings or a single string)
-     * 'matchingAnyTag' => remove cache entries matching any given tags
-     *                     ($tags can be an array of strings or a single string)
+     *
+     * Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
+     * Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
+     * Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
+     *                                               ($tags can be an array of strings or a single string)
+     * Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
+     *                                               ($tags can be an array of strings or a single string)
+     * Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
+     *                                               ($tags can be an array of strings or a single string)
      *
      * @param string $mode clean mode
      * @param tags array $tags array of tags
@@ -722,8 +723,8 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             if ((is_dir($file)) and ($this->_options['hashed_directory_level']>0)) {
                 // Recursive call
                 $result = $this->_clean($file . DIRECTORY_SEPARATOR, $mode, $tags) && $result;
-                if ($mode=='all') {
-                    // if mode=='all', we try to drop the structure too
+                if ($mode == Zend_Cache::CLEANING_MODE_ALL) {
+                    // we try to drop the structure too
                     @rmdir($file);
                 }
             }
