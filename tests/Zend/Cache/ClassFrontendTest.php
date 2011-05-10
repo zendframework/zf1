@@ -264,5 +264,14 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('startend', $output);
     }
 
+    /**
+     * @group ZF-11337
+     */
+    public function testThrowExceptionOnInvalidCallback()
+    {
+        $this->setExpectedException('Zend_Cache_Exception');
+        $this->_instance2->unknownMethod();
+    }
+
 }
 
