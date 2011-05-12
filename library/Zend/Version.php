@@ -39,7 +39,7 @@ final class Zend_Version
      *
      * @var string
      */
-    protected static $_lastestVersion;
+    protected static $_latestVersion;
 
     /**
      * Compare the specified Zend Framework version string $version
@@ -66,16 +66,16 @@ final class Zend_Version
      */
     public static function getLatest()
     {
-        if (null === self::$_lastestVersion) {
-            self::$_lastestVersion = 'not available';
+        if (null === self::$_latestVersion) {
+            self::$_latestVersion = 'not available';
 
             $handle = fopen('http://framework.zend.com/api/zf-version', 'r');
             if (false !== $handle) {
-                self::$_lastestVersion = stream_get_contents($handle);
+                self::$_latestVersion = stream_get_contents($handle);
                 fclose($handle);
             }
         }
 
-        return self::$_lastestVersion;
+        return self::$_latestVersion;
     }
 }
