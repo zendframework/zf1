@@ -277,7 +277,7 @@ class Zend_Json
             $childArray= array();
             foreach ($childrens as $child) {
                 $childname= $child->getName();
-                $element= self::_processXml($child,$ignoreXmlAttributes,$recursionDepth++);
+                $element= self::_processXml($child,$ignoreXmlAttributes,$recursionDepth+1);
                 if (array_key_exists($childname, $childArray)) {
                     if (empty($subChild[$childname])) {
                         $childArray[$childname]=array($childArray[$childname]);
