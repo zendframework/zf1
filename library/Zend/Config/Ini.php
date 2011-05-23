@@ -83,16 +83,17 @@ class Zend_Config_Ini extends Zend_Config
      *
      * The $options parameter may be provided as either a boolean or an array.
      * If provided as a boolean, this sets the $allowModifications option of
-     * Zend_Config. If provided as an array, there are two configuration
+     * Zend_Config. If provided as an array, there are three configuration
      * directives that may be set. For example:
      *
      * $options = array(
      *     'allowModifications' => false,
-     *     'nestSeparator'      => '->'
+     *     'nestSeparator'      => ':',
+     *     'skipExtends'        => false,
      *      );
      *
      * @param  string        $filename
-     * @param  string|null   $section
+     * @param  mixed         $section
      * @param  boolean|array $options
      * @throws Zend_Config_Exception
      * @return void

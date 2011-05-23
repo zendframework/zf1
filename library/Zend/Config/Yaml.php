@@ -124,9 +124,9 @@ class Zend_Config_Yaml extends Zend_Config
      * - skip_extends: whether or not to skip processing of parent configuration
      * - yaml_decoder: a callback to use to decode the Yaml source
      *
-     * @param  string  $yaml     YAML file to process
-     * @param  mixed   $section Section to process
-     * @param  boolean $options Whether modifiacations are allowed at runtime
+     * @param  string        $yaml     YAML file to process
+     * @param  mixed         $section  Section to process
+     * @param  array|boolean $options 
      */
     public function __construct($yaml, $section = null, $options = false)
     {
