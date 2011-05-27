@@ -273,9 +273,16 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             return false;
         }
 
-        foreach ($objects as $object) {
-            $this->removeObject("$bucket/$object");
+        while (!empty($objects)) {
+            foreach ($objects as $object) {
+                $this->removeObject("$bucket/$object");
+            }
+            $params= array (
+                'marker' => $objects[count($objects)-1]
+            );
+            $objects = $this->getObjectsByBucket($bucket,$params);
         }
+        
         return true;
     }
 
