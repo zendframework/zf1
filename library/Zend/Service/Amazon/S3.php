@@ -599,7 +599,13 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             $endpoint->setHost($parts[0].'.'.$endpoint->getHost());
         }
         if (!empty($parts[1])) {
-            $endpoint->setPath('/'.$parts[1]);
+            //$endpoint->setPath('/'.$parts[1]);
+
+            // ZF-10218, ZF-10219, ZF-10122
+            $pathparts = explode('?',$parts[1]);
+            $endpath = $pathparts[0];
+            $endpoint->setPath('/'.$endpath);
+            
         }
         else {
             $endpoint->setPath('/');
