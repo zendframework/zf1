@@ -71,6 +71,7 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         $this->_httpClientAdapterSocket = new Zend_Http_Client_Adapter_Socket();
 
         $this->_bucket = constant('TESTS_ZEND_SERVICE_AMAZON_S3_BUCKET');
+        $this->_bucketEu = $this->_bucket.'-EU';
 
         $this->_amazon->getHttpClient()
                       ->setAdapter($this->_httpClientAdapterSocket);
@@ -395,10 +396,10 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateBucketEU()
     {
-        $this->_amazon->createBucket($this->_bucket, 'EU');
-        $this->assertTrue($this->_amazon->isBucketAvailable($this->_bucket));
+        $this->_amazon->createBucket($this->_bucketEu, 'EU');
+        $this->assertTrue($this->_amazon->isBucketAvailable($this->_bucketEu));
         $list = $this->_amazon->getBuckets();
-        $this->assertContains($this->_bucket, $list);
+        $this->assertContains($this->_bucketEu, $list);
     }
     /**
      * Test bucket name with /'s and encoding
@@ -488,6 +489,8 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         unset($this->_amazon->debug);
         $this->_amazon->cleanBucket($this->_bucket);
         $this->_amazon->removeBucket($this->_bucket);
+        $this->_amazon->cleanBucket($this->_bucketEu);
+        $this->_amazon->removeBucket($this->_bucketEu);
     }
 }
 

@@ -157,14 +157,16 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
     public function createBucket($bucket, $location = null)
     {
         $this->_validBucketName($bucket);
-
+        $headers=array();
         if($location) {
             $data = '<CreateBucketConfiguration><LocationConstraint>'.$location.'</LocationConstraint></CreateBucketConfiguration>';
+            $headers['Content-type']= 'text/plain';
+            $headers['Contne-size']= strlen($data);
         }
         else {
             $data = null;
         }
-        $response = $this->_makeRequest('PUT', $bucket, null, array(), $data);
+        $response = $this->_makeRequest('PUT', $bucket, null, $headers, $data);
 
         return ($response->getStatus() == 200);
     }
