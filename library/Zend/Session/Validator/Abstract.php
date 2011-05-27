@@ -62,8 +62,10 @@ abstract class Zend_Session_Validator_Abstract implements Zend_Session_Validator
     protected function getValidData()
     {
         $validatorName = get_class($this);
-
-        return $_SESSION['__ZF']['VALID'][$validatorName];
+        if (isset($_SESSION['__ZF']['VALID'][$validatorName])) {
+            return $_SESSION['__ZF']['VALID'][$validatorName];
+        }
+        return null;
     }
 
 }

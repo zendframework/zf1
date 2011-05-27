@@ -1048,4 +1048,18 @@ class Zend_SessionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-11186
+     */
+    public function testNoNoticesIfNoValidatorDataInSession()
+    {
+        try {
+            Zend_Session::start();
+            require_once dirname(__FILE__) . '/Validator/NoticeValidator.php';
+            Zend_Session::registerValidator(new Zend_Session_Validator_NoticeValidator);
+        } catch (PHPUnit_Framework_Error_Notice $exception) {
+            $this->fail($exception->getMessage());
+        }
+    }
+
 }
