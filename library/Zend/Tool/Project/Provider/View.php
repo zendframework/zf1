@@ -90,7 +90,7 @@ class Zend_Tool_Project_Provider_View extends Zend_Tool_Project_Provider_Abstrac
      * @param string $controllerName
      * @param string $actionNameOrSimpleName
      */
-    public function create($controllerName, $actionNameOrSimpleName)
+    public function create($controllerName, $actionNameOrSimpleName, $module = null)
     {
 
         if ($controllerName == '' || $actionNameOrSimpleName == '') {
@@ -100,7 +100,7 @@ class Zend_Tool_Project_Provider_View extends Zend_Tool_Project_Provider_Abstrac
 
         $profile = $this->_loadProfile();
 
-        $view = self::createResource($profile, $actionNameOrSimpleName, $controllerName);
+        $view = self::createResource($profile, $actionNameOrSimpleName, $controllerName, $module);
 
         if ($this->_registry->getRequest()->isPretend()) {
             $this->_registry->getResponse(
