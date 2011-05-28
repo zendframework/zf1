@@ -91,13 +91,6 @@ class Zend_View_Helper_FormTest extends PHPUnit_Framework_TestCase
         $this->assertContains($this->view->escape('<&foo'), $form);
     }
 
-    public function testPassingIdAsAttributeShouldRenderIdAttribAndNotName()
-    {
-        $form = $this->helper->form('foo', array('action' => '/foo', 'method' => 'get', 'id' => 'bar'));
-        $this->assertRegexp('/<form[^>]*(id="bar")/', $form);
-        $this->assertNotRegexp('/<form[^>]*(name="foo")/', $form);
-    }
-
     /**
      * @group ZF-3832
      */
