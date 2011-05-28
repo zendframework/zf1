@@ -403,6 +403,32 @@ class Zend_View_Helper_FormRadioTest extends PHPUnit_Framework_TestCase
             $this->assertRegexp('/<label([^>]*)(for="' . $id . '")/', $html);
         }
     }
+    
+    /**
+     * @group ZF-4191
+     */
+    public function testDashesShouldNotBeFilteredFromId()
+    {
+        $name = "Foo";
+        $options = array(
+            -1 => 'Test -1',
+             0 => 'Test 0',
+             1 => 'Test 1'
+        );
+        
+        $formRadio = new Zend_View_Helper_FormRadio();
+        $formRadio->setView(new Zend_View());
+        $html = $formRadio->formRadio($name, -1, null, $options);
+        foreach ( $options as $key=>$value ) {
+            $fid = "{$name}-{$key}";
+            $this->assertRegExp('/<label([^>]*)(for="'.$fid.'")/', $html);
+            $this->assertRegExp('/<input([^>]*)(id="'.$fid.'")/', $html);
+        }
+        
+        // Assert that radio for value -1 is the selected one
+        $this->assertRegExp('/<input([^>]*)(id="'.$name.'--1")([^>]*)(checked="checked")/', $html);
+    }
+    
 }
 
 // Call Zend_View_Helper_FormRadioTest::main() if this source file is executed directly.
