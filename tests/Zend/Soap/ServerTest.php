@@ -890,6 +890,16 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($options['cache_wsdl']));
         $this->assertEquals(100, $options['cache_wsdl']);
     }
+    
+    /**
+     * @group ZF-11411
+     */
+    public function testHandleUsesProperRequestParameter()
+    {
+        $server = new Zend_Soap_MockServer();
+        $r = $server->handle(new DomDocument('1.0', 'UTF-8'));
+        $this->assertTrue(is_string($server->mockSoapServer->handle[0]));
+    }
 }
 
 
@@ -930,6 +940,22 @@ class Zend_Soap_Server_TestLocalSoapClient extends SoapClient
 
 }
 
+class MockSoapServer {
+    public $handle = null;
+    public function handle()
+    {
+        $this->handle = func_get_args();
+    }
+    public function __call($name, $args) {}
+}
+
+class Zend_Soap_MockServer extends Zend_Soap_Server {
+    public $mockSoapServer = null;
+    protected function _getSoap() {
+        $this->mockSoapServer = new MockSoapServer(); 
+        return $this->mockSoapServer;
+    }
+}
 
 /** Test Class */
 class Zend_Soap_Server_TestClass {
