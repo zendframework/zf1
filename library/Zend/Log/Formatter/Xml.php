@@ -146,10 +146,12 @@ class Zend_Log_Formatter_Xml extends Zend_Log_Formatter_Abstract
         $elt = $dom->appendChild(new DOMElement($this->_rootElement));
 
         foreach ($dataToInsert as $key => $value) {
-            if($key == "message") {
-                $value = htmlspecialchars($value, ENT_COMPAT, $enc);
+            if(empty($value) || is_scalar($value)) {
+                if($key == "message") {
+                    $value = htmlspecialchars($value, ENT_COMPAT, $enc);
+                }
+                $elt->appendChild(new DOMElement($key, (string)$value));
             }
-            $elt->appendChild(new DOMElement($key, $value));
         }
 
         $xml = $dom->saveXML();

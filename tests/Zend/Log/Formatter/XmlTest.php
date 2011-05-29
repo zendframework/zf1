@@ -137,6 +137,28 @@ class Zend_Log_Formatter_XmlTest extends PHPUnit_Framework_TestCase
         $formatter = Zend_Log_Formatter_Xml::factory($options);
         $this->assertType('Zend_Log_Formatter_Xml', $formatter);
     }
+    
+    /**
+     * @group ZF-11161
+     */
+    public function testNonScalarValuesAreExcludedFromFormattedString()
+    {
+        $options = array(
+            'rootElement' => 'log'
+        );
+        $event = array(
+            'message' => 'tottakai',
+            'priority' => 4,
+            'context' => array('test'=>'one'),
+            'reference' => new Zend_Log_Formatter_Xml()
+        );
+        $expected = '<log><message>tottakai</message><priority>4</priority></log>';
+
+        $formatter = new Zend_Log_Formatter_Xml($options);
+        $output = $formatter->format($event);
+        $this->assertContains($expected, $output);
+    }
+    
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Log_Formatter_XmlTest::main') {
