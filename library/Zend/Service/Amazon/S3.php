@@ -162,8 +162,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             $data = '<CreateBucketConfiguration><LocationConstraint>'.$location.'</LocationConstraint></CreateBucketConfiguration>';
             $headers['Content-type']= 'text/plain';
             $headers['Contne-size']= strlen($data);
-        }
-        else {
+        } else {
             $data = null;
         }
         $response = $this->_makeRequest('PUT', $bucket, null, $headers, $data);
@@ -611,16 +610,16 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
                 $path = $parts[0].'/';
             }
         }
-
         self::addSignature($method, $path, $headers);
 
         $client = self::getHttpClient();
 
-        $client->resetParameters();
+        $client->resetParameters(true);
         $client->setUri($endpoint);
         $client->setAuth(false);
         // Work around buglet in HTTP client - it doesn't clean headers
         // Remove when ZHC is fixed
+        /*
         $client->setHeaders(array('Content-MD5'              => null,
                                   'Content-Encoding'         => null,
                                   'Expect'                   => null,
@@ -628,7 +627,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
                                   'x-amz-acl'                => null,
                                   'x-amz-copy-source'        => null,
                                   'x-amz-metadata-directive' => null));
-
+        */
         $client->setHeaders($headers);
 
         if (is_array($params)) {
@@ -642,7 +641,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
                  $headers['Content-type'] = self::getMimeType($path);
              }
              $client->setRawData($data, $headers['Content-type']);
-         }
+         } 
          do {
             $retry = false;
 
@@ -732,6 +731,9 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
         }
         else if (strpos($path, '?torrent') !== false) {
             $sig_str .= '?torrent';
+        }
+        else if (strpos($path, '?versions') !== false) {
+            $sig_str .= '?versions';
         }
 
         $signature = base64_encode(Zend_Crypt_Hmac::compute($this->_getSecretKey(), 'sha1', utf8_encode($sig_str), Zend_Crypt_Hmac::BINARY));
