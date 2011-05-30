@@ -782,7 +782,8 @@ class Zend_Http_Client
         $this->paramsPost    = array();
         $this->files         = array();
         $this->raw_post_data = null;
-
+        $this->enctype       = null;
+        
         if($clearAll) {
             $this->headers = array();
             $this->last_request = null;

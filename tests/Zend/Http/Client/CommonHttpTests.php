@@ -996,6 +996,27 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $this->assertContains('REQUEST_METHOD: PUT', $response->getBody(), $response->getBody());
     }
 
+
+    /**
+     * @group ZF-11418
+     */
+    public function testMultiplePuts()
+    {
+        $this->client->setUri($this->baseuri . 'ZF10645-PutContentType.php');
+        $data= 'test';
+        $this->client->setRawData($data, 'text/plain');
+        $this->client->setMethod(Zend_Http_Client::PUT);
+        $response = $this->client->request();
+        $this->assertContains('REQUEST_METHOD: PUT', $response->getBody(), $response->getBody());
+
+        $this->client->resetParameters(true);
+        $this->client->setUri($this->baseuri . 'ZF10645-PutContentType.php');
+        $this->client->setMethod(Zend_Http_Client::PUT);
+        $response = $this->client->request();
+        $request= $this->client->getLastRequest();
+        $this->assertNotContains('Content-Type: text/plain', $request);
+
+    }
     /**
      * Internal helpder function to get the contents of test files
      *
