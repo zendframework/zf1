@@ -450,6 +450,11 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
      */
     public function assemble($userParams, $name = null, $reset = false, $encode = true)
     {
+        if (!is_array($userParams)) {
+            require_once 'Zend/Controller/Router/Exception.php';
+            throw new Zend_Controller_Router_Exception('userParams must be an array');
+        }
+        
         if ($name == null) {
             try {
                 $name = $this->getCurrentRouteName();

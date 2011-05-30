@@ -756,6 +756,15 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
             $this->_router->assemble($params)
         );
     }
+    
+    /**
+     * @group ZF-11393
+     * @expectedException Zend_Controller_Router_Exception
+     */
+    public function testCallingAssembleWithNullArgumentShouldThrowException()
+    {
+        $this->_router->assemble(null);
+    }
 }
 
 
