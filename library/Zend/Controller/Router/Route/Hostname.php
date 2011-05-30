@@ -302,7 +302,6 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
             }
         }
 
-        $hostname = implode('.', $host);
         $url      = $scheme . '://' . $url;
 
         return $url;
