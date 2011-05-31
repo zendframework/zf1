@@ -150,7 +150,7 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("testdata", $stream_read, 'Downloaded stream does not seem to match!');
         $this->assertEquals("testdata", $file_read, 'Downloaded file does not seem to match!');
     }
-/**
+    /**
      * Test getting info
      *
      * @return void
@@ -221,10 +221,10 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         $this->_amazon->putObject($this->_bucket."/zftest", $data);
         $this->_amazon->cleanBucket($this->_bucket);
         $this->_amazon->removeBucket($this->_bucket);
-
+        
         $this->assertFalse($this->_amazon->isBucketAvailable($this->_bucket));
         $this->assertFalse($this->_amazon->isObjectAvailable($this->_bucket."/zftest"));
-        $this->assertFalse($this->_amazon->getObjectsByBucket($this->_bucket));
+        $this->assertFalse((boolean)$this->_amazon->getObjectsByBucket($this->_bucket));
         $list = $this->_amazon->getBuckets();
         $this->assertNotContains($this->_bucket, $list);
     }
@@ -238,7 +238,6 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         }
 
         $data = file_get_contents($filename);
-
         $this->assertTrue($this->_amazon->isObjectAvailable($object));
 
         $info = $this->_amazon->getInfo($object);
@@ -495,6 +494,22 @@ class Zend_Service_Amazon_S3_OnlineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($response,'The response for the ?versions is empty');
         $xml = new SimpleXMLElement($response->getBody());
         $this->assertEquals((string) $xml->Name,$this->_bucket,'The bucket name in XML response is not valid');
+    }
+    /**
+     * @see ZF-11401
+     */
+    public function testCommonPrefixes()
+    {
+        $this->_amazon->createBucket($this->_bucket);
+        $this->_amazon->putObject($this->_bucket.'/test-folder/test1','test');
+        $this->_amazon->putObject($this->_bucket.'/test-folder/test2-folder/','');
+        $params= array(
+                    'prefix' => 'test-folder/',
+                    'delimiter' => '/'
+                 );
+        $response= $this->_amazon->getObjectsAndPrefixesByBucket($this->_bucket,$params);
+        $this->assertEquals($response['objects'][0],'test-folder/test1');
+        $this->assertEquals($response['prefixes'][0],'test-folder/test2-folder/');
     }
     public function tearDown()
     {
