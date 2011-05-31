@@ -285,13 +285,12 @@ class Zend_Config_Yaml extends Zend_Config
         $inIndent = false;
         while (list($n, $line) = each($lines)) {
             $lineno = $n + 1;
+            
+            $line = rtrim(preg_replace("/#.*$/", "", $line));
             if (strlen($line) == 0) {
                 continue;
             }
-            if ($line[0] == '#') {
-                // comment
-                continue;
-            }
+
             $indent = strspn($line, " ");
 
             // line without the spaces

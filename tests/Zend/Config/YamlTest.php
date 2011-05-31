@@ -47,6 +47,7 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->_booleansConfig            = dirname(__FILE__) . '/_files/booleans.yaml';
         $this->_constantsConfig           = dirname(__FILE__) . '/_files/constants.yaml';
         $this->_yamlInlineCommentsConfig  = dirname(__FILE__) . '/_files/inlinecomments.yaml';
+        $this->_yamlIndentedCommentsConfig  = dirname(__FILE__) . '/_files/indentedcomments.yaml';
     }
 
     public function testLoadSingleSection()
@@ -334,4 +335,23 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
             $config->resources->frontController->controllerDirectory
         );
     }
+    
+    /**
+     * @group ZF-11384
+     */
+    public function testAllowsIndentedCommentsUsingHash()
+    {
+        $config = new Zend_Config_Yaml($this->_yamlIndentedCommentsConfig, null);
+        $this->assertType('Zend_Config', $config->resources);
+        $this->assertType('Zend_Config', $config->resources->frontController);
+        $this->assertType(
+            'string', 
+            $config->resources->frontController->controllerDirectory
+        );
+        $this->assertSame(
+            'APPLICATION_PATH/controllers',
+            $config->resources->frontController->controllerDirectory
+        );
+    }
+    
 }
