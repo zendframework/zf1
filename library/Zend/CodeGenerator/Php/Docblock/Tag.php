@@ -21,7 +21,7 @@
  */
 
 /**
- * @see Zend_CodeGenerator_Abstract
+ * @see Zend_CodeGenerator_Php_Abstract
  */
 require_once 'Zend/CodeGenerator/Php/Abstract.php';
 
