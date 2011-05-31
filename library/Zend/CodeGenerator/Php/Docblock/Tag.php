@@ -26,16 +26,6 @@
 require_once 'Zend/CodeGenerator/Php/Abstract.php';
 
 /**
- * @see Zend_CodeGenerator_Php_Docblock_Tag_Param
- */
-require_once 'Zend/CodeGenerator/Php/Docblock/Tag/Param.php';
-
-/**
- * @see Zend_CodeGenerator_Php_Docblock_Tag_Return
- */
-require_once 'Zend/CodeGenerator/Php/Docblock/Tag/Return.php';
-
-/**
  * @category   Zend
  * @package    Zend_CodeGenerator
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
