@@ -395,6 +395,7 @@ class Zend_Application
                 break;
 
             case 'yaml':
+            case 'yml':
                 $config = new Zend_Config_Yaml($file, $environment);
                 break;
 

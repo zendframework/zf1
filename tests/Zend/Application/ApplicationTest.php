@@ -320,6 +320,15 @@ class Zend_Application_ApplicationTest extends PHPUnit_Framework_TestCase
         $application = new Zend_Application('testing', dirname(__FILE__) . '/_files/appconfig.json');
         $this->assertTrue($application->hasOption('foo'));
     }
+    
+    /**
+     * @group ZF-11425
+     */
+    public function testPassingStringYmlConfigPathOptionToConstructorShouldLoadOptionsAsYaml()
+    {
+        $application = new Zend_Application('testing', dirname(__FILE__) . '/_files/appconfig.yml');
+        $this->assertTrue($application->hasOption('foo'));
+    }
 
     public function testPassingArrayOptionsWithConfigKeyShouldLoadOptions()
     {
