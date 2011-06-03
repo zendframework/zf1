@@ -169,6 +169,30 @@ class Zend_Application_Resource_ModulesTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('foo',     (array)$bootstraps);
         $this->assertArrayHasKey('default', (array)$bootstraps);
     }
+    
+    public function testBootstrapBootstrapsIsOwnMethod()
+    {
+        require_once 'Zend/Application/Resource/Modules.php';
+
+        $this->bootstrap->registerPluginResource('Frontcontroller', array(
+            'moduleDirectory' => dirname(__FILE__) . '/../_files/modules',
+        ));
+        $resource = new ZendTest_Application_Resource_ModulesHalf(array());
+        $resource->setBootstrap($this->bootstrap);
+        $bootstraps = $resource->init();
+        $this->assertEquals(3, count((array)$bootstraps));
+    }
+}
+
+require_once 'Zend/Application/Resource/Modules.php';
+class ZendTest_Application_Resource_ModulesHalf
+    extends Zend_Application_Resource_Modules 
+{
+    protected function bootstrapBootstraps($bootstraps)
+    {
+        array_pop($bootstraps);
+        return parent::bootstrapBootstraps($bootstraps);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Application_Resource_ModulesTest::main') {

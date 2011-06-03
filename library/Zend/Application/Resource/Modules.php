@@ -62,6 +62,7 @@ class Zend_Application_Resource_Modules extends Zend_Application_Resource_Resour
      */
     public function init()
     {
+        $bootstraps = array();
         $bootstrap = $this->getBootstrap();
         $bootstrap->bootstrap('FrontController');
         $front = $bootstrap->getResource('FrontController');
@@ -102,13 +103,30 @@ class Zend_Application_Resource_Modules extends Zend_Application_Resource_Resour
                 // resource, don't re-execute.
                 continue;
             }
+            
+            $bootstraps[$module] = $bootstrapClass;
+        }
 
+        return $this->_bootstraps = $this->bootstrapBootstraps($bootstraps);
+    }
+    
+    /*
+     * Bootstraps the bootstraps found. Allows for easy extension.
+     * @param array $bootstraps Array containing the bootstraps to instantiate
+     */
+    protected function bootstrapBootstraps($bootstraps)
+    {
+        $bootstrap = $this->getBootstrap();
+        $out = array();
+        
+        foreach($bootstraps as $module => $bootstrapClass) {
             $moduleBootstrap = new $bootstrapClass($bootstrap);
             $moduleBootstrap->bootstrap();
             $this->_bootstraps[$module] = $moduleBootstrap;
+            $out[$module] = $moduleBootstrap;
         }
-
-        return $this->_bootstraps;
+        
+        return $out;
     }
 
     /**
