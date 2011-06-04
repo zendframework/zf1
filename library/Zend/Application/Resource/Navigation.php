@@ -56,12 +56,13 @@ class Zend_Application_Resource_Navigation
     {
         if (!$this->_container) {
             $options = $this->getOptions();
-            $pages = isset($options['pages']) ? $options['pages'] : array();
-            $this->_container = new Zend_Navigation($pages);
 
             if(isset($options['defaultPageType'])) {
                 Zend_Navigation_Page::setDefaultPageType($options['defaultPageType']);
             }
+            
+            $pages = isset($options['pages']) ? $options['pages'] : array();
+            $this->_container = new Zend_Navigation($pages);
         }
 
         $this->store();
