@@ -124,6 +124,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
         }
 
         unset($options['type']);
+        unset($options['register']); //@see ZF-11022
 
         switch($transportName) {
             case 'Zend_Mail_Transport_Smtp':
