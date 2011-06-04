@@ -200,6 +200,40 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $page->isActive());
     }
 
+    public function testIsActiveIsRouteAware()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'myaction',
+            'route' => 'myroute',
+            'params' => array(
+                'page' => 1337
+            )
+        ));
+
+        $this->_front->getRouter()->addRoute(
+            'myroute',
+            new Zend_Controller_Router_Route(
+                'lolcat/:action/:page',
+                array(
+                    'module'     => 'default',
+                    'controller' => 'foobar',
+                    'action'     => 'bazbat',
+                    'page'       => 1
+                )
+            )
+        );
+
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'default',
+            'controller' => 'foobar',
+            'action' => 'myaction',
+            'page' => 1337
+        ));
+
+        $this->assertEquals(true, $page->isActive());
+    }
+
     public function testActionAndControllerAccessors()
     {
         $page = new Zend_Navigation_Page_Mvc(array(

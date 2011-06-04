@@ -138,21 +138,28 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
 
             $myParams = $this->_params;
 
+            if ($this->_route) {
+                $route = $front->getRouter()->getRoute($this->_route);
+                if(method_exists($route, 'getDefaults')) {
+                    $myParams = array_merge($route->getDefaults(), $myParams);
+                }
+            }
+
             if (null !== $this->_module) {
                 $myParams['module'] = $this->_module;
-            } else {
+            } elseif(!array_key_exists('module', $myParams)) {
                 $myParams['module'] = $front->getDefaultModule();
             }
 
             if (null !== $this->_controller) {
                 $myParams['controller'] = $this->_controller;
-            } else {
+            } elseif(!array_key_exists('controller', $myParams)) {
                 $myParams['controller'] = $front->getDefaultControllerName();
             }
 
             if (null !== $this->_action) {
                 $myParams['action'] = $this->_action;
-            } else {
+            } elseif(!array_key_exists('action', $myParams)) {
                 $myParams['action'] = $front->getDefaultAction();
             }
 
