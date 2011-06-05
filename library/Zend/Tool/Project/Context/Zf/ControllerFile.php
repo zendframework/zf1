@@ -100,7 +100,9 @@ class Zend_Tool_Project_Context_Zf_ControllerFile extends Zend_Tool_Project_Cont
      */
     public function getContents()
     {
-        $className = ($this->_moduleName) ? ucfirst($this->_moduleName) . '_' : '';
+        $filter = new Zend_Filter_Word_DashToCamelCase();
+        
+        $className = ($this->_moduleName) ? $filter->filter(ucfirst($this->_moduleName)) . '_' : '';
         $className .= ucfirst($this->_controllerName) . 'Controller';
 
         $codeGenFile = new Zend_CodeGenerator_Php_File(array(
