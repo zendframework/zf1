@@ -67,7 +67,8 @@ abstract class Zend_Tool_Project_Context_Zf_AbstractClassFile extends Zend_Tool_
                 $prefix = $containingResource->getAttribute('classNamePrefix');
                 $fullClassName = $prefix;
             } elseif ($containingResource->getName() == 'ModuleDirectory') {
-                $prefix = ucfirst($containingResource->getAttribute('moduleName')) . '_';
+                $filter = new Zend_Filter_Word_DashToCamelCase();
+                $prefix = $filter->filter(ucfirst($containingResource->getAttribute('moduleName'))) . '_';
                 $fullClassName = $prefix;
             }
         }
