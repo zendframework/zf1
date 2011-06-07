@@ -554,6 +554,17 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->_validator->getDomainCheck());
     }
+    
+    /**
+     * @group ZF-11222
+     * @group ZF-11451
+     */
+    public function testEmailAddressesWithTrailingDotInHostPartAreRejected()
+    {
+        $this->assertFalse($this->_validator->isValid('example@gmail.com.'));
+        $this->assertFalse($this->_validator->isValid('test@test.co.'));
+        $this->assertFalse($this->_validator->isValid('test@test.co.za.'));
+    }
 
     public function errorHandler($errno, $errstr)
     {

@@ -527,8 +527,9 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         // Split email address up and disallow '..'
+        // and disallow addresses ending with a '.'
         if ((strpos($value, '..') !== false) or
-            (!preg_match('/^(.+)@([^@]+)$/', $value, $matches))) {
+            (!preg_match('/^(.+)@([^@]+[^.])$/', $value, $matches))) {
             $this->_error(self::INVALID_FORMAT);
             return false;
         }
