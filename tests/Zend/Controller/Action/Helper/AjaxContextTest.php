@@ -32,6 +32,7 @@ require_once 'Zend/Controller/Action.php';
 require_once 'Zend/Controller/Action/HelperBroker.php';
 require_once 'Zend/Controller/Front.php';
 require_once 'Zend/Controller/Request/Http.php';
+require_once 'Zend/Controller/Request/Simple.php';
 require_once 'Zend/Controller/Response/Cli.php';
 require_once 'Zend/Layout.php';
 require_once 'Zend/View.php';
@@ -197,6 +198,48 @@ class Zend_Controller_Action_Helper_AjaxContextTest extends PHPUnit_Framework_Te
         $this->helper->initContext();
         $this->assertNull($this->helper->getCurrentContext());
     }
+
+    /**
+     * @author Fix sponsored by Enrise - www.enrise.com
+     *
+     * @group ZF-8444
+     */
+    public function testAjaxContextIsRequestDependent()
+    {
+        $request = new ZendTest_Controller_Request_SimpleMock_AjaxTest();
+        $helper = new Zend_Controller_Action_Helper_AjaxContext();
+
+        $helper->setActionController(
+                    new Zend_Controller_Action_Helper_AjaxContextTestController(
+                        $request,
+                        $this->response,
+                        array()
+                    )
+        );
+
+        try {
+            $helper->initContext();
+            $this->assertTrue(true);
+        } catch(Exception $e) {
+            if($e->getMessage() == 'test testAjaxContextIsRequestDependent failed' ) {
+                $this->fail();
+            } else {
+                throw $e;
+            }
+        }
+    }
+}
+
+class ZendTest_Controller_Request_SimpleMock_AjaxTest
+    extends Zend_Controller_Request_Simple
+{
+         public function __call($method, $args) {
+             if($method == 'isXmlHttpRequest') {
+                 throw new exception('test testAjaxContextIsRequestDependent failed');
+             }
+
+             return parent::__call($method, $args);
+         }
 }
 
 class Zend_Controller_Action_Helper_AjaxContextTestController extends Zend_Controller_Action
