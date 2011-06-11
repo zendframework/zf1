@@ -1120,7 +1120,7 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
     /**
      * Retrieve test case request object
      *
-     * @return Zend_Controller_Request_Abstract
+     * @return Zend_Controller_Request_HttpTestCase
      */
     public function getRequest()
     {
@@ -1134,7 +1134,7 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
     /**
      * Retrieve test case response object
      *
-     * @return Zend_Controller_Response_Abstract
+     * @return Zend_Controller_Response_HttpTestCase
      */
     public function getResponse()
     {
