@@ -128,6 +128,9 @@ class Zend_Tool_Project_Provider_Controller
                 );
         }
         
+        $originalName = $name;
+        $name = ucfirst($name);
+        
         if (self::hasResource($this->_loadedProfile, $name, $module)) {
             throw new Zend_Tool_Project_Provider_Exception('This project already has a controller named ' . $name);
         }
@@ -136,9 +139,6 @@ class Zend_Tool_Project_Provider_Controller
         if (preg_match('#[_-]#', $name)) {
             throw new Zend_Tool_Project_Provider_Exception('Controller names should be camel cased.');
         }
-
-        $originalName = $name;
-        $name = ucfirst($name);
 
         try {
             $controllerResource = self::createResource($this->_loadedProfile, $name, $module);
