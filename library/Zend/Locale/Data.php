@@ -1139,6 +1139,10 @@ class Zend_Locale_Data
                 $temp = self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\'' . $value[0] . '\']/fields/field/relative[@type=\'' . $value[1] . '\']', '', $value[1]);
                 break;
 
+            case 'defaultnumberingsystem':
+                $temp = self::_getFile($locale, '/ldml/numbers/defaultNumberingSystem', '', 'default');
+                break;
+
             case 'decimalnumber':
                 $temp = self::_getFile($locale, '/ldml/numbers/decimalFormats/decimalFormatLength/decimalFormat/pattern', '', 'default');
                 break;

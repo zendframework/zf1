@@ -745,6 +745,16 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
         $value = Zend_Locale_Data::getContent('de_AT', 'decimalnumber');
         $this->assertEquals("#,##0.###", $value);
     }
+    
+    /**
+     * test for reading defaultNumberingSystem from locale data
+     * @group ZF-10728
+     */
+    public function testDefaultNumberingSystem()
+    {
+        $value = Zend_Locale_Data::getContent('de_AT', 'defaultnumberingsystem');
+        $this->assertEquals('latn', $value);
+    }
 
     /**
      * test for reading scientificnumber from locale
