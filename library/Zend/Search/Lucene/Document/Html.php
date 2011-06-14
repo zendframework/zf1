@@ -438,7 +438,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
         if (!is_callable($callback)) {
             require_once 'Zend/Search/Lucene/Exception.php';
-            throw new Zend_Search_Lucene_Exception('$viewHelper parameter mast be a View Helper name, View Helper object or callback.');
+            throw new Zend_Search_Lucene_Exception('$viewHelper parameter must be a View Helper name, View Helper object or callback.');
         }
 
         $xpath = new DOMXPath($this->_doc);
