@@ -346,6 +346,21 @@ class Zend_Captcha_ImageTest extends PHPUnit_Framework_TestCase
         $input = array("id" => $this->captcha->getId(), "input" => $this->captcha->getWord());
         $this->assertTrue($this->element->isValid($input));
     }
+    
+    /**
+     * @group ZF-11483
+     */
+    public function testImageTagRenderedProperlyBasedUponDoctype()
+    {
+        $this->testCaptchaIsRendered();        
+        $view = new Zend_View();
+        
+        $view->doctype('XHTML1_STRICT');        
+        $this->assertRegExp('#/>$#', $this->captcha->render($view));
+        
+        $view->doctype('HTML4_STRICT');        
+        $this->assertRegExp('#[^/]>$#', $this->captcha->render($view));
+    }
 }
 
 class Zend_Captcha_ImageTest_SessionContainer
