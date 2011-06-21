@@ -531,6 +531,7 @@ abstract class Zend_Db_Adapter_Abstract
      * @param mixed $table The table to insert data into.
      * @param array $bind Column-value pairs.
      * @return int The number of affected rows.
+     * @throws Zend_Db_Adapter_Exception
      */
     public function insert($table, array $bind)
     {
@@ -583,6 +584,7 @@ abstract class Zend_Db_Adapter_Abstract
      * @param  array        $bind  Column-value pairs.
      * @param  mixed        $where UPDATE WHERE clause(s).
      * @return int          The number of affected rows.
+     * @throws Zend_Db_Adapter_Exception
      */
     public function update($table, array $bind, $where = '')
     {
