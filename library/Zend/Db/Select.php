@@ -68,6 +68,8 @@ class Zend_Db_Select
     const SQL_UNION      = 'UNION';
     const SQL_UNION_ALL  = 'UNION ALL';
     const SQL_FROM       = 'FROM';
+    const SQL_JOIN       = 'JOIN';
+    const SQL_USING      = 'USING';
     const SQL_WHERE      = 'WHERE';
     const SQL_DISTINCT   = 'DISTINCT';
     const SQL_GROUP_BY   = 'GROUP BY';
@@ -748,11 +750,20 @@ class Zend_Db_Select
      * @param  string $cond Join on this condition
      * @param  array|string $cols The columns to select from the joined table
      * @param  string $schema The database name to specify, if any.
+     * @param  string $joinColumnType Denotes column selection type (ie: ON or USING)
      * @return Zend_Db_Select This Zend_Db_Select object
      * @throws Zend_Db_Select_Exception
      */
-    protected function _join($type, $name, $cond, $cols, $schema = null)
+    protected function _join($type, $name, $cond, $cols, $schema = null, $joinColumnType = self::SQL_ON)
     {
+        if (!in_array($joinColumnType, array(self::SQL_ON, self::SQL_USING))) {
+            /**
+             * @see Zend_Db_Select_Exception
+             */
+            require_once 'Zend/Db/Select/Exception.php';
+            throw new Zend_Db_Select_Exception("Invalid join column type '$joinColumnType'");            
+        }
+        
         if (!in_array($type, self::$_joinTypes) && $type != self::FROM) {
             /**
              * @see Zend_Db_Select_Exception
@@ -828,7 +839,8 @@ class Zend_Db_Select
                 'joinType'      => $type,
                 'schema'        => $schema,
                 'tableName'     => $tableName,
-                'joinCondition' => $cond
+                'joinCondition' => $cond,
+                'joinColumnType'=> $joinColumnType
                 );
             while ($tmpFromParts) {
                 $currentCorrelationName = key($tmpFromParts);
@@ -857,7 +869,7 @@ class Zend_Db_Select
      * $select = $db->select()->from('table1')
      *                        ->joinUsing('table2', 'column1');
      *
-     * // SELECT * FROM table1 JOIN table2 ON table1.column1 = table2.column2
+     * // SELECT * FROM table1 JOIN table2 USING (column1)
      * </code>
      *
      * These joins are called by the developer simply by adding 'Using' to the
@@ -877,14 +889,8 @@ class Zend_Db_Select
             throw new Zend_Db_Select_Exception("You can only perform a joinUsing after specifying a FROM table");
         }
 
-        $join  = $this->_adapter->quoteIdentifier(key($this->_parts[self::FROM]), true);
-        $from  = $this->_adapter->quoteIdentifier($this->_uniqueCorrelation($name), true);
-
-        $cond1 = $from . '.' . $cond;
-        $cond2 = $join . '.' . $cond;
-        $cond  = $cond1 . ' = ' . $cond2;
-
-        return $this->_join($type, $name, $cond, $cols, $schema);
+        $cond = "(" . implode(",", (array)$cond) . ")";        
+        return $this->_join($type, $name, $cond, $cols, $schema, self::SQL_USING);
     }
 
     /**
@@ -1127,7 +1133,7 @@ class Zend_Db_Select
 
             // Add join conditions (if applicable)
             if (!empty($from) && ! empty($table['joinCondition'])) {
-                $tmp .= ' ' . self::SQL_ON . ' ' . $table['joinCondition'];
+                $tmp .= ' ' . $table['joinColumnType'] . ' ' . $table['joinCondition'];
             }
 
             // Add the table name and condition add to the list

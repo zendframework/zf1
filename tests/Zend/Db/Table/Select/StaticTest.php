@@ -289,24 +289,24 @@ class Zend_Db_Table_Select_StaticTest extends Zend_Db_Select_TestCommon
 
     /**
      * Test adding a JOIN USING to a Zend_Db_Select object.
+     * @group ZF-3792
      */
-
     public function testSelectJoinUsing()
     {
         $select = $this->_selectJoinUsing();
         $sql = preg_replace('/\\s+/', ' ', $select->__toString());
-        $this->assertEquals('SELECT "zfproducts".*, "zfbugs_products".* FROM "zfproducts" INNER JOIN "zfbugs_products" ON "zfbugs_products"."product_id" = "zfproducts"."product_id" WHERE ("zfbugs_products"."product_id" < 3)', $sql);
+        $this->assertEquals('SELECT "zfproducts".*, "zfbugs_products".* FROM "zfproducts" INNER JOIN "zfbugs_products" USING ("product_id") WHERE ("zfbugs_products"."product_id" < 3)', $sql);
     }
 
     /**
      * Test adding a JOIN INNER USING to a Zend_Db_Select object.
+     * @group ZF-3792
      */
-
     public function testSelectJoinInnerUsing()
     {
         $select = $this->_selectJoinInnerUsing();
         $sql = preg_replace('/\\s+/', ' ', $select->__toString());
-        $this->assertEquals('SELECT "zfproducts".*, "zfbugs_products".* FROM "zfproducts" INNER JOIN "zfbugs_products" ON "zfbugs_products"."product_id" = "zfproducts"."product_id" WHERE ("zfbugs_products"."product_id" < 3)', $sql);
+        $this->assertEquals('SELECT "zfproducts".*, "zfbugs_products".* FROM "zfproducts" INNER JOIN "zfbugs_products" USING ("product_id") WHERE ("zfbugs_products"."product_id" < 3)', $sql);
     }
 
     public function testSelectJoinWithNocolumns()

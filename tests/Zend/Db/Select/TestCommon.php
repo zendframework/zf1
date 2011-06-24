@@ -1698,4 +1698,61 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $this->assertType('string',$serialize);
     }
 
+    /**
+     * @group ZF-3309
+     */
+    public function testJoinUsingUsesTableNameOfTableBeingJoinedWhenAliasNotDefined()
+    {
+        $select = $this->_db->select();
+        $select->from('table1')->joinUsing('table2', 'column1');
+        
+        $condition = "/"
+                   . Zend_Db_Select::INNER_JOIN
+                   . " [`\"']?table2[`\"']? "
+                   . Zend_Db_Select::SQL_USING
+                   . " \([`\"']?column1[`\"']?\)"
+                   . "/is";
+        
+        $this->assertRegexp($condition, $select->assemble());
+    }
+    
+    /**
+     * @group ZF-3309
+     */
+    public function testJoinUsingUsesAliasOfTableBeingJoinedWhenAliasIsDefined()
+    {
+        $select = $this->_db->select();
+        $select->from('table1')->joinUsing(array('t2'=>'table2'), 'column1');
+        
+        $condition = "/"
+                   . Zend_Db_Select::INNER_JOIN
+                   . " [`\"']?table2[`\"']? "
+                    . Zend_Db_Select::SQL_AS
+                   . " [`\"']?t2[`\"']? "
+                   . Zend_Db_Select::SQL_USING
+                   . " \([`\"']?column1[`\"']?\)"
+                   . "/is";
+        
+        $this->assertRegexp($condition, $select->assemble());
+    }
+    
+    /**
+     * @group ZF-3309
+     * @group ZF-5372
+     */
+    public function testJoinUsingProperlyHandlesArrayOfColumnNamesToJoinOn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1')->joinUsing('table2', array('c1','c2','c3'));
+        
+        $condition = "/"
+                   . Zend_Db_Select::INNER_JOIN
+                   . " [`\"']?table2[`\"']? " 
+                   . Zend_Db_Select::SQL_USING
+                   . " \([`\"']?c1[`\"']?,[`\"']?c2[`\"']?,[`\"']?c3[`\"']?\)"
+                   . "/is";
+        
+        $this->assertRegexp($condition, $select->assemble());
+    }
+
 }
