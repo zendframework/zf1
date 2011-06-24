@@ -151,7 +151,8 @@ class Zend_Json_Encoder
             }
         }
 
-        return '{"__className":"' . get_class($value) . '"'
+        $className = get_class($value);
+        return '{"__className":' . $this->_encodeString($className)
                 . $props . '}';
     }
 

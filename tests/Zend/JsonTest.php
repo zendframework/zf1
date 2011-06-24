@@ -762,6 +762,25 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
         $expectedDecoding = '{"__className":"ArrayIterator","0":"foo"}';
         $this->assertEquals($encoded, $expectedDecoding);
     }
+    
+    /**
+     * @group ZF-11356
+     */
+    public function testEncoderEscapesNamespacedClassNamesProperly()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0') === -1) {
+            $this->markTestSkipped('Namespaces not available in PHP < 5.3.0');
+        }
+        
+        require_once dirname(__FILE__ ) . "/Json/_files/ZF11356-NamespacedClass.php";        
+        $inputValue = new \Zend\JsonTest\ZF11356\NamespacedClass(array('foo'));
+        
+        $encoded = Zend_Json_Encoder::encode($inputValue);
+        $this->assertEquals(
+            '{"__className":"Zend\\\\JsonTest\\\\ZF11356\\\\NamespacedClass","0":"foo"}',
+            $encoded
+        );
+    }
 }
 
 /**
