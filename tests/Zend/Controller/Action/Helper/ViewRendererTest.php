@@ -858,6 +858,36 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         $this->assertEquals('B', $b->getViewSuffix());
         $this->assertNotEquals('B', $a->getViewSuffix());
     }
+    
+    /**
+     * @group ZF-10725
+     * @dataProvider providerViewScriptNameDoesNotIncludeDisallowedCharacters
+     */
+    public function testViewScriptNameDoesNotIncludeDisallowedCharacters($actionName)
+    {
+        $this->request->setModuleName('default')
+                      ->setControllerName('foo')
+                      ->setActionName($actionName);
+        $controller = new Bar_IndexController($this->request, $this->response, array());
+        $this->helper->setActionController($controller);
+        $scriptName = $this->helper->getViewScript();
+        $this->assertEquals('foo/my-bar.phtml', $scriptName);
+
+    }
+    
+    /**
+     * Data provider for testViewScriptNameDoesNotIncludeDisallowedCharacters
+     * @group ZF-10725
+     * @return array
+     */
+    public function providerViewScriptNameDoesNotIncludeDisallowedCharacters()
+    {
+        return array(
+            array('myBar-'),
+            array('-myBar'),
+            array('-myBar-')
+        );
+    }
 
     protected function _normalizePath($path)
     {

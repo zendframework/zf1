@@ -626,6 +626,9 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         } elseif (null !== $action) {
             $vars['action'] = $action;
         }
+        
+        $replacePattern = array('/[^a-z0-9]+$/', '/^[^a-z0-9]+/');
+        $vars['action'] = preg_replace($replacePattern, '', $vars['action']);
 
         $inflector = $this->getInflector();
         if ($this->getNoController() || $this->getNeverController()) {
