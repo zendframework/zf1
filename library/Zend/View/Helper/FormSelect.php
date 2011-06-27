@@ -123,8 +123,11 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
                 if (null !== $translator) {
                     $opt_value = $translator->translate($opt_value);
                 }
+                $opt_id = ' id="' . $this->view->escape($id) . '-optgroup-'
+                        . $this->view->escape($opt_value) . '"';
                 $list[] = '<optgroup'
                         . $opt_disable
+                        . $opt_id
                         . ' label="' . $this->view->escape($opt_value) .'">';
                 foreach ($opt_label as $val => $lab) {
                     $list[] = $this->_build($val, $lab, $value, $disable);

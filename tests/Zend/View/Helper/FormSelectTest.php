@@ -311,6 +311,25 @@ class Zend_View_Helper_FormSelectTest extends PHPUnit_Framework_TestCase
         $this->assertRegexp('/<select[^>]*?(name="baz\[\]")/', $html, $html);
         $this->assertNotRegexp('/<select[^>]*?(multiple="multiple")/', $html, $html);
     }
+    /** 
+     * @group ZF-8252
+     */
+    public function testOptGroupHasAnId()
+    {
+        $html = $this->helper->formSelect(array(
+            'name'    => 'baz',
+            'options' => array(
+                'foo' => 'Foo',
+                'bar' => array(
+                    '1' => 'one',
+                    '2' => 'two'
+                ),
+                'baz' => 'Baz,'
+            )
+        ));
+        $this->assertRegexp('/<optgroup[^>]*?id="baz-optgroup-bar"[^>]*?"bar"[^>]*?/', $html, $html);
+    }
+ 
 }
 
 // Call Zend_View_Helper_FormSelectTest::main() if this source file is executed directly.
