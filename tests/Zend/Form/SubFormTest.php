@@ -139,6 +139,24 @@ class Zend_Form_SubFormTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->form, $this->form->loadDefaultDecorators());
     }
+    /**
+     * @see ZF-11504
+     */
+    public function testSubFormWithNumericName()
+    {
+        $subForm = new Zend_Form_SubForm(array(
+            'elements' => array(
+                'foo' => 'text',
+                'bar' => 'text',
+            ),
+        ));
+        $form = new Zend_Form();
+        $form->addSubForm($subForm, 0);
+        $form->addSubForm($subForm, 234);
+        $form2 = clone $form;
+        $this->assertEquals($form2->getSubForm(234)->getName(),234);
+        $this->assertEquals($form2->getSubForm(0)->getName(),0);
+    }
 }
 
 class Zend_Form_SubFormTest_SubForm extends Zend_Form_SubForm
