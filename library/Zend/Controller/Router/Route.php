@@ -347,7 +347,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
                     $value = $this->_values[$name];
                 } elseif (!$reset && !$useDefault && isset($this->_wildcardData[$name])) {
                     $value = $this->_wildcardData[$name];
-                } elseif (isset($this->_defaults[$name])) {
+                } elseif (array_key_exists($name, $this->_defaults)) {
                     $value = $this->_defaults[$name];
                 } else {
                     require_once 'Zend/Controller/Router/Exception.php';
