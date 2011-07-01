@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- EN-Revision: 20763 -->
-<!-- Reviewed: no -->
+<!-- Reviewed: 20763 -->
 <sect1 id="zend.application.theory-of-operation">
-    <title>Theorie der Funktionsweise</title>
+    <title>Arbeitsweise</title>
 
     <para>
-        Um eine <acronym>MVC</acronym> Anwendung zu konfigurieren und bereit zur Auslieferung
-        zu bekommen wird ein immer größerer Anteil an Code benötigt sobald mehr Features verfügbar
+        Um eine <acronym>MVC</acronym>-Anwendung zu konfigurieren und bereit zur Auslieferung
+        zu bekommen wird ein immer größerer Anteil an Code benötigt, sobald mehr Features verfügbar
         sind: Setzen der Datenbank, Konfiguration der View und View Helfer, Konfiguration der
         Layouts, Registrierung der Plugins, Registrierung der Aktion Helfer, und andere.
     </para>
 
     <para>
-        Zusätzlich will man oft den gleichen Code wiederverwenden um Tests zu bootstrappen, einen
-        Cronjob, oder ein Service Skript zu haben. Wärend es sehr einfach ist sein Bootstrap Skript
-        einzubauen, gibt es oft Initialisierungen die abhängig sind von der Umgebung - man könnte
-        kein <acronym>MVC</acronym> für einen Cronjob benötigen, oder nur den DB Layer für ein
-        Service Skript.
+        Zusätzlich will man oft den gleichen Code wiederverwenden, um Tests zu bootstrappen, einen
+        Cronjob, oder ein Service-Skript zu haben. Wärend es sehr einfach ist, sein Bootstrap-Skript
+        einzubauen, gibt es oft Initialisierungen, die abhängig von der Umgebung sind - man
+        benötigt kein <acronym>MVC</acronym> für einen Cronjob, oder nur den DB-Layer für ein
+        Service-Skript.
     </para>
 
     <para>
-        <classname>Zend_Application</classname> zielt darauf ab das alles einfacher zu machen und
-        bietet Wiederwervendbarkeit durch die Kapselung vom Bootstrapping in <acronym>OOP</acronym>
-        Paradigmen.
+        <classname>Zend_Application</classname> zielt darauf ab, das alles einfacher zu machen und
+        bietet Wiederverwendbarkeit durch die Kapselung des Bootstrapping in
+        <acronym>OOP</acronym>-Paradigmen.
     </para>
 
     <para>
@@ -32,37 +32,37 @@
     <itemizedlist>
         <listitem>
             <para>
-                <classname>Zend_Application</classname>: Lädt die <acronym>PHP</acronym> Umgebung,
-                inklusive Inklude-Pfade und Autoloading, und instanziiert die benötigte Bootstrap
-                Klasse.
+                <classname>Zend_Application</classname>: Lädt die <acronym>PHP</acronym>-Umgebung,
+                inklusive Inklude-Pfade und Autoloading, und instanziiert die benötigte
+                Bootstrap-Klasse.
             </para>
         </listitem>
 
         <listitem>
             <para>
-                <classname>Zend_Application_Bootstrap</classname>: Bietet Interfaces für Bootstrap
-                Klassen. <classname>Zend_Application_Bootstrap_Bootstrap</classname> bietet übliche
-                Funktionalitäten für die meisten Notwendigkeiten des Bootstrappings, inklusive
-                Angorithmen um Abhängigkeiten zu prüfen und die Möglichkeit Bootstrap Ressourcen bei
-                Bedarf zu laden.
+                <classname>Zend_Application_Bootstrap</classname>: Bietet Interfaces für
+                Bootstrap-Klassen. <classname>Zend_Application_Bootstrap_Bootstrap</classname> bietet
+                übliche Funktionalitäten für die meisten Notwendigkeiten des Bootstrappings,
+                inklusive Algorithmen um Abhängigkeiten zu prüfen und die Möglichkeit
+                Bootstrap-Ressourcen bei Bedarf zu laden.
             </para>
         </listitem>
 
         <listitem>
             <para>
                 <classname>Zend_Application_Resource</classname> bietet ein Interface für Standard
-                Bootstrap Ressourcen die bei Bedarf von einer Bootstrap Instanz geladen werden
-                können, sowie verschiedene standardmäßige Ressource Implementationen.
+                Bootstrap-Ressourcen, die bei Bedarf von einer Bootstrap-Instanz geladen werden
+                können, sowie verschiedene standardmäßige Ressource-Implementationen.
             </para>
         </listitem>
     </itemizedlist>
 
     <para>
-        Entwickler erstellen eine Bootstrap Klasse für Ihre Anwendung und erweitern
+        Entwickler erstellen eine Bootstrap-Klasse für ihre Anwendung und erweitern
         <classname>Zend_Application_Bootstrap_Bootstrap</classname> oder implementieren (mindestens)
         <classname>Zend_Application_Bootstrap_BootstrapAbstract</classname>. Der Einstiegspunkt
         (z.B. <filename>public/index.php</filename>) lädt <classname>Zend_Application</classname>
-        und initialisiert Sie, indem folgendes übergeben wird:
+        und initialisiert sie, indem folgendes übergeben wird:
     </para>
 
     <itemizedlist>
@@ -71,7 +71,7 @@
     </itemizedlist>
 
     <para>
-        Die Bootstrap Optionen enthalten den Pfad zur Datei welche die Bootstrap Klasse enthält und
+        Die Bootstrap-Optionen enthalten den Pfad zur Datei, welche die Bootstrap-Klasse enthält und
         optional:
     </para>
 
@@ -81,38 +81,38 @@
         </listitem>
 
         <listitem>
-            <para>Jeden Autoloader Namespace der zusätzlich zu registrieren ist</para>
+            <para>Jeden Autoloader Namespace, der zusätzlich zu registrieren ist</para>
         </listitem>
 
         <listitem>
-            <para>Jede <filename>php.ini</filename> Einstellung die zu initialisieren ist</para>
+            <para>Jede <filename>php.ini</filename> Einstellung, die zu initialisieren ist</para>
         </listitem>
 
         <listitem>
             <para>
-                Den Klassennamen für die Bootstrap Klasse (wenn diese nicht "Bootstrap" ist)
+                Den Klassennamen für die Bootstrap-Klasse (wenn diese nicht "Bootstrap" ist)
             </para>
         </listitem>
 
         <listitem>
-            <para>Ressourcen Präfix zu Pfad Paare die zu verwenden sind</para>
+            <para>Ressourcen-Präfix zu Pfadpaaren, die zu verwenden sind</para>
         </listitem>
 
         <listitem>
-            <para>Jede Ressource die zu verwenden ist (durch Name der Klasse oder Kurzname)</para>
+            <para>Jede Ressource, die zu verwenden ist (durch Name der Klasse oder Kurzname)</para>
         </listitem>
 
         <listitem>
-            <para>Zusätzliche Pfade zu einer Konfigurationsdatei die zu laden ist</para>
+            <para>Zusätzliche Pfade zu einer Konfigurationsdatei, die zu laden ist</para>
         </listitem>
 
         <listitem>
-            <para>Zusätzliche Konfigurations Optionen</para>
+            <para>Zusätzliche Konfigurationsoptionen</para>
         </listitem>
     </itemizedlist>
 
     <para>
-        Optionen können, ein Array, ein <classname>Zend_Config</classname> Objekt, oder der Pfad zu
+        Optionen können ein Array, ein <classname>Zend_Config</classname>-Objekt, oder der Pfad zu
         einer Konfigurationsdatei sein.
     </para>
 
@@ -120,8 +120,8 @@
         <title>Bootstrapping</title>
 
         <para>
-            <classname>Zend_Application</classname>'s zweites Feld der Arbeit ist die Ausführung des
-            Bootstraps der Anwendung. Bootstraps müssen mindestens
+            Der zweite Aufgabenbereich von<classname>Zend_Application</classname> ist die Ausführung
+            des Bootstraps der Anwendung. Bootstraps müssen mindestens
             <classname>Zend_Application_Bootstrap_Bootstrapper</classname> implementieren, welches
             die folgende <acronym>API</acronym> definiert:
         </para>
@@ -164,25 +164,25 @@ interface Zend_Application_Bootstrap_Bootstrapper
             <para>
                 Die Implementation von
                 <classname>Zend_Application_Bootstrap_BootstrapAbstract</classname> bietet eine
-                einfache Konvention für die Definition von Methoden für Ressourcen Klassen. Jede
-                geschützte Methode (protected), deren Name mit <emphasis>_init</emphasis> beginnt
+                einfache Konvention für die Definition von Methoden für Ressourcen-Klassen. Jede
+                geschützte Methode (protected), deren Name mit <emphasis>_init</emphasis> beginnt,
                 wird als Ressourcemethode angenommen.
             </para>
 
             <para>
-                Um eine einzelne Ressource Methode zu bootstrappen, muß die
-                <methodname>bootstrap()</methodname> Methode verwendet, und der Name der Ressource
-                übergeben werden. Der Name ist der Name der Methode ohne den
-                <emphasis>_init</emphasis> Präfix.
+                Um eine einzelne Ressource-Methode zu bootstrappen, muß die
+                Methode <methodname>bootstrap()</methodname> verwendet und der Name der Ressource
+                übergeben werden. Der Name ist der Name der Methode ohne das
+                Präfix <emphasis>_init</emphasis>.
             </para>
 
             <para>
-                Um mehrere Ressourcen Methoden zu bootstrappen, muß ein Array von Namen übergeben
-                werden. Um alle Ressourcen Methoden zu bootstrappen, darf nichts übergeben werden.
+                Um mehrere Ressourcen-Methoden zu bootstrappen, muß ein Array von Namen übergeben
+                werden. Um alle Ressourcen-Methoden zu bootstrappen, darf nichts übergeben werden.
             </para>
 
             <para>
-                Nehmen wir die folgende Bootstrap Klasse an:
+                Nehmen wir die folgende Bootstrap-Klasse an:
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -206,7 +206,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 ]]></programlisting>
 
             <para>
-                Um nur die <methodname>_initFoo()</methodname> Methode zu bootstrappen, machen wir
+                Um nur die Methode <methodname>_initFoo()</methodname> zu bootstrappen, machen wir
                 das folgende:
             </para>
 
@@ -224,7 +224,7 @@ $bootstrap->bootstrap(array('foo', 'bar'));
 ]]></programlisting>
 
             <para>
-                Um alle Ressourcen Methoden zu bootstrappen, rufen wir
+                Um alle Ressourcen-Methoden zu bootstrappen, rufen wir
                 <methodname>bootstrap()</methodname> ohne Argumente auf:
             </para>
 
@@ -234,23 +234,23 @@ $bootstrap->bootstrap();
         </sect3>
 
         <sect3 id="zend.application.theory-of-operation.bootstrap.resource-plugins">
-            <title>Bootstraps die Ressourcen Plugins benutzen</title>
+            <title>Bootstraps, die Ressourcen-Plugins benutzen</title>
 
             <para>
-                Um Bootstraps wiederverwendbarer zu machen wurde die Fähigkeit zur Verfügung
-                gestellt Ressourcen in Ressource Plugin Klassen zu geben. Das erlaubt es Ressourcen
-                einfach über die Konfiguration zu mischen und zu sehen ob Sie passen. Wir behandeln
+                Um Bootstraps wiederverwendbarer zu machen, wurde die Fähigkeit zur Verfügung
+                gestellt, Ressourcen in Ressource-Plugin-Klassen zu geben. Das erlaubt es, Ressourcen
+                einfach über die Konfiguration zu mischen und zu sehen ob sie passen. Wir behandeln
                 später <link linkend="zend.application.theory-of-operation.resources">wie
-                    Ressourcen erstellt werden</link>; in diesem Abschnitt zeigen wir nur wie Sie
+                    Ressourcen erstellt werden</link>; in diesem Abschnitt zeigen wir nur, wie sie
                 angepasst werden können.
             </para>
 
             <para>
-                Wenn die Bootstrap dazu in der Lage sein soll Ressource Plugins zu verwenden muß
+                Wenn das Bootstrap dazu in der Lage sein soll, Ressource-Plugins zu verwenden, muß
                 man ein zusätzliches Interface implementieren,
                 <classname>Zend_Application_Bootstrap_ResourceBootstrapper</classname>. Dieses
                 Interface definiert eine <acronym>API</acronym> für das Erkennen, Registrieren und
-                Laden von Ressource Plugins:
+                Laden von Ressource-Plugins:
             </para>
 
         <programlisting language="php"><![CDATA[
@@ -268,27 +268,27 @@ interface Zend_Application_Bootstrap_ResourceBootstrapper
 ]]></programlisting>
 
             <para>
-                Ressource Plugins bieten grundsätzlich die Fähigkeit Ressource Initialisierer zu
-                Erstellen die zwischen Anwendungen wiederverwendet werden können. Das erlaubt es
+                Ressource-Plugins bieten grundsätzlich die Fähigkeit, Ressource-Initialisierer zu
+                erstellen, die zwischen Anwendungen wiederverwendet werden können. Das erlaubt es,
                 die aktuelle Bootstrap relativ klein zu halten, und neue Ressourcen einzuführen
-                ohne Sie in der Bootstrap selbst anzugreifen.
+                ohne sie in der Bootstrap selbst anzugreifen.
             </para>
 
             <para>
                 <classname>Zend_Application_Bootstrap_BootstrapAbstract</classname> (und bei
                 Erweiterung <classname>Zend_Application_Bootstrap_Bootstrap</classname>)
-                implementiert dieses Interface genauso, und erlaubt es Ressource Plugins zu
+                implementiert dieses Interface genauso, und erlaubt es Ressource-Plugins zu
                 verwenden.
             </para>
 
             <para>
-                Um Ressource Plugins zu verwenden müssen diese in den Optionen spezifiziert
-                werden, die dem Anwendungs Objekt und-oder der Bootstrap übergeben werden. Diese
+                Um Ressource-Plugins zu verwenden, müssen diese in den Optionen spezifiziert
+                werden, die dem Anwendungsobjekt und/oder der Bootstrap übergeben werden. Diese
                 Optionen können von einer Konfigurationsdatei kommen, oder manuell übergeben
-                werden. Optionen sind Paare von Schlüssel zu Optionspaaren, wobei der Schlüssel
-                den Namen der Ressource repräsentiert. Der Ressourcename ist das Segment das
+                werden. Optionen sind Paare von Schlüssel zu Optionen, wobei der Schlüssel
+                den Namen der Ressource repräsentiert. Der Ressourcename ist das Segment, das
                 dem Klassenpräfix folgt. Die Ressourcen, die zum Beispiel mit Zend Framework
-                ausgeliefert werden, haben den Klassenpräfix
+                ausgeliefert werden, haben das Klassenpräfix
                 "<classname>Zend_Application_Resource_</classname>"; alles was folgt würde der
                 Name der Ressource sein. Als Beispiel:
             </para>
@@ -304,22 +304,22 @@ $application = new Zend_Application(APPLICATION_ENV, array(
 ]]></programlisting>
 
             <para>
-                Das zeigt das die "FrontController" verwendet werden sollte, mit den spezifizierten
-                Optionen.
+                Das bedeutet, dass die Ressource "FrontController" verwendet werden sollte, mit den
+                spezifizierten Optionen.
             </para>
 
             <para>
-                Wenn man beginnt eigene Ressource Plugins zu schreiben, oder Ressource Plugins von
-                dritten anzupassen, muß man der eigenen Bootstrap mitteilen wo nach Ihnen zu suchen
-                ist. Intern verwendet die Bootstrap <classname>Zend_Loader_PluginLoader</classname>
+                Wenn man beginnt, eigene Ressource-Plugins zu schreiben, oder Ressource-Plugins von
+                dritten anzupassen, muß man der eigenen Bootstrap mitteilen, wo nach ihnen zu suchen
+                ist. Intern verwendet Bootstrap <classname>Zend_Loader_PluginLoader</classname>,
                 so dass man nur die üblichen Klassenpräfix und Pfadpaare angeben muß.
             </para>
 
             <para>
-                Als Beispiel nehmen wir an das wir eigene Ressource Plugins in
-                <filename>APPLICATION_PATH/resources/</filename> haben, und das sie den gemeinsamen
+                Als Beispiel nehmen wir an, dass wir eigene Ressource-Plugins in
+                <filename>APPLICATION_PATH/resources/</filename> haben, und dass sie das gemeinsame
                 Klassenpräfix <classname>My_Resource</classname> teilen. Man würde diese
-                Information de Anwendungsobjekt wie folgt übergeben:
+                Information dem Anwendungsobjekt wie folgt übergeben:
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -336,15 +336,15 @@ $application = new Zend_Application(APPLICATION_ENV, array(
 ]]></programlisting>
 
             <para>
-                Man ist jetzt in der Lage Ressource von diesem Verzeichnis zu verwenden.
+                Man ist jetzt in der Lage, Ressourcen aus diesem Verzeichnis zu verwenden.
             </para>
 
             <para>
-                Wie Ressource Methoden kann die <methodname>bootstrap()</methodname> Methode
-                verwendet werden um Ressource Plugins zu verwenden. Wie bei Ressource Methoden
-                kann man entweder einzelne Ressource Plugins spezifizieren, mehrere Plugins
+                Wie Ressource-Methoden kann die Methode <methodname>bootstrap()</methodname>
+                verwendet werden, um Ressource-Plugins zu verwenden. Wie bei Ressource-Methoden
+                kann man entweder einzelne Ressource-Plugins spezifizieren, mehrere Plugins
                 (über ein Array), oder alle Plugins. Zusätzlich kann man mischen und entsprechende
-                Ressource Methoden genauso ausführen.
+                Ressource-Methoden genauso ausführen.
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -363,33 +363,33 @@ $bootstrap->bootstrap();
             <title>Ressource Registry</title>
 
             <para>
-                Viele, wenn nicht sogar alle, der eigenen Ressource Methoden oder Plugins
+                Viele, wenn nicht sogar alle, der eigenen Ressource-Methoden oder -Plugins
                 initialisieren Objekte, und in vielen Fällen werden diese Objekte an anderen
-                Orten der Anwendung benötigt. Wie man auf Sie zugreifen?
+                Orten der Anwendung benötigt. Wie kann man auf sie zugreifen?
             </para>
 
             <para>
                 <classname>Zend_Application_Bootstrap_BootstrapAbstract</classname>
-                bietet eine locale Registry für diese Objekte. Um eigene Objekte in Ihr zu
-                Speichern müssen diese einfach von den eigenen Ressourcen zurückgegeben werden.
+                bietet eine lokale Registry für diese Objekte. Um eigene Objekte darin zu
+                speichern, müssen diese einfach von den eigenen Ressourcen zurückgegeben werden.
             </para>
 
             <para>
                 Für maximale Flexibilität wird diese Registry intern als "Container" bezeichnet;
-                die einzige Voraussetzung ist das es ein Objekt ist. Ressourcen werden dann als
-                Eigenschaften registriert die nach dem Namen der Ressource benannt sind.
+                die einzige Voraussetzung ist, dass es ein Objekt ist. Ressourcen werden dann als
+                Eigenschaften registriert, die nach dem Namen der Ressource benannt sind.
                 Standardmäßig wird eine Instanz von <classname>Zend_Registry</classname> verwendet,
-                man kann aber jedes andere Objekt spezifizieren wenn man das will. Die Methoden
+                man kann aber jedes andere Objekt spezifizieren, wenn man das will. Die Methoden
                 <methodname>setContainer()</methodname> und <methodname>getContainer()</methodname>
-                können verwendet werden um den Container selber zu manipulieren.
-                <methodname>getResource($resource)</methodname> kann verwendet werden um eine
+                können verwendet werden, um den Container selber zu manipulieren.
+                <methodname>getResource($resource)</methodname> kann verwendet werden, um eine
                 angegebene Ressource vom Container zu holen, und
-                <methodname>hasResource($resource)</methodname> um zu prüfen ob die Ressource
+                <methodname>hasResource($resource)</methodname> um zu prüfen, ob die Ressource
                 aktuell schon registriert wurde.
             </para>
 
             <para>
-                Als Beispiel nehmen wir eine grundsätzliche View Ressource an:
+                Als Beispiel nehmen wir eine grundlegenden View Ressource an:
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -406,11 +406,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 ]]></programlisting>
 
             <para>
-                Man kann Sie prüfen und-oder Sie wie folgt holen:
+                Man kann sie prüfen und/oder sie wie folgt holen:
             </para>
 
             <programlisting language="php"><![CDATA[
-// Verwendung der has- und getResource() Paare:
+// Verwendung der has- und getResource()-Paare:
 if ($bootstrap->hasResource('view')) {
     $view = $bootstrap->getResource('view');
 }
@@ -423,17 +423,17 @@ if (isset($container->view)) {
 ]]></programlisting>
 
             <para>
-                Es ist zu beachten das die Registry und auch der Container nicht global sind. Das
-                bedeutet das man auf die Bootstrap zugreifen muß um Ressourcen zu holen.
-                <classname>Zend_Application_Bootstrap_Bootstrap</classname> bietet einige
-                Bequemlichkeiten hierfür: wärend der Ausführung von
-                <methodname>run()</methodname>, registriert Sie sich als Front Controller Parameter
-                "bootstrap", was es erlaubt Sie von Routern, Dispatchern, Plugins, und
-                Action Controllern zu holen.
+                Es ist zu beachten, dass die Registry und auch der Container nicht global sind. Das
+                bedeutet, dass man auf die Bootstrap zugreifen muß, um Ressourcen zu holen.
+                <classname>Zend_Application_Bootstrap_Bootstrap</classname> bietet einigen
+                Komfort hierfür: wärend der Ausführung von
+                <methodname>run()</methodname>, registriert sie sich als FrontController-Parameter
+                "bootstrap", was es erlaubt, sie von Routern, Dispatchern, Plugins und
+                Action-Controllern zu holen.
             </para>
 
             <para>
-                Wenn man, als Beispiel, auf die View Ressource von oben im eigenen Action
+                Wenn man zum Beispiel auf die View Ressource von oben im eigenen Action
                 Controller zugreifen will, kann man das wie folgt tun:
             </para>
 
@@ -454,9 +454,9 @@ class FooController extends Zend_Controller_Action
             <title>Erkennen von Abhängigkeiten</title>
 
             <para>
-                Zusätzlich zur Ausführung von Ressource Methoden und Plugins, ist es notwendig
-                sicherzustellen das diese einmal und wirklich nur einmal ausgeführt werden; Sie
-                sollen eine Anwendung bootstrappen, und die mehrfache Ausführung von Ihnen kann
+                Zusätzlich zur Ausführung von Ressource-Methoden und -Plugins, ist es notwendig
+                sicherzustellen, dass diese einmal und wirklich nur einmal ausgeführt werden; sie
+                sollen eine Anwendung bootstrappen, und die mehrfache Ausführung von ihnen kann
                 zu einem Overhead von Ressourcen führen.
             </para>
 
@@ -471,17 +471,17 @@ class FooController extends Zend_Controller_Action
                 Wie vorher erwähnt werden alle Ressourcen -- ob Methoden oder Plugins -- durch den
                 Aufruf von <methodname>bootstrap($resource)</methodname> gebootstrappt, wobei
                 <varname>$resource</varname> der Name einer Ressource ist, ein Array von Ressourcen
-                oder leer gelassen wird, was zeigt das alle Ressourcen ausgeführt werden sollen.
+                oder leer gelassen wird, was zeigt, dass alle Ressourcen ausgeführt werden sollen.
             </para>
 
             <para>
-                Wenn eine Ressource von anderen Ressourcen abhängig ist, sollte Sie in Ihrem Code
-                <methodname>bootstrap()</methodname> aufrufen um sicherzustellen das die Ressource
-                ausgeführt wurde. Weitere Aufrufe von Ihr werden dann ignoriert.
+                Wenn eine Ressource von anderen Ressourcen abhängig ist, sollten Sie in Ihrem Code
+                <methodname>bootstrap()</methodname> aufrufen um sicherzustellen, dass die Ressource
+                ausgeführt wurde. Weitere Aufrufe von ihr werden dann ignoriert.
             </para>
 
             <para>
-                In einer Ressource Methode würde so ein Aufruf wie folgt aussehen:
+                In einer Ressource-Methode würde so ein Aufruf wie folgt aussehen:
             </para>
 
             <programlisting language="php"><![CDATA[
@@ -489,17 +489,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected function _initRequest()
     {
-        // Sicherstellen das der Front Controlle initialisiert wird
+        // Sicherstellen, dass der FrontController initialisiert wird
         $this->bootstrap('FrontController');
 
-        // Den Front Controller von der Bootstrap Registry erhalten
+        // Den FrontController von der Bootstrap Registry erhalten
         $front = $this->getResource('FrontController');
 
         $request = new Zend_Controller_Request_Http();
         $request->setBaseUrl('/foo');
         $front->setRequest($request);
 
-        // Sicherstellen das die Anfrage in der Bootstrap Registry
+        // Sicherstellen, dass die Anfrage in der Bootstrap Registry
         // gespeichert ist
         return $request;
     }
@@ -513,16 +513,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         <para>
             <link linkend="zend.application.theory-of-operation.bootstrap.resource-plugins">Wie
-                vorher erwähnt</link> ist die Verwendung von Ressource Plugins ein guter Weg um
-            wiederverwendbare Bootstrap Ressourcen zu erstellen und um so viel wie möglich vom
-            eigenen Code in diskrete Klassen auszulagern. Wärend Zend Framework mit einer Anzahl
-            von standardmäßigen Ressource Plugins geliefert wird, besteht das Ziel darin das der
-            Entwickler eigene schreiben sollte um seine eigenen Notwendigkeiten der
+                vorher erwähnt</link> ist die Verwendung von Ressource Plugins ein guter Weg, um
+            wiederverwendbare Bootstrap-Ressourcen zu erstellen und um so viel eigenen Code wie
+            möglich in diskrete Klassen auszulagern. Wärend Zend Framework mit einer Anzahl
+            von standardmäßigen Ressource-Plugins geliefert wird, besteht das Ziel darin, dass der
+            Entwickler eigene schreiben sollte, um seine eigenen Notwendigkeiten der
             Initialisierung zu kapseln.
         </para>
 
         <para>
-            Ressource Plugins müssen nur <classname>Zend_Application_Resource_Resource</classname>
+            Ressource-Plugins müssen nur <classname>Zend_Application_Resource_Resource</classname>
             implementieren, oder einfach
             <classname>Zend_Application_Resource_ResourceAbstract</classname> erweitern. Das
             grundsätzliche Interface ist folgendes:
@@ -543,17 +543,17 @@ interface Zend_Application_Resource_Resource
 ]]></programlisting>
 
         <para>
-            Das Interface definiert einfach was ein Ressouce Plugin an Optionen im Konstruktor
-            akzeptieren sollte, Mechanismen für das Setzen und Empfangen von Optionen, Mechanismen
-            für das Setzen und Empfangen des Bootstrap Objekts, und eine Initialisierungs-Methode
-            hat.
+            Das Interface definiert einfach, was ein Ressouce-Plugin an Optionen im Konstruktor
+            akzeptieren sollte, die Mechanismen für das Setzen und Zurückgeben von Optionen,
+            die Mechanismen für das Setzen und Zurückgeben des Bootstrap-Objekts und eine
+            Initialisierungs-Methode.
         </para>
 
         <para>
-            Als Beispiel nehmen wir an das wir eine normale View Initialisierung haben die in der
+            Als Beispiel nehmen wir an, dass wir eine normale View Initialisierung haben, die in der
             eigenen Anwendung verwendet wird. Man hat normale Doctype, <acronym>CSS</acronym> und
-            Javascript, und will in der Lage sein diese in einem basis Dokumententitel über die
-            Konfiguration zu übergeben. So ein Ressource Plugin könnte wie folgt aussehen:
+            Javascript, und will in der Lage sein, diese in einem Standard-Dokumententitel über die
+            Konfiguration zu übergeben. So ein Ressource-Plugin könnte wie folgt aussehen:
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -563,7 +563,7 @@ class My_Resource_View extends Zend_Application_Resource_ResourceAbstract
 
     public function init()
     {
-        // Die View zurückgeben damit die Bootstrap Sie
+        // Die View zurückgeben damit die Bootstrap sie
         // in der Registry speichert
         return $this->getView();
     }
@@ -598,10 +598,10 @@ class My_Resource_View extends Zend_Application_Resource_ResourceAbstract
 ]]></programlisting>
 
         <para>
-            Solange man den Präfix Pfad für dieses Ressource Plugin registriert, kann es in der
-            eigenen Anwendung verwendet werden. Besser, weil der Plugin Loader verwendet wird, ist
-            es die gelieferten "View" Ressource Plugin zu überschreiben, und sicherzustellen das
-            man stattdessen die eigene verwendet.
+            Solange man den Präfix-Pfad für dieses Ressource-Plugin registriert, kann es in der
+            eigenen Anwendung verwendet werden. Weil der Plugin-Loader verwendet wird, ist es
+            besser, das gelieferte "View"-Ressource-Plugin zu überschreiben und sicherzustellen,
+            dass man stattdessen das eigene verwendet.
         </para>
     </sect2>
 </sect1>
