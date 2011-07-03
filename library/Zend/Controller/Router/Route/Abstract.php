@@ -38,6 +38,11 @@ require_once 'Zend/Controller/Router/Route/Interface.php';
 abstract class Zend_Controller_Router_Route_Abstract implements Zend_Controller_Router_Route_Interface
 {
     /**
+     * URI delimiter
+     */
+    const URI_DELIMITER = '/';
+    
+    /**
      * Wether this route is abstract or not
      *
      * @var boolean
