@@ -470,7 +470,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
         $url   = $route->assemble($params, $reset, $encode);
 
         if (!preg_match('|^[a-z]+://|', $url)) {
-            $url = rtrim($this->getFrontController()->getBaseUrl(), '/') . '/' . $url;
+            $url = rtrim($this->getFrontController()->getBaseUrl(), self::URI_DELIMITER) . self::URI_DELIMITER . $url;
         }
 
         return $url;

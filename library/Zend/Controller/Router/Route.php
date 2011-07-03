@@ -77,7 +77,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
     protected $_translatable = array();
 
     protected $_urlVariable = ':';
-    protected $_urlDelimiter = '/';
+    protected $_urlDelimiter = self::URI_DELIMITER;
     protected $_regexDelimiter = '#';
     protected $_defaultRegex = null;
 
