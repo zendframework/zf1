@@ -827,6 +827,19 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         $body = $this->response->getBody();
         $this->assertContains('fooUseHelper invoked', $body, 'Received ' . $body);
     }
+    /**
+     * @group ZF-10725
+     */
+    public function testThatCharactersStrippedFromActionNameByDispatcherAreAlsoStrippedFromViewScriptName()
+    {
+        $this->request->setModuleName('default')
+                      ->setControllerName('foo')
+                      ->setActionName('-myBar-');
+        $controller = new Bar_IndexController($this->request, $this->response, array());
+        $this->helper->setActionController($controller);
+        $scriptName = $this->helper->getViewScript();
+        $this->assertEquals('foo/my-bar.phtml', $scriptName);
+    }
 
     public function testCorrectViewHelperPathShouldBePropagatedWhenSubControllerInvokedInDefaultModule()
     {

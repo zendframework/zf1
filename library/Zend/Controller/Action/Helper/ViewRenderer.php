@@ -630,6 +630,14 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         $replacePattern = array('/[^a-z0-9]+$/', '/^[^a-z0-9]+/');
         $vars['action'] = preg_replace($replacePattern, '', $vars['action']);
 
+        // Remove non-alphanumeric characters from action name
+        // see ZF-10725
+        $vars['action'] = preg_replace(
+            array('/[^a-z0-9]+$/', '/^[^a-z0-9]+/'),
+            array('', ''),
+            $vars['action']
+        );
+
         $inflector = $this->getInflector();
         if ($this->getNoController() || $this->getNeverController()) {
             $this->_setInflectorTarget($this->getViewScriptPathNoControllerSpec());
