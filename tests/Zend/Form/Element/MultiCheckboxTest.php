@@ -278,6 +278,28 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
         $this->element->isValid(array('foo', 'bogus'));
         $html = $this->element->render($this->getView());
     }
+
+    /**
+     * @group ZF-11402
+     */
+    public function testValidateShouldNotAcceptEmptyArray()
+    {
+        $this->element->addMultiOptions(array(
+            'foo' => 'Foo',
+            'bar' => 'Bar',
+            'baz' => 'Baz',
+        ));
+        $this->element->setRegisterInArrayValidator(true);
+    
+        $this->assertTrue($this->element->isValid(array('foo')));
+        $this->assertTrue($this->element->isValid(array('foo','baz')));
+    
+        $this->element->setAllowEmpty(true);
+        $this->assertTrue($this->element->isValid(array()));
+    
+        $this->element->setAllowEmpty(false);
+        $this->assertFalse($this->element->isValid(array()));
+    }
 }
 
 // Call Zend_Form_Element_MultiCheckboxTest::main() if this source file is executed directly.
