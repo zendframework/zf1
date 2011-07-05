@@ -220,6 +220,16 @@ class Zend_Dojo_View_Helper_EditorTest extends PHPUnit_Framework_TestCase
         $html = $this->helper->editor('foo');
         $this->assertRegexp('#</noscript><input#', $html, $html);
     }
+
+    /** @group ZF-5711 */
+    public function testHelperShouldJsonifyExtraPlugins()
+    {
+        $extraPlugins = array('copy', 'cut', 'paste');
+        $html = $this->helper->editor('foo', '', array('extraPlugins' => $extraPlugins));
+        $pluginsString = Zend_Json::encode($extraPlugins);
+        $pluginsString = str_replace('"', "'", $pluginsString);
+        $this->assertContains('extraPlugins="' . $pluginsString . '"', $html);
+    }
 }
 
 // Call Zend_Dojo_View_Helper_EditorTest::main() if this source file is executed directly.

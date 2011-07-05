@@ -71,7 +71,7 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Dijit
      * JSON-encoded parameters
      * @var array
      */
-    protected $_jsonParams = array('captureEvents', 'events', 'plugins');
+    protected $_jsonParams = array('captureEvents', 'events', 'plugins', 'extraPlugins');
 
     /**
      * dijit.Editor
