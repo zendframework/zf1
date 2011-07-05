@@ -291,6 +291,27 @@ class Zend_Dojo_Form_Element_EditorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->element->getDijitParam('minHeight'), $this->element->getMinHeight());
         $this->assertEquals('10em', $this->element->getMinHeight());
     }
+
+    /** @group ZF-11511 */
+    public function testShouldNotHaveExtraPluginsByDefault()
+    {
+        $extraPlugins = $this->element->getExtraPlugins();
+        $this->assertTrue(empty($extraPlugins));
+    }
+
+    /** @group ZF-11511 */
+    public function testExtraPluginAccessorsShouldProxyToDijitParams()
+    {
+        $this->element->setExtraPlugins(array('undo', 'bold', 'italic'));
+        $this->assertTrue($this->element->hasDijitParam('extraPlugins'));
+        $this->assertTrue($this->element->hasExtraPlugin('bold'));
+        $this->assertEquals($this->element->getDijitParam('extraPlugins'), $this->element->getExtraPlugins());
+
+        $this->element->removeExtraPlugin('bold');
+        $this->assertFalse($this->element->hasExtraPlugin('bold'), var_export($this->element->getExtraPlugins(), 1));
+        $extraPlugins = $this->element->getDijitParam('extraPlugins');
+        $this->assertNotContains('bold', $extraPlugins, var_export($extraPlugins, 1));
+    }
 }
 
 // Call Zend_Dojo_Form_Element_EditorTest::main() if this source file is executed directly.
