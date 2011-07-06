@@ -142,12 +142,18 @@ class Zend_Amf_Server implements Zend_Server_Interface
     /**
      * Set authentication adapter
      *
+     * If the authentication adapter implements a "getAcl()" method, populate 
+     * the ACL of this instance with it (if none exists already).
+     *
      * @param  Zend_Amf_Auth_Abstract $auth
      * @return Zend_Amf_Server
      */
     public function setAuth(Zend_Amf_Auth_Abstract $auth)
     {
         $this->_auth = $auth;
+        if ((null === $this->getAcl()) && method_exists($auth, 'getAcl')) {
+            $this->setAcl($auth->getAcl());
+        }
         return $this;
     }
    /**

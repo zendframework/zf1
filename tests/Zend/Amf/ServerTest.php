@@ -29,6 +29,8 @@ require_once 'Zend/Amf/Server.php';
 require_once 'Zend/Amf/Request.php';
 require_once 'Zend/Amf/Parse/TypeLoader.php';
 require_once 'Zend/Amf/Value/Messaging/RemotingMessage.php';
+require_once 'Zend/Amf/Adobe/Auth.php';
+require_once 'Zend/Acl.php';
 require_once 'ServiceA.php';
 require_once 'ServiceB.php';
 require_once 'Zend/Session.php';
@@ -1110,6 +1112,29 @@ class Zend_Amf_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertContains("Oops, exception!", $response[0]->getData()->faultString);
     }
 
+
+    /** @group ZF-11529 */
+    public function testSettingAuthAdapterWithAclSetsServerAcl()
+    {
+        $aclFile     = dirname(__FILE__) . '/_files/acl.xml';
+        $authAdapter = new Zend_Amf_Adobe_Auth($aclFile);
+        $this->_server->setAuth($authAdapter);
+        $this->assertSame($authAdapter->getAcl(), $this->_server->getAcl());
+    }
+
+    /** @group ZF-11529 */
+    public function testSettingAuthAdapterWithAclWhenServerAclAlreadyPopulatedWillNotChangeServerAcl()
+    {
+        $acl = new Zend_Acl();
+        $this->_server->setAcl($acl);
+
+        $aclFile     = dirname(__FILE__) . '/_files/acl.xml';
+        $authAdapter = new Zend_Amf_Adobe_Auth($aclFile);
+        $this->_server->setAuth($authAdapter);
+
+        $this->assertNotSame($authAdapter->getAcl(), $this->_server->getAcl());
+        $this->assertSame($acl, $this->_server->getAcl());
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == "Zend_Amf_ServerTest::main") {
@@ -1249,7 +1274,6 @@ class Zend_Amf_testclass
     {
         return array_merge($arrayOne, $arrayTwo);
     }
-
 }
 
 class Zend_Amf_testException
