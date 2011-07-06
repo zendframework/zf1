@@ -494,26 +494,28 @@ class Zend_Amf_Server implements Zend_Server_Interface
         // set response encoding
         $response->setObjectEncoding($objectEncoding);
 
-        $responseBody = $request->getAmfBodies();
+        $requestBodies = $request->getAmfBodies();
 
         $handleAuth = false;
         if ($this->_auth) {
             $headers = $request->getAmfHeaders();
-            if (isset($headers[Zend_Amf_Constants::CREDENTIALS_HEADER]) &&
-                isset($headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->userid)) {
+            if (isset($headers[Zend_Amf_Constants::CREDENTIALS_HEADER]) 
+                && isset($headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->userid)
+            ) {
                 $handleAuth = true;
             }
         }
 
         // Iterate through each of the service calls in the AMF request
-        foreach($responseBody as $body)
+        foreach($requestBodies as $body)
         {
             try {
                 if ($handleAuth) {
                     $message = '';
                     if ($this->_handleAuth(
-                        $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->userid,
-                        $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->password)) {
+                            $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->userid,
+                            $headers[Zend_Amf_Constants::CREDENTIALS_HEADER]->password
+                    )) {
                         // use RequestPersistentHeader to clear credentials
                         $response->addAmfHeader(
                             new Zend_Amf_Value_MessageHeader(
@@ -521,7 +523,10 @@ class Zend_Amf_Server implements Zend_Server_Interface
                                 false,
                                 new Zend_Amf_Value_MessageHeader(
                                     Zend_Amf_Constants::CREDENTIALS_HEADER,
-                                    false, null)));
+                                    false, null
+                                )
+                            )
+                        );
                         $handleAuth = false;
                     }
                 }
