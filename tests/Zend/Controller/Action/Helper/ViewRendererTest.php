@@ -898,7 +898,10 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         return array(
             array('myBar-'),
             array('-myBar'),
-            array('-myBar-')
+            array('-myBar-'),
+            array('-MyBar-'),
+            array('MyBar-'),
+            array('-MyBar')
         );
     }
 

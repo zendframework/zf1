@@ -627,7 +627,7 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
             $vars['action'] = $action;
         }
         
-        $replacePattern = array('/[^a-z0-9]+$/', '/^[^a-z0-9]+/');
+        $replacePattern = array('/[^a-z0-9]+$/i', '/^[^a-z0-9]+/i');
         $vars['action'] = preg_replace($replacePattern, '', $vars['action']);
 
         // Remove non-alphanumeric characters from action name
