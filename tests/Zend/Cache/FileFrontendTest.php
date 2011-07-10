@@ -223,6 +223,13 @@ class Zend_Cache_FileFrontendTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo', $this->_instance1->load('cache_id', true));
     }
 
+    /**
+     * @group ZF-11547
+     */
+    public function testMultipleMasterFiles()
+    {
+        $this->assertEquals(2, count($this->_instance3->getOption('master_files')));
+        $this->assertNotNull($this->_instance3->getOption('master_file'));
+    }
+
 }
-
-

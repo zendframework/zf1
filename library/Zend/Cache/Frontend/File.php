@@ -123,7 +123,7 @@ class Zend_Cache_Frontend_File extends Zend_Cache_Core
             $this->_masterFile_mtimes[$i] = $mtime;
             $this->_specificOptions['master_files'][$i] = $masterFile;
             if ($i === 0) { // to keep a compatibility
-                $this->_specificOptions['master_files'] = $masterFile;
+                $this->_specificOptions['master_file'] = $masterFile;
             }
 
             $i++;
