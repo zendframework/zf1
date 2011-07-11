@@ -224,6 +224,9 @@ class Zend_Captcha_ReCaptcha extends Zend_Captcha_Base
             $this->_error(self::MISSING_VALUE);
             return false;
         }
+echo "Validating ReCapthca\n";
+echo "    Value: " . var_export($value, 1) . "\n";
+echo "    Context " . var_export($context, 1) . "\n";
 
         if (!is_array($value) && is_array($context)) {
             $value = $context;
@@ -261,6 +264,10 @@ class Zend_Captcha_ReCaptcha extends Zend_Captcha_Base
      */
     public function render(Zend_View_Interface $view = null, $element = null)
     {
-        return $this->getService()->getHTML();
+        $name = null;
+        if ($element instanceof Zend_Form_Element) {
+            $name = $element->getBelongsTo();
+        }
+        return $this->getService()->getHTML($name);
     }
 }

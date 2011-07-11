@@ -254,6 +254,15 @@ class Zend_Service_ReCaptcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame(false, strstr($html, 'src="' . Zend_Service_ReCaptcha::API_SECURE_SERVER . '/challenge?k=' . $this->_publicKey . '&error=' . $errorMsg . '"'));
     }
 
+    /** @group ZF-10991 */
+    public function testHtmlGenerationWillUseSuppliedNameForNoScriptElements()
+    {
+        $this->_reCaptcha->setPublicKey($this->_publicKey);
+        $html = $this->_reCaptcha->getHtml('contact');
+        $this->assertContains('contact[recaptcha_challenge_field]', $html);
+        $this->assertContains('contact[recaptcha_response_field]', $html);
+    }
+
     public function testVerifyWithMissingPrivateKey() {
         $this->setExpectedException('Zend_Service_ReCaptcha_Exception');
 
