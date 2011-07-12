@@ -178,6 +178,13 @@ class Zend_Captcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
         $this->assertContains('contact[recaptcha_challenge_field]', $html);
         $this->assertContains('contact[recaptcha_response_field]', $html);
     }
+
+    /** @group ZF-10991 */
+    public function testUsesReCaptchaSpecificDecorator()
+    {
+        $captcha = new Zend_Captcha_ReCaptcha;
+        $this->assertEquals('Captcha_ReCaptcha', $captcha->getDecorator());
+    }
 }
 
 class Zend_Captcha_ReCaptchaTest_SessionContainer

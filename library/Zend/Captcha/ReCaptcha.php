@@ -270,4 +270,14 @@ echo "    Context " . var_export($context, 1) . "\n";
         }
         return $this->getService()->getHTML($name);
     }
+
+    /**
+     * Get captcha decorator
+     *
+     * @return string
+     */
+    public function getDecorator()
+    {
+        return "Captcha_ReCaptcha";
+    }
 }

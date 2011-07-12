@@ -183,10 +183,10 @@ class Zend_Form_Element_Captcha extends Zend_Form_Element_Xhtml
         $decorator  = $captcha->getDecorator();
         if (!empty($decorator)) {
             array_unshift($decorators, $decorator);
+        } else {
+            $decorator = array('Captcha', array('captcha' => $captcha));
+            array_unshift($decorators, $decorator);
         }
-
-        $decorator = array('Captcha', array('captcha' => $captcha));
-        array_unshift($decorators, $decorator);
 
         $this->setDecorators($decorators);
 
