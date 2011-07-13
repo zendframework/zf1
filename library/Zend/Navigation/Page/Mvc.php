@@ -163,6 +163,12 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                 $myParams['action'] = $front->getDefaultAction();
             }
 
+            foreach($myParams as $key => $value) {
+                if($value == null) {
+                    unset($myParams[$key]);
+                }
+            }
+
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
                 count($myParams)) {
                 $this->_active = true;

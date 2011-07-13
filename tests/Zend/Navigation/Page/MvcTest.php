@@ -397,4 +397,47 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-11550
+     */
+    public function testNullValuesInMatchedRouteWillStillReturnMatchedPage()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'route'      => 'default',
+            'module'     => 'default',
+            'controller' => 'index',
+            'action'     => 'index',
+            'label'      => 'Home',
+            'title'      => 'Home',
+        ));
+
+        $this->_front->getRouter()->addRoute(
+            'default',
+            new Zend_Controller_Router_Route(
+                ':locale/:module/:controller/:action/*',
+                array(
+                    'locale'     => null,
+                    'module'     => 'default',
+                    'controller' => 'index',
+                    'action'     => 'index',
+                ),
+                array(
+                    'locale'     => '.*',
+                    'module'     => '.*',
+                    'controller' => '.*',
+                    'action'     => '.*',
+                )
+            )
+        );
+
+        $this->_front->getRequest()->setParams(array(
+            'locale'     => 'en_US',
+            'module'     => 'default',
+            'controller' => 'index',
+            'action'     => 'index',
+        ));
+
+        $this->assertEquals(true, $page->isActive());
+    }
 }
