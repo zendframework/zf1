@@ -224,9 +224,6 @@ class Zend_Captcha_ReCaptcha extends Zend_Captcha_Base
             $this->_error(self::MISSING_VALUE);
             return false;
         }
-echo "Validating ReCapthca\n";
-echo "    Value: " . var_export($value, 1) . "\n";
-echo "    Context " . var_export($context, 1) . "\n";
 
         if (!is_array($value) && is_array($context)) {
             $value = $context;
