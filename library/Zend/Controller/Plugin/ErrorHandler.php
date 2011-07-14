@@ -202,6 +202,17 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
     }
 
     /**
+     * Pre dispatch hook -- check for exceptions and dispatch error handler if
+     * necessary
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
+        $this->_handleError($request);
+    }
+	
+    /**
      * Post dispatch hook -- check for exceptions and dispatch error handler if
      * necessary
      *
