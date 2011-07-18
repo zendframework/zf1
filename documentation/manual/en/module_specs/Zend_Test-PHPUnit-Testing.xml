@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect2 id="zend.test.phpunit.testing">
-	<title>Testing your Controllers and MVC Applications</title>
+    <title>Testing your Controllers and MVC Applications</title>
 
-	<para>
-		Once you have your bootstrap in place, you can begin testing. Testing
-		is basically as you would expect in an PHPUnit test suite, with a few
-		minor differences.
+    <para>
+        Once you have your bootstrap in place, you can begin testing. Testing
+        is basically as you would expect in an PHPUnit test suite, with a few
+        minor differences.
     </para>
 
-	<para>
-		First, you will need to dispatch a
-		<acronym>URL</acronym>
-		to test, using the
-		<methodname>dispatch()</methodname>
-		method of the TestCase:
-	</para>
+    <para>
+        First, you will need to dispatch a <acronym>URL</acronym> to test, using the
+        <methodname>dispatch()</methodname> method of the TestCase:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -30,15 +27,13 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-	<para>
-		There will be times, however, that you need to provide extra
-		information --
-		<constant>GET</constant>
-		and POST variables, COOKIE information, etc. You can
-		populate the request with that information:
-	</para>
+    <para>
+        There will be times, however, that you need to provide extra
+        information -- <constant>GET</constant> and POST variables, COOKIE information, etc. You can
+        populate the request with that information:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -79,40 +74,33 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-	<para>
-		Now that the request is made, it's time to start making assertions
-		against it.
+    <para>
+        Now that the request is made, it's time to start making assertions against it.
     </para>
 
-	<sect3 id="zend.test.phpunit.testing.redirector">
-		<title>Controller Tests and the Redirector Action Helper</title>
+    <sect3 id="zend.test.phpunit.testing.redirector">
+        <title>Controller Tests and the Redirector Action Helper</title>
 
-		<important>
-			<para>
-				The redirect action helper issues an
-				<methodname>exit()</methodname>
-				statement
-				when using the method
-				<methodname>gotoAndExit()</methodname>
-				and will then obviously also stops a test running for this method.
-				For testability of your application dont use that method on the
-				redirector!
-			</para>
-		</important>
+        <important>
+            <para>
+                The redirect action helper issues an <methodname>exit()</methodname> statement
+                when using the method <methodname>gotoAndExit()</methodname>
+                and will then obviously also stops a test running for this method.
+                For testability of your application dont use that method on the
+                redirector!
+            </para>
+        </important>
 
-		<para>
-			Due to its nature the redirector action helper plugin issues a
-			redirect
-			and exists after this. Because you cannot test parts of an application
-			that issue exit calls
-			<classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
-			automatically disables the exit part of the redirector which can
-			cause
-			different behaviours in tests and the real application. To make sure
-			redirect work correctly you should it them in the following way:
-		</para>
+        <para>
+            Due to its nature the redirector action helper plugin issues a redirect
+            and exists after this. Because you cannot test parts of an application
+            that issue exit calls <classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
+            automatically disables the exit part of the redirector which can cause
+            different behaviours in tests and the real application. To make sure
+            redirect work correctly you should it them in the following way:
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 class MyController extends Zend_Controller_Action
 {
     public function indexAction()
@@ -129,18 +117,16 @@ class MyController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-		<important>
-			<para>
-				Depending on your application this is not enough as additional
-				action,
-				<methodname>preDispatch()</methodname>
-				or
-				<methodname>postDispatch()</methodname>
-				logic might be executed. This cannot be handled in a good way with
-				Zend Test
-				currently.
-			</para>
-		</important>
-	</sect3>
+        <important>
+            <para>
+                Depending on your application this is not enough as additional action,
+                <methodname>preDispatch()</methodname> or <methodname>postDispatch()</methodname>
+                logic might be executed. This cannot be handled in a good way with Zend Test
+                currently.
+            </para>
+        </important>
+    </sect3>
 </sect2>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

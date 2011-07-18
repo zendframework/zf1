@@ -2,51 +2,41 @@
 <!-- EN-Revision: 20766 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.db.table.definition">
-	<title>Zend_Db_Table_Definition</title>
+    <title>Zend_Db_Table_Definition</title>
 
-	<sect2 id="zend.db.table.definition.introduction">
-		<title>Einführung</title>
+    <sect2 id="zend.db.table.definition.introduction">
+        <title>Einführung</title>
 
-		<para>
-			<classname>Zend_Db_Table_Definition</classname>
-			ist eine Klasse die verwendet werden
-			kann um Relationen und Optionen der Konfiguration zu beschreiben die
-			verwendet werden
-			sollten wenn
-			<classname>Zend_Db_Table</classname>
-			über eine konkrete Instanz verwendet
-			wird.
-		</para>
-	</sect2>
+        <para>
+            <classname>Zend_Db_Table_Definition</classname> ist eine Klasse die verwendet werden
+            kann um Relationen und Optionen der Konfiguration zu beschreiben die verwendet werden
+            sollten wenn <classname>Zend_Db_Table</classname> über eine konkrete Instanz verwendet
+            wird.
+        </para>
+    </sect2>
 
-	<sect2 id="zend.db.table.definition.usage">
-		<title>Grundsätzliche Verwendung</title>
+    <sect2 id="zend.db.table.definition.usage">
+        <title>Grundsätzliche Verwendung</title>
 
-		<para>
-			Für alle gleichen Optionen die vorhanden sind wenn eine erweiterte
-			<classname>Zend_Db_Table_Abstract</classname>
-			Klasse konfiguriert wird, sind diese
-			Optionen auch vorhanden wenn eine Definitionsdatei beschrieben wird. Diese
-			Definitionsdatei sollte der Klasse zum Zeitpunkt der Instanziierung
-			übergeben werden
-			damit diese die komplette Definition aller Tabellen in der besagten
-			Definition kennt.
-		</para>
-
-		<para>
-			Anbei ist eine Definition welche die Tabellennamen und Relationen zwischen
-			den Tabellen
-			Objekten beschreibt. Beachte: Wenn 'name' von der Definition ausgelassen
-			wird, wird er
-			als Schlüssel der definierten Tabelle genommen (ein Beispiel hierfür ist
-			die 'genre'
-			Sektion im Beispiel anbei.)
+        <para>
+            Für alle gleichen Optionen die vorhanden sind wenn eine erweiterte
+            <classname>Zend_Db_Table_Abstract</classname> Klasse konfiguriert wird, sind diese
+            Optionen auch vorhanden wenn eine Definitionsdatei beschrieben wird. Diese
+            Definitionsdatei sollte der Klasse zum Zeitpunkt der Instanziierung übergeben werden
+            damit diese die komplette Definition aller Tabellen in der besagten Definition kennt.
         </para>
 
-		<example id="zend.db.table.definition.example1">
-			<title>Die Definition eines Datenbank Data Modells beschreiben</title>
+        <para>
+            Anbei ist eine Definition welche die Tabellennamen und Relationen zwischen den Tabellen
+            Objekten beschreibt. Beachte: Wenn 'name' von der Definition ausgelassen wird, wird er
+            als Schlüssel der definierten Tabelle genommen (ein Beispiel hierfür ist die 'genre'
+            Sektion im Beispiel anbei.)
+        </para>
 
-			<programlisting language="php"><![CDATA[
+        <example id="zend.db.table.definition.example1">
+            <title>Die Definition eines Datenbank Data Modells beschreiben</title>
+
+            <programlisting language="php"><![CDATA[
 $definition = new Zend_Db_Table_Definition(array(
     'author' => array(
         'name' => 'author',
@@ -79,35 +69,27 @@ $definition = new Zend_Db_Table_Definition(array(
         )
     ));
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>
-			Wie man sieht sind die gleichen Optionen die man generell in einer
-			erweiterten
-			<classname>Zend_Db_Table_Abstract</classname>
-			Klasse sieht auch in diesem Array
-			dokumentiert. Wenn es in den Constructor von
-			<classname>Zend_Db_Table</classname>
-			übergeben wird, ist diese Definition
-			<emphasis>persistent</emphasis>
-			in jeder Tabelle
-			die erstellt werden muß um die richtigen Zeilen zurückzugeben.
-		</para>
+        <para>
+            Wie man sieht sind die gleichen Optionen die man generell in einer erweiterten
+            <classname>Zend_Db_Table_Abstract</classname> Klasse sieht auch in diesem Array
+            dokumentiert. Wenn es in den Constructor von <classname>Zend_Db_Table</classname>
+            übergeben wird, ist diese Definition <emphasis>persistent</emphasis> in jeder Tabelle
+            die erstellt werden muß um die richtigen Zeilen zurückzugeben.
+        </para>
 
-		<para>
-			Anbei ist ein Beispiel der Instanziierung einer primären Tabelle
-			sowie Aufrufe von
-			<methodname>findDependentRowset()</methodname>
-			und
-			<methodname>findManyToManyRowset()</methodname>
-			die mit dem oben beschriebenen
-			Datenmodell korrespondieren:
-		</para>
+        <para>
+            Anbei ist ein Beispiel der Instanziierung einer primären Tabelle sowie Aufrufe von
+            <methodname>findDependentRowset()</methodname> und
+            <methodname>findManyToManyRowset()</methodname> die mit dem oben beschriebenen
+            Datenmodell korrespondieren:
+        </para>
 
-		<example id="zend.db.table.definition.example2">
-			<title>Mit der beschriebenen Definition interagieren</title>
+        <example id="zend.db.table.definition.example2">
+            <title>Mit der beschriebenen Definition interagieren</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $authorTable = new Zend_Db_Table('author', $definition);
 $authors = $authorTable->fetchAll();
 
@@ -130,40 +112,31 @@ foreach ($authors as $author) {
     }
 }
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 
-	<sect2 id="zend.db.table.definition.advanced-usage">
-		<title>Fortgeschrittene Verwendung</title>
+    <sect2 id="zend.db.table.definition.advanced-usage">
+        <title>Fortgeschrittene Verwendung</title>
 
-		<para>
-			Manchmal will man beide Paradigmen für die Definition und Verwendung
-			des
-			Tabellen Gateways verwenden: Beide durch Wrweiterung und konkrete
-			Instanziierung.
-			Um das zu tun muß man einfach alle Tabellen Konfigurationen aus der
-			Definition
-			lassen. Das erlaubt es
-			<classname>Zend_Db_Table</classname>
-			in der aktuell referierten
-			Klasse statt im Definitionsschlüssel nachzusehen.
-		</para>
+        <para>
+            Manchmal will man beide Paradigmen für die Definition und Verwendung des
+            Tabellen Gateways verwenden: Beide durch Wrweiterung und konkrete Instanziierung.
+            Um das zu tun muß man einfach alle Tabellen Konfigurationen aus der Definition
+            lassen. Das erlaubt es <classname>Zend_Db_Table</classname> in der aktuell referierten
+            Klasse statt im Definitionsschlüssel nachzusehen.
+        </para>
 
-		<para>
-			Aufbauend auf dem Beispiel anbei, erlauben wir es einer der
-			Tabellenkonfigurationen
-			eine erweiterte
-			<classname>Zend_Db_Table_Abstract</classname>
-			Klasse zu sein, während der
-			Rest der Tabellen Teil der Definition ist. Wir zeigen auch wie man mit
-			dieser neuen
-			Definition interagieren kann.
-		</para>
+        <para>
+            Aufbauend auf dem Beispiel anbei, erlauben wir es einer der Tabellenkonfigurationen
+            eine erweiterte <classname>Zend_Db_Table_Abstract</classname> Klasse zu sein, während der
+            Rest der Tabellen Teil der Definition ist. Wir zeigen auch wie man mit dieser neuen
+            Definition interagieren kann.
+        </para>
 
-		<example id="zend.db.table.definition.example3">
-			<title>Mit einer gemischten Zend_Db_Table Definition interagieren</title>
+        <example id="zend.db.table.definition.example3">
+            <title>Mit einer gemischten Zend_Db_Table Definition interagieren</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class MyBook extends Zend_Db_Table_Abstract
 {
     protected $_name = 'book';
@@ -220,6 +193,6 @@ foreach ($authors as $author) {
     }
 }
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 </sect1>

@@ -2,24 +2,24 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 22741 -->
 <sect1 id="zend.application.examples">
-	<title>例</title>
+    <title>例</title>
 
-	<para>
-		ブートストラップ・クラスそのものは、一般的にかなりごく小さいものです;
-		しばしば、それは基底ブートストラップ・クラスを拡張している中身がない単純なスタブです:
+    <para>
+        ブートストラップ・クラスそのものは、一般的にかなりごく小さいものです;
+        しばしば、それは基底ブートストラップ・クラスを拡張している中身がない単純なスタブです:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 }
 ]]></programlisting>
 
-	<para>
-		対応する構成ファイルを伴います:
+    <para>
+        対応する構成ファイルを伴います:
     </para>
 
-	<programlisting language="ini"><![CDATA[
+    <programlisting language="ini"><![CDATA[
 ; APPLICATION_PATH/configs/application.ini
 [production]
 autoloaderNamespaces[] = "My_"
@@ -32,61 +32,51 @@ resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
 [development : production]
 ]]></programlisting>
 
-	<!-- TODO : to be translated -->
-	<note>
-		<title>Autoloader namespaces</title>
+    <!-- TODO : to be translated -->
+    <note>
+        <title>Autoloader namespaces</title>
 
-		<para>
-			Because these examples use custom code, we need to register the
-			namespace prefixes for
-			that code with our configuration; this is done with the
-			<property>autoloaderNamespaces</property>
-			configuration key, which is an array.
-		</para>
+        <para>
+            Because these examples use custom code, we need to register the namespace prefixes for
+            that code with our configuration; this is done with the
+            <property>autoloaderNamespaces</property> configuration key, which is an array.
+        </para>
 
-		<para>
-			Additionally, to ensure that custom plugin resources are discovered,
-			we need to register
-			a plugin prefix path with the bootstrap. This is done with the
-			<property>pluginpaths</property>
-			configuration key, which is an associative array, with keys denoting
-			the prefix to use,
-			and values denoting the path related to that prefix.
-		</para>
-	</note>
+        <para>
+            Additionally, to ensure that custom plugin resources are discovered, we need to register
+            a plugin prefix path with the bootstrap. This is done with the <property>pluginpaths</property>
+            configuration key, which is an associative array, with keys denoting the prefix to use,
+            and values denoting the path related to that prefix.
+        </para>
+    </note>
 
-	<para>
-		しかし、カスタマイズした初期化が必要ならば、2つの選択肢ががあります。
-		最初に、ブートストラップに個別のコードを指定するために
-		<emphasis>_init</emphasis>
-		で前に置かれるメソッドを書くことができます。
-		これらのメソッドは
-		<methodname>bootstrap()</methodname>
-		によって呼ばれて、
-		まるでそれらが public メソッドであるように呼ばれることもできます:
-		<emphasis>bootstrap&lt;resource&gt;()</emphasis>
-		それらは、任意のオプション配列を受け取るべきです。
-	</para>
-
-	<para>
-		リソース・メソッドが値を返すならば、それはブートストラップでコンテナに保存されます。
-		異なるリソースが相互に作用する必要があるとき、
-		（例えば、別のリソースにそれ自体を注入している1つのリソース）
-		これは役に立つことがあります。
-		その場合、メソッド
-		<methodname>getResource()</methodname>
-		は、
-		それらの値を取得するために使うことができます。
-	</para>
-
-	<para>
-		下記の例では、リクエスト・オブジェクトを初期化するためのリソース・メソッドを示します。
-		それは、トラッキング（フロントコントローラ・リソースに依存します）、
-		ブートストラップからのリソース取得、
-		ブートストラップに保存する値の返却することの依存性を利用します。
+    <para>
+        しかし、カスタマイズした初期化が必要ならば、2つの選択肢ががあります。
+        最初に、ブートストラップに個別のコードを指定するために
+        <emphasis>_init</emphasis>で前に置かれるメソッドを書くことができます。
+        これらのメソッドは<methodname>bootstrap()</methodname>によって呼ばれて、
+        まるでそれらが public メソッドであるように呼ばれることもできます:
+        <emphasis>bootstrap&lt;resource&gt;()</emphasis>
+        それらは、任意のオプション配列を受け取るべきです。
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <para>
+        リソース・メソッドが値を返すならば、それはブートストラップでコンテナに保存されます。
+        異なるリソースが相互に作用する必要があるとき、
+        （例えば、別のリソースにそれ自体を注入している1つのリソース）
+        これは役に立つことがあります。
+        その場合、メソッド<methodname>getResource()</methodname>は、
+        それらの値を取得するために使うことができます。
+    </para>
+
+    <para>
+        下記の例では、リクエスト・オブジェクトを初期化するためのリソース・メソッドを示します。
+        それは、トラッキング（フロントコントローラ・リソースに依存します）、
+        ブートストラップからのリソース取得、
+        ブートストラップに保存する値の返却することの依存性を利用します。
+    </para>
+
+    <programlisting language="php"><![CDATA[
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected function _initRequest()
@@ -108,53 +98,48 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 }
 ]]></programlisting>
 
-	<para>
-		この例で、
-		<methodname>bootstrap()</methodname>
-		を呼び出すことに注意してください;
-		フロントコントローラがこのメソッドを呼ぶ前に初期化されることを確実にします。
-		その呼び出しは、クラスのリソースまたは別のメソッドいずれかの引き金となるかもしれません。
-	</para>
-
-	<para>
-		リソース・プラグインは、特定の初期化を実行するオブジェクトで、
-		それは指定されるかもしれません:
+    <para>
+        この例で、<methodname>bootstrap()</methodname>を呼び出すことに注意してください;
+        フロントコントローラがこのメソッドを呼ぶ前に初期化されることを確実にします。
+        その呼び出しは、クラスのリソースまたは別のメソッドいずれかの引き金となるかもしれません。
     </para>
 
-	<itemizedlist>
-		<listitem>
-			<para>
-				<classname>Zend_Application</classname>
-				オブジェクトが初期化されるとき
-			</para>
-		</listitem>
+    <para>
+        リソース・プラグインは、特定の初期化を実行するオブジェクトで、
+        それは指定されるかもしれません:
+    </para>
 
-		<listitem>
-			<para>
-				ブートストラップオブジェクトの初期化中
+    <itemizedlist>
+        <listitem>
+            <para>
+                <classname>Zend_Application</classname>オブジェクトが初期化されるとき
             </para>
-		</listitem>
+        </listitem>
 
-		<listitem>
-			<para>
-				メソッド呼び出しを介してそれらをブートストラップ・オブジェクトで明示的に使用可能にすることによって
+        <listitem>
+            <para>
+                ブートストラップオブジェクトの初期化中
             </para>
-		</listitem>
-	</itemizedlist>
+        </listitem>
 
-	<para>
-		呼出し元とオプションを注入でき、
-		<methodname>init()</methodname>
-		メソッドをもつことを
-		簡単に明確にする
-		<classname>Zend_Application_Resource_ResourceAbstract</classname>
-		を
-		リソース・プラグインでは実装します。
-		例えば、カスタマイズした "View" ブートストラップ・リソースは、
-		以下のように見えるかもしれません:
-	</para>
+        <listitem>
+            <para>
+                メソッド呼び出しを介してそれらをブートストラップ・オブジェクトで明示的に使用可能にすることによって
+            </para>
+        </listitem>
+    </itemizedlist>
 
-	<programlisting language="php"><![CDATA[
+    <para>
+        呼出し元とオプションを注入でき、
+        <methodname>init()</methodname>メソッドをもつことを
+        簡単に明確にする
+        <classname>Zend_Application_Resource_ResourceAbstract</classname>を
+        リソース・プラグインでは実装します。
+        例えば、カスタマイズした "View" ブートストラップ・リソースは、
+        以下のように見えるかもしれません:
+    </para>
+
+    <programlisting language="php"><![CDATA[
 class My_Bootstrap_Resource_View
     extends Zend_Application_Resource_ResourceAbstract
 {
@@ -185,15 +170,15 @@ class My_Bootstrap_Resource_View
 }
 ]]></programlisting>
 
-	<para>
-		これを使うようにブートストラップに命じるために、
-		リソースプラグインのクラス名か、
-		またはプラグイン・ローダ・プレフィックス・パスと
-		リソースプラグインの短い名前（例えば "view" ）の組み合わせを
-		提供する必要があるでしょう:
+    <para>
+        これを使うようにブートストラップに命じるために、
+        リソースプラグインのクラス名か、
+        またはプラグイン・ローダ・プレフィックス・パスと
+        リソースプラグインの短い名前（例えば "view" ）の組み合わせを
+        提供する必要があるでしょう:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $application = new Zend_Application(
     APPLICATION_ENV,
     array(
@@ -214,12 +199,12 @@ $application = new Zend_Application(
 );
 ]]></programlisting>
 
-	<para>
-		リソースは、親ブートストラップにアクセスすることによって、
-		他のリソースとイニシャライザを呼び出すことができます:
+    <para>
+        リソースは、親ブートストラップにアクセスすることによって、
+        他のリソースとイニシャライザを呼び出すことができます:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class My_Bootstrap_Resource_Layout
     extends Zend_Application_Resource_ResourceAbstract
 {
@@ -236,23 +221,23 @@ class My_Bootstrap_Resource_Layout
 }
 ]]></programlisting>
 
-	<para>
-		通常の使用法では、アプリケーションをインスタンス化して、
-		起動して実行するでしょう:
+    <para>
+        通常の使用法では、アプリケーションをインスタンス化して、
+        起動して実行するでしょう:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $application = new Zend_Application(...);
 $application->bootstrap()
             ->run();
 ]]></programlisting>
 
-	<para>
-		カスタマイズしたスクリプトについては、
-		特定のリソースを単純に初期化する必要があるかもしれません:
+    <para>
+        カスタマイズしたスクリプトについては、
+        特定のリソースを単純に初期化する必要があるかもしれません:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $application = new Zend_Application(...);
 $application->getBootstrap()->bootstrap('db');
 
@@ -261,14 +246,13 @@ $service->setClass('Foo');  // データベースの利用
 echo $service->handle();
 ]]></programlisting>
 
-	<para>
-		内部のメソッドまたはリソースを呼び出す
-		<methodname>bootstrap()</methodname>
-		メソッドを使用する代わりに、
-		オーバーローディングも使うかもしれません:
-	</para>
+    <para>
+        内部のメソッドまたはリソースを呼び出す
+        <methodname>bootstrap()</methodname>メソッドを使用する代わりに、
+        オーバーローディングも使うかもしれません:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $application = new Zend_Application(...);
 $application->getBootstrap()->bootstrapDb();
 ]]></programlisting>

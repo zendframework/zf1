@@ -3,85 +3,68 @@
 <!-- EN-Revision: 21741 -->
 <sect3 id="zend.view.helpers.initial.translate">
 
-	<title>翻訳ヘルパー</title>
+    <title>翻訳ヘルパー</title>
 
-	<para>
-		ウェブサイトを複数言語で提供することもよくあります。
-		サイト上のコンテンツを翻訳するには、
-		<link linkend="zend.translate.introduction">Zend_Translate</link>
-		を使用します。
-		<classname>Zend_Translate</classname>
-		をビューと統合するために使用するのが
-		<emphasis>Translate</emphasis>
-		ビューヘルパーです。
-	</para>
+    <para>
+        ウェブサイトを複数言語で提供することもよくあります。
+        サイト上のコンテンツを翻訳するには、
+        <link linkend="zend.translate.introduction">Zend_Translate</link>
+        を使用します。 <classname>Zend_Translate</classname> をビューと統合するために使用するのが
+        <emphasis>Translate</emphasis> ビューヘルパーです。
+    </para>
 
-	<para>
-		これ以降のすべての例では、単純は配列翻訳アダプタを使用します。
-		もちろん
-		<classname>Zend_Translate</classname>
-		の任意のインスタンスやお好みの
-		<classname>Zend_Translate_Adapter</classname>
-		のサブクラスを使うことも可能です。
-		<emphasis>Translate</emphasis>
-		ビューヘルパーのインスタンスを作成するにはいくつかの方法があります。
-	</para>
+    <para>
+        これ以降のすべての例では、単純は配列翻訳アダプタを使用します。
+        もちろん <classname>Zend_Translate</classname> の任意のインスタンスやお好みの
+        <classname>Zend_Translate_Adapter</classname> のサブクラスを使うことも可能です。
+        <emphasis>Translate</emphasis> ビューヘルパーのインスタンスを作成するにはいくつかの方法があります。
+    </para>
 
-	<itemizedlist>
-		<listitem>
-			<para>
-				事前に
-				<classname>Zend_Registry</classname>
-				に登録済みのインスタンスを使用する
-			</para>
-		</listitem>
-		<listitem>
-			<para>
-				流れるようなインターフェイスで後から追加する
+    <itemizedlist>
+        <listitem>
+            <para>
+                事前に <classname>Zend_Registry</classname> に登録済みのインスタンスを使用する
             </para>
-		</listitem>
-		<listitem>
-			<para>
-				クラスのインスタンスの作成時に直接指定する
+        </listitem>
+        <listitem>
+            <para>
+                流れるようなインターフェイスで後から追加する
             </para>
-		</listitem>
-	</itemizedlist>
+        </listitem>
+        <listitem>
+            <para>
+                クラスのインスタンスの作成時に直接指定する
+            </para>
+        </listitem>
+    </itemizedlist>
 
-	<para>
-		登録済みの
-		<classname>Zend_Translate</classname>
-		のインスタンスを使用する方法をおすすめします。
-		アダプタをレジストリに追加する際に、使用するロケールを選択できます。
-	</para>
+    <para>
+        登録済みの <classname>Zend_Translate</classname> のインスタンスを使用する方法をおすすめします。
+        アダプタをレジストリに追加する際に、使用するロケールを選択できます。
+    </para>
 
-	<note>
-		<para>
-			ここで言語ではなくロケールと言っているのは、
-			言語には地域を含む可能性があるからです。
-			たとえば英語は様々な地域で話されています。
-			イギリス英語やアメリカ英語など複数の翻訳が存在します。
-			そこで、ここでは "言語" と言わずに "ロケール" としているのです。
+    <note>
+        <para>
+            ここで言語ではなくロケールと言っているのは、
+            言語には地域を含む可能性があるからです。
+            たとえば英語は様々な地域で話されています。
+            イギリス英語やアメリカ英語など複数の翻訳が存在します。
+            そこで、ここでは "言語" と言わずに "ロケール" としているのです。
         </para>
-	</note>
+    </note>
 
-	<example id="zend.view.helpers.initial.translate.registered">
+    <example id="zend.view.helpers.initial.translate.registered">
 
-		<title>登録済みのインスタンス</title>
+        <title>登録済みのインスタンス</title>
 
-		<para>
-			登録済みのインスタンスを使用するには、まず
-			<classname>Zend_Translate</classname>
-			あるいは
-			<classname>Zend_Translate_Adapter</classname>
-			のインスタンスを作成し、
-			それを
-			<classname>Zend_Registry</classname>
-			に登録します。登録する際のキーとして
-			<classname>Zend_Translate</classname>
-			を使用します。
-		</para>
+        <para>
+            登録済みのインスタンスを使用するには、まず <classname>Zend_Translate</classname> あるいは
+            <classname>Zend_Translate_Adapter</classname> のインスタンスを作成し、
+            それを <classname>Zend_Registry</classname> に登録します。登録する際のキーとして
+            <classname>Zend_Translate</classname> を使用します。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // サンプルアダプタ
 $adapter = new Zend_Translate(
     array(
@@ -97,29 +80,25 @@ echo $this->translate('simple');
 // これは 'einfach' を返します
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<para>
-		流れるようなインターフェイスのほうがなじみがあるという場合は、
-		ビューの中でインスタンスを作成し、ヘルパーのインスタンスは後で作成することもできます。
+    <para>
+        流れるようなインターフェイスのほうがなじみがあるという場合は、
+        ビューの中でインスタンスを作成し、ヘルパーのインスタンスは後で作成することもできます。
     </para>
 
-	<example id="zend.view.helpers.initial.translate.afterwards">
+    <example id="zend.view.helpers.initial.translate.afterwards">
 
-		<title>ビューの中で</title>
+        <title>ビューの中で</title>
 
-		<para>
-			流れるようなインターフェイスで
-			<classname>Zend_Translate</classname>
-			あるいは
-			<classname>Zend_Translate_Adapter</classname>
-			のインスタンスを作成するには、
-			パラメータを指定せずにヘルパーをコールし、それから
-			<methodname>setTranslator()</methodname>
-			メソッドをコールします。
-		</para>
+        <para>
+            流れるようなインターフェイスで <classname>Zend_Translate</classname> あるいは
+            <classname>Zend_Translate_Adapter</classname> のインスタンスを作成するには、
+            パラメータを指定せずにヘルパーをコールし、それから
+            <methodname>setTranslator()</methodname> メソッドをコールします。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $adapter = new Zend_Translate(
     array(
@@ -132,20 +111,18 @@ $this->translate()->setTranslator($adapter)->translate('simple');
 // これは 'einfach' を返します
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<para>
-		ヘルパーを
-		<classname>Zend_View</classname>
-		なしで使用すると、
-		ヘルパーを直接使用することもできます。
-	</para>
+    <para>
+        ヘルパーを <classname>Zend_View</classname> なしで使用すると、
+        ヘルパーを直接使用することもできます。
+    </para>
 
-	<example id="zend.view.helpers.initial.translate.directly">
+    <example id="zend.view.helpers.initial.translate.directly">
 
-		<title>直接使用する方法</title>
+        <title>直接使用する方法</title>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // サンプルアダプタ
 $adapter = new Zend_Translate(
     array(
@@ -160,58 +137,55 @@ $translate = new Zend_View_Helper_Translate($adapter);
 print $translate->translate('simple'); // これは 'einfach' を返します
 ]]></programlisting>
 
-		<para>
-			<classname>Zend_View</classname>
-			は使わないけれど、
-			翻訳した結果がほしいという場合にこの方式を使用します。
-		</para>
-
-	</example>
-
-	<para>
-		これまで見てきたように、
-		<methodname>translate()</methodname>
-		メソッドは翻訳を返します。
-		翻訳アダプタのメッセージ ID を指定してこれをコールします。
-		さらに、翻訳文字列の中のパラメータを置換することも可能です。
-		パラメータの値を指定する方法には二通りあります。
-		パラメータのリストを指定する方法か、あるいはパラメータの配列を指定する方法です。
-		たとえば次のようになります。
-	</para>
-
-	<example id="zend.view.helpers.initial.translate.parameter">
-
-		<title>単一のパラメータ</title>
-
-		<para>
-			単一のパラメータを使用するには、単にそれをメソッドに追加します。
+        <para>
+            <classname>Zend_View</classname> は使わないけれど、
+            翻訳した結果がほしいという場合にこの方式を使用します。
         </para>
 
-		<programlisting language="php"><![CDATA[
+    </example>
+
+    <para>
+        これまで見てきたように、<methodname>translate()</methodname> メソッドは翻訳を返します。
+        翻訳アダプタのメッセージ ID を指定してこれをコールします。
+        さらに、翻訳文字列の中のパラメータを置換することも可能です。
+        パラメータの値を指定する方法には二通りあります。
+        パラメータのリストを指定する方法か、あるいはパラメータの配列を指定する方法です。
+        たとえば次のようになります。
+    </para>
+
+    <example id="zend.view.helpers.initial.translate.parameter">
+
+        <title>単一のパラメータ</title>
+
+        <para>
+            単一のパラメータを使用するには、単にそれをメソッドに追加します。
+        </para>
+
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = "Monday";
 $this->translate("Today is %1\$s", $date);
 // これは 'Heute ist Monday' を返します
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<note>
-		<para>
-			パラメータの値にテキストを使用する場合は、
-			このパラメータの値も翻訳しなければならないことに注意しましょう。
+    <note>
+        <para>
+            パラメータの値にテキストを使用する場合は、
+            このパラメータの値も翻訳しなければならないことに注意しましょう。
         </para>
-	</note>
+    </note>
 
-	<example id="zend.view.helpers.initial.translate.parameterlist">
+    <example id="zend.view.helpers.initial.translate.parameterlist">
 
-		<title>パラメータのリスト</title>
+        <title>パラメータのリスト</title>
 
-		<para>
-			パラメータのリストを使用して、それをメソッドに追加することもできます。
+        <para>
+            パラメータのリストを使用して、それをメソッドに追加することもできます。
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = "Monday";
 $month = "April";
@@ -223,83 +197,81 @@ $this->translate("Today is %1\$s in %2\$s. Actual time: %3\$s",
 // これは 'Heute ist Monday in April. Aktuelle Zeit: 11:20:55' を返します
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<example id="zend.view.helpers.initial.translate.parameterarray">
+    <example id="zend.view.helpers.initial.translate.parameterarray">
 
-		<title>パラメータの配列</title>
+        <title>パラメータの配列</title>
 
-		<para>
-			パラメータの配列を使用して、それをメソッドに追加することもできます。
+        <para>
+            パラメータの配列を使用して、それをメソッドに追加することもできます。
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = array("Monday", "April", "11:20:55");
 $this->translate("Today is %1\$s in %2\$s. Actual time: %3\$s", $date);
 // これは 'Heute ist Monday in April. Aktuelle Zeit: 11:20:55' を返します
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<para>
-		翻訳のロケールを変更しなければならないこともあるでしょう。
-		翻訳単位で動的に変更することもできますが、
-		静的に変更してそれ以降のすべての翻訳に適用させることもできます。
-		そして、パラメータリスト型あるいはパラメータ配列型のどちらの形式でもそれを使用できます。
-		どひらの形式の場合も、ロケールは最後のパラメータとして指定します。
+    <para>
+        翻訳のロケールを変更しなければならないこともあるでしょう。
+        翻訳単位で動的に変更することもできますが、
+        静的に変更してそれ以降のすべての翻訳に適用させることもできます。
+        そして、パラメータリスト型あるいはパラメータ配列型のどちらの形式でもそれを使用できます。
+        どひらの形式の場合も、ロケールは最後のパラメータとして指定します。
     </para>
 
-	<example id="zend.view.helpers.initial.translate.dynamic">
+    <example id="zend.view.helpers.initial.translate.dynamic">
 
-		<title>ロケールの動的な変更</title>
+        <title>ロケールの動的な変更</title>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = array("Monday", "April", "11:20:55");
 $this->translate("Today is %1\$s in %2\$s. Actual time: %3\$s", $date, 'it');
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<para>
-		この例は、指定したメッセージ ID に対応するイタリア語の翻訳を返します。
-		しかし、イタリア語を返すのはこのときだけです。
-		次の翻訳では、アダプタに設定されているロケールを使用します。
-		通常は、使用したいロケールを翻訳アダプタに設定してからレジストリに追加します。
-		しかし、ロケールの設定をヘルパー内で行うこともできます。
+    <para>
+        この例は、指定したメッセージ ID に対応するイタリア語の翻訳を返します。
+        しかし、イタリア語を返すのはこのときだけです。
+        次の翻訳では、アダプタに設定されているロケールを使用します。
+        通常は、使用したいロケールを翻訳アダプタに設定してからレジストリに追加します。
+        しかし、ロケールの設定をヘルパー内で行うこともできます。
     </para>
 
-	<example id="zend.view.helpers.initial.translate.static">
+    <example id="zend.view.helpers.initial.translate.static">
 
-		<title>ロケールの静的な変更</title>
+        <title>ロケールの静的な変更</title>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = array("Monday", "April", "11:20:55");
 $this->translate()->setLocale('it');
 $this->translate("Today is %1\$s in %2\$s. Actual time: %3\$s", $date);
 ]]></programlisting>
 
-	</example>
+    </example>
 
-	<para>
-		上の例では新しいデフォルトロケールとして
-		<emphasis>'it'</emphasis>
-		を設定しており、これ以降の翻訳ではこのロケールを使用します。
-	</para>
+    <para>
+        上の例では新しいデフォルトロケールとして <emphasis>'it'</emphasis>
+        を設定しており、これ以降の翻訳ではこのロケールを使用します。
+    </para>
 
-	<para>
-		もちろん、現在設定されているロケールを取得するためのメソッド
-		<methodname>getLocale()</methodname>
-		もあります。
-	</para>
+    <para>
+        もちろん、現在設定されているロケールを取得するためのメソッド
+        <methodname>getLocale()</methodname> もあります。
+    </para>
 
-	<example id="zend.view.helpers.initial.translate.getlocale">
+    <example id="zend.view.helpers.initial.translate.getlocale">
 
-		<title>現在設定されているロケールの取得</title>
+        <title>現在設定されているロケールの取得</title>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // ビューの中で
 $date = array("Monday", "April", "11:20:55");
 
@@ -313,7 +285,9 @@ $this->translate("Today is %1\$s in %2\$s. Actual time: %3\$s", $date);
 $this->translate()->getLocale();
 ]]></programlisting>
 
-	</example>
+    </example>
 
 </sect3>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

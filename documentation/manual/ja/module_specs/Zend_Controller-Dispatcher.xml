@@ -2,50 +2,39 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 16658 -->
 <sect1 id="zend.controller.dispatcher">
-	<title>ディスパッチャ</title>
+    <title>ディスパッチャ</title>
 
-	<sect2 id="zend.controller.dispatcher.overview">
-		<title>概要</title>
+    <sect2 id="zend.controller.dispatcher.overview">
+        <title>概要</title>
 
-		<para>
-			ディスパッチ処理は、リクエストオブジェクトである
-			<classname>Zend_Controller_Request_Abstract</classname>
-			を受け取り、
-			そこに含まれる情報 (モジュール名、コントローラ名、アクション名およびオプションのパラメータ)
-			を展開し、コントローラのインスタンスを作成してそのコントローラのアクションをコールします。
-			モジュールやコントローラ、アクションが見つからない場合は、
-			デフォルト値を使用します。
-			<classname>Zend_Controller_Dispatcher_Standard</classname>
-			では、コントローラとアクションのデフォルトはどちらも
-			<emphasis>index</emphasis>
-			で、モジュールのデフォルトは
-			<emphasis>default</emphasis>
-			です。しかし、
-			<methodname>setDefaultController()</methodname>
-			メソッドや
-			<methodname>setDefaultAction()</methodname>
-			メソッド、そして
-			<methodname>setDefaultModule()</methodname>
-			でこれらを変更することもできます。
-		</para>
+        <para>
+            ディスパッチ処理は、リクエストオブジェクトである
+            <classname>Zend_Controller_Request_Abstract</classname> を受け取り、
+            そこに含まれる情報 (モジュール名、コントローラ名、アクション名およびオプションのパラメータ)
+            を展開し、コントローラのインスタンスを作成してそのコントローラのアクションをコールします。
+            モジュールやコントローラ、アクションが見つからない場合は、
+            デフォルト値を使用します。<classname>Zend_Controller_Dispatcher_Standard</classname>
+            では、コントローラとアクションのデフォルトはどちらも
+            <emphasis>index</emphasis> で、モジュールのデフォルトは <emphasis>default</emphasis> です。しかし、
+            <methodname>setDefaultController()</methodname> メソッドや
+            <methodname>setDefaultAction()</methodname> メソッド、そして
+            <methodname>setDefaultModule()</methodname> でこれらを変更することもできます。
+        </para>
 
-		<note>
-			<title>デフォルトモジュール</title>
+        <note>
+            <title>デフォルトモジュール</title>
 
-			<para>
-				モジュール構造のアプリケーションを作成する場合に、
-				デフォルトのモジュールにも名前空間を定義したくなることもあるでしょう
-				(デフォルトの設定では、デフォルトモジュールには名前空間が
-				<emphasis>ありません</emphasis>
-				)。1.5.0 以降では、
-				フロントコントローラあるいはディスパッチャで
-				<property>prefixDefaultModule</property>
-				に
-				<constant>TRUE</constant>
-				を設定すればこれが実現できるようになりました。
-			</para>
+            <para>
+                モジュール構造のアプリケーションを作成する場合に、
+                デフォルトのモジュールにも名前空間を定義したくなることもあるでしょう
+                (デフォルトの設定では、デフォルトモジュールには名前空間が
+                <emphasis>ありません</emphasis>)。1.5.0 以降では、
+                フロントコントローラあるいはディスパッチャで
+                <property>prefixDefaultModule</property> に <constant>TRUE</constant>
+                を設定すればこれが実現できるようになりました。
+            </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 // フロントコントローラで
 $front->setParam('prefixDefaultModule', true);
 
@@ -53,42 +42,37 @@ $front->setParam('prefixDefaultModule', true);
 $dispatcher->setParam('prefixDefaultModule', true);
 ]]></programlisting>
 
-			<para>
-				これにより、既存のモジュールをアプリケーションのデフォルトモジュールとすることができます。
+            <para>
+                これにより、既存のモジュールをアプリケーションのデフォルトモジュールとすることができます。
             </para>
-		</note>
+        </note>
 
-		<para>
-			ディスパッチ処理が発生するのは、フロントコントローラでのループの内部です。
-			ディスパッチ処理を行う前に、フロントコントローラはルーティングを行い、
-			ユーザが指定したコントローラとアクション、そして追加のパラメータを取得します。
-			それからディスパッチループに入り、リクエストを配送します。
+        <para>
+            ディスパッチ処理が発生するのは、フロントコントローラでのループの内部です。
+            ディスパッチ処理を行う前に、フロントコントローラはルーティングを行い、
+            ユーザが指定したコントローラとアクション、そして追加のパラメータを取得します。
+            それからディスパッチループに入り、リクエストを配送します。
         </para>
 
-		<para>
-			ループ内では、まず最初にリクエストオブジェクトのフラグを設定します。
-			このフラグは、アクションがディスパッチされたことを示すものです。
-			アクション内や pre/postDispatch プラグインでこのフラグをリセットすると、
-			ディスパッチループがそのまま継続され、もう一度リクエストを処理しようとします。
-			リクエスト内のコントローラやアクションを変更してフラグをリセットすることで、
-			さまざまなリクエストを続けて実行させることができます。
+        <para>
+            ループ内では、まず最初にリクエストオブジェクトのフラグを設定します。
+            このフラグは、アクションがディスパッチされたことを示すものです。
+            アクション内や pre/postDispatch プラグインでこのフラグをリセットすると、
+            ディスパッチループがそのまま継続され、もう一度リクエストを処理しようとします。
+            リクエスト内のコントローラやアクションを変更してフラグをリセットすることで、
+            さまざまなリクエストを続けて実行させることができます。
         </para>
 
-		<para>
-			このようなディスパッチ処理を制御する
-			アクションコントローラのメソッドが
-			<methodname>_forward()</methodname>
-			です。
-			このメソッドを
-			<methodname>preDispatch()</methodname>
-			、
-			<methodname>postDispatch()</methodname>
-			やアクションメソッドでコールし、
-			コントローラやアクション、
-			そして新しいアクションに送りたい追加のパラメータを指定します。
-		</para>
+        <para>
+            このようなディスパッチ処理を制御する
+            アクションコントローラのメソッドが <methodname>_forward()</methodname> です。
+            このメソッドを <methodname>preDispatch()</methodname>、
+            <methodname>postDispatch()</methodname> やアクションメソッドでコールし、
+            コントローラやアクション、
+            そして新しいアクションに送りたい追加のパラメータを指定します。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 public function fooAction()
 {
     // 現在のモジュールおよびコントローラの、別のアクションに転送します
@@ -109,34 +93,32 @@ public function bazAction()
     $this->_forward('baz', 'bar', 'foo', array('baz' => 'bogus'));
 }
 ]]></programlisting>
-	</sect2>
+    </sect2>
 
-	<sect2 id="zend.controller.dispatcher.subclassing">
-		<title>ディスパッチャのサブクラスの作成</title>
+    <sect2 id="zend.controller.dispatcher.subclassing">
+        <title>ディスパッチャのサブクラスの作成</title>
 
-		<para>
-			<classname>Zend_Controller_Front</classname>
-			は、
-			まず最初にルータをコールして、
-			リクエスト内で最初にディスパッチできるアクションを決定します。
-			その後、ディスパッチャループに入り、ディスパッチャをコールしてアクションを振り分けます。
-		</para>
+        <para>
+            <classname>Zend_Controller_Front</classname> は、
+            まず最初にルータをコールして、
+            リクエスト内で最初にディスパッチできるアクションを決定します。
+            その後、ディスパッチャループに入り、ディスパッチャをコールしてアクションを振り分けます。
+        </para>
 
-		<para>
-			ディスパッチャが動作するためには、さまざまなデータが必要です。
-			たとえば、コントローラ名やアクション名を決定する方法、
-			コントローラクラスを探す場所、モジュール名が有効かどうか、
-			その他、リクエストの内容をディスパッチするために必要な情報を取得する
-			<acronym>API</acronym>
-			が必要となります。
-		</para>
+        <para>
+            ディスパッチャが動作するためには、さまざまなデータが必要です。
+            たとえば、コントローラ名やアクション名を決定する方法、
+            コントローラクラスを探す場所、モジュール名が有効かどうか、
+            その他、リクエストの内容をディスパッチするために必要な情報を取得する
+            <acronym>API</acronym> が必要となります。
+        </para>
 
-		<para>
-			<classname>Zend_Controller_Dispatcher_Interface</classname>
-			では次のようなメソッドを定義しています。ディスパッチャは、これを実装しなければなりません。
-		</para>
+        <para>
+            <classname>Zend_Controller_Dispatcher_Interface</classname>
+            では次のようなメソッドを定義しています。ディスパッチャは、これを実装しなければなりません。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 interface Zend_Controller_Dispatcher_Interface
 {
     /**
@@ -292,23 +274,24 @@ interface Zend_Controller_Dispatcher_Interface
 }
 ]]></programlisting>
 
-		<para>
-			しかし、たいていの場合は単純に抽象クラス
-			<classname>Zend_Controller_Dispatcher_Abstract</classname>
-			を継承するだけで事足りるでしょう。ここには、これらのメソッドがすでに定義されています。
-			あるいは、
-			<classname>Zend_Controller_Dispatcher_Standard</classname>
-			を継承して、標準の機能と異なる部分だけを変更するということも可能です。
-		</para>
-
-		<para>
-			ディスパッチャのサブクラスを作成する必要がある場面としては、
-			たとえばアクションコントローラ内で
-			標準とは異なるクラス名やメソッド名の命名規則を使用したいなどということが考えられます。
-			あるいは、クラスメソッドに振り分けるのではなく
-			コントローラディレクトリは以下のアクションファイルに振り分けるなど、
-			異なるディスパッチ方式を使用したい場合にもサブクラスを作成する必要があります。
+        <para>
+            しかし、たいていの場合は単純に抽象クラス
+            <classname>Zend_Controller_Dispatcher_Abstract</classname>
+            を継承するだけで事足りるでしょう。ここには、これらのメソッドがすでに定義されています。
+            あるいは、<classname>Zend_Controller_Dispatcher_Standard</classname>
+            を継承して、標準の機能と異なる部分だけを変更するということも可能です。
         </para>
-	</sect2>
+
+        <para>
+            ディスパッチャのサブクラスを作成する必要がある場面としては、
+            たとえばアクションコントローラ内で
+            標準とは異なるクラス名やメソッド名の命名規則を使用したいなどということが考えられます。
+            あるいは、クラスメソッドに振り分けるのではなく
+            コントローラディレクトリは以下のアクションファイルに振り分けるなど、
+            異なるディスパッチ方式を使用したい場合にもサブクラスを作成する必要があります。
+        </para>
+    </sect2>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

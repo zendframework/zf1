@@ -2,25 +2,23 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 21740 -->
 <sect1 id="zend.serializer.introduction">
-	<title>導入</title>
+    <title>導入</title>
 
-	<para>
-		<classname>Zend_Serializer</classname>
-		はさまざまな機関による保存可能な
-		<acronym>PHP</acronym>
-		型表現の簡潔な生成と回復のインターフェイスに基づく
-		アダプターを提供します。
-	</para>
+    <para>
+        <classname>Zend_Serializer</classname> はさまざまな機関による保存可能な
+        <acronym>PHP</acronym> 型表現の簡潔な生成と回復のインターフェイスに基づく
+        アダプターを提供します。
+    </para>
 
-	<example id="zend.serializer.introduction.example.dynamic">
-		<title>Zend_Serializer の動的なインターフェイスの使用</title>
+    <example id="zend.serializer.introduction.example.dynamic">
+        <title>Zend_Serializer の動的なインターフェイスの使用</title>
 
-		<para>
-			シリアライザーをインスタンス化するにはアダプター名に基づいたファクトリーメソッド
-			を使用しなければなりません:
+        <para>
+            シリアライザーをインスタンス化するにはアダプター名に基づいたファクトリーメソッド
+            を使用しなければなりません:
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $serializer = Zend_Serializer::factory('PhpSerialize');
 // この時 $serializer は Zend_Serializer_Adapter_AdapterInterface のインスタンスです,
 // すなわち Zend_Serializer_Adapter_PhpSerialize です
@@ -35,37 +33,26 @@ try {
     echo $e;
 }
 ]]></programlisting>
-	</example>
+    </example>
 
-	<para>
-		<methodname>serialize()</methodname>
-		メソッドは 保存できる文字列を生成します。
-		再生成するにはシリアライズされたデータ
-		<methodname>unserialize()</methodname>
-		メソッドを簡単にコールできます。
-	</para>
+    <para>
+        <methodname>serialize()</methodname> メソッドは 保存できる文字列を生成します。
+        再生成するにはシリアライズされたデータ <methodname>unserialize()</methodname>メソッドを簡単にコールできます。
+    </para>
 
-	<para>
-		シリアル化またはアンシリアライズにてエラーに遭遇した際は常に
-		<classname>Zend_Serializer</classname>
-		は
-		<classname>Zend_Serializer_Exception</classname>
-		をスローします。
-	</para>
+    <para>
+        シリアル化またはアンシリアライズにてエラーに遭遇した際は常に
+        <classname>Zend_Serializer</classname> は
+        <classname>Zend_Serializer_Exception</classname> をスローします。
+    </para>
 
-	<para>
-		特定されたシリアライザーアダプターの設定をするために、配列か
-		<classname>Zend_Config</classname>
-		を
-		<methodname>factory</methodname>
-		か
-		<methodname>serialize()</methodname>
-		と
-		<methodname>unserialize()</methodname>
-		メソッドに任意に追加できます:
-	</para>
+    <para>
+        特定されたシリアライザーアダプターの設定をするために、配列か <classname>Zend_Config</classname> 
+        を <methodname>factory</methodname> か <methodname>serialize()</methodname> 
+        と <methodname>unserialize()</methodname> メソッドに任意に追加できます:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $serializer = Zend_Serializer::factory('Wddx', array(
     'comment' => 'serialized by Zend_Serializer',
 ));
@@ -85,34 +72,25 @@ try {
 }
 ]]></programlisting>
 
-	<para>
-		<methodname>factory()</methodname>
-		に与えらえたオプションはインスタンス化されたオブジェクトにとって妥当なものです。
-		<methodname>setOption(s)</methodname>
-		メソッドを用いてこれらのオプションを
-		変更できます。単発の呼び出しだけをするために一つか
-		それ以上の変更をするには、
-		<methodname>serialize()</methodname>
-		または
-		<methodname>unserialize()</methodname>
-		を第二引数として渡します。
-	</para>
+    <para>
+        <methodname>factory()</methodname>に与えらえたオプションはインスタンス化されたオブジェクトにとって妥当なものです。
+        <methodname>setOption(s)</methodname>メソッドを用いてこれらのオプションを
+        変更できます。単発の呼び出しだけをするために一つか
+        それ以上の変更をするには、<methodname>serialize()</methodname> または 
+        <methodname>unserialize()</methodname> を第二引数として渡します。
+    </para>
 
-	<example id="zend.serializer.introduction.example.static.php">
-		<title>Zend_Serializer の静的なインターフェイスの使用</title>
+    <example id="zend.serializer.introduction.example.static.php">
+        <title>Zend_Serializer の静的なインターフェイスの使用</title>
 
-		<para>
-			<classname>Zend_Serializer</classname>
-			とともに使用するのに特別なシリアライザーを標準のシリアル化
-			アダプターとして登録できます。デフォルトでは
-			<classname>PhpSerialize</classname>
-			アダプターが
-			登録されているでしょうが、静的メソッド
-			<methodname>setDefaultAdapter()</methodname>
-			を使用してこのオプションを変更できます。
-		</para>
+        <para>
+            <classname>Zend_Serializer</classname>とともに使用するのに特別なシリアライザーを標準のシリアル化
+            アダプターとして登録できます。デフォルトでは <classname>PhpSerialize</classname> アダプターが
+            登録されているでしょうが、静的メソッド <methodname>setDefaultAdapter()</methodname>
+            を使用してこのオプションを変更できます。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 Zend_Serializer::setDefaultAdapter('PhpSerialize', $options);
 // or
 $serializer = Zend_Serializer::factory('PhpSerialize', $options);
@@ -125,6 +103,8 @@ try {
     echo $e;
 }
 ]]></programlisting>
-	</example>
+    </example>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

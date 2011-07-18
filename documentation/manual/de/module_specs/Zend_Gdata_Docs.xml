@@ -2,78 +2,59 @@
 <!-- EN-Revision: 20779 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.gdata.docs">
-	<title>Verwenden der Google Dokumente Listen Daten API</title>
+    <title>Verwenden der Google Dokumente Listen Daten API</title>
 
-	<para>
-		Die Google Dokumente Listen Daten
-		<acronym>API</acronym>
-		erlaubt es Client Anwendungen
-		Dokumente zu Google Dokumente hochzuladen und diese in der Form von Google
-		Daten
-		<acronym>API</acronym>
-		("GData") Feeds aufzulisten. Die Client Anwendung kann eine Liste von
-		Benutzer Dokumenten anfragen, und den Inhalt in einem existierenden
-		Dokument abfragen.
-	</para>
+    <para>
+        Die Google Dokumente Listen Daten <acronym>API</acronym> erlaubt es Client Anwendungen
+        Dokumente zu Google Dokumente hochzuladen und diese in der Form von Google Daten
+        <acronym>API</acronym> ("GData") Feeds aufzulisten. Die Client Anwendung kann eine Liste von
+        Benutzer Dokumenten anfragen, und den Inhalt in einem existierenden Dokument abfragen.
+    </para>
 
-	<para>
-		Siehe
-		<ulink url="http://code.google.com/apis/documents/overview.html">http://code.google.com/apis/documents/overview.html</ulink>
-		für weitere Informationen über die Google Dokumente Listen
-		<acronym>API</acronym>
-		.
-	</para>
+    <para>
+        Siehe <ulink
+            url="http://code.google.com/apis/documents/overview.html">http://code.google.com/apis/documents/overview.html</ulink>
+        für weitere Informationen über die Google Dokumente Listen <acronym>API</acronym>.
+    </para>
 
-	<sect2 id="zend.gdata.docs.listdocuments">
-		<title>Eine Liste von Dokumenten erhalten</title>
+    <sect2 id="zend.gdata.docs.listdocuments">
+        <title>Eine Liste von Dokumenten erhalten</title>
 
-		<para>
-			Man kann eine Liste von den Google Dokumenten für einen bestimmten
-			Benutzer erhalten
-			indem die
-			<methodname>getDocumentListFeed()</methodname>
-			Methode des Docs Services
-			verwendet wird. Das Service gibt ein
-			<classname>Zend_Gdata_Docs_DocumentListFeed</classname>
-			Objekt zurück das eine Liste von
-			Dokumenten enthält die mit dem authentifizierten Benutzer assoziiert sind.
-		</para>
+        <para>
+            Man kann eine Liste von den Google Dokumenten für einen bestimmten Benutzer erhalten
+            indem die <methodname>getDocumentListFeed()</methodname> Methode des Docs Services
+            verwendet wird. Das Service gibt ein
+            <classname>Zend_Gdata_Docs_DocumentListFeed</classname> Objekt zurück das eine Liste von
+            Dokumenten enthält die mit dem authentifizierten Benutzer assoziiert sind.
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $service = Zend_Gdata_Docs::AUTH_SERVICE_NAME;
 $client = Zend_Gdata_ClientLogin::getHttpClient($user, $pass, $service);
 $docs = new Zend_Gdata_Docs($client);
 $feed = $docs->getDocumentListFeed();
 ]]></programlisting>
 
-		<para>
-			Das sich ergebende
-			<classname>Zend_Gdata_Docs_DocumentListFeed</classname>
-			Objekt
-			repräsentiert die Antwort des Servers. Dieser Feed enthält eine Liste von
-			<classname>Zend_Gdata_Docs_DocumentListEntry</classname>
-			Objekten
-			(
-			<command>$feed->entries</command>
-			), wobei jeder von Ihnen ein einzelnes Google Dokument
-			repräsentiert.
-		</para>
-	</sect2>
+        <para>
+            Das sich ergebende <classname>Zend_Gdata_Docs_DocumentListFeed</classname> Objekt
+            repräsentiert die Antwort des Servers. Dieser Feed enthält eine Liste von
+            <classname>Zend_Gdata_Docs_DocumentListEntry</classname> Objekten
+            (<command>$feed->entries</command>), wobei jeder von Ihnen ein einzelnes Google Dokument
+            repräsentiert.
+        </para>
+    </sect2>
 
-	<sect2 id="zend.gdata.docs.creating">
-		<title>Ein Dokument hochladen</title>
+    <sect2 id="zend.gdata.docs.creating">
+        <title>Ein Dokument hochladen</title>
 
-		<para>
-			Man kann ein neues Google Dokument erstellen indem ein Wortverarbeitungs
-			Dokument, eine
-			Tabellenkalkulation oder eine Präsentation hochgeladen wird. Dieses Beispiel ist vom
-			interaktiven Docs.php Beispiel welches mit der Bibliothek kommt. Es
-			demonstriert das
-			Hochladen einer Datei und das Ausdrucken der Information über das Ergebnis vom
-			Server.
+        <para>
+            Man kann ein neues Google Dokument erstellen indem ein Wortverarbeitungs Dokument, eine
+            Tabellenkalkulation oder eine Präsentation hochgeladen wird. Dieses Beispiel ist vom
+            interaktiven Docs.php Beispiel welches mit der Bibliothek kommt. Es demonstriert das
+            Hochladen einer Datei und das Ausdrucken der Information über das Ergebnis vom Server.
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 /**
  * Ein spezielles Dokument hochladen
  *
@@ -127,88 +108,68 @@ function uploadDocument($docs, $html, $originalFileName,
   if ($html) {echo "</a>\n";}
 }
 ]]></programlisting>
-	</sect2>
+    </sect2>
 
-	<sect2 id="zend.gdata.docs.queries">
-		<title>Den Dokumenten Feed durchsuchen</title>
+    <sect2 id="zend.gdata.docs.queries">
+        <title>Den Dokumenten Feed durchsuchen</title>
 
-		<para>
-			Die Dokumenten Liste kann durchsucht werden indem einer der
-			<ulink url="http://code.google.com/apis/gdata/reference.html#Queries">
-				standardmäßigen
-				Google Daten
-				<acronym>API</acronym>
-				Abfrageparameter
-			</ulink>
-			verwendet wird. Kategorien
-			werden verwendet um den Typ des Dokuments das zurückgegeben wird
-			(Wortverarbeitungs
-			Dokument, Tabellenkalkulation) einzuschränken. Detailiertere Informationen
-			über
-			Parameter die speziell in der Dokumenten Liste vorhanden sind können in der
-			<ulink
-				url="http://code.google.com/apis/documents/reference.html#Parameters">
-				Dokumenten
-				Listen Daten
-				<acronym>API</acronym>
-				Referenz Anleitung
-			</ulink>
-			gefunden werden.
-		</para>
+        <para>
+            Die Dokumenten Liste kann durchsucht werden indem einer der
+            <ulink url="http://code.google.com/apis/gdata/reference.html#Queries">standardmäßigen
+            Google Daten <acronym>API</acronym> Abfrageparameter</ulink> verwendet wird. Kategorien
+            werden verwendet um den Typ des Dokuments das zurückgegeben wird (Wortverarbeitungs
+            Dokument, Tabellenkalkulation) einzuschränken. Detailiertere Informationen über
+            Parameter die speziell in der Dokumenten Liste vorhanden sind können in der
+            <ulink url="http://code.google.com/apis/documents/reference.html#Parameters">Dokumenten
+                Listen Daten <acronym>API</acronym> Referenz Anleitung</ulink> gefunden werden.
+        </para>
 
-		<sect3 id="zend.gdata.docs.listwpdocuments">
-			<title>Eine Liste von Wortverarbeitungs Dokumenten erhalten</title>
+        <sect3 id="zend.gdata.docs.listwpdocuments">
+            <title>Eine Liste von Wortverarbeitungs Dokumenten erhalten</title>
 
-			<para>
-				Ein Feed der alle Dokumente eines speziellen Typs enthält kann auch
-				angefragt
-				werden. Um zum Beispiel eine Liste von eigenen Wortverarbeitungs Dokumenten
-				zu
-				sehen, würde man eine Kategorieanfrage wie folgt durchführen.
+            <para>
+                Ein Feed der alle Dokumente eines speziellen Typs enthält kann auch angefragt
+                werden. Um zum Beispiel eine Liste von eigenen Wortverarbeitungs Dokumenten zu
+                sehen, würde man eine Kategorieanfrage wie folgt durchführen.
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $feed = $docs->getDocumentListFeed(
     'http://docs.google.com/feeds/documents/private/full/-/document');
 ]]></programlisting>
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.gdata.docs.listspreadsheets">
-			<title>Eine Liste von Tabellenkalkulationen erhalten</title>
+        <sect3 id="zend.gdata.docs.listspreadsheets">
+            <title>Eine Liste von Tabellenkalkulationen erhalten</title>
 
-			<para>
-				Um eine Liste aller eigenen Google Tabellenkalkulationen zu erhalten
-				kann die
-				folgende Abfrage verwendet werden:
+            <para>
+                Um eine Liste aller eigenen Google Tabellenkalkulationen zu erhalten kann die
+                folgende Abfrage verwendet werden:
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $feed = $docs->getDocumentListFeed(
     'http://docs.google.com/feeds/documents/private/full/-/spreadsheet');
 ]]></programlisting>
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.gdata.docs.textquery">
-			<title>Eine Textabfrage durchführen</title>
+        <sect3 id="zend.gdata.docs.textquery">
+            <title>Eine Textabfrage durchführen</title>
 
-			<para>
-				Der Inhalt von Dokumenten kann durch Verwendung von
-				<classname>Zend_Gdata_Docs_Query</classname>
-				in der Abfrage durchsucht werden. Ein
-				Abfrage Objekt kann verwendet werden um eine Abfrage
-				<acronym>URI</acronym>
-				zu
-				erstellen, wobei der Suchbegriff als Parameter übergeben wird. Hier ist eine
-				Beispielmethode welche die Dokumenten Liste nach Dokumenten abfrage
-				die den
-				Suchstring enthalten:
-			</para>
+            <para>
+                Der Inhalt von Dokumenten kann durch Verwendung von
+                <classname>Zend_Gdata_Docs_Query</classname> in der Abfrage durchsucht werden. Ein
+                Abfrage Objekt kann verwendet werden um eine Abfrage <acronym>URI</acronym> zu
+                erstellen, wobei der Suchbegriff als Parameter übergeben wird. Hier ist eine
+                Beispielmethode welche die Dokumenten Liste nach Dokumenten abfrage die den
+                Suchstring enthalten:
+            </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $docsQuery = new Zend_Gdata_Docs_Query();
 $docsQuery->setQuery($query);
 $feed = $client->getDocumentListFeed($docsQuery);
 ]]></programlisting>
-		</sect3>
-	</sect2>
+        </sect3>
+    </sect2>
 </sect1>

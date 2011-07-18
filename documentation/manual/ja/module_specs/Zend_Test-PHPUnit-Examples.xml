@@ -2,96 +2,78 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 22236 -->
 <sect2 id="zend.test.phpunit.examples">
-	<title>例</title>
+    <title>例</title>
 
-	<para>
-		テスト環境の設定方法とアサーションの作成方法を説明しましたが、
-		まだまだ戦いは続きます。それでは、
-		実際のテストシナリオをもとにテストの方法を確認していきましょう。
+    <para>
+        テスト環境の設定方法とアサーションの作成方法を説明しましたが、
+        まだまだ戦いは続きます。それでは、
+        実際のテストシナリオをもとにテストの方法を確認していきましょう。
     </para>
 
-	<example id="zend.test.phpunit.examples.userController">
-		<title>UserController のテスト</title>
+    <example id="zend.test.phpunit.examples.userController">
+        <title>UserController のテスト</title>
 
-		<para>
-			ウェブサイトの一般的なタスクである、
-			ユーザ認証とユーザ登録について考えてみましょう。
-			今回の例では UserController でこれらを処理することにします。
-			要件は次のとおりです。
+        <para>
+            ウェブサイトの一般的なタスクである、
+            ユーザ認証とユーザ登録について考えてみましょう。
+            今回の例では UserController でこれらを処理することにします。
+            要件は次のとおりです。
         </para>
 
-		<itemizedlist>
-			<listitem>
-				<para>
-					ユーザがまだ認証を済ませていない場合は、
-					どんなアクションが指定されたかにかかわらず
-					常にコントローラのログインページにリダイレクトされる。
-            </para>
-			</listitem>
+        <itemizedlist>
+            <listitem><para>
+                ユーザがまだ認証を済ませていない場合は、
+                どんなアクションが指定されたかにかかわらず
+                常にコントローラのログインページにリダイレクトされる。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					ログインフォームのページには、
-					ログインフォームと新規登録フォームの両方が表示される。
-            </para>
-			</listitem>
+            <listitem><para>
+                ログインフォームのページには、
+                ログインフォームと新規登録フォームの両方が表示される。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					間違った認証情報を入力すると、
-					ログインフォームに戻る。
-            </para>
-			</listitem>
+            <listitem><para>
+                間違った認証情報を入力すると、
+                ログインフォームに戻る。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					正しい認証情報を入力すると、
-					ユーザのプロファイルページにリダイレクトされる。
-            </para>
-			</listitem>
+            <listitem><para>
+                正しい認証情報を入力すると、
+                ユーザのプロファイルページにリダイレクトされる。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					プロファイルページには、そのユーザのユーザ名が表示される。
-            </para>
-			</listitem>
+            <listitem><para>
+                プロファイルページには、そのユーザのユーザ名が表示される。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					認証済みのユーザがログインフォームを訪れると、
-					そのユーザのプロファイルページにリダイレクトされる。
-            </para>
-			</listitem>
+            <listitem><para>
+                認証済みのユーザがログインフォームを訪れると、
+                そのユーザのプロファイルページにリダイレクトされる。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					ログアウトしたら、ログインページにリダイレクトされる。
-            </para>
-			</listitem>
+            <listitem><para>
+                ログアウトしたら、ログインページにリダイレクトされる。
+            </para></listitem>
 
-			<listitem>
-				<para>
-					無効なデータが渡された場合は、登録に失敗する。
-            </para>
-			</listitem>
-		</itemizedlist>
+            <listitem><para>
+                無効なデータが渡された場合は、登録に失敗する。
+            </para></listitem>
+        </itemizedlist>
 
-		<para>
-			もちろんこれら以外にも別のテストも必要でしょうが、
-			今のところはひとまずこれだけにしておきます。
+        <para>
+            もちろんこれら以外にも別のテストも必要でしょうが、
+            今のところはひとまずこれだけにしておきます。
         </para>
 
-		<para>
-			今回のアプリケーションでは、プラグイン 'Initialize'
-			を定義してそれを
-			<methodname>routeStartup()</methodname>
-			で実行します。
-			これによって起動処理をオブジェクト指向でカプセル化することができ、
-			コールバックを提供しやすくなります。
-			それではまず、このクラスの基本部分を見ていきましょう。
-		</para>
+        <para>
+            今回のアプリケーションでは、プラグイン 'Initialize'
+            を定義してそれを <methodname>routeStartup()</methodname> で実行します。
+            これによって起動処理をオブジェクト指向でカプセル化することができ、
+            コールバックを提供しやすくなります。
+            それではまず、このクラスの基本部分を見ていきましょう。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 class Bugapp_Plugin_Initialize extends Zend_Controller_Plugin_Abstract
 {
     /**
@@ -155,11 +137,11 @@ class Bugapp_Plugin_Initialize extends Zend_Controller_Plugin_Abstract
 }
 ]]></programlisting>
 
-		<para>
-			これで、起動用コールバックを次のように作れるようになります。
+        <para>
+            これで、起動用コールバックを次のように作れるようになります。
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     public function appBootstrap()
@@ -180,18 +162,16 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-		<para>
-			ここまでできたら、テストを書くことができます。
-			しかし、ユーザがログインした状態でのテストはどのように書けばいいでしょう?
-			簡単な方法は、アプリケーションのロジックを利用する方法です。
-			<methodname>resetRequest()</methodname>
-			メソッドや
-			<methodname>resetResponse()</methodname>
-			メソッドを使ってちょっとした細工を行い、
-			別のリクエストをディスパッチさせます。
-		</para>
+        <para>
+            ここまでできたら、テストを書くことができます。
+            しかし、ユーザがログインした状態でのテストはどのように書けばいいでしょう?
+            簡単な方法は、アプリケーションのロジックを利用する方法です。
+            <methodname>resetRequest()</methodname> メソッドや
+            <methodname>resetResponse()</methodname> メソッドを使ってちょっとした細工を行い、
+            別のリクエストをディスパッチさせます。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -218,11 +198,11 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-		<para>
-			ではテストを書いてみましょう。
+        <para>
+            ではテストを書いてみましょう。
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -302,36 +282,36 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-		<para>
-			これらは簡潔なものであり、大半は実際の中身までは見ていないことに注意しましょう。
-			その代わりに、レスポンスコードやヘッダ、そして DOM ノードを見ています。
-			これにより、期待通りの構造になっているかどうかを検証できるようになり、
-			新たなコンテンツが追加されるたびにテストを実行しなおすことが避けられます。
+        <para>
+            これらは簡潔なものであり、大半は実際の中身までは見ていないことに注意しましょう。
+            その代わりに、レスポンスコードやヘッダ、そして DOM ノードを見ています。
+            これにより、期待通りの構造になっているかどうかを検証できるようになり、
+            新たなコンテンツが追加されるたびにテストを実行しなおすことが避けられます。
         </para>
 
-		<para>
-			ドキュメントの構造を使用してテストを行なっていることに注目しましょう。
-			たとえば最後のテストでは、"errors"
-			というクラスが指定されているノードをフォームから探しました。
-			これにより、単にフォームの検証エラーが発生したかどうかだけを確認することができ、
-			どんなエラーが発生したのかという中身までは気にしなくてすむのです。
+        <para>
+            ドキュメントの構造を使用してテストを行なっていることに注目しましょう。
+            たとえば最後のテストでは、"errors"
+            というクラスが指定されているノードをフォームから探しました。
+            これにより、単にフォームの検証エラーが発生したかどうかだけを確認することができ、
+            どんなエラーが発生したのかという中身までは気にしなくてすむのです。
         </para>
 
-		<para>
-			このアプリケーションでは、データベースを使うことがあるかもしれません。
-			そんな場合は、何らかの scaffold を使用してデータベースの初期状態を作成し、
-			テスト用の設定を行うという作業が各テストの最初に発生します。
-			PHPUnit にはそのための機能が既に用意されています。
-			<ulink url="http://www.phpunit.de/manual/3.4/en/database.html">
-				PHPUnit のドキュメントを参照ください</ulink>
-			。
-			テスト時と実運用時には別のデータベースを使用することを推奨します。
-			また、特に (ファイルあるいはインメモリ形式の) SQLite
-			を使うことを推奨します。どちらも別のサーバを必要とせず、
-			大半の
-			<acronym>SQL</acronym>
-			構文を使用できます。
-		</para>
-	</example>
+        <para>
+            このアプリケーションでは、データベースを使うことがあるかもしれません。
+            そんな場合は、何らかの scaffold を使用してデータベースの初期状態を作成し、
+            テスト用の設定を行うという作業が各テストの最初に発生します。
+            PHPUnit にはそのための機能が既に用意されています。
+            <ulink
+                url="http://www.phpunit.de/manual/3.4/en/database.html">
+                PHPUnit のドキュメントを参照ください</ulink>。
+            テスト時と実運用時には別のデータベースを使用することを推奨します。
+            また、特に (ファイルあるいはインメモリ形式の) SQLite
+            を使うことを推奨します。どちらも別のサーバを必要とせず、
+            大半の <acronym>SQL</acronym> 構文を使用できます。
+        </para>
+    </example>
 </sect2>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

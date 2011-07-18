@@ -1,84 +1,62 @@
 <sect1 id="zend.feed.importing">
 
-	<title>Importowanie kanałów informacyjnych</title>
+    <title>Importowanie kanałów informacyjnych</title>
 
-	<para>
-		<code>Zend_Feed</code>
-		pozwala programistom bardzo łatwo odbierać wiadomości
-		z kanałów informacyjnych. Jeśli znasz adres URI kanału, w prosty sposób
-		użyj metody
-		<code>Zend_Feed::import()</code>
-		:
-	</para>
+    <para>
+        <code>Zend_Feed</code> pozwala programistom bardzo łatwo odbierać wiadomości
+        z kanałów informacyjnych. Jeśli znasz adres URI kanału, w prosty sposób
+        użyj metody <code>Zend_Feed::import()</code>:
+    </para>
 
-	<programlisting role="php"><![CDATA[
+    <programlisting role="php"><![CDATA[
 $feed = Zend_Feed::import('http://feeds.example.com/feedName');
 ]]>
-	</programlisting>
+    </programlisting>
 
-	<para>
-		Możesz także użyć
-		<code>Zend_Feed</code>
-		do pobrania zawartości kanału
-		z pliku lub z łańcucha znaków PHP:
-	</para>
+    <para>
+        Możesz także użyć <code>Zend_Feed</code> do pobrania zawartości kanału
+        z pliku lub z łańcucha znaków PHP:
+    </para>
 
-	<programlisting role="php"><![CDATA[
+    <programlisting role="php"><![CDATA[
 // importowanie kanału z pliku tekstowego
 $feedFromFile = Zend_Feed::importFile('feed.xml');
 
 // importowanie kanału z łańcucha znaków PHP
 $feedFromPHP = Zend_Feed::importString($feedString);
 ]]>
-	</programlisting>
+    </programlisting>
 
-	<para>
-		We wszystkich powyższych przykładach w razie powodzenia operacji
-		zwracany
-		jest obiekt klasy rozszerzającej
-		<code>Zend_Feed_Abstract</code>
-		, zależenie
-		od typu kanału. Jeśli zostały odebrane dane RSS za pomocą jednej z
-		powyższych
-		metod importu, wtedy będzie zwrócony obiekt
-		<code>Zend_Feed_Rss</code>
-		.
-		Z drugiej strony, gdy będą importowane dane kanału Atom, zwrócony
-		zostanie
-		obiekt
-		<code>Zend_Feed_Atom</code>
-		. Metody importu w razie niepowodzenia
-		wyrzucają wyjątek
-		<code>Zend_Feed_Exception</code>
-		, czyli na przykład wtedy
-		gdy nie jest możliwe odczytanie kanału lub gdy dane są błędne.
-	</para>
+    <para>
+        We wszystkich powyższych przykładach w razie powodzenia operacji zwracany
+        jest obiekt klasy rozszerzającej <code>Zend_Feed_Abstract</code>, zależenie
+        od typu kanału. Jeśli zostały odebrane dane RSS za pomocą jednej z powyższych
+        metod importu, wtedy będzie zwrócony obiekt <code>Zend_Feed_Rss</code>.
+        Z drugiej strony, gdy będą importowane dane kanału Atom, zwrócony zostanie
+        obiekt <code>Zend_Feed_Atom</code>. Metody importu w razie niepowodzenia
+        wyrzucają wyjątek <code>Zend_Feed_Exception</code>, czyli na przykład wtedy
+        gdy nie jest możliwe odczytanie kanału lub gdy dane są błędne.
+    </para>
 
-	<sect2 id="zend.feed.importing.custom">
+    <sect2 id="zend.feed.importing.custom">
 
-		<title>Własne kanały</title>
+        <title>Własne kanały</title>
 
-		<para>
-			<code>Zend_Feed</code>
-			pozwala programistom na bardzo łatwe
-			tworzenie własnych kanałów. Musisz jedynie utworzyć tablicę i
-			zaimportować ją za pomocą Zend_Feed. Ta tablica może być
-			zaimportowana za pomocą metody
-			<code>Zend_Feed::importArray()</code>
-			lub
-			<code>Zend_Feed::importBuilder()</code>
-			. W tym drugim przypadku
-			tablica zostanie utworzona w locie, przez własne źródło danych
-			implementujące interfejs
-			<code>Zend_Feed_Builder_Interface</code>
-			.
-		</para>
+        <para>
+            <code>Zend_Feed</code> pozwala programistom na bardzo łatwe
+            tworzenie własnych kanałów. Musisz jedynie utworzyć tablicę i
+            zaimportować ją za pomocą Zend_Feed. Ta tablica może być
+            zaimportowana za pomocą metody <code>Zend_Feed::importArray()</code>
+            lub <code>Zend_Feed::importBuilder()</code>. W tym drugim przypadku
+            tablica zostanie utworzona w locie, przez własne źródło danych
+            implementujące interfejs <code>Zend_Feed_Builder_Interface</code>.
+        </para>
 
-		<sect3 id="zend.feed.importing.custom.importarray">
+        <sect3 id="zend.feed.importing.custom.importarray">
 
-			<title>Importowanie własnej tablicy</title>
+            <title>Importowanie własnej tablicy</title>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 // importowanie kanału z tablicy
 $atomFeedFromArray = Zend_Feed::importArray($array);
 
@@ -89,13 +67,13 @@ $atomFeedFromArray = Zend_Feed::importArray($array, 'atom');
 // importowanie kanału rss z tablicy
 $rssFeedFromArray = Zend_Feed::importArray($array, 'rss');
 ]]>
-			</programlisting>
+            </programlisting>
 
-			<para>
-				Format tablicy musi zgadzać się z taką strukturą:
+            <para>
+                Format tablicy musi zgadzać się z taką strukturą:
             </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 array(
       'title'       => 'tytuł kanału', //wymagane
       'link'        => 'adres url kanału', //wymagane
@@ -198,94 +176,74 @@ array(
                              )
        );
 ]]>
-			</programlisting>
+            </programlisting>
 
-			<para>
-				Odnośniki:
-				<itemizedlist>
-					<listitem>
-						<para>
-							Specyfikacja RSS 2.0:
-							<ulink url="http://blogs.law.harvard.edu/tech/rss">RSS 2.0</ulink>
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Specyfikacja Atom:
-							<ulink url="http://tools.ietf.org/html/rfc4287">RFC 4287</ulink>
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Specyfikacja WFW:
-							<ulink url="http://wellformedweb.org/news/wfw_namespace_elements">Well
-								Formed Web</ulink>
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Specyfikacja iTunes:
-							<ulink url="http://www.apple.com/itunes/store/podcaststechspecs.html">Specyfikacja
-								Techniczna iTunes</ulink>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
+            <para>
+                Odnośniki:
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Specyfikacja RSS 2.0: <ulink url="http://blogs.law.harvard.edu/tech/rss">RSS 2.0</ulink>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Specyfikacja Atom: <ulink url="http://tools.ietf.org/html/rfc4287">RFC 4287</ulink>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Specyfikacja WFW: <ulink url="http://wellformedweb.org/news/wfw_namespace_elements">Well
+                            Formed Web</ulink>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Specyfikacja iTunes:
+                            <ulink url="http://www.apple.com/itunes/store/podcaststechspecs.html">Specyfikacja
+                            Techniczna iTunes</ulink>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
 
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.feed.importing.custom.importbuilder">
+        <sect3 id="zend.feed.importing.custom.importbuilder">
 
-			<title>Importowanie własnego źródła danych</title>
+            <title>Importowanie własnego źródła danych</title>
 
-			<para>
-				Możesz utworzyć instancję Zend_Feed z dowolnego źródła danych
-				implementując interfejs
-				<code>Zend_Feed_Builder_Interface</code>
-				.
-				Aby użyć swojego obiektu za pomocą metody
-				<code>Zend_Feed::importBuilder()</code>
-				musisz po prostu
-				zaimplementować metody
-				<code>getHeader()</code>
-				oraz
-				<code>getEntries()</code>
-				. Jako przykład implementacji możesz
-				użyć klasy
-				<code>Zend_Feed_Builder</code>
-				, która przyjmuje
-				tablicę jako argument konstruktora, przeprowadza pewną
-				weryfikację, a następnie może być użyta za pomocą metody
-				<code>importBuilder()</code>
-				. Metoda
-				<code>getHeader()</code>
-				musi zwracać instancję klasy
-				<code>Zend_Feed_Builder_Header</code>
-				, a metoda
-				<code>getEntries()</code>
-				musi zwracać tablicę instancji klasy
-				<code>Zend_Feed_Builder_Entry</code>
-				.
-			</para>
+            <para>
+                Możesz utworzyć instancję Zend_Feed z dowolnego źródła danych
+                implementując interfejs <code>Zend_Feed_Builder_Interface</code>.
+                Aby użyć swojego obiektu za pomocą metody
+                <code>Zend_Feed::importBuilder()</code> musisz po prostu
+                zaimplementować metody <code>getHeader()</code> oraz
+                <code>getEntries()</code>. Jako przykład implementacji możesz
+                użyć klasy <code>Zend_Feed_Builder</code>, która przyjmuje
+                tablicę jako argument konstruktora, przeprowadza pewną
+                weryfikację, a następnie może być użyta za pomocą metody
+                <code>importBuilder()</code>. Metoda <code>getHeader()</code>
+                musi zwracać instancję klasy
+                <code>Zend_Feed_Builder_Header</code>, a metoda
+                <code>getEntries()</code> musi zwracać tablicę instancji klasy
+                <code>Zend_Feed_Builder_Entry</code>.
+            </para>
 
-			<note>
-				<para>
-					<code>Zend_Feed_Builder</code>
-					jest konkretną implementacją
-					pokazującą sposób użycia. Namawiamy użytkownika do napisania
-					własnej klasy, implementującej interfejs
-					<code>Zend_Feed_Builder_Interface</code>
-					.
-				</para>
-			</note>
+            <note>
+                <para>
+                    <code>Zend_Feed_Builder</code> jest konkretną implementacją
+                    pokazującą sposób użycia. Namawiamy użytkownika do napisania
+                    własnej klasy, implementującej interfejs
+                    <code>Zend_Feed_Builder_Interface</code>.
+                </para>
+            </note>
 
-			<para>
-				Oto przykład użycia metody
-				<code>Zend_Feed::importBuilder()</code>
-				:
-			</para>
+            <para>
+                Oto przykład użycia metody <code>Zend_Feed::importBuilder()</code>:
+            </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 // importowanie kanału z własnego źródła
 $atomFeedFromArray =
     Zend_Feed::importBuilder(new Zend_Feed_Builder($array));
@@ -299,26 +257,20 @@ $atomFeedFromArray =
 $rssFeedFromArray =
     Zend_Feed::importArray(new Zend_Feed_Builder($array), 'rss');
 ]]>
-			</programlisting>
+            </programlisting>
 
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.feed.importing.custom.dump">
+        <sect3 id="zend.feed.importing.custom.dump">
 
-			<title>Zrzucanie zawartości kanału</title>
+            <title>Zrzucanie zawartości kanału</title>
 
-			<para>
-				Aby zrzucić zawartość instancji
-				<code>Zend_Feed_Abstract</code>
-				,
-				możesz użyć metody
-				<code>send()</code>
-				lub
-				<code>saveXml()</code>
-				.
-			</para>
+            <para>
+                Aby zrzucić zawartość instancji <code>Zend_Feed_Abstract</code>,
+                możesz użyć metody <code>send()</code> lub <code>saveXml()</code>.
+            </para>
 
-			<programlisting role="php">
+            <programlisting role="php">
 <![CDATA[
 assert($feed instanceof Zend_Feed_Abstract);
 
@@ -328,7 +280,7 @@ print $feed->saveXML();
 // wysyła nagłówki oraz zrzuca zawartość kanału
 $feed->send();
 ]]>
-			</programlisting>
-		</sect3>
-	</sect2>
+            </programlisting>
+        </sect3>
+    </sect2>
 </sect1>

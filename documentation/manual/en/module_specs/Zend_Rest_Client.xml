@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect1 id="zend.rest.client">
-	<title>Zend_Rest_Client</title>
+    <title>Zend_Rest_Client</title>
 
-	<sect2 id="zend.rest.client.introduction">
-		<title>Introduction</title>
+    <sect2 id="zend.rest.client.introduction">
+        <title>Introduction</title>
 
-		<para>
-			Using the
-			<classname>Zend_Rest_Client</classname>
-			is very similar to using
-			<code>SoapClient</code>
-			objects (
-			<ulink url="http://www.php.net/soap">SOAP web service extension</ulink>
-			).
-			You can simply call the REST service procedures as
-			<classname>Zend_Rest_Client</classname>
-			methods. Specify the service's full
-			address in the
-			<classname>Zend_Rest_Client</classname>
-			constructor.
-		</para>
+        <para>
+            Using the <classname>Zend_Rest_Client</classname> is very similar to using
+            <code>SoapClient</code> objects (<ulink
+            url="http://www.php.net/soap">SOAP web service extension</ulink>).
+            You can simply call the REST service procedures as
+            <classname>Zend_Rest_Client</classname> methods. Specify the service's full
+            address in the <classname>Zend_Rest_Client</classname> constructor.
+        </para>
 
-		<example id="zend.rest.client.introduction.example-1">
-			<title>A basic REST request</title>
+        <example id="zend.rest.client.introduction.example-1">
+            <title>A basic REST request</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 /**
  * Connect to framework.zend.com server and retrieve a greeting
  */
@@ -33,121 +26,91 @@ $client = new Zend_Rest_Client('http://framework.zend.com/rest');
 
 echo $client->sayHello('Davey', 'Day')->get(); // "Hello Davey, Good Day"
 ]]></programlisting>
-		</example>
+        </example>
 
-		<note>
-			<title>Differences in calling</title>
+        <note>
+            <title>Differences in calling</title>
 
-			<para>
-				<classname>Zend_Rest_Client</classname>
-				attempts to make remote methods
-				look as much like native methods as possible, the only
-				difference being that you must follow the method call with one
-				of either
-				<methodname>get()</methodname>
-				,
-				<methodname>post()</methodname>
-				,
-				<methodname>put()</methodname>
-				or
-				<methodname>delete()</methodname>
-				. This call may
-				be made via method chaining or in separate method calls:
-			</para>
+            <para>
+                <classname>Zend_Rest_Client</classname> attempts to make remote methods
+                look as much like native methods as possible, the only
+                difference being that you must follow the method call with one
+                of either <methodname>get()</methodname>, <methodname>post()</methodname>,
+                <methodname>put()</methodname> or <methodname>delete()</methodname>. This call may
+                be made via method chaining or in separate method calls:
+            </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $client->sayHello('Davey', 'Day');
 echo $client->get();
 ]]></programlisting>
-		</note>
-	</sect2>
+        </note>
+    </sect2>
 
-	<sect2 id="zend.rest.client.return">
-		<title>Responses</title>
+    <sect2 id="zend.rest.client.return">
+        <title>Responses</title>
 
-		<para>
-			All requests made using
-			<classname>Zend_Rest_Client</classname>
-			return a
-			<classname>Zend_Rest_Client_Response</classname>
-			object. This object has many
-			properties that make it easier to access the results.
-		</para>
+        <para>
+            All requests made using <classname>Zend_Rest_Client</classname> return a
+            <classname>Zend_Rest_Client_Response</classname> object. This object has many
+            properties that make it easier to access the results.
+        </para>
 
-		<para>
-			When the service is based on
-			<classname>Zend_Rest_Server</classname>
-			,
-			<classname>Zend_Rest_Client</classname>
-			can make several assumptions about the
-			response, including response status (success or failure) and return
-			type.
-		</para>
+        <para>
+            When the service is based on <classname>Zend_Rest_Server</classname>,
+            <classname>Zend_Rest_Client</classname> can make several assumptions about the
+            response, including response status (success or failure) and return
+            type.
+        </para>
 
-		<example id="zend.rest.client.return.example-1">
-			<title>Response Status</title>
+        <example id="zend.rest.client.return.example-1">
+            <title>Response Status</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $result = $client->sayHello('Davey', 'Day')->get();
 
 if ($result->isSuccess()) {
     echo $result; // "Hello Davey, Good Day"
 }
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>
-			In the example above, you can see that we use the request result as
-			an object, to call
-			<methodname>isSuccess()</methodname>
-			, and then because of
-			<methodname>__toString()</methodname>
-			, we can simply
-			<code>echo</code>
-			the
-			object to get the result.
-			<classname>Zend_Rest_Client_Response</classname>
-			will allow you to echo any scalar value. For complex types, you can
-			use either array or object notation.
-		</para>
+        <para>
+            In the example above, you can see that we use the request result as
+            an object, to call <methodname>isSuccess()</methodname>, and then because of
+            <methodname>__toString()</methodname>, we can simply <code>echo</code> the
+            object to get the result. <classname>Zend_Rest_Client_Response</classname>
+            will allow you to echo any scalar value. For complex types, you can
+            use either array or object notation.
+        </para>
 
-		<para>
-			If however, you wish to query a service not using
-			<classname>Zend_Rest_Server</classname>
-			the
-			<classname>Zend_Rest_Client_Response</classname>
-			object will behave more like
-			a
-			<code>SimpleXMLElement</code>
-			. However, to make things easier, it
-			will automatically query the
-			<acronym>XML</acronym>
-			using XPath if the property is not
-			a direct descendant of the document root element. Additionally, if
-			you access a property as a method, you will receive the
-			<acronym>PHP</acronym>
-			value
-			for the object, or an array of
-			<acronym>PHP</acronym>
-			value results.
-		</para>
+        <para>
+            If however, you wish to query a service not using
+            <classname>Zend_Rest_Server</classname> the
+            <classname>Zend_Rest_Client_Response</classname> object will behave more like
+            a <code>SimpleXMLElement</code>. However, to make things easier, it
+            will automatically query the <acronym>XML</acronym> using XPath if the property is not
+            a direct descendant of the document root element. Additionally, if
+            you access a property as a method, you will receive the <acronym>PHP</acronym> value
+            for the object, or an array of <acronym>PHP</acronym> value results.
+        </para>
 
-		<example id="zend.rest.client.return.example-2">
-			<title>Using Technorati's Rest Service</title>
+        <example id="zend.rest.client.return.example-2">
+            <title>Using Technorati's Rest Service</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $technorati = new Zend_Rest_Client('http://api.technorati.com/bloginfo');
 $technorati->key($key);
 $technorati->url('http://pixelated-dreams.com');
 $result = $technorati->get();
 echo $result->firstname() .' '. $result->lastname();
 ]]></programlisting>
-		</example>
+        </example>
 
-		<example id="zend.rest.client.return.example-3">
-			<title>Example Technorati Response</title>
+        <example id="zend.rest.client.return.example-3">
+            <title>Example Technorati Response</title>
 
-			<programlisting language="xml"><![CDATA[
+            <programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="utf-8"?>
 <!-- generator="Technorati API version 1.0 /bloginfo" -->
 <!DOCTYPE tapi PUBLIC "-//Technorati, Inc.//DTD TAPI 0.02//EN"
@@ -181,52 +144,44 @@ echo $result->firstname() .' '. $result->lastname();
     </document>
 </tapi>
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>
-			Here we are accessing the
-			<code>firstname</code>
-			and
-			<code>lastname</code>
-			properties. Even though these are not
-			top-level elements, they are automatically returned when accessed by
-			name.
-		</para>
+        <para>
+            Here we are accessing the <code>firstname</code> and
+            <code>lastname</code> properties. Even though these are not
+            top-level elements, they are automatically returned when accessed by
+            name.
+        </para>
 
-		<note>
-			<title>Multiple items</title>
+        <note>
+            <title>Multiple items</title>
 
-			<para>
-				If multiple items are found when accessing a value by name, an
-				array of SimpleXMLElements will be returned; accessing via
-				method notation will return an array of
-				<acronym>PHP</acronym>
-				values.
-			</para>
-		</note>
-	</sect2>
+            <para>
+                If multiple items are found when accessing a value by name, an
+                array of SimpleXMLElements will be returned; accessing via
+                method notation will return an array of <acronym>PHP</acronym> values.
+            </para>
+        </note>
+    </sect2>
 
-	<sect2 id="zend.rest.client.args">
-		<title>Request Arguments</title>
+    <sect2 id="zend.rest.client.args">
+        <title>Request Arguments</title>
 
-		<para>
-			Unless you are making a request to a
-			<classname>Zend_Rest_Server</classname>
-			based service, chances are you will need to send multiple arguments
-			with your request. This is done by calling a method with the name of
-			the argument, passing in the value as the first (and only) argument.
-			Each of these method calls returns the object itself, allowing for
-			chaining, or "fluent" usage. The first call, or the first argument
-			if you pass in more than one argument, is always assumed to be the
-			method when calling a
-			<classname>Zend_Rest_Server</classname>
-			service.
-		</para>
+        <para>
+            Unless you are making a request to a <classname>Zend_Rest_Server</classname>
+            based service, chances are you will need to send multiple arguments
+            with your request. This is done by calling a method with the name of
+            the argument, passing in the value as the first (and only) argument.
+            Each of these method calls returns the object itself, allowing for
+            chaining, or "fluent" usage. The first call, or the first argument
+            if you pass in more than one argument, is always assumed to be the
+            method when calling a <classname>Zend_Rest_Server</classname> service.
+        </para>
 
-		<example id="zend.rest.client.args.example-1">
-			<title>Setting Request Arguments</title>
+        <example id="zend.rest.client.args.example-1">
+            <title>Setting Request Arguments</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $client = new Zend_Rest_Client('http://example.org/rest');
 
 $client->arg('value1');
@@ -237,41 +192,34 @@ $client->get();
 
 $client->arg('value1')->arg2('value2')->get();
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>
-			Both of the methods in the example above, will result in the
-			following get args:
-			<code>?method=arg&amp;arg1=value1&amp;arg=value1&amp;arg2=value2</code>
-		</para>
+        <para>
+            Both of the methods in the example above, will result in the
+            following get args:
+            <code>?method=arg&amp;arg1=value1&amp;arg=value1&amp;arg2=value2</code>
+        </para>
 
-		<para>
-			You will notice that the first call of
-			<code>$client->arg('value1');</code>
-			resulted in both
-			<code>method=arg&amp;arg1=value1</code>
-			and
-			<code>arg=value1</code>
-			;
-			this is so that
-			<classname>Zend_Rest_Server</classname>
-			can understand the
-			request properly, rather than requiring pre-existing knowledge of
-			the service.
-		</para>
+        <para>
+            You will notice that the first call of
+            <code>$client->arg('value1');</code> resulted in both
+            <code>method=arg&amp;arg1=value1</code> and <code>arg=value1</code>;
+            this is so that <classname>Zend_Rest_Server</classname> can understand the
+            request properly, rather than requiring pre-existing knowledge of
+            the service.
+        </para>
 
-		<warning>
-			<title>Strictness of Zend_Rest_Client</title>
+        <warning>
+            <title>Strictness of Zend_Rest_Client</title>
 
-			<para>
-				Any REST service that is strict about the arguments it receives will
-				likely fail
-				using
-				<classname>Zend_Rest_Client</classname>
-				, because of the behavior described
-				above. This is not a common practice and should not cause problems.
-			</para>
-		</warning>
-	</sect2>
+            <para>
+                Any REST service that is strict about the arguments it receives will likely fail
+                using <classname>Zend_Rest_Client</classname>, because of the behavior described
+                above. This is not a common practice and should not cause problems.
+            </para>
+        </warning>
+    </sect2>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

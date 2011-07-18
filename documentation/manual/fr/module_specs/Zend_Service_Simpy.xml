@@ -2,79 +2,64 @@
 <!-- EN-Revision: 20818 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.service.simpy">
-	<title>Zend_Service_Simpy</title>
+    <title>Zend_Service_Simpy</title>
 
-	<sect2 id="zend.service.simpy.introduction">
-		<title>Introduction</title>
+    <sect2 id="zend.service.simpy.introduction">
+        <title>Introduction</title>
 
-		<para>
-			<classname>Zend_Service_Simpy</classname>
-			permet l'interaction avec les services
-			Web du réseau social de partage de 'marque-pages' (de 'favoris', de
-			'liens')
-			Simpy.
-		</para>
+        <para>
+            <classname>Zend_Service_Simpy</classname> permet l'interaction avec les services
+            Web du réseau social de partage de 'marque-pages' (de 'favoris', de 'liens')
+            Simpy.
+        </para>
 
-		<para>
-			Pour utiliser
-			<classname>Zend_Service_Simpy</classname>
-			, vous devez posséder un
-			compte. Pour ceci, voyez
-			<ulink url="http://simpy.com">le site Web de Simpy</ulink>
-			.
-			Pour plus d'informations sur l'API REST de Simpy, voyez
-			<ulink url="http://www.simpy.com/doc/api/rest">sa documentation </ulink>
-			.
-		</para>
+        <para>
+            Pour utiliser <classname>Zend_Service_Simpy</classname>, vous devez posséder un
+            compte. Pour ceci, voyez <ulink url="http://simpy.com">le site Web de Simpy</ulink>.
+            Pour plus d'informations sur l'API REST de Simpy, voyez <ulink
+            url="http://www.simpy.com/doc/api/rest">sa documentation </ulink>.
+        </para>
 
-		<para>
-			Les sections qui suivent vont vous indiquer les éléments sur lesquels
-			vous pouvez
-			agir en utilisant l'API de Simpy, via
-			<classname>Zend_Service_Simpy</classname>
-			.
-			<itemizedlist>
-				<listitem>
-					<para>Liens: Créer, requêter, mettre à jour, supprimer</para>
-				</listitem>
+        <para>
+            Les sections qui suivent vont vous indiquer les éléments sur lesquels vous pouvez
+            agir en utilisant l'API de Simpy, via <classname>Zend_Service_Simpy</classname>.
+            <itemizedlist>
+                    <listitem>
+                        <para>Liens: Créer, requêter, mettre à jour, supprimer</para>
+                    </listitem>
 
-				<listitem>
-					<para>Mots-clés: requêter, supprimer, renommer, fusionner, éclater</para>
-				</listitem>
+                    <listitem>
+                        <para>Mots-clés: requêter, supprimer, renommer, fusionner, éclater</para>
+                    </listitem>
 
-				<listitem>
-					<para>Notes: Créer, requêter, mettre à jour, supprimer</para>
-				</listitem>
+                    <listitem>
+                        <para>Notes: Créer, requêter, mettre à jour, supprimer</para>
+                    </listitem>
 
-				<listitem>
-					<para>Listes: récupérer, récupérer tout</para>
-				</listitem>
-			</itemizedlist>
-		</para>
-	</sect2>
+                    <listitem>
+                        <para>Listes: récupérer, récupérer tout</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+    </sect2>
 
-	<sect2 id="zend.service.simpy.links">
-		<title>Liens</title>
+    <sect2 id="zend.service.simpy.links">
+        <title>Liens</title>
 
-		<para>
-			Lors d'interactions avec les liens, ceux-ci sont retournées dans
-			l'ordre
-			descendant par date d'ajout. Vous pouvez les chercher par titre, auteur,
-			mots-clés,
-			notes ou même via le contenu de leur page. Vous pouvez chercher selon tous
-			ces critères
-			avec des phrases, des booléens ou des jokers. Voyez la
-			<ulink url="http://www.simpy.com/faq#searchSyntax">syntaxe de recherche</ulink>
-			et
-			<ulink url="http://www.simpy.com/faq#searchFieldsLinks">les champs de recherche</ulink>
-			depuis
-			la FAQ de Simpy, pour plus d'informations.
-		</para>
+        <para>
+            Lors d'interactions avec les liens, ceux-ci sont retournées dans l'ordre
+            descendant par date d'ajout. Vous pouvez les chercher par titre, auteur, mots-clés,
+            notes ou même via le contenu de leur page. Vous pouvez chercher selon tous ces critères
+            avec des phrases, des booléens ou des jokers. Voyez la <ulink
+            url="http://www.simpy.com/faq#searchSyntax">syntaxe de recherche</ulink> et <ulink
+            url="http://www.simpy.com/faq#searchFieldsLinks">les champs de recherche</ulink> depuis
+            la FAQ de Simpy, pour plus d'informations.
+        </para>
 
-		<example id="zend.service.simpy.links.querying">
-			<title>Requêter des liens</title>
+        <example id="zend.service.simpy.links.querying">
+            <title>Requêter des liens</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $simpy = new Zend_Service_Simpy('yourusername', 'yourpassword');
 
 /* Recherche les 10 liens les plus récents */
@@ -117,21 +102,17 @@ $linkQuery->setBeforeDate('2006-12-09');
 $linkQuery->setBeforeDate('2006-12-01');
 $linkQuery->setAfterDate('2006-12-09');
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>
-			Les liens sont représentés de manière unique par leur
-			<acronym>URL</acronym>
-			. Ainsi tenter de
-			sauvegarder un lien ayant le même
-			<acronym>URL</acronym>
-			qu'un lien existant va l'écraser.
-		</para>
+        <para>
+            Les liens sont représentés de manière unique par leur <acronym>URL</acronym>. Ainsi tenter de
+            sauvegarder un lien ayant le même <acronym>URL</acronym> qu'un lien existant va l'écraser.
+        </para>
 
-		<example id="zend.service.simpy.links.modifying">
-			<title>Modifier des liens</title>
+        <example id="zend.service.simpy.links.modifying">
+            <title>Modifier des liens</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $simpy = new Zend_Service_Simpy('yourusername', 'yourpassword');
 
 /* Sauvegarde un lien */
@@ -163,22 +144,21 @@ foreach ($linkSet as $link) {
     $this->_simpy->deleteLink($link->getUrl());
 }
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 
-	<sect2 id="zend.service.simpy.tags">
-		<title>Mots-clés</title>
+    <sect2 id="zend.service.simpy.tags">
+        <title>Mots-clés</title>
 
-		<para>
-			Les mots-clés sont récupérés dans l'ordre descendant, par le nombre de
-			liens
-			utilisant le mot-clé.
+        <para>
+            Les mots-clés sont récupérés dans l'ordre descendant, par le nombre de liens
+            utilisant le mot-clé.
         </para>
 
-		<example id="zend.service.simpy.tags.working">
-			<title>Travailler avec les mots-clés</title>
+        <example id="zend.service.simpy.tags.working">
+            <title>Travailler avec les mots-clés</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $simpy = new Zend_Service_Simpy('yourusername', 'yourpassword');
 
 /* Sauvegarde d'un lien avec des mots-clés */
@@ -216,21 +196,21 @@ $simpy->splitTag('frameworks', 'framework', 'development');
 /* Cette opération de fusion est l'opposé de l'opération ci-dessus */
 $simpy->mergeTags('framework', 'development', 'frameworks');
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 
-	<sect2 id="zend.service.simpy.notes">
-		<title>Notes</title>
+    <sect2 id="zend.service.simpy.notes">
+        <title>Notes</title>
 
-		<para>
-			Les notes peuvent être sauvées, récupérées, effacées. Elles possèdent un
-			identifiant numérique unique.
+        <para>
+            Les notes peuvent être sauvées, récupérées, effacées. Elles possèdent un
+            identifiant numérique unique.
         </para>
 
-		<example id="zend.service.simpy.notes.working">
-			<title>Travailler avec les notes</title>
+        <example id="zend.service.simpy.notes.working">
+            <title>Travailler avec les notes</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $simpy = new Zend_Service_Simpy('yourusername', 'yourpassword');
 
 /* Sauvegarde une note */
@@ -272,24 +252,22 @@ $noteSet = $simpy->getNotes('+title:PHP -description:framework');
 /* Efface une note */
 $simpy->deleteNote($note->getId());
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 
-	<sect2 id="zend.service.simpy.watchlists">
-		<title>Listes de surveillance</title>
+    <sect2 id="zend.service.simpy.watchlists">
+        <title>Listes de surveillance</title>
 
-		<para>
-			Les listes de surveillance ne peuvent qu'être requêtées via l'API Simpy.
-			Vous
-			devez donc vous assurer qu'elles sont correctement créées, depuis le site
-			Web de Simpy,
-			il n'est pas possible de les créer ou les supprimer depuis l'API.
+        <para>
+            Les listes de surveillance ne peuvent qu'être requêtées via l'API Simpy. Vous
+            devez donc vous assurer qu'elles sont correctement créées, depuis le site Web de Simpy,
+            il n'est pas possible de les créer ou les supprimer depuis l'API.
         </para>
 
-		<example id="zend.service.simpy.watchlists.retrieving">
-			<title>Récupérer des listes de surveillance</title>
+        <example id="zend.service.simpy.watchlists.retrieving">
+            <title>Récupérer des listes de surveillance</title>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 $simpy = new Zend_Service_Simpy('yourusername', 'yourpassword');
 
 /* Récupérer une liste de listes de surveillance */
@@ -325,7 +303,9 @@ foreach ($watchlistSet as $watchlist) {
 $watchlist = $simpy->getWatchlist($watchlist->getId());
 $watchlist = $simpy->getWatchlist(1);
 ]]></programlisting>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

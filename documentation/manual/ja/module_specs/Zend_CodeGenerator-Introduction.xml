@@ -2,33 +2,28 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 15998 -->
 <sect1 id="zend.codegenerator.introduction">
-	<title>導入</title>
+    <title>導入</title>
 
-	<para>
-		<classname>Zend_CodeGenerator</classname>
-		は、
-		新しいコードを作成するばかりではなく、既存のコードを更新するためにも、
-		オブジェクト指向インターフェースを用いた任意のコードを生成する機能を提供します。
-		現在の実装は
-		<acronym>PHP</acronym>
-		コードを生成することに限られますが、
-		他の仕事のためのコード生成をさせるために基底クラスを簡単に拡張することができます：
-		JavaScript、設定ファイル、apache vhosts、その他。
-	</para>
+    <para>
+        <classname>Zend_CodeGenerator</classname>は、
+        新しいコードを作成するばかりではなく、既存のコードを更新するためにも、
+        オブジェクト指向インターフェースを用いた任意のコードを生成する機能を提供します。
+        現在の実装は<acronym>PHP</acronym>コードを生成することに限られますが、
+        他の仕事のためのコード生成をさせるために基底クラスを簡単に拡張することができます：
+        JavaScript、設定ファイル、apache vhosts、その他。
+    </para>
 
-	<sect2 id="zend.codegenerator.introduction.theory">
-		<title>Theory of Operation</title>
+    <sect2 id="zend.codegenerator.introduction.theory">
+        <title>Theory of Operation</title>
 
-		<para>
-			最も代表的な使用例では、単にコード・ジェネレーター・クラスのインスタンスを生成して、
-			それに適切な設定を渡すか、またはインスタンス化のあと設定します。
-			コードを生成するために、単にオブジェクトをechoするか、
-			その
-			<methodname>generate()</methodname>
-			メソッドを呼びます。
-		</para>
+        <para>
+            最も代表的な使用例では、単にコード・ジェネレーター・クラスのインスタンスを生成して、
+            それに適切な設定を渡すか、またはインスタンス化のあと設定します。
+            コードを生成するために、単にオブジェクトをechoするか、
+            その<methodname>generate()</methodname>メソッドを呼びます。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 //構成をコンストラクタに渡す
 $file = new Zend_CodeGenerator_Php_File(array(
     'classes' => array(
@@ -63,11 +58,11 @@ echo $file;
 file_put_contents('World.php', $file->generate());
 ]]></programlisting>
 
-		<para>
-			上記のサンプルは両方とも同じ結果でレンダリングされます:
+        <para>
+            上記のサンプルは両方とも同じ結果でレンダリングされます:
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 <?php
 
 class World
@@ -81,25 +76,21 @@ class World
 }
 ]]></programlisting>
 
-		<para>
-			もう一つの一般的な使用例は、既存のコードを更新することです。
-			たとえばメソッドをクラスに加えるために。
-			この場合には、最初にreflectionを用いて既存のコードを調べて、
-			次に新しいメソッドを加えなければいけません。
-			<link linkend="zend.reflection">Zend_Reflection</link>
-			を導入することによって、
-			<classname>Zend_CodeGenerator</classname>
-			はつまらないほどこれを単純にします。
-		</para>
+        <para>
+            もう一つの一般的な使用例は、既存のコードを更新することです。
+            たとえばメソッドをクラスに加えるために。
+            この場合には、最初にreflectionを用いて既存のコードを調べて、
+            次に新しいメソッドを加えなければいけません。
+            <link linkend="zend.reflection">Zend_Reflection</link>を導入することによって、
+            <classname>Zend_CodeGenerator</classname>はつまらないほどこれを単純にします。
+        </para>
 
-		<para>
-			例えば、上記をファイル"
-			<filename>World.php</filename>
-			"に保存して、すでにincludeしたとしましょう。
-			それから下記のようにできます。
-		</para>
+        <para>
+            例えば、上記をファイル"<filename>World.php</filename>"に保存して、すでにincludeしたとしましょう。
+            それから下記のようにできます。
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $class = Zend_CodeGenerator_Php_Class::fromReflection(
     new Zend_Reflection_Class('World')
 );
@@ -119,11 +110,11 @@ echo $file;
 file_put_contents('World.php', $file->generate());
 ]]></programlisting>
 
-		<para>
-			クラスファイルの結果はこのようになります:
+        <para>
+            クラスファイルの結果はこのようになります:
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 <?php
 
 class World
@@ -141,5 +132,5 @@ class World
 
 }
 ]]></programlisting>
-	</sect2>
+    </sect2>
 </sect1>

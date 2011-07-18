@@ -1,21 +1,20 @@
 <sect1 id="zend.view.scripts">
 
-	<title>视图脚本</title>
+    <title>视图脚本</title>
 
-	<para>
-		Controller完成变量赋值和调用render()之后，Zend_View就会调用视图脚本并在Zend_View的实例内部执行。因此，在你的视图脚本内，$this指向Zend_View的实例。
+    <para>
+        Controller完成变量赋值和调用render()之后，Zend_View就会调用视图脚本并在Zend_View的实例内部执行。因此，在你的视图脚本内，$this指向Zend_View的实例。
     </para>
 
-	<para>
-		从控制器传递到视图的变量以Zend_View实例属性的形式来调用。例如，控制器有一个变量"something"
-		，那么视图代码中就要用$this->something来调用。这样的作法可以让你分清哪些是来自Zend_View实例的变量，哪些是视图自身的变量。
+    <para>
+        从控制器传递到视图的变量以Zend_View实例属性的形式来调用。例如，控制器有一个变量"something" ，那么视图代码中就要用$this->something来调用。这样的作法可以让你分清哪些是来自Zend_View实例的变量，哪些是视图自身的变量。
     </para>
 
-	<para>
-		为了说明，这里有一个例子：
+    <para>
+        为了说明，这里有一个例子：
     </para>
 
-	<programlisting role="php"><![CDATA[<?php if ($this->books): ?>
+    <programlisting role="php"><![CDATA[<?php if ($this->books): ?>
 
     <!-- A table of some books. -->
     <table>
@@ -38,34 +37,34 @@
     <p>There are no books to display.</p>
 
 <?php endif; ]]>
-	</programlisting>
+    </programlisting>
 
-	<sect2 id="zend.view.scripts.escaping">
+    <sect2 id="zend.view.scripts.escaping">
 
-		<title>转义输出（Escaping Output）</title>
+        <title>转义输出（Escaping Output）</title>
 
-		<para>
-			View脚本的最重要的工作之一是保证输出的内容是合适的，比如需要避免跨站攻击漏洞(XSS)。除非你已经使用一个函数、类方法或助手类（helper）来转义内容，你需要在输出时对变量进行转义。
+        <para>
+            View脚本的最重要的工作之一是保证输出的内容是合适的，比如需要避免跨站攻击漏洞(XSS)。除非你已经使用一个函数、类方法或助手类（helper）来转义内容，你需要在输出时对变量进行转义。
         </para>
 
-		<para>
-			Zend_View带有一个escape()方法来提供这个功能：
+        <para>
+            Zend_View带有一个escape()方法来提供这个功能：
         </para>
 
-		<programlisting role="php"><![CDATA[<?php
+        <programlisting role="php"><![CDATA[<?php
 // 不好的做法：
 echo $this->variable;
 
 // 好的做法：
 echo $this->escape($this->variable);
 ]]>
-		</programlisting>
+        </programlisting>
 
-		<para>
-			默认地，escape()方法使用PHP函数htmlspecialchars()来过滤，但你也可以通过setEscape()方法来在Controller内告诉Zend_View需要怎么过滤。
+        <para>
+            默认地，escape()方法使用PHP函数htmlspecialchars()来过滤，但你也可以通过setEscape()方法来在Controller内告诉Zend_View需要怎么过滤。
         </para>
 
-		<programlisting role="php"><![CDATA[<?php
+        <programlisting role="php"><![CDATA[<?php
 //创建一个Zend_View实例
 $view = new Zend_View();
 
@@ -82,30 +81,30 @@ $view->setEscape(array($obj, 'methodName'));
 //最后输出你的视图
 echo $view->render(...);
 ]]>
-		</programlisting>
+        </programlisting>
 
-		<para>
+        <para>
 
-			设定的转义函数会将需要转义的变量作为其第一个参数，其它参数是可选的。
+            设定的转义函数会将需要转义的变量作为其第一个参数，其它参数是可选的。
         </para>
 
-	</sect2>
+    </sect2>
 
-	<sect2 id="zend.view.scripts.templates">
-		<title>使用模板系统</title>
+    <sect2 id="zend.view.scripts.templates">
+        <title>使用模板系统</title>
 
-		<para>
-			尽管许多开发者觉得PHP本身就是一个强大的模板系统，但对模板设计师来说，使用PHP标签过于复杂。Zend_View提供了两套机制来同时满足这两种要求，一种是直接通过通过视图脚本，另一种是实现Zend_View_Interface接口。
+        <para>
+            尽管许多开发者觉得PHP本身就是一个强大的模板系统，但对模板设计师来说，使用PHP标签过于复杂。Zend_View提供了两套机制来同时满足这两种要求，一种是直接通过通过视图脚本，另一种是实现Zend_View_Interface接口。
         </para>
 
-		<sect3 id="zend.view.scripts.templates.scripts">
-			<title>使用View脚本的模板系统</title>
+        <sect3 id="zend.view.scripts.templates.scripts">
+            <title>使用View脚本的模板系统</title>
 
-			<para>
-				View脚本可能要被用来初始化和操作一个其它模板对象的实例，例如PHPLIB风格的模板。这时View脚本可能是这样的：
+            <para>
+                              View脚本可能要被用来初始化和操作一个其它模板对象的实例，例如PHPLIB风格的模板。这时View脚本可能是这样的：
             </para>
 
-			<programlisting role="php"><![CDATA[<?php
+            <programlisting role="php"><![CDATA[<?php
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -128,11 +127,11 @@ if ($this->books) {
 }
 ]]></programlisting>
 
-			<para>
-				下面是相关的模板文件：
+            <para>
+                下面是相关的模板文件：
             </para>
 
-			<programlisting role="html"><![CDATA[
+            <programlisting role="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -150,21 +149,19 @@ if ($this->books) {
 
 <!-- nobooks.tpl -->
 <p>There are no books to display.</p>]]>>
-			</programlisting>
+           </programlisting>
 
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.view.scripts.templates.interface">
-			<title>通过Zend_View_Interface接口使用模板系统</title>
+        <sect3 id="zend.view.scripts.templates.interface">
+            <title>通过Zend_View_Interface接口使用模板系统</title>
 
-			<para>
+            <para>
 
-				实现一个与Zend_View兼容的模板系统是很简单的。你只需要实现
-				<code>Zend_View_Interface</code>
-				接口即可，该接口定义了要实现兼容的最低要求。
-			</para>
+                实现一个与Zend_View兼容的模板系统是很简单的。你只需要实现<code>Zend_View_Interface</code>接口即可，该接口定义了要实现兼容的最低要求。
+            </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 /**
  * Return the actual template engine object
  * 返回实际模板系统的对象
@@ -222,13 +219,13 @@ public function clearVars();
  * 输出参数$name指定的某个模板
  */
 public function render($name);]]>
-			</programlisting>
+            </programlisting>
 
-			<para>
-				使用这个接口，把第三方的模板系统封装成Zend_View兼容的类是相当容易的。例如，下面是封装Smarty的示例代码：
+            <para>
+               使用这个接口，把第三方的模板系统封装成Zend_View兼容的类是相当容易的。例如，下面是封装Smarty的示例代码：
             </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 require_once 'Zend/View/Interface.php';
 require_once 'Smarty.class.php';
 
@@ -412,28 +409,24 @@ class Zend_View_Smarty implements Zend_View_Interface
         return $this->_smarty->fetch($name);
     }
 }]]>
-			</programlisting>
+            </programlisting>
 
-			<para>
-				在这个示例中，实例化
-				<code>Zend_View_Smarty</code>
-				而不是
-				<code>Zend_View</code>
-				，然后就像使用
-				<code>Zend_View</code>
-				一样地使用它。
-			</para>
+            <para>
+                在这个示例中，实例化<code>Zend_View_Smarty</code>而不是<code>Zend_View</code>，然后就像使用 <code>Zend_View</code>一样地使用它。
+            </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 $view = new Zend_View_Smarty();
 $view->setScriptPath('/path/to/templates');
 $view->book = 'Zend PHP 5 Certification Study Guide';
 $view->author = 'Davey Shafik and Ben Ramsey'
 $rendered = $view->render('bookinfo.tpl');]]>
-			</programlisting>
+            </programlisting>
 
-		</sect3>
-	</sect2>
+        </sect3>
+    </sect2>
 
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

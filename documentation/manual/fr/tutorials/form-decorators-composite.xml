@@ -2,16 +2,14 @@
 <!-- EN-Revision: 21829 -->
 <!-- Reviewed: no -->
 <sect1 id="learning.form.decorators.composite">
-	<title>Créer et rendre des éléments composites</title>
+    <title>Créer et rendre des éléments composites</title>
 
-	<para>
-		Dans
-		<link linkend="learning.form.decorators.individual">la dernière section</link>
-		, nous
-		avions un exemple traitant un élément "date de naissance":
-	</para>
+    <para>
+        Dans <link linkend="learning.form.decorators.individual">la dernière section</link>, nous
+        avions un exemple traitant un élément "date de naissance":
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 <div class="element">
     <?php echo $form->dateOfBirth->renderLabel() ?>
     <?php echo $this->formText('dateOfBirth[day]', '', array(
@@ -25,104 +23,88 @@
 </div>
 ]]></programlisting>
 
-	<para>
-		Comment représenteriez-vous cet élément en tant que
-		<classname>Zend_Form_Element</classname>
-		?
-		Comment écrire un décorateur qui s'assure de son rendu ?
-	</para>
+    <para>
+        Comment représenteriez-vous cet élément en tant que
+        <classname>Zend_Form_Element</classname>?
+        Comment écrire un décorateur qui s'assure de son rendu ?
+    </para>
 
-	<sect2 id="learning.form.decorators.composite.element">
-		<title>L'élément</title>
+    <sect2 id="learning.form.decorators.composite.element">
+        <title>L'élément</title>
 
-		<para>
-			Les questions à se poser sur le fonctionnement de l'élément sont:
+        <para>
+            Les questions à se poser sur le fonctionnement de l'élément sont:
         </para>
 
-		<itemizedlist>
-			<listitem>
-				<para>
-					Comment affecter et récupérer une valeur?
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Comment affecter et récupérer une valeur?
                 </para>
-			</listitem>
+            </listitem>
 
-			<listitem>
-				<para>
-					Comment valider la valeur?
+            <listitem>
+                <para>
+                    Comment valider la valeur?
                 </para>
-			</listitem>
+            </listitem>
 
-			<listitem>
-				<para>
-					Comment proposer l'affectation personnalisée d'une valeur composées de
-					trois
-					segments (jour, mois, année)?
+            <listitem>
+                <para>
+                    Comment proposer l'affectation personnalisée d'une valeur composées de trois
+                    segments (jour, mois, année)?
                 </para>
-			</listitem>
-		</itemizedlist>
+            </listitem>
+        </itemizedlist>
 
-		<para>
-			Les deux première questions se positionnent sur l'élément de
-			formulaire lui-même, comment
-			vont fonctionner les méthodes
-			<methodname>setValue()</methodname>
-			et
-			<methodname>getValue()</methodname>
-			?
-			L'autre question nous suggère de nous questionner sur comment récupérer les
-			segments
-			représentant la date, ou comment les affecter dans l'élément?
-		</para>
-
-		<para>
-			La solution est de surcharger la méthode
-			<methodname>setValue()</methodname>
-			dans l'élément
-			pour proposer sa propre logique. Dans le cas de notre exemple, notre
-			élément devrait avoir
-			trois comportements distincts:
-		</para>
-
-		<itemizedlist>
-			<listitem>
-				<para>
-					Si un timestamp entier est utilisé, il doit aider à la détermination
-					des entités
-					jour, mois, année.
-                </para>
-			</listitem>
-
-			<listitem>
-				<para>
-					Si une chaine est utilisée, elle devrait être transformée en
-					timestamp, et cette valeur
-					sera utiliser pour déterminer les entités jour, mois, année.
-                </para>
-			</listitem>
-
-			<listitem>
-				<para>
-					Si un tableau contenant les clés jour, mois, année est utilisé, alors
-					les valeurs
-					doivent être stockées.
-                </para>
-			</listitem>
-		</itemizedlist>
-
-		<para>
-			En interne, les jour, mois et année seront stockés distinctement.
-			Lorsque la valeur de l'élément
-			sera demandée, nous récupèrerons une chaine formatée et normalisée. Nous
-			surchargerons
-			<methodname>getValue()</methodname>
-			pour assembler les segments élémentaires composant la date.
-		</para>
-
-		<para>
-			Voici à quoi ressemblerait la classe:
+        <para>
+            Les deux première questions se positionnent sur l'élément de formulaire lui-même, comment
+            vont fonctionner les méthodes <methodname>setValue()</methodname> et
+            <methodname>getValue()</methodname>?
+            L'autre question nous suggère de nous questionner sur comment récupérer les segments
+            représentant la date, ou comment les affecter dans l'élément?
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <para>
+            La solution est de surcharger la méthode <methodname>setValue()</methodname> dans l'élément
+             pour proposer sa propre logique. Dans le cas de notre exemple, notre élément devrait avoir
+             trois comportements distincts:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Si un timestamp entier est utilisé, il doit aider à la détermination des entités
+                    jour, mois, année.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Si une chaine est utilisée, elle devrait être transformée en timestamp, et cette valeur
+                    sera utiliser pour déterminer les entités jour, mois, année.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Si un tableau contenant les clés jour, mois, année est utilisé, alors les valeurs
+                    doivent être stockées.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            En interne, les jour, mois et année seront stockés distinctement. Lorsque la valeur de l'élément
+            sera demandée, nous récupèrerons une chaine formatée et normalisée. Nous surchargerons
+            <methodname>getValue()</methodname> pour assembler les segments élémentaires composant la date.
+        </para>
+
+        <para>
+            Voici à quoi ressemblerait la classe:
+        </para>
+
+        <programlisting language="php"><![CDATA[
 class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 {
     protected $_dateFormat = '%year%-%month%-%day%';
@@ -201,42 +183,33 @@ class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 }
 ]]></programlisting>
 
-		<para>
-			Cette classe est fléxible : nous pouvons affecter les valeurs par défaut
-			depuis une base de
-			données et être certains qu'elles seront stockées correctement. Aussi, la
-			valeur peut être
-			affectée depuis un tableau provenant des entrées du formulaire. Enfin, nous
-			avons tous les
-			accesseurs distincts pour chaque segment de la date, un décorateur pourra donc
-			créer
-			l'élément comme il le voudra.
+        <para>
+            Cette classe est fléxible : nous pouvons affecter les valeurs par défaut depuis une base de
+            données et être certains qu'elles seront stockées correctement. Aussi, la valeur peut être
+            affectée depuis un tableau provenant des entrées du formulaire. Enfin, nous avons tous les
+            accesseurs distincts pour chaque segment de la date, un décorateur pourra donc créer
+            l'élément comme il le voudra.
         </para>
-	</sect2>
+    </sect2>
 
-	<sect2 id="learning.form.decorators.composite.decorator">
-		<title>Le décorateur</title>
+    <sect2 id="learning.form.decorators.composite.decorator">
+        <title>Le décorateur</title>
 
-		<para>
-			Toujours en suivant notre exemple, imaginons que nous voulions que
-			notre utilisateur
-			saisissent chaque segment jour, mois, année séparément. Heureusement, PHP
-			permet
-			d'utiliser la notation tableau pour créer des éléments, ainsi nous pourrons
-			capturer
-			ces trois valeurs en une seule et nous crérons un élément
-			<classname>Zend_Form</classname>
-			traitant avec des valeurs en tableau.
-		</para>
-
-		<para>
-			Le décorateur est relativement simple: Il va récupérer le jour, le mois
-			et l'année de
-			l'élément et passer chaque valeur à une aide de vue qui rendra chaque champ
-			individuellement. Nous les rassemblerons ensuite dans le rendu final.
+        <para>
+            Toujours en suivant notre exemple, imaginons que nous voulions que notre utilisateur
+            saisissent chaque segment jour, mois, année séparément. Heureusement, PHP permet
+            d'utiliser la notation tableau pour créer des éléments, ainsi nous pourrons capturer
+            ces trois valeurs en une seule et nous crérons un élément
+            <classname>Zend_Form</classname> traitant avec des valeurs en tableau.
         </para>
 
-		<programlisting language="php"><![CDATA[
+        <para>
+            Le décorateur est relativement simple: Il va récupérer le jour, le mois et l'année de
+            l'élément et passer chaque valeur à une aide de vue qui rendra chaque champ
+            individuellement. Nous les rassemblerons ensuite dans le rendu final.
+        </para>
+
+        <programlisting language="php"><![CDATA[
 class My_Form_Decorator_Date extends Zend_Form_Decorator_Abstract
 {
     public function render($content)
@@ -283,15 +256,13 @@ class My_Form_Decorator_Date extends Zend_Form_Decorator_Abstract
 }
 ]]></programlisting>
 
-		<para>
-			Il faut maintenant préciser à notre élément d'utiliser notre décorateur
-			par défaut.
-			Pour ceci, il faut informer l'élément du chemin vers notre décorateur.
-			Nous pouvons
-			effectuer ceci par le constructeur:
+    <para>
+        Il faut maintenant préciser à notre élément d'utiliser notre décorateur par défaut.
+        Pour ceci, il faut informer l'élément du chemin vers notre décorateur. Nous pouvons
+        effectuer ceci par le constructeur:
     </para>
 
-		<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 {
     // ...
@@ -310,35 +281,21 @@ class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 }
 ]]></programlisting>
 
-		<para>
-			Notez que l'on fait cela en constructeur et non dans la méthode
-			<methodname>init()</methodname>
-			.
-			Ceci pour deux raisons. D'abord, ceci permet d'étendre dans le futur
-			notre élément afin d'y
-			ajouter de la logique dans
-			<methodname>init</methodname>
-			sans se soucier de l'appel à
-			<methodname>parent::init()</methodname>
-			. Ensuite, celà permet aussi de redéfinir le décorateur
-			par défaut
-			<classname>Date</classname>
-			dans le futur si celà devient nécessaire, via le
-			constructeur ou la méthode
-			<methodname>init</methodname>
-			.
-		</para>
+    <para>
+        Notez que l'on fait cela en constructeur et non dans la méthode <methodname>init()</methodname>.
+        Ceci pour deux raisons. D'abord, ceci permet d'étendre dans le futur notre élément afin d'y
+        ajouter de la logique dans <methodname>init</methodname> sans se soucier de l'appel à
+        <methodname>parent::init()</methodname>. Ensuite, celà permet aussi de redéfinir le décorateur
+        par défaut <classname>Date</classname> dans le futur si celà devient nécessaire, via le
+        constructeur ou la méthode <methodname>init</methodname>.
+    </para>
 
-		<para>
-			Ensuite, nous devons réécrire la méthode
-			<methodname>loadDefaultDecorators()</methodname>
-			pour
-			lui indiquer d'utiliser notre décorateur
-			<classname>Date</classname>
-			:
-		</para>
+    <para>
+        Ensuite, nous devons réécrire la méthode <methodname>loadDefaultDecorators()</methodname> pour
+        lui indiquer d'utiliser notre décorateur <classname>Date</classname>:
+    </para>
 
-		<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 {
     // ...
@@ -369,11 +326,11 @@ class My_Form_Element_Date extends Zend_Form_Element_Xhtml
 }
 ]]></programlisting>
 
-		<para>
-			A qyuoi ressemble le rendu final ? Considérons l'élément suivant:
+    <para>
+        A qyuoi ressemble le rendu final ? Considérons l'élément suivant:
     </para>
 
-		<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 $d = new My_Form_Element_Date('dateOfBirth');
 $d->setLabel('Date de naissance: ')
   ->setView(new Zend_View());
@@ -383,13 +340,12 @@ $d->setValue('20 April 2009');
 $d->setValue(array('year' => '2009', 'month' => '04', 'day' => '20'));
 ]]></programlisting>
 
-		<para>
-			Si vous affichez cet élément, vous obtiendrez ce rendu (avec quelques
-			modifications
-			concernant la mise en page du manuel et sa lisibilité):
+    <para>
+        Si vous affichez cet élément, vous obtiendrez ce rendu (avec quelques modifications
+        concernant la mise en page du manuel et sa lisibilité):
     </para>
 
-		<programlisting language="html"><![CDATA[
+    <programlisting language="html"><![CDATA[
 <dt id="dateOfBirth-label"><label for="dateOfBirth" class="optional">
     Date de naissance:
 </label></dt>
@@ -402,36 +358,29 @@ $d->setValue(array('year' => '2009', 'month' => '04', 'day' => '20'));
         value="2009" size="4" maxlength="4">
 </dd>
 ]]></programlisting>
-	</sect2>
+    </sect2>
 
-	<sect2 id="learning.form.decorators.composite.conclusion">
-		<title>Conclusion</title>
+    <sect2 id="learning.form.decorators.composite.conclusion">
+        <title>Conclusion</title>
 
-		<para>
-			Nous avons maintenant un élément qui peut rendre de multiples champs
-			de formulaire,
-			et les traiter comme une seule entité -- la valeur
-			<varname>dateOfBirth</varname>
-			sera passée comme un tableau à l'élément et celui-ci créra les
-			segments de date
-			appropriés et retournera une valeur normalisée.
-		</para>
-
-		<para>
-			Aussi, nous pouvons toujours utiliser des décorateurs différents avec
-			l'élément. Si
-			nous avions voulu utiliser un décorateur
-			<ulink url="http://dojotoolkit.org/">Dojo</ulink>
-			<classname>DateTextBox</classname>
-			-- qui accepte et retourne des chaines -- we aurions pu, sans
-			modification sur
-			l'élément lui-même.
-		</para>
-
-		<para>
-			Enfin, vous avez une API uniforme pour décrire un élement se composant se
-			plusieurs
-			segments distincts.
+        <para>
+            Nous avons maintenant un élément qui peut rendre de multiples champs de formulaire,
+            et les traiter comme une seule entité -- la valeur <varname>dateOfBirth</varname>
+            sera passée comme un tableau à l'élément et celui-ci créra les segments de date
+            appropriés et retournera une valeur normalisée.
         </para>
-	</sect2>
+
+        <para>
+            Aussi, nous pouvons toujours utiliser des décorateurs différents avec l'élément. Si
+            nous avions voulu utiliser un décorateur
+            <ulink url="http://dojotoolkit.org/">Dojo</ulink> <classname>DateTextBox</classname>
+            -- qui accepte et retourne des chaines -- we aurions pu, sans modification sur
+            l'élément lui-même.
+        </para>
+
+        <para>
+            Enfin, vous avez une API uniforme pour décrire un élement se composant se plusieurs
+            segments distincts.
+        </para>
+    </sect2>
 </sect1>

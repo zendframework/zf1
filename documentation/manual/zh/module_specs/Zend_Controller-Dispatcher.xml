@@ -1,67 +1,47 @@
 <sect1 id="zend.controller.dispatcher">
-	<title>分发器</title>
+    <title>分发器</title>
 
-	<sect2 id="zend.controller.dispatcher.overview">
-		<title>概述</title>
+    <sect2 id="zend.controller.dispatcher.overview">
+        <title>概述</title>
 
-		<para>
-			分发是取得请求对象，提取其中的模块名，控制器名，动作名以及可选参数，然后实例化控制器并调用其中的动作的整过过程。如果其中的模块、控制器或者动作没能找到，将使用它们的默认值。
-			<code>Zend_Controller_Dispatcher_Standard</code>
-			指定每个控制器和动作的默认值为
-			<code>index</code>
-			，模块的默认值为
-			<code>default</code>
-			，允许开发人通过
-			<code>setDefaultController()</code>
-			、
-			<code>setDefaultAction()</code>
-			和
-			<code>setDefaultModule()</code>
-			改变默认值设定。
-		</para>
+        <para>
+            分发是取得请求对象，提取其中的模块名，控制器名，动作名以及可选参数，然后实例化控制器并调用其中的动作的整过过程。如果其中的模块、控制器或者动作没能找到，将使用它们的默认值。<code>Zend_Controller_Dispatcher_Standard</code>指定每个控制器和动作的默认值为 <code>index</code>，模块的默认值为<code>default</code>，允许开发人通过<code>setDefaultController()</code>、<code>setDefaultAction()</code>和<code>setDefaultModule()</code>改变默认值设定。
+        </para>
 
-		<note>
-			<title>缺省模块</title>
+        <note>
+            <title>缺省模块</title>
 
-			<para>
-				当创建模块程序，你可能也需要缺省模块的命名空间（缺省配置中，缺省模块
-				<emphasis>没有</emphasis>
-				命名空间）。从 1.5.0 开始，可以在前端控制器或你的派遣器里通过指定
-				<code>prefixDefaultModule</code>
-				为 true 来实现。
-			</para>
+            <para>
+                当创建模块程序，你可能也需要缺省模块的命名空间（缺省配置中，缺省模块<emphasis>没有</emphasis>命名空间）。从 1.5.0 开始，可以在前端控制器或你的派遣器里通过指定 <code>prefixDefaultModule</code>  为 true 来实现。
+             </para>
 
-			<programlisting role="php"><![CDATA[
+            <programlisting role="php"><![CDATA[
 // 在你的前端控制器中：
 $front->setParam('prefixDefaultModule', true);
 
 // 在你的分发器中：
 $dispatcher->setParam('prefixDefaultModule', true);
 ]]>
-			</programlisting>
+            </programlisting>
 
-			<para>
-				这允许你重定义一个已存在的模块为程序的缺省模块。
+            <para>
+                这允许你重定义一个已存在的模块为程序的缺省模块。
             </para>
-		</note>
+        </note>
 
-		<para>
-			分发发生在前端控制器中的一个循环（loop）中。分发之前，前端控制器通过路由请求，找到用户指定的模块、控制器、动作和可选参数。然后进入分发循环，分发请求。
+        <para>
+            分发发生在前端控制器中的一个循环（loop）中。分发之前，前端控制器通过路由请求，找到用户指定的模块、控制器、动作和可选参数。然后进入分发循环，分发请求。
         </para>
 
-		<para>
-			每次迭代（iteration）过程开始时，在请求对象中设置一个标志指示该动作已分发。如果在动作或者前/后分发（pre/postDispatch）插件重置了该标志，分发循环将继续下去并试图分发新的请求。通过改变请求中的控制器或者动作并重置已分发标志，开发人员可以定制执行一个请求链。
+        <para>
+           每次迭代（iteration）过程开始时，在请求对象中设置一个标志指示该动作已分发。如果在动作或者前/后分发（pre/postDispatch）插件重置了该标志，分发循环将继续下去并试图分发新的请求。通过改变请求中的控制器或者动作并重置已分发标志，开发人员可以定制执行一个请求链。
         </para>
 
-		<para>
-			控制这种分发过程的动作控制器方法是
-			<code>_forward()</code>
-			；在任意的
-			<code>pre/postDispatch()</code>
-			或者动作中调用该方法，并传入动作、控制器、模块、以及可选的附加参数，就可以进入新的动作。
-		</para>
+        <para>
+           控制这种分发过程的动作控制器方法是<code>_forward()</code>；在任意的<code>pre/postDispatch()</code>或者动作中调用该方法，并传入动作、控制器、模块、以及可选的附加参数，就可以进入新的动作。
+        </para>
 
-		<programlisting role="php"><![CDATA[
+        <programlisting role="php"><![CDATA[
 public function fooAction()
 {
     // forward to another action in the current controller and module:
@@ -83,27 +63,25 @@ public function bazAction()
     $this->_forward('baz', 'bar', 'foo', array('baz' => 'bogus'));
 }
 ]]>
-		</programlisting>
-	</sect2>
+        </programlisting>
+    </sect2>
 
-	<sect2 id="zend.controller.dispatcher.subclassing">
-		<title>子类化分发器</title>
+    <sect2 id="zend.controller.dispatcher.subclassing">
+        <title>子类化分发器</title>
 
-		<para>
-			<code>Zend_Controller_Front</code>
-			首先调用路由器找到请求中的第一个动作，然后进入分发循环，调用分发器分发动作。
-		</para>
-
-		<para>
-			分发器需要大量数据完成任务——它需要知道如何格式化控制器和动作的名称，到哪儿找到控制器类文件，模块名是否有效，以及基于其它可用信息判定请求是否能分发的API。
+        <para>
+            <code>Zend_Controller_Front</code>首先调用路由器找到请求中的第一个动作，然后进入分发循环，调用分发器分发动作。
         </para>
 
-		<para>
-			<code>Zend_Controller_Dispatcher_Interface</code>
-			定义了下列所有分发器需要实现的方法。
-		</para>
+        <para>
+            分发器需要大量数据完成任务——它需要知道如何格式化控制器和动作的名称，到哪儿找到控制器类文件，模块名是否有效，以及基于其它可用信息判定请求是否能分发的API。
+        </para>
 
-		<programlisting role="php"><![CDATA[
+        <para>
+            <code>Zend_Controller_Dispatcher_Interface</code>定义了下列所有分发器需要实现的方法。
+        </para>
+
+        <programlisting role="php"><![CDATA[
 interface Zend_Controller_Dispatcher_Interface
 {
     /**
@@ -258,19 +236,17 @@ interface Zend_Controller_Dispatcher_Interface
     public function getDefaultAction();
 }
 ]]>
-		</programlisting>
+        </programlisting>
 
-		<para>
-			不过大多数情况下，只需要简单地扩展抽象类
-			<code>Zend_Controller_Dispatcher_Abstract</code>
-			，其中已经定义好了上面的大部分方法。或者扩展
-			<code>Zend_Controller_Dispatcher_Standard</code>
-			类，基于标准分发器来修改功能。
-		</para>
-
-		<para>
-			需要子类化分发器的可能原因包括：期望在动作控制器中使用不同的类和方法命名模式，或者期望使用不同的分发方式，比如分发到控制器目录下的动作文件，而不是控制器类的动作方法。
+        <para>
+           不过大多数情况下，只需要简单地扩展抽象类<code>Zend_Controller_Dispatcher_Abstract</code>，其中已经定义好了上面的大部分方法。或者扩展<code>Zend_Controller_Dispatcher_Standard</code>类，基于标准分发器来修改功能。
         </para>
-	</sect2>
+
+        <para>
+            需要子类化分发器的可能原因包括：期望在动作控制器中使用不同的类和方法命名模式，或者期望使用不同的分发方式，比如分发到控制器目录下的动作文件，而不是控制器类的动作方法。
+        </para>
+    </sect2>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

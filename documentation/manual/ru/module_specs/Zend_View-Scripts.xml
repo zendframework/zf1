@@ -2,43 +2,31 @@
 <!-- Reviewed: no -->
 <sect1 id="zend.view.scripts">
 
-	<title>Скрипты видов</title>
+    <title>Скрипты видов</title>
 
-	<para>
-		После того, как ваш контроллер определил переменные и вызвал
-		метод
-		<code>render()</code>
-		,
-		<classname>Zend_View</classname>
-		включает
-		требуемый скрипт вида и выполняет его в области
-		видимости экземпляра
-		<classname>Zend_View</classname>
-		. Поэтому в вашем скрипте
-		вида ссылки на $this в действительности будут ссылаться на
-		сам экземляр
-		<classname>Zend_View</classname>
-		.
-	</para>
-
-	<para>
-		Переменные, устанавливаемые в контроллере для скрипта вида, являются
-		свойствами экземпляра
-		<classname>Zend_View</classname>
-		. Например, если контроллер
-		установил переменную 'something', то в скрипте вида вы можете ссылаться
-		на нее следующим образом:
-		<varname>$this->something</varname>
-		. Это дает
-		возможность отслеживать, какие переменные были установлены
-		извне для скрипта, и какие были установлены в самом скрипте.
-	</para>
-
-	<para>
-		Ниже приведен пример скрипта вида из введения:
+    <para>
+        После того, как ваш контроллер определил переменные и вызвал
+        метод <code>render()</code>, <classname>Zend_View</classname> включает
+        требуемый скрипт вида и выполняет его в области
+        видимости экземпляра <classname>Zend_View</classname>. Поэтому в вашем скрипте
+        вида ссылки на $this в действительности будут ссылаться на
+        сам экземляр <classname>Zend_View</classname>.
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <para>
+        Переменные, устанавливаемые в контроллере для скрипта вида, являются
+        свойствами экземпляра <classname>Zend_View</classname>. Например, если контроллер
+        установил переменную 'something', то в скрипте вида вы можете ссылаться
+        на нее следующим образом: <varname>$this->something</varname>. Это дает
+        возможность отслеживать, какие переменные были установлены
+        извне для скрипта, и какие были установлены в самом скрипте.
+    </para>
+
+    <para>
+        Ниже приведен пример скрипта вида из введения:
+    </para>
+
+    <programlisting language="php"><![CDATA[
 <?php if ($this->books): ?>
 
     <!-- Таблица из нескольких книг. -->
@@ -64,29 +52,26 @@
 <?php endif;?>
 ]]></programlisting>
 
-	<sect2 id="zend.view.scripts.escaping">
+    <sect2 id="zend.view.scripts.escaping">
 
-		<title>Экранирование вывода</title>
+        <title>Экранирование вывода</title>
 
-		<para>
-			Одной из наиважнейших задач, которую должен решать скрипт вида,
-			является обеспечение того, что вывод должным образом
-			экранирован; помимо прочего, это помогает
-			предотвратить XSS-атаки.
-			За исключением тех случаев, когда используются функции,
-			методы или помощники, которые сами производят экранирование,
-			вы должны всегда экранировать переменные, когда выводите их.
+        <para>
+            Одной из наиважнейших задач, которую должен решать скрипт вида,
+            является обеспечение того, что вывод должным образом
+            экранирован; помимо прочего, это помогает
+            предотвратить XSS-атаки.
+            За исключением тех случаев, когда используются функции,
+            методы или помощники, которые сами производят экранирование,
+            вы должны всегда экранировать переменные, когда выводите их.
         </para>
 
-		<para>
-			<classname>Zend_View</classname>
-			снабжен методом
-			<code>escape()</code>
-			,
-			который выполняет экранирование.
-		</para>
+        <para>
+            <classname>Zend_View</classname> снабжен методом <code>escape()</code>,
+            который выполняет экранирование.
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // плохая практика
 echo $this->variable;
 
@@ -94,23 +79,16 @@ echo $this->variable;
 echo $this->escape($this->variable);
 ]]></programlisting>
 
-		<para>
-			По умолчанию метод
-			<code>escape()</code>
-			использует функцию PHP
-			<code>htmlspecialchars()</code>
-			для экранирования. Но, в зависимости
-			от вашего окружения, может потребоваться выполнять экранирование
-			по-иному. Используйте метод
-			<code>setEscape()</code>
-			на уровне
-			контроллера, чтобы указать
-			<classname>Zend_View</classname>
-			, какую
-			экранирующую функцию обратного вызова использовать.
-		</para>
+        <para>
+            По умолчанию метод <code>escape()</code> использует функцию PHP
+            <code>htmlspecialchars()</code> для экранирования. Но, в зависимости
+            от вашего окружения, может потребоваться выполнять экранирование
+            по-иному. Используйте метод <code>setEscape()</code> на уровне
+            контроллера, чтобы указать <classname>Zend_View</classname>, какую
+            экранирующую функцию обратного вызова использовать.
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 // создание экземпляра Zend_View
 $view = new Zend_View();
 
@@ -129,41 +107,37 @@ $view->setEscape(array($obj, 'methodName'));
 echo $view->render(...);
 ]]></programlisting>
 
-		<para>
-			Функции или методы обратного вызова должны принимать значение,
-			которое требуется экранировать, как первый параметр,
-			все остальные параметры должны быть необязательными.
+        <para>
+            Функции или методы обратного вызова должны принимать значение,
+            которое требуется экранировать, как первый параметр,
+            все остальные параметры должны быть необязательными.
         </para>
 
-	</sect2>
+    </sect2>
 
-	<sect2 id="zend.view.scripts.templates">
+    <sect2 id="zend.view.scripts.templates">
 
-		<title>Использование других шаблонизаторов</title>
+        <title>Использование других шаблонизаторов</title>
 
-		<para>
-			Хотя PHP сам по себе представляет собой мощный шаблонизатор,
-			многие разработчики считают его избыточным или сложным для
-			верстальщиков и предпочитают использовать другие
-			шаблонизаторы.
-			<classname>Zend_View</classname>
-			предоставляет два пути для
-			этого: первый - через скрипты вида, второй - посредством реализации
-			интерфейса
-			<classname>Zend_View_Interface</classname>
-			.
-		</para>
+        <para>
+            Хотя PHP сам по себе представляет собой мощный шаблонизатор,
+            многие разработчики считают его избыточным или сложным для
+            верстальщиков и предпочитают использовать другие
+            шаблонизаторы. <classname>Zend_View</classname> предоставляет два пути для
+            этого: первый - через скрипты вида, второй - посредством реализации
+            интерфейса <classname>Zend_View_Interface</classname>.
+        </para>
 
-		<sect3 id="zend.view.scripts.templates.scripts">
-			<title>Шаблонизаторы c использованием скриптов видов</title>
+        <sect3 id="zend.view.scripts.templates.scripts">
+            <title>Шаблонизаторы c использованием скриптов видов</title>
 
-			<para>
-				Скрипт вида может использоваться для инстанцирования и
-				манипулирования отдельным объектом шаблона (это могут быть
-				шаблоны в стиле PHPLIB).
+            <para>
+                Скрипт вида может использоваться для инстанцирования и
+                манипулирования отдельным объектом шаблона (это могут быть
+                шаблоны в стиле PHPLIB).
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -186,11 +160,11 @@ if ($this->books) {
 }
 ]]></programlisting>
 
-			<para>
-				Это может соответствовать следующему файлу шаблона:
+            <para>
+                Это может соответствовать следующему файлу шаблона:
             </para>
 
-			<programlisting language="html"><![CDATA[
+            <programlisting language="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -210,21 +184,20 @@ if ($this->books) {
 <p>Нет книг для отображения.</p>
 ]]></programlisting>
 
-		</sect3>
+        </sect3>
 
-		<sect3 id="zend.view.scripts.templates.interface">
-			<title>Шаблонизаторы с использованием Zend_View_Interface</title>
+        <sect3 id="zend.view.scripts.templates.interface">
+            <title>Шаблонизаторы с использованием Zend_View_Interface</title>
 
-			<para>
-				Некоторые считают более удобным использовать совместимый с
-				<classname>Zend_View</classname>
-				шаблонизатор.
-				<classname>Zend_View_Interface</classname>
-				предоставляет минимально необходимый для
-				совместимости интерфейс:
-			</para>
+            <para>
+                Некоторые считают более удобным использовать совместимый с
+                <classname>Zend_View</classname> шаблонизатор.
+                <classname>Zend_View_Interface</classname>
+                предоставляет минимально необходимый для
+                совместимости интерфейс:
+            </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 /**
  * Возвращает объект используемого шаблонизатора
  */
@@ -276,13 +249,13 @@ public function clearVars();
 public function render($name);
 ]]></programlisting>
 
-			<para>
-				Используя этот интерфейс, относительно легко сделать "обертку"
-				для шаблонизаторов сторонних разработчиков. В примере показан
-				вариант "обертки" для Smarty:
+            <para>
+                Используя этот интерфейс, относительно легко сделать "обертку"
+                для шаблонизаторов сторонних разработчиков. В примере показан
+                вариант "обертки" для Smarty:
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -461,18 +434,14 @@ class Zend_View_Smarty implements Zend_View_Interface
 }
 ]]></programlisting>
 
-			<para>
-				В этом примере вы можете инстанцировать класс
-				<classname>Zend_View_Smarty</classname>
-				вместо
-				<classname>Zend_View</classname>
-				и
-				использовать его так же, как используется
-				<classname>Zend_View</classname>
-				.
-			</para>
+            <para>
+                В этом примере вы можете инстанцировать класс
+                <classname>Zend_View_Smarty</classname> вместо <classname>Zend_View</classname> и
+                использовать его так же, как используется
+                <classname>Zend_View</classname>.
+            </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 //Пример 1. В initView() инициализатора
 $view = new Zend_View_Smarty('/path/to/templates');
 $viewRenderer =
@@ -509,9 +478,11 @@ class FooController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-		</sect3>
+        </sect3>
 
-	</sect2>
+    </sect2>
 
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

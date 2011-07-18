@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect1 id="zend.form.advanced">
-	<title>Advanced Zend_Form Usage</title>
+    <title>Advanced Zend_Form Usage</title>
 
-	<para>
-		<classname>Zend_Form</classname>
-		has a wealth of functionality, much of it aimed
-		at experienced developers. This chapter aims to document some of this
-		functionality with examples and use cases.
-	</para>
+    <para>
+        <classname>Zend_Form</classname> has a wealth of functionality, much of it aimed
+        at experienced developers. This chapter aims to document some of this
+        functionality with examples and use cases.
+    </para>
 
-	<sect2 id="zend.form.advanced.arrayNotation">
-		<title>Array Notation</title>
+    <sect2 id="zend.form.advanced.arrayNotation">
+        <title>Array Notation</title>
 
-		<para>
-			Many experienced web developers like to group related form elements
-			using array notation in the element names. For example, if you have
-			two addresses you wish to capture, a shipping and a billing address,
-			you may have identical elements; by grouping them in an array, you
-			can ensure they are captured separately. Take the following form,
-			for example:
+        <para>
+            Many experienced web developers like to group related form elements
+            using array notation in the element names. For example, if you have
+            two addresses you wish to capture, a shipping and a billing address,
+            you may have identical elements; by grouping them in an array, you
+            can ensure they are captured separately. Take the following form,
+            for example:
         </para>
 
-		<programlisting language="html"><![CDATA[
+        <programlisting language="html"><![CDATA[
 <form>
     <fieldset>
         <legend>Shipping Address</legend>
@@ -74,13 +73,13 @@
 </form>
 ]]></programlisting>
 
-		<para>
-			In this example, the billing and shipping address contain some
-			identical fields, which means one would overwrite the other. We can
-			solve this solution using array notation:
+        <para>
+            In this example, the billing and shipping address contain some
+            identical fields, which means one would overwrite the other. We can
+            solve this solution using array notation:
         </para>
 
-		<programlisting language="html"><![CDATA[
+        <programlisting language="html"><![CDATA[
 <form>
     <fieldset>
         <legend>Shipping Address</legend>
@@ -142,125 +141,107 @@
 </form>
 ]]></programlisting>
 
-		<para>
-			In the above sample, we now get separate addresses. In the submitted
-			form, we'll now have three elements, the 'save' element for the
-			submit, and then two arrays, 'shipping' and 'billing', each with
-			keys for their various elements.
+        <para>
+            In the above sample, we now get separate addresses. In the submitted
+            form, we'll now have three elements, the 'save' element for the
+            submit, and then two arrays, 'shipping' and 'billing', each with
+            keys for their various elements.
         </para>
 
-		<para>
-			<classname>Zend_Form</classname>
-			attempts to automate this process with its
-			<link linkend="zend.form.forms.subforms">sub forms</link>
-			. By
-			default, sub forms render using the array notation as shown in the
-			previous
-			<acronym>HTML</acronym>
-			form listing, complete with ids. The array name is
-			based on the sub form name, with the keys based on the elements
-			contained in the sub form. Sub forms may be nested arbitrarily deep,
-			and this will create nested arrays to reflect the structure.
-			Additionally, the various validation routines in
-			<classname>Zend_Form</classname>
-			honor the array structure, ensuring that your
-			form validates correctly, no matter how arbitrarily deep you nest
-			your sub forms. You need do nothing to benefit from this; this
-			behaviour is enabled by default.
-		</para>
-
-		<para>
-			Additionally, there are facilities that allow you to turn on array
-			notation conditionally, as well as specify the specific array to
-			which an element or collection belongs:
+        <para>
+            <classname>Zend_Form</classname> attempts to automate this process with its
+            <link linkend="zend.form.forms.subforms">sub forms</link>. By
+            default, sub forms render using the array notation as shown in the
+            previous <acronym>HTML</acronym> form listing, complete with ids. The array name is
+            based on the sub form name, with the keys based on the elements
+            contained in the sub form. Sub forms may be nested arbitrarily deep,
+            and this will create nested arrays to reflect the structure.
+            Additionally, the various validation routines in
+            <classname>Zend_Form</classname> honor the array structure, ensuring that your
+            form validates correctly, no matter how arbitrarily deep you nest
+            your sub forms. You need do nothing to benefit from this; this
+            behaviour is enabled by default.
         </para>
 
-		<itemizedlist>
-			<listitem>
-				<para>
-					<methodname>Zend_Form::setIsArray($flag)</methodname>
-					: By setting the
-					flag
-					<constant>TRUE</constant>
-					, you can indicate that an entire form should be
-					treated as an array. By default, the form's name will be
-					used as the name of the array, unless
-					<methodname>setElementsBelongTo()</methodname>
-					has been called. If the
-					form has no specified name, or if
-					<methodname>setElementsBelongTo()</methodname>
-					has not been set, this
-					flag will be ignored (as there is no array name to which
-					the elements may belong).
-				</para>
-
-				<para>
-					You may determine if a form is being treated as an array
-					using the
-					<methodname>isArray()</methodname>
-					accessor.
-				</para>
-			</listitem>
-
-			<listitem>
-				<para>
-					<methodname>Zend_Form::setElementsBelongTo($array)</methodname>
-					:
-					Using this method, you can specify the name of an array to
-					which all elements of the form belong. You can determine the
-					name using the
-					<methodname>getElementsBelongTo()</methodname>
-					accessor.
-				</para>
-			</listitem>
-		</itemizedlist>
-
-		<para>
-			Additionally, on the element level, you can specify individual
-			elements may belong to particular arrays using
-			<methodname>Zend_Form_Element::setBelongsTo()</methodname>
-			method.
-			To discover what this value is -- whether set explicitly or
-			implicitly via the form -- you may use the
-			<methodname>getBelongsTo()</methodname>
-			accessor.
-		</para>
-	</sect2>
-
-	<sect2 id="zend.form.advanced.multiPage">
-		<title>Multi-Page Forms</title>
-
-		<para>
-			Currently, Multi-Page forms are not officially supported in
-			<classname>Zend_Form</classname>
-			; however, most support for implementing them
-			is available and can be utilized with a little extra tooling.
-		</para>
-
-		<para>
-			The key to creating a multi-page form is to utilize sub forms, but
-			to display only one such sub form per page. This allows you to
-			submit a single sub form at a time and validate it, but not process
-			the form until all sub forms are complete.
+        <para>
+            Additionally, there are facilities that allow you to turn on array
+            notation conditionally, as well as specify the specific array to
+            which an element or collection belongs:
         </para>
 
-		<example id="zend.form.advanced.multiPage.registration">
-			<title>Registration Form Example</title>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>Zend_Form::setIsArray($flag)</methodname>: By setting the
+                    flag <constant>TRUE</constant>, you can indicate that an entire form should be
+                    treated as an array. By default, the form's name will be
+                    used as the name of the array, unless
+                    <methodname>setElementsBelongTo()</methodname> has been called. If the
+                    form has no specified name, or if
+                    <methodname>setElementsBelongTo()</methodname> has not been set, this
+                    flag will be ignored (as there is no array name to which
+                    the elements may belong).
+                </para>
 
-			<para>
-				Let's use a registration form as an example. For our purposes,
-				we want to capture the desired username and password on the
-				first page, then the user's metadata -- given name, family name,
-				and location -- and finally allow them to decide what mailing
-				lists, if any, they wish to subscribe to.
+                <para>
+                    You may determine if a form is being treated as an array
+                    using the <methodname>isArray()</methodname> accessor.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>Zend_Form::setElementsBelongTo($array)</methodname>:
+                    Using this method, you can specify the name of an array to
+                    which all elements of the form belong. You can determine the
+                    name using the <methodname>getElementsBelongTo()</methodname> accessor.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            Additionally, on the element level, you can specify individual
+            elements may belong to particular arrays using
+            <methodname>Zend_Form_Element::setBelongsTo()</methodname> method.
+            To discover what this value is -- whether set explicitly or
+            implicitly via the form -- you may use the
+            <methodname>getBelongsTo()</methodname> accessor.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.form.advanced.multiPage">
+        <title>Multi-Page Forms</title>
+
+        <para>
+            Currently, Multi-Page forms are not officially supported in
+            <classname>Zend_Form</classname>; however, most support for implementing them
+            is available and can be utilized with a little extra tooling.
+        </para>
+
+        <para>
+            The key to creating a multi-page form is to utilize sub forms, but
+            to display only one such sub form per page. This allows you to
+            submit a single sub form at a time and validate it, but not process
+            the form until all sub forms are complete.
+        </para>
+
+        <example id="zend.form.advanced.multiPage.registration">
+            <title>Registration Form Example</title>
+
+            <para>
+                Let's use a registration form as an example. For our purposes,
+                we want to capture the desired username and password on the
+                first page, then the user's metadata -- given name, family name,
+                and location -- and finally allow them to decide what mailing
+                lists, if any, they wish to subscribe to.
             </para>
 
-			<para>
-				First, let's create our own form, and define several sub forms
-				within it:
+            <para>
+                First, let's create our own form, and define several sub forms
+                within it:
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class My_Form_Registration extends Zend_Form
 {
     public function init()
@@ -361,17 +342,17 @@ class My_Form_Registration extends Zend_Form
 }
 ]]></programlisting>
 
-			<para>
-				Note that there are no submit buttons, and that we have done
-				nothing with the sub form decorators -- which means that by
-				default they will be displayed as fieldsets. We will need to be
-				able to override these as we display each individual sub form,
-				and add in submit buttons so we can actually process them --
-				which will also require action and method properties. Let's add
-				some scaffolding to our class to provide that information:
+            <para>
+                Note that there are no submit buttons, and that we have done
+                nothing with the sub form decorators -- which means that by
+                default they will be displayed as fieldsets. We will need to be
+                able to override these as we display each individual sub form,
+                and add in submit buttons so we can actually process them --
+                which will also require action and method properties. Let's add
+                some scaffolding to our class to provide that information:
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class My_Form_Registration extends Zend_Form
 {
     // ...
@@ -449,24 +430,23 @@ class My_Form_Registration extends Zend_Form
 }
 ]]></programlisting>
 
-			<para>
-				Next, we need to add some scaffolding in our action controller,
-				and have several considerations. First, we need to make sure we
-				persist form data between requests, so that we can determine
-				when to quit. Second, we need some logic to determine what form
-				segments have already been submitted, and what sub form to
-				display based on that information. We'll use
-				<classname>Zend_Session_Namespace</classname>
-				to persist data, which will
-				also help us answer the question of which form to submit.
-			</para>
-
-			<para>
-				Let's create our controller, and add a method for retrieving a
-				form instance:
+            <para>
+                Next, we need to add some scaffolding in our action controller,
+                and have several considerations. First, we need to make sure we
+                persist form data between requests, so that we can determine
+                when to quit. Second, we need some logic to determine what form
+                segments have already been submitted, and what sub form to
+                display based on that information. We'll use
+                <classname>Zend_Session_Namespace</classname> to persist data, which will
+                also help us answer the question of which form to submit.
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <para>
+                Let's create our controller, and add a method for retrieving a
+                form instance:
+            </para>
+
+            <programlisting language="php"><![CDATA[
 class RegistrationController extends Zend_Controller_Action
 {
     protected $_form;
@@ -481,17 +461,17 @@ class RegistrationController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-			<para>
-				Now, let's add some functionality for determining which form to
-				display. Basically, until the entire form is considered valid,
-				we need to continue displaying form segments. Additionally, we
-				likely want to make sure they're in a particular order: user,
-				demog, and then lists. We can determine what data has been
-				submitted by checking our session namespace for particular keys
-				representing each subform.
+            <para>
+                Now, let's add some functionality for determining which form to
+                display. Basically, until the entire form is considered valid,
+                we need to continue displaying form segments. Additionally, we
+                likely want to make sure they're in a particular order: user,
+                demog, and then lists. We can determine what data has been
+                submitted by checking our session namespace for particular keys
+                representing each subform.
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class RegistrationController extends Zend_Controller_Action
 {
     // ...
@@ -584,45 +564,34 @@ class RegistrationController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-			<para>
-				The above methods allow us to use notations such as "
-				<command>$subForm =
-					$this-&gt;getCurrentSubForm();</command>
-				" to retrieve the current
-				sub form for validation, or "
-				<command>$next =
-					$this-&gt;getNextSubForm();</command>
-				" to get the next one to
-				display.
-			</para>
-
-			<para>
-				Now, let's figure out how to process and display the various sub
-				forms. We can use
-				<methodname>getCurrentSubForm()</methodname>
-				to determine
-				if any sub forms have been submitted (
-				<constant>FALSE</constant>
-				return values
-				indicate none have been displayed or submitted), and
-				<methodname>getNextSubForm()</methodname>
-				to retrieve a form to display. We
-				can then use the form's
-				<methodname>prepareSubForm()</methodname>
-				method to
-				ensure the form is ready for display.
-			</para>
-
-			<para>
-				When we have a form submission, we can validate the sub form,
-				and then check to see if the entire form is now valid. To do
-				these tasks, we'll need additional methods that ensure that
-				submitted data is added to the session, and that when validating
-				the form entire, we validate against all segments from the
-				session:
+            <para>
+                The above methods allow us to use notations such as "<command>$subForm =
+                    $this-&gt;getCurrentSubForm();</command>" to retrieve the current
+                sub form for validation, or "<command>$next =
+                    $this-&gt;getNextSubForm();</command>" to get the next one to
+                display.
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <para>
+                Now, let's figure out how to process and display the various sub
+                forms. We can use <methodname>getCurrentSubForm()</methodname> to determine
+                if any sub forms have been submitted (<constant>FALSE</constant> return values
+                indicate none have been displayed or submitted), and
+                <methodname>getNextSubForm()</methodname> to retrieve a form to display. We
+                can then use the form's <methodname>prepareSubForm()</methodname> method to
+                ensure the form is ready for display.
+            </para>
+
+            <para>
+                When we have a form submission, we can validate the sub form,
+                and then check to see if the entire form is now valid. To do
+                these tasks, we'll need additional methods that ensure that
+                submitted data is added to the session, and that when validating
+                the form entire, we validate against all segments from the
+                session:
+            </para>
+
+            <programlisting language="php"><![CDATA[
 class RegistrationController extends Zend_Controller_Action
 {
     // ...
@@ -663,13 +632,13 @@ class RegistrationController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-			<para>
-				Now that we have the legwork out of the way, let's build the
-				actions for this controller. We'll need a landing page for the
-				form, and then a 'process' action for processing the form.
+            <para>
+                Now that we have the legwork out of the way, let's build the
+                actions for this controller. We'll need a landing page for the
+                form, and then a 'process' action for processing the form.
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 class RegistrationController extends Zend_Controller_Action
 {
     // ...
@@ -710,22 +679,22 @@ class RegistrationController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-			<para>
-				As you'll notice, the actual code for processing the form is
-				relatively simple. We check to see if we have a current sub form
-				submission, and if not, we go back to the landing page. If we do
-				have a sub form, we attempt to validate it, redisplaying it if
-				it fails. If the sub form is valid, we then check to see if the
-				form is valid, which would indicate we're done; if not, we
-				display the next form segment. Finally, we display a
-				verification page with the contents of the session.
+            <para>
+                As you'll notice, the actual code for processing the form is
+                relatively simple. We check to see if we have a current sub form
+                submission, and if not, we go back to the landing page. If we do
+                have a sub form, we attempt to validate it, redisplaying it if
+                it fails. If the sub form is valid, we then check to see if the
+                form is valid, which would indicate we're done; if not, we
+                display the next form segment. Finally, we display a
+                verification page with the contents of the session.
             </para>
 
-			<para>
-				The view scripts are very simple:
+            <para>
+                The view scripts are very simple:
             </para>
 
-			<programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 <?php // registration/index.phtml ?>
 <h2>Registration</h2>
 <?php echo $this->form ?>
@@ -758,14 +727,16 @@ foreach ($this->info as $info):
 endforeach ?>
 ]]></programlisting>
 
-			<para>
-				Upcoming releases of Zend Framework will include components to
-				make multi page forms simpler by abstracting the session and
-				ordering logic. In the meantime, the above example should serve
-				as a reasonable guideline on how to accomplish this task for
-				your site.
+            <para>
+                Upcoming releases of Zend Framework will include components to
+                make multi page forms simpler by abstracting the session and
+                ordering logic. In the meantime, the above example should serve
+                as a reasonable guideline on how to accomplish this task for
+                your site.
             </para>
-		</example>
-	</sect2>
+        </example>
+    </sect2>
 </sect1>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->

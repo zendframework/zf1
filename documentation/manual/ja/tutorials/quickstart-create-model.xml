@@ -2,57 +2,42 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 23473 -->
 <sect1 id="learning.quickstart.create-model">
-	<title>モデルとデータベーステーブルの作成</title>
+    <title>モデルとデータベーステーブルの作成</title>
 
-	<para>
-		始める前にちょっと考えてみましょう。これらのクラスはどこにあって、それをどのように探すのでしょうか?
-		わたしたちが作成したデフォルトのプロジェクトでは、一つのオートローダーがインスタンス化されます。
-		そこへ、他のクラスを探せるよう別のオートローダーを付け加えることができます。
-		MVC の様々なクラスはふつう一つのツリー -- ここでは
-		<filename>application/</filename>
-		--
-		に集まっていて、ほとんどの場合には共通のプレフィックスを持っていてほしいものです。
-	</para>
+    <para>
+        始める前にちょっと考えてみましょう。これらのクラスはどこにあって、それをどのように探すのでしょうか?
+        わたしたちが作成したデフォルトのプロジェクトでは、一つのオートローダーがインスタンス化されます。
+        そこへ、他のクラスを探せるよう別のオートローダーを付け加えることができます。
+        MVC の様々なクラスはふつう一つのツリー -- ここでは <filename>application/</filename> --
+        に集まっていて、ほとんどの場合には共通のプレフィックスを持っていてほしいものです。
+    </para>
 
-	<para>
-		<classname>Zend_Controller_Front</classname>
-		は、独立したミニアプリケーション、
-		すなわち "モジュール" という考え方を採用しています。モジュールは
-		<command>zf</command>
-		ツールが
-		<filename>application/</filename>
-		以下に設定するディレクトリ構造を模倣しており、
-		その中の全てのクラスはモジュール名を共通のプレフィックスとして持っているものと見なされます。
-		<filename>application/</filename>
-		はそれ自体が一つのモジュール -- "default" または "application"
-		モジュール -- です。以上を踏まえてこのディレクトリ下にあるリソースのオートロードを設定していきたいと思います。
-	</para>
+    <para>
+        <classname>Zend_Controller_Front</classname> は、独立したミニアプリケーション、
+        すなわち "モジュール" という考え方を採用しています。モジュールは <command>zf</command>
+        ツールが <filename>application/</filename> 以下に設定するディレクトリ構造を模倣しており、
+        その中の全てのクラスはモジュール名を共通のプレフィックスとして持っているものと見なされます。
+        <filename>application/</filename> はそれ自体が一つのモジュール -- "default" または "application"
+        モジュール -- です。以上を踏まえてこのディレクトリ下にあるリソースのオートロードを設定していきたいと思います。
+    </para>
 
-	<para>
-		<classname>Zend_Application_Module_Autoloader</classname>
-		は、あるモジュールの様々なリソースを
-		適切なディレクトリに対応付けるために必要となる機能を提供し、同時に、名前の付け方の規約も提供します。
-		このクラスのインスタンスは、デフォルトではブートストラップ・オブジェクトの初期化時に作成され、
-		アプリケーションのブートストラップでは "Application" というプレフィックスをデフォルトで使用します。
-		そのため、モデル、フォーム、テーブル・クラスはどれも、プレフィックス "Application_" で始めます。
-	</para>
+    <para>
+        <classname>Zend_Application_Module_Autoloader</classname> は、あるモジュールの様々なリソースを
+        適切なディレクトリに対応付けるために必要となる機能を提供し、同時に、名前の付け方の規約も提供します。
+        このクラスのインスタンスは、デフォルトではブートストラップ・オブジェクトの初期化時に作成され、
+        アプリケーションのブートストラップでは "Application" というプレフィックスをデフォルトで使用します。
+        そのため、モデル、フォーム、テーブル・クラスはどれも、プレフィックス "Application_" で始めます。
+    </para>
 
-	<para>
-		では、ゲストブックを作っていくことにしましょう。一般的には
-		<emphasis>コメント</emphasis>
-		、
-		<emphasis>タイムスタンプ</emphasis>
-		、それからたまに
-		<emphasis>メールアドレス</emphasis>
-		を持つ単純なリストになります。
-		それらをデータベースに保存するとしたら、各エントリーのユニークな識別子も欲しいかも知れません。
-		エントリーを保存したり特定のエントリーを取ってきたり全エントリーを読み出したくなることでしょう。
-		そうだとすると、簡単なゲストブックモデルの
-		<acronym>API</acronym>
-		はこのようになりそうです。
-	</para>
+   <para>
+        では、ゲストブックを作っていくことにしましょう。一般的には<emphasis>コメント</emphasis>、
+        <emphasis>タイムスタンプ</emphasis>、それからたまに<emphasis>メールアドレス</emphasis>を持つ単純なリストになります。
+        それらをデータベースに保存するとしたら、各エントリーのユニークな識別子も欲しいかも知れません。
+        エントリーを保存したり特定のエントリーを取ってきたり全エントリーを読み出したくなることでしょう。
+        そうだとすると、簡単なゲストブックモデルの <acronym>API</acronym> はこのようになりそうです。
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // application/models/Guestbook.php
 
 class Application_Model_Guestbook
@@ -86,45 +71,29 @@ class Application_Model_GuestbookMapper
 }
 ]]></programlisting>
 
-	<para>
-		<methodname>__get()</methodname>
-		と
-		<methodname>__set()</methodname>
-		は、
-		各エントリーのプロパティにアクセスする便利な仕組みと、他のゲッター、セッターのプロキシ提供してくれます。
-		また、オブジェクト中の許可したプロパティのみアクセス可能にするのにも役立ちます。
-	</para>
-
-	<para>
-		<methodname>find()</methodname>
-		と
-		<methodname>fetchAll()</methodname>
-		は単一のエントリー、
-		全てのエントリーをフェッチする機能を提供し、
-		<methodname>save()</methodname>
-		は
-		一つのエントリーをデータストアに保存する面倒を見ます。
-	</para>
-
-	<para>
-		ここでようやく、データベース設定について考え始めることができます。
+    <para>
+        <methodname>__get()</methodname> と <methodname>__set()</methodname> は、
+        各エントリーのプロパティにアクセスする便利な仕組みと、他のゲッター、セッターのプロキシ提供してくれます。
+        また、オブジェクト中の許可したプロパティのみアクセス可能にするのにも役立ちます。
     </para>
 
-	<para>
-		まず
-		<classname>Db</classname>
-		リソースを初期化する必要があります。
-		<classname>Layout</classname>
-		と
-		<classname>View</classname>
-		リソースから
-		<classname>Db</classname>
-		リソースの設定を準備できます。これには
-		<command>zf configure db-adapter</command>
-		コマンドが使えます。
-	</para>
+    <para>
+        <methodname>find()</methodname> と <methodname>fetchAll()</methodname> は単一のエントリー、
+        全てのエントリーをフェッチする機能を提供し、<methodname>save()</methodname> は
+        一つのエントリーをデータストアに保存する面倒を見ます。
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <para>
+        ここでようやく、データベース設定について考え始めることができます。
+    </para>
+
+    <para>
+        まず <classname>Db</classname> リソースを初期化する必要があります。
+        <classname>Layout</classname> と <classname>View</classname> リソースから <classname>Db</classname>
+        リソースの設定を準備できます。これには <command>zf configure db-adapter</command> コマンドが使えます。
+    </para>
+
+    <programlisting language="shell"><![CDATA[
 % zf configure db-adapter \
 > 'adapter=PDO_SQLITE&dbname=APPLICATION_PATH "/../data/db/guestbook.db"' \
 > production
@@ -141,14 +110,12 @@ A db configuration for the production has been written to the application config
 A db configuration for the production has been written to the application config file.
 ]]></programlisting>
 
-	<para>
-		ここで
-		<filename>application/configs/application.ini</filename>
-		ファイルの相当する部分に
-		以下の行が追加されているのが見付かるので、編集します。
-	</para>
+    <para>
+        ここで <filename>application/configs/application.ini</filename> ファイルの相当する部分に
+        以下の行が追加されているのが見付かるので、編集します。
+    </para>
 
-	<programlisting language="ini"><![CDATA[
+    <programlisting language="ini"><![CDATA[
 ; application/configs/application.ini
 
 [production]
@@ -167,11 +134,11 @@ resources.db.adapter = "PDO_SQLITE"
 resources.db.params.dbname = APPLICATION_PATH "/../data/db/guestbook-dev.db"
 ]]></programlisting>
 
-	<para>
-		設定ファイルが最終的に以下のようになるようにしてください。
+    <para>
+        設定ファイルが最終的に以下のようになるようにしてください。
     </para>
 
-	<programlisting language="ini"><![CDATA[
+    <programlisting language="ini"><![CDATA[
 ; application/configs/application.ini
 
 [production]
@@ -202,30 +169,27 @@ resources.db.adapter = "PDO_SQLITE"
 resources.db.params.dbname = APPLICATION_PATH "/../data/db/guestbook-dev.db"
 ]]></programlisting>
 
-	<para>
-		データベースは
-		<filename>data/db/</filename>
-		に保存されることに注意しましょう。
-		ディレクトリを作って全ユーザーに書き込み権限を与えます。ユニックスライクなシステムでは、
-		次のようにすれば設定できます。
-	</para>
+    <para>
+        データベースは <filename>data/db/</filename> に保存されることに注意しましょう。
+        ディレクトリを作って全ユーザーに書き込み権限を与えます。ユニックスライクなシステムでは、
+        次のようにすれば設定できます。
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % mkdir -p data/db; chmod -R a+rwX data
 ]]></programlisting>
 
-	<para>
-		Windows では、エクスプローラでディレクトリを作り、
-		全ユーザーがそのディレクトリに書き込めるようアクセス権を設定する必要があります。
+    <para>
+        Windows では、エクスプローラでディレクトリを作り、
+        全ユーザーがそのディレクトリに書き込めるようアクセス権を設定する必要があります。
     </para>
 
-	<para>
-		この段階でデータベース接続が行えます。今の例では
-		<filename>application/data/</filename>
-		ディレクトリ内にある Sqlite データベースへの接続です。では、ゲストブックのエントリーを入れる簡単なテーブルを設計しましょう。
-	</para>
+    <para>
+        この段階でデータベース接続が行えます。今の例では <filename>application/data/</filename>
+        ディレクトリ内にある Sqlite データベースへの接続です。では、ゲストブックのエントリーを入れる簡単なテーブルを設計しましょう。
+    </para>
 
-	<programlisting language="sql"><![CDATA[
+    <programlisting language="sql"><![CDATA[
 -- scripts/schema.sqlite.sql
 --
 -- この SQL からデータベーススキーマをロードする必要があります。
@@ -240,11 +204,11 @@ CREATE TABLE guestbook (
 CREATE INDEX "id" ON "guestbook" ("id");
 ]]></programlisting>
 
-	<para>
-		それから、素晴らしい仕事ができるように、数行、アプリケーションを面白くするする情報を作りましょう。
+    <para>
+        それから、素晴らしい仕事ができるように、数行、アプリケーションを面白くするする情報を作りましょう。
     </para>
 
-	<programlisting language="sql"><![CDATA[
+    <programlisting language="sql"><![CDATA[
 -- scripts/data.sqlite.sql
 --
 -- 以下の SQL 文でデータベースに生命を吹き込めます。
@@ -259,15 +223,13 @@ INSERT INTO guestbook (email, comment, created) VALUES
     DATETIME('NOW'));
 ]]></programlisting>
 
-	<para>
-		これでスキーマができ、データもいくらか定義できました。それでは一緒にスクリプトを書いてこのデータベースの構築を実行しましょう。
-		普通は、プロダクション環境でこういったことは必要ありませんが、このスクリプトがあれば発者が必要なデータベースを手元で構築して、アプリケーションの作業に全力投球するのをたすけてくれるでしょう。
-		以下の内容で、
-		<filename>scripts/load.sqlite.php</filename>
-		としてスクリプトを作ってください。
-	</para>
+    <para>
+        これでスキーマができ、データもいくらか定義できました。それでは一緒にスクリプトを書いてこのデータベースの構築を実行しましょう。
+	普通は、プロダクション環境でこういったことは必要ありませんが、このスクリプトがあれば発者が必要なデータベースを手元で構築して、アプリケーションの作業に全力投球するのをたすけてくれるでしょう。
+	以下の内容で、<filename>scripts/load.sqlite.php</filename> としてスクリプトを作ってください。
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // scripts/load.sqlite.php
 
 /**
@@ -369,19 +331,19 @@ try {
 // 大抵の場合、このスクリプトはコマンドラインから走らせて true を返す
 ]]></programlisting>
 
-	<para>
-		このスクリプトを実行しましょう。ターミナルか DOS のコマンドラインから以下を実行してください。
+    <para>
+        このスクリプトを実行しましょう。ターミナルか DOS のコマンドラインから以下を実行してください。
     </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % php scripts/load.sqlite.php --withdata
 ]]></programlisting>
 
-	<para>
-		以下のような出力を目にすると思います。
+    <para>
+        以下のような出力を目にすると思います。
     </para>
 
-	<programlisting language="text"><![CDATA[
+    <programlisting language="text"><![CDATA[
 path/to/ZendFrameworkQuickstart/scripts$ php load.sqlite.php --withdata
 Writing Database Guestbook in (control-c to cancel):
 1
@@ -389,49 +351,37 @@ Database Created
 Data Loaded.
 ]]></programlisting>
 
-	<para>
-		これでゲストブックアプリケーションのためにきちんと動くデータベースとテーブルができました。
-		次のステップはアプリケーションのコードを作成することです。
-		これにはデータソース（ここでは
-		<classname>Zend_Db_Table</classname>
-		を使います）と、
-		そのデータソースをドメインモデルに繋げる役目のデータマッパーを構築することが含まれます。
-		最後に、既存のエントリーの表示と新規エントリーの処理をモデルに結び付けるコントローラーも作ります。
-	</para>
+    <para>
+        これでゲストブックアプリケーションのためにきちんと動くデータベースとテーブルができました。
+        次のステップはアプリケーションのコードを作成することです。
+        これにはデータソース（ここでは <classname>Zend_Db_Table</classname> を使います）と、
+        そのデータソースをドメインモデルに繋げる役目のデータマッパーを構築することが含まれます。
+        最後に、既存のエントリーの表示と新規エントリーの処理をモデルに結び付けるコントローラーも作ります。
+    </para>
 
-	<para>
-		ここではデータソースへの接続に
-		<ulink url="http://martinfowler.com/eaaCatalog/tableDataGateway.html">Table Data Gateway</ulink>
-		を使います。
-		<classname>Zend_Db_Table</classname>
-		がこの機能を提供してくれます。
-		始めるにあたって
-		<classname>Zend_Db_Table</classname>
-		ベースのクラスを作りましょう。
-		レイアウトとデータベースアダプターでやった時と同じように、
-		<command>zf</command>
-		ツールの力を借りることができます。
-		<command>create db-table</command>
-		コマンドを使うのです。
-		これは最低で 2 つの引数をとります。参照させるクラスと、対応付けるデータベーステーブルの名前です。
-	</para>
+    <para>
+        ここではデータソースへの接続に <ulink url="http://martinfowler.com/eaaCatalog/tableDataGateway.html">Table Data Gateway</ulink> を使います。
+        <classname>Zend_Db_Table</classname> がこの機能を提供してくれます。
+        始めるにあたって <classname>Zend_Db_Table</classname> ベースのクラスを作りましょう。
+        レイアウトとデータベースアダプターでやった時と同じように、<command>zf</command>
+        ツールの力を借りることができます。<command>create db-table</command> コマンドを使うのです。
+        これは最低で 2 つの引数をとります。参照させるクラスと、対応付けるデータベーステーブルの名前です。
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % zf create db-table Guestbook guestbook
 Creating a DbTable at application/models/DbTable/Guestbook.php
 Updating project profile 'zfproject.xml'
 ]]></programlisting>
 
-	<para>
-		Looking at your directory tree, you'll now see that a new directory,
-		<filename>application/models/DbTable/</filename>
-		, was created, with the file
-		<filename>Guestbook.php</filename>
-		. If you open that file, you'll see the following
-		contents:
-	</para>
+    <para>
+        Looking at your directory tree, you'll now see that a new directory,
+        <filename>application/models/DbTable/</filename>, was created, with the file
+        <filename>Guestbook.php</filename>. If you open that file, you'll see the following
+        contents:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // application/models/DbTable/Guestbook.php
 
 /**
@@ -444,43 +394,27 @@ class Application_Model_DbTable_Guestbook extends Zend_Db_Table_Abstract
 }
 ]]></programlisting>
 
-	<para>
-		Note the class prefix:
-		<classname>Application_Model_DbTable</classname>
-		. The class prefix
-		for our module, "Application", is the first segment, and then we have the
-		component,
-		"Model_DbTable"; the latter is mapped to the
-		<filename>models/DbTable/</filename>
-		directory
-		of the module.
-	</para>
+    <para>
+        Note the class prefix: <classname>Application_Model_DbTable</classname>. The class prefix
+        for our module, "Application", is the first segment, and then we have the component,
+        "Model_DbTable"; the latter is mapped to the <filename>models/DbTable/</filename> directory
+        of the module.
+    </para>
 
-	<para>
-		All that is truly necessary when extending
-		<classname>Zend_Db_Table</classname>
-		is to
-		provide a table name and optionally the primary key (if it is not "id").
-	</para>
+    <para>
+        All that is truly necessary when extending <classname>Zend_Db_Table</classname> is to
+        provide a table name and optionally the primary key (if it is not "id").
+    </para>
 
-	<para>
-		Now let's create a
-		<ulink url="http://martinfowler.com/eaaCatalog/dataMapper.html">Data
-			Mapper</ulink>
-		. A
-		<emphasis>Data Mapper</emphasis>
-		maps a domain object to the database.
-		In our case, it will map our model,
-		<classname>Application_Model_Guestbook</classname>
-		, to
-		our data source,
-		<classname>Application_Model_DbTable_Guestbook</classname>
-		. A typical
-		<acronym>API</acronym>
-		for a data mapper is as follows:
-	</para>
+    <para>
+        Now let's create a <ulink url="http://martinfowler.com/eaaCatalog/dataMapper.html">Data
+            Mapper</ulink>. A <emphasis>Data Mapper</emphasis> maps a domain object to the database.
+        In our case, it will map our model, <classname>Application_Model_Guestbook</classname>, to
+        our data source, <classname>Application_Model_DbTable_Guestbook</classname>. A typical
+        <acronym>API</acronym> for a data mapper is as follows:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // application/models/GuestbookMapper.php
 
 class Application_Model_GuestbookMapper
@@ -491,29 +425,23 @@ class Application_Model_GuestbookMapper
 }
 ]]></programlisting>
 
-	<para>
-		In addition to these methods, we'll add methods for setting and
-		retrieving the Table Data
-		Gateway. To create the initial class, use the
-		<command>zf</command>
-		CLI tool:
-	</para>
+    <para>
+        In addition to these methods, we'll add methods for setting and retrieving the Table Data
+        Gateway. To create the initial class, use the <command>zf</command> CLI tool:
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % zf create model GuestbookMapper
 Creating a model at application/models/GuestbookMapper.php
 Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
-	<para>
-		Now, edit the class
-		<classname>Application_Model_GuestbookMapper</classname>
-		found in
-		<filename>application/models/GuestbookMapper.php</filename>
-		to read as follows:
-	</para>
+    <para>
+        Now, edit the class <classname>Application_Model_GuestbookMapper</classname> found in
+        <filename>application/models/GuestbookMapper.php</filename> to read as follows:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // application/models/GuestbookMapper.php
 
 class Application_Model_GuestbookMapper
@@ -586,31 +514,25 @@ class Application_Model_GuestbookMapper
 }
 ]]></programlisting>
 
-	<para>
-		Now it's time to create our model class. We'll do so, once again,
-		using the
-		<command>zf create model</command>
-		command:
-	</para>
+    <para>
+        Now it's time to create our model class. We'll do so, once again, using the
+        <command>zf create model</command> command:
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % zf create model Guestbook
 Creating a model at application/models/Guestbook.php
 Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
-	<para>
-		We'll modify this empty
-		<acronym>PHP</acronym>
-		class to make it easy to populate the model
-		by passing an array of data either to the constructor or a
-		<methodname>setOptions()</methodname>
-		method. The final model class, located in
-		<filename>application/models/Guestbook.php</filename>
-		, should look like this:
-	</para>
+    <para>
+        We'll modify this empty <acronym>PHP</acronym> class to make it easy to populate the model
+        by passing an array of data either to the constructor or a
+        <methodname>setOptions()</methodname> method. The final model class, located in
+        <filename>application/models/Guestbook.php</filename>, should look like this:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // application/models/Guestbook.php
 
 class Application_Model_Guestbook
@@ -703,19 +625,16 @@ class Application_Model_Guestbook
 }
 ]]></programlisting>
 
-	<para>
-		Lastly, to connect these elements all together, lets create a guestbook
-		controller that will
-		both list the entries that are currently inside the database.
+    <para>
+        Lastly, to connect these elements all together, lets create a guestbook controller that will
+        both list the entries that are currently inside the database.
     </para>
 
-	<para>
-		To create a new controller, use the
-		<command>zf create controller</command>
-		command:
-	</para>
+    <para>
+        To create a new controller, use the <command>zf create controller</command> command:
+    </para>
 
-	<programlisting language="shell"><![CDATA[
+    <programlisting language="shell"><![CDATA[
 % zf create controller Guestbook
 Creating a controller at
     application/controllers/GuestbookController.php
@@ -727,34 +646,25 @@ Creating a controller test file at
 Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
-	<para>
-		This will create a new controller,
-		<classname>GuestbookController</classname>
-		, in
-		<filename>application/controllers/GuestbookController.php</filename>
-		, with a single action
-		method,
-		<methodname>indexAction()</methodname>
-		. It will also create a view script directory
-		for the controller,
-		<filename>application/views/scripts/guestbook/</filename>
-		, with a view
-		script for the index action.
-	</para>
-
-	<para>
-		We'll use the "index" action as a landing page to view all guestbook
-		entries.
+    <para>
+        This will create a new controller, <classname>GuestbookController</classname>, in
+        <filename>application/controllers/GuestbookController.php</filename>, with a single action
+        method, <methodname>indexAction()</methodname>. It will also create a view script directory
+        for the controller, <filename>application/views/scripts/guestbook/</filename>, with a view
+        script for the index action.
     </para>
 
-	<para>
-		Now, let's flesh out the basic application logic. On a hit to
-		<methodname>indexAction()</methodname>
-		, we'll display all guestbook entries. This would look
-		like the following:
-	</para>
+    <para>
+        We'll use the "index" action as a landing page to view all guestbook entries.
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <para>
+        Now, let's flesh out the basic application logic. On a hit to
+        <methodname>indexAction()</methodname>, we'll display all guestbook entries. This would look
+        like the following:
+    </para>
+
+    <programlisting language="php"><![CDATA[
 // application/controllers/GuestbookController.php
 
 class GuestbookController extends Zend_Controller_Action
@@ -767,13 +677,12 @@ class GuestbookController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-	<para>
-		And, of course, we need a view script to go along with that. Edit
-		<filename>application/views/scripts/guestbook/index.phtml</filename>
-		to read as follows:
-	</para>
+    <para>
+        And, of course, we need a view script to go along with that. Edit
+        <filename>application/views/scripts/guestbook/index.phtml</filename> to read as follows:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 <!-- application/views/scripts/guestbook/index.phtml -->
 
 <p><a href="<?php echo $this->url(
@@ -793,41 +702,33 @@ Guestbook Entries: <br />
 </dl>
 ]]></programlisting>
 
-	<note>
-		<title>Checkpoint</title>
+    <note>
+        <title>Checkpoint</title>
 
-		<para>
-			Now browse to "http://localhost/guestbook". You should see the following
-			in your
-			browser:
+        <para>
+            Now browse to "http://localhost/guestbook". You should see the following in your
+            browser:
         </para>
 
-		<para>
-			<inlinegraphic width="525" scale="100" align="center"
-				valign="middle" fileref="figures/learning.quickstart.create-model.png"
-				format="PNG" />
-		</para>
-	</note>
+        <para>
+            <inlinegraphic width="525" scale="100" align="center" valign="middle"
+                fileref="figures/learning.quickstart.create-model.png" format="PNG" />
+        </para>
+    </note>
 
-	<note>
-		<title>Using the data loader script</title>
+    <note>
+        <title>Using the data loader script</title>
 
-		<para>
-			The data loader script introduced in this section
-			(
-			<filename>scripts/load.sqlite.php</filename>
-			) can be used to create the database for
-			each environment you have defined, as well as to load it with sample
-			data. Internally,
-			it utilizes
-			<classname>Zend_Console_Getopt</classname>
-			, which allows it to provide a
-			number of command line switches. If you pass the "-h" or "--help" switch,
-			it will give
-			you the available options:
-		</para>
+        <para>
+            The data loader script introduced in this section
+            (<filename>scripts/load.sqlite.php</filename>) can be used to create the database for
+            each environment you have defined, as well as to load it with sample data. Internally,
+            it utilizes <classname>Zend_Console_Getopt</classname>, which allows it to provide a
+            number of command line switches. If you pass the "-h" or "--help" switch, it will give
+            you the available options:
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 Usage: load.sqlite.php [ options ]
 --withdata|-w         Load database with sample data
 --env|-e [  ]         Application environment for which to create database
@@ -835,14 +736,11 @@ Usage: load.sqlite.php [ options ]
 --help|-h             Help -- usage message)]]
 ]]></programlisting>
 
-		<para>
-			The "-e" switch allows you to specify the value to use for the
-			constant
-			<constant>APPLICATION_ENV</constant>
-			-- which in turn allows you to create a SQLite
-			database for each environment you define. Be sure to run the script for the
-			environment
-			you choose for your application when deploying.
-		</para>
-	</note>
+        <para>
+            The "-e" switch allows you to specify the value to use for the constant
+            <constant>APPLICATION_ENV</constant> -- which in turn allows you to create a SQLite
+            database for each environment you define. Be sure to run the script for the environment
+            you choose for your application when deploying.
+        </para>
+    </note>
 </sect1>

@@ -2,52 +2,36 @@
 <!-- EN-Revision: 20765 -->
 <!-- Reviewed: no -->
 <sect3 id="zend.controller.router.routes.chain">
-	<title>Zend_Controller_Router_Route_Chain</title>
+    <title>Zend_Controller_Router_Route_Chain</title>
 
-	<para>
-		<classname>Zend_Controller_Router_Route_Chain</classname>
-		est une route permettant le chainage
-		d'autres routes. Ceci permet de chainer des routes hostnames à des routes de
-		chemin, ou de multiples
-		routes de chemin entre elles, par exemple. Le chainage se configure via des
-		méthodes ou un fichier
-		de configuration.
-	</para>
+    <para>
+        <classname>Zend_Controller_Router_Route_Chain</classname> est une route permettant le chainage
+        d'autres routes. Ceci permet de chainer des routes hostnames à des routes de chemin, ou de multiples
+        routes de chemin entre elles, par exemple. Le chainage se configure via des méthodes ou un fichier
+        de configuration.
+    </para>
 
-	<note>
-		<title>Priorité des paramètres</title>
-		<para>
-			En chainant des routes entre elles, les paramètres de la route la plus
-			externe
-			(la plus proche) ont une prioprité supérieure aux paramètres des routes
-			les plus
-			internes (encapsulées). Définir un contrôleur dans la route externe, puis
-			dans la route
-			interne, c'est celui de la route externe qui sera sélectionné.
+    <note>
+        <title>Priorité des paramètres</title>
+        <para>
+            En chainant des routes entre elles, les paramètres de la route la plus externe
+            (la plus proche) ont une prioprité supérieure aux paramètres des routes les plus
+            internes (encapsulées). Définir un contrôleur dans la route externe, puis dans la route
+            interne, c'est celui de la route externe qui sera sélectionné.
         </para>
-	</note>
+    </note>
 
-	<para>
-		En réalisant le chainage via les méthodes, il existe 2 manières de
-		procéder. La première
-		est de créer un objet
-		<classname>Zend_Controller_Router_Route_Chain</classname>
-		puis
-		d'appeler la méthode
-		<methodname>chain()</methodname>
-		plusieurs fois en lui passant les routes à chainer.
-		La deuxième méthode consiste à créer la première route, par exemple une
-		route hostname, puis
-		d'appeler sa méthode
-		<methodname>chain()</methodname>
-		en passant comme paramètre la route qui devrait
-		être ajoutée. Ceci ne modifiera pas la route hostname, mais retournera une
-		instance de
-		<classname>Zend_Controller_Router_Route_Chain</classname>
-		possédant les 2 routes chainées:
-	</para>
+    <para>
+        En réalisant le chainage via les méthodes, il existe 2 manières de procéder. La première
+        est de créer un objet <classname>Zend_Controller_Router_Route_Chain</classname> puis
+        d'appeler la méthode <methodname>chain()</methodname> plusieurs fois en lui passant les routes à chainer.
+        La deuxième méthode consiste à créer la première route, par exemple une route hostname, puis
+        d'appeler sa méthode <methodname>chain()</methodname> en passant comme paramètre la route qui devrait
+        être ajoutée. Ceci ne modifiera pas la route hostname, mais retournera une instance de
+        <classname>Zend_Controller_Router_Route_Chain</classname> possédant les 2 routes chainées:
+    </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // Créer deux routes
 $hostnameRoute = new Zend_Controller_Router_Route_Hostname(...);
 $pathRoute     = new Zend_Controller_Router_Route(...);
@@ -61,13 +45,12 @@ $chainedRoute->chain($hostnameRoute)
 $chainedRoute = $hostnameRoute->chain($pathRoute);
 ]]></programlisting>
 
-	<para>
-		Le chainage utilise le slash comme séparateur par défaut entre les
-		routes.
-		Pour utiliser un séparateur différent, procédez comme suite:
+    <para>
+        Le chainage utilise le slash comme séparateur par défaut entre les routes.
+        Pour utiliser un séparateur différent, procédez comme suite:
     </para>
 
-	<programlisting language="php"><![CDATA[
+    <programlisting language="php"><![CDATA[
 // Créer deux routes
 $firstRoute  = new Zend_Controller_Router_Route('foo');
 $secondRoute = new Zend_Controller_Router_Route('bar');
@@ -79,25 +62,19 @@ $chainedRoute = $firstRoute->chain($secondRoute, '-');
 echo $chainedRoute->assemble();
 ]]></programlisting>
 
-	<sect4 id="zend.controller.router.routes.chain.config">
-		<title>Chainer des routes via Zend_Config</title>
+    <sect4 id="zend.controller.router.routes.chain.config">
+        <title>Chainer des routes via Zend_Config</title>
 
-		<para>
-			Pour chainer les route grâce à un fichier de configuration, il faut
-			considérer des paramètres
-			additionnels. L'approche la plus simple consiste à utiliser les paramètres de la
-			section
-			<code>chains</code>
-			. Il s'agit simplement d'une liste de routes qui seront chainées à
-			la route parente. Ce n'est ni le parent, ni un des enfants qui sera
-			ajouté au routeur, mais bien
-			le résultat de la chaine générale. Le nom de cette chaine dans le
-			routeur sera constitué du nom
-			de la route parente séparé du nom des enfants par un tiret (-) par
-			défaut. Voici un exemple:
-		</para>
+        <para>
+            Pour chainer les route grâce à un fichier de configuration, il faut considérer des paramètres
+            additionnels. L'approche la plus simple consiste à utiliser les paramètres de la
+            section <code>chains</code>. Il s'agit simplement d'une liste de routes qui seront chainées à
+            la route parente. Ce n'est ni le parent, ni un des enfants qui sera ajouté au routeur, mais bien
+            le résultat de la chaine générale. Le nom de cette chaine dans le routeur sera constitué du nom
+            de la route parente séparé du nom des enfants par un tiret (-) par défaut. Voici un exemple:
+        </para>
 
-		<programlisting language="xml"><![CDATA[
+        <programlisting language="xml"><![CDATA[
 <routes>
     <www type="Zend_Controller_Router_Route_Hostname">
         <route>www.example.com</route>
@@ -133,26 +110,19 @@ echo $chainedRoute->assemble();
 </routes>
 ]]></programlisting>
 
-		<para>
-			Le résultat sera 3 routes
-			<code>www-language-index</code>
-			,
-			<code>www-language-imprint</code>
-			et
-			<code>users-language-profile</code>
-			qui seront utilisées en fonction du nom d'hote
-			et de la route
-			<code>misc</code>
-			, qui elle sera utilisée pour tout nom d'hôte.
-		</para>
-
-		<para>
-			Autre manière de faire : utiliser les nom des routes directement. Cela ne
-			peut se faire
-			que pour le niveau racine:
+        <para>
+            Le résultat sera 3 routes <code>www-language-index</code>,
+            <code>www-language-imprint</code> et
+            <code>users-language-profile</code> qui seront utilisées en fonction du nom d'hote
+            et de la route <code>misc</code>, qui elle sera utilisée pour tout nom d'hôte.
         </para>
 
-		<programlisting language="xml"><![CDATA[
+        <para>
+            Autre manière de faire : utiliser les nom des routes directement. Cela ne peut se faire
+            que pour le niveau racine:
+        </para>
+
+        <programlisting language="xml"><![CDATA[
 <routes>
     <www type="Zend_Controller_Router_Route_Chain">
         <route>www.example.com</route>
@@ -179,13 +149,11 @@ echo $chainedRoute->assemble();
 </routes>
 ]]></programlisting>
 
-		<para>
-			On peut aussi passer un tableau à
-			<code>chain</code>
-			plutôt que les noms de route séparés par des virgules:
-		</para>
+        <para>
+            On peut aussi passer un tableau à <code>chain</code> plutôt que les noms de route séparés par des virgules:
+        </para>
 
-		<programlisting language="xml"><![CDATA[
+        <programlisting language="xml"><![CDATA[
 <routes>
     <www-index type="Zend_Controller_Router_Route_Chain">
         <chain>www</chain>
@@ -199,13 +167,12 @@ echo $chainedRoute->assemble();
     </www-imprint>
 </routes>
 ]]></programlisting>
-		<para>
-			Pour spécifier le séparateur de routes avec
-			<classname>Zend_Config</classname>
-			, agissez comme suit:
-		</para>
+        <para>
+            Pour spécifier le séparateur de routes avec <classname>Zend_Config</classname>
+            , agissez comme suit:
+        </para>
 
-		<programlisting language="php"><![CDATA[
+        <programlisting language="php"><![CDATA[
 $config = new Zend_Config(array(
     'chainName' => array(
         'type'   => 'Zend_Controller_Router_Route_Static',
@@ -235,6 +202,8 @@ echo $this->_router->assemble(array(), 'chainName_separator_subRouteName');
 
 // La preuve: cela affiche /foo/bar
 ]]></programlisting>
-	</sect4>
+    </sect4>
 </sect3>
-<!-- vim:se ts=4 sw=4 et: -->
+<!--
+vim:se ts=4 sw=4 et:
+-->
