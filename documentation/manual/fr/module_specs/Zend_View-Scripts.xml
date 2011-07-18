@@ -2,30 +2,43 @@
 <!-- EN-Revision: 20799 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.view.scripts">
-    <title>Scripts de vue</title>
+	<title>Scripts de vue</title>
 
-    <para>
-        Une fois que le contrôleur a assigné les variables et appelé <methodname>render()</methodname>,
-        <classname>Zend_View</classname> inclue le script de vue requis et l'exécute "à l'intérieur"
-        de la portée de l'instance <classname>Zend_View</classname>. Donc dans vos scripts de vue,
-        les références à <varname>$this</varname> pointent en fait sur l'instance
-        <classname>Zend_View</classname> elle-même.
-    </para>
+	<para>
+		Une fois que le contrôleur a assigné les variables et appelé
+		<methodname>render()</methodname>
+		,
+		<classname>Zend_View</classname>
+		inclue le script de vue requis et l'exécute "à l'intérieur"
+		de la portée de l'instance
+		<classname>Zend_View</classname>
+		. Donc dans vos scripts de vue,
+		les références à
+		<varname>$this</varname>
+		pointent en fait sur l'instance
+		<classname>Zend_View</classname>
+		elle-même.
+	</para>
 
-    <para>
-        Les variables assignées à la vue depuis le contrôleur lui sont référées comme des
-        propriétés de l'instance. Par exemple, si le contrôleur a assigné une variable
-        "quelquechose", vous vous référerez à cette variable par <code>$this-&gt;quelquechose</code>
-        dans le script de vue. (Cela vous permet de garder une trace pour savoir quelles valeurs ont
-        été assignées au script, et lesquelles sont internes au script lui même.)
-    </para>
+	<para>
+		Les variables assignées à la vue depuis le contrôleur lui sont
+		référées comme des
+		propriétés de l'instance. Par exemple, si le contrôleur a assigné une variable
+		"quelquechose", vous vous référerez à cette variable par
+		<code>$this-&gt;quelquechose</code>
+		dans le script de vue. (Cela vous permet de garder une trace pour
+		savoir quelles valeurs ont
+		été assignées au script, et lesquelles sont internes au script lui même.)
+	</para>
 
-    <para>
-        Pour rappel, voici l'exemple de script issu de l'introduction de ce chapitre sur
-        <classname>Zend_View</classname>.
-    </para>
+	<para>
+		Pour rappel, voici l'exemple de script issu de l'introduction de ce
+		chapitre sur
+		<classname>Zend_View</classname>
+		.
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 <?php if ($this->livres): ?>
 
     <!-- La table des livres -->
@@ -51,23 +64,30 @@
 <?php endif; ?>
 ]]></programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
-        <title>Échapper la sortie</title>
+	<sect2 id="zend.view.scripts.escaping">
+		<title>Échapper la sortie</title>
 
-        <para>
-            Une des tâches les plus importantes à effectuer dans un script de vue est de
-            s'assurer que la sortie est correctement échappée ; de plus ceci permet d'éviter les
-            attaques de type cross-site scripting (XSS). A moins que vous n'utilisiez une fonction,
-            une méthode, ou une aide qui gère l'échappement, vous devriez toujours échapper les
-            variables lors de l'affichage.
+		<para>
+			Une des tâches les plus importantes à effectuer dans un script de vue
+			est de
+			s'assurer que la sortie est correctement échappée ; de plus ceci permet
+			d'éviter les
+			attaques de type cross-site scripting (XSS). A moins que vous n'utilisiez une
+			fonction,
+			une méthode, ou une aide qui gère l'échappement, vous devriez toujours
+			échapper les
+			variables lors de l'affichage.
         </para>
 
-        <para>
-            <classname>Zend_View</classname> a une méthode appelée <methodname>escape()</methodname> qui
-            se charge de l'échappement.
-        </para>
+		<para>
+			<classname>Zend_View</classname>
+			a une méthode appelée
+			<methodname>escape()</methodname>
+			qui
+			se charge de l'échappement.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // mauvaise pratique d'affichage
 echo $this->variable;
 
@@ -75,16 +95,23 @@ echo $this->variable;
 echo $this->escape($this->variable);
 ]]></programlisting>
 
-        <para>
-            Par défaut, la méthode <methodname>escape()</methodname> utilise la fonction <acronym>PHP</acronym>
-            <methodname>htmlspecialchar()</methodname> pour l'échappement. Cependant, en fonction de votre
-            environnement, vous souhaitez peut-être un échappement différent. Utilisez la méthode
-            <methodname>setEscape()</methodname> au niveau du contrôleur pour dire à
-            <classname>Zend_View</classname> quelle méthode de rappel ("callback") elle doit
-            utiliser.
-        </para>
+		<para>
+			Par défaut, la méthode
+			<methodname>escape()</methodname>
+			utilise la fonction
+			<acronym>PHP</acronym>
+			<methodname>htmlspecialchar()</methodname>
+			pour l'échappement. Cependant, en fonction de votre
+			environnement, vous souhaitez peut-être un échappement différent. Utilisez la
+			méthode
+			<methodname>setEscape()</methodname>
+			au niveau du contrôleur pour dire à
+			<classname>Zend_View</classname>
+			quelle méthode de rappel ("callback") elle doit
+			utiliser.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // crée une instance Zend_View
 $view = new Zend_View();
 
@@ -104,33 +131,43 @@ $view->setEscape(array($obj, 'nomDeMethode'));
 echo $view->render(...);
 ]]></programlisting>
 
-        <para>
-            La fonction ou méthode de rappel doit prendre la valeur à échapper dans le premier
-            paramètre, et tous les autres paramètres devraient être optionnels.
+		<para>
+			La fonction ou méthode de rappel doit prendre la valeur à échapper dans
+			le premier
+			paramètre, et tous les autres paramètres devraient être optionnels.
         </para>
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
-        <title>Utiliser des systèmes de gabarit (template) alternatifs</title>
+	<sect2 id="zend.view.scripts.templates">
+		<title>Utiliser des systèmes de gabarit (template) alternatifs</title>
 
-        <para>
-            Bien que <acronym>PHP</acronym> lui-même un moteur de gabarit puissant, beaucoup de développeurs
-            pensent que c'est beaucoup trop puissant ou complexe pour les graphistes/intégrateurs et
-            veulent utiliser un moteur de template alternatif. <classname>Zend_View</classname>
-            fournit deux mécanismes pour faire cela, le premier à travers les scripts de vues, le
-            second en implémentant <classname>Zend_View_Interface</classname>.
-        </para>
+		<para>
+			Bien que
+			<acronym>PHP</acronym>
+			lui-même un moteur de gabarit puissant, beaucoup de développeurs
+			pensent que c'est beaucoup trop puissant ou complexe pour les
+			graphistes/intégrateurs et
+			veulent utiliser un moteur de template alternatif.
+			<classname>Zend_View</classname>
+			fournit deux mécanismes pour faire cela, le premier à travers les
+			scripts de vues, le
+			second en implémentant
+			<classname>Zend_View_Interface</classname>
+			.
+		</para>
 
-        <sect3 id="zend.view.scripts.templates.scripts">
-            <title>Système de gabarit utilisant les scripts de vues</title>
+		<sect3 id="zend.view.scripts.templates.scripts">
+			<title>Système de gabarit utilisant les scripts de vues</title>
 
-            <para>
-                Un script de vue peut être utilisé pour instancier et manipuler un objet de
-                gabarit séparé, comme un gabarit de type PHPLIB. Le script de vue pour ce type
-                d'activité pourrait ressembler à ceci :
+			<para>
+				Un script de vue peut être utilisé pour instancier et manipuler un
+				objet de
+				gabarit séparé, comme un gabarit de type PHPLIB. Le script de vue pour ce
+				type
+				d'activité pourrait ressembler à ceci :
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -153,9 +190,9 @@ if ($this->livres) {
 }
 ]]></programlisting>
 
-            <para>Et ceci pourrait être les fichiers de gabarits correspondants :</para>
+			<para>Et ceci pourrait être les fichiers de gabarits correspondants :</para>
 
-            <programlisting language="html"><![CDATA[
+			<programlisting language="html"><![CDATA[
 <!-- listelivre.tpl -->
 <table>
     <tr>
@@ -174,19 +211,23 @@ if ($this->livres) {
 <!-- pasdelivres.tpl -->
 <p>Aucun livre à afficher</p>
 ]]></programlisting>
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.view.scripts.templates.interface">
-            <title>Système de gabarit utilisant Zend_View_Interface</title>
+		<sect3 id="zend.view.scripts.templates.interface">
+			<title>Système de gabarit utilisant Zend_View_Interface</title>
 
-            <para>
-                Certains peuvent trouver plus facile de simplement fournir un moteur de
-                gabarit compatible avec <classname>Zend_View</classname>.
-                <classname>Zend_View_Interface</classname> définit l'interface de compatibilité
-                minimale nécessaire :
-            </para>
+			<para>
+				Certains peuvent trouver plus facile de simplement fournir un moteur
+				de
+				gabarit compatible avec
+				<classname>Zend_View</classname>
+				.
+				<classname>Zend_View_Interface</classname>
+				définit l'interface de compatibilité
+				minimale nécessaire :
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 /**
  * Retourne l'objet moteur de gabarit actuel
  */
@@ -237,14 +278,16 @@ public function clearVars();
 public function render($name);
 ]]></programlisting>
 
-            <para>
-                En utilisant cette interface, il devient relativement facile d'encapsuler un
-                moteur de gabarit tiers comme une classe compatible
-                <classname>Zend_View</classname>. Comme par exemple, le code suivant est une
-                encapsulation potentielle de Smarty :
-            </para>
+			<para>
+				En utilisant cette interface, il devient relativement facile
+				d'encapsuler un
+				moteur de gabarit tiers comme une classe compatible
+				<classname>Zend_View</classname>
+				. Comme par exemple, le code suivant est une
+				encapsulation potentielle de Smarty :
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -420,13 +463,16 @@ class Zend_View_Smarty implements Zend_View_Interface
 }
 ]]></programlisting>
 
-            <para>
-                Dans cet exemple, vous instanciez la classe
-                <classname>Zend_View_Smarty</classname> au lieu de <classname>Zend_View</classname>,
-                et vous l'utilisez de la même façon :
-            </para>
+			<para>
+				Dans cet exemple, vous instanciez la classe
+				<classname>Zend_View_Smarty</classname>
+				au lieu de
+				<classname>Zend_View</classname>
+				,
+				et vous l'utilisez de la même façon :
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 //Exemple 1a. Dans l'initView() de l'initializer.
 $view = new Zend_View_Smarty('/chemin/vers/les/templates');
 $viewRenderer =
@@ -462,6 +508,6 @@ class FooController extends Zend_Controller_Action
     }
 }
 ]]></programlisting>
-        </sect3>
-    </sect2>
+		</sect3>
+	</sect2>
 </sect1>

@@ -2,29 +2,42 @@
 <!-- EN-Revision: 20799 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.view.scripts">
-    <title>Scripts de Visualização</title>
+	<title>Scripts de Visualização</title>
 
-    <para>
-        Uma vez que seu controlador tenha atribuido as variáveis e chamado o método
-        <methodname>render()</methodname>, <classname>Zend_View</classname> incluirá o script de
-        visualização requerido e o executará "dentro" do escopo da instância de
-        <classname>Zend_View</classname>. Portanto, em seus scripts de visualização, as referências
-        a $this apontarão para a própria instância de <classname>Zend_View</classname>.
+	<para>
+		Uma vez que seu controlador tenha atribuido as variáveis e chamado o
+		método
+		<methodname>render()</methodname>
+		,
+		<classname>Zend_View</classname>
+		incluirá o script de
+		visualização requerido e o executará "dentro" do escopo da instância de
+		<classname>Zend_View</classname>
+		. Portanto, em seus scripts de visualização, as referências
+		a $this apontarão para a própria instância de
+		<classname>Zend_View</classname>
+		.
+	</para>
+
+	<para>
+		Variáveis atribuídas à visualização pelo controlador são referidas como
+		propriedades de
+		instância. Por exemplo, se o controlador atribuir a variável 'algumacoisa', você
+		deve
+		referir-se a ela como $this->algumacoisa em seu script de visualização. (Isto
+		permite um
+		rastreamento dos valores que foram atribuidos ao script, e que são internos ao
+		mesmo).
     </para>
 
-    <para>
-        Variáveis atribuídas à visualização pelo controlador são referidas como propriedades de
-        instância. Por exemplo, se o controlador atribuir a variável 'algumacoisa', você deve
-        referir-se a ela como $this->algumacoisa em seu script de visualização. (Isto permite um
-        rastreamento dos valores que foram atribuidos ao script, e que são internos ao mesmo).
-    </para>
+	<para>
+		A fim de lembrar, aqui está um exemplo de script de visualização
+		originado da introdução do
+		<classname>Zend_View</classname>
+		.
+	</para>
 
-    <para>
-        A fim de lembrar, aqui está um exemplo de script de visualização originado da introdução do
-        <classname>Zend_View</classname>.
-    </para>
-
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 <?php if ($this->books): ?>
 
     <!-- Uma tabela contendo alguns livros. -->
@@ -50,23 +63,28 @@
 <?php endif;?>
 ]]></programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
-        <title>Escapando a Saída</title>
+	<sect2 id="zend.view.scripts.escaping">
+		<title>Escapando a Saída</title>
 
-        <para>
-            Uma das tarefas mais importantes a ser executada por scripts de visualização é assegurar
-            que a saída seja corretamente escapada; entre outras coisas, isto ajuda a evitar ataques
-            do tipo site-cruzado. A menos que você esteja usando uma função, método, ou assistente
-            que realize o escape, você sempre deverá escapar o conteúdo das variáveis antes de
-            exibí-lo.
+		<para>
+			Uma das tarefas mais importantes a ser executada por scripts de
+			visualização é assegurar
+			que a saída seja corretamente escapada; entre outras coisas, isto ajuda
+			a evitar ataques
+			do tipo site-cruzado. A menos que você esteja usando uma função,
+			método, ou assistente
+			que realize o escape, você sempre deverá escapar o conteúdo das
+			variáveis antes de
+			exibí-lo.
         </para>
 
-        <para>
-            <classname>Zend_View</classname> implementa um método chamado escape() que realiza
-            corretamente o escape para você.
-        </para>
+		<para>
+			<classname>Zend_View</classname>
+			implementa um método chamado escape() que realiza
+			corretamente o escape para você.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // maneira ruim:
 echo $this->variable;
 
@@ -74,15 +92,20 @@ echo $this->variable;
 echo $this->escape($this->variable);
 ]]></programlisting>
 
-        <para>
-            Por padrão, o método escape() usa a função htmlspecialchars() do <acronym>PHP</acronym>
-            para fazer o escape. Mas, dependendo do seu ambiente, você pode desejar um comportamento
-            diferente para o escape. Use o método setEscape() no nível do controlador para instruir
-            o <classname>Zend_View</classname> sobre qual função de callback utilizar para fazer o
-            escape.
-        </para>
+		<para>
+			Por padrão, o método escape() usa a função htmlspecialchars() do
+			<acronym>PHP</acronym>
+			para fazer o escape. Mas, dependendo do seu ambiente, você pode
+			desejar um comportamento
+			diferente para o escape. Use o método setEscape() no nível do controlador para
+			instruir
+			o
+			<classname>Zend_View</classname>
+			sobre qual função de callback utilizar para fazer o
+			escape.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // cria uma instância de Zend_View
 $view = new Zend_View();
 
@@ -100,35 +123,40 @@ $view->setEscape(array($obj, 'methodName'));
 echo $view->render(...);
 ]]></programlisting>
 
-        <para>
-            A função ou método de callback deverá tomar o valor a ser escapado como seu primeiro
-            parâmetro, e os demais parâmetros deverão ser opcionais.
+		<para>
+			A função ou método de callback deverá tomar o valor a ser escapado
+			como seu primeiro
+			parâmetro, e os demais parâmetros deverão ser opcionais.
         </para>
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
-        <title>Usando Sistemas de Template Alternativos</title>
+	<sect2 id="zend.view.scripts.templates">
+		<title>Usando Sistemas de Template Alternativos</title>
 
-        <para>
-            Embora o <acronym>PHP</acronym> em si seja um poderoso sistema de template, muitos
-            desenvolvedores sentiram que ele é muito potente ou complexo para seus designers de
-            templates e acabam usando um motor de template alternativo.
-            <classname>Zend_View</classname> fornece para isso dois mecanismos, o primeiro através
-            de scripts de visualização, e o segundo implementando
-            <classname>Zend_View_Interface</classname>.
-        </para>
+		<para>
+			Embora o
+			<acronym>PHP</acronym>
+			em si seja um poderoso sistema de template, muitos
+			desenvolvedores sentiram que ele é muito potente ou complexo para seus designers de
+			templates e acabam usando um motor de template alternativo.
+			<classname>Zend_View</classname>
+			fornece para isso dois mecanismos, o primeiro através
+			de scripts de visualização, e o segundo implementando
+			<classname>Zend_View_Interface</classname>
+			.
+		</para>
 
-        <sect3 id="zend.view.scripts.templates.scripts">
-            <title>Template Systems Using View Scripts</title>
+		<sect3 id="zend.view.scripts.templates.scripts">
+			<title>Template Systems Using View Scripts</title>
 
-            <para>
-                A view script may be used to instantiate and manipulate a
-                separate template object, such as a PHPLIB-style template. The
-                view script for that kind of activity might look something like
-                this:
+			<para>
+				A view script may be used to instantiate and manipulate a
+				separate template object, such as a PHPLIB-style template. The
+				view script for that kind of activity might look something like
+				this:
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -151,11 +179,11 @@ if ($this->books) {
 }
 ]]></programlisting>
 
-            <para>
-                Estes seriam os arquivos de template relacionados:
+			<para>
+				Estes seriam os arquivos de template relacionados:
             </para>
 
-            <programlisting language="html"><![CDATA[
+			<programlisting language="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -174,19 +202,21 @@ if ($this->books) {
 <!-- nobooks.tpl -->
 <p>Não existem livros a serem exibidos.</p>
 ]]></programlisting>
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.view.scripts.templates.interface">
-            <title>Template Systems Using Zend_View_Interface</title>
+		<sect3 id="zend.view.scripts.templates.interface">
+			<title>Template Systems Using Zend_View_Interface</title>
 
-            <para>
-                Some may find it easier to simply provide a
-                <classname>Zend_View</classname>-compatible template engine.
-                <classname>Zend_View_Interface</classname> defines the minimum interface needed for
-                compatability:
-            </para>
+			<para>
+				Some may find it easier to simply provide a
+				<classname>Zend_View</classname>
+				-compatible template engine.
+				<classname>Zend_View_Interface</classname>
+				defines the minimum interface needed for
+				compatability:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 /**
  * Return the actual template engine object
  */
@@ -237,13 +267,15 @@ public function clearVars();
 public function render($name);
 ]]></programlisting>
 
-            <para>
-                Using this interface, it becomes relatively easy to wrap a
-                third-party template engine as a <classname>Zend_View</classname>-compatible class.
-                As an example, the following is one potential wrapper for Smarty:
-            </para>
+			<para>
+				Using this interface, it becomes relatively easy to wrap a
+				third-party template engine as a
+				<classname>Zend_View</classname>
+				-compatible class.
+				As an example, the following is one potential wrapper for Smarty:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -416,14 +448,18 @@ class Zend_View_Smarty implements Zend_View_Interface
 }
 ]]></programlisting>
 
-            <para>
-                In this example, you would instantiate the
-                <classname>Zend_View_Smarty</classname> class instead of
-                <classname>Zend_View</classname>, and then use it in roughly the same
-                fashion as <classname>Zend_View</classname>:
-            </para>
+			<para>
+				In this example, you would instantiate the
+				<classname>Zend_View_Smarty</classname>
+				class instead of
+				<classname>Zend_View</classname>
+				, and then use it in roughly the same
+				fashion as
+				<classname>Zend_View</classname>
+				:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 //Example 1. In initView() of initializer.
 $view = new Zend_View_Smarty('/path/to/templates');
 $viewRenderer =
@@ -458,9 +494,7 @@ class FooController extends Zend_Controller_Action
                      ->setViewSuffix('tpl');
     }
 ]]></programlisting>
-        </sect3>
-    </sect2>
+		</sect3>
+	</sect2>
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

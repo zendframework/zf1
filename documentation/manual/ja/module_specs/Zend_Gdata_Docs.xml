@@ -2,61 +2,73 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 20779 -->
 <sect1 id="zend.gdata.docs">
-    <title>Google Documents List Data API の使用法</title>
+	<title>Google Documents List Data API の使用法</title>
 
-    <para>
-        Google Documents List Data <acronym>API</acronym> は、
-        クライアントアプリケーションから Google Documents
-        にドキュメントをアップロードしたり、
-        ドキュメントの一覧を Google Data <acronym>API</acronym> ("GData")
-        形式のフィードで取得したりするためのものです。
-        クライアントアプリケーションからユーザのドキュメントの一覧をリクエストしたり、
-        ドキュメントの中身を問い合わせたりできます。
-    </para>
+	<para>
+		Google Documents List Data
+		<acronym>API</acronym>
+		は、
+		クライアントアプリケーションから Google Documents
+		にドキュメントをアップロードしたり、
+		ドキュメントの一覧を Google Data
+		<acronym>API</acronym>
+		("GData")
+		形式のフィードで取得したりするためのものです。
+		クライアントアプリケーションからユーザのドキュメントの一覧をリクエストしたり、
+		ドキュメントの中身を問い合わせたりできます。
+	</para>
 
-    <para>
-        Google Documents List <acronym>API</acronym> についての詳細は
-        <ulink url="http://code.google.com/apis/documents/overview.html">http://code.google.com/apis/documents/overview.html</ulink>
-        を参照ください。
-    </para>
+	<para>
+		Google Documents List
+		<acronym>API</acronym>
+		についての詳細は
+		<ulink url="http://code.google.com/apis/documents/overview.html">http://code.google.com/apis/documents/overview.html</ulink>
+		を参照ください。
+	</para>
 
-    <sect2 id="zend.gdata.docs.listdocuments">
-        <title>ドキュメントの一覧の取得</title>
-        <para>
-            特定のユーザの Google Documents の一覧を取得するには、docs サービスの
-            <methodname>getDocumentListFeed</methodname> メソッドを使用します。
-            このサービスは <classname>Zend_Gdata_Docs_DocumentListFeed</classname>
-            オブジェクトを返します。
-            その中には、認証済みユーザに関連付けられたドキュメントの一覧が含まれます。
-        </para>
+	<sect2 id="zend.gdata.docs.listdocuments">
+		<title>ドキュメントの一覧の取得</title>
+		<para>
+			特定のユーザの Google Documents の一覧を取得するには、docs サービスの
+			<methodname>getDocumentListFeed</methodname>
+			メソッドを使用します。
+			このサービスは
+			<classname>Zend_Gdata_Docs_DocumentListFeed</classname>
+			オブジェクトを返します。
+			その中には、認証済みユーザに関連付けられたドキュメントの一覧が含まれます。
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $service = Zend_Gdata_Docs::AUTH_SERVICE_NAME;
 $client = Zend_Gdata_ClientLogin::getHttpClient($user, $pass, $service);
 $docs = new Zend_Gdata_Docs($client);
 $feed = $docs->getDocumentListFeed();
 ]]></programlisting>
 
-        <para>
-        結果として得られる <classname>Zend_Gdata_Docs_DocumentListFeed</classname>
-        オブジェクトが、サーバからの応答を表します。
-        このフィードには <classname>Zend_Gdata_Docs_DocumentListEntry</classname>
-        オブジェクトの一覧 (<command>$feed->entries</command>) が含まれ、
-        それぞれがひとつの Google Document を表します。
-        </para>
-    </sect2>
+		<para>
+			結果として得られる
+			<classname>Zend_Gdata_Docs_DocumentListFeed</classname>
+			オブジェクトが、サーバからの応答を表します。
+			このフィードには
+			<classname>Zend_Gdata_Docs_DocumentListEntry</classname>
+			オブジェクトの一覧 (
+			<command>$feed->entries</command>
+			) が含まれ、
+			それぞれがひとつの Google Document を表します。
+		</para>
+	</sect2>
 
-    <sect2 id="zend.gdata.docs.creating">
-        <title>ドキュメントのアップロード</title>
-        <para>
-            新しい Google Document を作成するには、
-            ワープロ文書やスプレッドシート、あるいはプレゼンテーションをアップロードします。
-            この例はインタラクティブなサンプル Docs.php
-            で、これはライブラリに同梱されています。
-            これは、ファイルをアップロードした後で、
-            サーバからその結果の情報を取得して表示するものです。
+	<sect2 id="zend.gdata.docs.creating">
+		<title>ドキュメントのアップロード</title>
+		<para>
+			新しい Google Document を作成するには、
+			ワープロ文書やスプレッドシート、あるいはプレゼンテーションをアップロードします。
+			この例はインタラクティブなサンプル Docs.php
+			で、これはライブラリに同梱されています。
+			これは、ファイルをアップロードした後で、
+			サーバからその結果の情報を取得して表示するものです。
         </para>
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 /**
  * Upload the specified document
  *
@@ -104,63 +116,74 @@ function uploadDocument($docs, $html, $originalFileName,
   if ($html) {echo "</a>\n";}
 }
 ]]></programlisting>
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.gdata.docs.queries">
-        <title>ドキュメントのフィードの検索</title>
-        <para>
-            ドキュメントの一覧を検索するには、<ulink
-            url="http://code.google.com/apis/gdata/reference.html#Queries">
-            標準的な Google Data <acronym>API</acronym> クエリパラメータ</ulink> を使用します。
-            カテゴリを使用して、ドキュメントの種類 (ワープロ文書、
-            スプレッドシート) を絞り込みます。
-            フルテキストのクエリ文字列を使用して、ドキュメントの全文検索を行います。
-            ドキュメントの一覧に固有のパラメータについての詳細な情報は、 <ulink
-            url="http://code.google.com/apis/documents/reference.html#Parameters">
-            Documents List Data <acronym>API</acronym> リファレンスガイド</ulink>
-            を参照ください。
-        </para>
+	<sect2 id="zend.gdata.docs.queries">
+		<title>ドキュメントのフィードの検索</title>
+		<para>
+			ドキュメントの一覧を検索するには、
+			<ulink url="http://code.google.com/apis/gdata/reference.html#Queries">
+				標準的な Google Data
+				<acronym>API</acronym>
+				クエリパラメータ
+			</ulink>
+			を使用します。
+			カテゴリを使用して、ドキュメントの種類 (ワープロ文書、
+			スプレッドシート) を絞り込みます。
+			フルテキストのクエリ文字列を使用して、ドキュメントの全文検索を行います。
+			ドキュメントの一覧に固有のパラメータについての詳細な情報は、
+			<ulink
+				url="http://code.google.com/apis/documents/reference.html#Parameters">
+				Documents List Data
+				<acronym>API</acronym>
+				リファレンスガイド
+			</ulink>
+			を参照ください。
+		</para>
 
-        <sect3 id="zend.gdata.docs.listwpdocuments">
-            <title>ワープロ文書の一覧の取得</title>
-            <para>
-                指定した型のすべてのドキュメントを含むフィードを取得することもできます。
-                たとえば、ワープロ文書の一覧を取得するには、
-                次のようなカテゴリクエリを使用します。
+		<sect3 id="zend.gdata.docs.listwpdocuments">
+			<title>ワープロ文書の一覧の取得</title>
+			<para>
+				指定した型のすべてのドキュメントを含むフィードを取得することもできます。
+				たとえば、ワープロ文書の一覧を取得するには、
+				次のようなカテゴリクエリを使用します。
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 $feed = $docs->getDocumentListFeed(
     'http://docs.google.com/feeds/documents/private/full/-/document');]]></programlisting>
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.gdata.docs.listspreadsheets">
-            <title>スプレッドシートの一覧の取得</title>
-            <para>
-                Google Spreadsheets の一覧を取得するには、
-                次のようなカテゴリクエリを使用します。
+		<sect3 id="zend.gdata.docs.listspreadsheets">
+			<title>スプレッドシートの一覧の取得</title>
+			<para>
+				Google Spreadsheets の一覧を取得するには、
+				次のようなカテゴリクエリを使用します。
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 $feed = $docs->getDocumentListFeed(
     'http://docs.google.com/feeds/documents/private/full/-/spreadsheet');]]></programlisting>
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.gdata.docs.textquery">
-            <title>テキストクエリの実行</title>
-            <para>
-                ドキュメントの中身を検索するには、リクエスト内で
-                <classname>Zend_Gdata_Docs_Query</classname> を使用します。
-                クエリオブジェクトを使用してクエリ <acronym>URI</acronym> を組み立て、
-                検索する単語をパラメータとして渡します。
-                これは、ある文字列を含むドキュメントを一覧から探すクエリの例です。
-            </para>
-            <programlisting language="php"><![CDATA[
+		<sect3 id="zend.gdata.docs.textquery">
+			<title>テキストクエリの実行</title>
+			<para>
+				ドキュメントの中身を検索するには、リクエスト内で
+				<classname>Zend_Gdata_Docs_Query</classname>
+				を使用します。
+				クエリオブジェクトを使用してクエリ
+				<acronym>URI</acronym>
+				を組み立て、
+				検索する単語をパラメータとして渡します。
+				これは、ある文字列を含むドキュメントを一覧から探すクエリの例です。
+			</para>
+			<programlisting language="php"><![CDATA[
 $docsQuery = new Zend_Gdata_Docs_Query();
 $docsQuery->setQuery($query);
 $feed = $client->getDocumentListFeed($docsQuery);]]></programlisting>
-        </sect3>
+		</sect3>
 
-    </sect2>
+	</sect2>
 
 </sect1>

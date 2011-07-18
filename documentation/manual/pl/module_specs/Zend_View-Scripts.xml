@@ -3,29 +3,30 @@
 <!-- Reviewed: no -->
 <sect1 id="zend.view.scripts">
 
-    <title>Skrypty widoków</title>
+	<title>Skrypty widoków</title>
 
-    <para>
-        Kiedy już kontroler przypisze zmienne i wywoła metodę render(),
-        Zend_View dołącza wymagany skrypt widoku i wykonuje go "wewnątrz"
-        instancji Zend_View. Dlatego w skrypcie widoku, odwołania do zmiennych
-        i metod obsługiwane są za pomocą $this.
+	<para>
+		Kiedy już kontroler przypisze zmienne i wywoła metodę render(),
+		Zend_View dołącza wymagany skrypt widoku i wykonuje go "wewnątrz"
+		instancji Zend_View. Dlatego w skrypcie widoku, odwołania do zmiennych
+		i metod obsługiwane są za pomocą $this.
     </para>
 
-    <para>
-        Zmienne przypisane do widoku przez kontroler odnoszą się do właściwości
-        tej instancji. Na przykład, jeśli kontroler przypisał zmienną 'cos', w
-        skrypcie widoku możesz odwołać się do niej za pomocą $this->cos.
-        (To pozwala Ci na śledzenie zmiennych które zostały przypisane do skryptu
-        i tych które są zmiennymi wewnętrznymi skryptu).
+	<para>
+		Zmienne przypisane do widoku przez kontroler odnoszą się do właściwości
+		tej instancji. Na przykład, jeśli kontroler przypisał zmienną 'cos', w
+		skrypcie widoku możesz odwołać się do niej za pomocą $this->cos.
+		(To pozwala Ci na śledzenie zmiennych które zostały przypisane do skryptu
+		i tych które są zmiennymi wewnętrznymi skryptu).
     </para>
 
-    <para>
-        W celu przypomnienia, oto przykład skryptu widoku pokazanego we wprowadzeniu
-        do Zend_View.
+	<para>
+		W celu przypomnienia, oto przykład skryptu widoku pokazanego we
+		wprowadzeniu
+		do Zend_View.
     </para>
 
-    <programlisting role="php"><![CDATA[
+	<programlisting role="php"><![CDATA[
 if ($this->books): ?>
 
     <!-- Tabela z książkami. -->
@@ -50,44 +51,44 @@ if ($this->books): ?>
 
 <?php endif;
 ]]>
-    </programlisting>
+	</programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
+	<sect2 id="zend.view.scripts.escaping">
 
-        <title>Filtrowanie danych wyjściowych</title>
+		<title>Filtrowanie danych wyjściowych</title>
 
-        <para>
-            Jedną z najważniejszych rzeczy do zrobienia w skrypcie widoku
-            jest uzyskanie pewności, że dane wyjściowe zostały prawidłowo
-            przefiltrowane. Pomaga to w przeciwdziałaniu atakom XSS. Jeśli
-            nie używasz funkcji, metody lub helpera w celu
-            filtrowania danych wyjściowych, powinieneś zawsze je filtrować
-            wtedy gdy chcesz je wyświetlić.
+		<para>
+			Jedną z najważniejszych rzeczy do zrobienia w skrypcie widoku
+			jest uzyskanie pewności, że dane wyjściowe zostały prawidłowo
+			przefiltrowane. Pomaga to w przeciwdziałaniu atakom XSS. Jeśli
+			nie używasz funkcji, metody lub helpera w celu
+			filtrowania danych wyjściowych, powinieneś zawsze je filtrować
+			wtedy gdy chcesz je wyświetlić.
         </para>
 
-        <para>
-            Zend_View dostarcza metodę zwaną escape() która filtruje dane
-            wyjściowe.
+		<para>
+			Zend_View dostarcza metodę zwaną escape() która filtruje dane
+			wyjściowe.
         </para>
 
-        <programlisting role="php"><![CDATA[
+		<programlisting role="php"><![CDATA[
 // zły zwyczaj wyświetlania zmiennej:
 echo $this->variable;
 
 // dobry zwyczaj wyświetlania zmiennej:
 echo $this->escape($this->variable);
 ]]>
-        </programlisting>
+		</programlisting>
 
-        <para>
-            Domyślnie metoda escape() używa funkcji PHP htmlspecialchars() do
-            filtrowania danych wyjściowych. Jakkolwiek, zależenie od Twojego
-            środowiska możesz chcieć filtrować dane wyjściowe w inny sposób.
-            Użyj metody setEscape() na poziomie kontrolera by przekazać instancji
-            Zend_View informację o tym, jakiej metody filtrowania ma używać.
+		<para>
+			Domyślnie metoda escape() używa funkcji PHP htmlspecialchars() do
+			filtrowania danych wyjściowych. Jakkolwiek, zależenie od Twojego
+			środowiska możesz chcieć filtrować dane wyjściowe w inny sposób.
+			Użyj metody setEscape() na poziomie kontrolera by przekazać instancji
+			Zend_View informację o tym, jakiej metody filtrowania ma używać.
         </para>
 
-        <programlisting role="php"><![CDATA[
+		<programlisting role="php"><![CDATA[
 // utwórz instancje Zend_View
 $view = new Zend_View();
 
@@ -104,40 +105,40 @@ $view->setEscape(array($obj, 'methodName'));
 // a teraz wygeneruj skrypt widoku
 echo $view->render(...);
 ]]>
-        </programlisting>
+		</programlisting>
 
-        <para>
-            Metoda lub funkcja filtrująca powinna przyjmować wartość do
-            przefiltrowania jako pierwszy parametr, a wszystkie inne parametry
-            powinny być opcjonalne.
+		<para>
+			Metoda lub funkcja filtrująca powinna przyjmować wartość do
+			przefiltrowania jako pierwszy parametr, a wszystkie inne parametry
+			powinny być opcjonalne.
         </para>
 
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
+	<sect2 id="zend.view.scripts.templates">
 
-        <title>Użycie alternatywnych systemów szablonów</title>
+		<title>Użycie alternatywnych systemów szablonów</title>
 
-        <para>
-            Chociaż PHP jest sam w sobie potężnym systemem szablonów, wielu
-            programistów czuje, że jest on jednak zbyt potężny lub skomplikowany
-            dla projektantów szablonów i mogą chcieć użyć alternatywnego systemu
-            szablonów. Zend_View zapewnia do tego dwa mechanizmy, pierwszy przez
-            skrypty widoku, drugi przez zaimplementowanie interfejsu
-            Zend_View_Interface.
+		<para>
+			Chociaż PHP jest sam w sobie potężnym systemem szablonów, wielu
+			programistów czuje, że jest on jednak zbyt potężny lub skomplikowany
+			dla projektantów szablonów i mogą chcieć użyć alternatywnego systemu
+			szablonów. Zend_View zapewnia do tego dwa mechanizmy, pierwszy przez
+			skrypty widoku, drugi przez zaimplementowanie interfejsu
+			Zend_View_Interface.
         </para>
 
-        <sect3 id="zend.view.scripts.templates.scripts">
-            <title>Systemy szablonów używające skryptów widoku</title>
+		<sect3 id="zend.view.scripts.templates.scripts">
+			<title>Systemy szablonów używające skryptów widoku</title>
 
-            <para>
-                Skrypt widoku może być użyty w celu utworzenia instancji
-                i manipulowania osobnym obiektem szablonu, takim jak np.
-                szablon PHPLIB. Skrypt widoku w takim przypadku mógłby wyglądać
-                mniej więcej tak:
+			<para>
+				Skrypt widoku może być użyty w celu utworzenia instancji
+				i manipulowania osobnym obiektem szablonu, takim jak np.
+				szablon PHPLIB. Skrypt widoku w takim przypadku mógłby wyglądać
+				mniej więcej tak:
             </para>
 
-            <programlisting role="php"><![CDATA[
+			<programlisting role="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -159,13 +160,13 @@ if ($this->books) {
     $tpl->pparse("output", "nobooks");
 }
 ]]>
-            </programlisting>
+			</programlisting>
 
-            <para>
-                I mogłoby to być powiązane z takim plikiem szablonu:
+			<para>
+				I mogłoby to być powiązane z takim plikiem szablonu:
             </para>
 
-            <programlisting role="html"><![CDATA[
+			<programlisting role="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -184,20 +185,21 @@ if ($this->books) {
 <!-- nobooks.tpl -->
 <p>Nie ma żadnych książek do wyświetlenia.</p>
 ]]>
-            </programlisting>
+			</programlisting>
 
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.view.scripts.templates.interface">
-            <title>Systemy szablonów używające interfejsu Zend_View_Interface</title>
+		<sect3 id="zend.view.scripts.templates.interface">
+			<title>Systemy szablonów używające interfejsu Zend_View_Interface</title>
 
-            <para>
-                Niektórzy mogą zrobić to łatwiej zapewniając w prosty sposób system
-                szablonów kompatybilny z Zend_View. <code>Zend_View_Interface</code>
-                definiuje minimalny interfejs potrzebny dla kompatybilności.
-            </para>
+			<para>
+				Niektórzy mogą zrobić to łatwiej zapewniając w prosty sposób system
+				szablonów kompatybilny z Zend_View.
+				<code>Zend_View_Interface</code>
+				definiuje minimalny interfejs potrzebny dla kompatybilności.
+			</para>
 
-            <programlisting role="php"><![CDATA[
+			<programlisting role="php"><![CDATA[
 /**
  * Zwraca aktualny obiekt systemu szablonów
  */
@@ -249,15 +251,15 @@ public function clearVars();
  */
 public function render($name);
 ]]>
-            </programlisting>
+			</programlisting>
 
-            <para>
-                Używając tego interfejsu, relatywnie proste staje się podpięcie
-                zewnętrznego systemu szablonów jako klasy kompatybilnej z
-                Zend_View. Przykładowo, poniższy przykład to podpięcie systemu Smarty:
+			<para>
+				Używając tego interfejsu, relatywnie proste staje się podpięcie
+				zewnętrznego systemu szablonów jako klasy kompatybilnej z
+				Zend_View. Przykładowo, poniższy przykład to podpięcie systemu Smarty:
             </para>
 
-            <programlisting role="php"><![CDATA[
+			<programlisting role="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -442,25 +444,29 @@ class Zend_View_Smarty implements Zend_View_Interface
     }
 }
 ]]>
-            </programlisting>
+			</programlisting>
 
-            <para>
-                W tym przykładzie powinieneś utworzyć instancję klasy
-                <code>Zend_View_Smarty</code> zamiast <code>Zend_View</code>,
-                a następnie używać jej w dokładnie w ten sam sposób jak
-                <code>Zend_View</code>:
-            </para>
+			<para>
+				W tym przykładzie powinieneś utworzyć instancję klasy
+				<code>Zend_View_Smarty</code>
+				zamiast
+				<code>Zend_View</code>
+				,
+				a następnie używać jej w dokładnie w ten sam sposób jak
+				<code>Zend_View</code>
+				:
+			</para>
 
-            <programlisting role="php"><![CDATA[
+			<programlisting role="php"><![CDATA[
 $view = new Zend_View_Smarty();
 $view->setScriptPath('/path/to/templates');
 $view->book = 'Zend PHP 5 Certification Study Guide';
 $view->author = 'Davey Shafik and Ben Ramsey'
 $rendered = $view->render('bookinfo.tpl');
 ]]>
-            </programlisting>
+			</programlisting>
 
-        </sect3>
-    </sect2>
+		</sect3>
+	</sect2>
 
 </sect1>

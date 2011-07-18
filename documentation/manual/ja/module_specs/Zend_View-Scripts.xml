@@ -3,30 +3,38 @@
 <!-- EN-Revision: 20799 -->
 <sect1 id="zend.view.scripts">
 
-    <title>ビュースクリプト</title>
+	<title>ビュースクリプト</title>
 
-    <para>
-        コントローラが変数を代入して <methodname>render()</methodname> をコールすると、
-        指定されたビュースクリプトを <classname>Zend_View</classname> が読み込み、<classname>Zend_View</classname>
-        インスタンスのスコープでそれを実行します。したがって、
-        ビュースクリプトの中で $this を参照すると、
-        実際には <classname>Zend_View</classname> のインスタンスを指すことになります。
+	<para>
+		コントローラが変数を代入して
+		<methodname>render()</methodname>
+		をコールすると、
+		指定されたビュースクリプトを
+		<classname>Zend_View</classname>
+		が読み込み、
+		<classname>Zend_View</classname>
+		インスタンスのスコープでそれを実行します。したがって、
+		ビュースクリプトの中で $this を参照すると、
+		実際には
+		<classname>Zend_View</classname>
+		のインスタンスを指すことになります。
+	</para>
+
+	<para>
+		コントローラからビューに代入された変数は、
+		ビューインスタンスのプロパティとして参照できます。例えば、
+		コントローラで変数 'something' を代入したとすると、
+		ビュースクリプト内ではそれを $this->something で取得できます
+		(これにより、どの値がコントローラから代入されたもので、
+		どの値がスクリプト内部で作成されたものなのかを追いかけられるようになります)。
     </para>
 
-    <para>
-        コントローラからビューに代入された変数は、
-        ビューインスタンスのプロパティとして参照できます。例えば、
-        コントローラで変数 'something' を代入したとすると、
-        ビュースクリプト内ではそれを $this->something で取得できます
-        (これにより、どの値がコントローラから代入されたもので、
-        どの値がスクリプト内部で作成されたものなのかを追いかけられるようになります)。
-    </para>
+	<para>
+		<classname>Zend_View</classname>
+		の導入の部分で示したビュースクリプトの例を思い出してみましょう。
+	</para>
 
-    <para>
-        <classname>Zend_View</classname> の導入の部分で示したビュースクリプトの例を思い出してみましょう。
-    </para>
-
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 <?php if ($this->books): ?>
 
     <!-- 本の一覧 -->
@@ -52,24 +60,25 @@
 <?php endif;?>
 ]]></programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
+	<sect2 id="zend.view.scripts.escaping">
 
-        <title>出力のエスケープ</title>
+		<title>出力のエスケープ</title>
 
-        <para>
-            ビュースクリプトで行うべき仕事のうち最も重要なもののひとつは、
-            出力を適切にエスケープすることです。これは、
-            クロスサイトスクリプティング攻撃を防ぐのを助けます。
-            それ自身がエスケープを行ってくれるような関数、メソッド、
-            あるいはヘルパーを使用しているのでない限り、
-            変数を出力する際には常にそれをエスケープしなければなりません。
+		<para>
+			ビュースクリプトで行うべき仕事のうち最も重要なもののひとつは、
+			出力を適切にエスケープすることです。これは、
+			クロスサイトスクリプティング攻撃を防ぐのを助けます。
+			それ自身がエスケープを行ってくれるような関数、メソッド、
+			あるいはヘルパーを使用しているのでない限り、
+			変数を出力する際には常にそれをエスケープしなければなりません。
         </para>
 
-        <para>
-            <classname>Zend_View</classname> の escape() というメソッドが、このエスケープを行います。
-        </para>
+		<para>
+			<classname>Zend_View</classname>
+			の escape() というメソッドが、このエスケープを行います。
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // ビュースクリプトの悪い例
 echo $this->variable;
 
@@ -77,15 +86,19 @@ echo $this->variable;
 echo $this->escape($this->variable);
 ]]></programlisting>
 
-        <para>
-            デフォルトでは、escape() メソッドは <acronym>PHP</acronym> の htmlspecialchars()
-            関数でエスケープを行います。しかし環境によっては、
-            別の方法でエスケープしたくなることもあるでしょう。
-            コントローラから setEscape() メソッドを実行することで、
-            エスケープに使用するコールバックを <classname>Zend_View</classname> に通知できます。
-        </para>
+		<para>
+			デフォルトでは、escape() メソッドは
+			<acronym>PHP</acronym>
+			の htmlspecialchars()
+			関数でエスケープを行います。しかし環境によっては、
+			別の方法でエスケープしたくなることもあるでしょう。
+			コントローラから setEscape() メソッドを実行することで、
+			エスケープに使用するコールバックを
+			<classname>Zend_View</classname>
+			に通知できます。
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Zend_View のインスタンスを作成します
 $view = new Zend_View();
 
@@ -103,37 +116,40 @@ $view->setEscape(array($obj, 'methodName'));
 echo $view->render(...);
 ]]></programlisting>
 
-        <para>
-            コールバック関数あるいはメソッドは、
-            エスケープする値を最初のパラメータとして受け取ります。
-            それ以外のパラメータはオプションとなります。
+		<para>
+			コールバック関数あるいはメソッドは、
+			エスケープする値を最初のパラメータとして受け取ります。
+			それ以外のパラメータはオプションとなります。
         </para>
 
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
-        <title>別のテンプレートシステムの使用</title>
+	<sect2 id="zend.view.scripts.templates">
+		<title>別のテンプレートシステムの使用</title>
 
-        <para>
-            <acronym>PHP</acronym> 自身も強力なテンプレートシステムではありますが、
-            開発者の多くは、デザイナにとっては高機能すぎる/複雑すぎる
-            と感じており、別のテンプレートエンジンをほしがっているようです。
-            <classname>Zend_View</classname> では、そのような目的のために二種類の仕組みを提供します。
-            ビュースクリプトを使用することによるものと、
-            <classname>Zend_View_Interface</classname> 実装することによるものです。
-        </para>
+		<para>
+			<acronym>PHP</acronym>
+			自身も強力なテンプレートシステムではありますが、
+			開発者の多くは、デザイナにとっては高機能すぎる/複雑すぎる
+			と感じており、別のテンプレートエンジンをほしがっているようです。
+			<classname>Zend_View</classname>
+			では、そのような目的のために二種類の仕組みを提供します。
+			ビュースクリプトを使用することによるものと、
+			<classname>Zend_View_Interface</classname>
+			実装することによるものです。
+		</para>
 
-        <sect3 id="zend.view.scripts.templates.scripts">
-            <title>ビュースクリプトを使用したテンプレートシステム</title>
+		<sect3 id="zend.view.scripts.templates.scripts">
+			<title>ビュースクリプトを使用したテンプレートシステム</title>
 
-            <para>
-                ビュースクリプトを使用して、PHPLIB 形式のテンプレートのような
-                別のテンプレートオブジェクトのインスタンスを作成し、
-                それを操作できます。ビュースクリプトをこのように使用する方法は、
-                以下のようになります。
+			<para>
+				ビュースクリプトを使用して、PHPLIB 形式のテンプレートのような
+				別のテンプレートオブジェクトのインスタンスを作成し、
+				それを操作できます。ビュースクリプトをこのように使用する方法は、
+				以下のようになります。
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -156,11 +172,11 @@ if ($this->books) {
 }
 ]]></programlisting>
 
-            <para>
-                関連するテンプレートファイルは、このようになります。
+			<para>
+				関連するテンプレートファイルは、このようになります。
             </para>
 
-            <programlisting language="html"><![CDATA[
+			<programlisting language="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -180,18 +196,20 @@ if ($this->books) {
 <p>表示する本がありません。</p>
 ]]></programlisting>
 
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.view.scripts.templates.interface">
-            <title>Zend_View_Interface を使用したテンプレート</title>
+		<sect3 id="zend.view.scripts.templates.interface">
+			<title>Zend_View_Interface を使用したテンプレート</title>
 
-            <para>
-                <classname>Zend_View</classname> 互換のテンプレートエンジンを使用するほうが簡単だという人もいるでしょう。
-                <classname>Zend_View_Interface</classname> では、
-                互換性を保つために最低限必要なインターフェイスを定義しています。
-            </para>
+			<para>
+				<classname>Zend_View</classname>
+				互換のテンプレートエンジンを使用するほうが簡単だという人もいるでしょう。
+				<classname>Zend_View_Interface</classname>
+				では、
+				互換性を保つために最低限必要なインターフェイスを定義しています。
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 /**
  * テンプレートエンジンオブジェクトを返します
  */
@@ -241,14 +259,15 @@ public function clearVars();
 public function render($name);
 ]]></programlisting>
 
-            <para>
-                このインターフェイスを使用すると、
-                サードパーティのテンプレートエンジンをラップして
-                <classname>Zend_View</classname> 互換のクラスを作成することが簡単になります。
-                例として、Smarty 用のラッパーはこのようになります。
-            </para>
+			<para>
+				このインターフェイスを使用すると、
+				サードパーティのテンプレートエンジンをラップして
+				<classname>Zend_View</classname>
+				互換のクラスを作成することが簡単になります。
+				例として、Smarty 用のラッパーはこのようになります。
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -418,13 +437,18 @@ class Zend_View_Smarty implements Zend_View_Interface
 }
 ]]></programlisting>
 
-            <para>
-                この例では、<classname>Zend_View</classname> ではなく
-                <classname>Zend_View_Smarty</classname> クラスのインスタンスを作成し、
-                それを使用して <classname>Zend_View</classname> と同じようなことをしています。
-            </para>
+			<para>
+				この例では、
+				<classname>Zend_View</classname>
+				ではなく
+				<classname>Zend_View_Smarty</classname>
+				クラスのインスタンスを作成し、
+				それを使用して
+				<classname>Zend_View</classname>
+				と同じようなことをしています。
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 //例 1. InitializerのinitView()で
 $view = new Zend_View_Smarty('/path/to/templates');
 $viewRenderer =
@@ -460,9 +484,7 @@ class FooController extends Zend_Controller_Action
     }
 }
 ]]></programlisting>
-        </sect3>
-    </sect2>
+		</sect3>
+	</sect2>
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

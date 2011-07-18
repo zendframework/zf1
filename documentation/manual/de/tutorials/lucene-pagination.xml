@@ -2,25 +2,32 @@
 <!-- EN-Revision: 19777 -->
 <!-- Reviewed: no -->
 <sect1 id="learning.lucene.pagination">
-    <title>Seitendarstellung von Suchergebnissen</title>
+	<title>Seitendarstellung von Suchergebnissen</title>
 
-    <para>
-        Wie <link linkend="learning.lucene.searching.identifiers">vorher erwähnt</link>, verwenden
-        die Hit Objekte von Suchergebnissen Lazy Loading für gespeicherte Dokumentfelder. Wenn auf
-        ein gespeichertes Feld zugegriffen wird, wird das komplette Dokument geladen.
+	<para>
+		Wie
+		<link linkend="learning.lucene.searching.identifiers">vorher erwähnt</link>
+		, verwenden
+		die Hit Objekte von Suchergebnissen Lazy Loading für gespeicherte
+		Dokumentfelder. Wenn auf
+		ein gespeichertes Feld zugegriffen wird, wird das komplette Dokument
+		geladen.
+	</para>
+
+	<para>
+		Man sollte nicht alle Dokumente empfangen wenn man nur mit einem Teil von
+		Ihnen arbeiten
+		muss. Man sollte durch die Suchergebnisse gehen und die IDs der Dokumente
+		irgendwo speichern
+		(und optional die Bewertung) um die Dokumente vom Index bei der nächsten
+		Ausführung des
+		Skripts zu erhalten.
     </para>
 
-    <para>
-        Man sollte nicht alle Dokumente empfangen wenn man nur mit einem Teil von Ihnen arbeiten
-        muss. Man sollte durch die Suchergebnisse gehen und die IDs der Dokumente irgendwo speichern
-        (und optional die Bewertung) um die Dokumente vom Index bei der nächsten Ausführung des
-        Skripts zu erhalten.
-    </para>
+	<example id="learning.lucene.pagination.example">
+		<title>Beispiel für die seitendarstellung von Suchergebnissen</title>
 
-    <example id="learning.lucene.pagination.example">
-        <title>Beispiel für die seitendarstellung von Suchergebnissen</title>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $cacheId = md5($query);
 
 if (!$resultSet = $cache->load($cacheId)) {
@@ -46,5 +53,5 @@ for ($resultId = $startId; $resultId < $endId; $resultId++) {
     );
 }
 ]]></programlisting>
-    </example>
+	</example>
 </sect1>

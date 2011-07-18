@@ -2,39 +2,54 @@
 <!-- EN-Revision: 20765 -->
 <!-- Reviewed: no -->
 <sect3 id="zend.controller.router.routes.chain">
-    <title>Zend_Controller_Router_Route_Chain</title>
+	<title>Zend_Controller_Router_Route_Chain</title>
 
-    <para>
-        <classname>Zend_Controller_Router_Route_Chain</classname> ist eine Route die es erlaubt
-        mehrere Routen miteinander zu verketten. Das erlaubt es Hostname-Routen und Pfad-Routen zu
-        verketten, oder zum Beispiel mehrere Pfad-Routen. Verkettung kann entweder
-        program-technisch oder mit einer Konfigurationsdatei durchgeführt werden.
-    </para>
+	<para>
+		<classname>Zend_Controller_Router_Route_Chain</classname>
+		ist eine Route die es erlaubt
+		mehrere Routen miteinander zu verketten. Das erlaubt es Hostname-Routen und
+		Pfad-Routen zu
+		verketten, oder zum Beispiel mehrere Pfad-Routen. Verkettung kann entweder
+		program-technisch oder mit einer Konfigurationsdatei durchgeführt
+		werden.
+	</para>
 
-    <note>
-        <title>Priorität der Parameter</title>
+	<note>
+		<title>Priorität der Parameter</title>
 
-        <para>
-            Wenn Routen wie die Hostnameroute und die Pfadroute zusammengekettet werden, haben die
-            Parameter der Hostnameroute eine höhere Priorität als die Parameter der Pfadroute.
-            Deshalb wird, wenn man im Hostnamen und in der Pfadroute einen Controller definiert,
-            der Controller der Hostnameroute ausgewählt.
+		<para>
+			Wenn Routen wie die Hostnameroute und die Pfadroute zusammengekettet
+			werden, haben die
+			Parameter der Hostnameroute eine höhere Priorität als die Parameter der
+			Pfadroute.
+			Deshalb wird, wenn man im Hostnamen und in der Pfadroute einen Controller
+			definiert,
+			der Controller der Hostnameroute ausgewählt.
         </para>
-    </note>
+	</note>
 
-    <para>
-        Wenn Programmtechnisch verkettet wird, gibt es zwei Wege das zu tun. Der erste besteht
-        darin eine neue Instanz von <classname>Zend_Controller_Router_Route_Chain</classname> zu
-        erstellen und dann die <methodname>chain()</methodname> Methode mehrere Male mit allen
-        Routen aufzurufen die zusammen verkettet werden sollen. Der andere Weg besteht darin die
-        erste Route zu nehmen, z.B. eine Hostname Route, und die <methodname>chain()</methodname>
-        Methode mit der Route auf Ihr aufzurufen, die angehängt werden soll. Das verändert die
-        Hostname Route nicht, gibt aber eine neue Instanz von
-        <classname>Zend_Controller_Router_Route_Chain</classname> zurück, die dann beide Routen
-        verkettet hat:
-    </para>
+	<para>
+		Wenn Programmtechnisch verkettet wird, gibt es zwei Wege das zu tun.
+		Der erste besteht
+		darin eine neue Instanz von
+		<classname>Zend_Controller_Router_Route_Chain</classname>
+		zu
+		erstellen und dann die
+		<methodname>chain()</methodname>
+		Methode mehrere Male mit allen
+		Routen aufzurufen die zusammen verkettet werden sollen. Der andere Weg
+		besteht darin die
+		erste Route zu nehmen, z.B. eine Hostname Route, und die
+		<methodname>chain()</methodname>
+		Methode mit der Route auf Ihr aufzurufen, die angehängt werden soll.
+		Das verändert die
+		Hostname Route nicht, gibt aber eine neue Instanz von
+		<classname>Zend_Controller_Router_Route_Chain</classname>
+		zurück, die dann beide Routen
+		verkettet hat:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 // Erstellung zweier Routen
 $hostnameRoute = new Zend_Controller_Router_Route_Hostname(...);
 $pathRoute     = new Zend_Controller_Router_Route(...);
@@ -48,12 +63,13 @@ $chainedRoute->chain($hostnameRoute)
 $chainedRoute = $hostnameRoute->chain($pathRoute);
 ]]></programlisting>
 
-    <para>
-        Wenn Routen miteinander verkettet werden, ist Ihr Trennzeichen ein
-        Schrägstrich. Es kann Fälle geben in denen man ein anderes Trennzeichen verwenden will:
+	<para>
+		Wenn Routen miteinander verkettet werden, ist Ihr Trennzeichen ein
+		Schrägstrich. Es kann Fälle geben in denen man ein anderes
+		Trennzeichen verwenden will:
     </para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 // Zwei Routen erstellen
 $firstRoute  = new Zend_Controller_Router_Route('foo');
 $secondRoute = new Zend_Controller_Router_Route('bar');
@@ -65,21 +81,30 @@ $chainedRoute = $firstRoute->chain($secondRoute, '-');
 echo $chainedRoute->assemble();
 ]]></programlisting>
 
-    <sect4 id="zend.controller.router.routes.chain.config">
-        <title>Verkettete Routen über Zend_Config</title>
+	<sect4 id="zend.controller.router.routes.chain.config">
+		<title>Verkettete Routen über Zend_Config</title>
 
-        <para>
-            Um Routen in einer Config Datei miteinander zu verketten gibt es zusätzliche Parameter
-            für die Konfiguration von Ihnen. Der einfachere Weg ist die Verwendung des
-            <property>chains</property> Parameters. Dieser ist einfach eine Liste von Routen, die
-            mit der Eltern-Route verkettet werden. Weder die Eltern-, noch die Kind-Routen werden
-            dem Router direkt hinzugefügt sondern nur die resultierende verkettete Route. Der Name
-            der verketteten Route im Router ist standardmäßig der Name der Eltern-Route und der Name
-            der Kind-Route verbunden mit einem Bindestrich (-). Eine einfache Konfiguration würde
-            in <acronym>XML</acronym> wie folgt aussehen:
-        </para>
+		<para>
+			Um Routen in einer Config Datei miteinander zu verketten gibt es
+			zusätzliche Parameter
+			für die Konfiguration von Ihnen. Der einfachere Weg ist die Verwendung
+			des
+			<property>chains</property>
+			Parameters. Dieser ist einfach eine Liste von Routen, die
+			mit der Eltern-Route verkettet werden. Weder die Eltern-, noch die
+			Kind-Routen werden
+			dem Router direkt hinzugefügt sondern nur die resultierende verkettete
+			Route. Der Name
+			der verketteten Route im Router ist standardmäßig der Name der
+			Eltern-Route und der Name
+			der Kind-Route verbunden mit einem Bindestrich (-). Eine einfache
+			Konfiguration würde
+			in
+			<acronym>XML</acronym>
+			wie folgt aussehen:
+		</para>
 
-        <programlisting language="xml"><![CDATA[
+		<programlisting language="xml"><![CDATA[
 <routes>
     <www type="Zend_Controller_Router_Route_Hostname">
         <route>www.example.com</route>
@@ -117,20 +142,28 @@ echo $chainedRoute->assemble();
 </routes>
 ]]></programlisting>
 
-        <para>
-            Das führt zu den drei Routen <command>www-language-index</command>,
-            <command>www-language-imprint</command> und <command>users-language-profile</command>
-            die nur basierend auf dem Hostnamen und der Route <command>misc</command> passen, was
-            wiederum mit jedem Hostnamen passt.
-        </para>
+		<para>
+			Das führt zu den drei Routen
+			<command>www-language-index</command>
+			,
+			<command>www-language-imprint</command>
+			und
+			<command>users-language-profile</command>
+			die nur basierend auf dem Hostnamen und der Route
+			<command>misc</command>
+			passen, was
+			wiederum mit jedem Hostnamen passt.
+		</para>
 
-        <para>
-            Der alternative Weg der Erstellung einer verketteten Route ist der über den
-            <property>chain</property> Parameter, was wiederum nur mit dem Chain-Route Typ direkt
-            verwendet werden kann, und auch im Root Level funktioniert:
-        </para>
+		<para>
+			Der alternative Weg der Erstellung einer verketteten Route ist der
+			über den
+			<property>chain</property>
+			Parameter, was wiederum nur mit dem Chain-Route Typ direkt
+			verwendet werden kann, und auch im Root Level funktioniert:
+		</para>
 
-        <programlisting language="xml"><![CDATA[
+		<programlisting language="xml"><![CDATA[
 <routes>
     <www type="Zend_Controller_Router_Route_Chain">
         <route>www.example.com</route>
@@ -157,12 +190,14 @@ echo $chainedRoute->assemble();
 </routes>
 ]]></programlisting>
 
-        <para>
-            Man kann auch den <property>chain</property> Parameter als Array übergeben statt die
-            Routen mit einem Komma zu seperieren:
-        </para>
+		<para>
+			Man kann auch den
+			<property>chain</property>
+			Parameter als Array übergeben statt die
+			Routen mit einem Komma zu seperieren:
+		</para>
 
-        <programlisting language="xml"><![CDATA[
+		<programlisting language="xml"><![CDATA[
 <routes>
     <www-index type="Zend_Controller_Router_Route_Chain">
         <chain>www</chain>
@@ -177,13 +212,16 @@ echo $chainedRoute->assemble();
 </routes>
 ]]></programlisting>
 
-        <para>
-            Wenn man Chain-Routen mit <classname>Zend_Config</classname> konfiguriert und will dass
-            das Trennzeichen ein anderes als ein Unterstrich ist, dann muss man dises Trennzeichen
-            separat spezifizieren:
-        </para>
+		<para>
+			Wenn man Chain-Routen mit
+			<classname>Zend_Config</classname>
+			konfiguriert und will dass
+			das Trennzeichen ein anderes als ein Unterstrich ist, dann muss man
+			dises Trennzeichen
+			separat spezifizieren:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $config = new Zend_Config(array(
     'chainName' => array(
         'type'   => 'Zend_Controller_Router_Route_Static',
@@ -213,5 +251,5 @@ echo $this->_router->assemble(array(), 'chainName_separator_subRouteName');
 
 // Die Prüfung: Ausgegeben wird /foo/bar
 ]]></programlisting>
-    </sect4>
+	</sect4>
 </sect3>

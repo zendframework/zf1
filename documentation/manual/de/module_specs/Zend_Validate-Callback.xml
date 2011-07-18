@@ -2,47 +2,56 @@
 <!-- EN-Revision: 21740 -->
 <!-- Reviewed: no -->
 <sect2 id="zend.validate.set.callback">
-    <title>Callback</title>
+	<title>Callback</title>
 
-    <para>
-        <classname>Zend_Validate_Callback</classname> erlaubt es einen Callback anzugeben der
-        verwendet wird um einen angegebenen Wert zu prüfen.
-    </para>
+	<para>
+		<classname>Zend_Validate_Callback</classname>
+		erlaubt es einen Callback anzugeben der
+		verwendet wird um einen angegebenen Wert zu prüfen.
+	</para>
 
-    <sect3 id="zend.validate.set.callback.options">
-        <title>Unterstützte Optionen für Zend_Validate_Callback</title>
+	<sect3 id="zend.validate.set.callback.options">
+		<title>Unterstützte Optionen für Zend_Validate_Callback</title>
 
-        <para>
-            Die folgenden Optionen werden für <classname>Zend_Validate_Callback</classname>
-            unterstützt:
+		<para>
+			Die folgenden Optionen werden für
+			<classname>Zend_Validate_Callback</classname>
+			unterstützt:
+		</para>
+
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>
+						<property>callback</property>
+					</emphasis>
+					: Setzt den Callback welcher
+					für die Prüfung aufgerufen wird.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>
+						<property>options</property>
+					</emphasis>
+					: Setzt zusätzliche Optionen
+					welche an den Callback übergeben werden.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</sect3>
+
+	<sect3 id="zend.validate.set.callback.basic">
+		<title>Grundsätzliche Verwendung</title>
+
+		<para>
+			Der einfachste Anwendungsfall besteht darin eine einzelne Funktion zu
+			haben und diese
+			als Callback zu verwenden. Angenommen wir haben die folgende Funktion.
         </para>
 
-        <itemizedlist>
-            <listitem>
-                <para>
-                    <emphasis><property>callback</property></emphasis>: Setzt den Callback welcher
-                    für die Prüfung aufgerufen wird.
-                </para>
-            </listitem>
-
-            <listitem>
-                <para>
-                    <emphasis><property>options</property></emphasis>: Setzt zusätzliche Optionen
-                    welche an den Callback übergeben werden.
-                </para>
-            </listitem>
-        </itemizedlist>
-    </sect3>
-
-    <sect3 id="zend.validate.set.callback.basic">
-        <title>Grundsätzliche Verwendung</title>
-
-        <para>
-            Der einfachste Anwendungsfall besteht darin eine einzelne Funktion zu haben und diese
-            als Callback zu verwenden. Angenommen wir haben die folgende Funktion.
-        </para>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 function myMethod($value)
 {
     // einige Prüfungen
@@ -50,12 +59,14 @@ function myMethod($value)
 }
 ]]></programlisting>
 
-        <para>
-            Um diese in <classname>Zend_Validate_Callback</classname> zu verwenden muss man Sie
-            nur auf folgende Weise aufrufen:
-        </para>
+		<para>
+			Um diese in
+			<classname>Zend_Validate_Callback</classname>
+			zu verwenden muss man Sie
+			nur auf folgende Weise aufrufen:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $valid = new Zend_Validate_Callback('myMethod');
 if ($valid->isValid($input)) {
     // Input scheint gültig zu sein
@@ -63,21 +74,28 @@ if ($valid->isValid($input)) {
     // Input ist ungültig
 }
 ]]></programlisting>
-    </sect3>
+	</sect3>
 
-    <sect3 id="zend.validate.set.callback.closure">
-        <title>Verwendung mit Closures</title>
+	<sect3 id="zend.validate.set.callback.closure">
+		<title>Verwendung mit Closures</title>
 
-        <para>
-            <acronym>PHP</acronym> 5.3 führt <ulink
-                url="http://php.net/functions.anonymous">Closures</ulink> ein,
-            welche grundsätzlich selbst-enthaltene oder <emphasis>anonyme</emphasis> Funktionen
-            sind. <acronym>PHP</acronym> nimmt an das Closures eine andere Form eines Callbacks
-            sind, und können daher als solche mit <classname>Zend_Validate_Callback</classname>
-            verwendet werden. Als Beispiel:
-        </para>
+		<para>
+			<acronym>PHP</acronym>
+			5.3 führt
+			<ulink url="http://php.net/functions.anonymous">Closures</ulink>
+			ein,
+			welche grundsätzlich selbst-enthaltene oder
+			<emphasis>anonyme</emphasis>
+			Funktionen
+			sind.
+			<acronym>PHP</acronym>
+			nimmt an das Closures eine andere Form eines Callbacks
+			sind, und können daher als solche mit
+			<classname>Zend_Validate_Callback</classname>
+			verwendet werden. Als Beispiel:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $valid = new Zend_Validate_Callback(function($value){
     // einige Prüfungen
     return true;
@@ -89,17 +107,18 @@ if ($valid->isValid($input)) {
     // Input ist ungültig
 }
 ]]></programlisting>
-    </sect3>
+	</sect3>
 
-    <sect3 id="zend.validate.set.callback.class">
-        <title>Verwendung mit klassenbasierten Callbacks</title>
+	<sect3 id="zend.validate.set.callback.class">
+		<title>Verwendung mit klassenbasierten Callbacks</title>
 
-        <para>
-            Natürlich ist es auch möglich eine Klassenmethode als Callback zu verwenden. Angenommen
-            wir haben die folgende Klassenmethode:
+		<para>
+			Natürlich ist es auch möglich eine Klassenmethode als Callback zu verwenden.
+			Angenommen
+			wir haben die folgende Klassenmethode:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyClass
 {
     public function myMethod($value)
@@ -110,12 +129,14 @@ class MyClass
 }
 ]]></programlisting>
 
-        <para>
-            Die Definition des Callbacks ist in diesem Fall fast die gleiche. Man muss nur eine
-            Instanz der Klasse vor der Methode erstellen und ein Array das den Callback beschreibt:
+		<para>
+			Die Definition des Callbacks ist in diesem Fall fast die gleiche. Man
+			muss nur eine
+			Instanz der Klasse vor der Methode erstellen und ein Array das den Callback
+			beschreibt:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $object = new MyClass;
 $valid = new Zend_Validate_Callback(array($object, 'myMethod'));
 if ($valid->isValid($input)) {
@@ -125,12 +146,13 @@ if ($valid->isValid($input)) {
 }
 ]]></programlisting>
 
-        <para>
-            Man kann auch eine statische Methode als Callback definieren. Angenommen wir haben die
-            folgende Klassendefinition dann ist die Verwendung des Prüfers wie folgt:
+		<para>
+			Man kann auch eine statische Methode als Callback definieren. Angenommen
+			wir haben die
+			folgende Klassendefinition dann ist die Verwendung des Prüfers wie folgt:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyClass
 {
     public static function test($value)
@@ -148,13 +170,17 @@ if ($valid->isValid($input)) {
 }
 ]]></programlisting>
 
-        <para>
-            Letztendlich kann man, wenn man <acronym>PHP</acronym> 5.3 verwendet, die magische
-            Methode <methodname>__invoke()</methodname> in der eigenen Klasse definieren. Wenn man
-            das tut dann funktioniert die Angabe einer Instanz der Klasse genauso:
-        </para>
+		<para>
+			Letztendlich kann man, wenn man
+			<acronym>PHP</acronym>
+			5.3 verwendet, die magische
+			Methode
+			<methodname>__invoke()</methodname>
+			in der eigenen Klasse definieren. Wenn man
+			das tut dann funktioniert die Angabe einer Instanz der Klasse genauso:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyClass
 {
     public function __invoke($value)
@@ -172,21 +198,22 @@ if ($valid->isValid($input)) {
     // Input ist ungültig
 }
 ]]></programlisting>
-    </sect3>
+	</sect3>
 
-    <sect3 id="zend.validate.set.callback.options2">
-        <title>Optionen hinzufügen</title>
+	<sect3 id="zend.validate.set.callback.options2">
+		<title>Optionen hinzufügen</title>
 
-        <para>
-            <classname>Zend_Validate_Callback</classname> erlaubt auch die Verwendung von Optionen
-            welche als zusätzliche Argumente dem Callback übergeben werden.
+		<para>
+			<classname>Zend_Validate_Callback</classname>
+			erlaubt auch die Verwendung von Optionen
+			welche als zusätzliche Argumente dem Callback übergeben werden.
+		</para>
+
+		<para>
+			Nehmen wir die folgende Klassen und Methoden Definition an:
         </para>
 
-        <para>
-            Nehmen wir die folgende Klassen und Methoden Definition an:
-        </para>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyClass
 {
     function myMethod($value, $option)
@@ -197,18 +224,21 @@ class MyClass
 }
 ]]></programlisting>
 
-        <para>
-            Es gibt zwei Wege um den Prüfer über zusätzliche Optionen zu informieren: Diese im
-            Constructor übergeben, oder Sie mit der Methode <methodname>setOptions()</methodname>
-            übergeben.
+		<para>
+			Es gibt zwei Wege um den Prüfer über zusätzliche Optionen zu
+			informieren: Diese im
+			Constructor übergeben, oder Sie mit der Methode
+			<methodname>setOptions()</methodname>
+			übergeben.
+		</para>
+
+		<para>
+			Um Sie im Contructor zu übergeben, muss ein Array übergeben werden das
+			die zwei
+			Schlüssel "callback" und "options" enthält:
         </para>
 
-        <para>
-            Um Sie im Contructor zu übergeben, muss ein Array übergeben werden das die zwei
-            Schlüssel "callback" und "options" enthält:
-        </para>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $valid = new Zend_Validate_Callback(array(
     'callback' => array('MyClass', 'myMethod'),
     'options'  => $option,
@@ -221,11 +251,11 @@ if ($valid->isValid($input)) {
 }
 ]]></programlisting>
 
-        <para>
-            Andererseits können Sie dem Prüfer auch nach der Instanzierung übergeben werden:
+		<para>
+			Andererseits können Sie dem Prüfer auch nach der Instanzierung übergeben werden:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $valid = new Zend_Validate_Callback(array('MyClass', 'myMethod'));
 $valid->setOptions($option);
 
@@ -236,12 +266,16 @@ if ($valid->isValid($input)) {
 }
 ]]></programlisting>
 
-        <para>
-            Wenn zusätzliche Werte an <methodname>isValid()</methodname> übergeben werden, dann
-            werden diese Werte unmittelbar nach <varname>$value</varname> hinzugefügt.
-        </para>
+		<para>
+			Wenn zusätzliche Werte an
+			<methodname>isValid()</methodname>
+			übergeben werden, dann
+			werden diese Werte unmittelbar nach
+			<varname>$value</varname>
+			hinzugefügt.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $valid = new Zend_Validate_Callback(array('MyClass', 'myMethod'));
 $valid->setOptions($option);
 
@@ -252,15 +286,18 @@ if ($valid->isValid($input, $additional)) {
 }
 ]]></programlisting>
 
-        <para>
-            Wenn der Aufruf zu einem Callback durchgeführt wird, dann wird der Wert der zu
-            überprüfen ist als erstes Argument an den Callback übergeben gefolgt von allen anderen
-            Werten die an <methodname>isValid()</methodname> übergeben wurden; alle anderen Optionen
-            folgen Ihm. Die Anzahl und der Typ der Optionen welche verwendet werden ist nicht
-            limitiert.
-        </para>
-    </sect3>
+		<para>
+			Wenn der Aufruf zu einem Callback durchgeführt wird, dann wird der
+			Wert der zu
+			überprüfen ist als erstes Argument an den Callback übergeben gefolgt von allen
+			anderen
+			Werten die an
+			<methodname>isValid()</methodname>
+			übergeben wurden; alle anderen Optionen
+			folgen Ihm. Die Anzahl und der Typ der Optionen welche verwendet werden ist
+			nicht
+			limitiert.
+		</para>
+	</sect3>
 </sect2>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

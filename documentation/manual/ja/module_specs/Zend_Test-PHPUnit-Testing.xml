@@ -2,20 +2,23 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 22741 -->
 <sect2 id="zend.test.phpunit.testing">
-    <title>コントローラおよび MVC アプリケーションのテスト</title>
+	<title>コントローラおよび MVC アプリケーションのテスト</title>
 
-    <para>
-        起動用の設定を済ませたら、テストの開始です。
-        テストの方法は PHPUnit テストスイートによるものとほぼ同じですが、
-        ちょっとした違いがいくつかあります。
+	<para>
+		起動用の設定を済ませたら、テストの開始です。
+		テストの方法は PHPUnit テストスイートによるものとほぼ同じですが、
+		ちょっとした違いがいくつかあります。
     </para>
 
-    <para>
-        まず、テストケースの <methodname>dispatch()</methodname>
-        メソッドを用いてテストの <acronym>URL</acronym> をディスパッチしなければなりません。
-    </para>
+	<para>
+		まず、テストケースの
+		<methodname>dispatch()</methodname>
+		メソッドを用いてテストの
+		<acronym>URL</acronym>
+		をディスパッチしなければなりません。
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -28,13 +31,15 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-    <para>
-        しかし、時にはこれ以外の情報 (<constant>GET</constant> 変数や POST 変数、
-        COOKIE 情報など) が必要になることもあります。
-        これらの情報をリクエストに含めることもできます。
-    </para>
+	<para>
+		しかし、時にはこれ以外の情報 (
+		<constant>GET</constant>
+		変数や POST 変数、
+		COOKIE 情報など) が必要になることもあります。
+		これらの情報をリクエストに含めることもできます。
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -75,33 +80,35 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-    <para>
-        リクエストが準備できたので、次はアサーションを作成してみましょう。
+	<para>
+		リクエストが準備できたので、次はアサーションを作成してみましょう。
     </para>
 
-    <sect3 id="zend.test.phpunit.testing.redirector">
-        <title>コントローラのテストと Redirector アクションヘルパー</title>
+	<sect3 id="zend.test.phpunit.testing.redirector">
+		<title>コントローラのテストと Redirector アクションヘルパー</title>
 
-        <important>
-            <para>
-                Redirect アクションヘルパーは、<methodname>gotoAndExit()</methodname>
-                メソッドを使うときに <methodname>exit()</methodname>
-                ステートメントを発行し、このメソッドのテストを停止させます。
-                アプリケーションのテスト容易性を考慮して、
-                リダイレクタではこのメソッドを使わないようにしましょう。
-            </para>
-        </important>
+		<important>
+			<para>
+				Redirect アクションヘルパーは、
+				<methodname>gotoAndExit()</methodname>
+				メソッドを使うときに
+				<methodname>exit()</methodname>
+				ステートメントを発行し、このメソッドのテストを停止させます。
+				アプリケーションのテスト容易性を考慮して、
+				リダイレクタではこのメソッドを使わないようにしましょう。
+			</para>
+		</important>
 
-        <para>
-            その性質上、リダイレクタアクションヘルパープラグインは
-            リダイレクトしたあと処理を終了します。exit をコールする部分をテストすることはできないので、
-            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
-            は自動的にリダイレクタでの exit 部分を無効化します。
-            その結果、テスト時と実際の実行時で挙動が変わってくることがありえます。
-            リダイレクトが正しく動作することを確実にするには、次のようにします。
-        </para>
+		<para>
+			その性質上、リダイレクタアクションヘルパープラグインは
+			リダイレクトしたあと処理を終了します。exit をコールする部分をテストすることはできないので、
+			<classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
+			は自動的にリダイレクタでの exit 部分を無効化します。
+			その結果、テスト時と実際の実行時で挙動が変わってくることがありえます。
+			リダイレクトが正しく動作することを確実にするには、次のようにします。
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyController extends Zend_Controller_Action
 {
     public function indexAction()
@@ -118,16 +125,16 @@ class MyController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-        <important>
-            <para>
-                アプリケーションによっては、これだけでは不十分かもしれません。さらに
-                <methodname>preDispatch()</methodname> あるいは
-                <methodname>postDispatch()</methodname> といったロジックを実行するかもしれないからです。
-                現状の Zend Test では、これらをうまく処理することはできません。
-            </para>
-        </important>
-    </sect3>
+		<important>
+			<para>
+				アプリケーションによっては、これだけでは不十分かもしれません。さらに
+				<methodname>preDispatch()</methodname>
+				あるいは
+				<methodname>postDispatch()</methodname>
+				といったロジックを実行するかもしれないからです。
+				現状の Zend Test では、これらをうまく処理することはできません。
+			</para>
+		</important>
+	</sect3>
 </sect2>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

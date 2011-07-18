@@ -2,25 +2,30 @@
 <!-- EN-Revision: 20176 -->
 <!-- Reviewed: no -->
 <sect2 id="zend.application.available-resources.multidb">
-    <title>Zend_Application_Resource_Multidb</title>
+	<title>Zend_Application_Resource_Multidb</title>
 
-    <para>
-        <classname>Zend_Application_Resource_Multidb</classname> wird verwendet um mehrere
-        Datenbankverbindungen zu initialisieren. Man kann die gleichen Optionen wie beim <link
-            linkend="zend.application.available-resources.db">Db Ressource Plugin</link> verwenden.
-        Trotzdem kann für das Spezifizieren einer Standardverbindung auch die 'default' Direktive
-        verwendet werden.
-    </para>
+	<para>
+		<classname>Zend_Application_Resource_Multidb</classname>
+		wird verwendet um mehrere
+		Datenbankverbindungen zu initialisieren. Man kann die gleichen Optionen wie beim
+		<link linkend="zend.application.available-resources.db">Db Ressource Plugin</link>
+		verwenden.
+		Trotzdem kann für das Spezifizieren einer Standardverbindung auch die
+		'default' Direktive
+		verwendet werden.
+	</para>
 
-    <example id="zend.application.available-resources.multidb.configexample">
-        <title>Mehrere Db Verbindungen konfigurieren</title>
+	<example id="zend.application.available-resources.multidb.configexample">
+		<title>Mehrere Db Verbindungen konfigurieren</title>
 
-        <para>
-            Anbei ist eine beispielhafte <acronym>INI</acronym> Konfiguration die verwendet werden
-            kann um zwei Db Verbindungen zu initialisieren.
-        </para>
+		<para>
+			Anbei ist eine beispielhafte
+			<acronym>INI</acronym>
+			Konfiguration die verwendet werden
+			kann um zwei Db Verbindungen zu initialisieren.
+		</para>
 
-        <programlisting language="ini"><![CDATA[
+		<programlisting language="ini"><![CDATA[
 [production]
 resources.multidb.db1.adapter = "pdo_mysql"
 resources.multidb.db1.host = "localhost"
@@ -35,46 +40,64 @@ resources.multidb.db2.password = "notthatpublic"
 resources.multidb.db2.dbname = "db2"
 resources.multidb.db2.default = true
 ]]></programlisting>
-    </example>
+	</example>
 
-    <example id="zend.application.available-resources.multidb.retrieveSpecificDb">
-        <title>Einen speziellen Datenbankadapter empfangen</title>
+	<example
+		id="zend.application.available-resources.multidb.retrieveSpecificDb">
+		<title>Einen speziellen Datenbankadapter empfangen</title>
 
-        <para>
-            Wenn dieses Ressource Plugin verwendet wird, will man normalerweise eine spezifische
-            Datenbank erhalten. Das kann durch Verwendung von <methodname>getDb()</methodname> von
-            der Ressource getan werden. Die Methode <methodname>getDb()</methodname> gibt eine
-            Instanz einer Klasse zurück welche <classname>Zend_Db_Adapter_Abstract</classname>
-            erweitert. Wenn man keine Standarddatendank gesetzt hat, wird eine Exception geworfen
-            wenn diese Methode ohne die Spezifikation eines Parameters aufgerufen wird.
-         </para>
+		<para>
+			Wenn dieses Ressource Plugin verwendet wird, will man normalerweise
+			eine spezifische
+			Datenbank erhalten. Das kann durch Verwendung von
+			<methodname>getDb()</methodname>
+			von
+			der Ressource getan werden. Die Methode
+			<methodname>getDb()</methodname>
+			gibt eine
+			Instanz einer Klasse zurück welche
+			<classname>Zend_Db_Adapter_Abstract</classname>
+			erweitert. Wenn man keine Standarddatendank gesetzt hat, wird eine
+			Exception geworfen
+			wenn diese Methode ohne die Spezifikation eines Parameters aufgerufen
+			wird.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $resource = $bootstrap->getPluginResource('multidb');
 $db1 = $resource->getDb('db1');
 $db2 = $resource->getDb('db2');
 $defaultDb = $resource->getDb();
 ]]></programlisting>
-    </example>
+	</example>
 
-    <example id="zend.application.available-resources.multidb.retrieveDefaultDb">
-        <title>Den standardmäßigen Datenbankadapter empfangen</title>
+	<example
+		id="zend.application.available-resources.multidb.retrieveDefaultDb">
+		<title>Den standardmäßigen Datenbankadapter empfangen</title>
 
-        <para>
-            Zusätzlich kann der standardmäßige Datenbankadapter empfangen werden indem die Methode
-            <methodname>getDefaultDb()</methodname> verwendet wird. Wenn man keinen standardmäßigen
-            Adapter gesetzt hat, wird der erste konfigurierte Db Adapter zurückgegeben. Wenn man
-            <constant>FALSE</constant> als ersten Parameter spezifiziert dann wird
-            <constant>NULL</constant> zurückgegeben wenn kein standardmäßiger Datenbankadapter
-            gesetzt wurde.
-         </para>
+		<para>
+			Zusätzlich kann der standardmäßige Datenbankadapter empfangen werden
+			indem die Methode
+			<methodname>getDefaultDb()</methodname>
+			verwendet wird. Wenn man keinen standardmäßigen
+			Adapter gesetzt hat, wird der erste konfigurierte Db Adapter zurückgegeben.
+			Wenn man
+			<constant>FALSE</constant>
+			als ersten Parameter spezifiziert dann wird
+			<constant>NULL</constant>
+			zurückgegeben wenn kein standardmäßiger Datenbankadapter
+			gesetzt wurde.
+		</para>
 
-        <para>
-            Anbei ist ein Beispiel welches annimmt dass das Multidb Ressource Plugin mit dem
-            obigen <acronym>INI</acronym> Beispiel konfiguriert wurde:
-        </para>
+		<para>
+			Anbei ist ein Beispiel welches annimmt dass das Multidb Ressource
+			Plugin mit dem
+			obigen
+			<acronym>INI</acronym>
+			Beispiel konfiguriert wurde:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $resource = $bootstrap->getPluginResource('multidb');
 $db2 = $resource->getDefaultDb();
 
@@ -82,5 +105,5 @@ $db2 = $resource->getDefaultDb();
 $db1 = $resource->getDefaultDb();
 $null = $resource->getDefaultDb(false); // Null
 ]]></programlisting>
-    </example>
+	</example>
 </sect2>

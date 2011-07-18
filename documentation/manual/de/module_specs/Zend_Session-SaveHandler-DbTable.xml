@@ -2,22 +2,29 @@
 <!-- EN-Revision: 20810 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.session.savehandler.dbtable">
-    <title>Zend_Session_SaveHandler_DbTable</title>
+	<title>Zend_Session_SaveHandler_DbTable</title>
 
-    <para>
-        Das Basis Setup für <classname>Zend_Session_SaveHandler_DbTable</classname> muß zumindest
-        vier Spalten haben, die wie folgt im Config Array oder <classname>Zend_Config</classname>
-        Objekt beschrieben werden: primary, ist der Primary-Key und standardmäßig nur die
-        SessionID welche standardmäßig ein String der Länge 32 ist; modified, ist der
-        Unix-Timestamp des Datums der letzten Änderung; lifetime, ist die Lebenszeit der Session
-        (<command>modified + lifetime > time();</command>); und data, sind die serialisierten
-        Daten die in der Session gespeichert werden.
-    </para>
+	<para>
+		Das Basis Setup für
+		<classname>Zend_Session_SaveHandler_DbTable</classname>
+		muß zumindest
+		vier Spalten haben, die wie folgt im Config Array oder
+		<classname>Zend_Config</classname>
+		Objekt beschrieben werden: primary, ist der Primary-Key und
+		standardmäßig nur die
+		SessionID welche standardmäßig ein String der Länge 32 ist; modified, ist der
+		Unix-Timestamp des Datums der letzten Änderung; lifetime, ist die
+		Lebenszeit der Session
+		(
+		<command>modified + lifetime > time();</command>
+		); und data, sind die serialisierten
+		Daten die in der Session gespeichert werden.
+	</para>
 
-    <example id="zend.session.savehandler.dbtable.basic">
-        <title>Basis Setup</title>
+	<example id="zend.session.savehandler.dbtable.basic">
+		<title>Basis Setup</title>
 
-        <programlisting language="SQL"><![CDATA[
+		<programlisting language="SQL"><![CDATA[
 CREATE TABLE `session` (
   `id` char(32),
   `modified` int,
@@ -27,7 +34,7 @@ CREATE TABLE `session` (
 );
 ]]></programlisting>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Datenbank Verbindung vorbereiten
 $db = Zend_Db::factory('Pdo_Mysql', array(
     'host'     =>'example.com',
@@ -56,17 +63,18 @@ Zend_Session::start();
 
 // Jetzt kann Zend_Session wie sonst verwendet werden
 ]]></programlisting>
-    </example>
+	</example>
 
-    <para>
-        Man kann auch mehrere Spalten im Primarykey für
-        <classname>Zend_Session_SaveHandler_DbTable</classname> verwenden.
-    </para>
+	<para>
+		Man kann auch mehrere Spalten im Primarykey für
+		<classname>Zend_Session_SaveHandler_DbTable</classname>
+		verwenden.
+	</para>
 
-    <example id="zend.session.savehandler.dbtable.multi-column-key">
-        <title>Mehr-Spalten Primary-Keys verwenden</title>
+	<example id="zend.session.savehandler.dbtable.multi-column-key">
+		<title>Mehr-Spalten Primary-Keys verwenden</title>
 
-        <programlisting language="SQL"><![CDATA[
+		<programlisting language="SQL"><![CDATA[
 CREATE TABLE `session` (
     `session_id` char(32) NOT NULL,
     `save_path` varchar(32) NOT NULL,
@@ -78,7 +86,7 @@ CREATE TABLE `session` (
 );
 ]]></programlisting>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Die DB Verbindung wie vorher einrichten
 // BEACHTE: Diese Config wird auch an Zend_Db_Table übergeben sodas
 // spezielles für die Tabelle genauso in die Config gegeben werden kann
@@ -109,5 +117,5 @@ Zend_Session::start();
 
 // Zend_Session wie normal verwenden
 ]]></programlisting>
-    </example>
+	</example>
 </sect1>

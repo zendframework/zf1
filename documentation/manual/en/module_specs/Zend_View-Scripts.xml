@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect1 id="zend.view.scripts">
-    <title>View Scripts</title>
+	<title>View Scripts</title>
 
-    <para>
-        Once your controller has assigned variables and called <methodname>render()</methodname>,
-        <classname>Zend_View</classname> then includes the requested view script and executes
-        it "inside" the scope of the <classname>Zend_View</classname> instance. Therefore,
-        in your view scripts, references to $this actually point to the
-        <classname>Zend_View</classname> instance itself.
+	<para>
+		Once your controller has assigned variables and called
+		<methodname>render()</methodname>
+		,
+		<classname>Zend_View</classname>
+		then includes the requested view script and executes
+		it "inside" the scope of the
+		<classname>Zend_View</classname>
+		instance. Therefore,
+		in your view scripts, references to $this actually point to the
+		<classname>Zend_View</classname>
+		instance itself.
+	</para>
+
+	<para>
+		Variables assigned to the view from the controller are referred
+		to as instance properties. For example, if the controller were
+		to assign a variable 'something', you would refer to it as
+		$this->something in the view script. (This allows you to keep
+		track of which values were assigned to the script, and which are
+		internal to the script itself.)
     </para>
 
-    <para>
-        Variables assigned to the view from the controller are referred
-        to as instance properties. For example, if the controller were
-        to assign a variable 'something', you would refer to it as
-        $this->something in the view script. (This allows you to keep
-        track of which values were assigned to the script, and which are
-        internal to the script itself.)
-    </para>
+	<para>
+		By way of reminder, here is the example view script from the
+		<classname>Zend_View</classname>
+		introduction.
+	</para>
 
-    <para>
-        By way of reminder, here is the example view script from the
-        <classname>Zend_View</classname> introduction.
-    </para>
-
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 <?php if ($this->books): ?>
 
     <!-- A table of some books. -->
@@ -51,24 +58,25 @@
 <?php endif;?>
 ]]></programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
-        <title>Escaping Output</title>
+	<sect2 id="zend.view.scripts.escaping">
+		<title>Escaping Output</title>
 
-        <para>
-            One of the most important tasks to perform in a view script
-            is to make sure that output is escaped properly; among other
-            things, this helps to avoid cross-site scripting attacks.
-            Unless you are using a function, method, or helper that does
-            escaping on its own, you should always escape variables when
-            you output them.
+		<para>
+			One of the most important tasks to perform in a view script
+			is to make sure that output is escaped properly; among other
+			things, this helps to avoid cross-site scripting attacks.
+			Unless you are using a function, method, or helper that does
+			escaping on its own, you should always escape variables when
+			you output them.
         </para>
 
-        <para>
-            <classname>Zend_View</classname> comes with a method called escape() that does such
-            escaping for you.
-        </para>
+		<para>
+			<classname>Zend_View</classname>
+			comes with a method called escape() that does such
+			escaping for you.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // bad view-script practice:
 echo $this->variable;
 
@@ -76,15 +84,18 @@ echo $this->variable;
 echo $this->escape($this->variable);
 ]]></programlisting>
 
-        <para>
-            By default, the escape() method uses the <acronym>PHP</acronym> htmlspecialchars()
-            function for escaping. However, depending on your environment,
-            you may wish for escaping to occur in a different way. Use the
-            setEscape() method at the controller level to tell <classname>Zend_View</classname>
-            what escaping callback to use.
-        </para>
+		<para>
+			By default, the escape() method uses the
+			<acronym>PHP</acronym>
+			htmlspecialchars()
+			function for escaping. However, depending on your environment,
+			you may wish for escaping to occur in a different way. Use the
+			setEscape() method at the controller level to tell
+			<classname>Zend_View</classname>
+			what escaping callback to use.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // create a Zend_View instance
 $view = new Zend_View();
 
@@ -102,35 +113,41 @@ $view->setEscape(array($obj, 'methodName'));
 echo $view->render(...);
 ]]></programlisting>
 
-        <para>
-            The callback function or method should take the value to be
-            escaped as its first parameter, and all other parameters should
-            be optional.
+		<para>
+			The callback function or method should take the value to be
+			escaped as its first parameter, and all other parameters should
+			be optional.
         </para>
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
-        <title>Using Alternate Template Systems</title>
+	<sect2 id="zend.view.scripts.templates">
+		<title>Using Alternate Template Systems</title>
 
-        <para>
-            Although <acronym>PHP</acronym> is itself a powerful template system, many developers
-            feel it is too powerful or complex for their template designers and
-            will want to use an alternate template engine. <classname>Zend_View</classname> provides
-            two mechanisms for doing so, the first through view scripts, the
-            second by implementing <classname>Zend_View_Interface</classname>.
-        </para>
+		<para>
+			Although
+			<acronym>PHP</acronym>
+			is itself a powerful template system, many developers
+			feel it is too powerful or complex for their template designers and
+			will want to use an alternate template engine.
+			<classname>Zend_View</classname>
+			provides
+			two mechanisms for doing so, the first through view scripts, the
+			second by implementing
+			<classname>Zend_View_Interface</classname>
+			.
+		</para>
 
-        <sect3 id="zend.view.scripts.templates.scripts">
-            <title>Template Systems Using View Scripts</title>
+		<sect3 id="zend.view.scripts.templates.scripts">
+			<title>Template Systems Using View Scripts</title>
 
-            <para>
-                A view script may be used to instantiate and manipulate a
-                separate template object, such as a PHPLIB-style template. The
-                view script for that kind of activity might look something like
-                this:
+			<para>
+				A view script may be used to instantiate and manipulate a
+				separate template object, such as a PHPLIB-style template. The
+				view script for that kind of activity might look something like
+				this:
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -153,11 +170,11 @@ if ($this->books) {
 }
 ]]></programlisting>
 
-            <para>
-                These would be the related template files:
+			<para>
+				These would be the related template files:
             </para>
 
-            <programlisting language="html"><![CDATA[
+			<programlisting language="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -176,19 +193,21 @@ if ($this->books) {
 <!-- nobooks.tpl -->
 <p>There are no books to display.</p>
 ]]></programlisting>
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.view.scripts.templates.interface">
-            <title>Template Systems Using Zend_View_Interface</title>
+		<sect3 id="zend.view.scripts.templates.interface">
+			<title>Template Systems Using Zend_View_Interface</title>
 
-            <para>
-                Some may find it easier to simply provide a
-                <classname>Zend_View</classname>-compatible template engine.
-                <classname>Zend_View_Interface</classname> defines the minimum interface needed for
-                compatability:
-            </para>
+			<para>
+				Some may find it easier to simply provide a
+				<classname>Zend_View</classname>
+				-compatible template engine.
+				<classname>Zend_View_Interface</classname>
+				defines the minimum interface needed for
+				compatability:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 /**
  * Return the actual template engine object
  */
@@ -239,13 +258,15 @@ public function clearVars();
 public function render($name);
 ]]></programlisting>
 
-            <para>
-                Using this interface, it becomes relatively easy to wrap a
-                third-party template engine as a <classname>Zend_View</classname>-compatible class.
-                As an example, the following is one potential wrapper for Smarty:
-            </para>
+			<para>
+				Using this interface, it becomes relatively easy to wrap a
+				third-party template engine as a
+				<classname>Zend_View</classname>
+				-compatible class.
+				As an example, the following is one potential wrapper for Smarty:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 class Zend_View_Smarty implements Zend_View_Interface
 {
     /**
@@ -418,14 +439,18 @@ class Zend_View_Smarty implements Zend_View_Interface
 }
 ]]></programlisting>
 
-            <para>
-                In this example, you would instantiate the
-                <classname>Zend_View_Smarty</classname> class instead of
-                <classname>Zend_View</classname>, and then use it in roughly the same
-                fashion as <classname>Zend_View</classname>:
-            </para>
+			<para>
+				In this example, you would instantiate the
+				<classname>Zend_View_Smarty</classname>
+				class instead of
+				<classname>Zend_View</classname>
+				, and then use it in roughly the same
+				fashion as
+				<classname>Zend_View</classname>
+				:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 //Example 1. In initView() of initializer.
 $view = new Zend_View_Smarty('/path/to/templates');
 $viewRenderer =
@@ -460,9 +485,7 @@ class FooController extends Zend_Controller_Action
                      ->setViewSuffix('tpl');
     }
 ]]></programlisting>
-        </sect3>
-    </sect2>
+		</sect3>
+	</sect2>
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

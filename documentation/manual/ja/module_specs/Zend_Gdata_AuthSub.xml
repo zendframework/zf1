@@ -2,79 +2,101 @@
 <!-- Reviewed: no -->
 <!-- EN-Revision: 22741 -->
 <sect1 id="zend.gdata.authsub">
-    <title>AuthSub による認証</title>
+	<title>AuthSub による認証</title>
 
-    <para>
-        AuthSub を使用すると、ウェブアプリケーションで
-        Google Data サービスへのアクセスのための認証ができるようになります。
-        ユーザの認証情報を処理するコードを自分で書く必要はありません。
+	<para>
+		AuthSub を使用すると、ウェブアプリケーションで
+		Google Data サービスへのアクセスのための認証ができるようになります。
+		ユーザの認証情報を処理するコードを自分で書く必要はありません。
     </para>
 
-    <para>
-        Google Data AuthSub 認証についての詳細は、
-        <ulink url="http://code.google.com/apis/accounts/AuthForWebApps.html">http://code.google.com/apis/accounts/AuthForWebApps.html</ulink>
-        を参照ください。
+	<para>
+		Google Data AuthSub 認証についての詳細は、
+		<ulink url="http://code.google.com/apis/accounts/AuthForWebApps.html">http://code.google.com/apis/accounts/AuthForWebApps.html</ulink>
+		を参照ください。
+	</para>
+
+	<para>
+		Google のドキュメントでは、ClientLogin 方式は
+		"インストールするアプリケーション" に適しており、一方 AuthSub は
+		"ウェブアプリケーション" に適しているとされています。
+		これらの違いは、AuthSub はユーザとのやりとりが発生するということです。
+		ブラウザのインターフェイスを用いて、リクエストのリダイレクトを行います。
+		ClientLogin では
+		<acronym>PHP</acronym>
+		のコードでアカウント情報を提供します。
+		ユーザが直接認証情報を入力する必要がなくなります。
+	</para>
+
+	<para>
+		AuthSub の場合の認証情報は、ウェブアプリケーションのユーザが入力します。
+		つまり、認証情報をユーザが知っておく必要があります。
     </para>
 
-    <para>
-        Google のドキュメントでは、ClientLogin 方式は
-        "インストールするアプリケーション" に適しており、一方 AuthSub は
-        "ウェブアプリケーション" に適しているとされています。
-        これらの違いは、AuthSub はユーザとのやりとりが発生するということです。
-        ブラウザのインターフェイスを用いて、リクエストのリダイレクトを行います。
-        ClientLogin では <acronym>PHP</acronym> のコードでアカウント情報を提供します。
-        ユーザが直接認証情報を入力する必要がなくなります。
-    </para>
+	<note>
+		<title>登録されたアプリケーション</title>
+		<para>
+			<classname>Zend_Gdata</classname>
+			は、現在はセキュアなトークンの使用をサポートしていません。
+			なぜなら、デジタル証明書によるセキュアなトークンの取得を
+			AuthSub 認証がサポートしていないからです。
+		</para>
+	</note>
 
-    <para>
-        AuthSub の場合の認証情報は、ウェブアプリケーションのユーザが入力します。
-        つまり、認証情報をユーザが知っておく必要があります。
-    </para>
+	<sect2 id="zend.gdata.authsub.login">
+		<title>AuthSub 認証済みの Http クライアントの作成</title>
 
-    <note>
-        <title>登録されたアプリケーション</title>
-        <para>
-            <classname>Zend_Gdata</classname> は、現在はセキュアなトークンの使用をサポートしていません。
-            なぜなら、デジタル証明書によるセキュアなトークンの取得を
-            AuthSub 認証がサポートしていないからです。
-        </para>
-    </note>
+		<para>
+			あなたの作成した
+			<acronym>PHP</acronym>
+			アプリケーションで、認証を行う
+			Google
+			<acronym>URL</acronym>
+			へのハイパーリンクを提供しなければなりません。そのためには
+			静的関数
+			<methodname>Zend_Gdata_AuthSub::getAuthSubTokenUri()</methodname>
+			を使用します。この関数の引数には、あなたの作成した
+			<acronym>PHP</acronym>
+			アプリケーションの
+			<acronym>URL</acronym>
+			を指定します。それにより、ユーザ認証の後に
+			Google からもとの場所にリダイレクトされるようになります。
+		</para>
 
-    <sect2 id="zend.gdata.authsub.login">
-        <title>AuthSub 認証済みの Http クライアントの作成</title>
+		<para>
+			Google の認証サーバからアプリケーションに戻ってくる際に、
+			<emphasis>token</emphasis>
+			という名前の
+			<constant>GET</constant>
+			パラメータが設定されます。
+			このパラメータの値は、認証されたアクセスに使用する single-use トークンとなります。
+			このトークンを multi-use トークンに変換し、セッションに保存します。
+		</para>
 
-        <para>
-            あなたの作成した <acronym>PHP</acronym> アプリケーションで、認証を行う
-            Google <acronym>URL</acronym> へのハイパーリンクを提供しなければなりません。そのためには
-            静的関数 <methodname>Zend_Gdata_AuthSub::getAuthSubTokenUri()</methodname>
-            を使用します。この関数の引数には、あなたの作成した
-            <acronym>PHP</acronym> アプリケーションの <acronym>URL</acronym> を指定します。それにより、ユーザ認証の後に
-            Google からもとの場所にリダイレクトされるようになります。
-        </para>
+		<para>
+			そしてそのトークンの値は使用して
+			<methodname>Zend_Gdata_AuthSub::getHttpClient()</methodname>
+			をコールします。この関数は
+			<classname>Zend_Http_Client</classname>
+			のインスタンスを返します。このインスタンスには適切なヘッダが設定されており、
+			後でこの
+			<acronym>HTTP</acronym>
+			クライアントを使用して送信したリクエストは認証済みのものとなります。
+		</para>
 
-        <para>
-            Google の認証サーバからアプリケーションに戻ってくる際に、
-            <emphasis>token</emphasis> という名前の <constant>GET</constant> パラメータが設定されます。
-            このパラメータの値は、認証されたアクセスに使用する single-use トークンとなります。
-            このトークンを multi-use トークンに変換し、セッションに保存します。
-        </para>
+		<para>
+			以下の例は、
+			<acronym>PHP</acronym>
+			のウェブアプリケーションのコードです。
+			Google Calendar サービスに対する認証を行い、
+			認証済みの
+			<acronym>HTTP</acronym>
+			クライアントを使用して
+			<classname>Zend_Gdata</classname>
+			クライアントオブジェクトを作成します。
+		</para>
 
-        <para>
-            そしてそのトークンの値は使用して
-            <methodname>Zend_Gdata_AuthSub::getHttpClient()</methodname>
-            をコールします。この関数は <classname>Zend_Http_Client</classname>
-            のインスタンスを返します。このインスタンスには適切なヘッダが設定されており、
-            後でこの <acronym>HTTP</acronym> クライアントを使用して送信したリクエストは認証済みのものとなります。
-        </para>
-
-        <para>
-            以下の例は、<acronym>PHP</acronym> のウェブアプリケーションのコードです。
-            Google Calendar サービスに対する認証を行い、
-            認証済みの <acronym>HTTP</acronym> クライアントを使用して <classname>Zend_Gdata</classname>
-            クライアントオブジェクトを作成します。
-        </para>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $my_calendar = 'http://www.google.com/calendar/feeds/default/private/full';
 
 if (!isset($_SESSION['cal_token'])) {
@@ -102,18 +124,18 @@ $client = Zend_Gdata_AuthSub::getHttpClient($_SESSION['cal_token']);
 $cal = new Zend_Gdata_Calendar($client);
 ]]></programlisting>
 
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.gdata.authsub.logout">
-        <title>AuthSub 認証の解除</title>
+	<sect2 id="zend.gdata.authsub.logout">
+		<title>AuthSub 認証の解除</title>
 
-        <para>
-            指定したトークンによる認証状態を終わらせるには、静的関数
-            <methodname>Zend_Gdata_AuthSub::AuthSubRevokeToken()</methodname>
-            を使用します。そうしないと、このトークンはいつまでも有効なままになります。
-        </para>
+		<para>
+			指定したトークンによる認証状態を終わらせるには、静的関数
+			<methodname>Zend_Gdata_AuthSub::AuthSubRevokeToken()</methodname>
+			を使用します。そうしないと、このトークンはいつまでも有効なままになります。
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // アプリケーションのセキュリティ問題を避けるため、注意してこの値を作成します
 $php_self = htmlentities(substr($_SERVER['PHP_SELF'],
                          0,
@@ -128,22 +150,26 @@ if (isset($_GET['logout'])) {
 }
 ]]></programlisting>
 
-    <note>
-        <title>セキュリティについて</title>
-        <para>
-            上の例における <varname>$php_self</varname> の扱い方は、
-            一般的なセキュリティ問題の対応法に従ったものです。
-            <classname>Zend_Gdata</classname> に固有のものではありません。
-            <acronym>HTTP</acronym> ヘッダに出力する内容は、つねにフィルタリングするようにしましょう。
+		<note>
+			<title>セキュリティについて</title>
+			<para>
+				上の例における
+				<varname>$php_self</varname>
+				の扱い方は、
+				一般的なセキュリティ問題の対応法に従ったものです。
+				<classname>Zend_Gdata</classname>
+				に固有のものではありません。
+				<acronym>HTTP</acronym>
+				ヘッダに出力する内容は、つねにフィルタリングするようにしましょう。
+			</para>
+			<para>
+				認証トークンの解除については、ユーザが Google Data
+				セッションを終わらせたときに行うのがお勧めです。
+				だれかがトークンを盗んで悪用するという可能性は非常に小さいものです。
+				とは言え、サービスの利用が終わったら認証も終了させておくことは大切です。
         </para>
-        <para>
-            認証トークンの解除については、ユーザが Google Data
-            セッションを終わらせたときに行うのがお勧めです。
-            だれかがトークンを盗んで悪用するという可能性は非常に小さいものです。
-            とは言え、サービスの利用が終わったら認証も終了させておくことは大切です。
-        </para>
-    </note>
+		</note>
 
-    </sect2>
+	</sect2>
 
 </sect1>

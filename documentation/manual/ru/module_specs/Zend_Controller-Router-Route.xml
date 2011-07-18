@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect3 id="zend.controller.router.routes.standard">
-    <title>Zend_Controller_Router_Route</title>
+	<title>Zend_Controller_Router_Route</title>
 
-    <para>
-        <classname>Zend_Controller_Router_Route</classname> - стандартный маршрут
-        фреймворка. Он сочетает в себе легкость использования и гибкость
-        определения маршрутов. Каждый маршрут состоит в основном из карты URL
-        (статических и динамических частей (переменных)), и может быть
-        инициализирован со значениями по умолчанию и требованиями к переменным.
-    </para>
+	<para>
+		<classname>Zend_Controller_Router_Route</classname>
+		- стандартный маршрут
+		фреймворка. Он сочетает в себе легкость использования и гибкость
+		определения маршрутов. Каждый маршрут состоит в основном из карты URL
+		(статических и динамических частей (переменных)), и может быть
+		инициализирован со значениями по умолчанию и требованиями к
+		переменным.
+	</para>
 
-    <para>
-        Давайте представим себе некое приложение, в котором нужно разместить
-        несколько информационных страниц об авторах. Мы хотим, чтобы адрес
-        <code>http://domain.com/author/martel</code> вел
-        на страницу с информацией об авторе с именем "martel". Маршрут для
-        обеспечения такой функциональности может выглядеть следующим образом:
-    </para>
+	<para>
+		Давайте представим себе некое приложение, в котором нужно разместить
+		несколько информационных страниц об авторах. Мы хотим, чтобы адрес
+		<code>http://domain.com/author/martel</code>
+		вел
+		на страницу с информацией об авторе с именем "martel". Маршрут для
+		обеспечения такой функциональности может выглядеть следующим образом:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 $route = new Zend_Controller_Router_Route(
     'author/:username',
     array(
@@ -31,39 +34,47 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('user', $route);
 ]]></programlisting>
 
-    <para>
-        Первый параметр конструктора <classname>Zend_Controller_Router_Route</classname> -
-        определение маршрута, которое будет сопоставляться с URL. Определения
-        маршрутов содержат статические и динамические части, разделенные
-        символом косой черты ('/'). Статические части являются обычным текстом:
-        <code>author</code>. Динамические части, называемые переменными,
-        помечаются знаком двоеточия в начале имени переменной:
-        <code>:username</code>.
-    </para>
+	<para>
+		Первый параметр конструктора
+		<classname>Zend_Controller_Router_Route</classname>
+		-
+		определение маршрута, которое будет сопоставляться с URL. Определения
+		маршрутов содержат статические и динамические части, разделенные
+		символом косой черты ('/'). Статические части являются обычным текстом:
+		<code>author</code>
+		. Динамические части, называемые переменными,
+		помечаются знаком двоеточия в начале имени переменной:
+		<code>:username</code>
+		.
+	</para>
 
-    <note>
-        <title>Использование символов</title>
-        <para>
-            Текущая реализация позволяет использовать любые (за исключением
-            косой черты) символы в идентификаторе переменной,
-            но сильно рекомендуется использовать в них только символы,
-            допустимые для переменных в php. Есть вероятность, что в
-            будущем реализация изменится, и это может вызвать скрытые ошибки в
-            вашем коде.
+	<note>
+		<title>Использование символов</title>
+		<para>
+			Текущая реализация позволяет использовать любые (за исключением
+			косой черты) символы в идентификаторе переменной,
+			но сильно рекомендуется использовать в них только символы,
+			допустимые для переменных в php. Есть вероятность, что в
+			будущем реализация изменится, и это может вызвать скрытые ошибки в
+			вашем коде.
         </para>
-    </note>
+	</note>
 
-    <para>
-        Этот маршрут должен сработать, когда вы вводите
-        <code>http://domain.com/author/martel</code> в своем броузере, в этом
-        случае все его переменные будут добавлены в объект
-        <classname>Zend_Controller_Request</classname> и будут доступны в вашем
-        контроллере <code>ProfileController</code>.
-        Переменные, возвращаемые в этом примере, могут быть представленые в виде
-        следующего массива пар ключ/значение:
-    </para>
+	<para>
+		Этот маршрут должен сработать, когда вы вводите
+		<code>http://domain.com/author/martel</code>
+		в своем броузере, в этом
+		случае все его переменные будут добавлены в объект
+		<classname>Zend_Controller_Request</classname>
+		и будут доступны в вашем
+		контроллере
+		<code>ProfileController</code>
+		.
+		Переменные, возвращаемые в этом примере, могут быть представленые в виде
+		следующего массива пар ключ/значение:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 $values = array(
     'username'   => 'martel',
     'controller' => 'profile',
@@ -71,16 +82,24 @@ $values = array(
 );
 ]]></programlisting>
 
-    <para>
-        Затем <classname>Zend_Controller_Dispatcher_Standard</classname> должен вызвать
-        метод <code>userinfoAction()</code> вашего класса
-        <code>ProfileController</code> (используется модуль по умолчанию),
-        основываясь на этих значениях. Вы сможете получать эти переменные через
-        методы <code>Zend_Controller_Action::_getParam()</code> или
-        <code>Zend_Controller_Request::getParam()</code>.
-    </para>
+	<para>
+		Затем
+		<classname>Zend_Controller_Dispatcher_Standard</classname>
+		должен вызвать
+		метод
+		<code>userinfoAction()</code>
+		вашего класса
+		<code>ProfileController</code>
+		(используется модуль по умолчанию),
+		основываясь на этих значениях. Вы сможете получать эти переменные через
+		методы
+		<code>Zend_Controller_Action::_getParam()</code>
+		или
+		<code>Zend_Controller_Request::getParam()</code>
+		.
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 public function userinfoAction()
 {
     $request = $this->getRequest();
@@ -90,15 +109,15 @@ public function userinfoAction()
 }
 ]]></programlisting>
 
-    <para>
-        Определение маршрута может содержать в себе еще один специальный символ
-        (метасимвол), представленный символом '*'. Он используется для сбора
-        параметров, как в маршруте Module, используемом по умолчанию
-        (пары переменная => значение, определенные в URI). Следующий маршрут
-        приближенно воспроизводит поведение маршрута Module:
+	<para>
+		Определение маршрута может содержать в себе еще один специальный символ
+		(метасимвол), представленный символом '*'. Он используется для сбора
+		параметров, как в маршруте Module, используемом по умолчанию
+		(пары переменная => значение, определенные в URI). Следующий маршрут
+		приближенно воспроизводит поведение маршрута Module:
     </para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 $route = new Zend_Controller_Router_Route(
     ':module/:controller/:action/*',
     array('module' => 'default')
@@ -106,18 +125,19 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('default', $route);
 ]]></programlisting>
 
-    <sect4 id="zend.controller.router.routes.standard.variable-defaults">
-        <title>Значения переменных по умолчанию</title>
+	<sect4 id="zend.controller.router.routes.standard.variable-defaults">
+		<title>Значения переменных по умолчанию</title>
 
-        <para>
-            Любая переменная в маршруте может иметь значение по умолчанию, для
-            этого используется второй параметр конструктора
-            <classname>Zend_Controller_Router_Route</classname>. Этот параметр является
-            массивом с ключами, представляющими имена переменных, и со
-            значениями в качестве значений переменных по умолчанию:
-        </para>
+		<para>
+			Любая переменная в маршруте может иметь значение по умолчанию, для
+			этого используется второй параметр конструктора
+			<classname>Zend_Controller_Router_Route</classname>
+			. Этот параметр является
+			массивом с ключами, представляющими имена переменных, и со
+			значениями в качестве значений переменных по умолчанию:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $route = new Zend_Controller_Router_Route(
     'archive/:year',
     array('year' => 2006)
@@ -125,25 +145,35 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('archive', $route);
 ]]></programlisting>
 
-        <para>
-            Маршрут выше будет соответствовать URL-ам
-            <code>http://domain.com/archive/2005</code> и
-            <code>http://example.com/archive</code>. В последнем случае
-            переменная year будет иметь начальное значение по умолчанию 2006.
-        </para>
+		<para>
+			Маршрут выше будет соответствовать URL-ам
+			<code>http://domain.com/archive/2005</code>
+			и
+			<code>http://example.com/archive</code>
+			. В последнем случае
+			переменная year будет иметь начальное значение по умолчанию 2006.
+		</para>
 
-        <para>
-            В этом примере переменная <code>year</code> будет добавлена в объект запроса.
-            Поскольку не была предоставлена информация для маршрутизации (не
-            определены параметры <code>controller</code> и <code>action</code>), то управление будет
-            передано контроллеру и методу действия, используемым по умолчанию
-            (оба определены в <classname>Zend_Controller_Dispatcher_Abstract</classname>).
-            Для того, чтобы сделать этот пример более полезным, нужно
-            передать действительные контроллер и действие в качестве значений по
-            умолчанию:
-        </para>
+		<para>
+			В этом примере переменная
+			<code>year</code>
+			будет добавлена в объект запроса.
+			Поскольку не была предоставлена информация для маршрутизации (не
+			определены параметры
+			<code>controller</code>
+			и
+			<code>action</code>
+			), то управление будет
+			передано контроллеру и методу действия, используемым по умолчанию
+			(оба определены в
+			<classname>Zend_Controller_Dispatcher_Abstract</classname>
+			).
+			Для того, чтобы сделать этот пример более полезным, нужно
+			передать действительные контроллер и действие в качестве значений по
+			умолчанию:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $route = new Zend_Controller_Router_Route(
     'archive/:year',
     array(
@@ -155,24 +185,28 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('archive', $route);
 ]]></programlisting>
 
-        <para>
-            В результате будет вызван метод <code>showAction()</code> класса
-            <code>ArchiveController</code>.
-        </para>
+		<para>
+			В результате будет вызван метод
+			<code>showAction()</code>
+			класса
+			<code>ArchiveController</code>
+			.
+		</para>
 
-    </sect4>
+	</sect4>
 
-    <sect4 id="zend.controller.router.routes.standard.variable-requirements">
-        <title>Требования к переменным</title>
+	<sect4 id="zend.controller.router.routes.standard.variable-requirements">
+		<title>Требования к переменным</title>
 
-        <para>
-            Можно передать конструктору
-            <classname>Zend_Controller_Router_Route</classname> третий параметр, в котором
-            установлены требования к переменным. Они определяются как части
-            регулярных выражений:
-        </para>
+		<para>
+			Можно передать конструктору
+			<classname>Zend_Controller_Router_Route</classname>
+			третий параметр, в котором
+			установлены требования к переменным. Они определяются как части
+			регулярных выражений:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 $route = new Zend_Controller_Router_Route(
     'archive/:year',
     array(
@@ -185,112 +219,130 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('archive', $route);
 ]]></programlisting>
 
-        <para>
-            В случае маршрута, определенного таким образом, маршрутизатор будет
-            считать URL соответствующим ему только если переменная year
-            содержит числовые данные - например,
-            <code>http://domain.com/archive/2345</code>. URL вида
-            <code>http://example.com/archive/test</code> не будет
-            соответствовать этому маршруту, вместо этого будет произведен
-            переход к следующему маршруту в цепочке.
-        </para>
-    </sect4>
+		<para>
+			В случае маршрута, определенного таким образом, маршрутизатор будет
+			считать URL соответствующим ему только если переменная year
+			содержит числовые данные - например,
+			<code>http://domain.com/archive/2345</code>
+			. URL вида
+			<code>http://example.com/archive/test</code>
+			не будет
+			соответствовать этому маршруту, вместо этого будет произведен
+			переход к следующему маршруту в цепочке.
+		</para>
+	</sect4>
 
-    <sect4 id="zend.controller.router.routes.standard.translated-segments">
-        <title>Переводимые сегменты</title>
+	<sect4 id="zend.controller.router.routes.standard.translated-segments">
+		<title>Переводимые сегменты</title>
 
-        <para>
-            Стандартный маршрут поддерживает переводимые сегменты. Для того,
-            чтобы использовать эту возможность, нужно как минимум указать,
-            какой переводчик (экземпляр <classname>Zend_Translate</classname>)
-            должен использоваться - одним из следующих способов:
-        </para>
+		<para>
+			Стандартный маршрут поддерживает переводимые сегменты. Для того,
+			чтобы использовать эту возможность, нужно как минимум указать,
+			какой переводчик (экземпляр
+			<classname>Zend_Translate</classname>
+			)
+			должен использоваться - одним из следующих способов:
+		</para>
 
-        <itemizedlist>
-            <listitem>
-                <para>
-                    Поместить его в реестр с ключом <code>Zend_Translate</code>.
+		<itemizedlist>
+			<listitem>
+				<para>
+					Поместить его в реестр с ключом
+					<code>Zend_Translate</code>
+					.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Установить через статический метод
+					<classname>Zend_Controller_Router_Route::setDefaultTranslator()</classname>
+					.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Передать его конструктору в качестве четвертого параметра.
                 </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Установить через статический метод
-                    <classname>Zend_Controller_Router_Route::setDefaultTranslator()</classname>.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Передать его конструктору в качестве четвертого параметра.
-                </para>
-            </listitem>
-        </itemizedlist>
+			</listitem>
+		</itemizedlist>
 
-        <para>
-            По умолчанию используется локаль, указанная в экземпляре
-            <classname>Zend_Translate</classname>. Для того, чтобы
-            переопределить ее, вы можете установить ее значение (экземпляр
-            <classname>Zend_Locale</classname> или строка с локалью)
-            одним из следующих способов:
-        </para>
+		<para>
+			По умолчанию используется локаль, указанная в экземпляре
+			<classname>Zend_Translate</classname>
+			. Для того, чтобы
+			переопределить ее, вы можете установить ее значение (экземпляр
+			<classname>Zend_Locale</classname>
+			или строка с локалью)
+			одним из следующих способов:
+		</para>
 
-        <itemizedlist>
-            <listitem>
-                <para>
-                    Поместить ее в реестр с ключом
-                    <classname>Zend_Locale</classname>.
+		<itemizedlist>
+			<listitem>
+				<para>
+					Поместить ее в реестр с ключом
+					<classname>Zend_Locale</classname>
+					.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Установить через статический метод
+					<classname>Zend_Controller_Router_Route::setDefaultLocale()</classname>
+					.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Передать ее конструктору в качестве пятого параметра.
                 </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Установить через статический метод
-                    <classname>Zend_Controller_Router_Route::setDefaultLocale()</classname>.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Передать ее конструктору в качестве пятого параметра.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    Передать ее как параметр <code>@locale</code> методу
-                    <code>assemble()</code>.
-                </para>
-            </listitem>
-        </itemizedlist>
+			</listitem>
+			<listitem>
+				<para>
+					Передать ее как параметр
+					<code>@locale</code>
+					методу
+					<code>assemble()</code>
+					.
+				</para>
+			</listitem>
+		</itemizedlist>
 
-        <para>
-            Переводимые сегменты делятся на два типа. У статических
-            сегментов в начале ставится один символ <code>@</code>,
-            они будут переведены в соответствии текущей локалью при сборке URL
-            и преобразованы обратно в идентификатор сообщения при сопоставлении
-            URL с маршрутом.
-            У динамических сегментов в начале ставится <code>:@</code>.
-            При сборке URL данный параметр будет переведен и результат перевода
-            будет добавлен на его место.
-            При сопоставлении переведенный параметр из URL будет преобразован
-            обратно в идентификатор сообщения.
-        </para>
+		<para>
+			Переводимые сегменты делятся на два типа. У статических
+			сегментов в начале ставится один символ
+			<code>@</code>
+			,
+			они будут переведены в соответствии текущей локалью при сборке URL
+			и преобразованы обратно в идентификатор сообщения при сопоставлении
+			URL с маршрутом.
+			У динамических сегментов в начале ставится
+			<code>:@</code>
+			.
+			При сборке URL данный параметр будет переведен и результат перевода
+			будет добавлен на его место.
+			При сопоставлении переведенный параметр из URL будет преобразован
+			обратно в идентификатор сообщения.
+		</para>
 
-        <note>
-            <title>Идентификаторы сообщений и отдельный языковый файл</title>
-            <para>
-                Может случайно получиться так, что идентификатор сообщения,
-                который вы собираетесь использовать в одном из своих
-                маршрутов, уже используется в ваших скриптах вида или где-то
-                еще.
-                Для того, чтобы иметь полный контроль над вашими
-                URL-ами, следует использовать отдельный языковый файл для
-                сообщений, используемых в маршруте.
+		<note>
+			<title>Идентификаторы сообщений и отдельный языковый файл</title>
+			<para>
+				Может случайно получиться так, что идентификатор сообщения,
+				который вы собираетесь использовать в одном из своих
+				маршрутов, уже используется в ваших скриптах вида или где-то
+				еще.
+				Для того, чтобы иметь полный контроль над вашими
+				URL-ами, следует использовать отдельный языковый файл для
+				сообщений, используемых в маршруте.
             </para>
-        </note>
+		</note>
 
-        <para>
-            Следующий пример демонстрирует наиболее простой способ подготовки
-            стандартного маршрута с использованием переводимых сегментов:
+		<para>
+			Следующий пример демонстрирует наиболее простой способ подготовки
+			стандартного маршрута с использованием переводимых сегментов:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Подготовка переводчика
 $translator = new Zend_Translate('array', array(), 'en');
 $translator->addTranslation(array('archive' => 'archiv',
@@ -306,11 +358,11 @@ $translator->setLocale('en');
 Zend_Controller_Router_Route::setDefaultTranslator($translator);
 ]]></programlisting>
 
-        <para>
-            Этот пример демонстрирует использование статических сегментов:
+		<para>
+			Этот пример демонстрирует использование статических сегментов:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Создание маршрута
 $route = new Zend_Controller_Router_Route(
     '@archive',
@@ -328,13 +380,13 @@ $route->assemble(array());
 $route->assemble(array());
 ]]></programlisting>
 
-        <para>
-            Вы можете использовать динамические сегменты для создания
-            переведенных версий как в случае использования маршрутов основанных
-            на модулях:
+		<para>
+			Вы можете использовать динамические сегменты для создания
+			переведенных версий как в случае использования маршрутов основанных
+			на модулях:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Создание маршрута
 $route = new Zend_Controller_Router_Route(
     ':@controller/:@action/*',
@@ -352,11 +404,11 @@ $route->assemble(array('controller' => 'archive', 'foo' => 'bar'));
 $route->assemble(array('controller' => 'archive', 'foo' => 'bar'));
 ]]></programlisting>
 
-        <para>
-            Вы можете также комбинировать статические и динамические сегменты:
+		<para>
+			Вы можете также комбинировать статические и динамические сегменты:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 // Создание маршрута
 $route = new Zend_Controller_Router_Route(
     '@archive/:@mode/:value',
@@ -377,8 +429,6 @@ $route->assemble(array('mode' => 'month', 'value' => '5'));
 // Сборка URL в немецкой локали: archiv/monat/5
 $route->assemble(array('mode' => 'month', 'value' => '5', '@locale' => 'de'));
 ]]></programlisting>
-    </sect4>
+	</sect4>
 </sect3>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

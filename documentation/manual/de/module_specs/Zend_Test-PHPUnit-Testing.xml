@@ -2,20 +2,25 @@
 <!-- EN-Revision: 22741 -->
 <!-- Reviewed: 22741 -->
 <sect2 id="zend.test.phpunit.testing">
-    <title>Testen eigener Controller und MVC Anwendungen</title>
+	<title>Testen eigener Controller und MVC Anwendungen</title>
 
-    <para>
-        Sobald man sein Bootstrap hat, kann man mit dem Testen beginnen. Testen funktioniert
-        grundsätzlich so, wie man es in einer PHPUnit-TestSuite erwarten würde, mit ein paar kleinen
-        Unterschieden.
+	<para>
+		Sobald man sein Bootstrap hat, kann man mit dem Testen beginnen. Testen
+		funktioniert
+		grundsätzlich so, wie man es in einer PHPUnit-TestSuite erwarten würde, mit ein
+		paar kleinen
+		Unterschieden.
     </para>
 
-    <para>
-        Zuerst muss man eine <acronym>URL</acronym> ausführen, die getestet werden soll, indem die
-        <methodname>dispatch()</methodname>-Methode des Testfalls ausgeführt wird:
-    </para>
+	<para>
+		Zuerst muss man eine
+		<acronym>URL</acronym>
+		ausführen, die getestet werden soll, indem die
+		<methodname>dispatch()</methodname>
+		-Methode des Testfalls ausgeführt wird:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -28,13 +33,14 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-    <para>
-        Manchmal ist es trotzdem nötig, zusätzliche Informationen anzugeben -- 
-        <constant>GET</constant> und POST Variablen, COOKIE Informationen, usw.
-        Man kann die Anfrage mit folgenden Informationen ausstatten:
-    </para>
+	<para>
+		Manchmal ist es trotzdem nötig, zusätzliche Informationen anzugeben --
+		<constant>GET</constant>
+		und POST Variablen, COOKIE Informationen, usw.
+		Man kann die Anfrage mit folgenden Informationen ausstatten:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -75,34 +81,46 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-    <para>
-        Jetzt wurde die Anfrage durchgeführt, es ist also Zeit Zusicherungen zu prüfen.
+	<para>
+		Jetzt wurde die Anfrage durchgeführt, es ist also Zeit Zusicherungen zu
+		prüfen.
     </para>
 
-    <sect3 id="zend.test.phpunit.testing.redirector">
-        <title>Controller Tests und der Redirector Action Helper</title>
+	<sect3 id="zend.test.phpunit.testing.redirector">
+		<title>Controller Tests und der Redirector Action Helper</title>
 
-        <important>
-            <para>
-                Der Redirect Action Helper hat Probleme mit der Anweisung <methodname>exit()</methodname>,
-                wenn die Methode <methodname>gotoAndExit()</methodname> verwendet wird
-                und wird dann natürlich auch einen Test beenden, der für diese Methode läuft. Um die
-                eigene Anwendung testbar zu machen, sollte diese Methode nicht am Redirector
-                verwendet werden.
-            </para>
-        </important>
+		<important>
+			<para>
+				Der Redirect Action Helper hat Probleme mit der Anweisung
+				<methodname>exit()</methodname>
+				,
+				wenn die Methode
+				<methodname>gotoAndExit()</methodname>
+				verwendet wird
+				und wird dann natürlich auch einen Test beenden, der für diese Methode
+				läuft. Um die
+				eigene Anwendung testbar zu machen, sollte diese Methode nicht am
+				Redirector
+				verwendet werden.
+			</para>
+		</important>
 
-        <para>
-            Durch seine Natur führt das Redirector Action Helper Plugin ein Redirect aus und steigt
-            nach diesem aus. Weil man Teile einer Anwendung nicht testen kann, wenn diese
-            Exit-Aufrufe durchführen, deaktiviert
-            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname> den Exit-Teil des
-            Redirectors automatisch, was zu unterschiedlichen Verhaltensweisen in Tests und echter Anwendung
-            führen kann. Um sicherzustellen, dass der Redirect richtig arbeitet, sollte man diesen
-            auf folgendem Weg durchführen:
-        </para>
+		<para>
+			Durch seine Natur führt das Redirector Action Helper Plugin ein
+			Redirect aus und steigt
+			nach diesem aus. Weil man Teile einer Anwendung nicht testen kann, wenn
+			diese
+			Exit-Aufrufe durchführen, deaktiviert
+			<classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
+			den Exit-Teil des
+			Redirectors automatisch, was zu unterschiedlichen Verhaltensweisen in Tests und
+			echter Anwendung
+			führen kann. Um sicherzustellen, dass der Redirect richtig arbeitet, sollte
+			man diesen
+			auf folgendem Weg durchführen:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class MyController extends Zend_Controller_Action
 {
     public function indexAction()
@@ -119,13 +137,17 @@ class MyController extends Zend_Controller_Action
 }
 ]]></programlisting>
 
-        <important>
-            <para>
-                Abhängig von der eigenen Anwendung kann es sein, dass das nicht genug ist, da eine
-                zusätzliche <methodname>preDispatch()</methodname>- oder
-                <methodname>postDispatch()</methodname>-Logik ausgeführt werden könnte. Das kann
-                aktuell mit Zend_Test auf keine vernünftige Weise behandelt werden.
-            </para>
-        </important>
-    </sect3>
+		<important>
+			<para>
+				Abhängig von der eigenen Anwendung kann es sein, dass das nicht
+				genug ist, da eine
+				zusätzliche
+				<methodname>preDispatch()</methodname>
+				- oder
+				<methodname>postDispatch()</methodname>
+				-Logik ausgeführt werden könnte. Das kann
+				aktuell mit Zend_Test auf keine vernünftige Weise behandelt werden.
+			</para>
+		</important>
+	</sect3>
 </sect2>

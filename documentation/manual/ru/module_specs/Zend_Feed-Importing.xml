@@ -1,61 +1,78 @@
 <sect1 id="zend.feed.importing">
-    <title>Импортирование лент с помощью Zend_Feed</title>
-    <para>
-        <code>Zend_Feed</code> позволяет легко получать ленты.
-        Если вам известен URI ленты, то просто используйте метод
-        <code>Zend_Feed::import()</code>:
-    </para>
+	<title>Импортирование лент с помощью Zend_Feed</title>
+	<para>
+		<code>Zend_Feed</code>
+		позволяет легко получать ленты.
+		Если вам известен URI ленты, то просто используйте метод
+		<code>Zend_Feed::import()</code>
+		:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 $feed = Zend_Feed::import('http://feeds.example.com/feedName');
 ]]>
-    </programlisting>
+	</programlisting>
 
-    <para>
-        Еще вы можете использовать <code>Zend_Feed</code> для извлечения содержимого
-        ленты из файла или строки:
-    </para>
+	<para>
+		Еще вы можете использовать
+		<code>Zend_Feed</code>
+		для извлечения содержимого
+		ленты из файла или строки:
+	</para>
 
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 // импортирование ленты из текстового файла
 $feedFromFile = Zend_Feed::importFile('feed.xml');
 
 // импортирование ленты из строки
 $feedFromPHP = Zend_Feed::importString($feedString);
 ]]>
-    </programlisting>
+	</programlisting>
 
-    <para>
-        В примерах выше в случае успеха возвращается
-        объект одного из классов, расширяющих <code>Zend_Feed_Abstract</code>, в
-        зависимости от типа ленты. Если посредством одного из вышеприведенных
-        методов для импортирования была извлечена лента RSS, то будет возвращен объект
-        <code>Zend_Feed_Rss</code>. Если же импортируется лента Atom, то
-        будет возвращен объект <code>Zend_Feed_Atom</code>. Эти методы для импортирования
-        будут бросать исключение <code>Zend_Feed_Exception</code> в случае ошибки,
-        такой, как недоступная для чтения или плохо сформированная лента.
-    </para>
+	<para>
+		В примерах выше в случае успеха возвращается
+		объект одного из классов, расширяющих
+		<code>Zend_Feed_Abstract</code>
+		, в
+		зависимости от типа ленты. Если посредством одного из вышеприведенных
+		методов для импортирования была извлечена лента RSS, то будет возвращен
+		объект
+		<code>Zend_Feed_Rss</code>
+		. Если же импортируется лента Atom, то
+		будет возвращен объект
+		<code>Zend_Feed_Atom</code>
+		. Эти методы для импортирования
+		будут бросать исключение
+		<code>Zend_Feed_Exception</code>
+		в случае ошибки,
+		такой, как недоступная для чтения или плохо сформированная лента.
+	</para>
 
-    <sect2 id="zend.feed.importing.custom">
+	<sect2 id="zend.feed.importing.custom">
 
-        <title>Создание собственных лент</title>
+		<title>Создание собственных лент</title>
 
-        <para>
-            <code>Zend_Feed</code> позволяет разработчикам легко создавать
-            собственные ленты. Вам нужно просто создать массив и импортировать
-            его в Zend_Feed. Импорт из массива может быть выполнен с помощью
-            методов <code>Zend_Feed::importArray()</code> или
-            <code>Zend_Feed::importBuilder()</code>. В последнем методе
-            массив будет сформирован на лету с помощью специального
-            источника данных, реализующего интерфейс
-            <code>Zend_Feed_Builder_Interface</code>.
-        </para>
+		<para>
+			<code>Zend_Feed</code>
+			позволяет разработчикам легко создавать
+			собственные ленты. Вам нужно просто создать массив и импортировать
+			его в Zend_Feed. Импорт из массива может быть выполнен с помощью
+			методов
+			<code>Zend_Feed::importArray()</code>
+			или
+			<code>Zend_Feed::importBuilder()</code>
+			. В последнем методе
+			массив будет сформирован на лету с помощью специального
+			источника данных, реализующего интерфейс
+			<code>Zend_Feed_Builder_Interface</code>
+			.
+		</para>
 
-        <sect3 id="zend.feed.importing.custom.importarray">
+		<sect3 id="zend.feed.importing.custom.importarray">
 
-            <title>Импортирование массива</title>
+			<title>Импортирование массива</title>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 // Импортирование ленты из массива
 $atomFeedFromArray = Zend_Feed::importArray($array);
 
@@ -66,13 +83,13 @@ $atomFeedFromArray = Zend_Feed::importArray($array, 'atom');
 // Импортирование ленты RSS из массива
 $rssFeedFromArray = Zend_Feed::importArray($array, 'rss');
 ]]>
-            </programlisting>
+			</programlisting>
 
-            <para>
-                Формат массива должен соответствовать следующей структуре:
+			<para>
+				Формат массива должен соответствовать следующей структуре:
             </para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 array(
       'title'       => 'заголовок ленты', // обязательный
       'link'        => 'канонический URL ленты', // обязательный
@@ -181,74 +198,90 @@ array(
                              )
        );
 ]]>
-            </programlisting>
+			</programlisting>
 
-            <para>
-                Информационные ресурсы:
-                <itemizedlist>
-                    <listitem>
-                        <para>
-                            Спецификация RSS 2.0: <ulink url="http://blogs.law.harvard.edu/tech/rss">RSS 2.0</ulink>
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Спецификация Atom: <ulink url="http://tools.ietf.org/html/rfc4287">RFC 4287</ulink>
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Спецификация WFW: <ulink url="http://wellformedweb.org/news/wfw_namespace_elements">Well
-                            Formed Web</ulink>
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Спецификация iTunes:
-                            <ulink url="http://www.apple.com/itunes/store/podcaststechspecs.html">Технические спецификации iTunes</ulink>
-                        </para>
-                    </listitem>
-                </itemizedlist>
-            </para>
+			<para>
+				Информационные ресурсы:
+				<itemizedlist>
+					<listitem>
+						<para>
+							Спецификация RSS 2.0:
+							<ulink url="http://blogs.law.harvard.edu/tech/rss">RSS 2.0</ulink>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Спецификация Atom:
+							<ulink url="http://tools.ietf.org/html/rfc4287">RFC 4287</ulink>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Спецификация WFW:
+							<ulink url="http://wellformedweb.org/news/wfw_namespace_elements">Well
+								Formed Web</ulink>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Спецификация iTunes:
+							<ulink url="http://www.apple.com/itunes/store/podcaststechspecs.html">Технические спецификации iTunes</ulink>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
 
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.feed.importing.custom.importbuilder">
+		<sect3 id="zend.feed.importing.custom.importbuilder">
 
-            <title>Импортирование из специального источника данных</title>
+			<title>Импортирование из специального источника данных</title>
 
-            <para>
-                Вы можете создать экземпляр Zeed_Feed из любого источника
-                данных, реализующего интерфейс
-                <code>Zend_Feed_Builder_Interface</code>. Вам нужно только
-                реализовать методы <code>getHeader()</code> и
-                <code>getEntries()</code> для того, чтобы можно было
-                использовать свой объект с
-                <code>Zend_Feed::importBuilder()</code>. Простой пример -
-                вы можете использовать компоновщик
-                <code>Zend_Feed_Builder</code>, который принимает массив в
-                своем конструкторе, выполняет
-                некоторую проверку и затем может использоваться в методе
-                <code>importBuilder()</code>. <code>getEntries()</code>
-                должен возвращать массив экземпляров
-                <code>Zend_Feed_Builder_Entry</code>.
-            </para>
+			<para>
+				Вы можете создать экземпляр Zeed_Feed из любого источника
+				данных, реализующего интерфейс
+				<code>Zend_Feed_Builder_Interface</code>
+				. Вам нужно только
+				реализовать методы
+				<code>getHeader()</code>
+				и
+				<code>getEntries()</code>
+				для того, чтобы можно было
+				использовать свой объект с
+				<code>Zend_Feed::importBuilder()</code>
+				. Простой пример -
+				вы можете использовать компоновщик
+				<code>Zend_Feed_Builder</code>
+				, который принимает массив в
+				своем конструкторе, выполняет
+				некоторую проверку и затем может использоваться в методе
+				<code>importBuilder()</code>
+				.
+				<code>getEntries()</code>
+				должен возвращать массив экземпляров
+				<code>Zend_Feed_Builder_Entry</code>
+				.
+			</para>
 
-            <note>
-                <para>
-                    <code>Zend_Feed_Builder</code> служит только в качестве
-                    конкретной реализации для демонстрации использования.
-                    Пользователи должны создавать свои классы, реализующие
-                    интерфейс <code>Zend_Feed_Builder_Interface</code>.
-                </para>
-            </note>
+			<note>
+				<para>
+					<code>Zend_Feed_Builder</code>
+					служит только в качестве
+					конкретной реализации для демонстрации использования.
+					Пользователи должны создавать свои классы, реализующие
+					интерфейс
+					<code>Zend_Feed_Builder_Interface</code>
+					.
+				</para>
+			</note>
 
-            <para>
-                Ниже приведен пример использования
-                <code>Zend_Feed::importBuilder()</code>:
-            </para>
+			<para>
+				Ниже приведен пример использования
+				<code>Zend_Feed::importBuilder()</code>
+				:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 // Импортирование ленты из специального созданного ресурса-компоновщика
 $atomFeedFromArray =
     Zend_Feed::importBuilder(new Zend_Feed_Builder($array));
@@ -262,21 +295,25 @@ $atomFeedFromArray =
 $rssFeedFromArray =
     Zend_Feed::importArray(new Zend_Feed_Builder($array), 'rss');
 ]]>
-            </programlisting>
+			</programlisting>
 
-        </sect3>
+		</sect3>
 
-        <sect3 id="zend.feed.importing.custom.dump">
+		<sect3 id="zend.feed.importing.custom.dump">
 
-            <title>Дапм содержимого ленты</title>
+			<title>Дапм содержимого ленты</title>
 
-            <para>
-                Для того, чтобы произвести дамп экземпляра
-                <code>Zend_Feed_Abstract</code>, вы можете использовать методы
-                <code>send()</code> или <code>saveXml()</code>.
-            </para>
+			<para>
+				Для того, чтобы произвести дамп экземпляра
+				<code>Zend_Feed_Abstract</code>
+				, вы можете использовать методы
+				<code>send()</code>
+				или
+				<code>saveXml()</code>
+				.
+			</para>
 
-            <programlisting language="php">
+			<programlisting language="php">
 <![CDATA[
 assert($feed instanceof Zend_Feed_Abstract);
 
@@ -286,13 +323,11 @@ print $feed->saveXML();
 // отправка HTTP-заголовков и вывод дампа ленты
 $feed->send();
 ]]>
-            </programlisting>
+			</programlisting>
 
-        </sect3>
+		</sect3>
 
-    </sect2>
+	</sect2>
 
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

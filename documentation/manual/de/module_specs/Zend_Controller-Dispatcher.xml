@@ -2,39 +2,56 @@
 <!-- EN-Revision: 16658 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.controller.dispatcher">
-    <title>Der Dispatcher</title>
+	<title>Der Dispatcher</title>
 
-    <sect2 id="zend.controller.dispatcher.overview">
-        <title>Überblick</title>
+	<sect2 id="zend.controller.dispatcher.overview">
+		<title>Überblick</title>
 
-        <para>
-            Dispatching ist der Prozess, das Request Objekt
-            <classname>Zend_Controller_Request_Abstract</classname> zu übernehmen, die dort
-            enthaltenen Modul, Controller und Aktion Namen sowie die optionalen Parameter zu
-            extrahieren und dann den Controller zu instanzieren und die Aktion dieses Controllers
-            aufzurufen. Wenn kein Modul, kein Controller oder keine Aktion gefunden wurde, werden
-            dafür Standardwerte verwendet.
-            <classname>Zend_Controller_Dispatcher_Standard</classname> legt
-            <emphasis>index</emphasis> für jede der Controller und Action Standardwerte fest und
-            <emphasis>default</emphasis> für den Standardwert des Moduls, erlaubt dem Entwickler
-            aber auch, diese durch Verwendung der <methodname>setDefaultController()</methodname>,
-            <methodname>setDefaultAction()</methodname> und
-            <methodname>setDefaultModule()</methodname> Methoden zu verändern.
-        </para>
+		<para>
+			Dispatching ist der Prozess, das Request Objekt
+			<classname>Zend_Controller_Request_Abstract</classname>
+			zu übernehmen, die dort
+			enthaltenen Modul, Controller und Aktion Namen sowie die optionalen Parameter zu
+			extrahieren und dann den Controller zu instanzieren und die Aktion
+			dieses Controllers
+			aufzurufen. Wenn kein Modul, kein Controller oder keine Aktion gefunden wurde,
+			werden
+			dafür Standardwerte verwendet.
+			<classname>Zend_Controller_Dispatcher_Standard</classname>
+			legt
+			<emphasis>index</emphasis>
+			für jede der Controller und Action Standardwerte fest und
+			<emphasis>default</emphasis>
+			für den Standardwert des Moduls, erlaubt dem Entwickler
+			aber auch, diese durch Verwendung der
+			<methodname>setDefaultController()</methodname>
+			,
+			<methodname>setDefaultAction()</methodname>
+			und
+			<methodname>setDefaultModule()</methodname>
+			Methoden zu verändern.
+		</para>
 
-        <note>
-            <title>Standard Module</title>
+		<note>
+			<title>Standard Module</title>
 
-            <para>
-                Bei der Erstellung von modularen Anwendungen kann es sein das man auch einen
-                Namespace für eigene Standard Module haben will (die Standardkonfiguration ist, dass
-                das Standardmodul <emphasis>keinen</emphasis> Namensraum hat). Ab 1.5.0, kann das
-                durch Spezifizierung von <property>prefixDefaultModule</property> auf
-                <constant>TRUE</constant>, entweder im Front Controller oder im Dispatcher, getan
-                werden:
-            </para>
+			<para>
+				Bei der Erstellung von modularen Anwendungen kann es sein das man
+				auch einen
+				Namespace für eigene Standard Module haben will (die Standardkonfiguration
+				ist, dass
+				das Standardmodul
+				<emphasis>keinen</emphasis>
+				Namensraum hat). Ab 1.5.0, kann das
+				durch Spezifizierung von
+				<property>prefixDefaultModule</property>
+				auf
+				<constant>TRUE</constant>
+				, entweder im Front Controller oder im Dispatcher, getan
+				werden:
+			</para>
 
-            <programlisting language="php"><![CDATA[
+			<programlisting language="php"><![CDATA[
 // Im Front Controller:
 $front->setParam('prefixDefaultModule', true);
 
@@ -42,37 +59,51 @@ $front->setParam('prefixDefaultModule', true);
 $dispatcher->setParam('prefixDefaultModule', true);
 ]]></programlisting>
 
-            <para>
-                Das erlaubt es existierende Module als Standardmodule für eine Anwendung
-                wiederzuverwenden.
+			<para>
+				Das erlaubt es existierende Module als Standardmodule für eine
+				Anwendung
+				wiederzuverwenden.
             </para>
-        </note>
+		</note>
 
-        <para>
-            Dispatching läuft innerhalb einer Schleife im Front Controller ab. Vor dem Dispatching
-            fragt der Front Controller den Request ab, um benutzerspezifizierte Werte für Modul,
-            Controller, Aktion und optionale Parameter zu finden. Dann startet er die Dispatch
-            Schleife, um die Anfrage zu verarbeiten.
+		<para>
+			Dispatching läuft innerhalb einer Schleife im Front Controller ab. Vor dem
+			Dispatching
+			fragt der Front Controller den Request ab, um benutzerspezifizierte Werte
+			für Modul,
+			Controller, Aktion und optionale Parameter zu finden. Dann startet er die
+			Dispatch
+			Schleife, um die Anfrage zu verarbeiten.
         </para>
 
-        <para>
-            Zu Beginn jeden Durchlaufes setzt er im Request Objekt einen Schalter, der angibt, dass
-            die Aktion verarbeitet worden ist. Wenn eine Aktion oder ein pre- oder postDispatch
-            Plugin diesen Schalter zurücksetzt, wird die Dispatch Schleife fortgesetzt und
-            versucht, die neue Anfrage zu verarbeiten. Durch Ändern des Controllers und / oder der
-            Aktion im Request Objekt und Zuürcksetzen des Verarbeitungsstatus, kann der Entwickler
-            eine zu durchlaufende Anfragekette definieren.
+		<para>
+			Zu Beginn jeden Durchlaufes setzt er im Request Objekt einen Schalter,
+			der angibt, dass
+			die Aktion verarbeitet worden ist. Wenn eine Aktion oder ein pre- oder
+			postDispatch
+			Plugin diesen Schalter zurücksetzt, wird die Dispatch Schleife fortgesetzt
+			und
+			versucht, die neue Anfrage zu verarbeiten. Durch Ändern des Controllers und /
+			oder der
+			Aktion im Request Objekt und Zuürcksetzen des Verarbeitungsstatus, kann der
+			Entwickler
+			eine zu durchlaufende Anfragekette definieren.
         </para>
 
-        <para>
-            Die Controller Methode, die solch eine Verarbeitung kontrolliert lautet
-            <methodname>_forward()</methodname>; rufe diese Methode von einer beliebigen
-            <methodname>preDispatch()</methodname>, <methodname>postDispatch()</methodname>
-            oder Aktionsmethode auf und übergebe Aktion, Controller, Modul und beliebige optionale
-            Parameter, die du zur neuen Aktion übersenden möchtest:
-        </para>
+		<para>
+			Die Controller Methode, die solch eine Verarbeitung kontrolliert
+			lautet
+			<methodname>_forward()</methodname>
+			; rufe diese Methode von einer beliebigen
+			<methodname>preDispatch()</methodname>
+			,
+			<methodname>postDispatch()</methodname>
+			oder Aktionsmethode auf und übergebe Aktion, Controller, Modul und
+			beliebige optionale
+			Parameter, die du zur neuen Aktion übersenden möchtest:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 public function fooAction()
 {
     // weiterleiten zu einer anderen Aktion im aktuellen Controller und Modul:
@@ -93,31 +124,39 @@ public function bazAction()
     $this->_forward('baz', 'bar', 'foo', array('baz' => 'bogus'));
 }
 ]]></programlisting>
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.controller.dispatcher.subclassing">
-        <title>Erben vom Dispatcher</title>
+	<sect2 id="zend.controller.dispatcher.subclassing">
+		<title>Erben vom Dispatcher</title>
 
-        <para>
-            <classname>Zend_Controller_Front</classname> ruft zuerst den Router auf, um die erste
-            Aktion für den Request zu ermitteln. Danach startet es die Dispatch Schleife, welche
-            den Dispatcher aufruft, um die Aktion zu verarbeiten.
-        </para>
+		<para>
+			<classname>Zend_Controller_Front</classname>
+			ruft zuerst den Router auf, um die erste
+			Aktion für den Request zu ermitteln. Danach startet es die Dispatch
+			Schleife, welche
+			den Dispatcher aufruft, um die Aktion zu verarbeiten.
+		</para>
 
-        <para>
-            Der Dispatcher benötigt eine Vielzahl von Daten um seine Arbeit zu erledigen - er muß
-            wissen wie die Namen von Controller und Aktionen formatiert werden sollen, wo nach
-            Dateien der Controller Klassen gesucht wird, ob ein übergebener Modulname gültig ist
-            oder nicht, und eine <acronym>API</acronym> um festzustellen ob eine gegebene Anfrage,
-            basierend auf den anderen vorhandenen Informationen, bearbeitbar ist.
-        </para>
+		<para>
+			Der Dispatcher benötigt eine Vielzahl von Daten um seine Arbeit zu
+			erledigen - er muß
+			wissen wie die Namen von Controller und Aktionen formatiert werden sollen,
+			wo nach
+			Dateien der Controller Klassen gesucht wird, ob ein übergebener Modulname
+			gültig ist
+			oder nicht, und eine
+			<acronym>API</acronym>
+			um festzustellen ob eine gegebene Anfrage,
+			basierend auf den anderen vorhandenen Informationen, bearbeitbar ist.
+		</para>
 
-        <para>
-            <classname>Zend_Controller_Dispatcher_Interface</classname> definiert die folgenden
-            Methoden die für jede Dispatcher Implementierung benötigt werden:
-        </para>
+		<para>
+			<classname>Zend_Controller_Dispatcher_Interface</classname>
+			definiert die folgenden
+			Methoden die für jede Dispatcher Implementierung benötigt werden:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 interface Zend_Controller_Dispatcher_Interface
 {
     /**
@@ -270,22 +309,26 @@ interface Zend_Controller_Dispatcher_Interface
 }
 ]]></programlisting>
 
-        <para>
-            In den meisten Fällen sollte trotzdem einfach die abstrakte Klasse
-            <classname>Zend_Controller_Dispatcher_Abstract</classname> erweitert werden, und welcher
-            jede davon schon definiert wurde, oder
-            <classname>Zend_Controller_Dispatcher_Standard</classname> um Funktionalitäten des
-            Standard Dispatchers zu modifizieren.
-        </para>
+		<para>
+			In den meisten Fällen sollte trotzdem einfach die abstrakte Klasse
+			<classname>Zend_Controller_Dispatcher_Abstract</classname>
+			erweitert werden, und welcher
+			jede davon schon definiert wurde, oder
+			<classname>Zend_Controller_Dispatcher_Standard</classname>
+			um Funktionalitäten des
+			Standard Dispatchers zu modifizieren.
+		</para>
 
-        <para>
-            Mögliche Gründe um den Dispatcher zu erweitern beinhaltet den Wunsch eine anderes
-            Klassen oder Methoden Namensschema in den eigenen Aktion Controllern zu verwenden, oder
-            den Wunsch ein anderes Verarbeitungs Paradigma wie das Verarbeiten zu Aktionsdateien
-            unter den Controller Verzeichnissen (statt auf Klassen Methoden zu verarbeiten).
+		<para>
+			Mögliche Gründe um den Dispatcher zu erweitern beinhaltet den Wunsch eine
+			anderes
+			Klassen oder Methoden Namensschema in den eigenen Aktion Controllern zu
+			verwenden, oder
+			den Wunsch ein anderes Verarbeitungs Paradigma wie das Verarbeiten zu
+			Aktionsdateien
+			unter den Controller Verzeichnissen (statt auf Klassen Methoden zu
+			verarbeiten).
         </para>
-    </sect2>
+	</sect2>
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

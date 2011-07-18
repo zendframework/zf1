@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect1 id="zend.session.savehandler.dbtable">
-    <title>Zend_Session_SaveHandler_DbTable</title>
+	<title>Zend_Session_SaveHandler_DbTable</title>
 
-    <para>
-        The basic setup for <classname>Zend_Session_SaveHandler_DbTable</classname> must at least
-        have four columns, denoted in the config array or <classname>Zend_Config</classname> object:
-        primary, which is the primary key and defaults to just the session
-        id which by default is a string of length 32;
-        modified, which is the unix timestamp of the last modified date;
-        lifetime, which is the lifetime of the session
-        (<command>modified + lifetime > time();</command>);
-        and data, which is the serialized data stored in the session
-    </para>
+	<para>
+		The basic setup for
+		<classname>Zend_Session_SaveHandler_DbTable</classname>
+		must at least
+		have four columns, denoted in the config array or
+		<classname>Zend_Config</classname>
+		object:
+		primary, which is the primary key and defaults to just the session
+		id which by default is a string of length 32;
+		modified, which is the unix timestamp of the last modified date;
+		lifetime, which is the lifetime of the session
+		(
+		<command>modified + lifetime > time();</command>
+		);
+		and data, which is the serialized data stored in the session
+	</para>
 
-    <example id="zend.session.savehandler.dbtable.basic">
-            <title>Basic Setup</title>
+	<example id="zend.session.savehandler.dbtable.basic">
+		<title>Basic Setup</title>
 
-            <programlisting language="SQL"><![CDATA[
+		<programlisting language="SQL"><![CDATA[
 CREATE TABLE `session` (
   `id` char(32),
   `modified` int,
@@ -27,7 +33,7 @@ CREATE TABLE `session` (
 );
 ]]></programlisting>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 //get your database connection ready
 $db = Zend_Db::factory('Pdo_Mysql', array(
     'host'        =>'example.com',
@@ -56,17 +62,18 @@ Zend_Session::start();
 
 //now you can use Zend_Session like any other time
 ]]></programlisting>
-    </example>
+	</example>
 
-    <para>
-        You can also use Multiple Columns in your primary key for
-        <classname>Zend_Session_SaveHandler_DbTable</classname>.
-    </para>
+	<para>
+		You can also use Multiple Columns in your primary key for
+		<classname>Zend_Session_SaveHandler_DbTable</classname>
+		.
+	</para>
 
-    <example id="zend.session.savehandler.dbtable.multi-column-key">
-        <title>Using a Multi-Column Primary Key</title>
+	<example id="zend.session.savehandler.dbtable.multi-column-key">
+		<title>Using a Multi-Column Primary Key</title>
 
-        <programlisting language="SQL"><![CDATA[
+		<programlisting language="SQL"><![CDATA[
 CREATE TABLE `session` (
     `session_id` char(32) NOT NULL,
     `save_path` varchar(32) NOT NULL,
@@ -78,7 +85,7 @@ CREATE TABLE `session` (
 );
 ]]></programlisting>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 //setup your DB connection like before
 //NOTE: this config is also passed to Zend_Db_Table so anything specific
 //to the table can be put in the config as well
@@ -109,8 +116,6 @@ Zend_Session::start();
 
 //use Zend_Session as normal
 ]]></programlisting>
-    </example>
+	</example>
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

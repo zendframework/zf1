@@ -1,26 +1,31 @@
 <sect1 id="zend.view.scripts">
 
-    <title>جزء الـ View</title>
+	<title>جزء الـ View</title>
 
-    <para>
-        بمجرد إنتهاء الـ controller خاصتك من عملية نَسب المتغيرات إلى نسخة Zend_View
-        و إستدعاء ()render , يقوم Zend_View بجلب محتويات ملف الـ view و ينفذها داخل
-        المدى "scope" الخاص بنسخة الـ Zend_View , لذلك داخل أكواد الـ view خاصتك
-        تكون this$ تشير إلى نسخة الـ Zend_View نفسها .
+	<para>
+		بمجرد إنتهاء الـ controller خاصتك من عملية نَسب المتغيرات إلى نسخة
+		Zend_View
+		و إستدعاء ()render , يقوم Zend_View بجلب محتويات ملف الـ view و ينفذها
+		داخل
+		المدى "scope" الخاص بنسخة الـ Zend_View , لذلك داخل أكواد الـ view خاصتك
+		تكون this$ تشير إلى نسخة الـ Zend_View نفسها .
     </para>
 
-    <para>
-        المتغيرات التى تم نسبها إلى الـ view من قبل الـ controller يتم الإشارة إليها على انها instance properties
-        (أى properties تنتمى للنسخة فقط) , على سبيل المثال : إن قام الـ controller بنسب متغير بأسم
-        'something' , يمكنك الأشار إليه داخل كود الـ view كـ this->something$ ,
-        (هذا يسمح لك بمعرفة أى المتغيرات تم نسبها إلى النسخة و أى المتغيرات داخلية فى كود الـ view نفسه).
+	<para>
+		المتغيرات التى تم نسبها إلى الـ view من قبل الـ controller يتم الإشارة إليها
+		على انها instance properties
+		(أى properties تنتمى للنسخة فقط) , على سبيل المثال : إن قام الـ
+		controller بنسب متغير بأسم
+		'something' , يمكنك الأشار إليه داخل كود الـ view كـ this->something$ ,
+		(هذا يسمح لك بمعرفة أى المتغيرات تم نسبها إلى النسخة و أى المتغيرات داخلية
+		فى كود الـ view نفسه).
     </para>
 
-    <para>
-        لنتذكر من جديد, ها هو مثال كود الـ view من فصل "مقدمة الـ Zend_view" .
+	<para>
+		لنتذكر من جديد, ها هو مثال كود الـ view من فصل "مقدمة الـ Zend_view" .
     </para>
 
-    <programlisting role="php"><![CDATA[<?php if ($this->books): ?>
+	<programlisting role="php"><![CDATA[<?php if ($this->books): ?>
 
     <!-- A table of some books. -->
     <table>
@@ -43,42 +48,51 @@
     <p>There are no books to display.</p>
 
 <?php endif; ?>]]>
-    </programlisting>
+	</programlisting>
 
-    <sect2 id="zend.view.scripts.escaping">
+	<sect2 id="zend.view.scripts.escaping">
 
-        <title>تجاهل "escaping" المخرجات</title>
+		<title>تجاهل "escaping" المخرجات</title>
 
-        <para>
-            واحدة من أهم المهام التى يجب تنفيذها فى كود الـ view هى أن تتأكد من أن المخرجات قد تم
-            عمل تجاهل لها أو escaping دائماً , و هذا أهم من أشياء كثيرة أخرى , هذا يساعد فى تجنب
-            هجمات الـ cross-site scripting , فإن لم تكن تستخدم دالة أو method أو مساعد "helper"
-            يقوم بعملية التجاهل "escaping" بنفسه , فيجب عليك أنت أن تقوم بعمل تجاهل لمحتويات متغيراتك
-            قبل إخراجهم دائماً .
+		<para>
+			واحدة من أهم المهام التى يجب تنفيذها فى كود الـ view هى أن تتأكد من أن
+			المخرجات قد تم
+			عمل تجاهل لها أو escaping دائماً , و هذا أهم من أشياء كثيرة أخرى , هذا
+			يساعد فى تجنب
+			هجمات الـ cross-site scripting , فإن لم تكن تستخدم دالة أو method أو مساعد
+			"helper"
+			يقوم بعملية التجاهل "escaping" بنفسه , فيجب عليك أنت أن تقوم بعمل تجاهل
+			لمحتويات متغيراتك
+			قبل إخراجهم دائماً .
         </para>
 
-        <para>
-            Zend_View يأتى مع method يسمى ()escape و هو الذى يقوم لك بعملية التجاهل للمخرجات.
+		<para>
+			Zend_View يأتى مع method يسمى ()escape و هو الذى يقوم لك بعملية التجاهل
+			للمخرجات.
         </para>
 
-        <programlisting role="php"><![CDATA[<?php
+		<programlisting role="php"><![CDATA[<?php
 // bad view-script practice:
 echo $this->variable;
 
 // good view-script practice:
 echo $this->escape($this->variable);
 ?>]]>
-        </programlisting>
+		</programlisting>
 
-        <para>
-            الأعدادات الأساسية للـ method المسمى ()escape هى أن يعتمد على دالة لغة PHP المسمى
-            ()htmlspecialchars لعمل تجاهل , لكن إعتماداً على بيئة عمل تطبيقك , ربما تود أن تتم عملية
-            التجاهل للمخرجات بطريقة أخرى , إستخدم الـ method المسمى ()setEscape و أنت فى مستوى
-            الـ controller لتخبر Zend_View عن ما الذى يجب إستدعائه (callback) عند تنفيذ عملية
-             تجاهل المخرجات.
+		<para>
+			الأعدادات الأساسية للـ method المسمى ()escape هى أن يعتمد على دالة لغة PHP
+			المسمى
+			()htmlspecialchars لعمل تجاهل , لكن إعتماداً على بيئة عمل تطبيقك , ربما تود أن تتم
+			عملية
+			التجاهل للمخرجات بطريقة أخرى , إستخدم الـ method المسمى ()setEscape و أنت فى
+			مستوى
+			الـ controller لتخبر Zend_View عن ما الذى يجب إستدعائه (callback) عند
+			تنفيذ عملية
+			تجاهل المخرجات.
         </para>
 
-        <programlisting role="php"><![CDATA[<?php
+		<programlisting role="php"><![CDATA[<?php
 // create a Zend_View instance
 $view = new Zend_View();
 
@@ -95,28 +109,29 @@ $view->setEscape(array($obj, 'methodName'));
 // and then render your view
 echo $view->render(...);
 ?>]]>
-        </programlisting>
+		</programlisting>
 
-        <para>
-            الدالة أو الـ method الذى سيتم عمل callback له يجب أن يستلم القيمة التى سيقوم بتجاهلها
-            فى البراميتر الأول , و كل البراميترات الأخرى يجب أن تكون أختيارية.
+		<para>
+			الدالة أو الـ method الذى سيتم عمل callback له يجب أن يستلم القيمة التى
+			سيقوم بتجاهلها
+			فى البراميتر الأول , و كل البراميترات الأخرى يجب أن تكون أختيارية.
         </para>
 
-    </sect2>
+	</sect2>
 
-    <sect2 id="zend.view.scripts.templates">
+	<sect2 id="zend.view.scripts.templates">
 
-        <title>أنظمة القوالب</title>
+		<title>أنظمة القوالب</title>
 
-        <para>
-            أيضاً لغة PHP نفسها عبارة عن نظام قوالب قوى, لكن بعض المطورين يرى
-            أنها قوية جدا أو معقدة بالنسبة إلى المصممين الذين سيستخدمون القوالب.
-            لذلك , كود الـ view من الممكن إستخدامه لإنشاء نسخ أو معالجة
-            كائنات قوالب منفصلة , مثل قوالب PHPLIB-style , كود الـ view
-            لهذا النوع من النشاطات من الممكن أن بيدو مثل هذا :
+		<para>
+			أيضاً لغة PHP نفسها عبارة عن نظام قوالب قوى, لكن بعض المطورين يرى
+			أنها قوية جدا أو معقدة بالنسبة إلى المصممين الذين سيستخدمون القوالب.
+			لذلك , كود الـ view من الممكن إستخدامه لإنشاء نسخ أو معالجة
+			كائنات قوالب منفصلة , مثل قوالب PHPLIB-style , كود الـ view
+			لهذا النوع من النشاطات من الممكن أن بيدو مثل هذا :
         </para>
 
-        <programlisting role="php"><![CDATA[<?php
+		<programlisting role="php"><![CDATA[<?php
 include_once 'template.inc';
 $tpl = new Template();
 
@@ -138,13 +153,13 @@ if ($this->books) {
     $tpl->pparse("output", "nobooks");
 }
 ?>]]>
-        </programlisting>
+		</programlisting>
 
-        <para>
-            و هذه هى الملفات الأخرى ذات الصلة المفروض وجودها :
+		<para>
+			و هذه هى الملفات الأخرى ذات الصلة المفروض وجودها :
         </para>
 
-        <programlisting role="html"><![CDATA[
+		<programlisting role="html"><![CDATA[
 <!-- booklist.tpl -->
 <table>
     <tr>
@@ -163,11 +178,9 @@ if ($this->books) {
 <!-- nobooks.tpl -->
 <p>There are no books to display.</p>
 ]]>
-        </programlisting>
+		</programlisting>
 
-    </sect2>
+	</sect2>
 
 </sect1>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

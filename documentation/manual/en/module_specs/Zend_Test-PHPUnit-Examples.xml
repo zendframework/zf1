@@ -1,91 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
 <sect2 id="zend.test.phpunit.examples">
-    <title>Examples</title>
+	<title>Examples</title>
 
-    <para>
-        Knowing how to setup your testing infrastructure and how to make
-        assertions is only half the battle; now it's time to start looking at
-        some actual testing scenarios to see how you can leverage them.
+	<para>
+		Knowing how to setup your testing infrastructure and how to make
+		assertions is only half the battle; now it's time to start looking at
+		some actual testing scenarios to see how you can leverage them.
     </para>
 
-    <example id="zend.test.phpunit.examples.userController">
-        <title>Testing a UserController</title>
+	<example id="zend.test.phpunit.examples.userController">
+		<title>Testing a UserController</title>
 
-        <para>
-            Let's consider a standard task for a website: authenticating and registering users. In
-            our example, we'll define a UserController for handling this, and have the following
-            requirements:
+		<para>
+			Let's consider a standard task for a website: authenticating and
+			registering users. In
+			our example, we'll define a UserController for handling this, and have
+			the following
+			requirements:
         </para>
 
-        <itemizedlist>
-            <listitem>
-                <para>
-                    If a user is not authenticated, they will always be redirected
-                    to the login page of the controller, regardless of the action
-                    specified.
+		<itemizedlist>
+			<listitem>
+				<para>
+					If a user is not authenticated, they will always be redirected
+					to the login page of the controller, regardless of the action
+					specified.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    The login form page will show both the login form and the
-                    registration form.
+			<listitem>
+				<para>
+					The login form page will show both the login form and the
+					registration form.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    Providing invalid credentials should result in returning to the login form.
+			<listitem>
+				<para>
+					Providing invalid credentials should result in returning to the login form.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    Valid credentials should result in redirecting to the user profile page.
+			<listitem>
+				<para>
+					Valid credentials should result in redirecting to the user profile page.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    The profile page should be customized to contain the user's username.
+			<listitem>
+				<para>
+					The profile page should be customized to contain the user's username.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    Authenticated users who visit the login page should be
-                    redirected to their profile page.
+			<listitem>
+				<para>
+					Authenticated users who visit the login page should be
+					redirected to their profile page.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    On logout, a user should be redirected to the login page.
+			<listitem>
+				<para>
+					On logout, a user should be redirected to the login page.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    With invalid data, registration should fail.
+			<listitem>
+				<para>
+					With invalid data, registration should fail.
                 </para>
-            </listitem>
-        </itemizedlist>
+			</listitem>
+		</itemizedlist>
 
-        <para>
-            We could, and should define further tests, but these will do for
-            now.
+		<para>
+			We could, and should define further tests, but these will do for
+			now.
         </para>
 
-        <para>
-            For our application, we will define a plugin, 'Initialize', that
-            runs at <methodname>routeStartup()</methodname>. This allows us to encapsulate
-            our bootstrap in an OOP interface, which also provides an easy way
-            to provide a callback. Let's look at the basics of this class
-            first:
-        </para>
+		<para>
+			For our application, we will define a plugin, 'Initialize', that
+			runs at
+			<methodname>routeStartup()</methodname>
+			. This allows us to encapsulate
+			our bootstrap in an OOP interface, which also provides an easy way
+			to provide a callback. Let's look at the basics of this class
+			first:
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class Bugapp_Plugin_Initialize extends Zend_Controller_Plugin_Abstract
 {
     /**
@@ -149,11 +153,11 @@ class Bugapp_Plugin_Initialize extends Zend_Controller_Plugin_Abstract
 }
 ]]></programlisting>
 
-        <para>
-            This allows us to create a bootstrap callback like the following:
+		<para>
+			This allows us to create a bootstrap callback like the following:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     public function appBootstrap()
@@ -174,16 +178,19 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Once we have that in place, we can write our tests. However, what
-            about those tests that require a user is logged in? The easy
-            solution is to use our application logic to do so... and fudge a
-            little by using the <methodname>resetRequest()</methodname> and
-            <methodname>resetResponse()</methodname> methods, which will allow us to
-            dispatch another request.
-        </para>
+		<para>
+			Once we have that in place, we can write our tests. However, what
+			about those tests that require a user is logged in? The easy
+			solution is to use our application logic to do so... and fudge a
+			little by using the
+			<methodname>resetRequest()</methodname>
+			and
+			<methodname>resetResponse()</methodname>
+			methods, which will allow us to
+			dispatch another request.
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -210,11 +217,11 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Now let's write tests:
+		<para>
+			Now let's write tests:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     // ...
@@ -294,37 +301,39 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Notice that these are terse, and, for the most part, don't look for
-            actual content. Instead, they look for artifacts within the
-            response -- response codes and headers, and DOM nodes. This allows
-            you to verify that the structure is as expected -- preventing your
-            tests from choking every time new content is added to the site.
+		<para>
+			Notice that these are terse, and, for the most part, don't look for
+			actual content. Instead, they look for artifacts within the
+			response -- response codes and headers, and DOM nodes. This allows
+			you to verify that the structure is as expected -- preventing your
+			tests from choking every time new content is added to the site.
         </para>
 
-        <para>
-            Also notice that we use the structure of the document in our tests.
-            For instance, in the final test, we look for a form that has a node
-            with the class of "errors"; this allows us to test merely for the
-            presence of form validation errors, and not worry about what
-            specific errors might have been thrown.
+		<para>
+			Also notice that we use the structure of the document in our tests.
+			For instance, in the final test, we look for a form that has a node
+			with the class of "errors"; this allows us to test merely for the
+			presence of form validation errors, and not worry about what
+			specific errors might have been thrown.
         </para>
 
-        <para>
-            This application <emphasis>may</emphasis> utilize a database. If
-            so, you will probably need some scaffolding to ensure that the
-            database is in a pristine, testable configuration at the beginning
-            of each test. PHPUnit already provides functionality for doing so;
-            <ulink
-                url="http://www.phpunit.de/manual/3.4/en/database.html">read
-                about it in the PHPUnit documentation</ulink>. We recommend
-            using a separate database for testing versus production, and in
-            particular recommend using either a SQLite file or in-memory
-            database, as both options perform very well, do not require a
-            separate server, and can utilize most <acronym>SQL</acronym> syntax.
-        </para>
-    </example>
+		<para>
+			This application
+			<emphasis>may</emphasis>
+			utilize a database. If
+			so, you will probably need some scaffolding to ensure that the
+			database is in a pristine, testable configuration at the beginning
+			of each test. PHPUnit already provides functionality for doing so;
+			<ulink url="http://www.phpunit.de/manual/3.4/en/database.html">read
+				about it in the PHPUnit documentation</ulink>
+			. We recommend
+			using a separate database for testing versus production, and in
+			particular recommend using either a SQLite file or in-memory
+			database, as both options perform very well, do not require a
+			separate server, and can utilize most
+			<acronym>SQL</acronym>
+			syntax.
+		</para>
+	</example>
 </sect2>
-<!--
-vim:se ts=4 sw=4 et:
--->
+<!-- vim:se ts=4 sw=4 et: -->

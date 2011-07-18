@@ -2,33 +2,41 @@
 <!-- EN-Revision: 22084 -->
 <!-- Reviewed: no -->
 <sect2 id="zend.test.phpunit.db.quickstart">
-    <title>Quickstart</title>
+	<title>Quickstart</title>
 
-    <sect3 id="zend.test.phpunit.db.quickstart.testcase">
-        <title>Configurer un cas de tests Database</title>
+	<sect3 id="zend.test.phpunit.db.quickstart.testcase">
+		<title>Configurer un cas de tests Database</title>
 
-        <para>
-            Nous allons à présent écrire des tests pour la base de données Bug de la
-            documentation sur <classname>Zend_Db_Table</classname>. D'abord, nous testons
-            qu'insérer un nouveau bug est bien sauvegardé en base. Nous devons créer un cas
-            de tests sous forme de classe étendant
-            <classname>Zend_Test_PHPUnit_DatabaseTestCase</classname>. Cette classe étend elle-
-            même PHPUnit Database Extension, qui étend alors
-            <classname>PHPUnit_Framework_TestCase</classname>. Un cas de test pour base de données
-            contient deux méthodes abstraites à définir, une concernant la connexion à la base et
-            l'autre concernant les données à utiliser comme source pour les tests.
-        </para>
+		<para>
+			Nous allons à présent écrire des tests pour la base de données Bug de
+			la
+			documentation sur
+			<classname>Zend_Db_Table</classname>
+			. D'abord, nous testons
+			qu'insérer un nouveau bug est bien sauvegardé en base. Nous devons créer un cas
+			de tests sous forme de classe étendant
+			<classname>Zend_Test_PHPUnit_DatabaseTestCase</classname>
+			. Cette classe étend elle-
+			même PHPUnit Database Extension, qui étend alors
+			<classname>PHPUnit_Framework_TestCase</classname>
+			. Un cas de test pour base de données
+			contient deux méthodes abstraites à définir, une concernant la connexion à la
+			base et
+			l'autre concernant les données à utiliser comme source pour les tests.
+		</para>
 
-        <note>
-            <para>
-                Il est recommandé de se familiariser à l'extension PHPUnit Database afin de suivre
-                nos exemples sereinnement. Bien que nous expliquions tous les concepts dans cette
-                documentation, il peut être intéressant de lire la documentation de PHPUnit avant
-                de suivre nos exemples.
+		<note>
+			<para>
+				Il est recommandé de se familiariser à l'extension PHPUnit Database
+				afin de suivre
+				nos exemples sereinnement. Bien que nous expliquions tous les concepts
+				dans cette
+				documentation, il peut être intéressant de lire la documentation de PHPUnit avant
+				de suivre nos exemples.
             </para>
-        </note>
+		</note>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     private $_connectionMock;
@@ -62,57 +70,77 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Ici, nous créons la connexion à la base et nous y injectons des données fictives de test.
-            Les éléments suivants sont importants à noter :
+		<para>
+			Ici, nous créons la connexion à la base et nous y injectons des données
+			fictives de test.
+			Les éléments suivants sont importants à noter :
         </para>
 
-        <itemizedlist>
-            <listitem>
-                <para>
-                    Vous ne pouvez retourner directement un objet <classname>Zend_Db_Adapter_Abstract</classname>
-                    depuis <methodname>getConnection()</methodname>, mais un objet spécifique à PHPUnit
-                    qui est généré grâce à la méthode <methodname>createZendDbConnection()</methodname>.
+		<itemizedlist>
+			<listitem>
+				<para>
+					Vous ne pouvez retourner directement un objet
+					<classname>Zend_Db_Adapter_Abstract</classname>
+					depuis
+					<methodname>getConnection()</methodname>
+					, mais un objet spécifique à PHPUnit
+					qui est généré grâce à la méthode
+					<methodname>createZendDbConnection()</methodname>
+					.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					Le schéma de la base (tables et bases de données) n'est pas recrée
+					entre chaque test. Les bases de données et les tables doivent être
+					créees
+					à la main avant de lancer les tests.
                 </para>
-            </listitem>
+			</listitem>
 
-            <listitem>
-                <para>
-                    Le schéma de la base (tables et bases de données) n'est pas recrée
-                    entre chaque test. Les bases de données et les tables doivent être créees
-                    à la main avant de lancer les tests.
-                </para>
-            </listitem>
+			<listitem>
+				<para>
+					Les tests vident la base durant
+					<methodname>setUp()</methodname>
+					et y
+					insèrent les données en provenance de
+					<methodname>getDataSet()</methodname>
+					.
+				</para>
+			</listitem>
 
-            <listitem>
-                <para>
-                    Les tests vident la base durant <methodname>setUp()</methodname> et y
-                    insèrent les données en provenance de <methodname>getDataSet()</methodname>.
-                </para>
-            </listitem>
+			<listitem>
+				<para>
+					Les jeux de données (DataSets) doivent implémenter
+					<classname>PHPUnit_Extensions_Database_DataSet_IDataSet</classname>
+					.
+					Il en existe quelques uns, basés sur
+					<acronym>XML</acronym>
+					ou YAML et
+					ils sont inclus dans PHPUnit et permettent de décrire les données
+					fictives pour
+					les tests. Vous devriez vous reporter à la documentation de PHPUnit
+					pour
+					des informations complémentaires ou plus à jour concernant les
+					DataSets.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</sect3>
 
-            <listitem>
-                <para>
-                    Les jeux de données (DataSets) doivent implémenter
-                    <classname>PHPUnit_Extensions_Database_DataSet_IDataSet</classname>.
-                    Il en existe quelques uns, basés sur <acronym>XML</acronym> ou YAML et
-                    ils sont inclus dans PHPUnit et permettent de décrire les données fictives pour
-                    les tests. Vous devriez vous reporter à la documentation de PHPUnit pour
-                    des informations complémentaires ou plus à jour concernant les DataSets.
-                </para>
-            </listitem>
-        </itemizedlist>
-    </sect3>
+	<sect3 id="zend.test.phpunit.db.quickstart.dataset">
+		<title>Spécifier un jeu de données (DataSet)</title>
 
-    <sect3 id="zend.test.phpunit.db.quickstart.dataset">
-        <title>Spécifier un jeu de données (DataSet)</title>
+		<para>
+			Dans l'exemple précédent, nous avons préciser un fichier de jeu de
+			données. Nous allons
+			maintenant le créer, au format
+			<acronym>XML</acronym>
+			:
+		</para>
 
-        <para>
-            Dans l'exemple précédent, nous avons préciser un fichier de jeu de données. Nous allons
-            maintenant le créer, au format <acronym>XML</acronym> :
-        </para>
-
-        <programlisting language="xml"><![CDATA[
+		<programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
     <zfbugs bug_id="1" bug_description="system needs electricity to run"
@@ -132,12 +160,13 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 </dataset>
 ]]></programlisting>
 
-        <para>
-            Nous allons travailler sur ces quatre entrées dans la table "zfbugs" après.
-            Le script MySQL suivant est nécessaire pour l'exemple:
+		<para>
+			Nous allons travailler sur ces quatre entrées dans la table "zfbugs"
+			après.
+			Le script MySQL suivant est nécessaire pour l'exemple:
         </para>
 
-        <programlisting language="sql"><![CDATA[
+		<programlisting language="sql"><![CDATA[
 CREATE TABLE IF NOT EXISTS `zfbugs` (
     `bug_id` int(11) NOT NULL auto_increment,
     `bug_description` varchar(100) default NULL,
@@ -150,20 +179,23 @@ CREATE TABLE IF NOT EXISTS `zfbugs` (
 PRIMARY KEY  (`bug_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 ;
 ]]></programlisting>
-    </sect3>
+	</sect3>
 
-    <sect3 id="zend.test.phpunit.db.quickstart.initial-tests">
-        <title>Quelques tests initiaux</title>
+	<sect3 id="zend.test.phpunit.db.quickstart.initial-tests">
+		<title>Quelques tests initiaux</title>
 
-        <para>
-            Maintenant que nous avons écrits les deux méthodes obligatoires pour
-            <classname>Zend_Test_PHPUnit_DatabaseTestCase</classname> et que nous avons
-            préciser avec quoi remplir la base et ses tables, nous pouvons commencer à écrire
-            des tests afin d'effectuer des assertions. Voyons un test pour l'insertion d'un
-            nouveau bug
-        </para>
+		<para>
+			Maintenant que nous avons écrits les deux méthodes obligatoires pour
+			<classname>Zend_Test_PHPUnit_DatabaseTestCase</classname>
+			et que nous avons
+			préciser avec quoi remplir la base et ses tables, nous pouvons commencer à
+			écrire
+			des tests afin d'effectuer des assertions. Voyons un test pour
+			l'insertion d'un
+			nouveau bug
+		</para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     public function testBugInsertedIntoDatabase()
@@ -196,20 +228,32 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Au dessus de la ligne <methodname>$bugsTable->insert($data);</methodname>, tout devrait vous
-            être familier. La ligne d'après contient le nom de la méthode d'assertion. Nous souhaitons vérifier
-            qu'après l'insertion d'un bug, la base a été correctement mise à jour avec les données. Ainsi,
-            nous utilisons un objet de requête de jeu de données, instance de
-            <classname>Zend_Test_PHPUnit_Db_DataSet_QueryDataSet</classname> et nous lui fournissons notre
-            connexion à la base de données. Puis nous indiquons à notre objet de requête qu'il contient une table
-            "zfbugs" contenant les données d'une requête <acronym>SQL</acronym> statement. Cet état actuel
-            est alors comparé à un état contenu dans un fichier  <acronym>XML</acronym>
-            "bugsInsertIntoAssertions.xml". Ce fichier <acronym>XML</acronym> est le même que celui des données
-            d'origine, à l'exception qu'il contient lui les données supplémentaires attendues:
-        </para>
+		<para>
+			Au dessus de la ligne
+			<methodname>$bugsTable->insert($data);</methodname>
+			, tout devrait vous
+			être familier. La ligne d'après contient le nom de la méthode
+			d'assertion. Nous souhaitons vérifier
+			qu'après l'insertion d'un bug, la base a été correctement mise à jour avec
+			les données. Ainsi,
+			nous utilisons un objet de requête de jeu de données, instance de
+			<classname>Zend_Test_PHPUnit_Db_DataSet_QueryDataSet</classname>
+			et nous lui fournissons notre
+			connexion à la base de données. Puis nous indiquons à notre objet de requête
+			qu'il contient une table
+			"zfbugs" contenant les données d'une requête
+			<acronym>SQL</acronym>
+			statement. Cet état actuel
+			est alors comparé à un état contenu dans un fichier
+			<acronym>XML</acronym>
+			"bugsInsertIntoAssertions.xml". Ce fichier
+			<acronym>XML</acronym>
+			est le même que celui des données
+			d'origine, à l'exception qu'il contient lui les données supplémentaires
+			attendues:
+		</para>
 
-        <programlisting language="xml"><![CDATA[
+		<programlisting language="xml"><![CDATA[
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
     <!-- Les 4 enregistrement précédents, puis: -->
@@ -219,14 +263,17 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 </dataset>
 ]]></programlisting>
 
-        <para>
-            Il existe d'autres manière de vérifier que l'état actuel de la base est équivalent à
-            un état attendu. La table "Bugs" de l'exemple connait déja sont état interne, utilisons
-            ceci à notre avantage. L'exemple suivant teste que la suppression de données dans la table
-            est possible:
+		<para>
+			Il existe d'autres manière de vérifier que l'état actuel de la base est
+			équivalent à
+			un état attendu. La table "Bugs" de l'exemple connait déja sont état
+			interne, utilisons
+			ceci à notre avantage. L'exemple suivant teste que la suppression de
+			données dans la table
+			est possible:
         </para>
 
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     public function testBugDelete()
@@ -249,27 +296,37 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Ici nous créons un objet représentant un jeu de données pour une table, instance de
-            <classname>Zend_Test_PHPUnit_Db_DataSet_DbTableDataSet</classname>. Il prend en paramètre
-            un objet <classname>Zend_Db_Table_Abstract</classname> et l'ajoute au jeu de données
-            avec le nom de la table, dans notre exemple : "zfbugs". Vous pourriez ajouter plus de données
-            dans le jeu de données en utilisant <methodname>addTable()</methodname> plusieurs fois.
+		<para>
+			Ici nous créons un objet représentant un jeu de données pour une
+			table, instance de
+			<classname>Zend_Test_PHPUnit_Db_DataSet_DbTableDataSet</classname>
+			. Il prend en paramètre
+			un objet
+			<classname>Zend_Db_Table_Abstract</classname>
+			et l'ajoute au jeu de données
+			avec le nom de la table, dans notre exemple : "zfbugs". Vous pourriez
+			ajouter plus de données
+			dans le jeu de données en utilisant
+			<methodname>addTable()</methodname>
+			plusieurs fois.
+		</para>
+
+		<para>
+			Ici nous ne possédons qu'une seule table et nous la comparons à un état
+			défini dans
+			"bugsDeleteAssertion.xml" qui est en fait le jeu de données original moins la données
+			supprimée : celle ayant l'id 4.
         </para>
 
-        <para>
-            Ici nous ne possédons qu'une seule table et nous la comparons à un état défini dans
-            "bugsDeleteAssertion.xml" qui est en fait le jeu de données original moins la données
-            supprimée : celle ayant l'id 4.
+		<para>
+			Voyons maintenant comment vérifier que deux tables soient identiques (et
+			non deux jeux
+			de données correspondants à de telles tables). Ajoutons un test à notre
+			scénario qui va
+			vérifier la mise à jour de données.
         </para>
 
-        <para>
-            Voyons maintenant comment vérifier que deux tables soient identiques (et non deux jeux
-            de données correspondants à de telles tables). Ajoutons un test à notre scénario qui va
-            vérifier la mise à jour de données.
-        </para>
-
-        <programlisting language="php"><![CDATA[
+		<programlisting language="php"><![CDATA[
 class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     public function testBugUpdate()
@@ -300,13 +357,16 @@ class BugsTest extends Zend_Test_PHPUnit_DatabaseTestCase
 }
 ]]></programlisting>
 
-        <para>
-            Ici, nous récupérons l'état de la table depuis un objet
-            <classname>Zend_Db_Table_Rowset_Abstract</classname> au moyen de
-            <methodname>Zend_Test_PHPUnit_Db_DataSet_DbRowset($rowset)</methodname> qui crée
-            une représentation de l'état interne des données du rowset. Nous comparons
-            enfin cet état grâce à l'assertion
-            <methodname>$this->assertTablesEqual()</methodname>
-        </para>
-    </sect3>
+		<para>
+			Ici, nous récupérons l'état de la table depuis un objet
+			<classname>Zend_Db_Table_Rowset_Abstract</classname>
+			au moyen de
+			<methodname>Zend_Test_PHPUnit_Db_DataSet_DbRowset($rowset)</methodname>
+			qui crée
+			une représentation de l'état interne des données du rowset. Nous
+			comparons
+			enfin cet état grâce à l'assertion
+			<methodname>$this->assertTablesEqual()</methodname>
+		</para>
+	</sect3>
 </sect2>

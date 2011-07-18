@@ -2,26 +2,32 @@
 <!-- EN-Revision: 21646 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.currency.exchange">
-    <title>Währungen wechseln</title>
+	<title>Währungen wechseln</title>
 
-    <para>
-        Im vorherigen Abschnitt haben wir die Berechnung der Währung besprochen. Aber wie man sich
-        vorstellen kann bedeutet das Rechnen mit Währungen oft das man mit unterschiedlichen
-        Währungen von verschiedenen Ländern rechnen will.
+	<para>
+		Im vorherigen Abschnitt haben wir die Berechnung der Währung besprochen.
+		Aber wie man sich
+		vorstellen kann bedeutet das Rechnen mit Währungen oft das man mit
+		unterschiedlichen
+		Währungen von verschiedenen Ländern rechnen will.
     </para>
 
-    <para>
-        In diesem Fall müssen die Währungen gewechselt werden so dass beide die selbe Währung
-        verwenden. Im wirklichen Leben ist diese Information von Banken oder Tageszeitungen
-        erhältlich. Aber wir sind im Web, also sollten wir vorhandene Wechselservices verwenden.
-        <classname>Zend_Currency</classname> erlaubt deren Verwendung mit einem einfachen Callback.
+	<para>
+		In diesem Fall müssen die Währungen gewechselt werden so dass beide
+		die selbe Währung
+		verwenden. Im wirklichen Leben ist diese Information von Banken oder
+		Tageszeitungen
+		erhältlich. Aber wir sind im Web, also sollten wir vorhandene Wechselservices
+		verwenden.
+		<classname>Zend_Currency</classname>
+		erlaubt deren Verwendung mit einem einfachen Callback.
+	</para>
+
+	<para>
+		Zuerst schreiben wir ein einfaches Umrechnungsservice.
     </para>
 
-    <para>
-        Zuerst schreiben wir ein einfaches Umrechnungsservice.
-    </para>
-
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 class SimpleExchange implements Zend_Currency_CurrencyInterface
 {
     public function getRate($from, $to)
@@ -42,34 +48,43 @@ class SimpleExchange implements Zend_Currency_CurrencyInterface
 }
 ]]></programlisting>
 
-    <para>
-        Wir haben jetzt ein manuelles Umrechnungsservice erstellt. Es passt nicht im wirklichen
-        Leben, aber es zeigt wie die Umrechnung von Währungen arbeitet.
+	<para>
+		Wir haben jetzt ein manuelles Umrechnungsservice erstellt. Es passt nicht
+		im wirklichen
+		Leben, aber es zeigt wie die Umrechnung von Währungen arbeitet.
     </para>
 
-    <para>
-        Unsere Umrechnungsklasse muss das <classname>Zend_Currency_CurrencyInterface</classname>
-        Interface implementieren. Diese Interface erwartet das die einzige Methode
-        <methodname>getRate()</methodname> implementiert wird. Diese Methode hat zwei Parameter
-        die Sie empfängt. Beide sind die Kurznamen für die angegebenen Währungen.
-        <classname>Zend_Currency</classname> auf der anderen Seite erwartet dass der
-        Umrechnungsfaktor zurückgegeben wird.
+	<para>
+		Unsere Umrechnungsklasse muss das
+		<classname>Zend_Currency_CurrencyInterface</classname>
+		Interface implementieren. Diese Interface erwartet das die einzige
+		Methode
+		<methodname>getRate()</methodname>
+		implementiert wird. Diese Methode hat zwei Parameter
+		die Sie empfängt. Beide sind die Kurznamen für die angegebenen Währungen.
+		<classname>Zend_Currency</classname>
+		auf der anderen Seite erwartet dass der
+		Umrechnungsfaktor zurückgegeben wird.
+	</para>
+
+	<para>
+		In einer lebenden Umrechnungsklasse wird man warscheinlich einen
+		Serviceprovider nach den
+		richtigen Umrechnungsfaktoren fragen. Für unser Beispiel ist der händische
+		Faktor in
+		Ordnung.
     </para>
 
-    <para>
-        In einer lebenden Umrechnungsklasse wird man warscheinlich einen Serviceprovider nach den
-        richtigen Umrechnungsfaktoren fragen. Für unser Beispiel ist der händische Faktor in
-        Ordnung.
-    </para>
+	<para>
+		Jetzt verbinden wir unsere Umrechnungsklasse einfach mit
+		<classname>Zend_Currency</classname>
+		. Es gibt zwei Wege mit denen das getan werden kann.
+		Entweder durch Anhängen einer Instanz der Umrechnungsklasse, oder einfach
+		durch Angabe eines
+		Strings mit dem Klassennamen.
+	</para>
 
-    <para>
-        Jetzt verbinden wir unsere Umrechnungsklasse einfach mit
-        <classname>Zend_Currency</classname>. Es gibt zwei Wege mit denen das getan werden kann.
-        Entweder durch Anhängen einer Instanz der Umrechnungsklasse, oder einfach durch Angabe eines
-        Strings mit dem Klassennamen.
-    </para>
-
-    <programlisting language="php"><![CDATA[
+	<programlisting language="php"><![CDATA[
 $currency = new Zend_Currency(
     array(
         'value'    => 1000,
@@ -92,19 +107,27 @@ $currency2 = new Zend_Currency(
 print $currency->add($currency2);
 ]]></programlisting>
 
-    <para>
-        Um obigen Beispeil wird '$ 3.000' zurückgegeben weil die 1.000 <acronym>USD</acronym> mit
-        dem Faktor 2 in 2.000 <acronym>EUR</acronym> umgerechnet werden.
-    </para>
+	<para>
+		Um obigen Beispeil wird '$ 3.000' zurückgegeben weil die 1.000
+		<acronym>USD</acronym>
+		mit
+		dem Faktor 2 in 2.000
+		<acronym>EUR</acronym>
+		umgerechnet werden.
+	</para>
 
-    <note>
-        <title>Kalkulation ohne Umrechnungsservice</title>
+	<note>
+		<title>Kalkulation ohne Umrechnungsservice</title>
 
-        <para>
-            Wenn man versucht zwei Währungsobjekte zu berechnen wenn diese nicht die selbe Währung
-            haben und kein Umrechnungsservice angehängt wurde, erhält man eine Exception. Der Grund
-            hierfür ist, dass <classname>Zend_Currency</classname> dann nicht mehr in der Lage ist
-            zwischen verschiedenen Währungen zu wechseln.
-        </para>
-    </note>
+		<para>
+			Wenn man versucht zwei Währungsobjekte zu berechnen wenn diese nicht
+			die selbe Währung
+			haben und kein Umrechnungsservice angehängt wurde, erhält man eine
+			Exception. Der Grund
+			hierfür ist, dass
+			<classname>Zend_Currency</classname>
+			dann nicht mehr in der Lage ist
+			zwischen verschiedenen Währungen zu wechseln.
+		</para>
+	</note>
 </sect1>
