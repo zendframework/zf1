@@ -383,7 +383,6 @@ class Zend_Cache_Backend_TwoLevels extends Zend_Cache_Backend implements Zend_Ca
         return $this->_slowBackend->getIdsMatchingAnyTags($tags);
     }
 
-
     /**
      * Return the filling percentage of the backend storage
      *
@@ -481,18 +480,19 @@ class Zend_Cache_Backend_TwoLevels extends Zend_Cache_Backend implements Zend_Ca
      */
     private function _getFastLifetime($lifetime, $priority, $maxLifetime = null)
     {
-        if ($lifetime === null) {
-            // if lifetime is null, we have an infinite lifetime
+        if ($lifetime <= 0) {
+            // if no lifetime, we have an infinite lifetime
             // we need to use arbitrary lifetimes
             $fastLifetime = (int) (2592000 / (11 - $priority));
         } else {
-            $fastLifetime = (int) ($lifetime / (11 - $priority));
+            // prevent computed infinite lifetime (0) by ceil
+            $fastLifetime = (int) ceil($lifetime / (11 - $priority));
         }
-        if (($maxLifetime !== null) && ($maxLifetime >= 0)) {
-            if ($fastLifetime > $maxLifetime) {
-                return $maxLifetime;
-            }
+
+        if ($maxLifetime >= 0 && $fastLifetime > $maxLifetime) {
+            return $maxLifetime;
         }
+
         return $fastLifetime;
     }
 
