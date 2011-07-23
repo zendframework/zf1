@@ -235,4 +235,14 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
         }
         $this->responseIndex = $index;
     }
+
+    /**
+     * Retrieve the array of all configuration options
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
 }

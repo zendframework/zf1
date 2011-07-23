@@ -199,6 +199,14 @@ class Zend_Http_Client_TestAdapterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-11599
+     */
+    public function testGetConfig()
+    {
+        $this->assertNotNull($this->adapter->getConfig());
+    }
+
+    /**
      * Data Providers
      */
 
