@@ -557,7 +557,7 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
         $this->_client->setUri('http://example.com');
         $this->_client->setFileUpload('testFile.name', 'testFile', 'TESTDATA12345', 'text/plain');
         $this->_client->request('POST');
-        
+
         $expectedLines = file(dirname(__FILE__) . '/_files/ZF4236-fileuploadrequest.txt');
         $gotLines = explode("\n", trim($this->_client->getLastRequest()));
 
@@ -570,7 +570,7 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
             $this->assertRegExp("/^$expected$/", $got);
         }
     }
-    
+
     /**
      * @group ZF-4236
      */
@@ -582,7 +582,7 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
         $this->_client->setFileUpload('testFile.name', 'testFile', 'TESTDATA12345', 'text/plain');
         $this->_client->setParameterPost('testLast', 'bar');
         $this->_client->request('POST');
-        
+
         $expectedLines = file(dirname(__FILE__) . '/_files/ZF4236-clientbodyretainsfieldordering.txt');
         $gotLines = explode("\n", trim($this->_client->getLastRequest()));
 
@@ -675,10 +675,10 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
 			return;
 		}
     }
-    
+
 	/**
      * Test that we can handle trailing space in location header
-     * 
+     *
      * @group ZF-11283
      * @link http://framework.zend.com/issues/browse/ZF-11283
      */
@@ -686,13 +686,13 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
     {
         $this->_client->setUri('http://example.com/');
         $this->_client->setAdapter('Zend_Http_Client_Adapter_Test');
-        
+
         $adapter = $this->_client->getAdapter(); /* @var $adapter Zend_Http_Client_Adapter_Test */
-        
+
         $adapter->setResponse(<<<RESPONSE
 HTTP/1.1 302 Redirect
 Content-Type: text/html; charset=UTF-8
-Location: /test   
+Location: /test
 Server: Microsoft-IIS/7.0
 Date: Tue, 19 Apr 2011 11:23:48 GMT
 
@@ -700,10 +700,19 @@ RESPONSE
         );
 
         $res = $this->_client->request('GET');
-        
+
         $lastUri = $this->_client->getUri();
-        
+
         $this->assertEquals("/test", $lastUri->getPath());
+    }
+
+    /**
+     * @group ZF-11598
+     */
+    public function testAdapter()
+    {
+        $client = new Zend_Http_Client(null, array('adapter' => 'Zend_Http_Client_Adapter_Test'));
+        $this->assertTrue($client->getAdapter() instanceof Zend_Http_Client_Adapter_Test);
     }
 
     /**
