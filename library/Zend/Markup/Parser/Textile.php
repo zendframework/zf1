@@ -288,7 +288,7 @@ class Zend_Markup_Parser_Textile implements Zend_Markup_Parser_ParserInterface
                         $this->_temp = array(
                             'tag'        => '',
                             'name'       => 'p',
-                            'type'       => Zend_Markup_token::TYPE_TAG,
+                            'type'       => Zend_Markup_Token::TYPE_TAG,
                             'attributes' => array()
                         );
                     } else {
