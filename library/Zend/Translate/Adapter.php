@@ -249,7 +249,8 @@ abstract class Zend_Translate_Adapter {
                 new RecursiveRegexIterator(
                     new RecursiveDirectoryIterator($options['content'], RecursiveDirectoryIterator::KEY_AS_PATHNAME),
                     '/^(?!.*(\.svn|\.cvs)).*$/', RecursiveRegexIterator::MATCH
-                )
+                ),
+                RecursiveIteratorIterator::SELF_FIRST
             );
             
             foreach ($iterator as $directory => $info) {
