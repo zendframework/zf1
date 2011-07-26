@@ -371,7 +371,7 @@ class Zend_Http_Client
             throw new Zend_Http_Client_Exception("'{$method}' is not a valid HTTP request method.");
         }
 
-        if ($method == self::POST && $this->enctype === null) {
+        if (($method == self::POST || $method == self::PUT || $method == self::DELETE) && $this->enctype === null) {
             $this->setEncType(self::ENC_URLENCODED);
         }
 
@@ -740,7 +740,7 @@ class Zend_Http_Client
             'ctype'    => $ctype,
             'data'     => $data
         );
-
+        
         $this->body_field_order[$formname] = self::VTYPE_FILE;
 
         return $this;
