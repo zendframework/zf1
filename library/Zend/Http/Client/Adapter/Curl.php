@@ -393,6 +393,9 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         } elseif ($method == Zend_Http_Client::PUT) {
             // This is a PUT by a setRawData string, not by file-handle
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+        } elseif ($method == Zend_Http_Client::DELETE) {
+            // This is a DELETE by a setRawData string
+            curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
         }
 
         // set additional curl options

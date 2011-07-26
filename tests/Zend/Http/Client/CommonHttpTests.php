@@ -19,7 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
-
 // Read local configuration
 if (! defined('TESTS_ZEND_HTTP_CLIENT_BASEURI') &&
     is_readable('TestConfiguration.php')) {
@@ -195,6 +194,51 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('POST');
         $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
     }
+    
+    /**
+     * Test we can properly send PUT parameters with
+     * application/x-www-form-urlencoded content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPutDataUrlEncoded($params)
+    {
+        $this->client->setUri($this->baseuri . 'testPutData.php');
+        $this->client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('PUT');
+        $this->assertEquals(serialize($params), $res->getBody(), "PUT data integrity test failed");
+    }
+    
+    /**
+     * Test we can properly send PUT parameters without
+     * content type, relying on default content type (urlencoded)
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPutDataDefault($params)
+    {
+        $this->client->setUri($this->baseuri . 'testPutData.php');
+        // note that no content type is set
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('PUT');
+        $this->assertEquals(serialize($params), $res->getBody(), "PUT data integrity test failed for default content-type");
+    }
+    
+    /**
+     * Test we can properly send parameters with
+     * application/x-www-form-urlencoded content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testDeleteDataUrlEncoded($params)
+    {
+        $this->client->setUri($this->baseuri . 'testDeleteData.php');
+        $this->client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('DELETE');
+        $this->assertEquals(serialize($params), $res->getBody(), "DELETE data integrity test failed");
+    }
 
     /**
      * Test we can properly send POST parameters with
@@ -210,6 +254,100 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('POST');
         $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
     }
+    
+    /**
+     * Test we can properly send PUT parameters with
+     * multipart/form-data content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPutDataMultipart($params)
+    {
+        $this->client->setUri($this->baseuri . 'testRawPutData.php');
+        $this->client->setParameterPost($params);
+        $this->client->setMethod(Zend_Http_Client::PUT);
+        $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $response = $this->client->request();
+        $responseText = $response->getBody();
+        $this->_checkPresence($responseText, $params);
+    }
+    
+    /**
+     * Checks the presence of keys (non-numeric only) and values
+     * in the raw form data reponse for a PUT or DELETE request recursively
+     * 
+     * An example response (I do not know of a better way to check it):
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="quest"
+     * 
+     * To seek the holy grail
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="YourMother"
+     * 
+     * Was a hamster
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="specialChars"
+     * 
+     * <>$+ &?=[]^%
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="array[]"
+     * 
+     * firstItem
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="array[]"
+     * 
+     * secondItem
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
+     * Content-Disposition: form-data; name="array[]"
+     * 
+     * 3rdItem
+     * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828--
+     * @param string $responseText
+     * @param string|integer|array $needle
+     */
+    protected function _checkPresence($responseText, $needle)
+    {
+        if (is_array($needle)) {
+            foreach ($needle as $key => $value) {
+                // treat array values recursively, let them re-enter this function
+                if (is_array($value)) {
+                    $this->_checkPresence($responseText, $value);
+                    continue;
+                }
+                // continue with non array keys and values
+                // numeric keys will not be present in the response
+                if (!is_int($key)) {
+                    $this->assertGreaterThan(
+                        0,
+                        strpos($responseText, $key), 
+                        "key '$key' is missing from the reponse for raw multipart PUT or DELETE request"
+                    );
+                }
+                $this->assertGreaterThan(
+                    0,
+                    strpos($responseText, $value), 
+                    "value '$value' is missing from the reponse for raw multipart PUT or DELETE request"
+                );
+            }
+        }
+    }
+    
+    /**
+     * Test we can properly send DELETE parameters with
+     * multipart/form-data content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testDeleteDataMultipart($params)
+    {
+        $this->client->setUri($this->baseuri . 'testRawDeleteData.php');
+        $this->client->setParameterPost($params);
+        $this->client->setMethod(Zend_Http_Client::DELETE);
+        $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $response = $this->client->request();
+        $responseText = $response->getBody();
+        $this->_checkPresence($responseText, $params);
+    }
 
     /**
      * Test using raw HTTP POST data
@@ -221,6 +359,38 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
 
         $res = $this->client->setRawData($data, 'text/html')->request('POST');
         $this->assertEquals($data, $res->getBody(), 'Response body does not contain the expected data');
+    }
+    
+    /**
+     * Test using raw HTTP PUT data
+     *
+     * @group ZF-11030
+     * 
+     */
+    public function testRawPutData()
+    {
+        $data = "Chuck Norris never wet his bed as a child. The bed wet itself out of fear.";
+        $this->client->setUri($this->baseuri . 'testRawPutData.php');
+        $this->client->setRawData($data, 'text/plain');
+        $this->client->setMethod(Zend_Http_Client::PUT);
+        $response = $this->client->request();
+        $this->assertEquals($data, $response->getBody(), 'Response body does not contain the expected data');
+    }
+    
+    /**
+     * Test using raw HTTP DELETE data
+     *
+     * @group ZF-11030
+     * 
+     */
+    public function testRawDeleteData()
+    {
+        $data = "Chuck Norris never wet his bed as a child. The bed wet itself out of fear.";
+        $this->client->setUri($this->baseuri . 'testRawDeleteData.php');
+        $this->client->setRawData($data, 'text/plain');
+        $this->client->setMethod(Zend_Http_Client::DELETE);
+        $response = $this->client->request();
+        $this->assertEquals($data, $response->getBody(), 'Response body does not contain the expected data');
     }
 
     /**
@@ -854,7 +1024,6 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         }
 
         $res = $this->client->request('POST');
-
         $this->assertEquals($expectedBody, $res->getBody(), 'Response body does not include expected upload parameters');
     }
 
