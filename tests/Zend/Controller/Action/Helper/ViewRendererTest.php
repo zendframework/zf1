@@ -885,7 +885,6 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         $this->helper->setActionController($controller);
         $scriptName = $this->helper->getViewScript();
         $this->assertEquals('foo/my-bar.phtml', $scriptName);
-
     }
     
     /**
@@ -908,6 +907,20 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
     protected function _normalizePath($path)
     {
         return str_replace(array('/', '\\'), '/', $path);
+    }
+
+    /**
+     * @group ZF-10725
+     */
+    public function testActionsWithLeadingCapitalLettersShouldNotInvokeTruncatedViewScripts()
+    {
+        $this->request->setModuleName('default')
+                      ->setControllerName('Controller')
+                      ->setActionName('Action');
+        $controller = new Bar_IndexController($this->request, $this->response, array());
+        $this->helper->setActionController($controller);
+        $scriptName = $this->helper->getViewScript();
+        $this->assertEquals('controller/action.phtml', $scriptName);
     }
 }
 
