@@ -52,9 +52,8 @@ class Zend_Application_Resource_View extends Zend_Application_Resource_ResourceA
     {
         $view = $this->getView();
 
-        $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->setView($view);
-        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
         return $view;
     }
 

@@ -227,6 +227,20 @@ class Zend_Application_Resource_ViewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('barbazoo', $view->bar);
     }
 
+    /**
+     * @group ZF-11579
+     */
+    public function testViewResourceDoesNotReinjectViewRenderer()
+    {
+        require_once dirname(__FILE__) . '/TestAsset/ViewRenderer.php';
+        $viewRenderer = new Zend_Application_Resource_TestAsset_ViewRenderer();
+        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+
+        $resource = new Zend_Application_Resource_View(array('encoding' => 'UTF-8'));
+        $view = $resource->init();
+
+        $this->assertSame($view, $viewRenderer->view);
+    }
 }
 
 
