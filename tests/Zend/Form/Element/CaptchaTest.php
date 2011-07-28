@@ -31,6 +31,9 @@ require_once 'Zend/Form/Element/Captcha.php';
 /** Zend_Captcha_Dumb */
 require_once 'Zend/Captcha/Dumb.php';
 
+/** Zend_Captcha_ReCaptcha */
+require_once 'Zend/Captcha/ReCaptcha.php';
+
 /**
  * @category   Zend
  * @package    Zend_Form
@@ -170,6 +173,220 @@ class Zend_Form_Element_CaptchaTest extends PHPUnit_Framework_TestCase
     public function testFluentInterfaceOnLoadDefaultDecorators()
     {
         $this->assertSame($this->element, $this->element->loadDefaultDecorators());
+    }
+    
+    /**
+     * @group ZF-11609
+     */
+    public function testDefaultDecoratorsBeforeAndAfterRendering()
+    {
+        /**
+         * Dumb captcha
+         */
+        
+        // Before rendering
+        $decorators = array_keys($this->element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_HtmlTag',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+        
+        $this->element->render();
+        
+        // After rendering
+        $decorators = array_keys($this->element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Captcha',
+                'Zend_Form_Decorator_Captcha_Word',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_HtmlTag',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+   
+        /**
+         * ReCaptcha
+         */
+        
+        // Reset element
+        $this->setUp();
+        
+        $options = array(
+            'privKey' => 'privateKey',
+            'pubKey'  => 'publicKey',
+            'ssl'     => true,
+            'xhtml'   => true,
+        );
+        $this->element->setCaptcha(new Zend_Captcha_ReCaptcha($options));
+        
+        // Before rendering
+        $decorators = array_keys($this->element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_HtmlTag',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+        
+        $this->element->render();
+        
+        // After rendering
+        $decorators = array_keys($this->element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Captcha_ReCaptcha',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_HtmlTag',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+    }
+    
+    /**
+     * @group ZF-11609
+     */
+    public function testDefaultDecoratorsBeforeAndAfterRenderingWhenDefaultDecoratorsAreDisabled()
+    {
+        $element = new Zend_Form_Element_Captcha(
+            'foo',
+            array(
+                'captcha'        => 'Dumb',
+                'captchaOptions' => array(
+                    'sessionClass' => 'Zend_Form_Element_CaptchaTest_SessionContainer',
+                ),
+                'disableLoadDefaultDecorators' => true,
+            )
+        );
+        
+        // Before rendering
+        $decorators = $element->getDecorators();
+        $this->assertTrue(empty($decorators));
+        
+        $element->render();
+        
+        // After rendering
+        $decorators = $element->getDecorators();
+        $this->assertTrue(empty($decorators));
+    }
+    
+    /**
+     * @group ZF-11609
+     */
+    public function testIndividualDecoratorsBeforeAndAfterRendering()
+    {
+        // Disable default decorators is true
+        $element = new Zend_Form_Element_Captcha(
+            'foo',
+            array(
+                'captcha'        => 'Dumb',
+                'captchaOptions' => array(
+                    'sessionClass' => 'Zend_Form_Element_CaptchaTest_SessionContainer',
+                ),
+                'disableLoadDefaultDecorators' => true,
+                'decorators'                   => array(
+                    'Description',
+                    'Errors',
+                    'Captcha_Word',
+                    'Captcha',
+                    'Label',
+                ),
+            )
+        );
+        
+        // Before rendering
+        $decorators = array_keys($element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Captcha_Word',
+                'Zend_Form_Decorator_Captcha',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+        
+        $element->render();
+        
+        // After rendering
+        $decorators = array_keys($element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Captcha_Word',
+                'Zend_Form_Decorator_Captcha',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+        
+        // Disable default decorators is false
+        $element = new Zend_Form_Element_Captcha(
+            'foo',
+            array(
+                'captcha'        => 'Dumb',
+                'captchaOptions' => array(
+                    'sessionClass' => 'Zend_Form_Element_CaptchaTest_SessionContainer',
+                ),
+                'decorators' => array(
+                    'Description',
+                    'Errors',
+                    'Captcha_Word',
+                    'Captcha',
+                    'Label',
+                ),
+            )
+        );
+        
+        // Before rendering
+        $decorators = array_keys($element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Captcha_Word',
+                'Zend_Form_Decorator_Captcha',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
+        
+        $element->render();
+        
+        // After rendering
+        $decorators = array_keys($element->getDecorators());
+        $this->assertSame(
+            array(
+                'Zend_Form_Decorator_Description',
+                'Zend_Form_Decorator_Errors',
+                'Zend_Form_Decorator_Captcha_Word',
+                'Zend_Form_Decorator_Captcha',
+                'Zend_Form_Decorator_Label',
+            ),
+            $decorators,
+            var_export($decorators, true)
+        );
     }
 }
 
