@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 23473 -->
+<!-- EN-Revision: 24259 -->
 <sect1 id="learning.quickstart.create-model">
     <title>モデルとデータベーステーブルの作成</title>
 
@@ -73,12 +73,12 @@ class Application_Model_GuestbookMapper
 
     <para>
         <methodname>__get()</methodname> と <methodname>__set()</methodname> は、
-        各エントリーのプロパティにアクセスする便利な仕組みと、他のゲッター、セッターのプロキシ提供してくれます。
+        各エントリーのプロパティにアクセスする便利な仕組みと、他のゲッター、セッターのプロキシを提供してくれます。
         また、オブジェクト中の許可したプロパティのみアクセス可能にするのにも役立ちます。
     </para>
 
     <para>
-        <methodname>find()</methodname> と <methodname>fetchAll()</methodname> は単一のエントリー、
+        <methodname>find()</methodname> と <methodname>fetchAll()</methodname> は単一のエントリーや
         全てのエントリーをフェッチする機能を提供し、<methodname>save()</methodname> は
         一つのエントリーをデータストアに保存する面倒を見ます。
     </para>
@@ -89,7 +89,7 @@ class Application_Model_GuestbookMapper
 
     <para>
         まず <classname>Db</classname> リソースを初期化する必要があります。
-        <classname>Layout</classname> と <classname>View</classname> リソースから <classname>Db</classname>
+        <classname>Layout</classname> リソースと <classname>View</classname> リソースから <classname>Db</classname>
         リソースの設定を準備できます。これには <command>zf configure db-adapter</command> コマンドが使えます。
     </para>
 
@@ -225,8 +225,8 @@ INSERT INTO guestbook (email, comment, created) VALUES
 
     <para>
         これでスキーマができ、データもいくらか定義できました。それでは一緒にスクリプトを書いてこのデータベースの構築を実行しましょう。
-	普通は、プロダクション環境でこういったことは必要ありませんが、このスクリプトがあれば発者が必要なデータベースを手元で構築して、アプリケーションの作業に全力投球するのをたすけてくれるでしょう。
-	以下の内容で、<filename>scripts/load.sqlite.php</filename> としてスクリプトを作ってください。
+    普通は、プロダクション環境でこういったことは必要ありませんが、このスクリプトがあれば開発者が必要なデータベースを手元で構築して、アプリケーションの作業に全力投球するのを助けてくれるでしょう。
+    以下の内容で、<filename>scripts/load.sqlite.php</filename> としてスクリプトを作ってください。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -283,7 +283,7 @@ $bootstrap = $application->getBootstrap();
 $bootstrap->bootstrap('db');
 $dbAdapter = $bootstrap->getResource('db');
 
-// やっていることをユーザーにお知らせ
+// やっていることをユーザーに通知
 // （実際にここでデータベースを作る）
 if ('testing' != APPLICATION_ENV) {
     echo 'Writing Database Guestbook in (control-c to cancel): ' . PHP_EOL;
@@ -360,10 +360,10 @@ Data Loaded.
     </para>
 
     <para>
-        ここではデータソースへの接続に <ulink url="http://martinfowler.com/eaaCatalog/tableDataGateway.html">Table Data Gateway</ulink> を使います。
+        ここではデータソースへの接続に<ulink url="http://martinfowler.com/eaaCatalog/tableDataGateway.html">テーブルデータゲートウェイ</ulink> を使います。
         <classname>Zend_Db_Table</classname> がこの機能を提供してくれます。
         始めるにあたって <classname>Zend_Db_Table</classname> ベースのクラスを作りましょう。
-        レイアウトとデータベースアダプターでやった時と同じように、<command>zf</command>
+        レイアウトとデータベースアダプタでやった時と同じように、<command>zf</command>
         ツールの力を借りることができます。<command>create db-table</command> コマンドを使うのです。
         これは最低で 2 つの引数をとります。参照させるクラスと、対応付けるデータベーステーブルの名前です。
     </para>
@@ -375,10 +375,9 @@ Updating project profile 'zfproject.xml'
 ]]></programlisting>
 
     <para>
-        Looking at your directory tree, you'll now see that a new directory,
-        <filename>application/models/DbTable/</filename>, was created, with the file
-        <filename>Guestbook.php</filename>. If you open that file, you'll see the following
-        contents:
+        ディレクトリツリーを見てみると、新規ディレクトリ <filename>application/models/DbTable/</filename>
+        が作られてファイル <filename>Guestbook.php</filename> が作られているのが分かります。
+        ファイルを開くと以下の内容になっています。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -395,23 +394,23 @@ class Application_Model_DbTable_Guestbook extends Zend_Db_Table_Abstract
 ]]></programlisting>
 
     <para>
-        Note the class prefix: <classname>Application_Model_DbTable</classname>. The class prefix
-        for our module, "Application", is the first segment, and then we have the component,
-        "Model_DbTable"; the latter is mapped to the <filename>models/DbTable/</filename> directory
-        of the module.
+        クラスのプレフィックス <classname>Application_Model_DbTable</classname> に注目しましょう。
+        最初の部分がモジュールのクラスプレフィックス "Application" で、その後にコンポーネント
+        "Model_DbTable" がきます。後者はモジュールのディレクトリ <filename>models/DbTable/</filename>
+        に対応付けられています。
     </para>
 
     <para>
-        All that is truly necessary when extending <classname>Zend_Db_Table</classname> is to
-        provide a table name and optionally the primary key (if it is not "id").
+        <classname>Zend_Db_Table</classname> を拡張する際に必要なのはテーブル名と場合により主キーを
+        ("id" でなければ)与えることだけです。
     </para>
 
     <para>
-        Now let's create a <ulink url="http://martinfowler.com/eaaCatalog/dataMapper.html">Data
-            Mapper</ulink>. A <emphasis>Data Mapper</emphasis> maps a domain object to the database.
-        In our case, it will map our model, <classname>Application_Model_Guestbook</classname>, to
-        our data source, <classname>Application_Model_DbTable_Guestbook</classname>. A typical
-        <acronym>API</acronym> for a data mapper is as follows:
+        では <ulink url="http://martinfowler.com/eaaCatalog/dataMapper.html">データマッパー</ulink>
+        を作成しましょう。<emphasis>データマッパー</emphasis> はドメインオブジェクトをデータベースに対応付けます。
+        ここではモデル <classname>Application_Model_Guestbook</classname> をデータソース
+        <classname>Application_Model_DbTable_Guestbook</classname> に対応付けることになります。
+        データマッパーの典型的な <acronym>API</acronym> は次のようになるでしょう。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -426,8 +425,8 @@ class Application_Model_GuestbookMapper
 ]]></programlisting>
 
     <para>
-        In addition to these methods, we'll add methods for setting and retrieving the Table Data
-        Gateway. To create the initial class, use the <command>zf</command> CLI tool:
+        こうしたメソッドの他に、テーブルデータゲートウェイを設定してそこからデータを取り出すメソッドを追加します。
+        クラスの最初の形を作成するのに CLI の <command>zf</command> ツールを使います。
     </para>
 
     <programlisting language="shell"><![CDATA[
@@ -437,8 +436,8 @@ Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
     <para>
-        Now, edit the class <classname>Application_Model_GuestbookMapper</classname> found in
-        <filename>application/models/GuestbookMapper.php</filename> to read as follows:
+        次に <filename>application/models/GuestbookMapper.php</filename> にあるクラス
+    <classname>Application_Model_GuestbookMapper</classname> を編集して下記の通りにします。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -515,8 +514,7 @@ class Application_Model_GuestbookMapper
 ]]></programlisting>
 
     <para>
-        Now it's time to create our model class. We'll do so, once again, using the
-        <command>zf create model</command> command:
+        これでモデルクラスが作れます。ここでもコマンド <command>zf create model</command> を使います。
     </para>
 
     <programlisting language="shell"><![CDATA[
@@ -526,10 +524,9 @@ Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
     <para>
-        We'll modify this empty <acronym>PHP</acronym> class to make it easy to populate the model
-        by passing an array of data either to the constructor or a
-        <methodname>setOptions()</methodname> method. The final model class, located in
-        <filename>application/models/Guestbook.php</filename>, should look like this:
+        この空の <acronym>PHP</acronym> クラスを修正して、コンストラクタでも <methodname>setOptions()</methodname>
+        メソッドでも、データの配列からモデルを生成するのを簡単にします。<filename>application/models/Guestbook.php</filename>
+        中の最終的なモデルクラスはこのようになるはずです。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -626,12 +623,12 @@ class Application_Model_Guestbook
 ]]></programlisting>
 
     <para>
-        Lastly, to connect these elements all together, lets create a guestbook controller that will
-        both list the entries that are currently inside the database.
+        最後に、以上の要素を全て一つに繋げます。データベース内の既存のエントリーを一覧表示する
+        ゲストブック用のコントローラを作りましょう。
     </para>
 
     <para>
-        To create a new controller, use the <command>zf create controller</command> command:
+        新しいコントローラを作るには <command>zf create controller</command> コマンドを使います。
     </para>
 
     <programlisting language="shell"><![CDATA[
@@ -647,21 +644,20 @@ Updating project profile '.zfproject.xml'
 ]]></programlisting>
 
     <para>
-        This will create a new controller, <classname>GuestbookController</classname>, in
-        <filename>application/controllers/GuestbookController.php</filename>, with a single action
-        method, <methodname>indexAction()</methodname>. It will also create a view script directory
-        for the controller, <filename>application/views/scripts/guestbook/</filename>, with a view
-        script for the index action.
+        このコマンドによって <filename>application/controllers/GuestbookController.php</filename> の中に
+        <classname>GuestbookController</classname> が作られ、そこには一つのアクションメソッド
+        <methodname>indexAction()</methodname> が出来ています。また、このコントローラーの
+        ビュースクリプト用ディレクトリ <filename>application/views/scripts/guestbook/</filename>
+        とインデックスアクション用のビュースクリプトも作成されます。
     </para>
 
     <para>
-        We'll use the "index" action as a landing page to view all guestbook entries.
+        ゲスブックの全エントリーを表示する入り口用のページとして "index" アクションを使います。
     </para>
 
     <para>
-        Now, let's flesh out the basic application logic. On a hit to
-        <methodname>indexAction()</methodname>, we'll display all guestbook entries. This would look
-        like the following:
+        では、基本的なアプリケーションロジックを一息に作ってしまいましょう。<methodname>indexAction()</methodname>
+        へやって来るとゲストブックの全エントリーを表示します。これは次のようになります。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -678,8 +674,8 @@ class GuestbookController extends Zend_Controller_Action
 ]]></programlisting>
 
     <para>
-        And, of course, we need a view script to go along with that. Edit
-        <filename>application/views/scripts/guestbook/index.phtml</filename> to read as follows:
+        それからもちろんこれに使うビュースクリプトが必要です。
+        <filename>application/views/scripts/guestbook/index.phtml</filename> を以下のように編集します。
     </para>
 
     <programlisting language="php"><![CDATA[
@@ -703,11 +699,11 @@ Guestbook Entries: <br />
 ]]></programlisting>
 
     <note>
-        <title>Checkpoint</title>
+        <title>チェックポイント</title>
 
         <para>
-            Now browse to "http://localhost/guestbook". You should see the following in your
-            browser:
+            ここで "http://localhost/guestbook" にアクセスしてみましょう。
+            ブラウザには次のように表示されるはずです。
         </para>
 
         <para>
@@ -717,15 +713,14 @@ Guestbook Entries: <br />
     </note>
 
     <note>
-        <title>Using the data loader script</title>
+        <title>データローダースクリプトの使用</title>
 
         <para>
-            The data loader script introduced in this section
-            (<filename>scripts/load.sqlite.php</filename>) can be used to create the database for
-            each environment you have defined, as well as to load it with sample data. Internally,
-            it utilizes <classname>Zend_Console_Getopt</classname>, which allows it to provide a
-            number of command line switches. If you pass the "-h" or "--help" switch, it will give
-            you the available options:
+            この節で導入したデータローダースクリプト(<filename>scripts/load.sqlite.php</filename>)は
+            定義した環境のそれぞれでデータベースを作りサンプルデータを読み込むのに使用できます。
+            内部では、多くのコマンドラインスイッチを提供できるようにしてくれる
+            <classname>Zend_Console_Getopt</classname> を利用しています。"-h" または "--help"
+            スイッチを渡すと使用可能なオプションを提示します。
         </para>
 
         <programlisting language="php"><![CDATA[
@@ -733,14 +728,13 @@ Usage: load.sqlite.php [ options ]
 --withdata|-w         Load database with sample data
 --env|-e [  ]         Application environment for which to create database
                       (defaults to development)
---help|-h             Help -- usage message)]]
+--help|-h             Help -- usage message]]
 ]]></programlisting>
 
         <para>
-            The "-e" switch allows you to specify the value to use for the constant
-            <constant>APPLICATION_ENV</constant> -- which in turn allows you to create a SQLite
-            database for each environment you define. Be sure to run the script for the environment
-            you choose for your application when deploying.
+            "-e" スイッチを使うと <constant>APPLICATION_ENV</constant> 定数に使用する値を指定できます。
+            -- 定義した各環境で順に SQLite データベースを作れるようになるのです。
+            デプロイ時に、アプリケーション用に選んだ環境で確実にこのスクリプトを走らせるようにしてください。
         </para>
     </note>
 </sect1>
