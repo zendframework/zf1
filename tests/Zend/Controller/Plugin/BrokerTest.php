@@ -185,6 +185,7 @@ class Zend_Controller_Plugin_BrokerTest extends PHPUnit_Framework_TestCase
         $request  = new Zend_Controller_Request_Http('http://framework.zend.com/empty');
         $response = new Zend_Controller_Response_Cli();
         $broker   = new Zend_Controller_Plugin_Broker();
+        $broker->setRequest($request);
         $broker->setResponse($response);
         $broker->registerPlugin(new Zend_Controller_Plugin_BrokerTest_ExceptionTestPlugin());
         try {
