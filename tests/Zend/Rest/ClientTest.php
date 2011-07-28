@@ -220,10 +220,13 @@ class Zend_Rest_ClientTest extends PHPUnit_Framework_TestCase
         $this->adapter->setResponse($response);
 
         $reqXml   = file_get_contents($this->path . 'returnInt.xml');
-        $response = $this->rest->restDelete('/rest/');
+        $response = $this->rest->restDelete('/rest/', $reqXml);
         $this->assertTrue($response instanceof Zend_Http_Response);
         $body = $response->getBody();
         $this->assertContains($expXml, $response->getBody());
+        
+        $request = Zend_Rest_Client::getHttpClient()->getLastRequest();
+        $this->assertContains($reqXml, $request, $request);
     }
 
     public function testCallWithHttpMethod()
