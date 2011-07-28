@@ -159,6 +159,30 @@ class Zend_Form_Element_SubmitTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($translations['Label'], $submit->getLabel());
     }
 
+    public function testLabelWhichIsSetToNameIsTranslatedWhenTranslationAvailable()
+    {
+        require_once 'Zend/Translate.php';
+        $translations = array('foo' => 'This is the Submit Label');
+        $translate = new Zend_Translate('array', $translations);
+        $submit = new Zend_Form_Element_Submit('foo');
+        $submit->setTranslator($translate);
+        $this->assertEquals($translations['foo'], $submit->getLabel());
+    }
+
+    /**
+     * @group ZF-8764
+     */
+    public function testLabelIsNotTranslatedTwice()
+    {
+        require_once 'Zend/Translate.php';
+        $translations = array('firstLabel' => 'secondLabel',
+                              'secondLabel' => 'thirdLabel');
+        $translate = new Zend_Translate('array', $translations);
+        $submit = new Zend_Form_Element_Submit('foo', 'firstLabel');
+        $submit->setTranslator($translate);
+        $this->assertEquals($translations['firstLabel'], $submit->getLabel());
+    }
+
     public function testIsCheckedReturnsFalseWhenNoValuePresent()
     {
         $this->assertFalse($this->element->isChecked());
