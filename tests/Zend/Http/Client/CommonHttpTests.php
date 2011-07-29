@@ -1186,6 +1186,17 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $this->assertNotContains('Content-Type: text/plain', $request);
 
     }
+    
+    /**
+     * @group ZF-11598
+     */
+    public function testGetAdapterWithoutSet()
+    {
+        $client  = new Zend_Http_Client(null, $this->config);
+        $adapter = $client->getAdapter();
+        $this->assertTrue(!empty($adapter));
+    }
+    
     /**
      * Internal helpder function to get the contents of test files
      *
