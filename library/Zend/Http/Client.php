@@ -1232,22 +1232,27 @@ class Zend_Http_Client
                     $this->setHeaders(self::CONTENT_TYPE, self::ENC_FORMDATA . "; boundary={$boundary}");
 
                     // Map the formname of each file to the array index it is stored in
-                    $fileIndexMap = array();
-                    foreach ($this->files as $key=>$fdata ) {
-                        $fileIndexMap[$fdata['formname']] = $key;
-                    }
 
                     // Encode all files and POST vars in the order they were given
                     foreach ($this->body_field_order as $fieldName=>$fieldType) {
                         switch ($fieldType) {
                             case self::VTYPE_FILE:
-                                if (isset($fileIndexMap[$fieldName])) {
+                                
+                                //if (isset($fileIndexMap[$fieldName])) {
+                                    foreach ($this->files as $file) {
+                                        if ($file['formname']===$fieldName) {
+                                            $fhead = array(self::CONTENT_TYPE => $file['ctype']);
+                                            $body .= self::encodeFormData($boundary, $file['formname'], $file['data'], $file['filename'], $fhead);
+                                        }
+                                    }
+                                    /*
                                     if (isset($this->files[$fileIndexMap[$fieldName]])) {
                                         $file = $this->files[$fileIndexMap[$fieldName]];
                                         $fhead = array(self::CONTENT_TYPE => $file['ctype']);
                                         $body .= self::encodeFormData($boundary, $file['formname'], $file['data'], $file['filename'], $fhead);
                                     }
-                                }
+                                     */
+                                //}
                                 break;
                             case self::VTYPE_SCALAR:
                                 if (isset($this->paramsPost[$fieldName])) {
