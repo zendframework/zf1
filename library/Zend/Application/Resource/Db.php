@@ -45,7 +45,7 @@ class Zend_Application_Resource_Db extends Zend_Application_Resource_ResourceAbs
     protected $_adapter = null;
 
     /**
-     * @var Zend_Db_Adapter_Interface
+     * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
 
@@ -132,7 +132,7 @@ class Zend_Application_Resource_Db extends Zend_Application_Resource_ResourceAbs
     /**
      * Retrieve initialized DB connection
      *
-     * @return null|Zend_Db_Adapter_Interface
+     * @return null|Zend_Db_Adapter_Abstract
      */
     public function getDbAdapter()
     {
