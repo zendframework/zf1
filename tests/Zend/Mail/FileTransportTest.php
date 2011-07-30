@@ -118,7 +118,7 @@ class Zend_Mail_FileTransportTest extends PHPUnit_Framework_TestCase
     public function testNotWritablePathFailure()
     {
         $transport = new Zend_Mail_Transport_File(array(
-            'path' => $this->_tmpdir . '/not_existing/directory'
+            'callback' => array($this, 'directoryNotExisting')
         ));
 
         $mail = $this->_prepareMail();
@@ -180,5 +180,10 @@ class Zend_Mail_FileTransportTest extends PHPUnit_Framework_TestCase
         $this->assertContains('oleg@example.com', $entry);
         // and default callback part
         $this->assertContains('ZendMail', $entry);
+    }
+
+    public function directoryNotExisting($transport)
+    {
+        return $this->_tmpdir . '/not_existing/directory';
     }
 }
