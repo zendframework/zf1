@@ -169,6 +169,7 @@ class Zend_Gdata_AuthSub
         try {
             $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {
+            ob_end_clean();
             require_once 'Zend/Gdata/App/HttpException.php';
             throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
@@ -210,6 +211,7 @@ class Zend_Gdata_AuthSub
         try {
             $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {
+            ob_end_clean();
             require_once 'Zend/Gdata/App/HttpException.php';
             throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
