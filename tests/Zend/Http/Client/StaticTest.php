@@ -707,15 +707,6 @@ RESPONSE
     }
 
     /**
-     * @group ZF-11598
-     */
-    public function testAdapter()
-    {
-        $client = new Zend_Http_Client(null, array('adapter' => 'Zend_Http_Client_Adapter_Test'));
-        $this->assertTrue($client->getAdapter() instanceof Zend_Http_Client_Adapter_Test);
-    }
-
-    /**
      * Data providers
      */
 
