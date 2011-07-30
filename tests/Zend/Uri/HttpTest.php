@@ -380,7 +380,7 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
     public function testSetInvalidHost()
     {
         $uri = Zend_Uri::factory('http://example.com');
-        $host = 'example,com';
+        $host = 'example§com';
         $this->setExpectedException('Zend_Uri_Exception');
         $uri->setHost($host);
     }
@@ -430,7 +430,7 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
         ), $uri->getQueryAsArray());
         $this->assertEquals('a=1&c=3', $uri->getQuery());
     }
-    
+
     /**
      * @group ZF-11188
      * @see http://www.ietf.org/rfc/rfc2732.txt
