@@ -205,6 +205,7 @@ class Zend_Cache_PageFrontendTest extends PHPUnit_Framework_TestCase {
         $this->_instance->setOption('regexps', $regex);
         $this->_instance->setOption('caching', false);
         $this->_instance->start('zf10952');
+        ob_get_clean();
     }
 }
 
