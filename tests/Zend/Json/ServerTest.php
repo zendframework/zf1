@@ -83,11 +83,18 @@ class Zend_Json_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($methods->hasMethod('strtolower'));
     }
 
-    public function testShouldBeAbleToBindCallbackToServer()
+    public function testShouldBeAbleToBindCallback1ToServer()
     {
-        $this->server->addFunction(array($this, 'setUp'));
+        $this->server->addFunction(array('Zend_Json_ServerTest_Foo', 'bar'));
         $methods = $this->server->getFunctions();
-        $this->assertTrue($methods->hasMethod('setUp'));
+        $this->assertTrue($methods->hasMethod('bar'));
+    }
+
+    public function testShouldBeAbleToBindCallback2ToServer()
+    {
+        $this->server->addFunction(array(new Zend_Json_ServerTest_Foo, 'bar'));
+        $methods = $this->server->getFunctions();
+        $this->assertTrue($methods->hasMethod('bar'));
     }
 
     public function testShouldBeAbleToBindClassToServer()
