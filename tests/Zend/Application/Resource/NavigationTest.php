@@ -79,6 +79,8 @@ class Zend_Application_Resource_NavigationTest extends PHPUnit_Framework_TestCas
 
         // Reset autoloader instance so it doesn't affect other tests
         Zend_Loader_Autoloader::resetInstance();
+
+        Zend_Navigation_Page::setDefaultPageType();
     }
 
     public function testInitializationInitializesNavigationObject()
@@ -148,7 +150,7 @@ class Zend_Application_Resource_NavigationTest extends PHPUnit_Framework_TestCas
 
          $this->assertEquals($view->setInMethodByTest,true);
     }
-    
+
     /**
      * @group ZF-10959
      */
@@ -164,14 +166,14 @@ class Zend_Application_Resource_NavigationTest extends PHPUnit_Framework_TestCas
 
         $results = array();
         $resource = new Zend_Application_Resource_Navigation($options);
-        
+
         try {
             $resource->setBootstrap($this->bootstrap)->init();
             $this->fail('An exception should have been thrown but wasn\'t');
         } catch(Zend_Exception $e) {
             $this->assertTrue(true);
         }
-        
+
         $this->bootstrap->unregisterPluginResource('view');
     }
 
