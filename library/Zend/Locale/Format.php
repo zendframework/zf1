@@ -300,8 +300,8 @@ class Zend_Locale_Format
         // load class within method for speed
         require_once 'Zend/Locale/Math.php';
 
-        $value             = Zend_Locale_Math::normalize($value);
         $value             = Zend_Locale_Math::floatalize($value);
+        $value             = Zend_Locale_Math::normalize($value);
         $options           = self::_checkOptions($options) + self::$_options;
         $options['locale'] = (string) $options['locale'];
 
