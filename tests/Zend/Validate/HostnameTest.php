@@ -402,15 +402,26 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Ensure that a trailing "." in a hostname (but not ip) is permitted
+     * Ensure that a trailing "." in a local hostname is permitted
      *
      * @group ZF-6363
      */
     public function testTrailingDot()
     {
-        $this->assertTrue($this->_validator->isValid('example.com.'));
-        $this->assertFalse($this->_validator->isValid('example.com..'));
-        $this->assertFalse($this->_validator->isValid('1.2.3.4.'));
+        $valuesExpected = array(
+            array(Zend_Validate_Hostname::ALLOW_ALL, true, array('example.', 'example.com.', '~ex%20ample.com.')),
+            array(Zend_Validate_Hostname::ALLOW_ALL, false, array('example..',)),
+            array(Zend_Validate_Hostname::ALLOW_ALL, true, array('1.2.3.4.')),
+            array(Zend_Validate_Hostname::ALLOW_DNS, false, array('example..', '~ex%20ample..')),
+            array(Zend_Validate_Hostname::ALLOW_LOCAL, true, array('example.', 'example.com.')),
+        );
+
+        foreach ($valuesExpected as $element) {
+            $validator = new Zend_Validate_Hostname($element[0]);
+            foreach ($element[2] as $input) {
+                $this->assertEquals($element[1], $validator->isValid($input), implode("\n", $validator->getMessages()) . $input);
+            }
+        }
     }
     
     /**
