@@ -31,6 +31,11 @@ require_once 'Zend/OpenId/Provider.php';
 require_once 'Zend/OpenId/ResponseHelper.php';
 
 /**
+ * @see Zend_OpenId_Provider_User_Session
+ */
+require_once 'Zend/OpenId/Provider/User/Session.php';
+
+/**
  * @category   Zend
  * @package    Zend_OpenId
  * @subpackage UnitTests

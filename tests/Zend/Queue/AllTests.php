@@ -35,6 +35,7 @@ require_once 'Zend/Queue/MessageTest.php';
 require_once 'Zend/Queue/Message/IteratorTest.php';
 
 // Adapter testing
+require_once 'Zend/Queue/Adapter/AdapterTest.php';
 require_once 'Zend/Queue/Adapter/ArrayTest.php';
 require_once 'Zend/Queue/Adapter/MemcacheqTest.php';
 require_once 'Zend/Queue/Adapter/NullTest.php';
