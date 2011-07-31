@@ -80,9 +80,7 @@ class Zend_Queue_AllTests
 
         // Adapter testing
         $suite->addTestSuite('Zend_Queue_Adapter_ArrayTest');
-        if (extension_loaded('memcache')) {
-            $suite->addTestSuite('Zend_Queue_Adapter_MemcacheqTest');
-        }
+        $suite->addTestSuite('Zend_Queue_Adapter_MemcacheqTest');
         $suite->addTestSuite('Zend_Queue_Adapter_DbTest');
         $suite->addTestSuite('Zend_Queue_Adapter_NullTest');
         $suite->addTestSuite('Zend_Queue_Adapter_PlatformJobQueueTest');

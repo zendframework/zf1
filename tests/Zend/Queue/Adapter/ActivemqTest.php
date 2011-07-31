@@ -98,4 +98,21 @@ class Zend_Queue_Adapter_ActivemqTest extends Zend_Queue_Adapter_AdapterTest
         $this->assertTrue(is_string(Zend_Queue_Adapter_Activemq::DEFAULT_HOST));
         $this->assertTrue(is_integer(Zend_Queue_Adapter_Activemq::DEFAULT_PORT));
     }
+    
+    /**
+     * @group ZF-7650
+     */
+    public function testReceiveWillRetrieveZeroItems()
+    {
+        $options = array('driverOptions' => $this->getTestConfig());
+
+        $queue = new Zend_Queue('Activemq', $options);
+        $queue2 = $queue->createQueue('queue');
+
+        $queue->send('My Test Message 1');
+        $queue->send('My Test Message 2');
+
+        $messages = $queue->receive(0);
+        $this->assertEquals(0, count($messages));
+    }
 }

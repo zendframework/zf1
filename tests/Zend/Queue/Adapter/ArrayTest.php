@@ -110,4 +110,20 @@ class Zend_Queue_Adapter_ArrayTest extends Zend_Queue_Adapter_AdapterTest
         $got = $adapter->getData();
         $this->assertEquals($data['test'], $got['test']);
     }
+    
+    /**
+     * @group ZF-7650
+     */
+    public function testReceiveWillRetrieveZeroItems()
+    {
+        // Zend_Queue_Adapter_Array
+        $queue = new Zend_Queue('Array');
+        $queue2 = $queue->createQueue('queue');
+
+        $queue->send('My Test Message 1');
+        $queue->send('My Test Message 2');
+
+        $messages = $queue->receive(0);
+        $this->assertEquals(0, count($messages));
+    }
 }
