@@ -707,6 +707,16 @@ RESPONSE
     }
 
     /**
+     * @group ZF-11162
+     */
+    function testClientDoesNotModifyPassedUri() {
+        $uri = Zend_Uri_Http::fromString('http://example.org/');
+        $orig = clone $uri;
+        $client = new Zend_Http_Client($uri);
+        $this->assertEquals((string)$orig, (string)$uri);
+    }
+    
+    /**
      * Data providers
      */
 

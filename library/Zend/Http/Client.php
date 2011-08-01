@@ -282,7 +282,10 @@ class Zend_Http_Client
      */
     public function setUri($uri)
     {
-        if (is_string($uri)) {
+        if ($uri instanceof Zend_Uri_Http) {
+            // clone the URI in order to keep the passed parameter constant
+            $uri = clone $uri;
+        } elseif (is_string($uri)) {
             $uri = Zend_Uri::factory($uri);
         }
 
