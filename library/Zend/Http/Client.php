@@ -1026,7 +1026,10 @@ class Zend_Http_Client
             }
 
             if($this->config['output_stream']) {
-                rewind($stream);
+                $streamMetaData = stream_get_meta_data($stream);
+                if ($streamMetaData['seekable']) {
+                    rewind($stream);
+                }
                 // cleanup the adapter
                 $this->adapter->setOutputStream(null);
                 $response = Zend_Http_Response_Stream::fromStream($response, $stream);

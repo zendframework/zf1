@@ -715,7 +715,18 @@ RESPONSE
         $client = new Zend_Http_Client($uri);
         $this->assertEquals((string)$orig, (string)$uri);
     }
-    
+    /*
+     * @group ZF-9206
+     */
+    function testStreamWarningRewind()
+    {
+        $httpClient = new Zend_Http_Client();
+        $httpClient->setUri('http://example.org');
+        $httpClient->setMethod(Zend_Http_Client::GET);
+        ob_start();
+        $httpClient->setStream('php://output')->request();
+        ob_clean();
+    }
     /**
      * Data providers
      */
