@@ -67,6 +67,8 @@ class Zend_Application_Resource_NavigationTest extends PHPUnit_Framework_TestCas
 
     public function tearDown()
     {
+        Zend_Navigation_Page::setDefaultPageType();
+
         // Restore original autoloaders
         $loaders = spl_autoload_functions();
         foreach ($loaders as $loader) {
@@ -79,8 +81,6 @@ class Zend_Application_Resource_NavigationTest extends PHPUnit_Framework_TestCas
 
         // Reset autoloader instance so it doesn't affect other tests
         Zend_Loader_Autoloader::resetInstance();
-
-        Zend_Navigation_Page::setDefaultPageType();
     }
 
     public function testInitializationInitializesNavigationObject()
