@@ -219,6 +219,11 @@ class Zend_Ldap_Converter
                 break;
             default:
                 if (is_numeric($value)) {
+                    // specialized handling of phone numbers that start with +
+                    // ZF-11639
+                    if ($value[0] === '+') {
+                        return $value;
+                    }
                     return (float)$value;
                 } else if ('TRUE' === $value || 'FALSE' === $value) {
                     return self::fromLdapBoolean($value);

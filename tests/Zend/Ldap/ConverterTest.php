@@ -181,8 +181,6 @@ class Zend_Ldap_ConverterTest extends PHPUnit_Framework_TestCase
 
     public function fromLdapDateTimeProvider ()
     {
-        $tz = new DateTimeZone('UTC');
-        $tz = null;
         return array (
                 array(new DateTime('2010-12-24 08:00:23+0300'),'20101224080023+0300', false),
                 array(new DateTime('2010-12-24 08:00:23+0300'),'20101224080023+03\'00\'', false),
@@ -218,6 +216,24 @@ class Zend_Ldap_ConverterTest extends PHPUnit_Framework_TestCase
                 array('20101231235959+13'),
                 array('20101231235959+1160'),
             );
+    }
+
+	/**
+     * @dataProvider fromLdapProvider
+     */
+    public function testFromLdap($expect, $value, $type, $dateTimeAsUtc){
+        $this->assertSame($expect, Zend_Ldap_Converter::fromLdap($value, $type, $dateTimeAsUtc));
+    }
+
+    public function fromLdapProvider(){
+        return array(
+           array(1.0, '1', 0, true),
+           array(0.0, '0', 0, true),
+           array(true, 'TRUE', 0, true),
+           array(false, 'FALSE', 0, true),
+           array(123456789.0, '123456789', 0, true),
+           array('+123456789', '+123456789', 0, true),
+        );
     }
 }
 
