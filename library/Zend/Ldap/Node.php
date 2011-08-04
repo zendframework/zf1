@@ -319,12 +319,17 @@ class Zend_Ldap_Node extends Zend_Ldap_Node_Abstract implements Iterator, Recurs
     /**
      * Ensures that teh RDN attributes are correctly set.
      *
+     * @param  boolean    $overwrite    True to overwrite the RDN attributes
      * @return void
      */
-    protected function _ensureRdnAttributeValues()
+    protected function _ensureRdnAttributeValues($overwrite = false)
     {
         foreach ($this->getRdnArray() as $key => $value) {
-            Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, false);
+            if (!array_key_exists($key, $this->_currentData) || $overwrite) {
+                Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, false);
+            } else if (!in_array($value, $this->_currentData[$key])) {
+                Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, true);
+            }
         }
     }
 
@@ -501,7 +506,7 @@ class Zend_Ldap_Node extends Zend_Ldap_Node_Abstract implements Iterator, Recurs
         } else {
             $this->_newDn = Zend_Ldap_Dn::factory($newDn);
         }
-        $this->_ensureRdnAttributeValues();
+        $this->_ensureRdnAttributeValues(true);
         return $this;
     }
 
