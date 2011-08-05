@@ -227,11 +227,12 @@ class Zend_Ldap_ConverterTest extends PHPUnit_Framework_TestCase
 
     public function fromLdapProvider(){
         return array(
-           array(1.0, '1', 0, true),
-           array(0.0, '0', 0, true),
+           array('1', '1', 0, true),
+           array('0', '0', 0, true),
            array(true, 'TRUE', 0, true),
            array(false, 'FALSE', 0, true),
-           array(123456789.0, '123456789', 0, true),
+           array('123456789', '123456789', 0, true),
+           // ZF-11639
            array('+123456789', '+123456789', 0, true),
         );
     }
