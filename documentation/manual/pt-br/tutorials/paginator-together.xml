@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="learning.paginator.together">
+    <title>Juntando tudo</title>
+
+    <para>
+        Você viu como criar um objeto Paginator, como mostrar os itens da página atual,
+        e como mostrar os elementos para navegar pelas páginas. Nesta seção você
+        irá ver como o Paginator se encaixa com o restante da sua aplicação MVC.
+    </para>
+
+    <para>
+        Nos exemplos a seguir nos vamos ignorar as boas práticas de implementação de um serviço em
+        camadas para manter o exemplo simples e fácil de entender. Estando familiarizado
+        com o uso de camadas, será fácil ver como o Paginator pode se encaixar dentro de uma abordagem
+        com melhores práticas.
+    </para>
+
+    <para>
+        Vamos começar com o controlador. A aplicação de exemplo é simples, e nós vamos colocar
+        tudo no controlador Index (IndexController) e no método Index (IndexAction). Novamente,
+        isto é apenas para propósito de demonstração. Uma aplicação real não deve usar controllers
+        dessa maneira.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+class IndexController extends Zend_Controller_Action
+{
+    public function indexAction()
+    {
+        // Setup pagination control view script. See the pagation control tutorial page
+        // for more information about this view script.
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('controls.phtml');
+
+        // Fetch an already instantiated database connection from the registry
+        $db = Zend_Registry::get('db');
+
+        // Create a select object which fetches blog posts, sorted decending by date of creation
+        $select = $db->select()->from('posts')->sort('date_created DESC');
+
+        // Create a Paginator for the blog posts query
+        $paginator = Zend_Paginator::factory($select);
+
+        // Read the current page number from the request. Default to 1 if no explicit page number is provided.
+        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+
+        // Assign the Paginator object to the view
+        $this->view->paginator = $paginator;
+    }
+}
+]]></programlisting>
+
+    <para>
+        O código a seguir é a index.phtml para o método Index (IndexAction) do controlador Index
+        (IndexController). A view pode ser simples. Vamos assumir o uso padrão de exibição
+        ScrollingStyle para a paginação.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+<ul>
+<?php
+// Render each the title of each post for the current page in a list-item
+foreach ($this->paginator as $item) {
+    echo '<li>' . $item->title . '</li>';
+}
+?>
+</ul>
+<?php echo $this->paginator; ?>
+]]></programlisting>
+
+    <para>
+        Agora navegue para a index do seu projeto e vejo o Paginator em ação. O que vimos nesse
+        tutorial é apenas a ponta do iceberg. O manual de referência e a documentação da
+        <acronym>API</acronym> irá te mostrar mais do que você pode fazer com
+        <classname>Zend_Paginator</classname>.
+    </para>
+</sect1>
