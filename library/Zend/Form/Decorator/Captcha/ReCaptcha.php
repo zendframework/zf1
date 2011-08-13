@@ -94,7 +94,7 @@ windowOnLoad(function(){
     document.getElementById("$challengeId").form.addEventListener("submit", function(e) {
         document.getElementById("$challengeId").value = document.getElementById("recaptcha_challenge_field").value;
         document.getElementById("$responseId").value = document.getElementById("recaptcha_response_field").value;
-    });
+    }, false);
 });
 </script>
 EOJ;
