@@ -52,7 +52,7 @@ class Zend_InfoCard_Xml_EncryptedData_XmlEnc extends Zend_InfoCard_Xml_Encrypted
         if(!($cipherdata instanceof Zend_InfoCard_Xml_Element)) {
             throw new Zend_InfoCard_Xml_Exception("Unable to find the enc:CipherData block");
         }
-
+        $cipherdata->registerXPathNamespace('enc', 'http://www.w3.org/2001/04/xmlenc#');
         list(,$ciphervalue) = $cipherdata->xpath("//enc:CipherValue");
 
         if(!($ciphervalue instanceof Zend_InfoCard_Xml_Element)) {
