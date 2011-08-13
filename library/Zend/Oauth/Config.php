@@ -390,7 +390,7 @@ class Zend_Oauth_Config implements Zend_Oauth_Config_ConfigInterface
      */
     public function setCallbackUrl($url)
     {
-        if (!Zend_Uri::check($url)) {
+        if (!Zend_Uri::check($url) && $url !== 'oob') {
             require_once 'Zend/Oauth/Exception.php';
             throw new Zend_Oauth_Exception(
                 '\'' . $url . '\' is not a valid URI'
