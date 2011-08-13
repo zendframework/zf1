@@ -69,6 +69,19 @@ class Zend_Controller_Request_SimpleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($request->getParam('test4'), 'test5');
     }
 
+    /**
+     * @group ZF-3472
+     */
+    public function testSettingParamToNullInSetparamsCorrectlyUnsetsValue()
+    {
+        $request = new Zend_Controller_Request_Simple;
+        $request->setParam('key', 'value');
+        $request->setParams(array(
+            'key' => null
+        ));
+        $this->assertNull($request->getParam('key'));
+    }
+
 }
 
 // Call Zend_Controller_Request_SimpleTest::main() if this source file is executed directly.

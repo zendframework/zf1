@@ -312,7 +312,7 @@ abstract class Zend_Controller_Request_Abstract
     {
         $this->_params = $this->_params + (array) $array;
 
-        foreach ($this->_params as $key => $value) {
+        foreach ($array as $key => $value) {
             if (null === $value) {
                 unset($this->_params[$key]);
             }
