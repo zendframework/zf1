@@ -342,7 +342,7 @@ class Zend_OpenIdTest extends PHPUnit_Framework_TestCase
 
         $url = 'http://example.com/test.php?Foo=Bar#Baz';
         $this->assertTrue( Zend_OpenId::normalizeUrl($url) );
-        $this->assertSame( 'http://example.com/test.php?Foo=Bar', $url );
+        $this->assertSame( 'http://example.com/test.php?Foo=Bar#Baz', $url );
     }
 
     /**
