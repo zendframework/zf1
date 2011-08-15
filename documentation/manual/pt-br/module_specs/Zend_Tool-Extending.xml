@@ -421,55 +421,55 @@ C:\WAMP\PHP\bin
                 </para>
 
                 <para>
-                    The following naming rules apply on how you can access the providers
-                    that were found by the IncludePathLoader:
+                    As seguintes regras de nomeação aplicaveis em como você pode acessar os providers
+                    que foram encontrados pelo IncludePathLoader:
                 </para>
 
                 <itemizedlist>
                     <listitem>
                         <para>
-                            The last part of your classname split by underscore is used
-                            for the provider name, e.g. "My_Provider_Hello" leads to your
-                            provider being accessible by the name "hello".
+                            A última parte da sua divisão do classname por underscore é usado
+                            para o nome do provedor, por exemplo, "My_Provider_Hello" permite ao seu
+                            provider a ser acessível pelo nome de "hello".
                         </para>
                     </listitem>
 
                     <listitem>
                         <para>
-                            If your provider has a method <methodname>getName()</methodname>
-                            it will be used instead of the previous method to determine
-                            the name.
+                            Se o seu provider tem um método <methodname>getName()</methodname>
+                            ele irá ser usado ao invés da maneira anterior para determinar
+                            o nome.
                         </para>
                     </listitem>
 
                     <listitem>
                         <para>
-                            If your provider has "Provider" as prefix, e.g. it is called
-                            <classname>My_HelloProvider</classname> it will be stripped
-                            from the name so that the provider will be called "hello".
+                            Se o seu provider tem um prefixo "Provider", por exemplo ele é chamado
+                            de <classname>My_HelloProvider</classname>, isto será retirado
+                            do nome, assim o provider será chamado "hello".
                         </para>
                     </listitem>
                 </itemizedlist>
 
                 <note>
-                    <para>The IncludePathLoader does not follow symlinks, that means
-                    you cannot link provider functionality into your include paths,
-                    they have to be physically present in the include paths.</para>
+                    <para>O IncludePathLoader não permite links simbólicos, que significa
+                    que você não pode linkar funcionalmente o provider no seus inclide paths,
+                    eles tem que estar fisicamente presentes nos inclide paths.</para>
                 </note>
 
                 <example
                     id="zend.tool.extending.zend-tool-framework.providers-and-manifests.loading.example">
-                    <title>Exposing Your Providers with a Manifest</title>
+                    <title>Expondo Seus Providers com um Manifest</title>
 
                     <para>
-                        You can expose your providers to <classname>Zend_Tool</classname> by
-                        offering a manifest with a special filename ending with "Manifest.php".
-                        A Provider Manifest is an implementation of the
+                        Você pode expor seus providers para <classname>Zend_Tool</classname>
+                        oferecendo um manifest com a nome de arquivo especial terminando com
+                        "Manifest.php". Um Provider Manifest é uma implementação do 
                         <interface>Zend_Tool_Framework_Manifest_ProviderManifestable</interface>
-                        and requires the <methodname>getProviders()</methodname> method to return
-                        an array of instantiated providers. In anticipation of our first
-                        own provider <classname>My_Component_HelloProvider</classname>
-                        we will create the following manifest:
+                        e requer o método <methodname>getProviders()</methodname> para retornar
+                        uma array providers instânciados. Em antecipação do seu primeiro próprio
+                        provider <classname>My_Component_HelloProvider</classname> nós iremos
+                        criar o seguinte manifest:
                     </para>
 
                     <programlisting language="php"><![CDATA[
@@ -488,18 +488,17 @@ class My_Component_Manifest
             </sect4>
 
             <sect4 id="zend.tool.extending.zend-tool-framework.providers-and-manifests.basic">
-                <title>Basic Instructions for Creating Providers</title>
+                <title>Instruções Básicas para Criação de Providers</title>
 
                 <para>
-                    As an example, if a developer wants to add the capability of showing
-                    the version of a datafile that his 3rd party component is working
-                    from, there is only one class the developer would need to implement.
-                    Assuming the component is called <classname>My_Component</classname>, he would
-                    create a class named <classname>My_Component_HelloProvider</classname> in a
-                    file named <filename>HelloProvider.php</filename> somewhere on the
-                    <property>include_path</property>. This class would implement
-                    <classname>Zend_Tool_Framework_Provider_Interface</classname>, and the body of
-                    this file would only have to look like the following:
+                   Como um exemplo, se um desenvolvedor quer adicionar a capacidade de apresentar
+                   a versão de um arquivos de dados que seu componente de terceiros está usando,
+                   exite apenas uma classe que o desenvolvedor precisaria implementar.
+                   Asumindo que o componente é chamado <classname>My_Component</classname>,
+                   Ele poderia criar uma classe chamada <classname>My_Component_HelloProvider</classname>
+                   em um arquivo nomeado de <filename>HelloProvider.php</filename> em algum lugar no
+                   <property>include_path</property>. Esta classe implementaria <classname>Zend_Tool_Framework_Provider_Interface</classname>,
+                   e o corpo deste arquivo apenas teria que parecer com o seguinte:
                 </para>
 
                 <programlisting language="php"><![CDATA[
@@ -514,9 +513,9 @@ class My_Component_HelloProvider
 ]]></programlisting>
 
                 <para>
-                    Given that code above, and assuming the developer wishes to access
-                    this functionality through the console client, the call would look
-                    like this:
+                    Dado o códifo acima, e assumindo que o desenvolvedor deseja acessar
+                    esta funcionalidade através do cliente de console, a chamada se pareceria
+                    com isto:                    
                 </para>
 
                 <programlisting language="sh"><![CDATA[
@@ -526,15 +525,15 @@ Hello from my provider!
             </sect4>
 
             <sect4 id="zend.tool.extending.zend-tool-framework.providers-and-manifests.response">
-                <title>The response object</title>
+                <title>O objeto response</title>
 
                 <para>
-                    As discussed in the architecture section <classname>Zend_Tool</classname> allows
-                    to hook different clients for using your <classname>Zend_Tool</classname>
-                    providers. To keep compliant with different clients you should use the response
-                    object to return messages from your providers instead of using
-                    <methodname>echo()</methodname> or a similiar output mechanism. Rewritting our
-                    hello provider with this knowledge it looks like:
+                    Como assumido na arquitetura da sessão <classname>Zend_Tool</classname> permite
+                    unir diferentes cliente para usar o seus providers <classname>Zend_Tool</classname>.
+                    Para manter a conformidade com diferentes clientes você deve usar o objeto de resposta
+                    para retornar mensagens de seus providers em vez de usar <methodname>echo()</methodname>
+                    ou um mecanismo de saída semelhante. Reescrevendo nosso provider hello com este conhecimento
+                    isto vai se parecer com:
                 </para>
 
                 <programlisting language="php"><![CDATA[
@@ -551,10 +550,9 @@ class My_Component_HelloProvider
 ]]></programlisting>
 
                 <para>
-                    As you can see one has to extend the
-                    <classname>Zend_Tool_Framework_Provider_Abstract</classname> to gain access to
-                    the Registry which holds the
-                    <classname>Zend_Tool_Framework_Client_Response</classname> instance.
+                    Como você pode ser ele extende o 
+                    <classname>Zend_Tool_Framework_Provider_Abstract</classname> para ter acesso
+                    ao Registry que guarda a instância do <classname>Zend_Tool_Framework_Client_Response</classname>.
                 </para>
             </sect4>
 
