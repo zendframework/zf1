@@ -385,6 +385,7 @@ class Zend_Amf_Parse_Amf3_Deserializer extends Zend_Amf_Parse_Deserializer
             }
 
             // Add properties back to the return object.
+            if (!is_array($properties)) $properties = array();
             foreach($properties as $key=>$value) {
                 if($key) {
                     $returnObject->$key = $value;
