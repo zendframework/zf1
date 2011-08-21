@@ -95,8 +95,11 @@ class Zend_Form_Decorator_ReCaptchaTest extends PHPUnit_Framework_TestCase
         $this->assertContains('old = window.onload', $html);
         $this->assertContains('if (old)', $html);
 
+        //Test that we create IE/Mozilla zendBindEvent mediator
+        $this->assertContains('function zendBindEvent', $html);
+
         // Test that we add an event listener for the form submit event
-        $this->assertContains('document.getElementById("captcha-challenge").form.addEventListener("submit", function(e)', $html);
+        $this->assertContains('document.getElementById("captcha-challenge").form,', $html);
 
         // Test that we reset the hidden fields with the global recaptcha values
         $this->assertContains('document.getElementById("captcha-challenge").value = document.getElementById("recaptcha_challenge_field").value', $html);
@@ -117,7 +120,7 @@ class Zend_Form_Decorator_ReCaptchaTest extends PHPUnit_Framework_TestCase
     {
         $this->element->setBelongsTo('contact');
         $html = $this->decorator->render('');
-        $this->assertContains('document.getElementById("contact-captcha-challenge").form.addEventListener("submit", function(e)', $html);
+        $this->assertContains('document.getElementById("contact-captcha-challenge").form,', $html);
         $this->assertContains('document.getElementById("contact-captcha-challenge").value = document.getElementById("recaptcha_challenge_field").value', $html);
         $this->assertContains('document.getElementById("contact-captcha-response").value = document.getElementById("recaptcha_response_field").value', $html);
     }
