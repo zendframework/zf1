@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 20792 -->
+<!-- EN-Revision: 24249 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.json.xml2json">
     <title>Conversão de XML para JSON</title>
@@ -119,10 +119,64 @@ $jsonContents = Zend_Json::fromXml($xmlStringContents, true);
 }
 ]]></programlisting>
 
-    <para>
-        Mais detalhes sobre o recurso xml2json podem ser encontrados na proposta original em si.
-        Dê uma olhada na <ulink url="http://tinyurl.com/2tfa8z">proposta Zend_xml2json</ulink>.
-    </para>
+<sect2 id="zend.json.xml2json.changes">
+    <title>Changes</title>
+
+    <sect3 id="zend.json.xml2json.changes.1-11-6">
+        <title>Changes in 1.11.6</title>
+
+        <para>
+            Starting from the release 1.11.6 the <methodname>Zend_Json::fromXml()</methodname> function
+            has been rewritten from scratch in order to manage XML element with attributes, text value
+            and sub-elements (see the <ulink url="http://framework.zend.com/issues/browse/ZF-3257">ZF-3257</ulink>).
+        </para>
+
+        <para>
+            For instance, if you have an XML document like this:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<a>
+    <b id="foo"/>
+    bar
+</a>
+]]></programlisting>
+
+            <para>
+                The <acronym>JSON</acronym> output string returned from
+                <methodname>Zend_Json::fromXml()</methodname> is:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+{
+   "a" : {
+      "b" : {
+         "@attributes" : {
+            "id" : "foo"
+         }
+      },
+      "@text" : "bar"
+   }
+}
+]]></programlisting>
+
+            <para>
+                The idea is to use a special key value (@text) to store the text value of an XML element,
+                only if this element contains attributes or sub-elements (as in the previous examples).
+                If you have a simple XML element with only a text value, like this:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<a>foo</a>
+]]></programlisting>
+
+            <para>
+                the JSON will be {"a":"foo"} that is quite intuitive, instead of {"a":{"@text":"foo"}}.
+            </para>
+    </sect3>
+</sect2>
 </sect1>
 <!--
 vim:se ts=4 sw=4 et:
