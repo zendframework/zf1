@@ -53,7 +53,7 @@ class Zend_CodeGenerator_Php_Docblock_Tag_Param extends Zend_CodeGenerator_Php_D
      * fromReflection()
      *
      * @param Zend_Reflection_Docblock_Tag $reflectionTagParam
-     * @return Zend_CodeGenerator_Php_Docblock_Tag_Param
+     * @return Zend_CodeGenerator_Php_Docblock_Tag
      */
     public static function fromReflection(Zend_Reflection_Docblock_Tag $reflectionTagParam)
     {
