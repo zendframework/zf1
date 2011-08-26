@@ -87,6 +87,6 @@ class Zend_XmlRpc_Generator_XmlWriter extends Zend_XmlRpc_Generator_GeneratorAbs
 
     public function saveXml()
     {
-        return $this->_xmlWriter->flush(false);
+        return $this->_xmlWriter->flush(true);
     }
 }
