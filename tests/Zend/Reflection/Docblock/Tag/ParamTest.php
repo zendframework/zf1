@@ -21,6 +21,7 @@
  */
 
 require_once 'Zend/Reflection/File.php';
+require_once 'Zend/Reflection/Docblock/Tag/Param.php';
 
 /**
  * @category   Zend
@@ -86,6 +87,18 @@ class Zend_Reflection_Docblock_Tag_ParamTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Zend\Foo\Bar', $paramTag->getType());
         $this->assertEquals('$var', $paramTag->getVariableName());
         $this->assertEquals('desc', $paramTag->getDescription());
+    }
+
+    /**
+     * @group ZF-8373
+     */
+    public function testArrayNotationInParam()
+    {
+        $targetLine = '@param string[] $foo An array of strings';
+        $param = new Zend_Reflection_Docblock_Tag_Param($targetLine);
+        $this->assertEquals('string[]', $param->getType());
+        $this->assertEquals('$foo', $param->getVariableName());
+        $this->assertEquals('An array of strings', $param->getDescription());
     }
 }
 
