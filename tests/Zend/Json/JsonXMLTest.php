@@ -586,6 +586,54 @@ EOT;
 
     }
 
+    /**
+     * @group ZF-11385
+     * @expectedException Zend_Json_Exception
+     * @dataProvider providerNestingDepthIsHandledProperly
+     */
+    public function testNestingDepthIsHandledProperlyWhenNestingDepthExceedsMaximum($xmlStringContents)
+    {        
+        Zend_Json::$maxRecursionDepthAllowed = 1;
+        Zend_Json::fromXml($xmlStringContents, true);
+    }
+    
+    /**
+     * @group ZF-11385
+     * @dataProvider providerNestingDepthIsHandledProperly
+     */
+    public function testNestingDepthIsHandledProperlyWhenNestingDepthDoesNotExceedMaximum($xmlStringContents)
+    {   
+        try {
+            Zend_Json::$maxRecursionDepthAllowed = 25;
+            $jsonString = Zend_Json::fromXml($xmlStringContents, true);
+            $jsonArray = Zend_Json::decode($jsonString);
+            $this->assertNotNull($jsonArray, "JSON decode result is NULL");
+            $this->assertSame('A', $jsonArray['response']['message_type']['defaults']['close_rules']['after_responses']);
+        } catch ( Zend_Json_Exception $ex ) {
+            $this->fail('Zend_Json::fromXml does not implement recursion check properly');
+        }
+    }
+    
+    /**
+     * XML document provider for ZF-11385 tests
+     * @return array
+     */
+    public static function providerNestingDepthIsHandledProperly()
+    {
+        $xmlStringContents = <<<EOT
+<response>
+	<message_type>
+		<defaults>
+			<close_rules>
+				<after_responses>A</after_responses>
+			</close_rules>
+		</defaults>
+	</message_type>
+</response>
+EOT;
+        return array(array($xmlStringContents));
+    }
+    
 } // End of class Zend_Json_JsonXMLTest
 
 
