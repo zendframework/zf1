@@ -781,6 +781,38 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
             $encoded
         );
     }
+
+    /**
+     * @group ZF-9577
+     */
+    public function testJsonPrettyPrintWorksWithTxtOutputFormat()
+    {
+        $o = new stdClass;
+        $o->four = 4;
+        $o->foo = array(1,2,3);
+
+        $jsonstr = Zend_Json::encode($o);
+
+        $targetTxtOutput = "{\n\t\"four\":4,\n\t\"foo\":[\n\t\t1,\n\t\t2,\n\t\t3\n\t]\n}";
+        $this->assertEquals($targetTxtOutput, Zend_Json::prettyPrint($jsonstr));
+    }
+
+    /**
+     * @group ZF-9577
+     */
+    public function testJsonPrettyPrintWorksWithHtmlOutputFormat()
+    {
+        $o = new stdClass;
+        $o->four = 4;
+        $o->foo = array(1,2,3);
+
+        $jsonstr = Zend_Json::encode($o);
+        $targetHtmlOutput = '{<br />&nbsp;&nbsp;&nbsp;&nbsp;"four":4,<br />&nbsp;&nbsp;&nbsp;&nbsp;"foo":[<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3<br />&nbsp;&nbsp;&nbsp;&nbsp;]<br />}';
+        $this->assertEquals($targetHtmlOutput, Zend_Json::prettyPrint($jsonstr, array('format' => 'html')));
+    }
+
+
+
 }
 
 /**
