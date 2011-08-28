@@ -309,4 +309,34 @@ class MyClass extends ParentClass
 CODE;
         $this->assertEquals( $expected, $codeGenClass->generate() );
     }
+
+    /**
+     * @group ZF-11513
+     */
+    public function testAllowsClassConstantToHaveSameNameAsClassProperty()
+    {
+        $const = new Zend_CodeGenerator_Php_Property();
+        $const->setName('name')->setDefaultValue('constant')->setConst(true);
+
+        $property = new Zend_CodeGenerator_Php_Property();
+        $property->setName('name')->setDefaultValue('property');
+
+        $codeGenClass = new Zend_CodeGenerator_Php_Class();
+        $codeGenClass->setName('My_Class')->setProperties(array($const, $property));
+
+        $expected = <<<CODE
+class My_Class
+{
+
+    const name = 'constant';
+
+    public \$name = 'property';
+
+
+}
+
+CODE;
+        $this->assertEquals( $expected, $codeGenClass->generate() );
+    }
+
 }
