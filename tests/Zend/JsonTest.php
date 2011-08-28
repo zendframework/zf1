@@ -811,7 +811,28 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($targetHtmlOutput, Zend_Json::prettyPrint($jsonstr, array('format' => 'html')));
     }
 
+    /**
+     * @group ZF-11167
+     */
+    public function testEncodeWillUseToArrayMethodWhenAvailable()
+    {
+        $o = new ZF11167_ToArrayClass();
+        $objJson = Zend_Json::encode($o);
+        $arrJson = Zend_Json::encode($o->toArray());
+        $this->assertSame($arrJson, $objJson);
+    }
 
+    /**
+     * @group ZF-11167
+     */
+    public function testEncodeWillUseToJsonWhenBothToJsonAndToArrayMethodsAreAvailable()
+    {
+        $o = new ZF11167_ToArrayToJsonClass();
+        $objJson = Zend_Json::encode($o);
+        $this->assertEquals('"bogus"', $objJson);
+        $arrJson = Zend_Json::encode($o->toArray());
+        $this->assertNotSame($objJson, $arrJson);
+    }
 
 }
 
@@ -864,6 +885,41 @@ class ToJsonClass
         );
 
         return Zend_Json::encode($data);
+    }
+}
+
+/**
+ * Serializable class exposing a toArray() method
+ * @see ZF-11167
+ */
+class ZF11167_ToArrayClass
+{
+    private $_firstName = 'John';
+
+    private $_lastName = 'Doe';
+
+    private $_email = 'john@doe.com';
+
+    public function toArray()
+    {
+        $data = array(
+            'firstName' => $this->_firstName,
+            'lastName'  => $this->_lastName,
+            'email'     => $this->_email
+        );
+        return $data;
+    }
+}
+
+/**
+ * Serializable class exposing both toArray() and toJson() methods
+ * @see ZF-11167
+ */
+class ZF11167_ToArrayToJsonClass extends ZF11167_ToArrayClass
+{    
+    public function toJson()
+    {
+        return Zend_Json::encode('bogus');
     }
 }
 

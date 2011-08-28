@@ -125,8 +125,12 @@ class Zend_Json
      */
     public static function encode($valueToEncode, $cycleCheck = false, $options = array())
     {
-        if (is_object($valueToEncode) && method_exists($valueToEncode, 'toJson')) {
-            return $valueToEncode->toJson();
+        if (is_object($valueToEncode)) {
+            if (method_exists($valueToEncode, 'toJson')) {
+                return $valueToEncode->toJson();
+            } elseif (method_exists($valueToEncode, 'toArray')) {
+                return self::encode($valueToEncode->toArray(), $cycleCheck, $options);
+            }
         }
 
         // Pre-encoding look for Zend_Json_Expr objects and replacing by tmp ids
