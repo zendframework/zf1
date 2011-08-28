@@ -403,26 +403,34 @@ class Zend_Json
             $ind = $options['indent'];
         }
 
+        $inLiteral = false;
         foreach($tokens as $token) {
             if($token == '') {
                 continue;
             }
 
             $prefix = str_repeat($ind, $indent);
-            if ($token == '{' || $token == '[') {
+            if (!$inLiteral && ($token == '{' || $token == '[')) {
                 $indent++;
                 if (($result != '') && ($result[(strlen($result)-1)] == $lineBreak)) {
                     $result .= $prefix;
                 }
                 $result .= $token . $lineBreak;
-            } elseif ($token == '}' || $token == ']') {
+            } elseif (!$inLiteral && ($token == '}' || $token == ']')) {
                 $indent--;
                 $prefix = str_repeat($ind, $indent);
                 $result .= $lineBreak . $prefix . $token;
-            } elseif ($token == ',') {
+            } elseif (!$inLiteral && $token == ',') {
                 $result .= $token . $lineBreak;
             } else {
-                $result .= $prefix . $token;
+                $result .= ( $inLiteral ? '' : $prefix ) . $token;
+                
+                // Count # of unescaped double-quotes in token, subtract # of
+                // escaped double-quotes and if the result is odd then we are 
+                // inside a string literal
+                if ((substr_count($token, "\"")-substr_count($token, "\\\"")) % 2 != 0) {
+                    $inLiteral = !$inLiteral;
+                }
             }
         }
         return $result;

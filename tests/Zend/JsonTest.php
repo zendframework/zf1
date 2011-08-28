@@ -118,6 +118,49 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $zero, 'Failed 0 integer test. Encoded: ' . serialize(Zend_Json_Encoder::encode(0)));
     }
 
+    /**
+     * @group ZF-10185
+     */
+    public function testJsonPrettyPrintWorksWithArrayNotationInStringLiteral()
+    {
+        $o = new stdClass();
+        $o->test = 1;
+        $o->faz = 'fubar';
+        
+        // The escaped double-quote in item 'stringwithjsonchars' ensures that 
+        // escaped double-quotes don't throw off prettyPrint's string literal detection
+        $test = array(
+            'simple'=>'simple test string',
+            'stringwithjsonchars'=>'\"[1,2]',
+            'complex'=>array(
+                'foo'=>'bar',
+                'far'=>'boo',
+                'faz'=>array(
+                    'obj'=>$o
+                )
+            )
+        );
+        print_r($test);
+        $pretty = Zend_Json::prettyPrint(Zend_Json::encode($test), array("indent"  => " "));
+        print_r($pretty);
+        $expected = <<<EOB
+{
+ "simple":"simple test string",
+ "stringwithjsonchars":"\\\\\\"[1,2]",
+ "complex":{
+  "foo":"bar",
+  "far":"boo",
+  "faz":{
+   "obj":{
+    "test":1,
+    "faz":"fubar"
+   }
+  }
+ }
+}
+EOB;
+        $this->assertSame($expected, $pretty);
+    }
 
     /**
      * test float encoding/decoding
