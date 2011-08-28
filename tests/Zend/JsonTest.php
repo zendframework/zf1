@@ -140,9 +140,7 @@ class Zend_JsonTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        print_r($test);
         $pretty = Zend_Json::prettyPrint(Zend_Json::encode($test), array("indent"  => " "));
-        print_r($pretty);
         $expected = <<<EOB
 {
  "simple":"simple test string",
