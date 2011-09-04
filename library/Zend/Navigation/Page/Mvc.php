@@ -216,6 +216,14 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                                       $this->getRoute(),
                                       $this->getResetParams());
 
+        // Add the fragment identifier if it is set
+        $fragmentIdentifier = $this->getFragmentIdentifier();       
+        if (null !== $fragmentIdentifier) {
+            $url .= '#' . $fragmentIdentifier;
+        }         
+        
+         return $this->_hrefCache = $url;
+
         return $this->_hrefCache = $url;
     }
 

@@ -42,6 +42,20 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
     protected $_label;
 
     /**
+     * Fragment identifier (anchor identifier)
+     * 
+     * The fragment identifier (anchor identifier) pointing to an anchor within 
+     * a resource that is subordinate to another, primary resource.
+     * The fragment identifier introduced by a hash mark "#".
+     * Example: http://www.example.org/foo.html#bar ("bar" is the fragment identifier)
+     * 
+     * @link http://www.w3.org/TR/html401/intro/intro.html#fragment-uri
+     * 
+     * @var string|null
+     */
+    protected $_fragmentIdentifier;
+
+    /**
      * Page id
      *
      * @var string|null
@@ -327,6 +341,35 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
     public function getLabel()
     {
         return $this->_label;
+    }
+
+    /**
+     * Sets a fragment identifier
+     *
+     * @param  string $fragmentIdentifier   new fragment identifier
+     * @return Zend_Navigation_Page         fluent interface, returns self
+     * @throws Zend_Navigation_Exception    if empty/no string is given
+     */
+    public function setFragmentIdentifier($fragmentIdentifier)
+    {
+        if (null !== $fragmentIdentifier && !is_string($fragmentIdentifier)) {
+            require_once 'Zend/Navigation/Exception.php';
+            throw new Zend_Navigation_Exception(
+                    'Invalid argument: $fragmentIdentifier must be a string or null');
+        }
+ 
+        $this->_fragmentIdentifier = $fragmentIdentifier;
+        return $this;
+    }
+    
+     /**
+     * Returns fragment identifier
+     *
+     * @return string|null  fragment identifier
+     */
+    public function getFragmentIdentifier()
+    {
+        return $this->_fragmentIdentifier;
     }
 
     /**
@@ -1091,6 +1134,7 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
             $this->getCustomProperties(),
             array(
                 'label'     => $this->getlabel(),
+                'fragmentIdentifier' => $this->getFragmentIdentifier(),
                 'id'        => $this->getId(),
                 'class'     => $this->getClass(),
                 'title'     => $this->getTitle(),
