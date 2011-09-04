@@ -783,6 +783,9 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
      */
     public function setVisible($visible = true)
     {
+        if (is_string($visible) && 'false' == strtolower($visible)) {
+            $visible = false;
+        }
         $this->_visible = (bool) $visible;
         return $this;
     }
