@@ -94,6 +94,15 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
      */
     protected $_resetParams = true;
 
+        
+    /**
+     * Whether href should be encoded when assembling URL
+     *
+     * @see getHref()
+     * @var bool 
+     */
+    protected $_encodeUrl = true;
+
     /**
      * Cached href
      *
@@ -214,7 +223,8 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
 
         $url = self::$_urlHelper->url($params,
                                       $this->getRoute(),
-                                      $this->getResetParams());
+                                      $this->getResetParams(),
+                                      $this->getEncodeUrl());
 
         // Add the fragment identifier if it is set
         $fragmentIdentifier = $this->getFragmentIdentifier();       
@@ -426,6 +436,35 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
     }
 
     /**
+     * Sets whether href should be encoded when assembling URL
+     * 
+     * @see getHref()
+     *
+     * @param bool $resetParams         whether href should be encoded when
+     *                                  assembling URL
+     * @return Zend_Navigation_Page_Mvc fluent interface, returns self
+     */
+    public function setEncodeUrl($encodeUrl)
+    {
+        $this->_encodeUrl = (bool) $encodeUrl;
+        $this->_hrefCache = null;
+        
+        return $this;
+    }
+    
+    /**
+     * Returns whether herf should be encoded when assembling URL
+     * 
+     * @see getHref()
+     *
+     * @return bool whether herf should be encoded when assembling URL 
+     */
+    public function getEncodeUrl()
+    {
+        return $this->_encodeUrl;
+    }
+
+    /**
      * Sets action helper for assembling URLs
      *
      * @see getHref()
@@ -455,7 +494,8 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                 'module'       => $this->getModule(),
                 'params'       => $this->getParams(),
                 'route'        => $this->getRoute(),
-                'reset_params' => $this->getResetParams()
+                'reset_params' => $this->getResetParams(),
+                'encodeUrl'    => $this->getEncodeUrl(),
             ));
     }
 }

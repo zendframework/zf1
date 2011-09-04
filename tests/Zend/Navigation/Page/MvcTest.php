@@ -23,6 +23,7 @@
 require_once 'Zend/Navigation/Page/Mvc.php';
 require_once 'Zend/Controller/Request/Http.php';
 require_once 'Zend/Controller/Router/Route.php';
+require_once 'Zend/Controller/Router/Route/Regex.php';
 
 /**
  * Tests the class Zend_Navigation_Page_Mvc
@@ -378,6 +379,54 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $page->getParams());
     }
 
+    /**
+     * @group ZF-10465
+     */
+    public function testSetAndGetEncodeUrl()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label'      => 'foo',
+            'action'     => 'index',
+            'controller' => 'index',
+        ));
+        
+        $page->setEncodeUrl(false);
+        $this->assertEquals(false, $page->getEncodeUrl());
+    }
+    
+    /**
+     * @group ZF-10465
+     */
+    public function testEncodeUrlIsRouteAware()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label'      => 'foo',
+            'route'      => 'myroute',
+            'encodeUrl'  => false,
+            'params'     => array(
+                'contentKey' => 'pagexy/subpage',
+            )
+        ));
+ 
+        $this->_front->getRouter()->addRoute(
+            'myroute',
+            new Zend_Controller_Router_Route_Regex(
+                '(.+)\.html',
+                array(
+                    'module'     => 'default',
+                    'controller' => 'foobar',
+                    'action'     => 'bazbat',
+                ),
+                array(
+                    1 => 'contentKey'
+                ),
+                '%s.html'
+            )
+        );
+
+        $this->assertEquals('/pagexy/subpage.html', $page->getHref());
+    }
+
     public function testToArrayMethod()
     {
         $options = array(
@@ -393,6 +442,7 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
             'order' => 100,
             'active' => true,
             'visible' => false,
+            'encodeUrl'  => false,
 
             'foo' => 'bar',
             'meaning' => 42
