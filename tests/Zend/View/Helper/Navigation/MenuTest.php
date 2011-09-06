@@ -526,4 +526,18 @@ class Zend_View_Helper_Navigation_MenuTest
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-9746
+     */
+    public function testRenderingWithAccesskey()
+    {
+        $this->_nav3->findOneBy('id', 'home')->setAccesskey('H');
+        $this->_nav3->findOneBy('uri', 'contact')->setAccesskey('c');
+        $this->_nav3->findOneBy('id', 'imprint')->setAccesskey('i');
+        
+        $expected = $this->_getExpected('menu/accesskey.html');
+        
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
 }

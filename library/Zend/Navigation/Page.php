@@ -84,6 +84,18 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
     protected $_target;
 
     /**
+     * Accessibility key character
+     *
+     * This attribute assigns an access key to an element. An access key is a
+     * single character from the document character set.
+     *
+     * @link http://www.w3.org/TR/html401/interact/forms.html#access-keys
+     *
+     * @var string|null
+     */
+    protected $_accesskey;
+
+    /**
      * Forward links to other pages
      *
      * @link http://www.w3.org/TR/html4/struct/links.html#h-12.3.1
@@ -491,6 +503,40 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
     public function getTarget()
     {
         return $this->_target;
+    }
+
+    /**
+     * Sets access key for this page
+     *
+     * @param  string|null $character     [optional] access key to set. Default
+     *                                    is null, which sets no access key.
+     * @return Zend_Navigation_Page       fluent interface, returns self
+     * @throws Zend_Navigation_Exception  if access key is not string or null or
+     *                                    if the string length not equal to one
+     */
+    public function setAccesskey($character = null)
+    {
+        if (null !== $character
+            && (!is_string($character) || 1 != strlen($character)))
+        {
+            require_once 'Zend/Navigation/Exception.php';
+            throw new Zend_Navigation_Exception(
+                'Invalid argument: $character must be a single character or null'
+            );
+        }
+ 
+        $this->_accesskey = $character;
+        return $this;
+    }
+
+     /**
+     * Returns page access key
+     *
+     * @return string|null  page access key or null
+     */
+    public function getAccesskey()
+    {
+        return $this->_accesskey;
     }
 
     /**
@@ -1142,6 +1188,7 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
                 'class'     => $this->getClass(),
                 'title'     => $this->getTitle(),
                 'target'    => $this->getTarget(),
+                'accesskey' => $this->getAccesskey(),
                 'rel'       => $this->getRel(),
                 'rev'       => $this->getRev(),
                 'order'     => $this->getOrder(),

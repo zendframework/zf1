@@ -234,6 +234,7 @@ class Zend_View_Helper_Navigation_Menu
             $element = 'a';
             $attribs['href'] = $href;
             $attribs['target'] = $page->getTarget();
+            $attribs['accesskey'] = $page->getAccessKey();
         } else {
             $element = 'span';
         }
