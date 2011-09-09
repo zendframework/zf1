@@ -4461,6 +4461,24 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $form = new Zend_Form();
         $form->addElement(NULL);
     }
+
+    /**
+     * @group ZF-11729
+     */
+    public function testDashSeparatedElementsInDisplayGroupsShouldNotRenderOutsideDisplayGroup()
+    {
+        $form = new Zend_Form();
+        $form->addElement('text', 'random-element-name', array(
+            'label' => 'This is weird',
+            'value' => 'think its a bug',
+        ));
+        $form->addDisplayGroup(array('random-element-name'), 'foobar', array(
+            'legend' => 'foobar',
+        ));
+        $html = $form->render($this->getView());
+        $count = substr_count($html, 'randomelementname-element');
+        $this->assertEquals(1, $count, $html);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
