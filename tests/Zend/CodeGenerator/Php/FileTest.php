@@ -296,4 +296,86 @@ EOS;
         $this->assertEquals(';', $lines[2]{$targetLength-1});
     }
 
+    /**
+    * @group ZF-11703
+    */
+    public function testNewMethodKeepDocBlock(){
+        $codeGenFile = Zend_CodeGenerator_Php_File::fromReflectedFileName(dirname(__FILE__).'/_files/zf-11703.php', true, true);
+        $target = <<<EOS
+<?php
+/**
+ * For manipulating files.
+ *
+ */
+
+class Foo
+{
+
+    public function bar()
+    {
+        // action body
+    }
+
+    public function bar2()
+    {
+        // action body
+    }
+
+
+}
+
+
+EOS;
+
+        $codeGenFile->getClass()->setMethod(array(
+            'name' => 'bar2',
+            'body' => '// action body'
+            ));
+
+        $this->assertEquals($target, $codeGenFile->generate());
+    }
+    
+    /**
+    * @group ZF-11703
+    */
+    public function testNewMethodKeepTwoDocBlock(){
+        $codeGenFile = Zend_CodeGenerator_Php_File::fromReflectedFileName(dirname(__FILE__).'/_files/zf-11703_1.php', true, true);
+        $target = <<<EOS
+<?php
+/**
+ * For manipulating files.
+ *
+ */
+
+
+/**
+ * Class Foo1
+ *
+ */
+class Foo1
+{
+
+    public function bar()
+    {
+        // action body
+    }
+
+    public function bar2()
+    {
+        // action body
+    }
+
+
+}
+
+
+EOS;
+
+        $codeGenFile->getClass()->setMethod(array(
+            'name' => 'bar2',
+            'body' => '// action body'
+            ));
+
+        $this->assertEquals($target, $codeGenFile->generate());
+    }
 }
