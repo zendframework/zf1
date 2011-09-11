@@ -227,9 +227,9 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                                       $this->getEncodeUrl());
 
         // Add the fragment identifier if it is set
-        $fragmentIdentifier = $this->getFragmentIdentifier();       
-        if (null !== $fragmentIdentifier) {
-            $url .= '#' . $fragmentIdentifier;
+        $fragment = $this->getFragment();       
+        if (null !== $fragment) {
+            $url .= '#' . $fragment;
         }         
         
          return $this->_hrefCache = $url;

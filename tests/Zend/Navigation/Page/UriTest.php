@@ -110,7 +110,7 @@ class Zend_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
         
         $page = new Zend_Navigation_Page_Uri();
         $page->setUri($uri);
-        $page->setFragmentIdentifier('bar');
+        $page->setFragment('bar');
         
         $this->assertEquals($uri . '#bar', $page->getHref());
         

@@ -111,7 +111,7 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
     {
         $page = new Zend_Navigation_Page_Mvc(array(
             'label'              => 'foo',
-            'fragmentIdentifier' => 'qux',
+            'fragment' => 'qux',
             'controller'         => 'mycontroller',
             'action'             => 'myaction',
             'route'              => 'myroute',
@@ -434,7 +434,7 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
             'action' => 'index',
             'controller' => 'index',
             'module' => 'test',
-            'fragmentIdentifier' => 'bar',
+            'fragment' => 'bar',
             'id' => 'my-id',
             'class' => 'my-class',
             'title' => 'my-title',
