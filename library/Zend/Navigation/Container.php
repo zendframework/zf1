@@ -143,9 +143,12 @@ abstract class Zend_Navigation_Container implements RecursiveIterator, Countable
     /**
      * Adds several pages at once
      *
-     * @param  array|Zend_Config $pages   pages to add
-     * @return Zend_Navigation_Container  fluent interface, returns self
-     * @throws Zend_Navigation_Exception  if $pages is not array or Zend_Config
+     * @param  array|Zend_Config|Zend_Navigation_Container  $pages  pages to add
+     * @return Zend_Navigation_Container                    fluent interface,
+     *                                                      returns self
+     * @throws Zend_Navigation_Exception                    if $pages is not 
+     *                                                      array, Zend_Config or
+     *                                                      Zend_Navigation_Container
      */
     public function addPages($pages)
     {
@@ -153,11 +156,16 @@ abstract class Zend_Navigation_Container implements RecursiveIterator, Countable
             $pages = $pages->toArray();
         }
 
+        if ($pages instanceof Zend_Navigation_Container) {
+            $pages = iterator_to_array($pages);
+        }
+
         if (!is_array($pages)) {
             require_once 'Zend/Navigation/Exception.php';
             throw new Zend_Navigation_Exception(
-                    'Invalid argument: $pages must be an array or an ' .
-                    'instance of Zend_Config');
+                    'Invalid argument: $pages must be an array, an ' .
+                    'instance of Zend_Config or an instance of ' .
+                    'Zend_Navigation_Container');
         }
 
         foreach ($pages as $page) {
