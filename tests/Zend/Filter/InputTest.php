@@ -2182,6 +2182,106 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('rule1'), array_keys($missing));
         $this->assertEquals(array("Still missing"), $missing['rule1']);
     }
+
+    /**
+     * If setAllowEmpty(true) is called, all fields are optional, but fields with
+     * a NotEmpty validator attached to them, should contain a non empty value.
+     *
+     * @group ZF-9289
+     */
+    function testAllowEmptyTrueRespectsNotEmptyValidators()
+    {
+        $data = array(
+            'field1' => 'foo',
+            'field2' => ''
+        );
+
+        $validators = array(
+            'field1' => array(
+                new Zend_Validate_NotEmpty(),
+                Zend_Filter_Input::MESSAGES => array(
+                    array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => '\'field1\' is required'
+                    )
+                )
+            ),
+
+            'field2' => array(
+                new Zend_Validate_NotEmpty()
+            )
+        );
+
+        $options = array(Zend_Filter_Input::ALLOW_EMPTY => true);
+        $input = new Zend_Filter_Input( null, $validators, $data, $options );
+        $this->assertFalse($input->isValid(), 'Ouch, the NotEmpty validators are ignored!');
+
+        $validators = array(
+            'field1' => array(
+                'Digits',
+                array('NotEmpty', 'integer'),
+                Zend_Filter_Input::MESSAGES => array(
+                    1 =>
+                    array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => '\'field1\' is required'
+                    )
+                )
+            )
+        );
+
+        $data = array(
+            'field1' => 0,
+            'field2' => ''
+        );
+        $options = array(Zend_Filter_Input::ALLOW_EMPTY => true);
+        $input = new Zend_Filter_Input( null, $validators, $data, $options );
+        $this->assertFalse($input->isValid(), 'Ouch, if the NotEmpty validator is not the first rule, the NotEmpty validators are ignored !');
+
+        // and now with a string 'NotEmpty' instead of an instance:
+
+        $validators = array(
+            'field1' => array(
+                'NotEmpty',
+                Zend_Filter_Input::MESSAGES => array(
+                    0 =>
+                    array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => '\'field1\' is required'
+                    )
+                )
+            )
+        );
+
+        $data = array(
+            'field1' => '',
+            'field2' => ''
+        );
+
+        $options = array(Zend_Filter_Input::ALLOW_EMPTY => true);
+        $input = new Zend_Filter_Input( null, $validators, $data, $options );
+        $this->assertFalse($input->isValid(), 'If the NotEmpty validator is a string, the NotEmpty validator is ignored !');
+
+        // and now with an array
+
+        $validators = array(
+            'field1' => array(
+                array('NotEmpty', 'integer'),
+                Zend_Filter_Input::MESSAGES => array(
+                    0 =>
+                    array(
+                        Zend_Validate_NotEmpty::IS_EMPTY => '\'field1\' is required'
+                    )
+                )
+            )
+        );
+
+        $data = array(
+            'field1' => 0,
+            'field2' => ''
+        );
+
+        $options = array(Zend_Filter_Input::ALLOW_EMPTY => true);
+        $input = new Zend_Filter_Input( null, $validators, $data, $options );
+        $this->assertFalse($input->isValid(), 'If the NotEmpty validator is an array, the NotEmpty validator is ignored !');
+    }
 }
 
 class MyZend_Filter_Date implements Zend_Filter_Interface
