@@ -73,9 +73,10 @@ class Zend_View_Helper_Form extends Zend_View_Helper_FormElement
                . '>';
 
         if (false !== $content) {
-            $xhtml .= $content
-                   .  '</form>';
+            $xhtml .= $content;
         }
+
+        $xhtml .= '</form>';
 
         return $xhtml;
     }
