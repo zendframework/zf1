@@ -236,6 +236,55 @@ class Zend_Validate_File_MimeTypeTest extends PHPUnit_Framework_TestCase
             );
         }
     }
+    
+    /**
+     * @group ZF-11784
+     */
+    public function testTryCommonMagicFilesFlag()
+    {
+        $validator = new Zend_Validate_File_MimeType('image/jpeg');
+        $this->assertTrue($validator->shouldTryCommonMagicFiles());
+        
+        $validator->setTryCommonMagicFilesFlag(false);
+        $this->assertFalse($validator->shouldTryCommonMagicFiles());
+        
+        $validator->setTryCommonMagicFilesFlag(true);
+        $this->assertTrue($validator->shouldTryCommonMagicFiles());
+    }
+
+    /**
+     * @group ZF-11784
+     */
+    public function testDisablingTryCommonMagicFilesIgnoresCommonLocations()
+    {
+        $filetest = dirname(__FILE__) . '/_files/picture.jpg';
+        $files = array(
+            'name'     => 'picture.jpg',
+            'size'     => 200,
+            'tmp_name' => $filetest,
+            'error'    => 0
+        );
+        
+        $validator = new Zend_Validate_File_MimeType(array('image/jpeg', 'image/jpeg; charset=binary'));
+        
+        $goodEnvironment = $validator->isValid($filetest, $files);
+        
+        if ($goodEnvironment) {
+            /** 
+             * The tester's environment has magic files that are properly read by PHP
+             * This prevents the test from being relevant in the environment
+             */
+            $this->markTestSkipped('This test environment works as expected with the common magic files, preventing this from being testable.');
+        } else {
+            // The common magic files detected the image as application/octet-stream -- try the PHP default
+            // Note that if this  branch of code is entered then testBasic, testDualValidation,
+            // as well as Zend_Validate_File_IsCompressedTest::testBasic and Zend_Validate_File_IsImageTest::testBasic
+            // will be failing as well.
+            $validator = new Zend_Validate_File_MimeType(array('image/jpeg', 'image/jpeg; charset=binary'));
+            $validator->setTryCommonMagicFilesFlag(false);
+            $this->assertTrue($validator->isValid($filetest, $files));
+        }
+    }
 }
 
 // Call Zend_Validate_File_MimeTypeTest::main() if this source file is executed directly.
