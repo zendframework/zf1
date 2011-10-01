@@ -167,18 +167,6 @@ class Zend_View_Helper_FormTest extends PHPUnit_Framework_TestCase
         $form = $this->helper->form('FormName', array('action' => '/foo', 'method' => 'get'));
         $this->assertNotRegexp('/<form[^>]*(name="FormName")/', $form);
     }    
-
-    /**
-     * @group ZF-11747
-     */
-    public function testClosingTagIsPrintedWhenContentIsOmitted()
-    {
-        $form = $this->helper->form('FormName');
-        // Check that opening tag was printed
-        $this->assertContains('<form', $form);
-        // Check that closing tag was printed
-        $this->assertContains('</form>', $form);
-    }    
 }
 
 // Call Zend_View_Helper_FormTest::main() if this source file is executed directly.
