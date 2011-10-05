@@ -39,6 +39,11 @@ require_once 'Zend/Cloud/QueueService/AllTests.php';
 require_once 'Zend/Cloud/StorageService/AllTests.php';
 
 /**
+ * @see Zend_Cloud_Infrastructure_AllTests
+ */
+require_once 'Zend/Cloud/Infrastructure/AllTests.php';
+
+/**
  * @category   Zend
  * @package    Zend_Cloud
  * @subpackage UnitTests
@@ -60,7 +65,8 @@ class Zend_Cloud_AllTests
         $suite->addTest(Zend_Cloud_DocumentService_AllTests::suite());
         $suite->addTest(Zend_Cloud_QueueService_AllTests::suite());
         $suite->addTest(Zend_Cloud_StorageService_AllTests::suite());
-
+        $suite->addTest(Zend_Cloud_Infrastructure_AllTests::suite());
+        
         return $suite;
     }
 }
