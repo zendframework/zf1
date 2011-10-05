@@ -38,6 +38,10 @@ require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
 class Zend_Service_Amazon_Ec2_Instance extends Zend_Service_Amazon_Ec2_Abstract
 {
     /**
+     * Constant for Micro Instance Type
+     */
+    const MICRO = 't1.micro';
+    /**
      * Constant for Small Instance TYpe
      */
     const SMALL = 'm1.small';
@@ -168,7 +172,6 @@ class Zend_Service_Amazon_Ec2_Instance extends Zend_Service_Amazon_Ec2_Abstract
         if(isset($options['monitor']) && $options['monitor'] === true) {
             $params['Monitoring.Enabled'] = true;
         }
-
         $response = $this->sendRequest($params);
         $xpath = $response->getXPath();
 
