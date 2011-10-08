@@ -267,6 +267,17 @@ class Zend_Text_TableTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($row->render(array(10, 10), $decorator), "│foo       │foobar    │\n│bar       │          │\n");
     }
 
+    public function testUnicodeRowMultiLine()
+    {
+        $decorator = new Zend_Text_Table_Decorator_Unicode();
+
+        $row = new Zend_Text_Table_Row();
+        $row->appendColumn(new Zend_Text_Table_Column("föö\nbär"));
+        $row->appendColumn(new Zend_Text_Table_Column("fööbär"));
+
+        $this->assertEquals($row->render(array(3, 10), $decorator), "│föö│fööbär    │\n│bär│          │\n");
+    }
+
     public function testTableConstructInvalidColumnWidths()
     {
         try {
