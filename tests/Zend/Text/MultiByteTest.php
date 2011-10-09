@@ -84,7 +84,7 @@ class Zend_Text_MultiByteTest extends PHPUnit_Framework_TestCase
     public function testWordWrapLongBreak()
     {
         $line = Zend_Text_MultiByte::wordWrap("Ä very<br>long wöö<br>öööööööö<br>öörd.", 8, '<br>', false);
-        $this->assertEquals("Ä very<br>long<br>wöö<br>öööööööö<br>öörd.", $line);
+        $this->assertEquals("Ä very<br>long wöö<br>öööööööö<br>öörd.", $line);
     }
 
     /**
@@ -102,12 +102,30 @@ class Zend_Text_MultiByteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('äüö äöü ', $line);
     }
 
+    public function testWordWrapCutEndingSingleSpaceWithNonSpaceDivider()
+    {
+        $line = Zend_Text_MultiByte::wordWrap('äöüäöü ', 3, '-', true);
+        $this->assertEquals('äöü-äöü-', $line);
+    }
+    
     public function testWordWrapCutEndingTwoSpaces()
     {
         $line = Zend_Text_MultiByte::wordWrap('äüöäöü  ', 3, ' ', true);
         $this->assertEquals('äüö äöü  ', $line);
     }
 
+    public function testWordWrapNoCutEndingSingleSpace()
+    {
+        $line = Zend_Text_Multibyte::wordWrap('12345 ', 5, '-', false);
+        $this->assertEquals('12345-', $line);
+    }
+
+    public function testWordWrapNoCutEndingTwoSpaces()
+    {
+        $line = Zend_Text_MultiByte::wordWrap('12345  ', 5, '-', false);
+        $this->assertEquals('12345- ', $line);
+    }
+    
     public function testWordWrapCutEndingThreeSpaces()
     {
         $line = Zend_Text_MultiByte::wordWrap('äüöäöü  ', 3, ' ', true);
