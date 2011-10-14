@@ -1697,5 +1697,18 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $serialize = serialize($this->_select());
         $this->assertType('string',$serialize);
     }
+    
+    /**
+     * @group ZF-3792
+     */
+    public function testJoinUsingActuallyGeneratesAnInnerJoinOnForCompatibilityReasons()
+    {
+        $table_A = $this->_db->quoteTableAs('A');
+        $table_B = $this->_db->quoteTableAs('B');
+        $colname = $this->_db->quoteIdentifier('colname');
+        
+        $s = $this->_db->select()->from('A')->joinUsing('B', $colname);
+        $this->assertContains("JOIN {$table_B} ON {$table_B}.{$colname} = {$table_A}.{$colname}", $s->assemble());
+    }
 
 }
