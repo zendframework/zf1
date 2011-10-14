@@ -2282,6 +2282,25 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $input = new Zend_Filter_Input( null, $validators, $data, $options );
         $this->assertFalse($input->isValid(), 'If the NotEmpty validator is an array, the NotEmpty validator is ignored !');
     }
+    
+    /**
+     * This test doesn't include any assertions as it's purpose is to 
+     * ensure that passing an empty array value into a $validators rule 
+     * doesn't cause a notice to be emitted
+     *  
+     * @group ZF-11819
+     */
+    public function testValidatorRuleCanHaveEmptyArrayAsMetacommandValue()
+    {
+        $filters = array('html' => 'StringTrim',);
+        $validators = array(
+            'html' => array('NotEmpty', 'presence' => 'required'),
+            'perms' => array('Int', 'default' => array()),
+        );
+
+        $validate = new Zend_Filter_Input($filters, $validators);
+        $validate->isValid();
+    }    
 }
 
 class MyZend_Filter_Date implements Zend_Filter_Interface
