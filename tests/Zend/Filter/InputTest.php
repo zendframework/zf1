@@ -2292,13 +2292,11 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
      */
     public function testValidatorRuleCanHaveEmptyArrayAsMetacommandValue()
     {
-        $filters = array('html' => 'StringTrim',);
         $validators = array(
-            'html' => array('NotEmpty', 'presence' => 'required'),
             'perms' => array('Int', 'default' => array()),
         );
 
-        $validate = new Zend_Filter_Input($filters, $validators);
+        $validate = new Zend_Filter_Input(NULL, $validators);
         $validate->isValid();
     }    
 }
