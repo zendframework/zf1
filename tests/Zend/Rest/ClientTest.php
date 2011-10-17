@@ -51,6 +51,27 @@ class Zend_Rest_ClientTest extends PHPUnit_Framework_TestCase
 
         $this->rest = new Zend_Rest_Client('http://framework.zend.com/');
     }
+    
+    /**
+     * @group ZF-10664
+     * 
+     * Test that you can post a file using a preset 
+     * Zend_Http_Client that has a file to post,
+     * by calling $restClient->setNoReset() prior to issuing the
+     * restPost() call.    
+     */
+    public function testCanPostFileInPresetHttpClient()
+    {
+        $client = new Zend_Rest_Client('http://framework.zend.com');
+        $httpClient = new Zend_Http_Client();
+        $text = 'this is some plain text';
+        $httpClient->setFileUpload('some_text.txt', 'upload', $text, 'text/plain');
+        $client->setHttpClient($httpClient);
+        $client->setNoReset();
+        $client->restPost('/file');
+        $request = $httpClient->getLastRequest();
+        $this->assertTrue(strpos($request, $text) !== false, 'The file is not in the request');
+    }
 
     public function testUri()
     {
