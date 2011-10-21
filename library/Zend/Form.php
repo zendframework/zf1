@@ -2254,7 +2254,8 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
             }
         }
         foreach ($this->getSubForms() as $key => $form) {
-            if (null !== $translator && !$form->hasTranslator()) {
+            if (null !== $translator && $this->hasTranslator()
+                    && !$form->hasTranslator()) {
                 $form->setTranslator($translator);
             }
             if (isset($data[$key]) && !$form->isArray()) {

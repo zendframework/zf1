@@ -4479,6 +4479,61 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $count = substr_count($html, 'randomelementname-element');
         $this->assertEquals(1, $count, $html);
     }
+    
+    /**
+     * @group ZF-11831
+     */
+    public function testElementsOfSubFormReceiveCorrectDefaultTranslator()
+    {
+        // Global default translator
+        $trDefault = new Zend_Translate(array(
+            'adapter' => 'array',
+            'content' => array(
+                Zend_Validate_NotEmpty::IS_EMPTY => 'Default'
+            ),
+            'locale' => 'en'
+        ));
+        Zend_Registry::set('Zend_Translate', $trDefault);
+        
+        // Translator to use for elements
+        $trElement = new Zend_Translate(array(
+            'adapter' => 'array',
+            'content' => array(
+                Zend_Validate_NotEmpty::IS_EMPTY =>'Element'
+            ),
+            'locale' => 'en'
+        ));
+        Zend_Validate_Abstract::setDefaultTranslator($trElement);
+        
+        // Change the form's translator
+        $form = new Zend_Form();
+        $form->addElement(new Zend_Form_Element_Text('foo', array(
+            'required'   => true,
+            'validators' => array('NotEmpty')
+        )));
+        
+        // Create a subform with it's own validator
+        $sf1 = new Zend_Form_SubForm();
+        $sf1->addElement(new Zend_Form_Element_Text('foosub', array(
+            'required'   => true,
+            'validators' => array('NotEmpty')
+        )));
+        $form->addSubForm($sf1, 'Test1');
+        
+        $form->isValid(array());
+
+        $messages = $form->getMessages();
+        $this->assertEquals(
+            'Element', 
+            @$messages['foo'][Zend_Validate_NotEmpty::IS_EMPTY], 
+            'Form element received wrong validator'
+        );
+        $this->assertEquals(
+            'Element', 
+            @$messages['Test1']['foosub'][Zend_Validate_NotEmpty::IS_EMPTY], 
+            'SubForm element received wrong validator'
+        );        
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
