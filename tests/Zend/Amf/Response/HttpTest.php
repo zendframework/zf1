@@ -60,6 +60,7 @@ class Zend_Amf_Response_HttpTest extends PHPUnit_Framework_TestCase
      */
     public function testDoesNotEmitNoticeWhenHttpsServerKeyNotSet()
     {
+        unset($_SERVER['HTTPS']);
         $req = new ZF11783_ExposeIsIeOverSsl();
         $this->assertFalse($req->isIeOverSsl());
     }
