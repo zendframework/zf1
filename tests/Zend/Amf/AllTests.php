@@ -27,6 +27,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'Zend/Amf/Adobe/IntrospectorTest.php';
 require_once 'Zend/Amf/RequestTest.php';
 require_once 'Zend/Amf/ResponseTest.php';
+require_once 'Zend/Amf/Response/HttpTest.php';
 require_once 'Zend/Amf/ServerTest.php';
 require_once 'Zend/Amf/TypeLoaderTest.php';
 require_once 'Zend/Amf/Util/BinaryStreamTest.php';
@@ -57,6 +58,7 @@ class Zend_Amf_AllTests
         $suite->addTestSuite('Zend_Amf_Adobe_IntrospectorTest');
         $suite->addTestSuite('Zend_Amf_RequestTest');
         $suite->addTestSuite('Zend_Amf_ResponseTest');
+        $suite->addTestSuite('Zend_Amf_Response_HttpTest');
         $suite->addTestSuite('Zend_Amf_ServerTest');
         $suite->addTestSuite('Zend_Amf_TypeLoaderTest');
         $suite->addTestSuite('Zend_Amf_Util_BinaryStreamTest');

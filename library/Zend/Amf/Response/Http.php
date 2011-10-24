@@ -56,7 +56,7 @@ class Zend_Amf_Response_Http extends Zend_Amf_Response
 
     protected function isIeOverSsl()
     {
-        $ssl = $_SERVER['HTTPS'];
+        $ssl = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : false;
         if (!$ssl || ($ssl == 'off')) {
             // IIS reports "off", whereas other browsers simply don't populate
             return false;
