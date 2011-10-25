@@ -10088,4 +10088,14 @@ audio/vnd.qcelp, application/xhtml+xml'
         $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleWebKit', $capabilities['browser_name']);
     }
+    
+    /**
+     * @group ZF-11815
+     */
+    public function testUserAgentAppleCoreMediaForIphoneShouldNotResultInNotices()
+    {
+        $userAgent = 'AppleCoreMedia/1.0.0.8L1 (iPhone; U; CPU OS 4_3_5 like Mac OS X; de_de)';
+        $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
+        $this->assertEquals('AppleCoreMedia', $capabilities['browser_name']);        
+    }
 }
