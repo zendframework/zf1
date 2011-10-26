@@ -10098,4 +10098,14 @@ audio/vnd.qcelp, application/xhtml+xml'
         $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
         $this->assertEquals('AppleCoreMedia', $capabilities['browser_name']);        
     }
+    
+    /**
+     * @group ZF-11749
+     */
+    public function testUserAgentAppleWebKit53446WithoutLanguageShouldNotResultInNotices()
+    {
+        $userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A5313e Safari/7534.48.3';
+        $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
+        $this->assertEquals('Safari Mobile', $capabilities['browser_name']);
+    }
 }

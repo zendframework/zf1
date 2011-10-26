@@ -554,7 +554,9 @@ abstract class Zend_Http_UserAgent_AbstractDevice
             if (in_array($result['compatibility_flag'], $apple_device)) {
                 $result['device']           = strtolower($result['compatibility_flag']);
                 $result['device_os_token']  = 'iPhone OS';
-                $result['browser_language'] = trim($comment[3]);
+                if (isset($comment[3])) {
+                    $result['browser_language'] = trim($comment[3]);
+                }
                 if (isset($result['others']['detail'][1])) {
                     $result['browser_version']  = $result['others']['detail'][1][2];
                 } elseif (isset($result['others']['detail']) && count($result['others']['detail'])) {
