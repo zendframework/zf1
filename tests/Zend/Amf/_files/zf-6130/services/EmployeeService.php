@@ -3,6 +3,10 @@ class EmployeeService
 {
     public static $employee;
 
+    /**
+     * @param Employee $item
+     * @return string
+     */
     public function createEmployee(Employee $item) 
     {
         $item->id       = uniqid();

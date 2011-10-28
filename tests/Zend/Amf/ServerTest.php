@@ -25,11 +25,13 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Amf_ServerTest::main");
 }
 
+require_once 'Zend/Config.php';
 require_once 'Zend/Amf/Server.php';
 require_once 'Zend/Amf/Request.php';
 require_once 'Zend/Amf/Parse/TypeLoader.php';
 require_once 'Zend/Amf/Value/Messaging/RemotingMessage.php';
 require_once 'Zend/Amf/Adobe/Auth.php';
+require_once 'Zend/Amf/Adobe/Introspector.php';
 require_once 'Zend/Acl.php';
 require_once 'ServiceA.php';
 require_once 'ServiceB.php';
@@ -1146,9 +1148,9 @@ class Zend_Amf_ServerTest extends PHPUnit_Framework_TestCase
 
         // Create a mock message
         $message = new Zend_Amf_Value_Messaging_RemotingMessage();
-        $message->operation = 'createEmployee';
-        $message->source = 'EmployeeService';
-        $message->body = json_encode(array(
+        $message->operation   = 'createEmployee';
+        $message->source      = 'EmployeeService'; // original raw request used "destination"
+        $message->body        = array(array(
             'office'       => 322,
             'departmentid' => 3,
             'street'       => 32,
