@@ -1135,6 +1135,47 @@ class Zend_Amf_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($authAdapter->getAcl(), $this->_server->getAcl());
         $this->assertSame($acl, $this->_server->getAcl());
     }
+
+    /**
+     * @group ZF-6130
+     */
+    public function testServerShouldCastObjectArgumentsToAppropriateType()
+    {
+        $server = new Zend_Amf_Server();
+        $server->addDirectory(dirname(__FILE__) . '/_files/zf-6130/services');
+
+        // Create a mock message
+        $message = new Zend_Amf_Value_Messaging_RemotingMessage();
+        $message->operation = 'createEmployee';
+        $message->source = 'EmployeeService';
+        $message->body = json_encode(array(
+            'office'       => 322,
+            'departmentid' => 3,
+            'street'       => 32,
+            'zipcode'      => 32,
+            'state'        => 32,
+            'lastname'     => 4,
+            'firstname'    => 2,
+            'photofile'    => 322,
+            'city'         => 32,
+            'id'           => 1,
+            'title'        => 4,
+            'officephone'  => 233,
+            'email'        => 32,
+            'cellphone'    => 22,
+        ));
+        $body = new Zend_Amf_Value_MessageBody(null, "\1", $message);
+
+        $request = new Zend_Amf_Request();
+        $request->addAmfBody($body);
+        $request->setObjectEncoding(0x03);
+
+        $response = $server->handle($request);
+        $employee = EmployeeService::$employee;
+        $this->assertNotNull($employee);
+        $this->assertNotEquals(1, $employee->id);
+        $this->assertRegexp('/[a-z0-9]{3,}/', $employee->id);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == "Zend_Amf_ServerTest::main") {
