@@ -504,7 +504,9 @@ abstract class Zend_Http_UserAgent_AbstractDevice
                 $result['browser_name']    = $real[1][0];
                 $result['browser_version'] = $real[3][0];
             } else {
-                $result['browser_name']    = $result['browser_token'];
+                if(isset($result['browser_token'])) {
+                    $result['browser_name']    = $result['browser_token'];
+                }
                 $result['browser_version'] = '??';
             }
         } elseif ($product == 'mozilla' && $result['browser_version'] < 5.0) {

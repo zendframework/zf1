@@ -10108,4 +10108,14 @@ audio/vnd.qcelp, application/xhtml+xml'
         $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
         $this->assertEquals('Safari Mobile', $capabilities['browser_name']);
     }
+    
+    /**
+     * @group ZF-11693
+     */
+    public function testShortMozillaUserAgentShouldNotResultInNotices()
+    {
+        $userAgent = 'Mozilla/3.0 (compatible)';
+        $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
+        $this->assertEquals('Mozilla', $capabilities['browser_name']);
+    }
 }
