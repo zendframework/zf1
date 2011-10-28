@@ -10118,4 +10118,14 @@ audio/vnd.qcelp, application/xhtml+xml'
         $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
         $this->assertEquals('Mozilla', $capabilities['browser_name']);
     }
+    
+    /**
+     * @group ZF-11857
+     */
+    public function testOperaOnHtcHd2UserAgentShouldNotResultInNotices()
+    {
+        $userAgent = 'HTC_HD2_T8585 Opera/9.7 (Windows NT 5.1; U; de)';
+        $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
+        $this->assertEquals('Opera', $capabilities['browser_name']);
+    }
 }

@@ -698,10 +698,16 @@ abstract class Zend_Http_UserAgent_AbstractDevice
                 }
             }
 
-            // UA ends with 'Opera X.XX'
+            // UA ends with 'Opera X.XX' or 'Opera/X.XX'
             if ($result['others']['detail'][0][1] == 'Opera') {
                 $result['browser_name']    = $result['others']['detail'][0][1];
-                $result['browser_version'] = $result['others']['detail'][1][1];
+                // Opera X.XX
+                if (isset($result['others']['detail'][1][1])) {
+                    $result['browser_version'] = $result['others']['detail'][1][1];
+                // Opera/X.XX
+                } elseif (isset($result['others']['detail'][0][2])) {
+                    $result['browser_version'] = $result['others']['detail'][0][2];
+                }
             }
 
             // Opera Mini
