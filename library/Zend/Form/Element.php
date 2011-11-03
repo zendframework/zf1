@@ -1393,19 +1393,18 @@ class Zend_Form_Element implements Zend_Validate_Interface
                     if ($this->isRequired()
                         || (!$this->isRequired() && !$this->getAllowEmpty())
                     ) {
-                        $result = false;
+                        $value = '';
                     }
-                } else {
-                    foreach ($value as $val) {
-                        if (!$validator->isValid($val, $context)) {
-                            $result = false;
-                            if ($this->_hasErrorMessages()) {
-                                $messages = $this->_getErrorMessages();
-                                $errors   = $messages;
-                            } else {
-                                $messages = array_merge($messages, $validator->getMessages());
-                                $errors   = array_merge($errors,   $validator->getErrors());
-                            }
+                }
+                foreach ((array)$value as $val) {
+                    if (!$validator->isValid($val, $context)) {
+                        $result = false;
+                        if ($this->_hasErrorMessages()) {
+                            $messages = $this->_getErrorMessages();
+                            $errors   = $messages;
+                        } else {
+                            $messages = array_merge($messages, $validator->getMessages());
+                            $errors   = array_merge($errors,   $validator->getErrors());
                         }
                     }
                 }
