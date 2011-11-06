@@ -336,7 +336,15 @@ class Zend_Config_Yaml extends Zend_Config
                 // item in the list:
                 // - FOO
                 if (strlen($line) > 2) {
-                    $config[] = substr($line, 2);
+                    $value = substr($line, 2);
+                    if (preg_match('/^(t(rue)?|on|y(es)?)$/i', $value)) {
+                        $value = true;
+                    } elseif (preg_match('/^(f(alse)?|off|n(o)?)$/i', $value)) {
+                        $value = false;
+                    } elseif (!self::$_ignoreConstants) {
+                         $value = self::_replaceConstants($value);
+                    }
+                    $config[] = $value;
                 } else {
                     $config[] = self::_decodeYaml($currentIndent + 1, $lines);
                 }
