@@ -20,6 +20,15 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+/**
+ * Test helpers
+ */
+require_once dirname(__FILE__) . '/../../../../TestHelper.php';
+
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_Diagnostics_AllTests::main');
+}
+
 require_once 'Zend/Service/WindowsAzure/Diagnostics/ManagerTest.php';
 
 /**
@@ -32,13 +41,21 @@ require_once 'Zend/Service/WindowsAzure/Diagnostics/ManagerTest.php';
  */
 class Zend_Service_WindowsAzure_Diagnostics_AllTests
 {
+    public static function main()
+    {
+        PHPUnit_TextUI_TestRunner::run(self::suite());
+    }
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite();
+        $suite = new PHPUnit_Framework_TestSuite(__CLASS__);
 
         $suite->addTestSuite('Zend_Service_WindowsAzure_Diagnostics_ManagerTest');
-
+        
         return $suite;
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Service_WindowsAzure_Diagnostics_AllTests::main') {
+    Zend_Service_WindowsAzure_Diagnostics_AllTests::main();
 }

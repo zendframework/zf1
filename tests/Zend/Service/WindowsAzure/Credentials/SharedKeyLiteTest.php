@@ -20,6 +20,17 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest::main');
+}
+
+/**
+ * Test helpers
+ */
+require_once dirname(__FILE__) . '/../../../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../../../TestConfiguration.php.dist';
+require_once 'PHPUnit/Framework/TestCase.php';
+
 /** Zend_Service_WindowsAzure_Credentials_SharedKeyLite */
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedKeyLite.php';
 
@@ -33,6 +44,11 @@ require_once 'Zend/Service/WindowsAzure/Credentials/SharedKeyLite.php';
  */
 class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Framework_TestCase
 {
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite("Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest");
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
 
     /**
      * Test signing for devstore with root path
@@ -47,12 +63,12 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+                          
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite devstoreaccount1:iRQpXGzlMRb1A57bkcryX7Bg/3Uf5YOfNCG+XIingJI=", $signedHeaders["Authorization"]);
     }
-
+    
     /**
      * Test signing for devstore with other path
      */
@@ -66,12 +82,12 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+  
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite devstoreaccount1:MsC5SIbFB4M4UZd83CiMaL8ibUhaS5H9CcJBJpsnWqo=", $signedHeaders["Authorization"]);
     }
-
+    
     /**
      * Test signing for devstore with query string
      */
@@ -85,12 +101,12 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+  
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite devstoreaccount1:iRQpXGzlMRb1A57bkcryX7Bg/3Uf5YOfNCG+XIingJI=", $signedHeaders["Authorization"]);
     }
-
+    
     /**
      * Test signing for production with root path
      */
@@ -104,12 +120,12 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+                          
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite testing:vZdOn/j0gW5FG0kAUG9NhSBO9eBjZqfe6RwALPYUtqU=", $signedHeaders["Authorization"]);
     }
-
+    
     /**
      * Test signing for production with other path
      */
@@ -123,12 +139,12 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+  
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite testing:HJTSiRDtMsQVsFVispSHkcODeFykLO+WEuOepwmh51o=", $signedHeaders["Authorization"]);
     }
-
+    
     /**
      * Test signing for production with query string
      */
@@ -142,9 +158,14 @@ class Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest extends PHPUnit_Fr
                               array("x-ms-date" => "Wed, 29 Apr 2009 13:12:47 GMT"),
                               true
                           );
-
+  
         $this->assertType('array', $signedHeaders);
         $this->assertEquals(2, count($signedHeaders));
         $this->assertEquals("SharedKeyLite testing:vZdOn/j0gW5FG0kAUG9NhSBO9eBjZqfe6RwALPYUtqU=", $signedHeaders["Authorization"]);
     }
+}
+
+// Call Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest::main() if this source file is executed directly.
+if (PHPUnit_MAIN_METHOD == "Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest::main") {
+    Zend_Service_WindowsAzure_Credentials_SharedKeyLiteTest::main();
 }

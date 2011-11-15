@@ -21,11 +21,6 @@
  */
 
 /**
- * @see Zend_Service_WindowsAzure_Diagnostics_Exception
- */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
-
-/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage Diagnostics
@@ -36,14 +31,14 @@ abstract class Zend_Service_WindowsAzure_Diagnostics_ConfigurationObjectBaseAbst
 {
     /**
      * Data
-     *
+     * 
      * @var array
      */
     protected $_data = null;
-
+    
     /**
      * Magic overload for setting properties
-     *
+     * 
      * @param string $name     Name of the property
      * @param string $value    Value to set
      */
@@ -52,20 +47,20 @@ abstract class Zend_Service_WindowsAzure_Diagnostics_ConfigurationObjectBaseAbst
             $this->_data[strtolower($name)] = $value;
             return;
         }
-
+	require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
         throw new Zend_Service_WindowsAzure_Diagnostics_Exception("Unknown property: " . $name);
     }
 
     /**
      * Magic overload for getting properties
-     *
+     * 
      * @param string $name     Name of the property
      */
     public function __get($name) {
         if (array_key_exists(strtolower($name), $this->_data)) {
             return $this->_data[strtolower($name)];
         }
-
+	require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
         throw new Zend_Service_WindowsAzure_Diagnostics_Exception("Unknown property: " . $name);
     }
 }

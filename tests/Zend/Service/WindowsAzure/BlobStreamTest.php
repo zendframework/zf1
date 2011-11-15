@@ -20,6 +20,17 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Service_WindowsAzure_BlobStreamTest::main');
+}
+
+/**
+ * Test helpers
+ */
+require_once dirname(__FILE__) . '/../../../TestHelper.php';
+require_once dirname(__FILE__) . '/../../../TestConfiguration.php.dist';
+require_once 'PHPUnit/Framework/TestCase.php';
+
 /** Zend_Service_WindowsAzure_Storage_Blob */
 require_once 'Zend/Service/WindowsAzure/Storage/Blob.php';
 
@@ -33,34 +44,33 @@ require_once 'Zend/Service/WindowsAzure/Storage/Blob.php';
  */
 class Zend_Service_WindowsAzure_BlobStreamTest extends PHPUnit_Framework_TestCase
 {
-    static protected $path;
-
-    protected static $uniqId = 0;
-
+    static $path;
+    
     public function __construct()
     {
         self::$path = dirname(__FILE__).'/_files/';
     }
-
+    
+    public static function main()
+    {
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $suite  = new PHPUnit_Framework_TestSuite("Zend_Service_WindowsAzure_BlobStreamTest");
+            $result = PHPUnit_TextUI_TestRunner::run($suite);
+        }
+    }
+   
     /**
      * Test setup
      */
     protected function setUp()
     {
-        if (!TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
-            $this->markTestSkipped('This test case must be enabled by TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS in TestConfiguration.php');
-        }
     }
-
+    
     /**
      * Test teardown
      */
     protected function tearDown()
     {
-        if ($this->status == PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED) {
-            return;
-        }
-
         $storageClient = $this->createStorageInstance();
         for ($i = 1; $i <= self::$uniqId; $i++)
         {
@@ -77,208 +87,228 @@ class Zend_Service_WindowsAzure_BlobStreamTest extends PHPUnit_Framework_TestCas
         } else {
             $storageClient = new Zend_Service_WindowsAzure_Storage_Blob(TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_HOST_DEV, TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_ACCOUNT_DEV, TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_KEY_DEV, true, Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract::retryN(10, 250));
         }
-
+        
         if (TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_USEPROXY) {
             $storageClient->setProxy(TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_USEPROXY, TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_PROXY, TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_PROXY_PORT, TESTS_ZEND_SERVICE_WINDOWSAZURE_STORAGE_PROXY_CREDENTIALS);
         }
 
         return $storageClient;
     }
-
+    
+    protected static $uniqId = 0;
+    
     protected function generateName()
     {
         self::$uniqId++;
         return TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOBSTREAM_CONTAINER_PREFIX . self::$uniqId;
     }
-
+    
     /**
      * Test read file
      */
     public function testReadFile()
     {
-        $containerName = $this->generateName();
-        $fileName = 'azure://' . $containerName . '/test.txt';
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        $fh = fopen($fileName, 'w');
-        fwrite($fh, "Hello world!");
-        fclose($fh);
-
-        $result = file_get_contents($fileName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $this->assertEquals('Hello world!', $result);
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $fileName = 'azure://' . $containerName . '/test.txt';
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            $fh = fopen($fileName, 'w');
+            fwrite($fh, "Hello world!");
+            fclose($fh);
+            
+            $result = file_get_contents($fileName);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $this->assertEquals('Hello world!', $result);
+        }
     }
-
+    
     /**
      * Test write file
      */
     public function testWriteFile()
     {
-        $containerName = $this->generateName();
-        $fileName = 'azure://' . $containerName . '/test.txt';
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        $fh = fopen($fileName, 'w');
-        fwrite($fh, "Hello world!");
-        fclose($fh);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $instance = $storageClient->getBlobInstance($containerName, 'test.txt');
-        $this->assertEquals('test.txt', $instance->Name);
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $fileName = 'azure://' . $containerName . '/test.txt';
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            $fh = fopen($fileName, 'w');
+            fwrite($fh, "Hello world!");
+            fclose($fh);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $instance = $storageClient->getBlobInstance($containerName, 'test.txt');
+            $this->assertEquals('test.txt', $instance->Name);
+        }
     }
-
+    
     /**
      * Test unlink file
      */
     public function testUnlinkFile()
     {
-
-        $containerName = $this->generateName();
-        $fileName = 'azure://' . $containerName . '/test.txt';
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        $fh = fopen($fileName, 'w');
-        fwrite($fh, "Hello world!");
-        fclose($fh);
-
-        unlink($fileName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $result = $storageClient->listBlobs($containerName);
-        $this->assertEquals(0, count($result));
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $fileName = 'azure://' . $containerName . '/test.txt';
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            $fh = fopen($fileName, 'w');
+            fwrite($fh, "Hello world!");
+            fclose($fh);
+            
+            unlink($fileName);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $result = $storageClient->listBlobs($containerName);
+            $this->assertEquals(0, count($result));
+        }
     }
-
+    
     /**
      * Test copy file
      */
     public function testCopyFile()
     {
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $sourceFileName = 'azure://' . $containerName . '/test.txt';
+            $destinationFileName = 'azure://' . $containerName . '/test2.txt';
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            $fh = fopen($sourceFileName, 'w');
+            fwrite($fh, "Hello world!");
+            fclose($fh);
 
-        $containerName = $this->generateName();
-        $sourceFileName = 'azure://' . $containerName . '/test.txt';
-        $destinationFileName = 'azure://' . $containerName . '/test2.txt';
+            copy($sourceFileName, $destinationFileName);
 
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        $fh = fopen($sourceFileName, 'w');
-        fwrite($fh, "Hello world!");
-        fclose($fh);
-
-        copy($sourceFileName, $destinationFileName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $instance = $storageClient->getBlobInstance($containerName, 'test2.txt');
-        $this->assertEquals('test2.txt', $instance->Name);
+            $storageClient->unregisterStreamWrapper();
+            
+            $instance = $storageClient->getBlobInstance($containerName, 'test2.txt');
+            $this->assertEquals('test2.txt', $instance->Name);
+        }
     }
-
+    
     /**
      * Test rename file
      */
     public function testRenameFile()
     {
-        $containerName = $this->generateName();
-        $sourceFileName = 'azure://' . $containerName . '/test.txt';
-        $destinationFileName = 'azure://' . $containerName . '/test2.txt';
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        $fh = fopen($sourceFileName, 'w');
-        fwrite($fh, "Hello world!");
-        fclose($fh);
-
-        rename($sourceFileName, $destinationFileName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $instance = $storageClient->getBlobInstance($containerName, 'test2.txt');
-        $this->assertEquals('test2.txt', $instance->Name);
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $sourceFileName = 'azure://' . $containerName . '/test.txt';
+            $destinationFileName = 'azure://' . $containerName . '/test2.txt';
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            $fh = fopen($sourceFileName, 'w');
+            fwrite($fh, "Hello world!");
+            fclose($fh);
+            
+            rename($sourceFileName, $destinationFileName);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $instance = $storageClient->getBlobInstance($containerName, 'test2.txt');
+            $this->assertEquals('test2.txt', $instance->Name);
+        }
     }
-
+    
     /**
      * Test mkdir
      */
     public function testMkdir()
     {
-        $containerName = $this->generateName();
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        mkdir('azure://' . $containerName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $result = $storageClient->listContainers();
-
-        $this->assertEquals(1, count($result));
-        $this->assertEquals($containerName, $result[0]->Name);
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            mkdir('azure://' . $containerName);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $result = $storageClient->listContainers();
+            
+            $this->assertEquals(1, count($result));
+            $this->assertEquals($containerName, $result[0]->Name);
+        }
     }
-
+    
     /**
      * Test rmdir
      */
     public function testRmdir()
     {
-
-        $containerName = $this->generateName();
-
-        $storageClient = $this->createStorageInstance();
-        $storageClient->registerStreamWrapper();
-
-        mkdir('azure://' . $containerName);
-        rmdir('azure://' . $containerName);
-
-        $storageClient->unregisterStreamWrapper();
-
-        $result = $storageClient->listContainers();
-
-        $this->assertEquals(0, count($result));
-    }
-
+    	if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            
+            $storageClient = $this->createStorageInstance();
+            $storageClient->registerStreamWrapper();
+            
+            mkdir('azure://' . $containerName);
+            rmdir('azure://' . $containerName);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $result = $storageClient->listContainers();
+            
+            $this->assertEquals(0, count($result));
+        }
+    } 
+    
     /**
      * Test opendir
      */
     public function testOpendir()
     {
-        $containerName = $this->generateName();
-        $storageClient = $this->createStorageInstance();
-        $storageClient->createContainer($containerName);
-
-        $storageClient->putBlob($containerName, 'images/WindowsAzure1.gif', self::$path . 'WindowsAzure.gif');
-        $storageClient->putBlob($containerName, 'images/WindowsAzure2.gif', self::$path . 'WindowsAzure.gif');
-        $storageClient->putBlob($containerName, 'images/WindowsAzure3.gif', self::$path . 'WindowsAzure.gif');
-        $storageClient->putBlob($containerName, 'images/WindowsAzure4.gif', self::$path . 'WindowsAzure.gif');
-        $storageClient->putBlob($containerName, 'images/WindowsAzure5.gif', self::$path . 'WindowsAzure.gif');
-
-        $result1 = $storageClient->listBlobs($containerName);
-
-        $storageClient->registerStreamWrapper();
-
-        $result2 = array();
-        if ($handle = opendir('azure://' . $containerName)) {
-            while (false !== ($file = readdir($handle))) {
-                $result2[] = $file;
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_BLOB_RUNTESTS) {
+            $containerName = $this->generateName();
+            $storageClient = $this->createStorageInstance();
+            $storageClient->createContainer($containerName);
+            
+            $storageClient->putBlob($containerName, 'images/WindowsAzure1.gif', self::$path . 'WindowsAzure.gif');
+            $storageClient->putBlob($containerName, 'images/WindowsAzure2.gif', self::$path . 'WindowsAzure.gif');
+            $storageClient->putBlob($containerName, 'images/WindowsAzure3.gif', self::$path . 'WindowsAzure.gif');
+            $storageClient->putBlob($containerName, 'images/WindowsAzure4.gif', self::$path . 'WindowsAzure.gif');
+            $storageClient->putBlob($containerName, 'images/WindowsAzure5.gif', self::$path . 'WindowsAzure.gif');
+            
+            $result1 = $storageClient->listBlobs($containerName);
+  
+            $storageClient->registerStreamWrapper();
+            
+            $result2 = array();
+            if ($handle = opendir('azure://' . $containerName)) {
+                while (false !== ($file = readdir($handle))) {
+                    $result2[] = $file;
+                }
+                closedir($handle);
             }
-            closedir($handle);
+            
+            $storageClient->unregisterStreamWrapper();
+            
+            $result = $storageClient->listContainers();
+            
+            $this->assertEquals(count($result1), count($result2));
         }
+    } 
+}
 
-        $storageClient->unregisterStreamWrapper();
-
-        $result = $storageClient->listContainers();
-
-        $this->assertEquals(count($result1), count($result2));
-    }
+// Call Zend_Service_WindowsAzure_BlobStreamTest::main() if this source file is executed directly.
+if (PHPUnit_MAIN_METHOD == "Zend_Service_WindowsAzure_BlobStreamTest::main") {
+    Zend_Service_WindowsAzure_BlobStreamTest::main();
 }
