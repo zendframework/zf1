@@ -521,7 +521,18 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
 			'<meta charset="utf-8"/>',
 			$view->headMeta()->toString());
 	}
-
+    
+    /**
+     * @group ZF-11835
+     */
+    public function testConditional() 
+    {
+        $html = $this->helper->appendHttpEquiv('foo', 'bar', array('conditional' => 'lt IE 7'))->toString();
+        
+        $this->assertRegExp("|^<!--\[if lt IE 7\]>|", $html);
+        $this->assertRegExp("|<!\[endif\]-->$|", $html);
+    }
+    
 }
 
 // Call Zend_View_Helper_HeadMetaTest::main() if this source file is executed directly.
