@@ -136,7 +136,7 @@ class Zend_Cloud_Infrastructure_Adapter_Ec2Test extends PHPUnit_Framework_TestCa
      */
     public function testGetAdapter()
     {
-        $this->assertInstanceOf('Zend_Service_Amazon_Ec2_Instance',$this->infrastructure->getAdapter());
+        $this->assertType('Zend_Service_Amazon_Ec2_Instance',$this->infrastructure->getAdapter());
     }
 
     /**
