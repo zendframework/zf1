@@ -615,7 +615,8 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
         );
 
         $node = Zend_Ldap_Node::fromArray($data, true);
-        $this->assertTrue(empty($node->getChangedData()));
+        $changedData = $node->getChangedData();
+        $this->assertTrue(empty($changedData));
     }
 
 	/**

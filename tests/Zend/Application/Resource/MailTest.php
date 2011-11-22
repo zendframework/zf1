@@ -225,7 +225,8 @@ class Zend_Application_Resource_MailTest extends PHPUnit_Framework_TestCase
         $resource->setBootstrap($this->bootstrap);
         $resource->setOptions($options);
 
-        $this->assertTrue(empty($resource->getMail()->parameters));
+        $parameters = $resource->getMail()->parameters;
+        $this->assertTrue(empty($parameters));
     }
 
 }
