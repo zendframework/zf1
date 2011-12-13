@@ -637,6 +637,15 @@ class Zend_Soap_WsdlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-11937
+     */
+    public function testWsdlGetTypeWillAllowLongType()
+    {
+        $wsdl = new Zend_Soap_Wsdl('MyService', 'http://localhost/MyService.php');
+        $this->assertEquals("xsd:long", $wsdl->getType("long"));
+    }
+
+    /**
      * @group ZF-5430
      */
     public function testMultipleSequenceDefinitionsOfSameTypeWillBeRecognizedOnceBySequenceStrategy()
