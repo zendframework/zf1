@@ -336,7 +336,7 @@ function editVideoData($newVideoTitle, $newVideoDescription, $newVideoCategory, 
 {
     $httpClient = getAuthSubHttpClient();
     $youTubeService = new Zend_Gdata_YouTube($httpClient);
-    $feed = $youTubeService->getVideoFeed('http://gdata.youtube.com/feeds/users/default/uploads');
+    $feed = $youTubeService->getVideoFeed('https://gdata.youtube.com/feeds/users/default/uploads');
     $videoEntryToUpdate = null;
 
     foreach($feed as $entry) {
@@ -430,7 +430,7 @@ function createUploadForm($videoTitle, $videoDescription, $videoCategory, $video
     $videoTagsArray = explode(' ', trim($videoTags));
     $newVideoEntry->setVideoTags(implode(', ', $videoTagsArray));
 
-    $tokenHandlerUrl = 'http://gdata.youtube.com/action/GetUploadToken';
+    $tokenHandlerUrl = 'https://gdata.youtube.com/action/GetUploadToken';
     try {
         $tokenArray = $youTubeService->getFormUploadToken($newVideoEntry, $tokenHandlerUrl);
         if (loggingEnabled()) {
@@ -481,7 +481,7 @@ function deleteVideo($videoId)
 {
     $httpClient = getAuthSubHttpClient();
     $youTubeService = new Zend_Gdata_YouTube($httpClient);
-    $feed = $youTubeService->getVideoFeed('http://gdata.youtube.com/feeds/users/default/uploads');
+    $feed = $youTubeService->getVideoFeed('https://gdata.youtube.com/feeds/users/default/uploads');
     $videoEntryToDelete = null;
 
     foreach($feed as $entry) {
@@ -580,7 +580,7 @@ function clearSessionVar($name)
  */
 function generateAuthSubRequestLink($nextUrl = null)
 {
-    $scope = 'http://gdata.youtube.com';
+    $scope = 'https://gdata.youtube.com';
     $secure = false;
     $session = true;
 
@@ -791,7 +791,7 @@ function getRelatedVideos($videoId)
  */
 function getTopRatedVideosByUser($user)
 {
-    $userVideosUrl = 'http://gdata.youtube.com/feeds/users/' .
+    $userVideosUrl = 'https://gdata.youtube.com/feeds/users/' .
                    $user . '/uploads';
     $youTubeService = new Zend_Gdata_YouTube();
     $ytQuery = $youTubeService->newVideoQuery($userVideosUrl);
@@ -936,7 +936,7 @@ function createPlaylist($playlistTitle, $playlistDescription)
         return;
     }
 
-    $playlistFeedUrl = 'http://gdata.youtube.com/feeds/users/default/playlists';
+    $playlistFeedUrl = 'https://gdata.youtube.com/feeds/users/default/playlists';
 
     try {
         $updatedEntry = $youTubeService->insertEntry($newPlaylist, $playlistFeedUrl);

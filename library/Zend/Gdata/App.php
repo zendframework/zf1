@@ -42,6 +42,11 @@ require_once 'Zend/Version.php';
 require_once 'Zend/Gdata/App/MediaSource.php';
 
 /**
+ * Zend_Uri/Http
+ */
+require_once 'Zend/Uri/Http.php';
+
+/**
  * Provides Atom Publishing Protocol (APP) functionality.  This class and all
  * other components of Zend_Gdata_App are designed to work independently from
  * other Zend_Gdata components in order to interact with generic APP services.

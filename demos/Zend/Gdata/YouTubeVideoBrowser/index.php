@@ -70,7 +70,7 @@ function findFlashUrl($entry)
  */
 function getTopRatedVideosByUser($user)
 {
-    $userVideosUrl = 'http://gdata.youtube.com/feeds/users/' .
+    $userVideosUrl = 'https://gdata.youtube.com/feeds/users/' .
                      $user . '/uploads';
     $yt = new Zend_Gdata_YouTube();
     $ytQuery = $yt->newVideoQuery($userVideosUrl);
