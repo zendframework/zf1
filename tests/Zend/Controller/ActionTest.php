@@ -223,7 +223,7 @@ class Zend_Controller_ActionTest extends PHPUnit_Framework_TestCase
     public function testSetParam()
     {
         $this->_controller->setParam('foo', 'bar');
-        $params = $this->_controller->getParams();
+        $params = $this->_controller->getAllParams();
         $this->assertTrue(isset($params['foo']));
         $this->assertEquals('bar', $params['foo']);
     }
@@ -257,7 +257,7 @@ class Zend_Controller_ActionTest extends PHPUnit_Framework_TestCase
         $this->_controller->setParam('bar', 'baz');
         $this->_controller->setParam('boo', 'bah');
 
-        $params = $this->_controller->getParams();
+        $params = $this->_controller->getAllParams();
         $this->assertEquals('bar', $params['foo']);
         $this->assertEquals('baz', $params['bar']);
         $this->assertEquals('bah', $params['boo']);
@@ -544,37 +544,6 @@ class Zend_Controller_ActionTest_TestController extends Zend_Controller_Action
     public function bar()
     {
         $this->getResponse()->setBody("Should never see this\n");
-    }
-
-    public function forward($action, $controller = null, $module = null, array $params = null)
-    {
-        $this->_forward($action, $controller, $module, $params);
-    }
-
-    public function hasParam($param)
-    {
-        return $this->_hasParam($param);
-    }
-
-    public function getParams()
-    {
-        return $this->_getAllParams();
-    }
-
-    public function setParam($key, $value)
-    {
-        $this->_setParam($key, $value);
-        return $this;
-    }
-
-    public function getParam($key, $default)
-    {
-        return $this->_getParam($key, $default);
-    }
-
-    public function redirect($url, $code = 302, $prependBase = true)
-    {
-        $this->_redirect($url, array('code' => $code, 'prependBase' => $prependBase));
     }
 }
 
