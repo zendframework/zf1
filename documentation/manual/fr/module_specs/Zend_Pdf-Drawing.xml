@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 21992 -->
+<!-- EN-Revision: 24249 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.pdf.drawing">
     <title>Dessiner</title>
@@ -227,10 +227,11 @@ public function drawEllipse(
             <title>Dessiner du texte</title>
 
         <para>
-            Les opérations de dessins existent bien sûr dans le contexte d'une page <acronym>PDF</acronym>. Vous
-            pouvez dessiner une seule ligne de texte à n'importe quelle endroit dans la page en
-            fournissant les coordonnées x et y de la ligne de base. La police courant ainsi que sa
-            taille seront utilisées pour le dessin (voir la description ci-dessous).
+            Les opérations de dessins existent bien sûr dans le contexte d'une page
+            <acronym>PDF</acronym>. Vous pouvez dessiner une seule ligne de texte à n'importe quel
+            endroit dans la page en fournissant les coordonnées x et y de la ligne de base. La
+            police courant ainsi que sa taille et la couleur de remplissage seront utilisées pour
+            le dessin (voir la description ci-dessous).
         </para>
 
         <para>
@@ -249,27 +250,38 @@ public function drawEllipse(
 public function drawText($text, $x, $y, $charEncoding = '');
 ]]></programlisting></para>
 
-            <example id="zend.pdf.drawing.text-drawing.example-1">
-                <title>Dessiner une ligne dans la page</title>
+        <example id="zend.pdf.drawing.text-drawing.example-1">
+            <title>Dessiner une ligne dans la page</title>
 
-                <programlisting language="php"><![CDATA[
+            <programlisting language="php"><![CDATA[
 ...
 $pdfPage->drawText('Bonjour le monde!', 72, 720);
 ...
 ]]></programlisting>
-            </example>
+        </example>
+            
+        <example id="zend.pdf.drawing.text-drawing.example-2">
+            <title>Régler la couleur du texte</title>
 
+            <programlisting language="php"><![CDATA[
+...
+$pdfPage->setFillColor(Zend_Pdf_Color_Html::color('#990000'))
+        ->drawText('Bonjour le monde (en rouge) !', 72, 720);
+....
+]]></programlisting>
+        </example>
+        
         <para>
             Par défaut, les chaînes de texte sont interprétées en utilisant l'encodage du
             système. Si vous avez une chaîne qui utilise un encodage différent (comme les chaînes
             UTF-8 lues depuis une fichier sur le disque, ou une chaîne MacRoman obtenue depuis une
             base de données), vous pouvez indiquer l'encodage au moment du dessin et Zend_Pdf gérera
             la conversion pour vous. Vous pouvez fournir des chaînes dans n'importe quel encodage
-            supporté par la fonction <code><ulink
-            url="http://www.php.net/manual/function.iconv.php">iconv()</ulink></code> de <acronym>PHP</acronym>:
+            supporté par la fonction <ulink
+            url="http://www.php.net/manual/function.iconv.php">iconv()</ulink> de <acronym>PHP</acronym>:
         </para>
 
-        <example id="zend.pdf.drawing.text-drawing.example-2">
+        <example id="zend.pdf.drawing.text-drawing.example-3">
             <title>Dessiner une chaîne UTF-8 sur une page</title>
 
             <programlisting language="php"><![CDATA[
