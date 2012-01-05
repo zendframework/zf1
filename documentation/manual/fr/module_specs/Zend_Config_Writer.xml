@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- EN-Revision: 20765 -->
+<!-- EN-Revision: 24249 -->
 <!-- Reviewed: no -->
 <sect1 id="zend.config.writer.introduction">
     <title>Zend_Config_Writer</title>
@@ -26,25 +26,16 @@
         <listitem>
             <para><classname>Zend_Config_Writer_Ini</classname></para>
         </listitem>
+         <listitem>
+             <para><classname>Zend_Config_Writer_Json</classname></para>
+        </listitem>
         <listitem>
             <para><classname>Zend_Config_Writer_Xml</classname></para>
+         </listitem>
+        <listitem>
+            <para><classname>Zend_Config_Writer_Yaml</classname></para>
         </listitem>
     </itemizedlist>
-
-     <para>
-        Le rédacteur <acronym>INI</acronym> possède deux modes de rendu en fonction des sections.
-        Par défaut la configuration de premier niveau est toujours écrite dans des noms de section.
-        En appelant <command>$writer->setRenderWithoutSections();</command>, toutes les options
-        sont écrites dans l'espace de noms global du fichier <acronym>INI</acronym> et aucune
-        section n'est appliquée.
-    </para>
-
-    <para>
-        De plus, <classname>Zend_Config_Writer_Ini</classname> a un
-        paramètre optionnel additionnel <emphasis>nestSeparator</emphasis>, définissant le caractère
-        séparant les profondeurs d'imbrication. Par défaut il s'agit du point,
-        comme <classname>Zend_Config_Ini</classname> l'accepte par défaut.
-    </para>
 
     <para>
         Lors de la modification ou la création d'objet <classname>Zend_Config</classname>, il
@@ -52,8 +43,8 @@
         appelez simplement le réglage d'un paramètre d'un objet <classname>Zend_Config</classname>
         grâce à l'accesseur de paramètre ("<emphasis>-&gt;</emphasis>"). Pour créer une section à
         la racine ou pour créer une branche, vous avez juste à créer un nouveau tableau
-        (<command>$config-&gt;branch = array();</command>). Pour définir quelle section en étend une
-        autre, vous devez appeler la méthode <methodname>setExtend()</methodname> sur l'objet
+        (<command>$config-&gt;branch = array();</command>). Pour définir quelle section en étend
+        une autre, vous devez appeler la méthode <methodname>setExtend()</methodname> sur l'objet
         <classname>Zend_Config</classname> racine.
     </para>
 
@@ -141,10 +132,65 @@ $writer->write();
     </note>
 
     <para>
-        Pour tous les rédacteurs à base de fichiers (<acronym>INI</acronym>, <acronym>XML</acronym>
+        Pour tous les rédacteurs à base de fichiers (<acronym>INI</acronym>,
+        <acronym>JSON</acronym>, <acronym>XML</acronym>, <acronym>YAML</acronym>,
         et tableau <acronym>PHP</acronym>), en interne la méthode <methodname>render()</methodname>
         est utilisée pour construire la chaîne de configuration. Cette méthode peut être utilisée
         en dehors de la classe si vous souhaitez accéder à une représentation textuelle de vos
         données de configuration.
     </para>
+
+    <sect2 id="zend.config.writer.introduction.ini-notes">
+        <title>Notes spécifiques au rédacteur INI</title>
+
+        <itemizedlist>
+            <listitem>
+                 <para>
+                    Le rédacteur <acronym>INI</acronym> possède deux modes de rendu en fonction des
+                    sections. Par défaut la configuration de premier niveau est toujours écrite
+                    dans des noms de section. En appelant
+                    <command>$writer->setRenderWithoutSections();</command>, toutes les options
+                    sont écrites dans l'espace de noms global du fichier <acronym>INI</acronym>
+                    et aucune section n'est appliquée.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    De plus, <classname>Zend_Config_Writer_Ini</classname> a un
+                    paramètre optionnel additionnel <emphasis>nestSeparator</emphasis>, définissant
+                    le caractère séparant les profondeurs d'imbrication. Par défaut il s'agit
+                    du point, comme <classname>Zend_Config_Ini</classname> l'accepte par défaut.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="zend.config.writer.introduction.yaml-notes">
+        <title>Notes spécifiques au rédacteur YAML</title>
+
+        <para>
+            Le rédacteur <acronym>YAML</acronym> vous permet de spécifier un encodeur
+            <acronym>YAML</acronym> alternatif. Dans la plupart des cas, celui embarqué dans
+            le framework suffira amplement. Si vous le trouvez insuffisant, ou que vous souhaitez
+            une YAML plus avancé, vous pouvez fournir un autre encodeur.
+        </para>
+
+        <para>
+            La mthode pour le faire est
+            <methodname>Zend_Config_Writer_Yaml::setYamlEncoder()</methodname>, vous  devez lui
+            fournir un callback valide.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Use the Symfony Yaml Component:
+$writer = new Zend_Config_Writer_Yaml($filename);
+$writer->setYamlEncoder(array('sfYaml', 'dump'));
+]]></programlisting>
+
+        <para>
+            Ci-dessus nous utilisons le composant de Symfony <classname>sfYaml</classname> pour
+            encoder la configuration en <acronym>YAML</acronym>.
+        </para>
+    </sect2>
 </sect1>
