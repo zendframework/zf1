@@ -154,7 +154,7 @@ class Zend_Cache_Backend
         $tmpdir = array();
         foreach (array($_ENV, $_SERVER) as $tab) {
             foreach (array('TMPDIR', 'TEMP', 'TMP', 'windir', 'SystemRoot') as $key) {
-                if (isset($tab[$key])) {
+                if (isset($tab[$key]) && is_string($tab[$key])) {
                     if (($key == 'windir') or ($key == 'SystemRoot')) {
                         $dir = realpath($tab[$key] . '\\temp');
                     } else {
