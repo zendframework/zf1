@@ -549,8 +549,9 @@ class Zend_Soap_Wsdl
             case 'integer':
                 return 'xsd:int';
             case 'float':
-            case 'double':
                 return 'xsd:float';
+            case 'double':
+                return 'xsd:double';
             case 'boolean':
             case 'bool':
                 return 'xsd:boolean';
