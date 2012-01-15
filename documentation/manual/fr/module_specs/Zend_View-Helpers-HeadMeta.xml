@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 21825 -->
+<!-- EN-Revision: 24249 -->
 <!-- Reviewed: no -->
 <sect3 id="zend.view.helpers.initial.headmeta">
     <title>L'aide de vue HeadMeta</title>
@@ -63,6 +63,38 @@
         </listitem>
     </itemizedlist>
 
+     <para>
+        Les méthodes suivantes sont aussi supportées avec le doctype XHTML1_RDFA si celui-ci a été
+        spécifié avec <link linkend="zend.view.helpers.initial.doctype">l'aide de vue
+        Doctype</link>&#160;:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                <command>appendProperty($property, $content, $modifiers)</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>offsetSetProperty($index, $property, $content, $modifiers)</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>prependProperty($property, $content, $modifiers)</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>setProperty($property, $content, $modifiers)</command>
+            </para>
+        </listitem>
+    </itemizedlist>
+
     <para>
         Le paramètre <varname>$keyValue</varname> est utilisé pour définir une valeur pour la clé
         "name" ou "http-equiv" ; <varname>$content</varname> est la valeur pour la clé "content", et
@@ -75,7 +107,8 @@
         <methodname>headMeta()</methodname> qui a la signature suivante : <code>headMeta($content, $keyValue,
         $keyType = 'name', $modifiers = array(), $placement = 'APPEND')</code>.
         <varname>$keyValue</varname> est le contenu de la clé spécifiée dans <varname>$keyType</varname>, qui
-        peut être "name" ou "http-equiv". <varname>$placement</varname> peut être soit "SET" (efface
+        peut être "name" ou "http-equiv". <varname>$keyType</varname> peut aussi être spécifié en tant que
+        'property' si le doctype a été réglé à XHTML1_RDFA. <varname>$placement</varname> peut être soit "SET" (efface
         toutes les valeurs sauvegardées précédentes), soit "APPEND" (ajout en fin de pile), soit
         "PREPEND" (ajout en début de pile).
     </para>
@@ -172,5 +205,33 @@ $this->headMeta()->appendHttpEquiv('Refresh',
         <programlisting language="php"><![CDATA[
 <?php echo $this->headMeta() ?>
 ]]></programlisting>
+    </example>
+
+    <example id="zend.view.helpers.initial.headmeta.property">
+        <title>Utilisation de HeadMeta avec le doctype XHTML1_RDFA</title>
+
+        <para>
+            Activer le doctype RDFa avec <link
+                linkend="zend.view.helpers.initial.doctype">l'aide de vue Doctype</link> active
+            l'utilisation de l'attribut 'property' (en plus des habituels 'name' et 'http-equiv')
+            avec HeadMeta. Ceci est commun par exemple avec le
+            <ulink url="http://opengraphprotocol.org/">protocole Open Graph</ulink> de Facebook.
+        </para>
+
+        <para>
+            Par exemple, vous pouvez spécifier un titre et un type de page Open Graph comme ceci&#160;:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$this->doctype(Zend_View_Helper_Doctype::XHTML_RDFA);
+$this->headMeta()->setProperty('og:title', 'my article title');
+$this->headMeta()->setProperty('og:type', 'article');
+echo $this->headMeta();
+
+// l'affichage est :
+//   <meta property="og:title" content="my article title" />
+//   <meta property="og:type" content="article" />
+]]></programlisting>
+
     </example>
 </sect3>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EN-Revision: 21241 -->
+<!-- EN-Revision: 24249 -->
 <!-- Reviewed: no -->
 <sect2 id="zend.validate.Db">
     <title>Db_RecordExists et Db_NoRecordExists</title>
@@ -66,7 +66,13 @@
 
         <programlisting language="php"><![CDATA[
 //Vérifie que l'email existe bien dans la base de données
-$validator = new Zend_Validate_Db_RecordExists('users', 'emailaddress');
+$validator = new Zend_Validate_Db_RecordExists(
+    array(
+        'table' => 'users',
+        'field' => 'emailaddress'
+    )
+);
+
 if ($validator->isValid($emailaddress)) {
     // l'adresse email existe
 } else {
@@ -84,7 +90,12 @@ if ($validator->isValid($emailaddress)) {
 
         <programlisting language="php"><![CDATA[
 //Vérifie que le nom d'utilisateur n'est pas présent dans la table
-$validator = new Zend_Validate_Db_NoRecordExists('users', 'username');
+$validator = new Zend_Validate_Db_NoRecordExists(
+    array(
+        'table' => 'users',
+        'field' => 'username'
+    )
+);
 if ($validator->isValid($username)) {
     // Le nom d'utilisateur semble absent de la table
 } else {
@@ -113,19 +124,22 @@ if ($validator->isValid($username)) {
         </para>
 
         <para>
-            Lorsqu'un tableau est passé, l'opérateur <code>!=</code> est utilisé et vous pouvez ainsi
-            tester le reste de la table.
+            Lorsqu'un tableau est passé, l'opérateur <emphasis>!=</emphasis> est utilisé et vous
+            pouvez ainsi tester le reste de la table.
         </para>
 
         <programlisting language="php"><![CDATA[
-//Vérifie qu'aucun autre utilisateur que celui dont l'id est spécifié, ne possède ce nom
+// Vérifie qu'aucun autre utilisateur que celui dont l'id est spécifié,
+// ne possède ce nom
 $user_id   = $user->getId();
 $validator = new Zend_Validate_Db_NoRecordExists(
-    'users',
-    'username',
     array(
-        'field' => 'id',
-        'value' => $user_id
+        'table' => 'users',
+        'field' => 'username',
+        'exclude' => array(
+            'field' => 'id',
+            'value' => $user_id
+        )
     )
 );
 
@@ -141,22 +155,25 @@ if ($validator->isValid($username)) {
 ]]></programlisting>
 
         <para>
-            L'exemple ci dessus va vérifier qu'aucun utilisateur dont l'id n'est pas celui spécifié,
-            possède ce nom là <varname>$username</varname>.
+            L'exemple ci dessus va vérifier dans la table qu'aucun autre enregistrement que celui
+            pour lequel <command>id = $user_id</command> ne contient la valeur
+            <varname>$username</varname>.
         </para>
 
         <para>
             La clause d'exclusion peut aussi être renseignée avec une chaine afin de pouvoir utiliser
-            un opérateur autre que <code>!=</code>.
+            un opérateur autre que <emphasis>!=</emphasis>.
         </para>
 
         <programlisting language="php"><![CDATA[
-$post_id   = $post->getId();
-$clause    = $db->quoteInto('post_id = ?', $category_id);
+$email     = 'user@example.com';
+$clause    = $db->quoteInto('email = ?', $email);
 $validator = new Zend_Validate_Db_RecordExists(
-    'posts_categories',
-    'post_id',
-    $clause
+    array(
+        'table'   => 'users',
+        'field'   => 'username',
+        'exclude' => $clause
+    )
 );
 
 if ($validator->isValid($username)) {
@@ -171,8 +188,9 @@ if ($validator->isValid($username)) {
 ]]></programlisting>
 
         <para>
-            L'exemple ci-dessus vérifie la table <code>posts_categories</code> pour s'assurer
-            qu'un enregistrement avec <code>post_id</code> corresponde à <varname>$category_id</varname>
+            L'exemple ci-dessus vérifie la table 'users' pour s'assurer
+            qu'un seul enregistrement avec un nom <varname>$username</varname> et un
+            email <varname>$email</varname> est valide.
         </para>
     </sect3>
 
@@ -185,7 +203,13 @@ if ($validator->isValid($username)) {
         </para>
 
         <programlisting language="php"><![CDATA[
-$validator = new Zend_Validate_Db_RecordExists('users', 'id', null, $dbAdapter);
+$validator = new Zend_Validate_Db_RecordExists(
+    array(
+        'table' => 'users',
+        'field' => 'id',
+        'adapter' => $dbAdapter
+    )
+);
 ]]></programlisting>
     </sect3>
 
@@ -195,12 +219,17 @@ $validator = new Zend_Validate_Db_RecordExists('users', 'id', null, $dbAdapter);
         <para>
             Vous pouvez spécifier un nom de base de données (schéma) pour l'adaptateur
             PostgreSQL et DB/2 simplement grâce à un tableau possédant les clés
-            <code>table</code> et <code>schema</code>. Voici un exemple:
+            <property>table</property> et <property>schema</property>. Voici un exemple&#160;:
         </para>
 
         <programlisting language="php"><![CDATA[
-$validator = new Zend_Validate_Db_RecordExists(array('table' => 'users',
-                                                     'schema' => 'my'), 'id');
+$validator = new Zend_Validate_Db_RecordExists(
+    array(
+        'table'  => 'users',
+        'schema' => 'my',
+        'field'  => 'id'
+    )
+);
 ]]></programlisting>
     </sect3>
 </sect2>
