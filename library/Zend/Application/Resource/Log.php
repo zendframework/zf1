@@ -27,7 +27,7 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
 
 
 /**
- * Resource for initializing the locale
+ * Resource for initializing logger
  *
  * @uses       Zend_Application_Resource_ResourceAbstract
  * @category   Zend
@@ -66,6 +66,11 @@ class Zend_Application_Resource_Log
         return $this;
     }
 
+    /**
+     * Retrieve logger object
+     *
+     * @return Zend_Log
+     */
     public function getLog()
     {
         if (null === $this->_log) {
