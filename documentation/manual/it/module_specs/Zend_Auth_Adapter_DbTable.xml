@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.auth.adapter.dbtable">
+    <title>Database Table Authentication</title>
+
+    <sect2 id="zend.auth.adapter.dbtable.introduction">
+        <title>Introduzione</title>
+
+        <para>
+            <classname>Zend_Auth_Adapter_DbTable</classname> fornisce la possibilità di 
+            autenticare un utente secondo le credenziali memorizzate in una tabella di un database. Dato che
+            <classname>Zend_Auth_Adapter_DbTable</classname> necessita che un'istanza della classe
+            <classname>Zend_Db_Adapter_Abstract</classname> sia passata al suo 
+            costruttore, ogni istanza è legata ad una particolare connessione al
+            database. Altre opzioni di configurazione possono essere impostate tramite il 
+            costruttore e tramite i metodi dell'instanza, una per ogni opzione.
+        </para>
+
+        <para>
+            Le opzioni di configurazione disponibili includono:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>tableName</property></emphasis>: Indica il nome della tabella del database che contiene le credenziali di autenticazione, e in quale database la query di autenticazione viene effettuata.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>identityColumn</property></emphasis>: Indica il nome della colonna della tabella usata per rappresentare l'identità. La colonna dell'identità deve contenere valori univoci, come ad esempio il nome utente o l'indirizzo email.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>credentialColumn</property></emphasis>: Indica il nome della colonna della tabella usata per rappresentare le credenziali. Sotto un semplice schema di identità e password, il valore della credenziale corrisponde alla password. Vedere anche l'opzione <property>credentialTreatment</property>
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>credentialTreatment</property></emphasis>: In molti casi, le password e altre informazioni sensibili sono criptate, memorizzate attraverso algoritmi di hash, codificate, oscurate o trattate con funzioni o algoritmi. Specificando una stringa con questo metodo, come ad esempio '<methodname>MD5(?)</methodname>' oppure 
+                    '<methodname>PASSWORD(?)</methodname>', uno sviluppatore può applicare credenziali in <acronym>SQL</acronym>.
+Dato che queste funzioni sono specifiche all'<acronym>RDBMS</acronym> utilizzato, vedere il manuale per verificare la compatibilità di queste funzioni con il vostro database.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <example id="zend.auth.adapter.dbtable.introduction.example.basic_usage">
+            <title>Utilizzo base</title>
+
+            <para>
+Come illustrato nell'introduzione, il costruttore della <classname>Zend_Auth_Adapter_DbTable</classname> ha bisogno di un'istanza di <classname>Zend_Db_Adapter_Abstract</classname> che viene utilizzata come connessione al database per l'autenticazione. Prima di tutto, la connessione al database dovrebbe essere creata.
+            </para>
+
+            <para>
+Il codice seguente crea un adapter per un database in-memory, crea un semplice schema di una tabella, e inserisce una riga su cui più tardi sarà possibile effettuare la query di autenticazione. Questo esempio ha bisogno che l'estensione <acronym>PDO</acronym> SQLite sia disponibile:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Crea una connessione al database SQLite "in-memory"
+$dbAdapter = new Zend_Db_Adapter_Pdo_Sqlite(array('dbname' =>
+                                                  ':memory:'));
+
+// Costruisce una semplice tabella
+$sqlCreate = 'CREATE TABLE [users] ('
+           . '[id] INTEGER  NOT NULL PRIMARY KEY, '
+           . '[username] VARCHAR(50) UNIQUE NOT NULL, '
+           . '[password] VARCHAR(32) NULL, '
+           . '[real_name] VARCHAR(150) NULL)';
+
+// Crea la tabella che contiene le credenziali di autenticazione
+$dbAdapter->query($sqlCreate);
+
+// Costruisce una query per inserire una riga per cui l'autenticazione possa andare a buon fine
+$sqlInsert = "INSERT INTO users (username, password, real_name) "
+           . "VALUES ('my_username', 'my_password', 'My Real Name')";
+
+// Inserisce le informazioni
+$dbAdapter->query($sqlInsert);
+]]></programlisting>
+
+            <para>
+Con la connessione al database e i dati della tabella disponibili, un'instanza di <classname>Zend_Auth_Adapter_DbTable</classname> può essere creata. I valori delle opzioni di configurazione possono essere passati al costruttore o passati come parametri ai metodi di configurazione dopo l'istanziazione:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Configurare l'istanza con i parametri del costruttore
+$authAdapter = new Zend_Auth_Adapter_DbTable(
+    $dbAdapter,
+    'users',
+    'username',
+    'password'
+);
+
+// ...oppure configurare l'istanza con i metodi di configurazione
+$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+
+$authAdapter
+    ->setTableName('users')
+    ->setIdentityColumn('username')
+    ->setCredentialColumn('password')
+;
+]]></programlisting>
+
+            <para>
+A questo punto, l'istanza dell'adapter di autenticazione è pronta ad accettare le query di autenticazione. Al fine di formulare una query di autenticazione, i valori di input sono passati all'adapter prima di chiamare il metodo <methodname>authenticate()</methodname>:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Impostare i valori delle credenziali (e.g., da un form di login)
+$authAdapter
+    ->setIdentity('my_username')
+    ->setCredential('my_password')
+;
+
+// Effettua la query di autenticazione, salvando il risultato
+]]></programlisting>
+
+            <para>
+Oltre alla disponibilità del metodo <methodname>getIdentity()</methodname> sull'oggetto che contiene il risultato dell'autenticazione, <classname>Zend_Auth_Adapter_DbTable</classname> supporta anche il recupero della riga della tabella su cui l'autenticazione è avvenuta con successo:
+
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Stampa l'identità
+echo $result->getIdentity() . "\n\n";
+
+// Stampa la riga di risultato
+print_r($authAdapter->getResultRowObject());
+
+/* Output:
+my_username
+
+Array
+(
+    [id] => 1
+    [username] => my_username
+    [password] => my_password
+    [real_name] => My Real Name
+)
+]]></programlisting>
+
+            <para>
+Dato che la riga della tabella contiene le credenziali, è importante mettere in sicurezza questi dati da accessi indesiderati.
+            </para>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.auth.adapter.dbtable.advanced.storing_result_row">
+        <title>Utilizzo avanzato: Rendere persistente un oggetto di risultato di tipo DbTable</title>
+
+        <para>
+Di default, la classe <classname>Zend_Auth_Adapter_DbTable</classname> restituisce l'identità fornita all'oggetto di autenticazione dopo che l'autenticazione ha avuto successo. Un altro scenario, in cui gli sviluppatori vogliono memorizzare nel meccanismo di memorizzazione persistente della classe <classname>Zend_Auth</classname> un oggetto di identità contenente altre utili informazioni, è gestito usando il metodo <methodname>getResultRowObject()</methodname> per restituire un oggetto <emphasis>stdClass</emphasis>. Il seguente codice illustra il suo uso:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// autenticazione con Zend_Auth_Adapter_DbTable
+$result = $this->_auth->authenticate($adapter);
+
+if ($result->isValid()) {
+    // memorizzazione dell'identità come un oggetto in cui solo lo username e
+    // il real_name vengono restituiti
+    $storage = $this->_auth->getStorage();
+    $storage->write($adapter->getResultRowObject(array(
+        'username',
+        'real_name',
+    )));
+
+    // memorizza l'identità come un oggetto in cui la colonna password
+    // viene omessa
+    $storage->write($adapter->getResultRowObject(
+        null,
+        'password'
+    ));
+
+    /* ... */
+
+} else {
+
+    /* ... */
+
+}
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zend.auth.adapter.dbtable.advanced.advanced_usage">
+        <title>Esempio di un utilizzo avanzato</title>
+
+        <para>
+Mentre il proposito principale della <classname>Zend_Auth</classname> (e conseguentemente <classname>Zend_Auth_Adapter_DbTable</classname>) è principalmente l'<emphasis>autenticazione</emphasis> e non l'<emphasis>autorizzazione</emphasis>, ci sono un pò di istanze e problemi che segnano la linea in quale dominio loro dovrebbero essere utilizzati. A seconda di come si è deciso di spiegare il problema, a volte ha senso risolvere quello che potrebbe sembrare un problema di autenticazione con l'adapter autentication.
+        </para>
+
+        <para>
+Senza l'ostacolo del disclaimer, la classe <classname>Zend_Auth_Adapter_DbTable</classname> ha alcuni meccanismi interni che possono essere influenzati da ulteriori controlli nel momento dell'autenticazione per risolvere alcuni comuni problemi dell'utente.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Il valore del campo di stato di un account non è uguale a "compromised"
+$adapter = new Zend_Auth_Adapter_DbTable(
+    $db,
+    'users',
+    'username',
+    'password',
+    'MD5(?) AND status != "compromised"'
+);
+
+// Il valore del campo attivo di un account è uguale a TRUE
+$adapter = new Zend_Auth_Adapter_DbTable(
+    $db,
+    'users',
+    'username',
+    'password',
+    'MD5(?) AND active = "TRUE"'
+]]></programlisting>
+
+        <para>
+Un altro scenario può essere l'implementazione di un meccanismo di "salting". Il salting è un termine che si riferisce alla tecnica con la quale si può migliorare di molto la sicurezza dell'applicazione. E' basata sull'idea che concatenando una stringa casuale ad ogni password rende impossibile un attacco di tipo "brute force" sul database usando un dizionario di parole pre-confezionate.
+        </para>
+
+        <para>
+Quindi, è necessario modificare la tabella per memorizzare la stringa "salt".
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$sqlAlter = "ALTER TABLE [users] "
+          . "ADD COLUMN [password_salt] "
+          . "AFTER [password]";
+]]></programlisting>
+
+        <para>
+Di seguito un semplice modo per generare la stringa "salt" per ogni utente alla registrazione:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+for ($i = 0; $i < 50; $i++) {
+    $dynamicSalt .= chr(rand(33, 126));
+]]></programlisting>
+        <para>
+E ora compilare l'adapter:
+            And now let's build the adapter:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$adapter = new Zend_Auth_Adapter_DbTable(
+    $db,
+    'users',
+    'username',
+    'password',
+    "MD5(CONCAT('"
+    . Zend_Registry::get('staticSalt')
+    . "', ?, password_salt))"
+);
+]]></programlisting>
+
+        <note>
+            <para>
+E' possibile migliorare la sicurezza ancora di più usando un valore statico di "salt" inserito manualmente nel nell'applicazione. Nel caso in cui il database sia compromesso (per esempio da un attacco <acronym>SQL</acronym> injection) ma il web server sia intego e le informazioni ancora inutilizzabili da chi ha effettuato l'attacco.
+            </para>
+        </note>
+
+        <para>
+Un'alternativa è usare il metodo <methodname>getDbSelect()</methodname> della classe <classname>Zend_Auth_Adapter_DbTable</classname> dopo che l'adapter è stato costruito. Questo metodo restituisce l'istanza dell'oggetto <classname>Zend_Db_Select</classname> e la userà per completare il metodo <methodname>authenticate()</methodname>.
+E' importante notare che questo metodo restituisce sempre lo stesso oggetto indipendentemente dal fatto che il metodo <methodname>authenticate()</methodname> è stato chiamato o meno. Questo oggetto <emphasis>non avrà</emphasis> nessuna delle informazioni relative all'identità o alle credenziali  poichè quei valori sono stati inseriti nell'oggetto select nel momento in cui il metodo <methodname>authenticate()</methodname> viene eseguito.
+        </para>
+
+        <para>
+Un esempio della situazione in cui si voglia usare il metodo <methodname>getDbSelect()</methodname> per controllare lo stato di un utente, in altre parole per vedere se quell'account utente è abilitato.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Continua con l'esempio di sopra
+$adapter = new Zend_Auth_Adapter_DbTable(
+    $db,
+    'users',
+    'username',
+    'password',
+    'MD5(?)'
+);
+
+// prende l'oggette "select"
+$select = $adapter->getDbSelect();
+$select->where('active = "TRUE"');
+
+// metodo authenticate, questo assicura che users.active = TRUE
+$adapter->authenticate();
+]]></programlisting>
+    </sect2>
+</sect1>
