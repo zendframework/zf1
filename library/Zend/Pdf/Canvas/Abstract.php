@@ -31,6 +31,9 @@ require_once 'Zend/Pdf/Element/Name.php';
 require_once 'Zend/Pdf/Element/Null.php';
 require_once 'Zend/Pdf/Element/Numeric.php';
 require_once 'Zend/Pdf/Element/String.php';
+require_once 'Zend/Pdf/Resource/GraphicsState.php';
+require_once 'Zend/Pdf/Resource/Font.php';
+require_once 'Zend/Pdf/Resource/Image.php';
 
 
 /**
