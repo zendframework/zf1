@@ -206,6 +206,17 @@ class Zend_Feed_Writer_FeedTest extends PHPUnit_Framework_TestCase
         $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($writer->getDateCreated()));
     }
+    
+    /**
+     * @group ZF-11610
+     */
+    public function testSetDateCreatedUsesGivenUnixTimestampThatIsAVerySmallInteger()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setDateCreated(123);
+        $myDate = new Zend_Date('123', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($writer->getDateCreated()));
+    }
 
     public function testSetDateCreatedUsesZendDateObject()
     {
@@ -239,6 +250,17 @@ class Zend_Feed_Writer_FeedTest extends PHPUnit_Framework_TestCase
         $writer = new Zend_Feed_Writer_Feed;
         $writer->setDateModified(123456789);
         $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($writer->getDateModified()));
+    }
+
+    /**
+     * @group ZF-11610
+     */
+    public function testSetDateModifiedUsesGivenUnixTimestampThatIsAVerySmallInteger()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setDateModified(123);
+        $myDate = new Zend_Date('123', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($writer->getDateModified()));
     }
 
@@ -306,6 +328,17 @@ class Zend_Feed_Writer_FeedTest extends PHPUnit_Framework_TestCase
         $writer = new Zend_Feed_Writer_Feed;
         $writer->setLastBuildDate(123456789);
         $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($writer->getLastBuildDate()));
+    }
+
+    /**
+     * @group ZF-11610
+     */
+    public function testSetLastBuildDateUsesGivenUnixTimestampThatIsAVerySmallInteger()
+    {
+        $writer = new Zend_Feed_Writer_Feed;
+        $writer->setLastBuildDate(123);
+        $myDate = new Zend_Date('123', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($writer->getLastBuildDate()));
     }
 
