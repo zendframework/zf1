@@ -128,7 +128,7 @@ class Zend_Feed_Writer_Deleted
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit($date)) {
+        } elseif (ctype_digit((string)$date)) {
             $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
