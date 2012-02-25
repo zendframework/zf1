@@ -268,7 +268,18 @@ class Zend_Feed_Writer_EntryTest extends PHPUnit_Framework_TestCase
         $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($entry->getDateCreated()));
     }
-    
+
+    /**
+     * @group ZF-11610
+     */
+    public function testSetDateCreatedUsesGivenUnixTimestampWhenItIsAVerySmallInteger()
+    {
+        $entry = new Zend_Feed_Writer_Entry;
+        $entry->setDateCreated(123);
+        $myDate = new Zend_Date('123', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($entry->getDateCreated()));
+    }
+
     public function testSetDateCreatedUsesZendDateObject()
     {
         $entry = new Zend_Feed_Writer_Entry;
@@ -301,6 +312,17 @@ class Zend_Feed_Writer_EntryTest extends PHPUnit_Framework_TestCase
         $entry = new Zend_Feed_Writer_Entry;
         $entry->setDateModified(123456789);
         $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($entry->getDateModified()));
+    }
+
+    /**
+     * @group ZF-11610
+     */
+    public function testSetDateModifiedUsesGivenUnixTimestampWhenItIsAVerySmallInteger()
+    {
+        $entry = new Zend_Feed_Writer_Entry;
+        $entry->setDateModified(123);
+        $myDate = new Zend_Date('123', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($entry->getDateModified()));
     }
 
