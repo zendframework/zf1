@@ -72,6 +72,17 @@ class Zend_Feed_Writer_DeletedTest extends PHPUnit_Framework_TestCase
         $myDate = new Zend_Date('1234567890', Zend_Date::TIMESTAMP);
         $this->assertTrue($myDate->equals($entry->getWhen()));
     }
+ 
+    /**
+     * @group ZF-12070
+     */
+    public function testSetWhenUsesGivenUnixTimestampWhenItIsLessThanTenDigits()
+    {
+        $entry = new Zend_Feed_Writer_Deleted;
+        $entry->setWhen(123456789);
+        $myDate = new Zend_Date('123456789', Zend_Date::TIMESTAMP);
+        $this->assertTrue($myDate->equals($entry->getWhen()));
+    }
 
     public function testSetWhenUsesZendDateObject()
     {

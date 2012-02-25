@@ -214,7 +214,7 @@ class Zend_Feed_Writer_Entry
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit($date) && strlen($date) == 10) {
+        } elseif (ctype_digit($date)) {
             $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
@@ -235,7 +235,7 @@ class Zend_Feed_Writer_Entry
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit($date) && strlen($date) == 10) {
+        } elseif (ctype_digit($date)) {
             $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
