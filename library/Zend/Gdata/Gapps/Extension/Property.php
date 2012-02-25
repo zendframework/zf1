@@ -177,4 +177,3 @@ class Zend_Gdata_Gapps_Extension_Property extends Zend_Gdata_Extension
                "\nProperty Value: " . $this->getValue();
     }
 }
-?>
