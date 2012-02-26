@@ -65,6 +65,19 @@ class Zend_Translate_Adapter_TmxTest extends PHPUnit_Framework_TestCase
             $this->assertContains('Mismatched tag at line', $e->getMessage());
         }
     }
+    
+    /**
+     * @group ZF-12012
+     */
+    public function testErrorOnCreateIncludesFilename()
+    {
+        try {
+            $adapter = new Zend_Translate_Adapter_Tmx(dirname(__FILE__) . '/_files/nofile.tmx', 'en');
+            $this->fail("exception expected");
+        } catch (Zend_Translate_Exception $e) {
+            $this->assertContains('nofile.tmx', $e->getMessage());
+        }
+    }
 
     public function testToString()
     {

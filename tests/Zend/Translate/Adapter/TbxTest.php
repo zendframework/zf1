@@ -66,6 +66,19 @@ class Zend_Translate_Adapter_TbxTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-12012
+     */
+    public function testErrorOnCreateIncludesFilename()
+    {
+        try {
+            $adapter = new Zend_Translate_Adapter_Tbx(dirname(__FILE__) . '/_files/nofile.tbx', 'en');
+            $this->fail("exception expected");
+        } catch (Zend_Translate_Exception $e) {
+            $this->assertContains('nofile.tbx', $e->getMessage());
+        }
+    }
+    
     public function testToString()
     {
         $adapter = new Zend_Translate_Adapter_Tbx(dirname(__FILE__) . '/_files/translation_en.tbx', 'fr');
