@@ -85,19 +85,20 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
             <para>
                 The redirect action helper issues an <methodname>exit()</methodname> statement
                 when using the method <methodname>gotoAndExit()</methodname>
-                and will then obviously also stops a test running for this method.
-                For testability of your application dont use that method on the
-                redirector!
+                and will then obviously also stop any tests running against controllers 
+                using this method. For testability of your application dont use that
+                method of the redirector!
             </para>
         </important>
 
         <para>
             Due to its nature the redirector action helper plugin issues a redirect
-            and exists after this. Because you cannot test parts of an application
+            and then exits. Because you cannot test parts of an application
             that issue exit calls <classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
-            automatically disables the exit part of the redirector which can cause
-            different behaviours in tests and the real application. To make sure
-            redirect work correctly you should it them in the following way:
+            automatically disables the exit part of the redirector as it can cause
+            test behavior to differ from the real application. To ensure your controllers can
+            be properly tested, please make use of the redirector when you need to redirect
+            the user to a different page:
         </para>
 
         <programlisting language="php"><![CDATA[
