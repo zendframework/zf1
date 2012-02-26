@@ -113,5 +113,31 @@ class Zend_Cache_FactoryTest extends PHPUnit_Framework_TestCase
         }
         $this->fail('Zend_Exception was expected but not thrown');
     }
+    
+    /**
+     * @group ZF-11988
+     */
+    public function testNamespacedFrontendClassAccepted()
+    {
+        try {
+            Zend_Cache::factory('ZF11988\Frontend', 'File', array(), array(), true, false, false);
+            $this->fail('Zend_Cache_Exception was expected but not thrown');
+        } catch ( Zend_Cache_Exception $e ) {
+            $this->assertNotEquals('Invalid frontend name [ZF11988\Frontend]', $e->getMessage());
+        }
+    }
+    
+    /**
+     * @group ZF-11988
+     */
+    public function testNamespacedBackendClassAccepted()
+    {
+        try {
+            Zend_Cache::factory('Output', 'ZF11988\Backend', array(), array(), false, true, false);
+            $this->fail('Zend_Cache_Exception was expected but not thrown');
+        } catch ( Zend_Cache_Exception $e ) {
+            $this->assertNotEquals('Invalid backend name [ZF11988\Backend]', $e->getMessage());
+        }
+    }
 
 }
