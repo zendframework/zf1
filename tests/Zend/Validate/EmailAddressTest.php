@@ -561,6 +561,15 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
             $this->multipleOptionsDetected = true;
         }
     }
+    
+    /**
+     * @group ZF-11239
+     */
+    public function testNotSetHostnameValidator()
+    {
+        $hostname = $this->_validator->getHostnameValidator();
+        $this->assertTrue($hostname instanceof Zend_Validate_Hostname);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Validate_EmailAddressTest::main') {
