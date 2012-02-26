@@ -129,7 +129,9 @@ abstract class Zend_Pdf_Resource_Font_CidFont extends Zend_Pdf_Resource_Font
         $charGlyphs  = $this->_cmap->getCoveredCharactersGlyphs();
         $charWidths  = array();
         foreach ($charGlyphs as $charCode => $glyph) {
-            $charWidths[$charCode] = $glyphWidths[$glyph];
+            if(isset($glyphWidths[$glyph]) && !is_null($glyphWidths[$glyph])) {
+                $charWidths[$charCode] = $glyphWidths[$glyph];
+            }
         }
         $this->_charWidths       = $charWidths;
         $this->_missingCharWidth = $glyphWidths[0];
