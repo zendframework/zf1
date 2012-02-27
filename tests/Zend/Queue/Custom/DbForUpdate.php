@@ -98,13 +98,11 @@ class Custom_DbForUpdate extends Zend_Queue_Adapter_Db
                 // the rows after our select, but before our update.
                 if ($count > 0) {
                     $msgs[] = $data;
-                    $this->getLogger()->debug('Received message:' . $data['message_id'] . ' byte size=' . strlen($data['body']));
                 }
             }
             $db->commit();
         } catch (Exception $e) {
             $db->rollBack();
-            $this->getLogger()->err($e->getMessage() . ' code ' . $e->getCode());
             /**
              * @see Zend_Queue_Exception
              */

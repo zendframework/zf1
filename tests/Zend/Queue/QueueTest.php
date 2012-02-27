@@ -56,22 +56,6 @@ class Zend_Queue_QueueTest extends PHPUnit_Framework_TestCase
         );
 
         $this->queue = new Zend_Queue('array', $this->config);
-
-        /**
-         * @see Zend_Log
-         */
-        require_once 'Zend/Log.php';
-        require_once 'Zend/Log/Writer/Stream.php';
-        require_once 'Zend/Log/Writer/Null.php';
-        if (! isset($this->logger)) {
-            if (1) { // vebose?
-                $this->_logger = new Zend_Log(new Zend_Log_Writer_Stream('php://output'));
-            } else {
-                $this->_logger = new Zend_Log(new Zend_Log_Writer_Null());
-            }
-        }
-
-        $this->queue->setLogger($this->_logger);
     }
 
     protected function tearDown()
@@ -81,7 +65,7 @@ class Zend_Queue_QueueTest extends PHPUnit_Framework_TestCase
     public function testConst()
     {
         $this->assertTrue(is_string(Zend_Queue::TIMEOUT));
-        $this->assertTrue(is_integer(Zend_Queue::VISABILITY_TIMEOUT));
+        $this->assertTrue(is_integer(Zend_Queue::VISIBILITY_TIMEOUT));
         $this->assertTrue(is_string(Zend_Queue::NAME));
     }
 
@@ -100,15 +84,10 @@ class Zend_Queue_QueueTest extends PHPUnit_Framework_TestCase
             'adapter'   => 'array'
         );
 
+        require_once "Zend/Config.php";
         $zend_config = new Zend_Config($config);
 
         $obj = new Zend_Queue($config);
-        $this->assertTrue($obj instanceof Zend_Queue);
-
-        // test logger
-        $this->assertTrue($obj->getLogger() instanceof Zend_Log);
-
-        $obj = new Zend_Queue($zend_config);
         $this->assertTrue($obj instanceof Zend_Queue);
 
         try {
@@ -119,9 +98,9 @@ class Zend_Queue_QueueTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function test_getConfig()
+    public function test_getOptions()
     {
-        $config = $this->queue->getConfig();
+        $config = $this->queue->getOptions();
         $this->assertTrue(is_array($config));
         $this->assertEquals($this->config['name'], $config['name']);
     }
@@ -218,28 +197,6 @@ class Zend_Queue_QueueTest extends PHPUnit_Framework_TestCase
         // ------------------------------------ deleteMessage()
         foreach ($messages as $i => $message) {
             $this->assertTrue($this->queue->deleteMessage($message));
-        }
-    }
-
-    public function test_set_getLogger()
-    {
-        /**
-         * @see Zend_Log
-         */
-        require_once 'Zend/Log.php';
-        require_once 'Zend/Log/Writer/Null.php';
-
-        $logger = new Zend_Log(new Zend_Log_Writer_Null);
-
-        $this->assertTrue($this->queue->setLogger($logger) instanceof Zend_Queue);
-        $this->assertTrue($this->queue->getLogger() instanceof Zend_Log);
-
-        // parameter verification
-        try {
-            $this->queue->setLogger(array());
-            $this->fail('setlogger() passed an array and succeeded (bad)');
-        } catch (Exception $e) {
-            $this->assertTrue(true);
         }
     }
 
