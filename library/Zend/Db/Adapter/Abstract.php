@@ -745,7 +745,7 @@ abstract class Zend_Db_Adapter_Abstract
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
-     * @return array
+     * @return mixed Array, object, or scalar depending on fetch mode.
      */
     public function fetchRow($sql, $bind = array(), $fetchMode = null)
     {
