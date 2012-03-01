@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 24249 -->
+<!-- EN-Revision: 24662 -->
 <sect2 id="zend.test.phpunit.testing">
     <title>コントローラおよび MVC アプリケーションのテスト</title>
 
@@ -86,7 +86,7 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
             <para>
                 Redirect アクションヘルパーは、<methodname>gotoAndExit()</methodname>
                 メソッドを使うときに <methodname>exit()</methodname>
-                ステートメントを発行し、このメソッドのテストを停止させます。
+                ステートメントを発行し、このメソッドを使用するコントローラーに対するテストを全て停止させます。
                 アプリケーションのテスト容易性を考慮して、
                 リダイレクタではこのメソッドを使わないようにしましょう。
             </para>
@@ -94,11 +94,14 @@ class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
         <para>
             その性質上、リダイレクタアクションヘルパープラグインは
-            リダイレクトしたあと処理を終了します。exit をコールする部分をテストすることはできないので、
-            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
-            は自動的にリダイレクタでの exit 部分を無効化します。
-            その結果、テスト時と実際の実行時で挙動が変わってくることがありえます。
-            リダイレクトが正しく動作することを確実にするには、次のようにします。
+            リダイレクトしたあと処理を終了します。
+            <!-- to be translated -->
+            Because you cannot test parts of an application
+            that issue exit calls <classname>Zend_Test_PHPUnit_ControllerTestCase</classname>
+            automatically disables the exit part of the redirector as it can cause
+            test behavior to differ from the real application. To ensure your controllers can
+            be properly tested, please make use of the redirector when you need to redirect
+            the user to a different page:
         </para>
 
         <programlisting language="php"><![CDATA[
