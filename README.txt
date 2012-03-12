@@ -17,6 +17,18 @@ A detailed list of all features and bug fixes in this release may be found at:
 
 http://framework.zend.com/changelog/
 
+MIGRATION NOTES
+---------------
+
+* Zend_Cache_Backend_File
+  * renamed options, old names still exists but triggers an E_USER_NOTICE error
+    * 'hashed_directory_umask' to 'hashed_directory_perm'
+    * 'cache_file_umask' to 'cache_file_perm'
+
+A detailed list of migration notes may be found at:
+
+http://framework.zend.com/manual/en/migration.html
+
 SYSTEM REQUIREMENTS
 -------------------
 
