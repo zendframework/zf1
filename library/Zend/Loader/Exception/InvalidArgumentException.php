@@ -13,46 +13,22 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_File
- * @subpackage UnitTests
+ * @package    Zend_Loader
+ * @subpackage Exception
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_File_AllTests::main');
-}
-
-require_once 'Zend/File/Transfer/AllTests.php';
-require_once 'Zend/File/ClassFileLocatorTest.php';
+require_once dirname(__FILE__) . '/../Exception.php';
 
 /**
  * @category   Zend
- * @package    Zend_File
- * @subpackage UnitTests
+ * @package    Zend_Loader
+ * @subpackage Exception
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @group      Zend_File
  */
-class Zend_File_AllTests
+class Zend_Loader_Exception_InvalidArgumentException
+    extends Zend_Loader_Exception
 {
-    public static function main()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_File');
-
-        $suite->addTestSuite('Zend_File_ClassFileLocatorTest');
-        $suite->addTest(Zend_File_Transfer_AllTests::suite());
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Zend_File_AllTests::main') {
-    Zend_File_AllTests::main();
 }

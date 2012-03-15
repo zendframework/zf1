@@ -13,46 +13,41 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_File
+ * @package    Zend_Loader
  * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_File_AllTests::main');
-}
-
-require_once 'Zend/File/Transfer/AllTests.php';
-require_once 'Zend/File/ClassFileLocatorTest.php';
+namespace ZendTest\Loader\TestAsset;
 
 /**
- * @category   Zend
- * @package    Zend_File
+ * @package    Zend_Loader
  * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @group      Zend_File
+ * @group      Loader
  */
-class Zend_File_AllTests
+class ZendTest_Loader_TestAsset_TestPluginMap implements IteratorAggregate
 {
-    public static function main()
+    /**
+     * Plugin map
+     * 
+     * @var array
+     */
+    public $map = array(
+        'map'    => __CLASS__,
+        'test'   => 'Zend_Loader_PluginClassLoaderTest',
+        'loader' => 'Zend_Loader_PluginClassLoader',
+    );
+
+    /**
+     * Return iterator
+     * 
+     * @return Traversable
+     */
+    public function getIterator()
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        return new ArrayIterator($this->map);
     }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_File');
-
-        $suite->addTestSuite('Zend_File_ClassFileLocatorTest');
-        $suite->addTest(Zend_File_Transfer_AllTests::suite());
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Zend_File_AllTests::main') {
-    Zend_File_AllTests::main();
 }

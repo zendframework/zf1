@@ -25,9 +25,12 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once 'Zend/Loader/AutoloaderTest.php';
+require_once 'Zend/Loader/AutoloaderFactoryTest.php';
 require_once 'Zend/Loader/AutoloaderMultiVersionTest.php';
 require_once 'Zend/Loader/Autoloader/ResourceTest.php';
+require_once 'Zend/Loader/ClassMapAutoloaderTest.php';
 require_once 'Zend/Loader/PluginLoaderTest.php';
+require_once 'Zend/Loader/StandardAutoloaderTest.php';
 
 /**
  * @category   Zend
@@ -49,9 +52,12 @@ class Zend_Loader_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Loader');
 
         $suite->addTestSuite('Zend_Loader_AutoloaderTest');
+        $suite->addTestSuite('Zend_Loader_AutoloaderFactoryTest');
         $suite->addTestSuite('Zend_Loader_AutoloaderMultiVersionTest');
         $suite->addTestSuite('Zend_Loader_Autoloader_ResourceTest');
+        $suite->addTestSuite('Zend_Loader_ClassMapAutoloaderTest');
         $suite->addTestSuite('Zend_Loader_PluginLoaderTest');
+        $suite->addTestSuite('Zend_Loader_StandardAutoloaderTest');
 
         return $suite;
     }
