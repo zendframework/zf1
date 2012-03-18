@@ -30,6 +30,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'Zend/Gdata/AuthSubTest.php';
 
 /**
+ * 
+ */
+require_once 'Zend/Gdata/Analytics/AccountFeedTest.php';
+
+/**
  * Tests that do not require online access to servers
  */
 require_once 'Zend/Gdata/AppTest.php';
