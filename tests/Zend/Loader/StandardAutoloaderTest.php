@@ -119,13 +119,13 @@ class Zend_Loader_StandardAutoloaderTest extends PHPUnit_Framework_TestCase
 
     public function testPassingTraversableOptionsPopulatesProperties()
     {
-        $namespaces = new \ArrayObject(array(
+        $namespaces = new ArrayObject(array(
             'Zend\\' => dirname(dirname(__FILE__)) . '/',
         ));
-        $prefixes = new \ArrayObject(array(
+        $prefixes = new ArrayObject(array(
             'Zend_' => dirname(dirname(__FILE__)) . '/',
         ));
-        $options = new \ArrayObject(array(
+        $options = new ArrayObject(array(
             'namespaces' => $namespaces,
             'prefixes'   => $prefixes,
             'fallback_autoloader' => true,

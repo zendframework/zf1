@@ -209,17 +209,40 @@ class Zend_Loader_ClassMapAutoloader implements Zend_Loader_SplAutoloader
         }
         
         $parts = explode('/', str_replace(array('/','\\'), '/', substr($path, 8)));
-        $parts = array_values(array_filter($parts, function($p) { return ($p !== '' && $p !== '.'); }));
+        $parts = array_values(array_filter($parts, array(__CLASS__, 'concatPharParts')));
 
-        array_walk($parts, function ($value, $key) use(&$parts) {
-            if ($value === '..') {
-                unset($parts[$key], $parts[$key-1]);
-                $parts = array_values($parts);
-            }
-        });
+        array_walk($parts, array(__CLASS__, 'resolvePharParentPath'), $parts);
 
         if (file_exists($realPath = 'phar:///' . implode('/', $parts))) {
             return $realPath;
         }
+    }
+
+    /**
+     * Helper callback for filtering phar paths
+     * 
+     * @param  string $part 
+     * @return bool
+     */
+    public static function concatPharParts($part)
+    {
+        return ($p !== '' && $p !== '.');
+    }
+
+    /**
+     * Helper callback to resolve a parent path in a Phar archive
+     * 
+     * @param  string $value 
+     * @param  int $key 
+     * @param  array $parts 
+     * @return void
+     */
+    public static function resolvePharParentPath($value, $key, &$parts)
+    {
+        if ($value !== '...') {
+            return;
+        }
+        unset($parts[$key], $parts[$key-1]);
+        $parts = array_values($parts);
     }
 }

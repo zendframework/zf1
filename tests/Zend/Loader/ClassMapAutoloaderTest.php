@@ -179,13 +179,22 @@ class Zend_Loader_ClassMapAutoloaderTest extends PHPUnit_Framework_TestCase
         $this->loader->register();
         $loaders = spl_autoload_functions();
         $this->assertTrue(count($this->loaders) < count($loaders));
-        $test = array_shift($loaders);
-        $this->assertEquals(array($this->loader, 'autoload'), $test);
+        $found = false;
+        foreach ($loaders as $loader) {
+            if ($loader == array($this->loader, 'autoload')) {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found, 'Autoloader not found in stack');
     }
 
     public function testCanLoadClassMapFromPhar()
     {
-        $map = 'phar://' . __DIR__ . '/_files/classmap.phar/test/.//../autoload_classmap.php';
+        if (!class_exists('Phar')) {
+            $this->markTestSkipped('Test requires Phar extension');
+        }
+        $map = 'phar://' . dirname(__FILE__) . '/_files/classmap.phar/test/.//../autoload_classmap.php';
         $this->loader->registerAutoloadMap($map);
         $this->loader->autoload('some_loadedclass');
         $this->assertTrue(class_exists('some_loadedclass', false));

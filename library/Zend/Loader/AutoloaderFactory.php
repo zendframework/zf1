@@ -132,7 +132,7 @@ abstract class Zend_Loader_AutoloaderFactory
      */
     public static function getRegisteredAutoloaders()
     {
-        return static::$loaders;
+        return self::$loaders;
     }
 
     /**

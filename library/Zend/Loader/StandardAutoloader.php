@@ -56,6 +56,11 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
     protected $fallbackAutoloaderFlag = false;
 
     /**
+     * @var bool
+     */
+    protected $error;
+
+    /**
      * Constructor
      *
      * @param  null|array|Traversable $options
@@ -255,6 +260,21 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
     }
 
     /**
+     * Error handler
+     *
+     * Used by {@link loadClass} during fallback autoloading in PHP versions
+     * prior to 5.3.0.
+     * 
+     * @param mixed $errno 
+     * @param mixed $errstr 
+     * @return void
+     */
+    public function handleError($errno, $errstr)
+    {
+        $this->error = true;
+    }
+
+    /**
      * Transform the class name to a filename
      *
      * @param  string $class
@@ -302,7 +322,14 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
                 }
                 return false;
             }
-            return include $filename;
+            $this->error = false;
+            set_error_handler(array($this, 'handleError'), E_WARNING);
+            include $filename;
+            restore_error_handler();
+            if ($this->error) {
+                return false;
+            }
+            return class_exists($class, false);
         }
 
         // Namespace and/or prefix autoloading
