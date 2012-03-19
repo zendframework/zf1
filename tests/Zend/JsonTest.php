@@ -814,7 +814,8 @@ EOB;
         }
         
         require_once dirname(__FILE__ ) . "/Json/_files/ZF11356-NamespacedClass.php";        
-        $inputValue = new \Zend\JsonTest\ZF11356\NamespacedClass(array('foo'));
+        $className = '\Zend\JsonTest\ZF11356\NamespacedClass';
+        $inputValue = new $className(array('foo'));
         
         $encoded = Zend_Json_Encoder::encode($inputValue);
         $this->assertEquals(
