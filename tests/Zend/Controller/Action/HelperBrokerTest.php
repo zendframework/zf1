@@ -324,6 +324,9 @@ class Zend_Controller_Action_HelperBrokerTest extends PHPUnit_Framework_TestCase
 
     public function testCanLoadNamespacedHelper()
     {
+        if (version_compare(PHP_VERSION, '5.3.0') === -1) {
+            $this->markTestSkipped('Namespaces not available in PHP < 5.3.0');
+        }
         $this->front->setControllerDirectory(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files')
             ->setResponse(new Zend_Controller_Response_Cli())
             ->returnResponse(true);

@@ -36,6 +36,11 @@ class Zend_Crypt_MathTest extends PHPUnit_Framework_TestCase
 
     public function testRand()
     {
+        if (!extension_loaded('bcmath'))
+        {
+            $this->markTestSkipped('Extension bcmath not loaded');
+        }
+
         try {
             $math = new Zend_Crypt_Math_BigInteger();
         } catch (Zend_Crypt_Math_BigInteger_Exception $e) {
