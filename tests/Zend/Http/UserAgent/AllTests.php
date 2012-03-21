@@ -27,7 +27,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'Zend/Http/UserAgentTest.php';
 require_once 'Zend/Http/UserAgent/AbstractDeviceTest.php';
 require_once 'Zend/Http/UserAgent/Features/Adapter/BrowscapTest.php';
-require_once 'Zend/Http/UserAgent/Features/Adapter/WurflApiTest.php';
+require_once 'Zend/Http/UserAgent/Features/Adapter/DeviceAtlasTest.php';
+require_once 'Zend/Http/UserAgent/Features/Adapter/TeraWurflTest.php';
 
 /**
  * @category   Zend
@@ -51,7 +52,8 @@ class Zend_Http_UserAgent_AllTests
         $suite->addTestSuite('Zend_Http_UserAgentTest');
         $suite->addTestSuite('Zend_Http_UserAgent_AbstractDeviceTest');
         $suite->addTestSuite('Zend_Http_UserAgent_Features_Adapter_BrowscapTest');
-        $suite->addTestSuite('Zend_Http_UserAgent_Features_Adapter_WurflApiTest');
+        $suite->addTestSuite('Zend_Http_UserAgent_Features_Adapter_DeviceAtlasTest');
+        $suite->addTestSuite('Zend_Http_UserAgent_Features_Adapter_TeraWurflTest');
 
         return $suite;
     }
