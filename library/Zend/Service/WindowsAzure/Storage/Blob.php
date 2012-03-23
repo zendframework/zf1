@@ -50,7 +50,10 @@ require_once 'Zend/Service/WindowsAzure/Storage/LeaseInstance.php';
  */
 require_once 'Zend/Service/WindowsAzure/Storage/Blob/Stream.php';
 
-
+/**
+ * @see Zend_Service_WindowsAzure_Credentials_SharedAccessSignature
+ */
+require_once 'Zend/Service/WindowsAzure/Credentials/SharedAccessSignature.php';
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure

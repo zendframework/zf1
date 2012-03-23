@@ -41,6 +41,11 @@ require_once 'Zend/Service/WindowsAzure/Storage/TableEntityQuery.php';
 require_once 'Zend/Service/WindowsAzure/Storage/DynamicTableEntity.php';
 
 /**
+ * @see Zend_Service_WindowsAzure_Credentials_SharedKeyLite 
+ */
+require_once 'Zend/Service/WindowsAzure/Credentials/SharedKeyLite.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
  * @subpackage Storage
