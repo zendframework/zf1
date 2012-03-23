@@ -148,7 +148,6 @@ class Zend_Cloud_Infrastructure_Adapter_Rackspace extends Zend_Cloud_Infrastruct
             $this->rackspace->getHttpClient()->setAdapter($options[self::HTTP_ADAPTER]);
         }
         
-        $this->flavors= $this->rackspace->listFlavors(true);
     }
     /**
      * Convert the attributes of Rackspace server into attributes of Infrastructure

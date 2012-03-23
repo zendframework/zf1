@@ -70,9 +70,7 @@ class Zend_Cloud_Infrastructure_Instance
         self::INSTANCE_ID,
         self::INSTANCE_STATUS,
         self::INSTANCE_IMAGEID,
-        self::INSTANCE_ZONE,
-        self::INSTANCE_RAM,
-        self::INSTANCE_STORAGE,
+        self::INSTANCE_ZONE
     );
 
     /**

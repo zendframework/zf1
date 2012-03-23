@@ -57,9 +57,9 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
     {
         $this->infrastructure = Zend_Cloud_Infrastructure_Factory::getAdapter(array( 
             Zend_Cloud_Infrastructure_Factory::INFRASTRUCTURE_ADAPTER_KEY => 'Zend_Cloud_Infrastructure_Adapter_Rackspace', 
-            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_USER   => constant('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_USER'), 
-            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_KEY    => constant('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_KEY'), 
-            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_REGION => constant('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_REGION')   
+            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_USER   => 'foo', 
+            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_KEY    => 'bar', 
+            Zend_Cloud_Infrastructure_Adapter_Rackspace::RACKSPACE_REGION => 'USA'   
         )); 
 
         $this->httpClientAdapterTest = new Zend_Http_Client_Adapter_Test();
@@ -69,10 +69,15 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
                              ->setAdapter($this->httpClientAdapterTest);
         
         // load the HTTP response (from a file)
-        $shortClassName = substr(__CLASS__,strlen('Zend_Cloud_Infrastructure_Adapter_'));
+        $shortClassName = 'RackspaceTest';
         $filename= dirname(__FILE__) . '/_files/' . $shortClassName . '_'. $this->getName().'.response';
         
         if (file_exists($filename)) {
+            // authentication (from file)
+            $content = file_get_contents(dirname(__FILE__) . '/_files/'.$shortClassName . '_testAuthenticate.response');
+            $this->httpClientAdapterTest->setResponse($content);
+            $this->assertTrue($this->infrastructure->getAdapter()->authenticate(),'Authentication failed');
+            
             $this->httpClientAdapterTest->setResponse($this->loadResponse($filename)); 
         }
         
@@ -148,22 +153,6 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
         $instance = $this->infrastructure->createInstance(constant('TESTS_ZEND_SERVICE_RACKSPACE_SERVER_IMAGE_NAME'), $options);
         self::$instanceId= $instance->getId();
         $this->assertEquals(constant('TESTS_ZEND_SERVICE_RACKSPACE_SERVER_IMAGEID'), $instance->getImageId());
-    }
-    /**
-     * Test last HTTP request
-     */
-    public function testGetLastHttpRequest()
-    {
-        $lastHttpRequest = $this->infrastructure->getLastHttpRequest();
-        $this->assertTrue(!empty($lastHttpRequest));
-    }
-    /**
-     * Test last HTTP response
-     */
-    public function testGetLastHttpResponse()
-    {
-        $lastHttpResponse = $this->infrastructure->getLastHttpResponse();
-        $this->assertTrue(!empty($lastHttpResponse));
     }
     /**
      * Test list of an instance
