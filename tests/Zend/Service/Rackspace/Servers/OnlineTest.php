@@ -37,13 +37,13 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      *
      * @var Zend_Service_Rackspace_Servers
      */
-    protected static $rackspace;
+    protected $rackspace;
     /**
      * Check if the resize was successfully done
      * 
      * @var boolean 
      */
-    protected static $resize;
+    protected $resize;
     /**
      * List of flavors available
      * 
@@ -85,27 +85,8 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      *
      * @var Zend_Http_Client_Adapter_Socket
      */
-    protected static $httpClientAdapterSocket;
-    /**
-     * SetUpBerofeClass
-     */
-    public static function setUpBeforeClass()
-    {
-        if (!constant('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_ENABLED')) {
-            self::markTestSkipped('Zend_Service_Rackspace_Servers_OnlineTest tests are not enabled');
-        }
-        if(!defined('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_USER') || !defined('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_KEY')) {
-            self::markTestSkipped('Constants User and Key have to be set.');
-        }
+    protected $httpClientAdapterSocket;
 
-        self::$rackspace = new Zend_Service_Rackspace_Servers(TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_USER,
-                                       TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_KEY);
-
-        self::$httpClientAdapterSocket = new Zend_Http_Client_Adapter_Socket();
-
-        self::$rackspace->getHttpClient()
-                        ->setAdapter(self::$httpClientAdapterSocket);
-    }
     /**
      * Sets up this test case
      *
@@ -113,6 +94,22 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function setUp()
     {
+        if (!constant('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_ENABLED')) {
+            $this->markTestSkipped('Zend_Service_Rackspace_Servers_OnlineTest tests are not enabled');
+        }
+        
+        if(!defined('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_USER') || !defined('TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_KEY')) {
+            $this->markTestSkipped('Constants User and Key have to be set.');
+        }
+
+        $this->rackspace = new Zend_Service_Rackspace_Servers(TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_USER,
+                                       TESTS_ZEND_SERVICE_RACKSPACE_ONLINE_KEY);
+
+        $this->httpClientAdapterSocket = new Zend_Http_Client_Adapter_Socket();
+
+        $this->rackspace->getHttpClient()
+                        ->setAdapter($this->httpClientAdapterSocket);
+
         // terms of use compliance: safe delay between each test
         sleep(2);
     }
@@ -124,12 +121,12 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      * @param integer $timeout
      * @return boolean
      */
-    protected static function waitForStatus($status,$timeout=TESTS_ZEND_SERVICE_RACKSPACE_TIMEOUT)
+    protected function waitForStatus($status,$timeout=TESTS_ZEND_SERVICE_RACKSPACE_TIMEOUT)
     {
         $info['status']= null;
         $i=0;
         while ((strtoupper($info['status'])!==strtoupper($status)) && ($i<$timeout)) {
-            $info= self::$rackspace->getServer(self::$serverId)->toArray();
+            $info= $this->rackspace->getServer(self::$serverId)->toArray();
             $i+=5;
             sleep(5);
         }
@@ -150,7 +147,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
     public function testAuthentication()
     {
         $this->filename= __METHOD__;
-        $this->assertTrue(self::$rackspace->authenticate());
+        $this->assertTrue($this->rackspace->authenticate());
     }
     /**
      * Test create server
@@ -162,19 +159,19 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
             'imageId'  => TESTS_ZEND_SERVICE_RACKSPACE_SERVER_IMAGEID,
             'flavorId' => TESTS_ZEND_SERVICE_RACKSPACE_SERVER_FLAVORID
         );
-        $server= self::$rackspace->createServer($data);
+        $server= $this->rackspace->createServer($data);
         $this->assertTrue($server!==false);
         self::$serverId= $server->getId();
         self::$adminPass= $server->getAdminPass();
         $this->assertEquals(TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME,$server->getName());
-        $this->assertTrue(self::waitForStatus('active'));
+        $this->assertTrue($this->waitForStatus('active'));
     }
     /**
      * Test Get Server
      */
     public function testGetServer()
     {
-        $server= self::$rackspace->getServer(self::$serverId);
+        $server= $this->rackspace->getServer(self::$serverId);
         $this->assertTrue($server!==false);
         $this->assertEquals(TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME,$server->getName());
     }
@@ -183,7 +180,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testListServers()
     {
-        $servers= self::$rackspace->listServers();
+        $servers= $this->rackspace->listServers();
         $this->assertTrue($servers!==false);
     }
     /**
@@ -191,14 +188,14 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testChangeServerName()
     {
-        $this->assertTrue(self::$rackspace->changeServerName(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME.'_renamed'));
+        $this->assertTrue($this->rackspace->changeServerName(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME.'_renamed'));
     }
     /**
      * Test rechange server name
      */
     public function testRechangeServerName()
     {
-        $this->assertTrue(self::$rackspace->changeServerName(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME));
+        $this->assertTrue($this->rackspace->changeServerName(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NAME));
     }
     /**
      * Test change admin password
@@ -206,14 +203,14 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
     public function testChangeServerPassword()
     {
         self::$adminPass= md5(time().rand());
-        $this->assertTrue(self::$rackspace->changeServerPassword(self::$serverId,self::$adminPass));
+        $this->assertTrue($this->rackspace->changeServerPassword(self::$serverId,self::$adminPass));
     }
     /**
      * Test get server IP
      */
     public function testGetServerIp()
     {
-        $addresses= self::$rackspace->getServerIp(self::$serverId);
+        $addresses= $this->rackspace->getServerIp(self::$serverId);
         $this->assertTrue(!empty($addresses['public']) && is_array($addresses['public']));
         $this->assertTrue(!empty($addresses['private']) && is_array($addresses['private']));
     }
@@ -222,7 +219,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testGetServerPublicIp()
     {
-        $public= self::$rackspace->getServerPublicIp(self::$serverId);
+        $public= $this->rackspace->getServerPublicIp(self::$serverId);
         $this->assertTrue(!empty($public) && is_array($public));
     }
     /**
@@ -230,7 +227,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testGetServerPrivateIp()
     {
-        $private= self::$rackspace->getServerPrivateIp(self::$serverId);
+        $private= $this->rackspace->getServerPrivateIp(self::$serverId);
         $this->assertTrue(!empty($private) && is_array($private));
     }
     /**
@@ -238,23 +235,23 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testSoftRebootServer()
     {
-        $this->assertTrue(self::$rackspace->rebootServer(self::$serverId));
-        $this->assertTrue(self::waitForStatus('active'));
+        $this->assertTrue($this->rackspace->rebootServer(self::$serverId));
+        $this->assertTrue($this->waitForStatus('active'));
     }
     /**
      * Test hard reboot the server
      */
     public function testHardRebootServer()
     {
-        $this->assertTrue(self::$rackspace->rebootServer(self::$serverId,true));
-        $this->assertTrue(self::waitForStatus('active'));
+        $this->assertTrue($this->rackspace->rebootServer(self::$serverId,true));
+        $this->assertTrue($this->waitForStatus('active'));
     }
     /**
      * Test rebuild the server image
      */
     public function testRebuildServer()
     {
-        $this->assertTrue(self::$rackspace->rebuildServer(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NEW_IMAGEID));
+        $this->assertTrue($this->rackspace->rebuildServer(self::$serverId,TESTS_ZEND_SERVICE_RACKSPACE_SERVER_NEW_IMAGEID));
     }
     /**
      * Test resize server
@@ -282,7 +279,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testListFlavors()
     {
-        self::$flavors= self::$rackspace->listFlavors(true);
+        self::$flavors= $this->rackspace->listFlavors(true);
         $this->assertTrue(is_array(self::$flavors) && !empty(self::$flavors));
         $this->assertTrue(isset(self::$flavors[0]['id']));
     }
@@ -291,7 +288,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testGetFlavor()
     {
-        $flavor= self::$rackspace->getFlavor(self::$flavors[0]['id']);
+        $flavor= $this->rackspace->getFlavor(self::$flavors[0]['id']);
         $this->assertTrue(is_array($flavor) && !empty($flavor));
         $this->assertEquals($flavor['id'],self::$flavors[0]['id']);
     }
@@ -300,7 +297,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testListImages()
     {
-        self::$images= self::$rackspace->listImages(true);
+        self::$images= $this->rackspace->listImages(true);
         $this->assertTrue(count(self::$images)>0);
         $image= self::$images[0];
         $imageId= $image->getId();
@@ -312,7 +309,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
     public function testGetImage()
     {
         $image= self::$images[0];
-        $getImage= self::$rackspace->getImage($image->getId());
+        $getImage= $this->rackspace->getImage($image->getId());
         $this->assertEquals($getImage->getId(),$image->getId());
     }
     /**
@@ -320,7 +317,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testGetImageInfo()
     {
-        $image= self::$rackspace->getImage(self::$images[0]->getId())->toArray();
+        $image= $this->rackspace->getImage(self::$images[0]->getId())->toArray();
         $this->assertTrue(is_array($image) && !empty($image));
         $this->assertEquals($image['id'],self::$images[0]->getId());
     }
@@ -329,7 +326,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testCreateImage()
     {
-        $image= self::$rackspace->createImage(self::$serverId, TESTS_ZEND_SERVICE_RACKSPACE_SERVER_IMAGE_NAME);
+        $image= $this->rackspace->createImage(self::$serverId, TESTS_ZEND_SERVICE_RACKSPACE_SERVER_IMAGE_NAME);
         if ($image!==false) {
             self::$imageId= $image->getId();
         }
@@ -342,7 +339,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
     public function testDeleteImage()
     {
         if (isset(self::$imageId)) {
-            $this->assertTrue(self::$rackspace->deleteImage(self::$imageId));
+            $this->assertTrue($this->rackspace->deleteImage(self::$imageId));
         } else {
             $this->markTestSkipped('Delete image skipped because the new image has not been created');
         }
@@ -373,7 +370,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testCreateSharedIpGroup()
     {
-        self::$sharedIpGroup= self::$rackspace->createSharedIpGroup(TESTS_ZEND_SERVICE_RACKSPACE_SERVER_SHARED_IP_GROUP_NAME, self::$serverId);
+        self::$sharedIpGroup= $this->rackspace->createSharedIpGroup(TESTS_ZEND_SERVICE_RACKSPACE_SERVER_SHARED_IP_GROUP_NAME, self::$serverId);
         $this->assertTrue(self::$sharedIpGroup!==false);
         $this->assertEquals(self::$sharedIpGroup->getName(),TESTS_ZEND_SERVICE_RACKSPACE_SERVER_SHARED_IP_GROUP_NAME);
     }
@@ -382,7 +379,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testListSharedIpGroups()
     {
-        $groups= self::$rackspace->listSharedIpGroups(true);
+        $groups= $this->rackspace->listSharedIpGroups(true);
         $this->assertTrue($groups!==false);
     }
     /**
@@ -391,7 +388,7 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
     public function testGetSharedIpGroup()
     {
         $groupId= self::$sharedIpGroup->getId();
-        $group= self::$rackspace->getSharedIpGroup($groupId);
+        $group= $this->rackspace->getSharedIpGroup($groupId);
         $this->assertTrue($group!==false);
         $this->assertEquals($group->getId(), $groupId);   
     }
@@ -400,36 +397,13 @@ class Zend_Service_Rackspace_Servers_OnlineTest extends PHPUnit_Framework_TestCa
      */
     public function testDeleteSharedIpGroup()
     {
-        $this->assertTrue(self::$rackspace->deleteSharedIpGroup(self::$sharedIpGroup->getId())); 
+        $this->assertTrue($this->rackspace->deleteSharedIpGroup(self::$sharedIpGroup->getId())); 
     }
     /**
      * Test delete server
      */
     public function testDeleteServer()
     {
-        $this->assertTrue(self::$rackspace->deleteServer(self::$serverId));
-    }
-}
-
-
-/**
- * @category   Zend
- * @package    Zend_Service_Rackspace_Servers
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @group      Zend_Service
- * @group      Zend_Service_Rackspace
- */
-class Zend_Service_Rackspace_Servers_Skip extends PHPUnit_Framework_TestCase
-{
-    public function setUp()
-    {
-        $this->markTestSkipped('Zend_Service_Rackspace_Servers_OnlineTest is not enabled with an access key ID in '
-                             . 'TestConfiguration.php');
-    }
-
-    public function testNothing()
-    {
+        $this->assertTrue($this->rackspace->deleteServer(self::$serverId));
     }
 }
