@@ -14,25 +14,27 @@
  *
  * @category   Zend
  * @package    Zend_EventManager
- * @subpackage UnitTests
+ * @subpackage UnitTest
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-require_once 'Zend/EventManager/SharedEventCollection.php';
 
 /**
+ * Interface to automate setter injection for a SharedEventManager instance
+ *
  * @category   Zend
  * @package    Zend_EventManager
- * @subpackage UnitTests
- * @group      Zend_EventManager
+ * @subpackage UnitTest
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_EventManager_TestAsset_StaticEventsMock implements Zend_EventManager_SharedEventCollection
+interface Zend_EventManager_SharedEventManagerAware
 {
-    public function getListeners($id, $event)
-    {
-        return array();
-    }
+    /**
+     * Inject an EventManager instance
+     * 
+     * @param  Zend_EventManager_SharedEventCollection $sharedEventManager 
+     * @return Zend_EventManager_SharedEventManagerAware
+     */
+    public function setSharedConnections(Zend_EventManager_SharedEventCollection $sharedEventManager);
 }

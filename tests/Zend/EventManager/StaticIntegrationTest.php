@@ -93,7 +93,7 @@ class Zend_EventManager_StaticIntegrationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('local3', 'static', 'local2', 'local'), $this->test->results);
     }
 
-    public function testPassingNullValueToSetStaticConnectionsDisablesStaticConnections()
+    public function testPassingNullValueToSetSharedConnectionsDisablesSharedConnections()
     {
         $this->counter = (object) array('count' => 0);
         Zend_EventManager_StaticEventManager::getInstance()->attach(
@@ -102,12 +102,12 @@ class Zend_EventManager_StaticIntegrationTest extends PHPUnit_Framework_TestCase
             array($this, 'advanceCounter')
         );
         $class = new Zend_EventManager_TestAsset_ClassWithEvents();
-        $class->events()->setStaticConnections(null);
+        $class->events()->setSharedConnections(null);
         $class->foo();
         $this->assertEquals(0, $this->counter->count);
     }
 
-    public function testCanPassAlternateStaticConnectionsHolder()
+    public function testCanPassAlternateSharedConnectionsHolder()
     {
         $this->counter = (object) array('count' => 0);
         Zend_EventManager_StaticEventManager::getInstance()->attach(
@@ -117,8 +117,8 @@ class Zend_EventManager_StaticIntegrationTest extends PHPUnit_Framework_TestCase
         );
         $mockStaticEvents = new Zend_EventManager_TestAsset_StaticEventsMock();
         $class = new Zend_EventManager_TestAsset_ClassWithEvents();
-        $class->events()->setStaticConnections($mockStaticEvents);
-        $this->assertSame($mockStaticEvents, $class->events()->getStaticConnections());
+        $class->events()->setSharedConnections($mockStaticEvents);
+        $this->assertSame($mockStaticEvents, $class->events()->getSharedConnections());
         $class->foo();
         $this->assertEquals(0, $this->counter->count);
     }

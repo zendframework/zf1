@@ -59,7 +59,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      * Static connections
      * @var false|null|Zend_EventManager_StaticEventCollection
      */
-    protected $staticConnections = null;
+    protected $sharedConnections = null;
 
     /**
      * Constructor
@@ -93,12 +93,12 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      * @param  null|Zend_EventManager_StaticEventCollection $connections
      * @return void
      */
-    public function setStaticConnections(Zend_EventManager_StaticEventCollection $connections = null)
+    public function setSharedConnections(Zend_EventManager_SharedEventCollection $connections = null)
     {
         if (null === $connections) {
-            $this->staticConnections = false;
+            $this->sharedConnections = false;
         } else {
-            $this->staticConnections = $connections;
+            $this->sharedConnections = $connections;
         }
         return $this;
     }
@@ -106,14 +106,14 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
     /**
      * Get static connections container
      *
-     * @return false|Zend_EventManager_StaticEventCollection
+     * @return false|Zend_EventManager_SharedEventCollection
      */
-    public function getStaticConnections()
+    public function getSharedConnections()
     {
-        if (null === $this->staticConnections) {
-            $this->setStaticConnections(Zend_EventManager_StaticEventManager::getInstance());
+        if (null === $this->sharedConnections) {
+            $this->setSharedConnections(Zend_EventManager_StaticEventManager::getInstance());
         }
-        return $this->staticConnections;
+        return $this->sharedConnections;
     }
 
     /**
@@ -431,20 +431,20 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
         $responses = new Zend_EventManager_ResponseCollection;
         $listeners = $this->getListeners($event);
 
-        // Add static/wildcard listeners to the list of listeners,
+        // Add shared/wildcard listeners to the list of listeners,
         // but don't modify the listeners object
-        $staticListeners         = $this->getStaticListeners($event);
-        $staticWildcardListeners = $this->getStaticListeners('*');
+        $sharedListeners         = $this->getSharedListeners($event);
+        $sharedWildcardListeners = $this->getSharedListeners('*');
         $wildcardListeners       = $this->getListeners('*');
-        if (count($staticListeners) || count($staticWildcardListeners) || count($wildcardListeners)) {
+        if (count($sharedListeners) || count($sharedWildcardListeners) || count($wildcardListeners)) {
             $listeners = clone $listeners;
         }
 
-        // Static listeners on this specific event
-        $this->insertListeners($listeners, $staticListeners);
+        // Shared listeners on this specific event
+        $this->insertListeners($listeners, $sharedListeners);
 
-        // Static wildcard listeners
-        $this->insertListeners($listeners, $staticWildcardListeners);
+        // Shared wildcard listeners
+        $this->insertListeners($listeners, $sharedWildcardListeners);
 
         // Add wildcard listeners
         $this->insertListeners($listeners, $wildcardListeners);
@@ -476,23 +476,23 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
     }
 
     /**
-     * Get list of all listeners attached to the static collection for
+     * Get list of all listeners attached to the shared collection for
      * identifiers registered by this instance
      *
      * @param  string $event
      * @return array
      */
-    protected function getStaticListeners($event)
+    protected function getSharedListeners($event)
     {
-        if (!$staticConnections = $this->getStaticConnections()) {
+        if (!$sharedConnections = $this->getSharedConnections()) {
             return array();
         }
 
         $identifiers     = $this->getIdentifiers();
-        $staticListeners = array();
+        $sharedListeners = array();
 
         foreach ($identifiers as $id) {
-            if (!$listeners = $staticConnections->getListeners($id, $event)) {
+            if (!$listeners = $sharedConnections->getListeners($id, $event)) {
                 continue;
             }
 
@@ -504,17 +504,17 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
                 if (!$listener instanceof Zend_Stdlib_CallbackHandler) {
                     continue;
                 }
-                $staticListeners[] = $listener;
+                $sharedListeners[] = $listener;
             }
         }
 
-        return $staticListeners;
+        return $sharedListeners;
     }
 
     /**
      * Add listeners to the master queue of listeners
      *
-     * Used to inject static listeners and wildcard listeners.
+     * Used to inject shared listeners and wildcard listeners.
      * 
      * @param  Zend_Stdlib_PriorityQueue $masterListeners 
      * @param  Zend_Stdlib_PriorityQueue $listeners 
