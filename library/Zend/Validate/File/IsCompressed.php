@@ -94,6 +94,7 @@ class Zend_Validate_File_IsCompressed extends Zend_Validate_File_MimeType
             'application/x-stuffit',
             'application/x-tar',
             'application/zip',
+            'application/x-zip',
             'application/zoo',
             'multipart/x-gzip',
         );

@@ -69,19 +69,26 @@ class Zend_Validate_File_IsCompressedTest extends PHPUnit_Framework_TestCase
                 );
         }
 
+        // Sometimes mime_content_type() gives application/zip and sometimes 
+        // application/x-zip ...
+        $expectedMimeType = mime_content_type(dirname(__FILE__) . '/_files/test.zip');
+        if (!in_array($expectedMimeType, array('application/zip', 'application/x-zip'))) {
+            $this->markTestSkipped('mime_content_type exhibits buggy behavior on this system!');
+        }
+
         $valuesExpected = array(
             array(null, true),
             array('zip', true),
             array('test/notype', false),
-            array('application/zip, application/x-tar', true),
-            array(array('application/zip', 'application/x-tar'), true),
+            array('application/x-zip', 'application/zip, application/x-tar', true),
+            array(array('application/x-zip', 'application/zip', 'application/x-tar'), true),
             array(array('zip', 'tar'), true),
             array(array('tar', 'arj'), false),
         );
 
         $files = array(
             'name'     => 'test.zip',
-            'type'     => 'application/zip',
+            'type'     => $expectedMimeType,
             'size'     => 200,
             'tmp_name' => dirname(__FILE__) . '/_files/test.zip',
             'error'    => 0
