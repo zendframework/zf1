@@ -214,12 +214,12 @@ class Zend_Log
     }
 
    /**
-     * Construct formatter object from configuration array or Zend_Config object
-     *
-     * @param  array|Zend_Config $config Zend_Config or Array
-     * @return Zend_Log_Formatter_Interface
-     * @throws Zend_Log_Exception
-     */
+    * Construct formatter object from configuration array or Zend_Config object
+    *
+    * @param  array|Zend_Config $config Zend_Config or Array
+    * @return Zend_Log_Formatter_Interface
+    * @throws Zend_Log_Exception
+    */
     protected function _constructFormatterFromConfig($config)
     {
         $formatter = $this->_constructFromConfig('formatter', $config, $this->_defaultFormatterNamespace);
@@ -287,19 +287,29 @@ class Zend_Log
      */
     protected function getClassName($config, $type, $defaultNamespace)
     {
-        if (!isset($config[ $type . 'Name' ])) {
+        if (!isset($config[$type . 'Name'])) {
             require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception("Specify {$type}Name in the configuration array");
         }
-        $className = $config[ $type . 'Name' ];
 
+        $className = $config[$type . 'Name'];
         $namespace = $defaultNamespace;
-        if (isset($config[ $type . 'Namespace' ])) {
-            $namespace = $config[ $type . 'Namespace' ];
+
+        if (isset($config[$type . 'Namespace'])) {
+            $namespace = $config[$type . 'Namespace'];
         }
 
-        $fullClassName = $namespace . '_' . $className;
-        return $fullClassName;
+        // PHP >= 5.3.0 namespace given?
+        if (substr($namespace, -1) == '\\') {
+            return $namespace . $className;
+        }
+
+        // emtpy namespace given?
+        if (strlen($namespace) === 0) {
+            return $className;
+        }
+
+        return $namespace . '_' . $className;
     }
 
     /**

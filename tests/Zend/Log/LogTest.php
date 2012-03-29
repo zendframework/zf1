@@ -523,6 +523,31 @@ class Zend_Log_LogTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('c', $logger->getTimestampFormat());
     }
+
+    public function testFactorySupportsPHP53Namespaces()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0') < 0) {
+            $this->markTestSkipped('PHP < 5.3.0 does not support namespaces');
+        }
+
+        // preload namespaced class from custom path
+        Zend_Loader::loadClass('\Zfns\Writer', array(dirname(__FILE__) . '/_files'));
+
+        try {
+            $config = array(
+                'mine' => array(
+                    'writerName'      => 'Writer',
+                    'writerNamespace' => '\Zfns\\',
+                )
+            );
+
+            $logger = Zend_log::factory($config);
+            $logger->info('this is a test');
+
+        } catch (Zend_Log_Exception $e) {
+            $this->fail('Unable to load namespaced class');
+        }
+    }
 }
 
 class Zend_Log_Writer_NotExtendedWriterAbstract implements Zend_Log_FactoryInterface

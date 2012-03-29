@@ -83,3 +83,7 @@ if (defined('TESTS_ZEND_OB_ENABLED') && constant('TESTS_ZEND_OB_ENABLED')) {
  * Unset global variables that are no longer needed.
  */
 unset($zfRoot, $zfCoreLibrary, $zfCoreTests, $path);
+
+// Suppress DateTime warnings
+date_default_timezone_set(@date_default_timezone_get());
+
