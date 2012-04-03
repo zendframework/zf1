@@ -21,6 +21,7 @@
 require_once 'Zend/EventManager/Event.php';
 require_once 'Zend/EventManager/EventCollection.php';
 require_once 'Zend/EventManager/ResponseCollection.php';
+require_once 'Zend/EventManager/SharedEventCollectionAware.php';
 require_once 'Zend/EventManager/StaticEventManager.php';
 require_once 'Zend/Stdlib/CallbackHandler.php';
 require_once 'Zend/Stdlib/PriorityQueue.php';
@@ -36,7 +37,7 @@ require_once 'Zend/Stdlib/PriorityQueue.php';
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_EventManager_EventManager implements Zend_EventManager_EventCollection
+class Zend_EventManager_EventManager implements Zend_EventManager_EventCollection, Zend_EventManager_SharedEventCollectionAware
 {
     /**
      * Subscribed events and their listeners
@@ -56,10 +57,10 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
     protected $identifiers = array();
 
     /**
-     * Static connections
+     * Static collections
      * @var false|null|Zend_EventManager_StaticEventCollection
      */
-    protected $sharedConnections = null;
+    protected $sharedCollections = null;
 
     /**
      * Constructor
@@ -88,32 +89,41 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
     }
 
     /**
-     * Set static connections container
+     * Set static collections container
      *
-     * @param  null|Zend_EventManager_StaticEventCollection $connections
+     * @param  Zend_EventManager_StaticEventCollection $collections
      * @return void
      */
-    public function setSharedConnections(Zend_EventManager_SharedEventCollection $connections = null)
+    public function setSharedCollections(Zend_EventManager_SharedEventCollection $collections)
     {
-        if (null === $connections) {
-            $this->sharedConnections = false;
-        } else {
-            $this->sharedConnections = $connections;
-        }
+        $this->sharedCollections = $collections;
         return $this;
     }
 
     /**
-     * Get static connections container
+     * Remove any shared collections
+     *
+     * Sets {@link $sharedCollections} to boolean false to disable ability
+     * to lazy-load static event manager instance.
+     * 
+     * @return void
+     */
+    public function unsetSharedCollections()
+    {
+        $this->sharedCollections = false;
+    }
+
+    /**
+     * Get static collections container
      *
      * @return false|Zend_EventManager_SharedEventCollection
      */
-    public function getSharedConnections()
+    public function getSharedCollections()
     {
-        if (null === $this->sharedConnections) {
-            $this->setSharedConnections(Zend_EventManager_StaticEventManager::getInstance());
+        if (null === $this->sharedCollections) {
+            $this->setSharedCollections(Zend_EventManager_StaticEventManager::getInstance());
         }
-        return $this->sharedConnections;
+        return $this->sharedCollections;
     }
 
     /**
@@ -484,7 +494,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      */
     protected function getSharedListeners($event)
     {
-        if (!$sharedConnections = $this->getSharedConnections()) {
+        if (!$sharedCollections = $this->getSharedCollections()) {
             return array();
         }
 
@@ -492,7 +502,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
         $sharedListeners = array();
 
         foreach ($identifiers as $id) {
-            if (!$listeners = $sharedConnections->getListeners($id, $event)) {
+            if (!$listeners = $sharedCollections->getListeners($id, $event)) {
                 continue;
             }
 

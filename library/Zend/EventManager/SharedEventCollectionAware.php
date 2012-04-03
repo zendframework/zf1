@@ -19,8 +19,10 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+require_once 'Zend/EventManager/SharedEventCollection.php';
+
 /**
- * Interface to automate setter injection for a SharedEventManager instance
+ * Interface to automate setter injection for a SharedEventCollection instance
  *
  * @category   Zend
  * @package    Zend_EventManager
@@ -28,13 +30,13 @@
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Zend_EventManager_SharedEventManagerAware
+interface Zend_EventManager_SharedEventCollectionAware
 {
     /**
      * Inject an EventManager instance
      * 
-     * @param  Zend_EventManager_SharedEventCollection $sharedEventManager 
-     * @return Zend_EventManager_SharedEventManagerAware
+     * @param  Zend_EventManager_SharedEventCollection $sharedEventCollection 
+     * @return Zend_EventManager_SharedEventCollectionAware
      */
-    public function setSharedConnections(Zend_EventManager_SharedEventCollection $sharedEventManager);
+    public function setSharedCollections(Zend_EventManager_SharedEventCollection $sharedEventCollection);
 }
