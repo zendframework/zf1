@@ -201,6 +201,13 @@ class Zend_Crypt_Rsa
         return $decrypted;
     }
 
+    /**
+     * @param  array $configargs
+     * 
+     * @throws Zend_Crypt_Rsa_Exception
+     * 
+     * @return ArrayObject
+     */
     public function generateKeys(array $configargs = null)
     {
         $config = null;
@@ -215,6 +222,10 @@ class Zend_Crypt_Rsa
         $privateKey = null;
         $publicKey = null;
         $resource = openssl_pkey_new($config);
+        if (!$resource) {
+            require_once 'Zend/Crypt/Rsa/Exception.php';
+            throw new Zend_Crypt_Rsa_Exception('Failed to generate a new private key');
+        }
         // above fails on PHP 5.3
         openssl_pkey_export($resource, $private, $passPhrase);
         $privateKey = new Zend_Crypt_Rsa_Key_Private($private, $passPhrase);
@@ -312,6 +323,9 @@ class Zend_Crypt_Rsa
     protected function _parseConfigArgs(array $config = null)
     {
         $configs = array();
+        if (isset($config['private_key_bits'])) {
+            $configs['private_key_bits'] = $config['private_key_bits'];
+        }
         if (isset($config['privateKeyBits'])) {
             $configs['private_key_bits'] = $config['privateKeyBits'];
         }
