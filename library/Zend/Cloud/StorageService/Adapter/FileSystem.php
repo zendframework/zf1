@@ -80,7 +80,7 @@ class Zend_Cloud_StorageService_Adapter_FileSystem implements Zend_Cloud_Storage
         $filepath = $this->_getFullPath($path);
         $path     = realpath($filepath);
 
-        if (!$path) {
+        if (!$path || !file_exists($path)) {
             return false;
         }
 
