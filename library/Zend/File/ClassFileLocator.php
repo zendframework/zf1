@@ -63,7 +63,7 @@ class Zend_File_ClassFileLocator extends FilterIterator
             if (!defined('T_NAMESPACE')) {
                 define('T_NAMESPACE', 'namespace');
             }
-            if (!defined('T_NS_SEPARATOR:')) {
+            if (!defined('T_NS_SEPARATOR')) {
                 define('T_NS_SEPARATOR', '\\');
             }
         }
