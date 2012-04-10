@@ -85,9 +85,9 @@ class Zend_Json_ServerTest extends PHPUnit_Framework_TestCase
 
     public function testShouldBeAbleToBindCallback1ToServer()
     {
-        $this->server->addFunction(array('Zend_Json_ServerTest_Foo', 'bar'));
+        $this->server->addFunction(array('Zend_Json_ServerTest_Foo', 'staticBar'));
         $methods = $this->server->getFunctions();
-        $this->assertTrue($methods->hasMethod('bar'));
+        $this->assertTrue($methods->hasMethod('staticBar'));
     }
 
     public function testShouldBeAbleToBindCallback2ToServer()
@@ -462,10 +462,23 @@ class Zend_Json_ServerTest_Foo
      * @param  mixed $three
      * @return array
      */
-    public function bar($one, $two = 'two', $three = null)
+    static public function staticBar($one, $two = 'two', $three = null)
     {
         return array($one, $two, $three);
     }
+
+    /**
+     * Bar
+     *
+     * @param  bool $one
+     * @param  string $two
+     * @param  mixed $three
+     * @return array
+     */
+    public function bar($one, $two = 'two', $three = null)
+    {
+        return array($one, $two, $three);
+    }    
 
     /**
      * Baz
