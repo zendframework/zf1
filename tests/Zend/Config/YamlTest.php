@@ -50,6 +50,7 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->_yamlIndentedCommentsConfig  = dirname(__FILE__) . '/_files/indentedcomments.yaml';
         $this->_yamlListConstantsConfig     = dirname(__FILE__) . '/_files/listconstants.yaml';
         $this->_listBooleansConfig          = dirname(__FILE__) . '/_files/listbooleans.yaml';
+        $this->_yamlSingleQuotedString    = dirname(__FILE__) . '/_files/zf11934.yaml';
     }
 
     public function testLoadSingleSection()
@@ -404,6 +405,15 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($config->usingLowerCasedOff->{0});
         $this->assertFalse($config->usingTitleCasedOff->{0});
         $this->assertFalse($config->usingCapitalOff->{0});
+    }
+    
+    /**
+     * @group ZF-11934
+     */
+    public function testAllowsSingleQuotedStringValues()
+    {
+        $config = new Zend_Config_Yaml($this->_yamlSingleQuotedString);
+        $this->assertEquals('two', $config->one);
     }
     
 }
