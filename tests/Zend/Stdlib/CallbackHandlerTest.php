@@ -116,12 +116,18 @@ class Zend_Stdlib_CallbackHandlerTest extends PHPUnit_Framework_TestCase
 
     public function testCallbackConsistingOfStringContextWithNonStaticMethodShouldRaiseException()
     {
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            $this->markTestSkipped('Behavior of is_callable changes between 5.2 and 5.3');
+        }
         $this->setExpectedException('Zend_Stdlib_Exception_InvalidCallbackException');
         $handler     = new Zend_Stdlib_CallbackHandler(array('Zend_Stdlib_TestAsset_SignalHandlers_InstanceMethod', 'handler'));
     }
 
     public function testStringCallbackConsistingOfNonStaticMethodShouldRaiseException()
     {
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            $this->markTestSkipped('Behavior of is_callable changes between 5.2 and 5.3');
+        }
         $this->setExpectedException('Zend_Stdlib_Exception_InvalidCallbackException');
         $handler = new Zend_Stdlib_CallbackHandler('Zend_Stdlib_TestAsset_SignalHandlers_InstanceMethod::handler');
     }

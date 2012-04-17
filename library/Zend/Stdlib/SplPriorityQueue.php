@@ -404,7 +404,6 @@ class Zend_Stdlib_SplPriorityQueue extends SplPriorityQueue implements Serializa
     public function __construct()
     {
         $this->isPhp53 = version_compare(PHP_VERSION, '5.3', '>=');
-        parent::__construct();
     }
 
     /**
