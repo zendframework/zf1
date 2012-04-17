@@ -80,7 +80,7 @@ class Zend_Validate_File_IsCompressedTest extends PHPUnit_Framework_TestCase
             array(null, true),
             array('zip', true),
             array('test/notype', false),
-            array('application/x-zip', 'application/zip, application/x-tar', true),
+            array('application/x-zip, application/zip, application/x-tar', true),
             array(array('application/x-zip', 'application/zip', 'application/x-tar'), true),
             array(array('zip', 'tar'), true),
             array(array('tar', 'arj'), false),
