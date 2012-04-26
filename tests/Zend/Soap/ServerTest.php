@@ -83,6 +83,24 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($server->getOptions() == $options);
     }
 
+    public function testSetWsiCompliantViaConstructor()
+    {
+        $options = array(
+            'wsi_compliant' => true
+        );
+        $server = new Zend_Soap_Server(null, $options);
+        $this->assertTrue($server->getWsiCompliant());
+    }
+    
+    public function testSetWsiCompliant()
+    {
+        $server = new Zend_Soap_Server();
+        $server->setWsiCompliant(true);
+        $this->assertTrue($server->getWsiCompliant());
+        $server->setWsiCompliant(false);
+        $this->assertFalse($server->getWsiCompliant());
+    }
+    
     /**
      * @group ZF-9816
      */
@@ -557,6 +575,55 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($request, $server->getLastRequest());
     }
 
+    public function testWsiCompliant()
+    {
+        $server = new Zend_Soap_Server(null, array('wsi_compliant' => true));
+        $server->setOptions(array('location'=>'test://', 'uri'=>'http://framework.zend.com'));
+        $server->setReturnResponse(true);
+
+        $server->setClass('Zend_Soap_Server_TestClass');
+        
+        $request =
+            '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+          . '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" '
+                             . 'xmlns:ns1="http://framework.zend.com" '
+                             . 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" '
+                             . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                             . 'xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" '
+                             . 'SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
+          .     '<SOAP-ENV:Body>'
+          .         '<ns1:testFunc2>'
+          .             '<param0 xsi:type="xsd:string">World</param0>'
+          .         '</ns1:testFunc2>'
+          .     '</SOAP-ENV:Body>'
+          . '</SOAP-ENV:Envelope>' . "\n";
+        
+        $expectedResult = 
+            '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+          . '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" '
+                             . 'xmlns:ns1="http://framework.zend.com" '
+                             . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                             . 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" '
+                             . 'xmlns:ns2="http://xml.apache.org/xml-soap" '
+                             . 'xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" '
+                             . 'SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
+          .     '<SOAP-ENV:Body>'
+          .         '<ns1:testFunc2Response>'
+          .             '<return xsi:type="ns2:Map">'
+          .                 '<item>'
+          .                     '<key xsi:type="xsd:string">testFunc2Result</key>'
+          .                     '<value xsi:type="xsd:string">Hello !</value>'
+          .                 '</item>'
+          .             '</return>'
+          .         '</ns1:testFunc2Response>'
+          .     '</SOAP-ENV:Body>'
+          . '</SOAP-ENV:Envelope>' . "\n";     
+        
+        $response = $server->handle($request);
+        
+        $this->assertEquals($response, $expectedResult);
+    }
+    
     public function testSetReturnResponse()
     {
         $server = new Zend_Soap_Server();
