@@ -62,6 +62,7 @@ class Zend_SessionTest extends PHPUnit_Framework_TestCase
         parent::__construct($name, $data, $dataName);
         $this->_script = 'php '
             . '-c ' . escapeshellarg(php_ini_loaded_file()) . ' '
+            . '-d include_path=' . get_include_path() . ' '
             . escapeshellarg(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SessionTestHelper.php');
 
         $this->_savePath = ini_get('session.save_path');
