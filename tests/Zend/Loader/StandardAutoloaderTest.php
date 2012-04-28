@@ -103,10 +103,10 @@ class Zend_Loader_StandardAutoloaderTest extends PHPUnit_Framework_TestCase
     {
         $options = array(
             'namespaces' => array(
-                'Zend\\'   => dirname(dirname(__FILE__)) . '/',
+                'Zend\\'   => dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR,
             ),
             'prefixes'   => array(
-                'Zend_'  => dirname(dirname(__FILE__)) . '/',
+                'Zend_'  => dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR,
             ),
             'fallback_autoloader' => true,
         );
@@ -120,10 +120,10 @@ class Zend_Loader_StandardAutoloaderTest extends PHPUnit_Framework_TestCase
     public function testPassingTraversableOptionsPopulatesProperties()
     {
         $namespaces = new ArrayObject(array(
-            'Zend\\' => dirname(dirname(__FILE__)) . '/',
+            'Zend\\' => dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR,
         ));
         $prefixes = new ArrayObject(array(
-            'Zend_' => dirname(dirname(__FILE__)) . '/',
+            'Zend_' => dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR,
         ));
         $options = new ArrayObject(array(
             'namespaces' => $namespaces,
