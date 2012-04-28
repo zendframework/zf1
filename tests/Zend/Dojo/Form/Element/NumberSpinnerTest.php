@@ -195,6 +195,8 @@ class Zend_Dojo_Form_Element_NumberSpinnerTest extends PHPUnit_Framework_TestCas
         $this->element->setMin(5)
                       ->setMax(10);
         $html = $this->element->render();
+        // Note that ' is converted to &#39; in Zend_View_Helper_HtmlElement::_htmlAttribs() (line 116)
+        $html = str_replace('&#39;', "'", $html);
         $this->assertRegexp('/\'min\':\s*5/', $html, $html);
         $this->assertRegexp('/\'max\':\s*10/', $html, $html);
     }

@@ -195,7 +195,8 @@ class Zend_Dojo_View_Helper_HorizontalSliderTest extends PHPUnit_Framework_TestC
     public function testShouldCreateOnChangeAttributeByDefault()
     {
         $html = $this->getElement();
-        $this->assertContains('onChange="dojo.byId(\'elementId\').value = arguments[0];"', $html, $html);
+        // Note that ' is converted to &#39; in Zend_View_Helper_HtmlElement::_htmlAttribs() (line 116)
+        $this->assertContains('onChange="dojo.byId(&#39;elementId&#39;).value = arguments[0];"', $html, $html);
     }
 
     public function testShouldCreateHiddenElementWithValue()
