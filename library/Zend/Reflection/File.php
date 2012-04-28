@@ -86,8 +86,17 @@ class Zend_Reflection_File implements Reflector
     public function __construct($file)
     {
         $fileName = $file;
-
-        if (($fileRealpath = realpath($fileName)) === false) {
+        
+        $fileRealpath = realpath($fileName);
+        if ($fileRealpath) {
+            // realpath() doesn't return false if Suhosin is included
+            // see http://uk3.php.net/manual/en/function.realpath.php#82770
+            if (!file_exists($fileRealpath)) {
+                $fileRealpath = false;
+            }
+        }
+        
+        if ($fileRealpath === false) {
             $fileRealpath = self::findRealpathInIncludePath($file);
         }
 
