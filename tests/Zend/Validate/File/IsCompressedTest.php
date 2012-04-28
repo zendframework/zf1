@@ -69,6 +69,11 @@ class Zend_Validate_File_IsCompressedTest extends PHPUnit_Framework_TestCase
                 );
         }
 
+        // Prevent error in the next check
+        if (!function_exists('mime_content_type')) {
+            $this->markTestSkipped('mime_content_type function is not available.');
+        }
+
         // Sometimes mime_content_type() gives application/zip and sometimes 
         // application/x-zip ...
         $expectedMimeType = mime_content_type(dirname(__FILE__) . '/_files/test.zip');
