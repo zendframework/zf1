@@ -64,9 +64,16 @@ class Zend_Service_WindowsAzure_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Service_WindowsAzure');
 
-        $suite->addTest(Zend_Service_WindowsAzure_Credentials_AllTests::suite());
-        $suite->addTest(Zend_Service_WindowsAzure_Diagnostics_AllTests::suite());
-        $suite->addTest(Zend_Service_WindowsAzure_Management_AllTests::suite());
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
+            $suite->addTest(Zend_Service_WindowsAzure_Credentials_AllTests::suite());
+        }
+
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
+            $suite->addTest(Zend_Service_WindowsAzure_Diagnostics_AllTests::suite());
+        }
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_MANAGEMENT_RUNTESTS) {
+            $suite->addTest(Zend_Service_WindowsAzure_Management_AllTests::suite());
+        }
         
         $suite->addTestSuite('Zend_Service_WindowsAzure_RetryPolicyTest');
         $suite->addTestSuite('Zend_Service_WindowsAzure_StorageTest');
