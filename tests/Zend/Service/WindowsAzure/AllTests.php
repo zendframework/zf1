@@ -64,7 +64,7 @@ class Zend_Service_WindowsAzure_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Service_WindowsAzure');
 
-        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_DIAGNOSTICS_RUNTESTS) {
+        if (TESTS_ZEND_SERVICE_WINDOWSAZURE_CREDENTIALS_RUNTESTS) {
             $suite->addTest(Zend_Service_WindowsAzure_Credentials_AllTests::suite());
         }
 
