@@ -37,7 +37,16 @@ class Zend_Ldap_AttributeTest extends PHPUnit_Framework_TestCase
 {
     protected function _assertLocalDateTimeString($timestamp, $value)
     {
-        $this->assertEquals(date('YmdHisO', $timestamp), $value);
+        $tsValue = date('YmdHisO', $timestamp);
+
+        if(date('O', strtotime('20120101'))) {
+            // Local timezone is +0000 when DST is off. Zend_Ldap converts
+            // +0000 to "Z" (see Zend_Ldap_Converter:toLdapDateTime()), so
+            // take account of that here
+            $tsValue = str_replace('+0000', 'Z', $tsValue);
+        }
+
+        $this->assertEquals($tsValue, $value);
     }
 
     protected function _assertUtcDateTimeString($localTimestamp, $value)
