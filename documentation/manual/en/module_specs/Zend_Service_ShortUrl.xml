@@ -46,6 +46,13 @@
                         url="http://is.gd">is.gd</ulink> service.
                 </para>
             </listitem>
+
+            <listitem>
+                <para>
+                    <classname>Zend_Service_ShortUrl_BitLy</classname>, which accesses the <ulink
+                        url="http://bitly.com">bit.ly</ulink> service.
+                </para>
+            </listitem>
         </itemizedlist>
     </sect2>
 
@@ -153,6 +160,69 @@ $long  = $tinyurl->unshorten('http://tinyurl.com/rxtuq'); // http://framework.ze
                         Use this method to access the HTTP client attached to the service. By
                         default, this will lazy-load an instance of
                         <classname>Zend_Http_Client</classname> if no client is yet attached.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect2>
+
+    <sect2 id="zend.service.short-url.bitly">
+        <title>Additional Bit.ly Methods</title>
+
+        <para>
+            The bitly API require that authentication credentials be supplied as query arguments.
+            To get started, you'll need a free bitly user account and apiKey. Signup at:
+            <ulink url="http://http://bitly.com/a/sign_up">http://bitly.com/a/sign_up</ulink>
+        </para>
+
+        <para>
+            bitly currently also supports the OAuth 2 draft specification. You could provide a
+            generated OAuth access token to <classname>Zend_Service_ShortUrl_BitLy</classname>
+            using <methodname>setOAuthAccessToken</methodname> or as constructor argument.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$bitly = new Zend_Service_ShortUrl_BitLy('username','apiKey');
+
+// Shorten a URL:
+$short = $bitly->shorten('http://framework.zend.com/'); // http://bit.ly/15Oe0
+
+// Inflate or unshorten a short URL:
+$long  = $bitly->unshorten('http://bit.ly/15Oe0'); // http://framework.zend.com/
+]]></programlisting>
+
+        <variablelist>
+            <varlistentry id="zend.service.short-url.bitly.setApiLogin">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setApiLogin</methodname>
+                        <methodparam>
+                            <funcparams>$login, $apiKey</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Takes the required <varname>$login</varname> username and <varname>$apiKey</varname>
+                        and passes it to the service.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.service.short-url.bitly.setOAuthAccessToken">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setOAuthAccessToken</methodname>
+                        <methodparam>
+                            <funcparams>$accessToken</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Use the OAuth <varname>$accessToken</varname> for authentication
                     </para>
                 </listitem>
             </varlistentry>

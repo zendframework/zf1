@@ -45,6 +45,11 @@ require_once 'Zend/Service/ShortUrl/MetamarkNetTest.php';
 require_once 'Zend/Service/ShortUrl/TinyUrlComTest.php';
 
 /**
+ * @see Zend_Service_ShortUrl_BitLyTest
+ */
+require_once 'Zend/Service/ShortUrl/BitLyTest.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_ShortUrl
  * @subpackage UnitTests
@@ -67,6 +72,7 @@ class Zend_Service_ShortUrl_AllTests
         $suite->addTestSuite('Zend_Service_ShortUrl_JdemCzTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_MetamarkNetTest');
         $suite->addTestSuite('Zend_Service_ShortUrl_TinyUrlComTest');
+        $suite->addTestSuite('Zend_Service_ShortUrl_BitLyTest');
 
         return $suite;
     }
