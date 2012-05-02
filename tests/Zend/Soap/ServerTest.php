@@ -593,7 +593,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
                              . 'SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
           .     '<SOAP-ENV:Body>'
           .         '<ns1:testFunc2>'
-          .             '<param0 xsi:type="xsd:string">World</param0>'
+          .             '<who>World</who>'
           .         '</ns1:testFunc2>'
           .     '</SOAP-ENV:Body>'
           . '</SOAP-ENV:Envelope>' . "\n";
@@ -612,7 +612,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
           .             '<return xsi:type="ns2:Map">'
           .                 '<item>'
           .                     '<key xsi:type="xsd:string">testFunc2Result</key>'
-          .                     '<value xsi:type="xsd:string">Hello !</value>'
+          .                     '<value xsi:type="xsd:string">Hello World!</value>'
           .                 '</item>'
           .             '</return>'
           .         '</ns1:testFunc2Response>'

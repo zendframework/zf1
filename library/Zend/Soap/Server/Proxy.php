@@ -25,15 +25,26 @@ class Zend_Soap_Server_Proxy
     /**
      * @var object
      */
-    protected $_service;
+    protected $_classInstance;
+    /**
+     * @var string
+     */
+    protected $_className;
     /**
      * Constructor
      * 
      * @param object $service 
      */
-    public function  __construct($service)
+    public function  __construct($className, $classArgs = array())
     {
-        $this->_service = $service;
+        $class = new ReflectionClass($className);
+        $constructor = $class->getConstructor();
+	if ($constructor === null) {
+            $this->_classInstance = $class->newInstance();
+	} else {
+            $this->_classInstance = $class->newInstanceArgs($classArgs);
+	}
+	$this->_className = $className;
     }
     /**
      * Proxy for the WS-I compliant call
@@ -44,13 +55,21 @@ class Zend_Soap_Server_Proxy
      */
     public function __call($name, $arguments)
     {
-        $params = array();
-        if(count($arguments) > 0){
-            foreach($arguments[0] as $property => $value){
-                $params[$property] = $value;
-            }
-        }
-        $result = call_user_func_array(array($this->_service, $name), $params);
+        $result = call_user_func_array(array($this->_classInstance, $name), $this->_preProcessArguments($arguments));
         return array("{$name}Result"=>$result);
+    }
+    /**
+     *  Pre process arguments
+     * 
+     * @param  mixed $arguments
+     * @return array 
+     */
+    protected function _preProcessArguments($arguments)
+    {
+        if (count($arguments) == 1 && is_object($arguments[0])) {
+            return get_object_vars($arguments[0]);
+	} else {
+            return $arguments;
+	}
     }
 }

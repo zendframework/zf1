@@ -271,7 +271,7 @@ class Zend_Soap_Server implements Zend_Server_Interface
         }
 
         if (null !== $this->_wsiCompliant) {
-            $options['ws_i'] = $this->_wsiCompliant;
+            $options['wsi_compliant'] = $this->_wsiCompliant;
         }
         
         return $options;
@@ -863,7 +863,7 @@ class Zend_Soap_Server implements Zend_Server_Interface
         } catch (Zend_Soap_Server_Exception $e) {
             $setRequestException = $e;
         }
-
+        
         $soap = $this->_getSoap();
 
         ob_start();
