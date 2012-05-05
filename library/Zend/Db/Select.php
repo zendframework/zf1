@@ -896,7 +896,8 @@ class Zend_Db_Select
     private function _uniqueCorrelation($name)
     {
         if (is_array($name)) {
-            $c = end($name);
+            $k = key($name);
+            $c = is_string($k) ? $k : end($name);
         } else {
             // Extract just the last name of a qualified table name
             $dot = strrpos($name,'.');

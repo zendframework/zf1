@@ -1711,4 +1711,32 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $this->assertContains("JOIN {$table_B} ON {$table_B}.{$colname} = {$table_A}.{$colname}", $s->assemble());
     }
 
+    /**
+     * @group ZF-3309
+     */
+    public function testJoinUsingUsesTableNameOfTableBeingJoinedWhenAliasNotDefined()
+    {
+        $table1 = $this->_db->quoteTableAs('table1');
+        $table2 = $this->_db->quoteTableAs('table2');
+        $colname = $this->_db->quoteIdentifier('column1');
+        
+        $select = $this->_db->select();
+        $select->from('table1')->joinUsing('table2', $colname);
+        $this->assertRegexp("/ON {$table2}.{$colname}/s", $select->assemble());
+    }
+    
+    /**
+     * @group ZF-3309
+     */
+    public function testJoinUsingUsesAliasOfTableBeingJoinedWhenAliasIsDefined()
+    {
+        $table1 = $this->_db->quoteTableAs('table1');
+        $table2_alias = $this->_db->quoteTableAs('t2');
+        $colname = $this->_db->quoteIdentifier('column1');
+        
+        $select = $this->_db->select();
+        $select->from('table1')->joinUsing(array('t2'=>'table2'), $colname);
+        $this->assertRegexp("/ON {$table2_alias}.{$colname}/s", $select->assemble());
+    }    
+    
 }
