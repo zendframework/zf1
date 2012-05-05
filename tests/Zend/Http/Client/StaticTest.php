@@ -650,7 +650,6 @@ class Zend_Http_Client_StaticTest extends PHPUnit_Framework_TestCase
 		} catch (Zend_Http_Client_Exception $e) {
 			$this->fail('Unexpected exception was thrown');
 		}
-        echo "THERE";
 		// we can safely return until we can verify link is still active
 		// @todo verify link is still active
 		return;
