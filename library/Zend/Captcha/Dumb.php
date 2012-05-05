@@ -37,6 +37,29 @@ require_once 'Zend/Captcha/Word.php';
 class Zend_Captcha_Dumb extends Zend_Captcha_Word
 {
     /**
+     * CAPTCHA label
+     * @type string
+     */
+    protected $_label = 'Please type this word backwards';
+    
+    /**
+     * Set the label for the CAPTCHA
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->_label = $label;
+    }
+    
+    /**
+     * Retrieve the label for the CAPTCHA
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->_label;
+    }
+    /**
      * Render the captcha
      *
      * @param  Zend_View_Interface $view
@@ -45,7 +68,7 @@ class Zend_Captcha_Dumb extends Zend_Captcha_Word
      */
     public function render(Zend_View_Interface $view = null, $element = null)
     {
-        return 'Please type this word backwards: <b>'
+        return $this->getLabel() . ': <b>'
              . strrev($this->getWord())
              . '</b>';
     }
