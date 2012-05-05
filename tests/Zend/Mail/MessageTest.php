@@ -461,6 +461,53 @@ class Zend_Mail_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('constructor', $flags);
         $this->assertEquals('constructor', $flags['constructor']);
     }
+    
+    /**
+     * @group ZF-3745
+     */
+    public function testBackwardsCompatibilityMaintainedWhenPartClassNotSpecified()
+    {
+        $message = new Zend_Mail_Message(array('file' => $this->_file));
+        $this->assertGreaterThan(0, count($message));
+        foreach ( $message as $part ) {
+            $this->assertEquals('Zend_Mail_Part', get_class($part));
+        }
+    }
+    
+    /**
+     * @group ZF-3745
+     */
+    public function testMessageAcceptsPartClassOverrideViaConstructor()
+    {
+        $message = new Zend_Mail_Message(array(
+            'file'      => $this->_file,
+            'partclass' => 'ZF3745_Mail_Part'
+        ));
+        $this->assertEquals('ZF3745_Mail_Part', $message->getPartClass());
+        
+        // Ensure message parts use the specified part class
+        $this->assertGreaterThan(0, count($message));
+        foreach ( $message as $part ) {
+            $this->assertEquals('ZF3745_Mail_Part', get_class($part));
+        }
+    }
+    
+    /**
+     * @group ZF-3745
+     */
+    public function testMessageAcceptsPartClassOverrideViaSetter()
+    {
+        $message = new Zend_Mail_Message(array('file' => $this->_file));
+        $message->setPartClass('ZF3745_Mail_Part');
+        $this->assertEquals('ZF3745_Mail_Part', $message->getPartClass());
+        
+        // Ensure message parts use the specified part class
+        $this->assertGreaterThan(0, count($message));
+        foreach ( $message as $part ) {
+            $this->assertEquals('ZF3745_Mail_Part', get_class($part));
+        }
+    }
+    
 }
 
 /**
@@ -472,4 +519,8 @@ class ZF11514_Mail_Message extends Zend_Mail_Message
     protected $_flags = array(
         'default'=>'yes!'
     );
+}
+
+class ZF3745_Mail_Part extends Zend_Mail_Part
+{
 }
