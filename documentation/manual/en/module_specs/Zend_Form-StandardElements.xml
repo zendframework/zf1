@@ -522,6 +522,37 @@ $form->addElement('hash', 'no_csrf_foo', array('salt' => 'unique'));
             The 'formHidden' view helper is used to render the element in the
             form.
         </para>
+
+        <note>
+            <title>Testing forms containing Zend_Form_Element_Hash</title>
+            <para>
+                When unit testing a form containing a <classname>Zend_Form_Element_Hash</classname> 
+                it is necessary to call <methodname>initCsrfToken</methodname> and 
+                <methodname>initCsrfValidator</methodname> before attempting to
+                validate the form.  The hash value of the <classname>Zend_Form_Element_Hash</classname> 
+                element must also be injected into the array of values passed as the
+                argument to <methodname>Zend_Form::isValid</methodname>
+            </para>
+            <example id="zend.form.standardElements.hash.unittesting">
+                <title>Simple example of testing a CSRF-protected form</title>
+                <programlisting language="php"><![CDATA[
+public function testCsrfProtectedForm() 
+{
+    $form = new Zend_Form();
+    $form->addElement(new Zend_Form_Element_Hash('csrf'));
+
+    $csrf = $form->getElement('csrf');
+    $csrf->initCsrfToken();
+    $csrf->initCsrfValidator();
+
+    $this->assertTrue($form->isValid(array(
+        'csrf' => $csrf->getHash()
+    )));
+}]]></programlisting>
+
+            </example>
+        </note>
+        
     </sect2>
 
     <sect2 id="zend.form.standardElements.Image">
