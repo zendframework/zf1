@@ -123,12 +123,6 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement
         // ensure value is an array to allow matching multiple times
         $value = (array) $value;
 
-        // XHTML or HTML end tag?
-        $endTag = ' />';
-        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-            $endTag= '>';
-        }
-
         // Set up the filter - Alnum + hyphen + underscore
         require_once 'Zend/Filter/PregReplace.php';
         $pattern = @preg_match('/\pL/u', 'a') 
@@ -172,7 +166,7 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement
                     . $checked
                     . $disabled
                     . $this->_htmlAttribs($attribs)
-                    . $endTag
+                    . $this->getClosingBracket()
                     . (('append' == $labelPlacement) ? $opt_label : '')
                     . '</label>';
 

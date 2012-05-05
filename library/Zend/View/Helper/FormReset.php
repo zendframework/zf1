@@ -64,12 +64,6 @@ class Zend_View_Helper_FormReset extends Zend_View_Helper_FormElement
             $disabled = ' disabled="disabled"';
         }
 
-        // get closing tag
-        $endTag = '>';
-        if ($this->view->doctype()->isXhtml()) {
-            $endTag = ' />';
-        }
-
         // Render button
         $xhtml = '<input type="reset"'
                . ' name="' . $this->view->escape($name) . '"'
@@ -82,7 +76,7 @@ class Zend_View_Helper_FormReset extends Zend_View_Helper_FormElement
         }
 
         // add attributes, close, and return
-        $xhtml .= $this->_htmlAttribs($attribs) . $endTag;
+        $xhtml .= $this->_htmlAttribs($attribs) . $this->getClosingBracket();
         return $xhtml;
     }
 }

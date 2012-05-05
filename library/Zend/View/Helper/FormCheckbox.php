@@ -81,12 +81,6 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement
             $disabled = ' disabled="disabled"';
         }
 
-        // XHTML or HTML end tag?
-        $endTag = ' />';
-        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-            $endTag= '>';
-        }
-
         // build the element
         $xhtml = '';
         if (!$disable && !strstr($name, '[]')) {
@@ -99,7 +93,7 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement
                 . $checkedOptions['checkedString']
                 . $disabled
                 . $this->_htmlAttribs($attribs)
-                . $endTag;
+                . $this->getClosingBracket();
 
         return $xhtml;
     }

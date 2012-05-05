@@ -62,19 +62,13 @@ class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement
             $disabled = ' disabled="disabled"';
         }
 
-        // XHTML or HTML end tag?
-        $endTag = ' />';
-        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-            $endTag= '>';
-        }
-
         // build the element
         $xhtml = '<input type="file"'
                 . ' name="' . $this->view->escape($name) . '"'
                 . ' id="' . $this->view->escape($id) . '"'
                 . $disabled
                 . $this->_htmlAttribs($attribs)
-                . $endTag;
+                . $this->getClosingBracket();
 
         return $xhtml;
     }

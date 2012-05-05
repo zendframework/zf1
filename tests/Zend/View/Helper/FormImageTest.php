@@ -62,6 +62,8 @@ class Zend_View_Helper_FormImageTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->view = new Zend_View();
+        $this->view->doctype('HTML4_LOOSE');  // Reset doctype to default
+        
         $this->helper = new Zend_View_Helper_FormImage();
         $this->helper->setView($this->view);
     }
@@ -91,6 +93,29 @@ class Zend_View_Helper_FormImageTest extends PHPUnit_Framework_TestCase
         $this->assertRegexp('/<input[^>]*?src="bar"/', $button);
         $this->assertRegexp('/<input[^>]*?name="foo"/', $button);
         $this->assertRegexp('/<input[^>]*?type="image"/', $button);
+    }
+    
+    /**
+     * @group ZF-11477
+     */
+    public function testRendersAsHtmlByDefault()
+    {
+        $test = $this->helper->formImage(array(
+            'name' => 'foo',
+        ));
+        $this->assertNotContains(' />', $test);
+    }
+
+    /**
+     * @group ZF-11477
+     */
+    public function testCanRendersAsXHtml()
+    {
+        $this->view->doctype('XHTML1_STRICT');
+        $test = $this->helper->formImage(array(
+            'name' => 'foo',
+        ));
+        $this->assertContains(' />', $test);
     }
 }
 

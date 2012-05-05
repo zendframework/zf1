@@ -67,12 +67,6 @@ class Zend_View_Helper_FormSubmit extends Zend_View_Helper_FormElement
             $id = ' id="' . $this->view->escape($id) . '"';
         }
 
-        // XHTML or HTML end tag?
-        $endTag = ' />';
-        if (($this->view instanceof Zend_View_Abstract) && !$this->view->doctype()->isXhtml()) {
-            $endTag= '>';
-        }
-
         // Render the button.
         $xhtml = '<input type="submit"'
                . ' name="' . $this->view->escape($name) . '"'
@@ -80,7 +74,7 @@ class Zend_View_Helper_FormSubmit extends Zend_View_Helper_FormElement
                . ' value="' . $this->view->escape($value) . '"'
                . $disabled
                . $this->_htmlAttribs($attribs)
-               . $endTag;
+               . $this->getClosingBracket();
 
         return $xhtml;
     }
