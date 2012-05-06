@@ -263,6 +263,33 @@ class Zend_Text_MultiByteTest extends PHPUnit_Framework_TestCase
         $text = Zend_Text_MultiByte::strPad('äääöö', 5, 'ö', STR_PAD_RIGHT);
         $this->assertEquals('äääöö', $text);
     }
+
+    /**
+     * @group ZF-12186
+     */
+    public function testPadInputLongerThanPadLength()
+    {
+        $text = Zend_Text_MultiByte::strPad('äääöö', 2, 'ö');
+        $this->assertEquals('äääöö', $text);
+    }
+
+    /**
+     * @group ZF-12186
+     */
+    public function testPadInputSameAsPadLength()
+    {
+        $text = Zend_Text_MultiByte::strPad('äääöö', 5, 'ö');
+        $this->assertEquals('äääöö', $text);
+    }
+
+    /**
+     * @group ZF-12186
+     */
+    public function testPadNegativePadLength()
+    {
+        $text = Zend_Text_MultiByte::strPad('äääöö', -2, 'ö');
+        $this->assertEquals('äääöö', $text);
+    }
 }
 
 // Call Zend_Text_MultiByteTest::main() if this source file is executed directly.
