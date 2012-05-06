@@ -19,11 +19,14 @@
  */
 
 /**
- * @namespace
+ * @see Zend_Exception
  */
-namespace Zend\EventManager\Exception;
+require_once 'Zend/Exception.php';
 
-use Zend\EventManager\Exception;
+/**
+ * @see Zend_EventManager_Exception
+ */
+require_once 'Zend/EventManager/Exception.php';
 
 /**
  * Invalid argument exception
@@ -33,7 +36,7 @@ use Zend\EventManager\Exception;
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class InvalidArgumentException 
-    extends \InvalidArgumentException implements Exception
+class Zend_EventManager_Exception_InvalidArgumentException
+    extends Zend_Exception implements Zend_EventManager_Exception
 {
 }
