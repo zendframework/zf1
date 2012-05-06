@@ -2733,4 +2733,34 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
         $value = Zend_Locale_Data::getContent('de_AT', 'unit', array('day', 'one'));
         $this->assertEquals('{0} Tag', $value);
     }
+
+    /**
+     * @group ZF-12103
+     */
+    public function testGetListNonexistentTypeReturnsEmptyArray()
+    {
+        $result = Zend_Locale_Data::getList('de_AT', 'type', 'ddd');
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+    }
+
+    /**
+     * @group ZF-12103
+     */
+    public function testGetListValidTypeReturnsNonemptyArray()
+    {
+        $result = Zend_Locale_Data::getList('de_AT', 'type', 'calendar');
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(count($result) > 0);
+    }
+
+    /**
+     * @group ZF-12103
+     */
+    public function testGetListEmptyTypeReturnsNonemptyArray()
+    {
+        $result = Zend_Locale_Data::getList('de_AT', 'type', '');
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(count($result) > 0);
+    }
 }

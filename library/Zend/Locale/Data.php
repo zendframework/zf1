@@ -361,7 +361,7 @@ class Zend_Locale_Data
                 break;
 
             case 'type':
-                if (empty($type)) {
+                if (empty($value)) {
                     $temp = self::_getFile($locale, '/ldml/localeDisplayNames/types/type', 'type');
                 } else {
                     if (($value == 'calendar') or
