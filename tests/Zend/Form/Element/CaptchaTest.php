@@ -105,6 +105,28 @@ class Zend_Form_Element_CaptchaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-12161
+     */
+    public function testSettingCustomCaptchaAdapterPerConstructor()
+    {
+        $element = new Zend_Form_Element_Captcha(
+            'foo',
+            array(
+                'prefixPath' => array(
+                    'prefix' => 'Zend_Form_Element_CaptchaTest',
+                    'path'   => dirname(__FILE__) . '/_files',
+                ),
+                'captcha' => 'Foo',
+            )
+        );
+
+        $this->assertType(
+            'Zend_Form_Element_CaptchaTest_Captcha_Foo',
+            $element->getCaptcha()
+        );
+    }
+
+    /**
      * @see   ZF-4038
      * @group ZF-4038
      */
