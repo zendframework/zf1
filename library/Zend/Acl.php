@@ -140,7 +140,7 @@ class Zend_Acl
      * will have the least priority, and the last parent added will have the
      * highest priority.
      *
-     * @param  Zend_Acl_Role_Interface              $role
+     * @param  Zend_Acl_Role_Interface|string       $role
      * @param  Zend_Acl_Role_Interface|string|array $parents
      * @uses   Zend_Acl_Role_Registry::add()
      * @return Zend_Acl Provides a fluent interface
