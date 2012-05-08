@@ -174,18 +174,12 @@ require_once 'Zend/Gdata/Books/CollectionEntryTest.php';
 require_once 'Zend/Gdata/Books/VolumeFeedTest.php';
 require_once 'Zend/Gdata/Books/VolumeEntryTest.php';
 
-require_once 'Zend/Gdata/Health/QueryTest.php';
-require_once 'Zend/Gdata/Health/ProfileListEntryTest.php';
-require_once 'Zend/Gdata/Health/ProfileEntryTest.php';
-require_once 'Zend/Gdata/Health/ProfileFeedTest.php';
-
 /**
  * Tests that do require online access to servers
  * and authentication credentials
  */
 require_once 'Zend/Gdata/GdataOnlineTest.php';
 require_once 'Zend/Gdata/CalendarOnlineTest.php';
-require_once 'Zend/Gdata/HealthOnlineTest.php';
 require_once 'Zend/Gdata/SpreadsheetsOnlineTest.php';
 require_once 'Zend/Gdata/DocsOnlineTest.php';
 require_once 'Zend/Gdata/PhotosOnlineTest.php';
@@ -358,11 +352,6 @@ class Zend_Gdata_AllTests
         $suite->addTestSuite('Zend_Gdata_Books_VolumeEntryTest');
         $suite->addTestSuite('Zend_Gdata_Books_VolumeFeedTest');
 
-        $suite->addTestSuite('Zend_Gdata_Health_QueryTest');
-        $suite->addTestSuite('Zend_Gdata_Health_ProfileListEntryTest');
-        $suite->addTestSuite('Zend_Gdata_Health_ProfileEntryTest');
-        $suite->addTestSuite('Zend_Gdata_Health_ProfileFeedTest');
-
         $skippingOnlineTests = true;
         if (defined('TESTS_ZEND_GDATA_ONLINE_ENABLED') &&
             constant('TESTS_ZEND_GDATA_ONLINE_ENABLED') == true &&
@@ -402,12 +391,6 @@ class Zend_Gdata_AllTests
             constant('TESTS_ZEND_GDATA_BOOKS_ONLINE_ENABLED') == true) {
                 $suite->addTestSuite('Zend_Gdata_BooksOnlineTest');
             }
-
-            if (defined('TESTS_ZEND_GDATA_HEALTH_ONLINE_ENABLED') &&
-            constant('TESTS_ZEND_GDATA_HEALTH_ONLINE_ENABLED') == true) {
-                $suite->addTestSuite('Zend_Gdata_HealthOnlineTest');
-            }
-
         }
         if (defined('TESTS_ZEND_GDATA_ONLINE_ENABLED') &&
                    constant('TESTS_ZEND_GDATA_ONLINE_ENABLED') == true) {
