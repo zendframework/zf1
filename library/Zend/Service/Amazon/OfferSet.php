@@ -85,7 +85,7 @@ class Zend_Service_Amazon_OfferSet
     public function __construct(DOMElement $dom)
     {
         $xpath = new DOMXPath($dom->ownerDocument);
-        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2011-08-01');
 
         $offer = $xpath->query('./az:OfferSummary', $dom);
         if ($offer->length == 1) {
