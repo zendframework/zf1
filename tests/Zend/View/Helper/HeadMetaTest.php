@@ -532,7 +532,17 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp("|^<!--\[if lt IE 7\]>|", $html);
         $this->assertRegExp("|<!\[endif\]-->$|", $html);
     }
-    
+
+    /**
+     * @group ZF-11910
+     */
+    public function testStandaloneInstantiationWithoutViewDoesNotCauseFatalError()
+    {
+        $expected = '<meta name="foo" content="bar" />';
+        $helper = new Zend_View_Helper_HeadMeta();
+        $result = (string)$helper->headMeta()->appendName('foo','bar');
+        $this->assertEquals($expected, $result);
+    }
 }
 
 // Call Zend_View_Helper_HeadMetaTest::main() if this source file is executed directly.
