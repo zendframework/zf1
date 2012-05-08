@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 24604 -->
+<!-- EN-Revision: 24757 -->
 <sect1 id="zend.form.standardElements">
     <title>Zend Framework に同梱されている標準のフォーム要素</title>
 
@@ -269,23 +269,25 @@ $location = $form->foo->getFileName();
         <note>
             <title>getFileName() の返り値</title>
 
-            <!-- TODO : to be translated -->
             <para>
-                The result returned by the getFileName() method will change depending on how many files the Zend_Form_Element_File uploaded:
+                getFileName() メソッドによって返される結果は、
+                <!-- TODO : to be translated -->
+                how many files the Zend_Form_Element_File uploaded
+                によって変わります。
             <itemizedlist>
                 <listitem>
                     <para>
-                        A single file: string containing the single file name.
+                        単一のファイル: 単一のファイル名を含む文字列。
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        Multiple files: an array, where each item is a string containing a single file name.
+                        複数のファイル: 配列。各要素は、単一のファイル名を含む文字列です。
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        No files: an empty array
+                        ファイル無し: 空の配列
                     </para>
                 </listitem>
             </itemizedlist>
@@ -534,6 +536,39 @@ $form->addElement('hash', 'no_csrf_foo', array('salt' => 'unique'));
         <para>
             'formHidden' ビューヘルパーを使用して要素をフォームにレンダリングします。
         </para>
+
+        <note>
+            <title>Zend_Form_Element_Hash を含むフォームをテスト</title>
+
+            <!-- TODO : to be translated -->
+            <para>
+                When unit testing a form containing a <classname>Zend_Form_Element_Hash</classname> 
+                it is necessary to call <methodname>initCsrfToken</methodname> and 
+                <methodname>initCsrfValidator</methodname> before attempting to
+                validate the form.  The hash value of the <classname>Zend_Form_Element_Hash</classname> 
+                element must also be injected into the array of values passed as the
+                argument to <methodname>Zend_Form::isValid</methodname>
+            </para>
+            <example id="zend.form.standardElements.hash.unittesting">
+                <title>Simple example of testing a CSRF-protected form</title>
+                <programlisting language="php"><![CDATA[
+public function testCsrfProtectedForm() 
+{
+    $form = new Zend_Form();
+    $form->addElement(new Zend_Form_Element_Hash('csrf'));
+
+    $csrf = $form->getElement('csrf');
+    $csrf->initCsrfToken();
+    $csrf->initCsrfValidator();
+
+    $this->assertTrue($form->isValid(array(
+        'csrf' => $csrf->getHash()
+    )));
+}]]></programlisting>
+
+            </example>
+        </note>
+
     </sect2>
 
     <sect2 id="zend.form.standardElements.Image">
