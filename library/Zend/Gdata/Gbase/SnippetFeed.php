@@ -22,9 +22,14 @@
  */
 
 /**
- * @see Zend_Gdata_Gbase_Feed
+ * @see Zend_Exception
  */
-require_once 'Zend/Gdata/Gbase/Feed.php';
+require_once 'Zend/Exception.php';
+
+/**
+ * @see Zend_Gdata_Feed
+ */
+require_once 'Zend/Gdata/Feed.php';
 
 /**
  * Represents the Google Base Snippets Feed
@@ -39,10 +44,4 @@ require_once 'Zend/Gdata/Gbase/Feed.php';
  */
 class Zend_Gdata_Gbase_SnippetFeed extends Zend_Gdata_Feed
 {
-    /**
-     * The classname for individual snippet feed elements.
-     *
-     * @var string
-     */
-    protected $_entryClassName = 'Zend_Gdata_Gbase_SnippetEntry';
 }
