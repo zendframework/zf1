@@ -30,6 +30,7 @@ require_once 'Zend/Controller/Request/Http.php';
 require_once 'Zend/Controller/Response/Cli.php';
 require_once 'Zend/Controller/Action/HelperBroker.php';
 require_once 'Zend/Controller/Action/Helper/FlashMessenger.php';
+require_once 'Zend/Controller/Exception.php';
 require_once 'Zend/Session.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/_files/HelperFlashMessengerController.php';
 
@@ -106,7 +107,7 @@ class Zend_Controller_Action_Helper_FlashMessengerTest extends PHPUnit_Framework
         $this->request->setControllerName('helper-flash-messenger');
         $this->response   = new Zend_Controller_Response_Cli();
         $this->controller = new HelperFlashMessengerController($this->request, $this->response, array());
-        $this->helper     = new Zend_Controller_Action_Helper_FlashMessenger($this->controller);
+        $this->helper     = new Zend_Controller_Action_Helper_FlashMessenger;
     }
 
     public function testLoadFlashMessenger()
@@ -135,6 +136,99 @@ class Zend_Controller_Action_Helper_FlashMessengerTest extends PHPUnit_Framework
         $this->helper->direct('foo');
         $this->assertTrue($this->helper->hasMessages());
         $this->assertEquals(1, count($this->helper));
+    }
+
+    /**
+     * @group ZF-1705
+     */
+    public function testNamespaceChange()
+    {
+        $this->helper->setNamespace('foobar');
+        $this->assertEquals('foobar', $this->helper->getNamespace());
+    }
+
+    /**
+     * @group ZF-1705
+     */
+    public function testAddMessageToCustomNamespace()
+    {
+        $this->helper->addMessage('testmessage', 'foobar');
+        $this->assertTrue($this->helper->hasCurrentMessages('foobar'));
+        $foobarMessages = $this->helper->getCurrentMessages('foobar');
+        $this->assertEquals(1, count($foobarMessages));
+        $this->assertEquals('testmessage', array_pop($foobarMessages));
+
+        // Ensure it didnt' bleed over into default namespace
+        $defaultMessages = $this->helper->getCurrentMessages();
+        $this->assertTrue(empty($defaultMessages), 'Default namespace not empty');
+    }
+
+    /**
+     * @group ZF-1705
+     */
+    public function testRemoveMessageToCustomNamespace()
+    {
+        // Place a message in foobar and default namespaces
+        $this->helper->addMessage('testmessage', 'foobar');
+        $this->assertTrue($this->helper->hasCurrentMessages('foobar'));
+        $this->helper->addMessage('defaultmessage');
+        $this->assertTrue($this->helper->hasCurrentMessages());
+
+        // Erase the foobar namespace
+        $this->helper->clearCurrentMessages('foobar');
+
+        // Ensure it cleared the specified namespace
+        $foobarMessages = $this->helper->getCurrentMessages('foobar');
+        $this->assertTrue(empty($foobarMessages), 'Namespace foobar not empty');
+
+        // Ensure it didnt' clear the default namespace
+        $defaultMessages = $this->helper->getCurrentMessages();
+        $this->assertEquals(1, count($defaultMessages));
+        $this->assertEquals('defaultmessage', array_pop($defaultMessages));
+    }
+
+    /**
+     * @group ZF-1705
+     */
+    public function testSimulateCrossRequestMessagePassing()
+    {
+        $helper = new FlashMessengerControllerActionHelper;
+        $helper->addMessage('testmessage', 'foobar');
+        $helper->addMessage('defaultmessage');
+
+        // Reset and recreate the helper, essentially faking a subsequent request
+        $helper->reset();
+        $helper = new FlashMessengerControllerActionHelper;
+
+        // Check the contents
+        $this->assertFalse($helper->hasCurrentMessages('foobar'));
+        $this->assertFalse($helper->hasCurrentMessages());
+        $this->assertTrue($helper->hasMessages('foobar'));
+        $this->assertTrue($helper->hasMessages());
+
+        $defaultMessages = $helper->getMessages();
+        $this->assertEquals(1, count($defaultMessages));
+        $this->assertEquals('defaultmessage', array_pop($defaultMessages));
+
+        $foobarMessages = $helper->getMessages('foobar');
+        $this->assertEquals(1, count($foobarMessages));
+        $this->assertEquals('testmessage', array_pop($foobarMessages));
+    }
+}
+
+/**
+ * Subclass of FlashMessenger action helper which exposes a reset method
+ * to allow faking a second (fresh) request
+ */
+class FlashMessengerControllerActionHelper extends Zend_Controller_Action_Helper_FlashMessenger
+{
+    public function getName() { return 'FlashMessenger'; }
+
+    public function reset()
+    {
+        self::$_messages = array();
+        self::$_session = NULL;
+        self::$_messageAdded = false;
     }
 }
 
