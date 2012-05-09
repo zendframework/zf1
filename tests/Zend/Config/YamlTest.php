@@ -415,5 +415,15 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $config = new Zend_Config_Yaml($this->_yamlSingleQuotedString);
         $this->assertEquals('two', $config->one);
     }
-    
+
+    /**
+    * @group ZF-11363
+    */
+    public function testAllowsDashesInLists()
+    {
+        $config = new Zend_Config_Yaml($this->_iniFileSameNameKeysConfig, null);
+        $this->assertEquals('101112', $config->{'te-n'}->{'ele-ven'}->{0}->{'twel-ve'});
+        $this->assertEquals('101112', $config->{'te-n'}->{'ele-ven'}->{0}->twelve);
+        $this->assertEquals('thir-teen', $config->{'te-n'}->{'ele-ven'}->{1});
+    }
 }

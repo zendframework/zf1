@@ -310,7 +310,7 @@ class Zend_Config_Yaml extends Zend_Config
                 $inIndent      = true;
             }
 
-            if (preg_match("/(\w+):\s*(.*)/", $line, $m)) {
+            if (preg_match("/(?!-)([\w\-]+):\s*(.*)/", $line, $m)) {
                 // key: value
                 if (strlen($m[2])) {
                     // simple key: value
