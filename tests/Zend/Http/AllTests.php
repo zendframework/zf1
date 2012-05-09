@@ -28,6 +28,7 @@ require_once 'Zend/Http/ResponseTest.php';
 require_once 'Zend/Http/CookieTest.php';
 require_once 'Zend/Http/CookieJarTest.php';
 require_once 'Zend/Http/Client/AllTests.php';
+require_once 'Zend/Http/Header/AllTests.php';
 require_once 'Zend/Http/UserAgent/AllTests.php';
 
 /**
@@ -53,6 +54,7 @@ class Zend_Http_AllTests
         $suite->addTestSuite('Zend_Http_CookieTest');
         $suite->addTestSuite('Zend_Http_CookieJarTest');
         $suite->addTest(Zend_Http_Client_AllTests::suite());
+        $suite->addTest(Zend_Http_Header_AllTests::suite());
         $suite->addTest(Zend_Http_UserAgent_AllTests::suite());
 
         return $suite;
