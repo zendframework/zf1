@@ -31,6 +31,8 @@ Vagrant::Config.run do |config|
   # computers to access the VM, whereas host only networking does not.
   config.vm.forward_port 80, 8081
 
+  # Hostname
+  config.vm.host_name = "zf1.dev"
 
   # Pass custom arguments to VBoxManage before booting VM
   config.vm.customize [
