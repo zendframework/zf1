@@ -383,9 +383,9 @@ class Zend_Session extends Zend_Session_Abstract
      */
     public static function sessionExists()
     {
-        if (ini_get('session.use_cookies') == '1' && isset($_COOKIE[session_name()])) {
+        if ((bool)ini_get('session.use_cookies') == true && isset($_COOKIE[session_name()])) {
             return true;
-        } elseif (!empty($_REQUEST[session_name()])) {
+        } elseif ((bool)ini_get('session.use_only_cookies') == false && isset($_REQUEST[session_name()])) {
             return true;
         } elseif (self::$_unitTestEnabled) {
             return true;
