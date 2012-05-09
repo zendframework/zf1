@@ -4,82 +4,21 @@ group { "puppet":
 
 File { owner => 0, group => 0, mode => 0644 }
 
+
+# Ensure that apt-get update has been run, else not all packages will install
 exec { 'update-apt':
     command => "/usr/bin/apt-get update",
 }
 
-Exec["update-apt"] -> Package <| |>
+# install vim and all packages required to build PHP
+$packages = [ "vim", "curl", "libxpm-dev", "libmcrypt-dev", "libbz2-dev", "libcurl4-gnutls-dev", "libjpeg62-dev", "libpng12-dev", "libfreetype6-dev", "libt1-dev", "libgmp3-dev", "libmysqlclient-dev", "libpq-dev", "libpcre3-dev" ]
 
-package { 'vim':
-    ensure => latest,
+package { $packages :
+    ensure => latest,  # Don't use latest, or it will auto-update (or do if you like)
     require => Exec["update-apt"],
 }
 
-package { 'curl':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libxpm-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libmcrypt-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libbz2-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libcurl4-gnutls-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libjpeg62-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libpng12-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libfreetype6-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libt1-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libgmp3-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libmysqlclient-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libpq-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
-package { 'libpcre3-dev':
-    ensure => latest,
-    require => Exec["update-apt"],
-}
-
+# Update .bashrc
 $serial = "2012043001"
 $serialfile = "/var/log/pe-bashrc-update.serial"
 exec { "install-bashrc-update":
