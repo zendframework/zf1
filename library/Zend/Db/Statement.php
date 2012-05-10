@@ -186,9 +186,12 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
         $qe = $this->_adapter->quote($q);
         $qe = substr($qe, 1, 2);
         $qe = preg_quote($qe);
+        $escapeChar = substr($qe,0,1);
         // remove 'foo\'bar'
         if (!empty($q)) {
-            $sql = preg_replace("/$q($qe|[^$q])*$q/Us", '', $sql);
+            $escapeChar = preg_quote($escapeChar);
+            // this segfaults only at
+            $sql = preg_replace("/$q([^$q{$escapeChar}]*|($qe)*)*$q/s", '', $sql);
         }
         
         // get a version of the SQL statement with all quoted
