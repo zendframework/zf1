@@ -84,6 +84,10 @@ class Zend_Service_DeveloperGarden_OfflineSecurityTokenServerTest extends PHPUni
 
     public function testWsdlCache()
     {
+        if (!extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP extension is not loaded');
+        }
+
         $this->assertNull(
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::getWsdlCache()
         );
@@ -126,6 +130,10 @@ class Zend_Service_DeveloperGarden_OfflineSecurityTokenServerTest extends PHPUni
 
     public function testDisableWsdlCache()
     {
+        if (!extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP extension is not loaded');
+        }
+
         Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setWsdlCache(WSDL_CACHE_BOTH);
         $this->assertEquals(
             WSDL_CACHE_BOTH,

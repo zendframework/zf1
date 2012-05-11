@@ -130,6 +130,10 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
 
     public function testGetSoapClient()
     {
+        if (!extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP extension is not loaded');
+        }
+
         $options = array(
             'Username' => 'Zend',
             'Password' => 'Framework',
@@ -243,6 +247,10 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
 
     public function testGetClientOptionsWithWsdlCache()
     {
+        if (!extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP extension is not loaded');
+        }
+
         $this->assertNull(
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setWsdlCache(WSDL_CACHE_BOTH)
         );
