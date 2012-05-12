@@ -135,6 +135,22 @@ class Zend_Application_Resource_Frontcontroller extends Zend_Application_Resourc
                     }
                     break;
 
+                case 'dispatcher':
+                    if(!isset($value['class'])) {
+                        require_once 'Zend/Application/Exception.php';
+                        throw new Zend_Application_Exception('You must specify both ');
+                    }
+                    if (!isset($value['params'])) {
+                        $value['params'] = array();
+                    }
+                    
+                    $dispatchClass = $value['class'];
+                    if(!class_exists($dispatchClass)) {
+                        require_once 'Zend/Application/Exception.php';
+                        throw new Zend_Application_Exception('Dispatcher class not found!');
+                    }
+                    $front->setDispatcher(new $dispatchClass((array)$value['params']));
+                    break;
                 default:
                     $front->setParam($key, $value);
                     break;
