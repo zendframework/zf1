@@ -888,6 +888,19 @@ EOB;
         $json = Zend_Json::encode($array);
         $this->assertEquals($expected, $json);
     }
+    
+    /**
+     * @group ZF-7586
+     */
+    public function testWillDecodeStructureWithEmptyKeyToObjectProperly()
+    {
+        Zend_Json::$useBuiltinEncoderDecoder = true;
+        
+        $json = '{"":"test"}';
+        $object = Zend_Json::decode($json, Zend_Json::TYPE_OBJECT);
+        $this->assertTrue(isset($object->_empty_));
+        $this->assertEquals('test', $object->_empty_);
+    }
 
 }
 

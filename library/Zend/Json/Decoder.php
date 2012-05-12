@@ -236,6 +236,9 @@ class Zend_Json_Decoder
                 // Create new StdClass and populate with $members
                 $result = new StdClass();
                 foreach ($members as $key => $value) {
+                    if ($key === '') {
+                        $key = '_empty_';
+                    }
                     $result->$key = $value;
                 }
                 break;
