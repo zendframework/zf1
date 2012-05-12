@@ -73,6 +73,17 @@ class Zend_MimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(quoted_printable_decode($qp), $text);
     }
 
+    /**
+     * @group ZF-10074
+     */
+    public function testEncodeQuotedPrintableWhenTextHasZeroAtTheEnd()
+    {
+        $raw = str_repeat('x',72) . '0';
+        $quoted = Zend_Mime::encodeQuotedPrintable($raw, 72);
+        $expected = quoted_printable_decode($quoted);        
+        $this->assertEquals($expected, $raw);
+    }
+
     public function testBase64()
     {
         $content = str_repeat("\x88\xAA\xAF\xBF\x29\x88\xAA\xAF\xBF\x29\x88\xAA\xAF", 4);
