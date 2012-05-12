@@ -309,6 +309,22 @@ EOF;
         $this->assertType('DOMDocument', $doc);
         $this->assertEquals('utf-8', $doc->encoding);
     }
+    
+    /**
+     * @group ZF-11376
+     */
+    public function testXhtmlDocumentWithXmlDeclaration()
+    {
+        $xhtmlWithXmlDecl = <<<EOB
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head><title /></head>
+    <body><p>Test paragraph.</p></body>
+</html>
+EOB;
+        $this->query->setDocument($xhtmlWithXmlDecl, 'utf-8');
+        $this->assertEquals(1, $this->query->query('//p')->count());
+    }
 }
 
 // Call Zend_Dom_QueryTest::main() if this source file is executed directly.
