@@ -263,6 +263,23 @@ class Zend_Gdata_YouTubeOnlineTest extends PHPUnit_Framework_TestCase
             }
         }
     }
+    /**
+     * @group ZF-9479
+     */
+    public function testPerformV2Query()
+    {
+        $this->gdata->setMajorProtocolVersion(2);
+        $query = $this->gdata->newVideoQuery();
+        $query->videoQuery = 'zend framework';
+        $query->startIndex = 0;
+        $query->maxResults = 10;
+        $query->orderBy = 'viewCount';
+        $query->safeSearch = 'strict';
+        $videoFeed = $this->gdata->getVideoFeed($query);
+        $this->assertTrue(count($videoFeed->entry) > 0,
+            'Could not retrieve a single entry for location search:' .
+            $query->getQueryUrl(2));
+    }
 
     public function testPerformV2Query_Location()
     {

@@ -256,7 +256,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($location == null) {
             $uri = self::VIDEO_URI;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -286,7 +286,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
                 $uri = self::VIDEO_URI . "/" . $videoId;
             }
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -324,7 +324,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
             $uri = self::VIDEO_URI . "/" . $videoId . "/" .
                 self::RELATED_URI_SUFFIX;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -346,7 +346,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
             $uri = self::VIDEO_URI . "/" . $videoId . "/" .
                 self::RESPONSES_URI_SUFFIX;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -367,7 +367,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($videoId !== null) {
             $uri = self::VIDEO_URI . "/" . $videoId . "/comments";
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -398,7 +398,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
                     $location->setFeedType('top rated');
                 }
             }
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -430,7 +430,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
                     $location->setFeedType('most viewed');
                 }
             }
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -461,7 +461,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
                     $location->setFeedType('recently featured');
                 }
             }
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -493,7 +493,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
                     $location->setFeedType('watch on mobile');
                 }
             }
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -513,7 +513,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($user !== null) {
             $uri = self::USER_URI . '/' . $user . '/playlists';
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -531,7 +531,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
     public function getPlaylistVideoFeed($location)
     {
         if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -551,7 +551,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($user !== null) {
             $uri = self::USER_URI . '/' . $user . '/subscriptions';
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -571,7 +571,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($user !== null) {
             $uri = self::USER_URI . '/' . $user . '/contacts';
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -592,7 +592,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
             $uri = self::USER_URI . '/' . $user . '/' .
                    self::UPLOADS_URI_SUFFIX;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -613,7 +613,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
             $uri = self::USER_URI . '/' . $user . '/' .
                    self::FAVORITES_URI_SUFFIX;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -633,7 +633,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         if ($user !== null) {
             $uri = self::USER_URI . '/' . $user;
         } else if ($location instanceof Zend_Gdata_Query) {
-            $uri = $location->getQueryUrl();
+            $uri = $location->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             $uri = $location;
         }
@@ -729,7 +729,7 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
 
         $uri = null;
         if ($username instanceof Zend_Gdata_Query) {
-            $uri = $username->getQueryUrl();
+            $uri = $username->getQueryUrl($this->getMajorProtocolVersion());
         } else {
             if (count(explode(',', $username)) >
                 self::ACTIVITY_FEED_MAX_USERS) {
