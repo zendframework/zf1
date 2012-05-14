@@ -25,8 +25,11 @@ if (!$PHPUNIT) {
     if (!$PHPUNIT && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $PHPUNIT = `for %i in (phpunit.bat) do @echo.   %~\$PATH:i)`;
     } else {
-        $PHPUNIT = `which phpunit`;
-        $PHPUNIT = trim($PHPUNIT);
+        $PHPUNIT = trim(`echo \$PHPUNIT`);
+        if ( empty($PHPUNIT) ) {
+            $PHPUNIT = `which phpunit`;
+            $PHPUNIT = trim($PHPUNIT);
+        }
     }
 
     $PHPUNIT = trim($PHPUNIT);
