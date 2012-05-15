@@ -201,7 +201,10 @@ class Zend_Config_Yaml extends Zend_Config
             foreach ($section as $sectionName) {
                 if (!isset($config[$sectionName])) {
                     require_once 'Zend/Config/Exception.php';
-                    throw new Zend_Config_Exception(sprintf('Section "%s" cannot be found', $section));
+                    throw new Zend_Config_Exception(sprintf(
+                        'Section "%s" cannot be found', 
+                        implode(' ', (array)$section)
+                    ));
                 }
 
                 $dataArray = array_merge($this->_processExtends($config, $sectionName), $dataArray);
@@ -210,7 +213,10 @@ class Zend_Config_Yaml extends Zend_Config
         } else {
             if (!isset($config[$section])) {
                 require_once 'Zend/Config/Exception.php';
-                throw new Zend_Config_Exception(sprintf('Section "%s" cannot be found', $section));
+                throw new Zend_Config_Exception(sprintf(
+                    'Section "%s" cannot be found', 
+                    implode(' ', (array)$section)
+                ));
             }
 
             $dataArray = $this->_processExtends($config, $section);
