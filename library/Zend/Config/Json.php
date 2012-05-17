@@ -220,7 +220,9 @@ class Zend_Config_Json extends Zend_Config
     {
         foreach ($this->_getConstants() as $constant) {
             if (strstr($value, $constant)) {
-                $value = str_replace($constant, constant($constant), $value);
+                // handle backslashes that may represent windows path names for instance
+                $replacement = str_replace('\\', '\\\\', constant($constant));
+                $value = str_replace($constant, $replacement, $value);
             }
         }
         return $value;
