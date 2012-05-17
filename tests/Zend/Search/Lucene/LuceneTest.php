@@ -61,6 +61,11 @@ class Zend_Search_Lucene_LuceneTest extends PHPUnit_Framework_TestCase
         closedir($dir);
     }
 
+    public function setUp()
+    {
+        $this->_clearDirectory(dirname(__FILE__) . '/_index/_files');
+    }
+
     public function testCreate()
     {
         $index = Zend_Search_Lucene::create(dirname(__FILE__) . '/_index/_files');
