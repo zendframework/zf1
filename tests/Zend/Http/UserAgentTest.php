@@ -194,9 +194,6 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Zend_Http_UserAgent_Mobile', $className);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testDeviceClassNameMatchesDesktopTypeIfUserAgentDoesNotMatch()
     {
         $config = array(
@@ -534,9 +531,6 @@ class Zend_Http_UserAgentTest extends PHPUnit_Framework_TestCase
         $userAgent->setStorage(new Zend_Http_UserAgent_Storage_NonPersistent());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testAllowsPassingStorageConfigurationOptions()
     {
         $config = $this->config;
