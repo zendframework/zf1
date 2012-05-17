@@ -71,7 +71,7 @@ class Zend_Crypt_Rsa
     {
         if (!extension_loaded('openssl')) {
             require_once 'Zend/Crypt/Rsa/Exception.php';
-            throw new Zend_Crypt_Rsa_Exception('Zend_Crypt_Rsa requires openssl extention to be loaded.');
+            throw new Zend_Crypt_Rsa_Exception('Zend_Crypt_Rsa requires openssl extension to be loaded.');
         }
 
         // Set _hashAlgorithm property when we are sure, that openssl extension is loaded

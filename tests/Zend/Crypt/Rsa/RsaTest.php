@@ -40,16 +40,10 @@ class Zend_Crypt_RsaTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        try {
-            $rsaObject = new Zend_Crypt_Rsa();
-        } catch (Zend_Crypt_Rsa_Exception $e) {
-            if (strpos($e->getMessage(), 'requires openssl extension') !== false) {
-                $this->markTestSkipped($e->getMessage());
-            } else {
-                throw $e;
-            }
+        if (!extension_loaded('openssl')) {
+            $this->markTestSkipped('Zend_Crypt_Rsa requires openssl extension to be loaded.');
         }
-
+        
         $this->_testPemString = <<<RSAKEY
 -----BEGIN RSA PRIVATE KEY-----
 MIIBOgIBAAJBANDiE2+Xi/WnO+s120NiiJhNyIButVu6zxqlVzz0wy2j4kQVUC4Z
