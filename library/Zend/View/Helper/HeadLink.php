@@ -379,7 +379,7 @@ class Zend_View_Helper_HeadLink extends Zend_View_Helper_Placeholder_Container_S
         }
 
         $attributes = compact('rel', 'type', 'href', 'media', 'conditionalStylesheet', 'extras');
-        return $this->createData($attributes);
+        return $this->createData($this->_applyExtras($attributes));
     }
 
     /**
@@ -432,6 +432,24 @@ class Zend_View_Helper_HeadLink extends Zend_View_Helper_Placeholder_Container_S
         $title = (string) $title;
 
         $attributes = compact('rel', 'href', 'type', 'title', 'extras');
-        return $this->createData($attributes);
+        return $this->createData($this->_applyExtras($attributes));
+    }
+
+    /**
+     * Apply any overrides specified in the 'extras' array
+     * @param array $attributes
+     * @return array
+     */
+    protected function _applyExtras($attributes)
+    {
+        if (isset($attributes['extras'])) {
+            foreach ($attributes['extras'] as $eKey=>$eVal) {
+                if (isset($attributes[$eKey])) {
+                    $attributes[$eKey] = $eVal;
+                    unset($attributes['extras'][$eKey]);
+                }
+            }
+        }
+        return $attributes;
     }
 }

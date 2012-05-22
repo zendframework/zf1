@@ -467,6 +467,16 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
         $this->helper->appendStylesheet(array('href' => '/bar/baz', 'id' => 'foo'));
         $this->assertContains('id="foo"', $this->helper->toString());
     }
+
+    /**
+     * @group ZF-11811
+     */
+    public function testHeadLinkAllowsOverrideOfRelAttribute()
+    {
+        $this->helper->appendStylesheet('/css/auth.less', 'all', null, array('rel' => 'stylesheet/less'));
+        $this->assertEquals(1, substr_count($this->helper->toString(), "rel=\""));
+        $this->assertContains('rel="stylesheet/less"', $this->helper->toString());
+    }
 }
 
 // Call Zend_View_Helper_HeadLinkTest::main() if this source file is executed directly.
