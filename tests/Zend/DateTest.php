@@ -5679,6 +5679,16 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($t, $date->toString('yyyy-MM-dd HH:mm:ss'));
     }
 
+    /**
+     * @group ZF-11846
+     */
+    public function testGetTimezoneFromStringForTimezoneOffsetsGreaterThan12()
+    {
+        $date = new Zend_Date();
+        $this->assertEquals('Etc/GMT-13', $date->getTimezoneFromString('18:00:00+1300'));
+        $this->assertEquals('Etc/GMT-14', $date->getTimezoneFromString('18:00:00+1400'));
+    }
+
 }
 
 class Zend_Date_TestHelper extends Zend_Date

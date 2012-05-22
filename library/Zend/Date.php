@@ -1201,7 +1201,7 @@ class Zend_Date extends Zend_Date_DateObject
         }
 
         preg_match('/([+-]\d{2}):{0,1}\d{2}/', $zone, $match);
-        if (!empty($match) and ($match[count($match) - 1] <= 12) and ($match[count($match) - 1] >= -12)) {
+        if (!empty($match) and ($match[count($match) - 1] <= 14) and ($match[count($match) - 1] >= -12)) {
             $zone = "Etc/GMT";
             $zone .= ($match[count($match) - 1] < 0) ? "+" : "-";
             $zone .= (int) abs($match[count($match) - 1]);
