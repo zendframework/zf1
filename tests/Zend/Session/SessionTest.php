@@ -1063,4 +1063,51 @@ class Zend_SessionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-3378
+     */
+    public function testInvalidPreexistingSessionIdDoesNotPreventRegenerationOfSid()
+    {
+        // Pattern: [0-9a-v]*
+        ini_set('session.hash_bits_per_character', 5);
+
+        // Session store
+        $sessionCharSet = array_merge(range(0,9), range('a','v'));
+        $sessionStore = dirname(__FILE__)
+                      . DIRECTORY_SEPARATOR . "_files"
+                      . DIRECTORY_SEPARATOR . "ZF-3378";
+        if ( !is_dir($sessionStore) ) @mkdir($sessionStore, 0755, true);
+        ini_set('session.save_path', "1;666;" . $sessionStore);
+
+        // When using subdirs for session.save_path, the directory structure
+        // is your own responsibility...set it up, or else bad things happen
+        foreach ( $sessionCharSet as $subdir ) {
+            @mkdir($sessionStore . DIRECTORY_SEPARATOR . $subdir);
+        }
+
+        // Set session ID to invalid value
+        session_id('xxx');
+
+        // Attempt to start the session
+        try {
+            /** @see Zend_Session */
+            require_once "Zend/Session.php";
+            Zend_Session::start();
+        } catch (Zend_Session_Exception $e) {
+            Zend_Session::regenerateId();
+        }
+        // Get the current SID
+        $sid = Zend_Session::getId();
+
+        // We don't need the session any more, clean it up
+        Zend_Session::destroy();
+        foreach ( $sessionCharSet as $subdir ) {
+            @rmdir($sessionStore . DIRECTORY_SEPARATOR . $subdir);
+        }
+        @rmdir($sessionStore);
+
+        // Check the result
+        $this->assertRegExp('/^[0-9a-v]+$/', $sid);
+        $this->assertNotEquals('xxx', $sid);
+    }
 }
