@@ -118,4 +118,98 @@ class Zend_Http_Client_ProxyAdapterTest extends Zend_Http_Client_SocketTest
          * the TRACE response
          */
     }
+    
+    /**
+     * @group ZF-3189
+     */
+    public function testConnectHandshakeSendsCustomUserAgentHeader()
+    {      
+        // Change the adapter
+        $this->config['adapter'] = 'ZF3189_ProxyAdapter';
+        $this->config['useragent'] = 'ZendTest';
+        parent::setUp();
+        
+        $base = preg_replace("/^http:/", "https:", $this->baseuri);
+        $this->client->setUri($base . 'testSimpleRequests.php');
+
+        // Ensure we're proxying a HTTPS request
+        $this->assertEquals('https', $this->client->getUri()->getScheme());
+        
+        // Perform the request
+        $this->client->request();
+
+        $this->assertRegExp(
+            "/\r\nUser-Agent: {$this->config['useragent']}\r\n/i",
+            $this->client->getAdapter()->getLastConnectHandshakeRequest()
+        );
+    }
+    
+    /**
+     * @group ZF-3189
+     */
+    public function testConnectHandshakeSendsCustomUserAgentHeaderWhenSetInHeaders()
+    {      
+        // Change the adapter
+        $this->config['adapter'] = 'ZF3189_ProxyAdapter';
+        parent::setUp();
+        
+        $base = preg_replace("/^http:/", "https:", $this->baseuri);
+        $this->client->setUri($base . 'testSimpleRequests.php');
+        $this->client->setHeaders('User-Agent', 'ZendTest');
+
+        // Ensure we're proxying a HTTPS request
+        $this->assertEquals('https', $this->client->getUri()->getScheme());
+        
+        // Perform the request
+        $this->client->request();
+        print_r($this->client->getAdapter()->getLastConnectHandshakeRequest());
+        $this->assertRegExp(
+            "/\r\nUser-Agent: ZendTest\r\n/i",
+            $this->client->getAdapter()->getLastConnectHandshakeRequest()
+        );
+    }
+    
+    /**
+     * @group ZF-3189
+     */
+    public function testProxyAdapterDoesNotOverwriteExistingProxyAuthorizationHeader()
+    {      
+        // Change the adapter
+        $this->config['adapter'] = 'ZF3189_ProxyAdapter';
+        parent::setUp();
+        
+        $base = preg_replace("/^http:/", "https:", $this->baseuri);
+        $this->client->setUri($base . 'testSimpleRequests.php');
+        $this->client->setHeaders('Proxy-Authorization', 'FooBarBaz');
+
+        // Ensure we're proxying a HTTPS request
+        $this->assertEquals('https', $this->client->getUri()->getScheme());
+        
+        // Perform the request
+        $this->client->request();
+        print_r($this->client->getAdapter()->getLastConnectHandshakeRequest());
+        
+        $resp = $this->client->getAdapter()->getLastConnectHandshakeRequest();
+        $this->assertEquals(1, preg_match_all('/\r\nProxy-Authorization: ([^\r\n]+)\r\n/i', $resp, $matches));
+        $this->assertEquals('FooBarBaz', $matches[1][0]);
+    }
+    
+}
+
+/**
+ * Exposes internal variable connectHandshakeRequest for test purposes
+ * @see ZF-3189
+ */
+class ZF3189_ProxyAdapter extends Zend_Http_Client_Adapter_Proxy
+{
+    
+    /**
+     * Retrieve the request data from last CONNECT handshake
+     * @return string
+     */
+    public function getLastConnectHandshakeRequest()
+    {
+        return $this->connectHandshakeRequest;
+    }
+    
 }
