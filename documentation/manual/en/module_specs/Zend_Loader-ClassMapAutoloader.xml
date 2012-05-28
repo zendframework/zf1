@@ -16,14 +16,7 @@
 
         <para>
             In order to use the <classname>ClassMapAutoloader</classname>, you first need class
-            maps. Zend Framework ships with a class map per component or, if you grabbed the entire
-            ZF distribution, a class map for the entire Zend Framework. These maps are typically in
-            a file named <filename>.classmap.php</filename> within either the "Zend" directory, or
-            an individual component's source directory.
-        </para>
-
-        <para>
-            Zend Framework also provides a tool for generating these class maps; you can find it in
+            maps. Zend Framework also provides a tool for generating these class maps; you can find it in
             <filename>bin/classmap_generator.php</filename> of the distribution. Full documentation
             of this too is provided in <xref linkend="zend.loader.classmap-generator"/>.
         </para>
@@ -42,7 +35,7 @@ php classmap_generator.php Some/Directory/
 ]]></programlisting>
 
         <para>
-            This will create a file named <filename>Some/Directory/.classmap.php</filename>, which
+            This will create a file named <filename>Some/Directory/autoload_classmap.php</filename>, which
             is a PHP file returning an associative array that represents the class map.
         </para>
 
@@ -59,7 +52,7 @@ require_once 'Zend/Loader/ClassMapAutoloader.php';
 $loader = new Zend_Loader_ClassMapAutoloader();
 
 // Register the class map:
-$loader->registerAutoloadMap('Some/Directory/.classmap.php');
+$loader->registerAutoloadMap('Some/Directory/autoload_classmap.php');
 
 // Register with spl_autoload:
 $loader->register();
@@ -97,8 +90,8 @@ $loader->register();
                     <programlisting language="php"><![CDATA[
 // Configuration defining both a file-based class map, and an array map
 $config = array(
-    __DIR__ . '/library/.classmap.php', // file-based class map
-    array(                              // array class map
+    __DIR__ . '/library/autoload_classmap.php', // file-based class map
+    array(                                      // array class map
         'Application_Bootstrap' => __DIR__ . '/application/Bootstrap.php',
         'Test_Bootstrap'        => __DIR__ . '/tests/Bootstrap.php',
     ),
@@ -309,7 +302,7 @@ $config = array(
             <programlisting language="php"><![CDATA[
 // Configuration defining both a file-based class map, and an array map
 $config = array(
-APPLICATION_PATH . '/../library/.classmap.php', // file-based class map
+APPLICATION_PATH . '/../library/autoload_classmap.php', // file-based class map
     array(                              // array class map
         'Application_Bootstrap' => APPLICATION_PATH . '/Bootstrap.php',
         'Test_Bootstrap'        => APPLICATION_PATH . '/../tests/Bootstrap.php',
@@ -322,7 +315,7 @@ APPLICATION_PATH . '/../library/.classmap.php', // file-based class map
             </para>
 
             <programlisting language="ini"><![CDATA[
-classmap.library = APPLICATION_PATH "/../library/.classmap.php"
+classmap.library = APPLICATION_PATH "/../library/autoload_classmap.php"
 classmap.resources.Application_Bootstrap = APPLICATION_PATH "/Bootstrap.php"
 classmap.resources.Test_Bootstrap = APPLICATION_PATH "/../tests/Bootstrap.php"
 ]]></programlisting>
