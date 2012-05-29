@@ -458,10 +458,23 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         );
         $this->element->setAttribs($attribs);
 
-        $attribs['helper'] = 'formText';
-
         $received = $this->element->getAttribs();
         $this->assertEquals($attribs, $received);
+    }
+
+    /**
+     * @group ZF-6061
+     */
+    public function testHelperDoesNotShowUpInAttribs()
+    {
+        $attribs = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
+            'baz' => 'bat'
+        );
+        $this->element->setAttribs($attribs);
+
+        $this->assertFalse(array_key_exists('helper', $this->element->getAttribs()));
     }
 
     public function testPassingNullValuesToSetAttribsUnsetsAttribs()

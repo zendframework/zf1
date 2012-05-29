@@ -222,6 +222,21 @@ class Zend_Form_Decorator_ViewScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains('This text prefixes the content', $test);
         $this->assertContains('This text appends the content', $test);
     }
+
+    /**
+     * @group ZF-6061
+     */
+    public function testRenderingWithoutHelperInAttribs()
+    {
+        $this->decorator->setViewScript('withouthelperinattribs.phtml')
+            ->setElement($this->getElement());
+
+        $expected = 'Foo:'
+                  . "\n"
+                  . '<input type="text" name="foo" id="foo" value="">';
+
+        $this->assertSame($expected, $this->decorator->render('Foo:'));
+    }
 }
 
 // Call Zend_Form_Decorator_ViewScriptTest::main() if this source file is executed directly.

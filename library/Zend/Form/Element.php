@@ -904,6 +904,7 @@ class Zend_Form_Element implements Zend_Validate_Interface
     public function getAttribs()
     {
         $attribs = get_object_vars($this);
+        unset($attribs['helper']);
         foreach ($attribs as $key => $value) {
             if ('_' == substr($key, 0, 1)) {
                 unset($attribs[$key]);
