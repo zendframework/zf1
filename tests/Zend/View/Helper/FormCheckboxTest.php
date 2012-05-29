@@ -302,6 +302,46 @@ class Zend_View_Helper_FormCheckboxTest extends PHPUnit_Framework_TestCase
         $test = $this->helper->formCheckbox('foo', 0, array(), array(1,0));
         $this->assertNotContains('checked="checked"', $test);
     }
+
+    /**
+     * @group ZF-6624
+     */
+    public function testRenderingWithoutHiddenElement()
+    {
+        $html = $this->helper->formCheckbox(
+            'foo',
+            'bar',
+            array(
+                 'disableHidden' => true,
+            )
+        );
+        $this->assertSame(
+            '<input type="checkbox" name="foo" id="foo" value="bar">',
+            $html
+        );
+
+        $html = $this->helper->formCheckbox(
+            'foo',
+            'bar');
+
+        $this->assertSame(
+            '<input type="hidden" name="foo" value="0"><input type="checkbox" name="foo" id="foo" value="bar">',
+            $html
+        );
+
+        $html = $this->helper->formCheckbox(
+            'foo',
+            'bar',
+            array(
+                 'disableHidden' => false,
+            )
+        );
+
+        $this->assertSame(
+            '<input type="hidden" name="foo" value="0"><input type="checkbox" name="foo" id="foo" value="bar">',
+            $html
+        );
+    }
 }
 
 // Call Zend_View_Helper_FormCheckboxTest::main() if this source file is executed directly.

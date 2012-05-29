@@ -83,9 +83,16 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement
 
         // build the element
         $xhtml = '';
-        if (!$disable && !strstr($name, '[]')) {
+        if ((!$disable && !strstr($name, '[]'))
+            && (empty($attribs['disableHidden']) || !$attribs['disableHidden'])
+        ) {
             $xhtml = $this->_hidden($name, $checkedOptions['uncheckedValue']);
         }
+
+        if (array_key_exists('disableHidden', $attribs)) {
+            unset($attribs['disableHidden']);
+        }
+
         $xhtml .= '<input type="checkbox"'
                 . ' name="' . $this->view->escape($name) . '"'
                 . ' id="' . $this->view->escape($id) . '"'
