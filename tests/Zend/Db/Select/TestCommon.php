@@ -1712,6 +1712,24 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
     }
 
     /**
+     * @group ZF-5953
+     */
+    public function testJoinUsingAllowsSpecifyingMultipleColumnsViaAnArray()
+    {
+        $table_A = $this->_db->quoteTableAs('A');
+        $table_B = $this->_db->quoteTableAs('B');
+        $colOne  = $this->_db->quoteIdentifier('colOne');
+        $colTwo  = $this->_db->quoteIdentifier('colTwo');
+        
+        $s = $this->_db->select()->from('A')->joinUsing('B', array($colOne,$colTwo));
+        $this->assertContains(
+            "JOIN {$table_B} ON {$table_B}.{$colOne} = {$table_A}.{$colOne}"
+            . " AND {$table_B}.{$colTwo} = {$table_A}.{$colTwo}",
+            $s->assemble()
+        );
+    }
+
+    /**
      * @group ZF-3309
      */
     public function testJoinUsingUsesTableNameOfTableBeingJoinedWhenAliasNotDefined()

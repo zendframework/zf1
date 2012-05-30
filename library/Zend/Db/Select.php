@@ -880,9 +880,13 @@ class Zend_Db_Select
         $join  = $this->_adapter->quoteIdentifier(key($this->_parts[self::FROM]), true);
         $from  = $this->_adapter->quoteIdentifier($this->_uniqueCorrelation($name), true);
 
-        $cond1 = $from . '.' . $cond;
-        $cond2 = $join . '.' . $cond;
-        $cond  = $cond1 . ' = ' . $cond2;
+        $joinCond = array();
+        foreach ((array)$cond as $fieldName) {
+            $cond1 = $from . '.' . $fieldName;
+            $cond2 = $join . '.' . $fieldName;
+            $joinCond[]  = $cond1 . ' = ' . $cond2;
+        }
+        $cond = implode(' '.self::SQL_AND.' ', $joinCond);
 
         return $this->_join($type, $name, $cond, $cols, $schema);
     }
