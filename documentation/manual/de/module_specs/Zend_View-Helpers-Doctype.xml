@@ -21,8 +21,9 @@
         <listitem><para><constant>XHTML11</constant></para></listitem>
         <listitem><para><constant>XHTML1_STRICT</constant></para></listitem>
         <listitem><para><constant>XHTML1_TRANSITIONAL</constant></para></listitem>
-        <listitem><para><constant>XHTML_BASIC1</constant></para></listitem>
         <listitem><para><constant>XHTML1_FRAMESET</constant></para></listitem>
+        <listitem><para><constant>XHTML1_RDFA</constant></para></listitem>
+        <listitem><para><constant>XHTML_BASIC1</constant></para></listitem>
         <listitem><para><constant>HTML4_STRICT</constant></para></listitem>
         <listitem><para><constant>HTML4_LOOSE</constant></para></listitem>
         <listitem><para><constant>HTML4_FRAMESET</constant></para></listitem>
@@ -94,4 +95,67 @@ if ($view->doctype()->isHtml5()) {
 }
 ]]></programlisting>
     </example>
+
+    <example id="zend.view.helpers.initial.doctype.xhtml1_rdfa">
+        <title>
+            Eine geeignete Dokumenttypdeklaration für die Arbeit mit dem Open
+            Graph Protokoll wählen
+        </title>
+
+        <para>
+            Um das <ulink url="http://opengraphprotocol.org/">
+            Open Graph Protokoll</ulink> zu implementieren, muss
+            <constant>XHTML1_RDFA</constant> als Dokumenttypdeklaration gesetzt werden.
+            Diese Dokumenttypdeklaration erlaubt es Entwicklern, das
+            <ulink url="http://www.w3.org/TR/xhtml-rdfa-primer/">Resource Description
+            Framework</ulink> innerhalb von <acronym>XHTML</acronym>-Dokumenten
+            zu verwenden.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$doctypeHelper = new Zend_View_Helper_Doctype();
+$doctypeHelper->doctype('XHTML1_RDFA');
+]]></programlisting>
+
+        <para>
+        Der RDFa-Dokumenttyp erlaubt eine erfolgreiche Validierung von XHTML-Dokumenten,
+        wenn das Meta-Tag-Attribute 'property' aus dem Open Graph-Protokoll
+        verwendet wird. Beispielanwendung innerhalb eines View-Skripts:
+        </para>
+
+        <programlisting language="html"><![CDATA[
+<?php echo $this->doctype('XHTML1_RDFA'); ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://opengraphprotocol.org/schema/">
+<head>
+   <meta property="og:type" content="musician" />
+]]></programlisting>
+
+        <para>
+            Im vorangegangenen Beispiel wurde das Attribut 'property' auf den Wert
+            'og:type' gesetzt. 'og' bezieht sich dabei auf den Open Graph-Namensraum,
+            welcher im HTML-Element definiert wurde.
+            Die obige Angabe weist den Inhalt des Dokumentes als Seite über einen
+            Musiker aus. Je nach Inhalt einer Seite, muss der
+            <link linkend="zend.view.helpers.initial.headmeta">HeadMeta-Helfer</link>,
+            - innerhalb einer Applikation - gesondert aufgerufen werden.
+            Weitere mögliche Angaben sind in der
+            <ulink url="http://opengraphprotocol.org/">Open Graph Protokoll-Dokumentation</ulink>
+            aufgeführt.
+        </para>
+
+        <para>
+            Nachfolgend ein Beispiel, wie man prüfen kann, ob die Dokumenttypdeklaration
+            <constant>XHTML1_RDFA</constant> entspricht:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      <?php if ($view->doctype()->isRdfa()): ?>
+      xmlns:og="http://opengraphprotocol.org/schema/"
+      xmlns:fb="http://www.facebook.com/2008/fbml"
+      <?php endif; ?>
+>
+]]></programlisting>
 </sect3>
