@@ -217,7 +217,8 @@ abstract class Zend_Db_TestUtil_Common
         'noprimarykey'  => 'zfnoprimarykey',
         'Documents'     => 'zfdocuments',
         'Price'         => 'zfprice',
-        'AltBugsProducts' => 'zfalt_bugs_products'
+        'AltBugsProducts' => 'zfalt_bugs_products',
+        'CascadeRecursive' => 'zfalt_cascade_recursive'
     );
 
     public function getTableName($tableId)
@@ -289,6 +290,16 @@ abstract class Zend_Db_TestUtil_Common
             'price_total'   => 'DECIMAL(10,2) NOT NULL',
             'PRIMARY KEY'   => 'product_id'
             );
+    }
+
+    protected function _getColumnsCascadeRecursive()
+    {
+        return array(
+            'item_id'       => 'INTEGER NOT NULL',
+            'item_parent'   => 'INTEGER NULL',
+            'item_data'     => 'VARCHAR(100)',
+            'PRIMARY KEY'   => 'item_id'
+        );
     }
 
     protected function _getDataAccounts()
@@ -407,6 +418,18 @@ abstract class Zend_Db_TestUtil_Common
         );
     }
 
+    protected function _getDataCascadeRecursive()
+    {
+        return array(
+            array('item_id' => '1', 'item_parent' => NULL, 'item_data' => '1'),
+            array('item_id' => '2', 'item_parent' => '1', 'item_data' => '1.2'),
+            array('item_id' => '3', 'item_parent' => '1', 'item_data' => '1.3'),
+            array('item_id' => '4', 'item_parent' => '3', 'item_data' => '1.3.4'),
+            array('item_id' => '5', 'item_parent' => '3', 'item_data' => '1.3.5'),
+            array('item_id' => '6', 'item_parent' => NULL, 'item_data' => '6')
+        );
+    }
+
     public function populateTable($tableId)
     {
         $tableName = $this->getTableName($tableId);
@@ -486,6 +509,9 @@ abstract class Zend_Db_TestUtil_Common
 
         $this->createTable('Price');
         $this->populateTable('Price');
+
+        $this->createTable('CascadeRecursive');
+        $this->populateTable('CascadeRecursive');
 
         $this->createView();
     }
