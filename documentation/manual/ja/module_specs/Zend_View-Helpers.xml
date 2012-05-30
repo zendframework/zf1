@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 24249 -->
+<!-- EN-Revision: 24825 -->
 <sect1 id="zend.view.helpers" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>ビューヘルパー</title>
 
@@ -111,6 +111,8 @@
                     そしてチェック状態の値として '1' を使用します。
                     $value が渡されたけれど $options が存在しなかった場合は、
                     渡された値をチェック状態の値とみなします。
+                    チェックボックスをレンダリングする前に hidden 入力要素をレンダリングすることにより、
+                    unchecked 値を実装します。
                 </para>
 
                 <para>
@@ -119,6 +121,8 @@
                     その次の要素が未チェック状態の値となります。
                     3 番目以降の要素の内容は無視されます。
                     キー 'checked' および 'unChecked' を持つ連想配列を指定することもできます。
+                    unchecked 値に対して hidden フィールドをレンダリングすることを防ぐには、
+                    キー 'disableHidden' を true に設定できます。
                 </para>
 
                 <para>
@@ -186,9 +190,8 @@ echo $this->formCheckbox('foo',
                 </para>
 
                 <para>
-                    エラー出力の開始時、終了時、そして各エラーの区切りとして使用する
+                    エラーをレンダリングする際に、ヘルパーのいくつかのメソッドを呼び出して代わりの開始、終了および区切りの
                     コンテンツを指定することもできます。
-                    そのためにはヘルパーのこれらのメソッドをコールします。
                 </para>
 
                 <itemizedlist>
@@ -570,37 +573,35 @@ class My_View_Helper_ScriptPath
         </para>
     </sect2>
 
-    <!-- TODO : to be translated -->
     <sect2 id="zend.view.helpers.registering-concrete">
-        <title>Registering Concrete Helpers</title>
+        <title>実在するヘルパーを登録</title>
 
         <para>
-            Sometimes it is convenient to instantiate a view helper, and then register it with the
-            view. As of version 1.10.0, this is now possible using the
-            <methodname>registerHelper()</methodname> method, which expects two arguments: the
-            helper object, and the name by which it will be registered.
+            時には、ビュー・ヘルパーをインスタンス化して、それからビューで登録すると便利です。
+            バージョン 1.10.0 時点で、これは <methodname>registerHelper()</methodname> メソッドを用いると可能です。
+            それは２つの引数を期待します。それは、ヘルパー・オブジェクトと登録される名前です。
         </para>
 
         <programlisting language="php"><![CDATA[
 $helper = new My_Helper_Foo();
-// ...do some configuration or dependency injection...
+// ...何らかの構成または依存性注入を行います...
 
 $view->registerHelper($helper, 'foo');
 ]]></programlisting>
 
         <para>
-            If the helper has a <methodname>setView()</methodname> method, the view object will call
-            this and inject itself into the helper on registration.
+            ヘルパーに <methodname>setView()</methodname> メソッドがあると、
+            ビュー・オブジェクトはこれを呼び出して、登録時に自分自身をヘルパーに注入します。
         </para>
 
         <note>
-            <title>Helper name should match a method</title>
+            <title>ヘルパー名はメソッドと一致しなければいけません</title>
 
             <para>
-                The second argument to <methodname>registerHelper()</methodname> is the name of the
-                helper. A corresponding method name should exist in the helper; otherwise,
-                <classname>Zend_View</classname> will call a non-existent method when invoking the
-                helper, raising a fatal <acronym>PHP</acronym> error.
+                <methodname>registerHelper()</methodname> の２番目の引数はヘルパー名です。
+                対応するメソッド名がヘルパー内に存在しなければいけません。
+                さもなければ、ヘルパー起動時に <classname>Zend_View</classname> が存在しないメソッドを呼び出して
+                致命的な <acronym>PHP</acronym> エラーを引き起こします。
             </para>
         </note>
     </sect2>
