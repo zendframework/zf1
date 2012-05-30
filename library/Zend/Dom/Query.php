@@ -124,7 +124,7 @@ class Zend_Dom_Query
         }
         // breaking XML declaration to make syntax highlighting work
         if ('<' . '?xml' == substr(trim($document), 0, 5)) {
-            if (preg_match('/\?'.'>\s+<html[^>]*xmlns="([^"]+)"[^>]*>/i', $document, $matches)) {
+            if (preg_match('/<html[^>]*xmlns="([^"]+)"[^>]*>/i', $document, $matches)) {
                 $this->_xpathNamespaces[] = $matches[1];
                 return $this->setDocumentXhtml($document, $encoding);
             }
