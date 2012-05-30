@@ -45,14 +45,8 @@ class Zend_Search_Lucene_Analysis_TokenFilter_LowerCase extends Zend_Search_Luce
      */
     public function normalize(Zend_Search_Lucene_Analysis_Token $srcToken)
     {
-        $newToken = new Zend_Search_Lucene_Analysis_Token(
-                                     strtolower( $srcToken->getTermText() ),
-                                     $srcToken->getStartOffset(),
-                                     $srcToken->getEndOffset());
-
-        $newToken->setPositionIncrement($srcToken->getPositionIncrement());
-
-        return $newToken;
+        $srcToken->setTermText(strtolower($srcToken->getTermText()));
+        return $srcToken;
     }
 }
 

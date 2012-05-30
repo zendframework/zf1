@@ -123,6 +123,18 @@ class Zend_Search_Lucene_Analysis_Token
     {
         return $this->_termText;
     }
+    
+    /**
+     * Sets the Token's term text.
+     * 
+     * @param string $text
+     * @return this
+     */
+    public function setTermText($text)
+    {
+        $this->_termText = $text;
+        return $this;
+    }
 
     /**
      * Returns this Token's starting offset, the position of the first character
