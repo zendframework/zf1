@@ -174,6 +174,60 @@ class Zend_Controller_Action_Helper_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($layout->isEnabled());
         $this->assertFalse($this->viewRenderer->getNoRender());
     }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testEncodeJsonWillAcceptPreencodedJson()
+    {
+        $data = $this->helper->encodeJson(Zend_Json::encode(array('f')), false, false);
+        $this->assertEquals('["f"]', $data);
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testSendJsonWillAcceptPreencodedJson()
+    {
+        $data = $this->helper->sendJson(Zend_Json::encode(array('f')), false, false);
+        $this->assertEquals('["f"]', $data);
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testDirectWillAcceptPreencodedJson()
+    {
+        $data = $this->helper->direct(Zend_Json::encode(array('f')), false, false, false);
+        $this->assertEquals('["f"]', $data);
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testSendingPreencodedJsonViaDirectWillStillSendHeaders()
+    {
+        $data = $this->helper->direct(Zend_Json::encode(array('f')), false, false, false);
+        $this->verifyJsonHeader();
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testSendingPreencodedJsonViaSendJsonWillStillSendHeaders()
+    {
+        $data = $this->helper->sendJson(Zend_Json::encode(array('f')), false, false);
+        $this->verifyJsonHeader();
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testSendingPreencodedJsonViaEncodeJsonWillStillSendHeaders()
+    {
+        $data = $this->helper->encodeJson(Zend_Json::encode(array('f')), false, false);
+        $this->verifyJsonHeader();
+    }
 }
 
 /**

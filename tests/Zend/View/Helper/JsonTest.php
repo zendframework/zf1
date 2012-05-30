@@ -143,6 +143,24 @@ class Zend_View_Helper_JsonTest extends PHPUnit_Framework_TestCase
         $data = $this->helper->json(array('foobar'), true);
         $this->assertTrue($layout->isEnabled());
     }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testJsonHelperWillAcceptPreencodedJson()
+    {
+        $data = $this->helper->json(Zend_Json::encode(array('f')), false, false);
+        $this->assertEquals('["f"]', $data);
+    }
+    
+    /**
+     * @group ZF-10977
+     */
+    public function testJsonHelperWillSendHeadersWhenProvidedWithPreencodedJson()
+    {
+        $data = $this->helper->json(Zend_Json::encode(array('f')), false, false);
+        $this->verifyJsonHeader();
+    }
 }
 
 /**
