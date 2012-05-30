@@ -518,6 +518,22 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         $messages = $this->_validator->getMessageTemplates();
         $this->assertEquals('TestMessage', $messages[Zend_Validate_EmailAddress::INVALID]);
     }
+    
+    /**
+     * Testing setMessage for all messages
+     *
+     * @group ZF-10690
+     */
+    public function testSetMultipleMessages()
+    {
+        $messages = $this->_validator->getMessageTemplates();
+        $this->assertNotEquals('TestMessage', $messages[Zend_Validate_EmailAddress::INVALID]);
+        $this->_validator->setMessage('TestMessage');
+        $messages = $this->_validator->getMessageTemplates();
+        $this->assertEquals('TestMessage', $messages[Zend_Validate_EmailAddress::INVALID]);
+        $this->assertEquals('TestMessage', $messages[Zend_Validate_EmailAddress::INVALID_FORMAT]);
+        $this->assertEquals('TestMessage', $messages[Zend_Validate_EmailAddress::DOT_ATOM]);
+    }
 
     /**
      * Testing validateMxSupported
