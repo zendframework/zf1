@@ -130,16 +130,26 @@ class Zend_Controller_Action_Helper_Cache
     public function removePage($relativeUrl, $recursive = false)
     {
         $cache = $this->getCache(Zend_Cache_Manager::PAGECACHE);
+        $encodedCacheId = $this->_encodeCacheId($relativeUrl);
+
         if ($recursive) {
             $backend = $cache->getBackend();
             if (($backend instanceof Zend_Cache_Backend)
                 && method_exists($backend, 'removeRecursively')
             ) {
-                return $backend->removeRecursively($relativeUrl);
+                $result = $backend->removeRecursively($encodedCacheId);
+                if (is_null($result) ) {
+                    $result = $backend->removeRecursively($relativeUrl);
+                }
+                return $result;
             }
         }
 
-        return $cache->remove($relativeUrl);
+        $result = $cache->remove($encodedCacheId);
+        if (is_null($result) ) {
+            $result = $cache->remove($relativeUrl);
+        }
+        return $result;
     }
 
     /**
