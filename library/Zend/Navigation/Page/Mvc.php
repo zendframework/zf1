@@ -235,8 +235,6 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
             $url .= '#' . $fragment;
         }         
         
-         return $this->_hrefCache = $url;
-
         return $this->_hrefCache = $url;
     }
 
