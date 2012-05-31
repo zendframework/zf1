@@ -127,12 +127,8 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
             return $prefix;
         }
 
-        $last = strlen($prefix) - 1;
-        if ($prefix{$last} == '\\') {
-            return $prefix;
-        }
-
-        return rtrim($prefix, '_') . '_';
+        $nsSeparator = (false !== strpos($prefix, '\\'))?'\\':'_';
+        return rtrim($prefix, $nsSeparator) . $nsSeparator;
     }
 
     /**

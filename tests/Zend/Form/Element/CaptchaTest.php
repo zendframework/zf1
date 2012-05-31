@@ -410,6 +410,36 @@ class Zend_Form_Element_CaptchaTest extends PHPUnit_Framework_TestCase
             var_export($decorators, true)
         );
     }
+    
+    /**
+     * @group ZF-12173
+     */
+    public function testShouldAllowAddingCaptchaPrefixPathWithBackslash()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            return;
+        }
+        $this->element->addPrefixPath('My\Captcha', 'My/Captcha/', 'captcha');
+        $loader = $this->element->getPluginLoader('captcha');
+        $paths  = $loader->getPaths('My\Captcha');
+        $this->assertTrue(is_array($paths));
+    }
+    
+    /**
+     * @group ZF-12173
+     */
+    public function testAddingCaptchaPrefixPathWithBackslash()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            return;
+        }
+        $this->element->addPrefixPath('My\\', 'My/');
+        $loader = $this->element->getPluginLoader('captcha');
+        $paths  = $loader->getPaths('My\Captcha');
+        $this->assertTrue(is_array($paths));
+    }
 }
 
 /**

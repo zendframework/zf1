@@ -4534,6 +4534,26 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
             'SubForm element received wrong validator'
         );        
     }
+
+    /**
+     * @group ZF-12173
+     */
+    public function testAddingPrefixPathsWithBackslashWillLoadNamespacedPlugins()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            return;
+        }
+        $form = new Zend_Form();
+        $form->addPrefixPath('Zf\Foo', 'Zf/Foo');
+        foreach (array('element', 'decorator') as $type) {
+            $loader = $form->getPluginLoader($type);
+            $paths = $loader->getPaths('Zf\Foo\\' . ucfirst($type));
+            $this->assertTrue(is_array($paths), "Failed for type $type: " . var_export($paths, 1));
+            $this->assertFalse(empty($paths));
+            $this->assertContains('Foo', $paths[0]);
+        }
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup

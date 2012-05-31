@@ -491,6 +491,21 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->element, $this->element->loadDefaultDecorators());
     }
+    
+    /**
+     * @group ZF-12173
+     */
+    public function testElementShouldAllowAdapterWithBackslahes()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            return;
+        }
+        $this->element->addPrefixPath('Zend\Form\Element\FileTest\Adapter', dirname(__FILE__) . '/_files/TransferAdapter', 'transfer_adapter');
+        $this->element->setTransferAdapter('Bar');
+        $test = $this->element->getTransferAdapter();
+        $this->assertTrue($test instanceof \Zend\Form\Element\FileTest\Adapter\Bar);
+    }
 }
 
 class Zend_Form_Element_FileTest_MockAdapter extends Zend_File_Transfer_Adapter_Abstract
