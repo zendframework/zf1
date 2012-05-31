@@ -219,7 +219,9 @@ abstract class Zend_Feed_Pubsubhubbub_CallbackAbstract
     protected function _detectCallbackUrl()
     {
         $callbackUrl = '';
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+        if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) {
+            $callbackUrl = $_SERVER['HTTP_X_ORIGINAL_URL'];
+        } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
             $callbackUrl = $_SERVER['HTTP_X_REWRITE_URL'];
         } elseif (isset($_SERVER['REQUEST_URI'])) {
             $callbackUrl = $_SERVER['REQUEST_URI'];
