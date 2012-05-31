@@ -35,7 +35,6 @@ require_once 'Zend/Service/LiveDocx/AllTests.php';
 require_once 'Zend/Service/Nirvanix/AllTests.php';
 require_once 'Zend/Service/ReCaptcha/AllTests.php';
 require_once 'Zend/Service/ShortUrl/AllTests.php';
-require_once 'Zend/Service/Simpy/AllTests.php';
 require_once 'Zend/Service/SlideShareTest.php';
 require_once 'Zend/Service/StrikeIron/AllTests.php';
 require_once 'Zend/Service/Technorati/AllTests.php';
@@ -83,7 +82,6 @@ class Zend_Service_AllTests
         $suite->addTest(Zend_Service_Nirvanix_AllTests::suite());
         $suite->addTest(Zend_Service_ReCaptcha_AllTests::suite());
         $suite->addTest(Zend_Service_ShortUrl_AllTests::suite());
-        $suite->addTest(Zend_Service_Simpy_AllTests::suite());
         $suite->addTestSuite('Zend_Service_SlideShareTest');
         $suite->addTest(Zend_Service_StrikeIron_AllTests::suite());
         $suite->addTest(Zend_Service_Technorati_AllTests::suite());
