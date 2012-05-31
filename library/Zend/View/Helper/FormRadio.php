@@ -157,7 +157,7 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement
 
             // Wrap the radios in labels
             $radio = '<label'
-                    . $this->_htmlAttribs($label_attribs) . ' for="' . $optId . '">'
+                    . $this->_htmlAttribs($label_attribs) . '>'
                     . (('prepend' == $labelPlacement) ? $opt_label : '')
                     . '<input type="' . $this->_inputType . '"'
                     . ' name="' . $name . '"'
