@@ -100,7 +100,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve HTTP status code for {@link _redirect()} behaviour
+     * Set HTTP status code for {@link _redirect()} behaviour
      *
      * @param  int $code
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
@@ -123,7 +123,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve exit flag for {@link _redirect()} behaviour
+     * Set exit flag for {@link _redirect()} behaviour
      *
      * @param  boolean $flag
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
@@ -146,7 +146,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve 'prepend base' flag for {@link _redirect()} behaviour
+     * Set 'prepend base' flag for {@link _redirect()} behaviour
      *
      * @param  boolean $flag
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
