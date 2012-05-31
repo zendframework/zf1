@@ -540,4 +540,30 @@ class Zend_View_Helper_Navigation_MenuTest
         
         $this->assertEquals($expected, $this->_helper->render($this->_nav3));
     }
+
+    /**
+     * @group ZF-6941
+     */
+    public function testExpandSiblingNodesOfActiveBranch()
+    {
+        $this->_helper->setExpandSiblingNodesOfActiveBranch(true);
+ 
+        $expected = $this->_getExpected('menu/expandbranch.html');
+        $actual = $this->_helper->renderMenu();
+ 
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-6941
+     */
+    public function testExpandSiblingNodesOfActiveBranchWhenShowingOnlyActiveBranch()
+    {
+        $this->_helper->setExpandSiblingNodesOfActiveBranch(true)->setOnlyActiveBranch(true);
+ 
+        $expected = $this->_getExpected('menu/expandbranch_onlyactivebranch.html');
+        $actual = $this->_helper->renderMenu();
+ 
+        $this->assertEquals($expected, $actual);
+    }
 }

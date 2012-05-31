@@ -66,6 +66,11 @@ class Zend_View_Helper_Navigation_Menu
     protected $_partial = null;
 
     /**
+     * Expand all sibling nodes of active branch nodes
+     */
+    protected $_expandSiblingNodesOfActiveBranch = false;
+    
+    /**
      * View helper entry point:
      * Retrieves helper and optionally sets container to operate on
      *
@@ -135,7 +140,33 @@ class Zend_View_Helper_Navigation_Menu
     {
         return $this->_onlyActiveBranch;
     }
+    
+    /**
+     * Sets a flag indicating whether to expand all sibling nodes of the active branch
+     * 
+     * @param  bool $flag                        [optional] expand all siblings of
+     *                                           nodes in the active branch. Default is true.
+     * @return Zend_View_Helper_Navigation_Menu  fluent interface, returns self
+     */
+    public function setExpandSiblingNodesOfActiveBranch($flag = true)
+    {
+        $this->_expandSiblingNodesOfActiveBranch = (bool) $flag;
+        return $this;
+    }
 
+    /**
+     * Returns a flag indicating whether to expand all sibling nodes of the active branch
+     *
+     * By default, this value is false, meaning the entire menu will be
+     * be rendered.
+     *
+     * @return bool  whether siblings of nodes in the active branch should be expanded
+     */
+    public function getExpandSiblingNodesOfActiveBranch()
+    {
+        return $this->_expandSiblingNodesOfActiveBranch;
+    }
+    
     /**
      * Enables/disables rendering of parents when only rendering active branch
      *
@@ -257,7 +288,7 @@ class Zend_View_Helper_Navigation_Menu
         } else {
             $options['indent'] = $this->getIndent();
         }
-
+        
         if (isset($options['ulClass']) && $options['ulClass'] !== null) {
             $options['ulClass'] = (string) $options['ulClass'];
         } else {
@@ -286,6 +317,10 @@ class Zend_View_Helper_Navigation_Menu
 
         if (!isset($options['onlyActiveBranch'])) {
             $options['onlyActiveBranch'] = $this->getOnlyActiveBranch();
+        }
+        
+        if (!isset($options['expandSiblingNodesOfActiveBranch'])) {
+            $options['expandSiblingNodesOfActiveBranch'] = $this->getExpandSiblingNodesOfActiveBranch();
         }
 
         if (!isset($options['renderParents'])) {
@@ -359,6 +394,7 @@ class Zend_View_Helper_Navigation_Menu
      * @param  int|null                  $minDepth    minimum depth
      * @param  int|null                  $maxDepth    maximum depth
      * @param  bool                      $onlyActive  render only active branch?
+     * @param  bool                      $expandSibs  render siblings of active branch nodes?
      * @return string
      */
     protected function _renderMenu(Zend_Navigation_Container $container,
@@ -366,7 +402,8 @@ class Zend_View_Helper_Navigation_Menu
                                    $indent,
                                    $minDepth,
                                    $maxDepth,
-                                   $onlyActive)
+                                   $onlyActive,
+                                   $expandSibs)
     {
         $html = '';
 
@@ -393,6 +430,21 @@ class Zend_View_Helper_Navigation_Menu
             if ($depth < $minDepth || !$this->accept($page)) {
                 // page is below minDepth or not accepted by acl/visibilty
                 continue;
+            } else if ($expandSibs && $depth > $minDepth) {
+            	// page is not active itself, but might be in the active branch
+                $accept = false;
+                if ($foundPage) {
+                    if ($foundPage->hasPage($page)) {
+                        // accept if page is a direct child of the active page
+                        $accept = true;
+                    } else if ($page->getParent()->isActive(true)) {
+                        // page is a sibling of the active branch...
+                        $accept = true;
+                    }
+                }
+            	if (!$isActive && !$accept) {
+                    continue;
+                }
             } else if ($onlyActive && !$isActive) {
                 // page is not active itself, but might be in the active branch
                 $accept = false;
@@ -503,7 +555,8 @@ class Zend_View_Helper_Navigation_Menu
                                        $options['indent'],
                                        $options['minDepth'],
                                        $options['maxDepth'],
-                                       $options['onlyActiveBranch']);
+                                       $options['onlyActiveBranch'],
+                                       $options['expandSiblingNodesOfActiveBranch']);
         }
 
         return $html;
