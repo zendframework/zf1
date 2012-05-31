@@ -1232,4 +1232,37 @@ class Zend_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $subPageTwoDiff = array_diff_assoc($toArray['pages'][1], $options);
         $this->assertEquals(array(), $subPageTwoDiff);
     }
+    
+    /**
+     * @group ZF-11805
+     */
+    public function testFactoryExceptionWhenNoPageTypeDetected()
+    {
+        // Without label
+        try {
+            $page = Zend_Navigation_Page::factory(array());
+            $this->fail('An invalid value was set, but a ' .
+                        'Zend_Navigation_Exception was not thrown');
+        } catch (Zend_Navigation_Exception $e) {
+            $this->assertSame(
+                'Invalid argument: Unable to determine class to instantiate', 
+                $e->getMessage()
+            );
+}
+        
+        // With label
+        try {
+            $page = Zend_Navigation_Page::factory(array(
+                'label' => 'Foo',
+            ));
+            $this->fail('An invalid value was set, but a ' .
+                        'Zend_Navigation_Exception was not thrown');
+        } catch (Zend_Navigation_Exception $e) {
+            $this->assertSame(
+                'Invalid argument: Unable to determine class to instantiate'
+                . ' (Page label: Foo)', 
+                $e->getMessage()
+            );
+        }
+    }
 }

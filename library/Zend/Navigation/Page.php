@@ -258,9 +258,14 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
             return new Zend_Navigation_Page_Uri($options);
         } else {
             require_once 'Zend/Navigation/Exception.php';
-            throw new Zend_Navigation_Exception(
-                'Invalid argument: Unable to determine class to instantiate');
+            
+            $message = 'Invalid argument: Unable to determine class to instantiate';
+            if (isset($options['label'])) {
+                $message .= ' (Page label: ' . $options['label'] . ')';
         }
+            
+            throw new Zend_Navigation_Exception($message);
+    }
     }
 
     /**
