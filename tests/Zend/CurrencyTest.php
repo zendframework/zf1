@@ -826,4 +826,28 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         $currency->setService('Zend_Currency_Service');
         $this->assertTrue($currency->getService() instanceof Zend_Currency_Service);
     }
+
+    /**
+     * @group ZF-11798
+     * @dataProvider providerConstructorAllowsOverridingCurrencyDisplayFormat
+     */
+    public function testConstructorAllowsOverridingCurrencyDisplayFormat($display, $expected)
+    {
+        $currency = new Zend_Currency(array('value' => 100, 'display' => $display), 'en_US');
+        $this->assertEquals($expected, $currency->toString());
+    }
+
+    /**
+     * Data Provider for testConstructorAllowsOverridingCurrencyDisplayFormat
+     * @see ZF-11798
+     */
+    public function providerConstructorAllowsOverridingCurrencyDisplayFormat()
+    {
+        return array(
+            array(Zend_Currency::NO_SYMBOL, '100.00'),
+            array(Zend_Currency::USE_SYMBOL, '$100.00'),
+            array(Zend_Currency::USE_SHORTNAME, 'USD100.00'),
+            array(Zend_Currency::USE_NAME, 'US Dollar100.00')
+        );
+    }
 }
