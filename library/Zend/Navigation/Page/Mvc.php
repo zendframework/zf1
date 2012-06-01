@@ -94,7 +94,6 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
      */
     protected $_resetParams = true;
 
-        
     /**
      * Whether href should be encoded when assembling URL
      *
@@ -102,6 +101,13 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
      * @var bool 
      */
     protected $_encodeUrl = true;
+
+    /**
+     * Whether this page should be considered active
+     *
+     * @var bool
+     */
+    protected $_active = null;
 
     /**
      * Cached href
@@ -137,7 +143,7 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
      */
     public function isActive($recursive = false)
     {
-        if (!$this->_active) {
+        if (null === $this->_active) {
             $front     = Zend_Controller_Front::getInstance();
             $request   = $front->getRequest();
             $reqParams = array();
@@ -186,6 +192,8 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                 $this->_active = true;
                 return true;
             }
+            
+            $this->_active = false;
         }
 
         return parent::isActive($recursive);

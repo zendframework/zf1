@@ -267,6 +267,34 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $page->isActive());
     }
 
+    /**
+     * @group ZF-11664
+     */
+    public function testIsActiveWithoutAndWithRecursiveOption()
+    {
+        // Parent
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'controller' => 'index',
+            'action'     => 'index',
+        ));
+
+        // Child
+        $page->addPage(new Zend_Navigation_Page_Mvc(array(
+            'controller' => 'index',
+            'action'     => 'foo',
+        )));
+
+        // Front controller
+        $this->_front->getRequest()->setParams(array(
+            'controller' => 'index',
+            'action'     => 'foo'
+        ));
+
+        $this->assertFalse($page->isActive());
+
+        $this->assertTrue($page->isActive(true));
+    }
+
     public function testActionAndControllerAccessors()
     {
         $page = new Zend_Navigation_Page_Mvc(array(
@@ -377,6 +405,29 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
 
         $page->setParams(array());
         $this->assertEquals(array(), $page->getParams());
+    }
+
+    /**
+     * @group ZF-11664
+     */
+    public function testSetActiveAndIsActive()
+    {
+        // Page
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'controller' => 'foo',
+            'action'     => 'bar',
+        ));
+
+        // Front controller
+        $this->_front->getRequest()->setParams(array(
+            'controller' => 'foo',
+            'action'     => 'bar'
+        ));
+
+        $this->assertTrue($page->isActive());
+
+        $page->setActive(false);
+        $this->assertFalse($page->isActive());
     }
 
     /**
