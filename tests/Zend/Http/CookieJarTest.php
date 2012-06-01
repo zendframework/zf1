@@ -167,6 +167,30 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test we can get all cookies as a concatenated string
+     * @group ZF-11726
+     */
+    public function testGetAllCookiesAsConcatStrictMode()
+    {
+        $jar = new Zend_Http_CookieJar();
+
+        $cookies = array(
+            'name=Arthur; domain=camelot.gov.uk',
+            'quest=holy+grail; domain=forest.euwing.com',
+            'swallow=african; domain=bridge-of-death.net'
+        );
+
+        foreach ($cookies as $cookie) {
+            $jar->addCookie($cookie);
+        }
+
+        $expected = 'name=Arthur; quest=holy+grail; swallow=african';
+        $real = $jar->getAllCookies(Zend_Http_CookieJar::COOKIE_STRING_CONCAT_STRICT);
+
+        $this->assertEquals($expected, $real, 'Concatenated string is not as expected');
+    }
+
+    /**
      * Test we can get a single cookie as an object
      *
      */
@@ -382,6 +406,13 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_CONCAT);
         $this->assertType('string', $cookies, '$cookies is expected to be a string');
+        $expected = 'foo1=bar1;foo2=bar2;foo4=bar4;foo7=bar7;';
+        $this->assertEquals($expected, $cookies, 'Concatenated string is not as expected');
+
+        $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_CONCAT_STRICT);
+        $this->assertType('string', $cookies, '$cookies is expected to be a string');
+        $expected = 'foo1=bar1; foo2=bar2; foo4=bar4; foo7=bar7';
+        $this->assertEquals($expected, $cookies, 'Concatenated string is not as expected');
     }
 
     /**
