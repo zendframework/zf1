@@ -26,6 +26,11 @@
 require_once 'Zend/Reflection/Method.php';
 
 /**
+ * @see ZF-9018
+ */
+require_once dirname(__FILE__) . '/_files/ZF9018TestClass.php';
+
+/**
  * @category   Zend
  * @package    Zend_Reflection
  * @subpackage UnitTests
@@ -77,6 +82,36 @@ class Zend_Reflection_MethodTest extends PHPUnit_Framework_TestCase
         $alsoAssigined = 2;
         return \'mixedValue\';';
         $reflectionMethod = new Zend_Reflection_Method('Zend_Reflection_TestSampleClass6', 'doSomething');
+        $this->assertEquals($body, $reflectionMethod->getBody());
+    }
+
+    /**
+     * @group ZF-9018
+     * @group ZF-9501
+     */
+    public function testGetBodyReturnsCorrectBodyWhenContentEndsWithClosingCurlyBrace()
+    {
+        $body = '        if ( true ) {
+            echo "True";
+        } else {
+            echo "False";
+        }';
+        $reflectionMethod = new Zend_Reflection_Method('ZF9018TestClass', 'doSomething');
+        $this->assertEquals($body, $reflectionMethod->getBody());
+    }
+
+    /**
+     * @group ZF-9018
+     * @group ZF-9501
+     */
+    public function testGetBodyReturnsCorrectBodyWhenMethodWithInlineOpenBraceHasBodyWhichEndsWithClosingCurlyBrace()
+    {
+        $body = '        if ( true ) {
+            echo "True";
+        } else {
+            echo "False";
+        }';
+        $reflectionMethod = new Zend_Reflection_Method('ZF9018TestClass', 'doSomethingOpenBraceInline');
         $this->assertEquals($body, $reflectionMethod->getBody());
     }
 

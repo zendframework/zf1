@@ -163,6 +163,6 @@ class Zend_Reflection_Method extends ReflectionMethod
         }
 
         // just in case we had code on the bracket lines
-        return rtrim(ltrim(implode("\n", $lines), '{'), '}');
+        return implode("\n", $lines);
     }
 }
