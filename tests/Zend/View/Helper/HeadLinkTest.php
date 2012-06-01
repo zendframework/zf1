@@ -477,6 +477,25 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, substr_count($this->helper->toString(), "rel=\""));
         $this->assertContains('rel="stylesheet/less"', $this->helper->toString());
     }
+
+    /**
+     * @group ZF-11643
+     */
+    public function testSizesAttributeIsSupported()
+    {
+        $this->helper->headLink(
+            array(
+                 'rel'   => 'icon',
+                 'href'  => 'favicon.png',
+                 'sizes' => '16x16',
+                 'type'  => 'image/png',
+            )
+        );
+
+        $expected = '<link href="favicon.png" rel="icon" type="image/png" sizes="16x16" >';
+
+        $this->assertEquals($expected, $this->helper->toString());
+    }
 }
 
 // Call Zend_View_Helper_HeadLinkTest::main() if this source file is executed directly.
