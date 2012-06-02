@@ -180,6 +180,62 @@ class Zend_Form_Decorator_ViewHelperTest extends PHPUnit_Framework_TestCase
             $this->assertContains($translations[$value], $test);
         }
     }
+    
+    /**
+     * @group ZF-9689
+     */
+    public function testRenderWithListSeparatorForMulticheckbox()
+    {
+        require_once 'Zend/Form/Element/MultiCheckbox.php';
+        
+        $element = new Zend_Form_Element_MultiCheckbox('foo');
+        $options = array(
+            'foo' => 'Foo',
+            'bar' => 'Bar',
+        );
+        $element->setMultiOptions($options);
+        $element->setSeparator('</p><p>');
+        $element->setDecorators(
+            array(
+                array('ViewHelper', array('separator' => '')),
+                array('HtmlTag', array('tag' => 'p')),
+            )
+        );
+        
+        $expected = '<p><label><input type="checkbox" name="foo[]" id="foo-foo" value="foo">Foo</label></p>'
+                  . '<p><label><input type="checkbox" name="foo[]" id="foo-bar" value="bar">Bar</label></p>';
+        $actual   = $element->render($this->getView());
+        
+        $this->assertEquals($expected, $actual);
+    }
+    
+    /**
+     * @group ZF-9689
+     */
+    public function testRenderWithListSeparatorForRadio()
+    {
+        require_once 'Zend/Form/Element/Radio.php';
+        
+        $element = new Zend_Form_Element_Radio('foo');
+        $options = array(
+            'foo' => 'Foo',
+            'bar' => 'Bar',
+        );
+        $element->setMultiOptions($options);
+        $element->setSeparator('</p><p>');
+        $element->setDecorators(
+            array(
+                array('ViewHelper', array('separator' => '')),
+                array('HtmlTag', array('tag' => 'p')),
+            )
+        );
+        
+        $expected = '<p><label><input type="radio" name="foo" id="foo-foo" value="foo">Foo</label></p>'
+                  . '<p><label><input type="radio" name="foo" id="foo-bar" value="bar">Bar</label></p>';
+        $actual   = $element->render($this->getView());
+        
+        $this->assertEquals($expected, $actual);
+    }
 }
 
 class Zend_Form_Decorator_ViewHelperTest_Textarea extends Zend_Form_Element
