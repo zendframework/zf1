@@ -69,6 +69,15 @@
                         Whether user params should be reset when generating href to the page.
                     </entry>
                 </row>
+                <row>
+                    <entry><code>encode_url</code></entry>
+                    <entry><code>bool</code></entry>
+                    <entry><constant>TRUE</constant></entry>
+
+                    <entry>
+                        Whether href should be encoded when assembling URL.
+                    </entry>
+                </row>
             </tbody>
         </tgroup>
     </table>
@@ -234,5 +243,68 @@ $page = new Zend_Navigation_Page_Mvc(array(
 // returns: /a/42
 $page->getHref();
 ]]></programlisting>
+    </example>
+
+    <example id="zend.navigation.pages.mvc.example.setparams">
+        <title>Set parameters to use when assembling URL</title>
+
+        <programlisting language="php">
+// The following route is added to the ZF router
+Zend_Controller_Front::getInstance()->getRouter()->addRoute(
+    'article_list', // route name
+    new Zend_Controller_Router_Route(
+        'blog/:category/:page',
+        array(
+            'module'     => 'blog',
+            'controller' => 'article',
+            'action'     => 'list',
+            'category'   => null,
+            'page'       => null,
+        )
+    )
+);
+
+// A page is created with the 'route' option
+$page = new Zend_Navigation_Page_Mvc(array(
+    'label'      => 'Article list',
+    'module'     => 'blog',
+    'controller' => 'post',
+    'action'     => 'list',
+));
+
+// Add multiple parameters at once
+$page->addParams(
+    array(
+        'category' => 'news',
+        'page'     => 1,
+    )
+);
+
+// Add a single parameter
+$page->addParam('category', 'news');
+
+// Set multiple parameters at once (Overwrites any previously set parameters!)
+$page->setParams(
+    array(
+        'category' => 'news',
+        'page'     => 1,
+    )
+);
+
+// Set a single parameter
+$page->setParam('category', 'news');
+
+// Retrieve all parameters
+$params = $page->getParams();
+
+// Retrieve a single parameter
+$category = $page->getParam('category');
+
+// Remove a parameter
+$page->removeParam('page');
+
+// Clear all parameters
+$page->clearParams();
+        </programlisting>
     </example>
 </sect2>
