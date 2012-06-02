@@ -329,6 +329,39 @@ class Zend_Form_Decorator_FormErrorsTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->decorator->getShowCustomFormErrors());
     }
 
+    /**
+     * @group ZF-11225
+     */
+    public function testRenderingEscapesFormErrorsByDefault()
+    {
+        $this->setupForm();
+        $this->form->addDecorator($this->decorator)
+                   ->addError('<strong>form-badness</strong>');
+        $html = $this->form->render();
+        $this->assertContains('&lt;strong&gt;form-badness&lt;/strong&gt;', $html);
+    }
+
+    /**
+     * @group ZF-11225
+     */
+    public function testCanDisableEscapingFormErrors()
+    {
+        $this->setupForm();
+        $this->form->addDecorator($this->decorator);
+
+        // Set error message with html content
+        $this->form->addError('<strong>form-badness</strong>');
+
+        // Set element label with html content
+        $this->form->getElement('bar')->setLabel('<strong>Sub Bar: </strong>');
+
+        $this->form->getDecorator('FormErrors')->setEscape(false);
+
+        $html = $this->form->render();
+        $this->assertContains('<li><strong>form-badness</strong>', $html);
+        $this->assertContains('<li><b><strong>Sub Bar: </strong>', $html);
+    }
+
     public function markupOptionMethodsProvider()
     {
         return array(

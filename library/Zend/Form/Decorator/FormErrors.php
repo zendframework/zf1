@@ -70,6 +70,12 @@ class Zend_Form_Decorator_FormErrors extends Zend_Form_Decorator_Abstract
     /**#@-*/
 
     /**
+     * Whether or not to escape error label and error message
+     * @var bool
+     */
+    protected $_escape;
+
+    /**
      * Render errors
      *
      * @param  string $content
@@ -405,6 +411,41 @@ class Zend_Form_Decorator_FormErrors extends Zend_Form_Decorator_Abstract
     }
 
     /**
+     * Set whether or not to escape error label and error message
+     *
+     * Sets also the 'escape' option for the view helper
+     *
+     * @param  bool $flag
+     * @return Zend_Form_Decorator_FormErrors
+     */
+    public function setEscape($flag)
+    {
+        $this->_escape = (bool) $flag;
+
+        // Set also option for view helper
+        $this->setOption('escape', $this->_escape);
+        return $this;
+    }
+
+    /**
+     * Get escape flag
+     *
+     * @return bool
+     */
+    public function getEscape()
+    {
+        if (null === $this->_escape) {
+            if (null !== ($escape = $this->getOption('escape'))) {
+                $this->setEscape($escape);
+            } else {
+                $this->setEscape(true);
+            }
+        }
+
+        return $this->_escape;
+    }
+
+    /**
      * Render element label
      *
      * @param  Zend_Form_Element $element
@@ -418,8 +459,12 @@ class Zend_Form_Decorator_FormErrors extends Zend_Form_Decorator_Abstract
             $label = $element->getName();
         }
 
+        if ($this->getEscape()) {
+            $label = $view->escape($label);
+        }
+
         return $this->getMarkupElementLabelStart()
-             . $view->escape($label)
+             . $label
              . $this->getMarkupElementLabelEnd();
     }
 
