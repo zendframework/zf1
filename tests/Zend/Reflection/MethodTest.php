@@ -121,5 +121,25 @@ class Zend_Reflection_MethodTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("    {\n\n        return 'mixedValue';\n\n    }\n", $reflectionMethod->getContents(false));
     }
 
+    /**
+     * @group ZF-10870
+     */
+    public function testGetBodyReturnsCorrectBodyWhenMethodSignatureIsMultiline()
+    {
+        $body = '        // FUNKY SIGNATURE';
+        $reflectionMethod = new Zend_Reflection_Method('Zend_Reflection_TestSampleClass7', 'bigMethodSignature');
+        $this->assertEquals($body, $reflectionMethod->getBody());
+    }
+
+    /**
+     * @group ZF-10870
+     */
+    public function testGetBodyReturnsCorrectBodyWhenMethodSignatureAndBodyAreOnSameLine()
+    {
+        $body = 'return true;';
+        $reflectionMethod = new Zend_Reflection_Method('Zend_Reflection_TestSampleClass7', 'testInlineMethod');
+        $this->assertEquals($body, $reflectionMethod->getBody());
+    }
+
 }
 

@@ -145,21 +145,40 @@ class Zend_Reflection_Method extends ReflectionMethod
     {
         $lines = array_slice(
             file($this->getDeclaringClass()->getFileName(), FILE_IGNORE_NEW_LINES),
-            $this->getStartLine(),
-            ($this->getEndLine() - $this->getStartLine()),
+            $this->getStartLine()-1,
+            ($this->getEndLine() - $this->getStartLine()) + 1,
             true
         );
 
-        $firstLine = array_shift($lines);
+        // Strip off lines until we come to a closing bracket
+        do {
+            if (count($lines) == 0) break;
+            $firstLine = array_shift($lines);
+        } while (strpos($firstLine, ')') === false);
 
-        if (trim($firstLine) !== '{') {
-            array_unshift($lines, $firstLine);
+        // If the opening brace isn't on the same line as method 
+        // signature, then we should pop off more lines until we find it
+        if (strpos($firstLine,'{') === false) {
+            do {
+                if (count($lines) == 0) break;
+                $firstLine = array_shift($lines);
+            } while (strpos($firstLine, '{') === false);
+        }
+
+        // If there are more characters on the line after the opening brace,
+        // push them back onto the lines stack as they are part of the body
+        $restOfFirstLine = trim(substr($firstLine, strpos($firstLine, '{')+1));
+        if (!empty($restOfFirstLine)) {
+            array_unshift($lines, $restOfFirstLine);
         }
 
         $lastLine = array_pop($lines);
 
-        if (trim($lastLine) !== '}') {
-            array_push($lines, $lastLine);
+        // If there are more characters on the line before the closing brace,
+        // push them back onto the lines stack as they are part of the body
+        $restOfLastLine = trim(substr($lastLine, 0, strrpos($lastLine, '}')-1));
+        if (!empty($restOfLastLine)) {
+            array_push($lines, $restOfLastLine);
         }
 
         // just in case we had code on the bracket lines

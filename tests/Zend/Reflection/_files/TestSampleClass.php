@@ -182,3 +182,14 @@ class Zend_Reflection_Docblock_Param_WithNamespace
 
     }
 }
+
+class Zend_Reflection_TestSampleClass7
+{
+    public function bigMethodSignature($arg1, $arg2, $arg3, 
+        $arg4, $arg5, $arg6)
+    {
+        // FUNKY SIGNATURE
+    }
+
+    public function testInlineMethod() { return true; }
+}
