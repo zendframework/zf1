@@ -242,6 +242,25 @@ echo $this->formCheckbox('foo',
 
             <listitem>
                 <para>
+                    <methodname>formImage($name, $value, $attribs)</methodname>: Creates an
+                    &lt;input type="image" /&gt; element.
+                </para>
+
+<programlisting language="php"><![CDATA[
+echo $this->formImage(
+    'foo',
+    'bar',
+    array(
+        'src' => 'images/button.png',
+        'alt' => 'Button',
+    )
+);
+// Output: <input type="image" name="foo" id="foo" src="images/button.png" value="bar" alt="Button" />
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
                     <methodname>formLabel($name, $value, $attribs)</methodname>: Creates a
                     &lt;label&gt; element, setting the <property>for</property> attribute to
                     <varname>$name</varname>, and the actual label text to
@@ -331,6 +350,19 @@ Output:
     Three<input type="checkbox" name="foo[]" id="foo-3" value="3" />
 </label>
 */
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>formNote($name, $value = null)</methodname>: Creates a
+                    simple text note. (e.g. as element for headlines in a
+                    <classname>Zend_Form</classname> object)
+                </para>
+
+<programlisting language="php"><![CDATA[
+echo $this->formNote(null, 'This is an example text.');
+// Output: This is an example text.
 ]]></programlisting>
             </listitem>
 
@@ -601,6 +633,37 @@ echo $this->url(
 
             <listitem>
                 <para>
+                    <methodname>serverUrl($requestUri = null)</methodname>: Helper
+                    for returning the current server URL (optionally with request URI).
+                </para>
+
+<programlisting language="php"><![CDATA[
+// Current server URL in the example is: http://www.example.com/foo.html
+
+echo $this->serverUrl();
+// Output: http://www.example.com
+
+echo $this->serverUrl(true);
+// Output: http://www.example.com/foo.html
+
+echo $this->serverUrl('/foo/bar');
+// Output: http://www.example.com/foo/bar
+
+echo $this->serverUrl()->getHost();
+// Output: www.example.com
+
+echo $this->serverUrl()->getScheme();
+// Output: http
+
+$this->serverUrl()->setHost('www.foo.com');
+$this->serverUrl()->setScheme('https');
+echo $this->serverUrl();
+// Output: https://www.foo.com
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
                     <methodname>htmlList($items, $ordered, $attribs, $escape)</methodname>:
                     generates unordered and ordered lists based on the <varname>$items</varname>
                     passed to it. If <varname>$items</varname> is a multidimensional
@@ -676,6 +739,7 @@ echo $this->url(
         <xi:include href="Zend_View-Helpers-HeadTitle.xml" />
         <xi:include href="Zend_View-Helpers-HtmlObject.xml" />
         <xi:include href="Zend_View-Helpers-InlineScript.xml" />
+        <xi:include href="Zend_View-Helpers-RenderToPlaceholder.xml" />
         <xi:include href="Zend_View-Helpers-Json.xml" />
         <xi:include href="Zend_View-Helpers-Navigation.xml" />
         <xi:include href="Zend_View-Helpers-TinySrc.xml" />
