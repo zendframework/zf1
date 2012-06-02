@@ -349,37 +349,132 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
     }
 
     /**
-     * Sets params to use when assembling URL
+     * Set multiple parameters (to use when assembling URL) at once
      *
+     * URL options passed to the url action helper for assembling URLs.
+     * Overwrites any previously set parameters!
+     * 
      * @see getHref()
      *
-     * @param  array|null $params        [optional] page params. Default is null
-     *                                   which sets no params.
-     * @return Zend_Navigation_Page_Mvc  fluent interface, returns self
+     * @param  array|null $params           [optional] paramters as array
+     *                                      ('name' => 'value'). Default is null
+     *                                      which clears all params.
+     * @return Zend_Navigation_Page_Mvc     fluent interface, returns self
      */
     public function setParams(array $params = null)
     {
-        if (null === $params) {
-            $this->_params = array();
-        } else {
-            // TODO: do this more intelligently?
-            $this->_params = $params;
+        $this->clearParams();
+        
+        if (is_array($params)) {
+            $this->addParams($params);
         }
+        
+        return $this;
+    }
+    
+    /**
+     * Set parameter (to use when assembling URL)
+     * 
+     * URL option passed to the url action helper for assembling URLs.
+     *
+     * @see getHref()
+     *
+     * @param  string $name                 parameter name
+     * @param  mixed $value                 parameter value
+     * @return Zend_Navigation_Page_Mvc     fluent interface, returns self
+     */
+    public function setParam($name, $value)
+    {
+        $name = (string) $name;
+        $this->_params[$name] = $value;
 
         $this->_hrefCache = null;
         return $this;
     }
 
     /**
-     * Returns params to use when assembling URL
-     *
+     * Add multiple parameters (to use when assembling URL) at once
+     * 
+     * URL options passed to the url action helper for assembling URLs.
+     * 
      * @see getHref()
      *
-     * @return array  page params
+     * @param  array $params                paramters as array ('name' => 'value')
+     * @return Zend_Navigation_Page_Mvc     fluent interface, returns self
+     */
+    public function addParams(array $params)
+    {
+        foreach ($params as $name => $value) {
+            $this->setParam($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove parameter (to use when assembling URL)
+     * 
+     * @see getHref()
+     *
+     * @param  string $name
+     * @return bool
+     */
+    public function removeParam($name)
+    {             
+        if (array_key_exists($name, $this->_params)) {
+            unset($this->_params[$name]);
+
+            $this->_hrefCache = null;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear all parameters (to use when assembling URL)
+     * 
+     * @see getHref()
+     *
+     * @return Zend_Navigation_Page_Mvc     fluent interface, returns self
+     */
+    public function clearParams()
+    {
+        $this->_params = array();
+
+        $this->_hrefCache = null;
+        return $this;
+    }
+    
+    /**
+     * Retrieve all parameters (to use when assembling URL)
+     * 
+     * @see getHref()
+     *
+     * @return array                        parameters as array ('name' => 'value')
      */
     public function getParams()
     {
         return $this->_params;
+    }
+
+    /**
+     * Retrieve a single parameter (to use when assembling URL)
+     * 
+     * @see getHref()
+     *
+     * @param  string $name                 parameter name
+     * @return mixed
+     */
+    public function getParam($name)
+    {
+        $name = (string) $name;
+
+        if (!array_key_exists($name, $this->_params)) {
+            return null;
+        }
+
+        return $this->_params[$name];
     }
 
     /**

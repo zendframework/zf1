@@ -406,6 +406,87 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $page->setParams(array());
         $this->assertEquals(array(), $page->getParams());
     }
+    
+    /**
+     * @group ZF-10727
+     */
+    public function testSetAndGetParam()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'index',
+            'controller' => 'index'
+        ));
+        
+        $page->setParam('foo', 'bar');
+        $this->assertEquals('bar', $page->getParam('foo'));
+        
+        // Check type conversion
+        $page->setParam(null, null);
+        $this->assertEquals(null, $page->getParam('null'));
+    }
+    
+    /**
+     * @group ZF-10727
+     */
+    public function testAddParams()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'index',
+            'controller' => 'index'
+        ));
+        
+        $params = array('foo' => 'bar', 'baz' => 'bat');
+        
+        $page->addParams($params);
+        $this->assertEquals($params, $page->getParams());
+        
+        $params2 = array('qux' => 'foobar');
+        
+        $page->addParams($params2);
+        $this->assertEquals(array_merge($params, $params2), $page->getParams());
+    }
+    
+    /**
+     * @group ZF-10727
+     */
+    public function testRemoveParam()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'index',
+            'controller' => 'index'
+        ));
+        
+        $params = array('foo' => 'bar', 'baz' => 'bat');
+        
+        $page->setParams($params);
+        $page->removeParam('foo');
+        
+        $this->assertEquals(array('baz' => 'bat'), $page->getParams());
+        
+        $this->assertNull($page->getParam('foo'));
+    }
+    
+    /**
+     * @group ZF-10727
+     */
+    public function testClearParams()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'index',
+            'controller' => 'index'
+        ));
+        
+        $params = array('foo' => 'bar', 'baz' => 'bat');
+        
+        $page->setParams($params);
+        $page->clearParams();
+        
+        $this->assertEquals(array(), $page->getParams());
+    }
 
     /**
      * @group ZF-11664
