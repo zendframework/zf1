@@ -262,6 +262,76 @@ echo $this->formCheckbox('foo',
                     element is treated as an array; all checkboxes share the same name, and are
                     submitted as an array.
                 </para>
+
+<programlisting language="php"><![CDATA[
+// Using list separator ($listsep):
+
+echo '<ul><li>';
+echo $view->formMultiCheckbox(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    ),
+    "</li>\n<li>"
+);
+echo '</li></ul>';
+
+/*
+Output:
+<ul>
+    <li>
+        <label for="foo-1">
+            <input type="checkbox" name="foo[]" id="foo-1" value="1" class="baz" />One
+        </label>
+    </li>
+    <li>
+        <label for="foo-2">
+            <input type="checkbox" name="foo[]" id="foo-2" value="2" checked="checked" class="baz" />Two
+        </label>
+    </li>
+    <li>
+        <label for="foo-3">
+            <input type="checkbox" name="foo[]" id="foo-3" value="3" class="baz" />Three</label>
+        </li>
+    </ul>
+*/
+
+// Using options for label elements:
+echo $this->formMultiCheckbox(
+    'foo',
+    2,
+    array(
+        'label_placement' => 'prepend',
+        'label_class'     => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+Output:
+<label class="baz" for="foo-1">
+    One<input type="checkbox" name="foo[]" id="foo-1" value="1" />
+</label>
+<br />
+<label class="baz" for="foo-2">
+    Two<input type="checkbox" name="foo[]" id="foo-2" value="2" checked="checked" />
+</label>
+<br />
+<label class="baz" for="foo-3">
+    Three<input type="checkbox" name="foo[]" id="foo-3" value="3" />
+</label>
+*/
+]]></programlisting>
             </listitem>
 
             <listitem>
@@ -273,12 +343,84 @@ echo $this->formCheckbox('foo',
 
             <listitem>
                 <para>
-                    <methodname>formRadio($name, $value, $attribs, $options)</methodname>:
+                    <methodname>formRadio($name, $value, $attribs, $options, $listsep)</methodname>:
                     Creates a series of &lt;input type="radio" /&gt; elements, one
                     for each of the $options elements. In the $options array, the
                     element key is the radio value, and the element value is the
                     radio label. The $value radio will be preselected for you.
                 </para>
+
+<programlisting language="php"><![CDATA[
+// Using list separator ($listsep)
+
+echo '<ul><li>';
+echo $this->formRadio(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    ),
+    "</li>\n<li>"
+);
+echo '</li></ul>';
+
+/*
+Output:
+<ul>
+    <li>
+        <label for="foo-1">
+            <input type="radio" name="foo" id="foo-1" value="1" class="baz" />One
+        </label>
+    </li>
+    <li>
+        <label for="foo-2">
+            <input type="radio" name="foo" id="foo-2" value="2" checked="checked" class="baz" />Two
+        </label>
+    </li>
+    <li>
+        <label for="foo-3">
+            <input type="radio" name="foo" id="foo-3" value="3" class="baz" />Three
+        </label>
+    </li>
+</ul>
+*/
+
+// Using options for label elements:
+
+echo $this->formRadio(
+    'foo',
+    2,
+    array(
+        'label_placement' => 'prepend',
+        'label_class'     => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+Output:
+<label class="baz" for="foo-1">
+    One<input type="radio" name="foo" id="foo-1" value="1" />
+</label>
+<br />
+<label class="baz" for="foo-2">
+    Two<input type="radio" name="foo" id="foo-2" value="2" checked="checked" />
+</label>
+<br />
+<label class="baz" for="foo-3">
+    Three<input type="radio" name="foo" id="foo-3" value="3" />
+</label>
+*/
+]]></programlisting>
             </listitem>
 
             <listitem>
@@ -297,6 +439,89 @@ echo $this->formCheckbox('foo',
                     element value is the option label. The $value option(s) will be
                     preselected for you.
                 </para>
+
+<programlisting language="php"><![CDATA[
+// Using option groups:
+
+echo $view->formSelect(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1     => 'One',
+        'Two' => array(
+            '2.1' => 'One',
+            '2.2' => 'Two',
+            '2.3' => 'Three',
+        ),
+        3     => 'Three',
+    )
+);
+
+/*
+Output:
+<select name="foo" id="foo" class="baz">
+    <option value="1" label="One">One</option>
+    <optgroup id="foo-optgroup-Two" label="Two">
+        <option value="2.1" label="One">One</option>
+        <option value="2.2" label="Two">Two</option>
+        <option value="2.3" label="Three">Three</option>
+    </optgroup>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+
+// First example with 'multiple' option:
+
+echo $this->formSelect(
+    'foo[]',
+    2,
+    null,
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+Output:
+<select name="foo[]" id="foo" multiple="multiple">
+    <option value="1" label="One">One</option>
+    <option value="2" label="Two" selected="selected">Two</option>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+
+// Second example with 'multiple' option:
+
+echo $this->formSelect(
+    'foo',
+    array(
+        1,
+        2,
+    ),
+    array(
+        'multiple' => true,
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+Output:
+<select name="foo[]" id="foo" multiple="multiple">
+    <option value="1" label="One" selected="selected">One</option>
+    <option value="2" label="Two" selected="selected">Two</option>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+]]></programlisting>
             </listitem>
 
             <listitem>
@@ -322,11 +547,56 @@ echo $this->formCheckbox('foo',
 
             <listitem>
                 <para>
-                    <methodname>url($urlOptions, $name, $reset)</methodname>: Creates a
+                    <methodname>url($urlOptions, $name, $reset, $encode)</methodname>: Creates a
                     <acronym>URL</acronym> string based on a named route.
                     <varname>$urlOptions</varname> should be an associative array of key/value pairs
                     used by the particular route.
                 </para>
+
+<programlisting language="php"><![CDATA[
+// Using without options: (current request is: user/id/1)
+echo $this->url();
+// Output: user/info/id/1
+
+// Set URL options:
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'foobar')
+);
+// Output: user/info/username/foobar
+
+// Using a route:
+$router->addRoute(
+    'user',
+    new Zend_Controller_Router_Route(
+        'user/:username',
+        array(
+            'controller' => 'user',
+            'action'     => 'info',
+        )
+    )
+);
+
+echo $this->url(array('name' => 'foobar'), 'user');
+// Output: user/foobar
+
+// Using reset: (current request is: user/id/1)
+echo $this->url(array('controller' => 'user', 'action' => 'info'), null, false);
+// Output: user/info/id/1
+
+echo $this->url(array('controller' => 'user', 'action' => 'info'), null, true);
+// Output: user/info
+
+// Using encode:
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'John Doe'), null, true, false
+);
+// Output: user/info/username/John Doe
+
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'John Doe'), null, true, false
+);
+// Output: user/info/username/John+Doe
+]]></programlisting>
             </listitem>
 
             <listitem>
