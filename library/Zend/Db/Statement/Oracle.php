@@ -240,7 +240,7 @@ class Zend_Db_Statement_Oracle extends Zend_Db_Statement
             }
             $error = false;
             foreach (array_keys($params) as $name) {
-                if (!@oci_bind_by_name($this->_stmt, $name, $params[$name], -1)) {
+                if (!$this->bindParam($name, $params[$name], null, -1)) {
                     $error = true;
                     break;
                 }
