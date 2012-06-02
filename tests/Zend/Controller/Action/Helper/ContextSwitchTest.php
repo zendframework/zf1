@@ -919,6 +919,20 @@ class Zend_Controller_Action_Helper_ContextSwitchTest extends PHPUnit_Framework_
         $this->assertContains('foo', $suffix, $suffix);
         $this->assertNotContains('foo.foo', $suffix, $suffix);
     }
+
+    /**
+     * @group ZF-11793
+     */
+    public function testGetActionContextsReturnsFullListWhenArgumentIsNull()
+    {
+        $expected = array(
+            'foo' => array('xml'),
+            'bar' => array('xml', 'json'),
+            'all' => array('json','xml')
+        );
+        $actual = $this->helper->getActionContexts(null);
+        $this->assertEquals($expected, $actual);
+    }
 }
 
 class Zend_Controller_Action_Helper_ContextSwitchTestController extends Zend_Controller_Action

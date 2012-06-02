@@ -1304,7 +1304,6 @@ class Zend_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
         if (null === $controller) {
             return array();
         }
-        $action     = (string) $action;
         $contextKey = $this->_contextKey;
 
         if (!isset($controller->$contextKey)) {
@@ -1312,6 +1311,7 @@ class Zend_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
         }
 
         if (null !== $action) {
+            $action = (string) $action;
             if (isset($controller->{$contextKey}[$action])) {
                 return $controller->{$contextKey}[$action];
             } else {
