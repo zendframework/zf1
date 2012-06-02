@@ -46,6 +46,7 @@ class Zend_Form_Decorator_Fieldset extends Zend_Form_Decorator_Abstract
         'helper',
         'method',
         'name',
+        'accept-charset',
     );
 
     /**

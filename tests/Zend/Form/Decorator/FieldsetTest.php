@@ -229,6 +229,20 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
                                 ->render('content');
         $this->assertContains('<fieldset id="fieldset-id"', $html);
     }
+
+    /**
+     * @group ZF-8822
+     */
+    public function testStripAcceptCharsetAttribute()
+    {
+        $form = new Zend_Form();
+        $form->setAttrib('accept-charset', 'ISO-8859-15');
+        $form->setView($this->getView());
+
+        $html = $this->decorator->setElement($form)->render('');
+
+        $this->assertEquals('<fieldset></fieldset>', $html);
+    }
 }
 
 // Call Zend_Form_Decorator_FieldsetTest::main() if this source file is executed directly.
