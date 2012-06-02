@@ -399,7 +399,7 @@ class Zend_View_Helper_FormRadioTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $expected = '<label><input type="radio" name="foo" id="foo-bar" value="bar">Bar</label><br />'
+        $expected = '<label><input type="radio" name="foo" id="foo-bar" value="bar">Bar</label><br>'
                   . "\n"
                   . '<label><input type="radio" name="foo" id="foo-baz" value="baz">Baz</label>';
 
@@ -469,6 +469,51 @@ class Zend_View_Helper_FormRadioTest extends PHPUnit_Framework_TestCase
         $this->assertContains('value="bar" />', $html);
         $this->assertContains('value="baz" />', $html);
     }
+
+     /**
+      * @group ZF-11620
+      */
+     public function testSeparatorCanRendersAsXhtmlByDefault()
+     {
+         $this->view->doctype('XHTML1_STRICT');
+         $options = array(
+             'foo' => 'Foo',
+             'bar' => 'Bar',
+             'baz' => 'Baz'
+         );
+         $html = $this->helper->formRadio(array(
+             'name'    => 'foo',
+             'value'   => 'bar',
+             'options' => $options,
+         ));
+ 
+         $this->assertContains('<br />', $html);
+         $count = substr_count($html, '<br />');
+         $this->assertEquals(2, $count);
+     }
+ 
+     /**
+      * @group ZF-11620
+      */
+     public function testeparatorCanRendersAsHtml()
+     {
+         $this->view->doctype('HTML4_STRICT');
+         $options = array(
+             'foo' => 'Foo',
+             'bar' => 'Bar',
+             'baz' => 'Baz'
+         );
+         $html = $this->helper->formRadio(array(
+             'name'    => 'foo',
+             'value'   => 'bar',
+             'options' => $options,
+         ));
+ 
+         $this->assertContains('<br>', $html);
+         $count = substr_count($html, '<br>');
+         $this->assertEquals(2, $count);
+     }
+
 }
 
 // Call Zend_View_Helper_FormRadioTest::main() if this source file is executed directly.

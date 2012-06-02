@@ -173,6 +173,11 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement
             // add to the array of radio buttons
             $list[] = $radio;
         }
+        
+        // XHTML or HTML for standard list separator?
+        if (!$this->_isXhtml() && false !== strpos($listsep, '<br />')) {
+            $listsep = str_replace('<br />', '<br>', $listsep);
+        }
 
         // done!
         $xhtml .= implode($listsep, $list);
