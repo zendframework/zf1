@@ -504,7 +504,7 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
         $this->element->addPrefixPath('Zend\Form\Element\FileTest\Adapter', dirname(__FILE__) . '/_files/TransferAdapter', 'transfer_adapter');
         $this->element->setTransferAdapter('Bar');
         $test = $this->element->getTransferAdapter();
-        $this->assertTrue($test instanceof \Zend\Form\Element\FileTest\Adapter\Bar);
+        $this->assertType('\Zend\Form\Element\FileTest\Adapter\Bar', $test);
     }
 }
 
