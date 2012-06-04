@@ -245,7 +245,7 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
                     break;
                 case 'file':
                 default:
-                    if (!$this->_isDuplicate($content)) {
+                    if (!$this->_isDuplicate($content) || $action=='set') {
                         $attrs['src'] = $content;
                         $item = $this->createData($type, $attrs);
                         if ('offsetSet' == $action) {

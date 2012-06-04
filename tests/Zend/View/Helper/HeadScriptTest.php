@@ -451,6 +451,20 @@ document.write(bar.strlen());');
 
         $this->assertEquals($expected, $test);
     }
+    
+    /**
+     * @group ZF-12048
+     */
+    public function testSetFileStillOverwritesExistingFilesWhenItsADuplicate()
+    {
+        $this->helper->appendFile('foo.js');
+        $this->helper->appendFile('bar.js');
+        $this->helper->setFile('foo.js');
+        
+        $expected = '<script type="text/javascript" src="foo.js"></script>';
+        $test = $this->helper->toString();
+        $this->assertEquals($expected, $test);
+    }
 }
 
 // Call Zend_View_Helper_HeadScriptTest::main() if this source file is executed directly.
