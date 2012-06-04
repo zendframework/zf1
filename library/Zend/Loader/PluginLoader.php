@@ -368,7 +368,11 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
 
         $registry  = array_reverse($registry, true);
         $found     = false;
-        $classFile = str_replace('_', DIRECTORY_SEPARATOR, $name) . '.php';
+        if (false !== strpos($name, '\\')) {
+            $classFile = str_replace('\\', DIRECTORY_SEPARATOR, $name) . '.php';
+        } else {
+            $classFile = str_replace('_', DIRECTORY_SEPARATOR, $name) . '.php';
+        }
         $incFile   = self::getIncludeFileCache();
         foreach ($registry as $prefix => $paths) {
             $className = $prefix . $name;
