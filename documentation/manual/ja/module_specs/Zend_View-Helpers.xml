@@ -224,6 +224,25 @@ echo $this->formCheckbox('foo',
                 type="hidden" /&gt; 要素を作成します。
             </para></listitem>
 
+            <listitem>
+                <para>
+                    <methodname>formImage($name, $value, $attribs)</methodname>:
+                    &lt;input type="image" /&gt; 要素を作成します。
+                </para>
+
+<programlisting language="php"><![CDATA[
+echo $this->formImage(
+    'foo',
+    'bar',
+    array(
+        'src' => 'images/button.png',
+        'alt' => 'Button',
+    )
+);
+// 出力: <input type="image" name="foo" id="foo" src="images/button.png" value="bar" alt="Button" />
+]]></programlisting>
+            </listitem>
+
             <listitem><para>
                 <methodname>formLabel($name, $value, $attribs):</methodname>
                 &lt;label&gt; 要素を作成します。<property>for</property> 属性の値は
@@ -233,45 +252,287 @@ echo $this->formCheckbox('foo',
                 を渡すと、結果を何も返しません。
             </para></listitem>
 
-            <listitem><para>
-                <methodname>formMultiCheckbox($name, $value, $attribs, $options,
-                    $listsep):</methodname> チェックボックスのリストを作成します。
-                <varname>$options</varname> は連想配列で、任意の深さにできます。
-                <varname>$value</varname> は単一の値か複数の値の配列で、これが
-                <varname>$options</varname> 配列のキーにマッチします。
-                <varname>$listsep</varname> は、デフォルトでは <acronym>HTML</acronym> の改行
-                ("&lt;br /&gt;") です。デフォルトでは、
-                この要素は配列として扱われます。
-                つまり、すべてのチェックボックスは同じ名前となり、
-                入力内容は配列形式で送信されます。
-            </para></listitem>
+            <listitem>
+                <para>
+                    <methodname>formMultiCheckbox($name, $value, $attribs, $options,
+                        $listsep):</methodname> チェックボックスのリストを作成します。
+                    <varname>$options</varname> は連想配列で、任意の深さにできます。
+                    <varname>$value</varname> は単一の値か複数の値の配列で、これが
+                    <varname>$options</varname> 配列のキーにマッチします。
+                    <varname>$listsep</varname> は、デフォルトでは <acronym>HTML</acronym> の改行
+                ("&lt;br /&gt;") です。デフォルトでは、この要素は配列として扱われます。
+                    つまり、すべてのチェックボックスは同じ名前となり、入力内容は配列形式で送信されます。
+                </para>
+
+<programlisting language="php"><![CDATA[
+// リスト・セパレーター ($listsep) を使用:
+
+echo '<ul><li>';
+echo $view->formMultiCheckbox(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    ),
+    "</li>\n<li>"
+);
+echo '</li></ul>';
+
+/*
+出力:
+<ul>
+    <li>
+        <label for="foo-1">
+            <input type="checkbox" name="foo[]" id="foo-1" value="1" class="baz" />One
+        </label>
+    </li>
+    <li>
+        <label for="foo-2">
+            <input type="checkbox" name="foo[]" id="foo-2" value="2" checked="checked" class="baz" />Two
+        </label>
+    </li>
+    <li>
+        <label for="foo-3">
+            <input type="checkbox" name="foo[]" id="foo-3" value="3" class="baz" />Three</label>
+        </li>
+    </ul>
+*/
+
+// ラベル要素に対してオプションを使用:
+echo $this->formMultiCheckbox(
+    'foo',
+    2,
+    array(
+        'label_placement' => 'prepend',
+        'label_class'     => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+出力:
+<label class="baz" for="foo-1">
+    One<input type="checkbox" name="foo[]" id="foo-1" value="1" />
+</label>
+<br />
+<label class="baz" for="foo-2">
+    Two<input type="checkbox" name="foo[]" id="foo-2" value="2" checked="checked" />
+</label>
+<br />
+<label class="baz" for="foo-3">
+    Three<input type="checkbox" name="foo[]" id="foo-3" value="3" />
+</label>
+*/
+]]></programlisting>
+            </listitem>
+
+            <!-- TODO : to be translated -->
+            <listitem>
+                <para>
+                    <methodname>formNote($name, $value = null)</methodname>: Creates a
+                    simple text note. (e.g. as element for headlines in a
+                    <classname>Zend_Form</classname> object)
+                </para>
+
+<programlisting language="php"><![CDATA[
+echo $this->formNote(null, 'This is an example text.');
+// 出力: This is an example text.
+]]></programlisting>
+            </listitem>
 
             <listitem><para>
                 <methodname>formPassword($name, $value, $attribs):</methodname> &lt;input
                 type="password" /&gt; 要素を作成します。
             </para></listitem>
 
-            <listitem><para>
-                <methodname>formRadio($name, $value, $attribs, $options):</methodname>
-                一連の &lt;input type="radio" /&gt; 要素を、
-                $options の要素ごとに作成します。$options は、
-                ラジオボタンの値をキー、ラベルを値とする配列となります。
-                $value はラジオボタンの初期選択状態を設定します。
-            </para></listitem>
+            <listitem>
+                <para>
+                    <methodname>formRadio($name, $value, $attribs, $options, $listsep):</methodname>
+                    一連の &lt;input type="radio" /&gt; 要素を、$options の要素ごとに作成します。
+                    $options は、ラジオボタンの値をキー、ラベルを値とする配列となります。
+                    $value はラジオボタンの初期選択状態を設定します。
+                </para>
+
+<programlisting language="php"><![CDATA[
+// リスト・セパレーター ($listsep) を使用
+
+echo '<ul><li>';
+echo $this->formRadio(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    ),
+    "</li>\n<li>"
+);
+echo '</li></ul>';
+
+/*
+出力:
+<ul>
+    <li>
+        <label for="foo-1">
+            <input type="radio" name="foo" id="foo-1" value="1" class="baz" />One
+        </label>
+    </li>
+    <li>
+        <label for="foo-2">
+            <input type="radio" name="foo" id="foo-2" value="2" checked="checked" class="baz" />Two
+        </label>
+    </li>
+    <li>
+        <label for="foo-3">
+            <input type="radio" name="foo" id="foo-3" value="3" class="baz" />Three
+        </label>
+    </li>
+</ul>
+*/
+
+// ラベル要素に対してオプションを使用:
+
+echo $this->formRadio(
+    'foo',
+    2,
+    array(
+        'label_placement' => 'prepend',
+        'label_class'     => 'baz',
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+出力:
+<label class="baz" for="foo-1">
+    One<input type="radio" name="foo" id="foo-1" value="1" />
+</label>
+<br />
+<label class="baz" for="foo-2">
+    Two<input type="radio" name="foo" id="foo-2" value="2" checked="checked" />
+</label>
+<br />
+<label class="baz" for="foo-3">
+    Three<input type="radio" name="foo" id="foo-3" value="3" />
+</label>
+*/
+]]></programlisting>
+            </listitem>
 
             <listitem><para>
                 <methodname>formReset($name, $value, $attribs):</methodname> &lt;input
                 type="reset" /&gt; 要素を作成します。
             </para></listitem>
 
-            <listitem><para>
-                <methodname>formSelect($name, $value, $attribs, $options):</methodname>
-                &lt;select&gt;...&lt;/select&gt; ブロックを作成します。
-                $options の要素ごとに &lt;option&gt; を作成します。
-                $options は、選択肢の値をキー、
-                ラベルを値とする配列となります。$value
-                は初期選択状態を設定します。
-            </para></listitem>
+            <listitem>
+                <para>
+                    <methodname>formSelect($name, $value, $attribs, $options):</methodname>
+                    &lt;select&gt;...&lt;/select&gt; ブロックを作成します。
+                    $options の要素ごとに &lt;option&gt; を作成します。
+                    $options は、選択肢の値をキー、ラベルを値とする配列となります。
+                    $value は初期選択状態を設定します。
+                </para>
+
+<!-- TODO : to be translated -->
+<programlisting language="php"><![CDATA[
+// Using option groups:
+
+echo $view->formSelect(
+    'foo',
+    2,
+    array(
+        'class' => 'baz',
+    ),
+    array(
+        1     => 'One',
+        'Two' => array(
+            '2.1' => 'One',
+            '2.2' => 'Two',
+            '2.3' => 'Three',
+        ),
+        3     => 'Three',
+    )
+);
+
+/*
+出力:
+<select name="foo" id="foo" class="baz">
+    <option value="1" label="One">One</option>
+    <optgroup id="foo-optgroup-Two" label="Two">
+        <option value="2.1" label="One">One</option>
+        <option value="2.2" label="Two">Two</option>
+        <option value="2.3" label="Three">Three</option>
+    </optgroup>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+
+// First example with 'multiple' option:
+
+echo $this->formSelect(
+    'foo[]',
+    2,
+    null,
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+出力:
+<select name="foo[]" id="foo" multiple="multiple">
+    <option value="1" label="One">One</option>
+    <option value="2" label="Two" selected="selected">Two</option>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+
+// Second example with 'multiple' option:
+
+echo $this->formSelect(
+    'foo',
+    array(
+        1,
+        2,
+    ),
+    array(
+        'multiple' => true,
+    ),
+    array(
+        1 => 'One',
+        2 => 'Two',
+        3 => 'Three',
+    )
+);
+
+/*
+出力:
+<select name="foo[]" id="foo" multiple="multiple">
+    <option value="1" label="One" selected="selected">One</option>
+    <option value="2" label="Two" selected="selected">Two</option>
+    <option value="3" label="Three">Three</option>
+</select>
+*/
+]]></programlisting>
+            </listitem>
 
             <listitem><para>
                 <methodname>formSubmit($name, $value, $attribs):</methodname> &lt;input
@@ -288,12 +549,90 @@ echo $this->formCheckbox('foo',
                 &lt;textarea&gt;...&lt;/textarea&gt; ブロックを作成します。
             </para></listitem>
 
-            <listitem><para>
-                <methodname>url($urlOptions, $name, $reset):</methodname>
-                指定したルートにもとづく <acronym>URL</acronym> 文字列を作成します。
-                <varname>$urlOptions</varname> は、そのルートで使用する
-                キー/値 のペアの配列となります。
-            </para></listitem>
+            <listitem>
+                <para>
+                    <methodname>url($urlOptions, $name, $reset, $encode):</methodname>
+                    指定したルートにもとづく <acronym>URL</acronym> 文字列を作成します。
+                    <varname>$urlOptions</varname> は、そのルートで使用するキーと値のペアの配列です。
+                </para>
+
+<!-- TODO : to be translated -->
+<programlisting language="php"><![CDATA[
+// Using without options: (current request is: user/id/1)
+echo $this->url();
+// 出力: user/info/id/1
+
+// Set URL options:
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'foobar')
+);
+// 出力: user/info/username/foobar
+
+// Using a route:
+$router->addRoute(
+    'user',
+    new Zend_Controller_Router_Route(
+        'user/:username',
+        array(
+            'controller' => 'user',
+            'action'     => 'info',
+        )
+    )
+);
+
+echo $this->url(array('name' => 'foobar'), 'user');
+// 出力: user/foobar
+
+// Using reset: (current request is: user/id/1)
+echo $this->url(array('controller' => 'user', 'action' => 'info'), null, false);
+// 出力: user/info/id/1
+
+echo $this->url(array('controller' => 'user', 'action' => 'info'), null, true);
+// 出力: user/info
+
+// Using encode:
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'John Doe'), null, true, false
+);
+// 出力: user/info/username/John Doe
+
+echo $this->url(
+    array('controller' => 'user', 'action' => 'info', 'username' => 'John Doe'), null, true, false
+);
+// 出力: user/info/username/John+Doe
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>serverUrl($requestUri = null)</methodname>: Helper
+                    for returning the current server URL (optionally with request URI).
+                </para>
+
+<programlisting language="php"><![CDATA[
+// Current server URL in the example is: http://www.example.com/foo.html
+
+echo $this->serverUrl();
+// 出力: http://www.example.com
+
+echo $this->serverUrl(true);
+// 出力: http://www.example.com/foo.html
+
+echo $this->serverUrl('/foo/bar');
+// 出力: http://www.example.com/foo/bar
+
+echo $this->serverUrl()->getHost();
+// 出力: www.example.com
+
+echo $this->serverUrl()->getScheme();
+// 出力: http
+
+$this->serverUrl()->setHost('www.foo.com');
+$this->serverUrl()->setScheme('https');
+echo $this->serverUrl();
+// 出力: https://www.foo.com
+]]></programlisting>
+            </listitem>
 
             <listitem><para>
                 <methodname>htmlList($items, $ordered, $attribs, $escape):</methodname>
@@ -375,6 +714,9 @@ echo $this->formCheckbox('foo',
         <xi:include href="Zend_View-Helpers-HeadTitle.xml" />
         <xi:include href="Zend_View-Helpers-HtmlObject.xml" />
         <xi:include href="Zend_View-Helpers-InlineScript.xml" />
+        <xi:include href="Zend_View-Helpers-RenderToPlaceholder.xml">
+            <xi:fallback><xi:include href="../../en/module_specs/Zend_View-Helpers-RenderToPlaceholder.xml" /></xi:fallback>
+        </xi:include>
         <xi:include href="Zend_View-Helpers-Json.xml" />
         <xi:include href="Zend_View-Helpers-Navigation.xml">
             <xi:fallback><xi:include href="../../en/module_specs/Zend_View-Helpers-Navigation.xml" /></xi:fallback>
