@@ -251,4 +251,47 @@ class Zend_View_Helper_Navigation_BreadcrumbsTest
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testRenderingWithCustomHtmlAttribs()
+    {
+        $container = new Zend_Navigation(array(
+            array(
+                'label'             => 'Page 1',
+                'uri'               => 'p1',
+                'customHtmlAttribs' => array(
+                    'rel'   => 'nofollow',
+                    'style' => 'font-weight: bold;',
+                ),
+                'pages'             => array(
+                    array(
+                        'label'             => 'Page 2',
+                        'uri'               => 'p2',
+                        'customHtmlAttribs' => array(
+                            'rel'   => 'nofollow',
+                        ),
+                        'pages'             => array(
+                            array(
+                                'label'             => 'Page 3',
+                                'uri'               => 'p3',
+                                'active'            => true,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ));
+
+        $expected = '<a href="p1" rel="nofollow" style="font-weight: bold;">Page 1</a>'
+                  . ' &gt; '
+                  . '<a href="p2" rel="nofollow">Page 2</a>'
+                  . ' &gt; '
+                  . 'Page 3';
+
+        $actual = $this->_helper->setMinDepth(0)->render($container);
+
+        $this->assertEquals($expected, $actual);
+    }
 }

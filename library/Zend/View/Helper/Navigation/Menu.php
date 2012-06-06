@@ -262,13 +262,16 @@ class Zend_View_Helper_Navigation_Menu
 
         // does page have a href?
         if ($href = $page->getHref()) {
-            $element = 'a';
-            $attribs['href'] = $href;
-            $attribs['target'] = $page->getTarget();
+            $element              = 'a';
+            $attribs['href']      = $href;
+            $attribs['target']    = $page->getTarget();
             $attribs['accesskey'] = $page->getAccessKey();
         } else {
             $element = 'span';
         }
+
+        // Add custom HTML attributes
+        $attribs = array_merge($attribs, $page->getCustomHtmlAttribs());
 
         return '<' . $element . $this->_htmlAttribs($attribs) . '>'
              . $this->view->escape($label)

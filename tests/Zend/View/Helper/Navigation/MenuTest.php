@@ -566,4 +566,23 @@ class Zend_View_Helper_Navigation_MenuTest
  
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testRenderingWithCustomHtmlAttribs()
+    {
+        $this->_nav3->findOneBy('id', 'home')->setCustomHtmlAttrib('rel', 'nofollow');
+        $this->_nav3->findOneBy('uri', 'contact')->setCustomHtmlAttribs(
+            array(
+                 'rel'   => 'nofollow',
+                 'style' => 'font-weight: bold;',
+            )
+        );
+        $this->_nav3->findOneBy('id', 'imprint')->setCustomHtmlAttrib('rel', 'nofollow');
+
+        $expected = $this->_getExpected('menu/customhtmlattribs.html');
+
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
 }

@@ -1156,6 +1156,100 @@ class Zend_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $page->getCustomProperties());
     }
 
+    /**
+     * @group ZF-11876
+     */
+    public function testSetCustomHtmlAttrib()
+    {
+        $page = Zend_Navigation_Page::factory(
+            array(
+                 'type' => 'uri',
+            )
+        );
+
+        $page->setCustomHtmlAttrib('rel', 'nofollow');
+
+        $this->assertEquals('nofollow', $page->getCustomHtmlAttrib('rel'));
+    }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testSetCustomHtmlAttribWithNull()
+    {
+        $page = Zend_Navigation_Page::factory(
+            array(
+                 'type' => 'uri',
+            )
+        );
+
+        $page->setCustomHtmlAttrib('rel', 'nofollow');
+        $page->setCustomHtmlAttrib('rel', null);
+
+        $this->assertNull($page->getCustomHtmlAttrib('rel'));
+    }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testSetCustomHtmlAttribs()
+    {
+        $page = Zend_Navigation_Page::factory(
+            array(
+                 'type' => 'uri',
+            )
+        );
+
+        $attribs = array(
+             'rel'   => 'nofollow',
+             'style' => 'font-weight: bold;',
+        );
+
+        $page->setCustomHtmlAttribs($attribs);
+
+        $this->assertEquals($attribs, $page->getCustomHtmlAttribs());
+    }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testRemoveCustomHtmlAttrib()
+    {
+        $page = Zend_Navigation_Page::factory(
+            array(
+                 'type' => 'uri',
+            )
+        );
+
+        $page->setCustomHtmlAttrib('rel', 'nofollow');
+        $page->removeCustomHtmlAttrib('rel');
+
+        $this->assertEquals(array(), $page->getCustomHtmlAttribs());
+    }
+
+    /**
+     * @group ZF-11876
+     */
+    public function testClearCustomHtmlAttribs()
+    {
+        $page = Zend_Navigation_Page::factory(
+            array(
+                 'type' => 'uri',
+            )
+        );
+
+        $page->setCustomHtmlAttribs(
+            array(
+                 'rel'   => 'nofollow',
+                 'style' => 'font-weight: bold;',
+            )
+        );
+
+        $page->clearCustomHtmlAttribs();
+
+        $this->assertEquals(array(), $page->getCustomHtmlAttribs());
+    }
+
     public function testToArrayMethod()
     {
         $options = array(
@@ -1188,7 +1282,12 @@ class Zend_Navigation_PageTest extends PHPUnit_Framework_TestCase
                     'label' => 'foo.baz',
                     'uri'   => 'http://www.example.com/foo.html'
                 )
-            )
+            ),
+
+            'customHtmlAttribs' => array(
+                'rel'   => 'nofollow',
+                'style' => 'font-weight: bold;',
+            ),
         );
 
         $page = Zend_Navigation_Page::factory($options);

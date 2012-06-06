@@ -669,12 +669,15 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
         }
 
         // get attribs for anchor element
-        $attribs = array(
-            'id'     => $page->getId(),
-            'title'  => $title,
-            'class'  => $page->getClass(),
-            'href'   => $page->getHref(),
-            'target' => $page->getTarget()
+        $attribs = array_merge(
+            array(
+                'id'     => $page->getId(),
+                'title'  => $title,
+                'class'  => $page->getClass(),
+                'href'   => $page->getHref(),
+                'target' => $page->getTarget()
+            ),
+            $page->getCustomHtmlAttribs()
         );
 
         return '<a' . $this->_htmlAttribs($attribs) . '>'
