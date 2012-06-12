@@ -2644,10 +2644,8 @@ class Zend_Date extends Zend_Date_DateObject
                                 $parsed['day'] = 0;
                             }
 
-                            if (isset($parsed['year'])) {
-                                $parsed['year'] -= 1970;
-                            } else {
-                                $parsed['year'] = 0;
+                            if (!isset($parsed['year'])) {
+                                $parsed['year'] = 1970;
                             }
                         }
 
@@ -2657,7 +2655,7 @@ class Zend_Date extends Zend_Date_DateObject
                             isset($parsed['second']) ? $parsed['second'] : 0,
                             isset($parsed['month']) ? (1 + $parsed['month']) : 1,
                             isset($parsed['day']) ? (1 + $parsed['day']) : 1,
-                            isset($parsed['year']) ? (1970 + $parsed['year']) : 1970,
+                            $parsed['year'],
                             false), $this->getUnixTimestamp(), false);
                     } catch (Zend_Locale_Exception $e) {
                         if (!is_numeric($date)) {

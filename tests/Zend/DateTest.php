@@ -5689,6 +5689,15 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Etc/GMT-14', $date->getTimezoneFromString('18:00:00+1400'));
     }
 
+    /**
+     * @group ZF-11992
+     */
+    public function testDateShouldMatchOnFirstDayOfYear()
+    {
+        $date = new Zend_Date('01.01.2012');
+        $out  = $date->toString('Y-MM-dd');
+        $this->assertEquals('2012-01-01', $out);
+    }
 }
 
 class Zend_Date_TestHelper extends Zend_Date
