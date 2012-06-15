@@ -274,6 +274,32 @@ class Zend_Validate_File_UploadTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $validator->getFiles());
     }
 
+    /**
+     * @group ZF-12128
+     */
+    public function testErrorMessage()
+    {
+        $_FILES = array(
+            'foo' => array(
+                'name'     => 'bar',
+                'type'     => 'text',
+                'size'     => 100,
+                'tmp_name' => 'tmp_bar',
+                'error'    => 7,
+            )
+        );
+
+        $validator = new Zend_Validate_File_Upload();
+        $validator->isValid('foo');
+
+        $this->assertEquals(
+            array(
+                 'fileUploadErrorCantWrite' => "File 'bar' can't be written",
+            ),
+            $validator->getMessages()
+        );
+    }
+
 }
 
 // Call Zend_Validate_File_UploadTest::main() if this source file is executed directly.

@@ -185,40 +185,40 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
             switch($content['error']) {
                 case 0:
                     if (!is_uploaded_file($content['tmp_name'])) {
-                        $this->_throw($file, self::ATTACK);
+                        $this->_throw($content, self::ATTACK);
                     }
                     break;
 
                 case 1:
-                    $this->_throw($file, self::INI_SIZE);
+                    $this->_throw($content, self::INI_SIZE);
                     break;
 
                 case 2:
-                    $this->_throw($file, self::FORM_SIZE);
+                    $this->_throw($content, self::FORM_SIZE);
                     break;
 
                 case 3:
-                    $this->_throw($file, self::PARTIAL);
+                    $this->_throw($content, self::PARTIAL);
                     break;
 
                 case 4:
-                    $this->_throw($file, self::NO_FILE);
+                    $this->_throw($content, self::NO_FILE);
                     break;
 
                 case 6:
-                    $this->_throw($file, self::NO_TMP_DIR);
+                    $this->_throw($content, self::NO_TMP_DIR);
                     break;
 
                 case 7:
-                    $this->_throw($file, self::CANT_WRITE);
+                    $this->_throw($content, self::CANT_WRITE);
                     break;
 
                 case 8:
-                    $this->_throw($file, self::EXTENSION);
+                    $this->_throw($content, self::EXTENSION);
                     break;
 
                 default:
-                    $this->_throw($file, self::UNKNOWN);
+                    $this->_throw($content, self::UNKNOWN);
                     break;
             }
         }
