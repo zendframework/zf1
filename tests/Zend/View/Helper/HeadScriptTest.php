@@ -465,6 +465,62 @@ document.write(bar.strlen());');
         $test = $this->helper->toString();
         $this->assertEquals($expected, $test);
     }
+
+    /**
+     * @group ZF-12287
+     */
+    public function testConditionalWithAllowArbitraryAttributesDoesNotIncludeConditionalScript()
+    {
+        $this->helper->setAllowArbitraryAttributes(true);
+        $this->helper->appendFile(
+            '/js/foo.js', 'text/javascript', array('conditional' => 'lt IE 7')
+        );
+        $test = $this->helper->toString();
+
+        $this->assertNotContains('conditional', $test);
+    }
+
+    /**
+     * @group ZF-12287
+     */
+    public function testNoEscapeWithAllowArbitraryAttributesDoesNotIncludeNoEscapeScript()
+    {
+        $this->helper->setAllowArbitraryAttributes(true);
+        $this->helper->appendScript(
+            '// some script', 'text/javascript', array('noescape' => true)
+        );
+        $test = $this->helper->toString();
+
+        $this->assertNotContains('noescape', $test);
+    }
+
+    /**
+     * @group ZF-12287
+     */
+    public function testNoEscapeDefaultsToFalse()
+    {
+        $this->helper->appendScript(
+            '// some script' . PHP_EOL, 'text/javascript', array()
+        );
+        $test = $this->helper->toString();
+
+        $this->assertContains('//<!--', $test);
+        $this->assertContains('//-->', $test);
+    }
+
+    /**
+     * @group ZF-12287
+     */
+    public function testNoEscapeTrue()
+    {
+        $this->helper->appendScript(
+            '// some script' . PHP_EOL, 'text/javascript', array('noescape' => true)
+        );
+        $test = $this->helper->toString();
+
+        $this->assertNotContains('//<!--', $test);
+        $this->assertNotContains('//-->', $test);
+    }
 }
 
 // Call Zend_View_Helper_HeadScriptTest::main() if this source file is executed directly.
