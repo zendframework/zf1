@@ -110,6 +110,14 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
     protected $_active = null;
 
     /**
+     * Scheme to use when assembling URL
+     *
+     * @see getHref()
+     * @var string
+     */
+    protected $_scheme;
+
+    /**
      * Cached href
      *
      * The use of this variable minimizes execution time when getHref() is
@@ -127,6 +135,14 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
      * @var Zend_Controller_Action_Helper_Url
      */
     protected static $_urlHelper = null;
+
+    /**
+     * View helper for assembling URLs with schemes
+     *
+     * @see getHref()
+     * @var Zend_View_Helper_ServerUrl
+     */
+    protected static $_schemeHelper = null;
 
     // Accessors:
 
@@ -236,6 +252,17 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                                       $this->getRoute(),
                                       $this->getResetParams(),
                                       $this->getEncodeUrl());
+
+        // Use scheme?
+        $scheme = $this->getScheme();
+        if (null !== $scheme) {
+            if (null === self::$_schemeHelper) {
+                require_once 'Zend/View/Helper/ServerUrl.php';
+                self::$_schemeHelper = new Zend_View_Helper_ServerUrl();
+            }
+
+            $url = self::$_schemeHelper->setScheme($scheme)->serverUrl($url);
+        }
 
         // Add the fragment identifier if it is set
         $fragment = $this->getFragment();       
@@ -569,6 +596,39 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
     }
 
     /**
+     * Sets scheme to use when assembling URL
+     *
+     * @see getHref()
+     *
+     * @param  string|null $scheme        scheme
+     * @return Zend_Navigation_Page_Mvc   fluent interface, returns self
+     */
+    public function setScheme($scheme)
+    {
+        if (null !== $scheme && !is_string($scheme)) {
+            require_once 'Zend/Navigation/Exception.php';
+            throw new Zend_Navigation_Exception(
+                'Invalid argument: $scheme must be a string or null'
+            );
+        }
+
+        $this->_scheme = $scheme;
+        return $this;
+    }
+
+    /**
+     * Returns scheme to use when assembling URL
+     *
+     * @see getHref()
+     *
+     * @return string|null  scheme or null
+     */
+    public function getScheme()
+    {
+        return $this->_scheme;
+    }
+
+    /**
      * Sets action helper for assembling URLs
      *
      * @see getHref()
@@ -579,6 +639,19 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
     public static function setUrlHelper(Zend_Controller_Action_Helper_Url $uh)
     {
         self::$_urlHelper = $uh;
+    }
+
+    /**
+     * Sets view helper for assembling URLs with schemes
+     *
+     * @see getHref()
+     *
+     * @param  Zend_View_Helper_ServerUrl $sh   scheme helper
+     * @return void
+     */
+    public static function setSchemeHelper(Zend_View_Helper_ServerUrl $sh)
+    {
+        self::$_schemeHelper = $sh;
     }
 
     // Public methods:
@@ -600,6 +673,8 @@ class Zend_Navigation_Page_Mvc extends Zend_Navigation_Page
                 'route'        => $this->getRoute(),
                 'reset_params' => $this->getResetParams(),
                 'encodeUrl'    => $this->getEncodeUrl(),
-            ));
+                'scheme'       => $this->getScheme(),
+            )
+        );
     }
 }

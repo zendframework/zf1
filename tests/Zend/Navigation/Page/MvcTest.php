@@ -559,25 +559,105 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/pagexy/subpage.html', $page->getHref());
     }
 
+    /**
+     * @group ZF-7794
+     */
+    public function testSetScheme()
+    {
+        $page = new Zend_Navigation_Page_Mvc();
+        $page->setScheme('https');
+
+        $this->assertEquals('https', $page->getScheme());
+    }
+
+    /**
+     * @group ZF-7794
+     */
+    public function testOptionScheme()
+    {
+        $page = new Zend_Navigation_Page_Mvc(
+            array(
+                 'scheme' => 'https',
+            )
+        );
+
+        $this->assertEquals('https', $page->getScheme());
+    }
+
+    /**
+     * @group ZF-7794
+     */
+    public function testHrefGeneratedWithScheme()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'controller' => 'foo',
+            'action'     => 'bar',
+            'scheme'     => 'https',
+        ));
+
+        $_SERVER['HTTP_HOST'] = 'foobar.example.com';
+
+        $this->assertEquals(
+            'https://foobar.example.com/foo/bar',
+            $page->getHref()
+        );
+    }
+
+    /**
+     * @group ZF-7794
+     */
+    public function testHrefGeneratedWithSchemeIsRouteAware()
+    {
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'action'     => 'myaction',
+            'controller' => 'mycontroller',
+            'route'      => 'myroute',
+            'params'     => array(
+                'page' => 1337,
+            ),
+            'scheme'     => 'https',
+        ));
+
+        $this->_front->getRouter()->addRoute(
+            'myroute',
+            new Zend_Controller_Router_Route(
+                'lolcat/:action/:page',
+                array(
+                    'module'     => 'default',
+                    'controller' => 'foobar',
+                    'action'     => 'bazbat',
+                    'page'       => 1,
+                )
+            )
+        );
+
+        $_SERVER['HTTP_HOST'] = 'foobar.example.com';
+
+        $this->assertEquals(
+            'https://foobar.example.com/lolcat/myaction/1337',
+            $page->getHref()
+        );
+    }
+
     public function testToArrayMethod()
     {
         $options = array(
-            'label' => 'foo',
-            'action' => 'index',
+            'label'      => 'foo',
+            'action'     => 'index',
             'controller' => 'index',
-            'module' => 'test',
-            'fragment' => 'bar',
-            'id' => 'my-id',
-            'class' => 'my-class',
-            'title' => 'my-title',
-            'target' => 'my-target',
-            'order' => 100,
-            'active' => true,
-            'visible' => false,
+            'module'     => 'test',
+            'fragment'   => 'bar',
+            'id'         => 'my-id',
+            'class'      => 'my-class',
+            'title'      => 'my-title',
+            'target'     => 'my-target',
+            'order'      => 100,
+            'active'     => true,
+            'visible'    => false,
             'encodeUrl'  => false,
-
-            'foo' => 'bar',
-            'meaning' => 42
+            'scheme'     => 'https',
+            'foo'        => 'bar',
+            'meaning'    => 42
         );
 
         $page = new Zend_Navigation_Page_Mvc($options);
@@ -585,13 +665,15 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $toArray = $page->toArray();
 
         $options['reset_params'] = true;
-        $options['route'] = null;
-        $options['params'] = array();
-        $options['rel'] = array();
-        $options['rev'] = array();
+        $options['route']        = null;
+        $options['params']       = array();
+        $options['rel']          = array();
+        $options['rev']          = array();
 
-        $this->assertEquals(array(),
-            array_diff_assoc($options, $page->toArray()));
+        $this->assertEquals(
+            array(),
+            array_diff_assoc($options, $page->toArray())
+        );
     }
 
     public function testSpecifyingAnotherUrlHelperToGenerateHrefs()
@@ -609,6 +691,32 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
 
         $old = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
         Zend_Navigation_Page_Mvc::setUrlHelper($old);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-7794
+     */
+    public function testSpecifyingAnotherSchemeHelperToGenerateHrefs()
+    {
+        $path = dirname(dirname(__FILE__)) . '/_files/My/SchemeHelper.php';
+        require_once $path;
+
+        $newHelper = new My_SchemeHelper();
+        Zend_Navigation_Page_Mvc::setSchemeHelper($newHelper);
+
+        $page = new Zend_Navigation_Page_Mvc(
+            array(
+                 'scheme' => 'https',
+            )
+        );
+
+        $expected = My_SchemeHelper::RETURN_URL;
+        $actual   = $page->getHref();
+
+        $old = new Zend_View_Helper_ServerUrl();
+        Zend_Navigation_Page_Mvc::setSchemeHelper($old);
 
         $this->assertEquals($expected, $actual);
     }
