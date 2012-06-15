@@ -1181,6 +1181,22 @@ abstract class Zend_Db_Table_Abstract
      */
     public function delete($where)
     {
+        $depTables = $this->getDependentTables();
+        if (!empty($depTables)) {
+            $resultSet = $this->fetchAll($where);
+            if (count($resultSet) > 0 ) {
+                foreach ($resultSet as $row) {
+                    /**
+                     * Execute cascading deletes against dependent tables
+                     */
+                    foreach ($depTables as $tableClass) {
+                        $t = self::getTableFromString($tableClass, $this);
+                        $t->_cascadeDelete($tableClass, $row->getPrimaryKey());
+                    }
+                }
+            }
+        }
+
         $tableSpec = ($this->_schema ? $this->_schema . '.' : '') . $this->_name;
         return $this->_db->delete($tableSpec, $where);
     }
