@@ -191,6 +191,83 @@ class Zend_View_Helper_Navigation_MenuTest
         $this->assertEquals($expected, $this->_helper->render($this->_nav2));
     }
 
+    /**
+     * @group ZF-10409
+     */
+    public function testSetPrefixForIdWithContent()
+    {
+        $this->_helper->setPrefixForId('test-');
+        $expected = $this->_getExpected('menu/normalize-id-prefix-with-content.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testSetPrefixForIdWithoutContent()
+    {
+        $this->_helper->setPrefixForId('');
+        $expected = $this->_getExpected('menu/normalize-id-prefix-without-content.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testSetPrefixForIdWithNull()
+    {
+        $this->_helper->setPrefixForId(null);
+        $expected = $this->_getExpected('menu/normalize-id-prefix-with-null.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testGetPrefixForIdWithContent()
+    {
+        $this->_helper->setPrefixForId('test');
+        $this->assertEquals('test', $this->_helper->getPrefixForId());
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testGetPrefixForIdWithoutContent()
+    {
+        $this->_helper->setPrefixForId('');
+        $this->assertEquals('', $this->_helper->getPrefixForId());
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testGetPrefixForIdWithNull()
+    {
+        $this->_helper->setPrefixForId(null);
+        $this->assertEquals('menu-', $this->_helper->getPrefixForId());
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testSkipPrefixForIdTrue()
+    {
+        $this->_helper->skipPrefixForId(true);
+        $expected = $this->_getExpected('menu/normalize-id-prefix-without-content.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
+    /**
+     * @group ZF-10409
+     */
+    public function testSkipPrefixForIdFalse()
+    {
+        $this->_helper->skipPrefixForId(false);
+        $expected = $this->_getExpected('menu/normalize-id-prefix-with-null.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
     public function testTranslationUsingZendTranslate()
     {
         $translator = $this->_getTranslator();
@@ -267,14 +344,6 @@ class Zend_View_Helper_Navigation_MenuTest
         } catch (Zend_View_Exception $e) {
         }
     }
-
-
-
-
-
-
-
-
 
     public function testSetMaxDepth()
     {
@@ -584,5 +653,55 @@ class Zend_View_Helper_Navigation_MenuTest
         $expected = $this->_getExpected('menu/customhtmlattribs.html');
 
         $this->assertEquals($expected, $this->_helper->render($this->_nav3));
+    }
+
+    /**
+     * @group ZF-7212
+     */
+    public function testRenderingWithUlId()
+    {
+        $this->_helper->setUlId('foo');
+
+        $this->assertContains(
+            '<ul class="navigation" id="foo">',
+            $this->_helper->renderMenu()
+        );
+    }
+
+    /**
+     * @group ZF-7212
+     */
+    public function testRenderingWithUlIdPerOptions()
+    {
+        $this->assertContains(
+            '<ul class="navigation" id="foo">',
+            $this->_helper->renderMenu(null, array('ulId' => 'foo'))
+        );
+    }
+
+    /**
+     * @group ZF-7212
+     */
+    public function testRenderingOnlyActiveBranchWithUlId()
+    {
+        $this->_helper->setUlId('foo')
+                      ->setOnlyActiveBranch()
+                      ->setRenderParents();
+
+        $this->assertContains(
+            '<ul class="navigation" id="foo">',
+            $this->_helper->renderMenu()
+        );
+    }
+
+    /**
+     * @group ZF-7212
+     */
+    public function testRenderingSubMenuWithUlId()
+    {
+        $this->assertContains(
+            '<ul class="navigation" id="foo">',
+            $this->_helper->renderSubMenu(null, null, null, 'foo')
+        );
     }
 }

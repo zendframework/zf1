@@ -72,6 +72,20 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     protected $_indent = '';
 
     /**
+     * Prefix for IDs when they are normalized
+     *
+     * @var string|null
+     */
+    protected $_prefixForId = null;
+
+    /**
+     * Skip current prefix for IDs when they are normalized (flag)
+     *
+     * @var bool
+     */
+    protected $_skipPrefixForId = false;
+
+    /**
      * Translator
      *
      * @var Zend_Translate_Adapter
@@ -271,6 +285,50 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     public function getIndent()
     {
         return $this->_indent;
+    }
+
+    /**
+     * Sets prefix for IDs when they are normalized
+     *
+     * @param   string $prefix                              Prefix for IDs
+     * @return  Zend_View_Helper_Navigation_HelperAbstract  fluent interface, returns self
+     */
+    public function setPrefixForId($prefix)
+    {
+        if (is_string($prefix)) {
+            $this->_prefixForId = trim($prefix);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns prefix for IDs when they are normalized
+     *
+     * @return string   Prefix for
+     */
+    public function getPrefixForId()
+    {
+        if (null === $this->_prefixForId) {
+            $prefix             = get_class($this);
+            $this->_prefixForId = strtolower(
+                    trim(substr($prefix, strrpos($prefix, '_')), '_')
+                ) . '-';
+        }
+
+        return $this->_prefixForId;
+    }
+
+    /**
+     * Skip the current prefix for IDs when they are normalized
+     *
+     * @param  bool $flag
+     * @return Zend_View_Helper_Navigation_HelperAbstract  fluent interface, returns self
+     */
+    public function skipPrefixForId($flag = true)
+    {
+        $this->_skipPrefixForId = (bool) $flag;
+        return $this;
     }
 
     /**
@@ -803,17 +861,22 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     /**
      * Normalize an ID
      *
-     * Overrides {@link Zend_View_Helper_HtmlElement::_normalizeId()}.
+     * Extends {@link Zend_View_Helper_HtmlElement::_normalizeId()}.
      *
-     * @param  string $value
-     * @return string
+     * @param  string $value    ID
+     * @return string           Normalized ID
      */
     protected function _normalizeId($value)
-    {
-        $prefix = get_class($this);
-        $prefix = strtolower(trim(substr($prefix, strrpos($prefix, '_')), '_'));
+    {        
+        if (false === $this->_skipPrefixForId) {
+            $prefix = $this->getPrefixForId();
 
-        return $prefix . '-' . $value;
+            if (strlen($prefix)) {
+                return $prefix . $value;
+            }
+        }
+
+        return parent::_normalizeId($value);
     }
 
     // Static methods:
