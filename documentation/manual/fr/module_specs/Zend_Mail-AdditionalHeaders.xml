@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.mail.additional-headers">
+    <title>En-têtes additionnels</title>
+
+     <para>
+        <classname>Zend_Mail</classname> fournit différentes méthodes pour ajouter des en-têtes supplémentaires :
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>setReplyTo($email, $name = null)</methodname>: spécifie l'adresse de réponse
+                    (soit l'en-tête : «ReplyTo:»).
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <methodname>setDate($date = null)</methodname>: spécifie la date (soit l'en-tête «Date:»).
+                    Par défaut, cette méthode utilise l'epoch actuelle. Néanmoins, vous pouvez définir un
+                    paramètre de type epoch, une chaîne de caractères représentant une date, ou une instance
+                    de <classname>Zend_Date</classname>.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <methodname>setMessageId($id = true)</methodname>: spécifie l'identifiant du message (soit
+                    l'en-tête «Message-Id»). Par défaut, cette méthode génère automatiquement un identifiant par
+                    le biais de la méthode <methodname>createMessageId()</methodname>. Vous pouvez également
+                    définir votre propre identifiant comme paramètre.
+                </para>
+            </listitem>
+        </itemizedlist>
+     </para>
+     <note>
+        <title>En-tête de l'adresse de retour</title>
+        <para>
+            Si vous souhaitez définir l'adresse de retour (soit l'en-tête «Return-Path:») dans votre courriel,
+            veuillez vous reporter à <link linkend="zend.mail.introduction.sendmail">Configurer le transport
+            sendmail</link>. Malheureusement, cette méthode <methodname>setReturnPath($email)</methodname> ne
+            fonctionne pas à cet effet.
+        </para>
+    </note>
+
+    <para>
+        Des en-têtes arbitraires peuvent être définis en utilisant la méthode
+        <methodname>addHeader()</methodname>. Elle a besoin de deux paramètres contenant le nom, et la valeur du
+        champ d'en-tête. Un troisième paramètre optionnel détermine si l'en-tête doit avoir une ou
+        plusieurs valeurs :
+    </para>
+
+    <example id="zend.mail.additional-headers.example-1">
+        <title>Ajouter des en-têtes au courriel</title>
+
+        <programlisting language="php"><![CDATA[
+$mail = new Zend_Mail();
+$mail->addHeader('X-MailGenerator', 'MaSuperApplication');
+$mail->addHeader('X-greetingsTo', 'Maman', true); // plusieurs valeurs
+$mail->addHeader('X-greetingsTo', 'Papa', true);
+]]></programlisting>
+    </example>
+</sect1>

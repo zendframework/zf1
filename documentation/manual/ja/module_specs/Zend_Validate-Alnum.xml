@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.validate.set.alnum">
+    <title>Alnum(一部日本語)</title>
+
+    <para>
+        <classname>Zend_Validate_Alnum</classname> により、
+        与えられた文字列がアルファベットおよび数字だけを含むかどうか検証できます。
+        検証したい入力に対する長さの制限はありません。
+        （訳注：ここでいうアルファベットおよび数字、とは各言語で使われる文字および数字の集合を意味します。英数字<emphasis>ではありません</emphasis>）
+    </para>
+
+    <sect3 id="zend.validate.set.alnum.options">
+        <title>Zend_Validate_Alnum でサポートされるオプション</title>
+
+        <para>
+            下記のオプションが <classname>Zend_Validate_Alnum</classname> でサポートされます。
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowWhiteSpace</property></emphasis>: 空白文字が許されるかどうか。
+                    このオプションの既定値は <constant>FALSE</constant> です。
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.validate.set.alnum.basic">
+        <title>基本的な使用法</title>
+
+        <para>
+            下記は基本的な使用例です。
+        </para>
+
+        <!-- TODO : to be translated -->
+        <programlisting language="php"><![CDATA[
+$validator = new Zend_Validate_Alnum();
+if ($validator->isValid('Abcd12')) {
+    // value contains only allowed chars
+} else {
+    // false
+}
+]]></programlisting>
+    </sect3>
+
+    <sect3 id="zend.validate.set.alnum.whitespace">
+        <title>空白を使用</title>
+
+        <para>
+            Per default whitespaces are not accepted because they are not part of the alphabet.
+            Still, there is a way to accept them as input. This allows to validate complete
+            sentences or phrases.
+        </para>
+
+        <para>
+            To allow the usage of whitespaces you need to give the
+            <property>allowWhiteSpace</property> option. This can be done while creating an instance
+            of the validator, or afterwards by using <methodname>setAllowWhiteSpace()</methodname>.
+            To get the actual state you can use <methodname>getAllowWhiteSpace()</methodname>.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$validator = new Zend_Validate_Alnum(array('allowWhiteSpace' => true));
+if ($validator->isValid('Abcd and 12')) {
+    // value contains only allowed chars
+} else {
+    // false
+}
+]]></programlisting>
+    </sect3>
+
+    <sect3 id="zend.validate.set.alnum.languages">
+        <title>別の言語を使用</title>
+
+        <para>
+            When using <classname>Zend_Validate_Alnum</classname> then the language which the user
+            sets within his browser will be used to set the allowed characters. This means when your
+            user sets <emphasis>de</emphasis> for german then he can also enter characters like
+            <emphasis>ä</emphasis>, <emphasis>ö</emphasis> and <emphasis>ü</emphasis> additionally
+            to the characters from the english alphabet.
+        </para>
+
+        <para>
+            Which characters are allowed depends completly on the used language as every language
+            defines it's own set of characters.
+        </para>
+
+        <para>
+            実際には、それらの固有の文書で受け付けられない３つの言語があります。
+            それらの言語は、<emphasis>Korean</emphasis>、<emphasis>日本語</emphasis>、
+            <emphasis>中国語</emphasis>です。
+            <!-- TODO : to be translated -->
+            because this languages are using an alphabet where a
+            single character is build by using multiple characters.
+        </para>
+
+        <para>
+            これらの言語を使用する場合、入力は英語のアルファベットを使用した検証のみ行なわれます。
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

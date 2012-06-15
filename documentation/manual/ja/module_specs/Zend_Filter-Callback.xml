@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.filter.set.callback">
+    <title>Callback(日本語)</title>
+
+    <para>
+        このフィルタにより、 <classname>Zend_Filter</classname> とともに自分自身のメソッドを使えます。
+        機能を果たすメソッドがすでにあるとき、新しいフィルタを生成する必要はありません。
+    </para>
+
+    <sect3 id="zend.filter.set.callback.options">
+        <title>Zend_Filter_Callback でサポートされるオプション</title>
+
+        <para>
+            <classname>Zend_Filter_Callback</classname> では、下記のオプションがサポートされます。
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>callback</property></emphasis>:
+                    使用されるべきコールバックを設定します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>options</property></emphasis>:
+                    コールバックが処理される際に使われるオプションを設定します。
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.callback.basic">
+        <title>基本的な使用法</title>
+
+        <para>
+            このフィルタの使い方はとても簡単です。
+            文字列を逆にするフィルタを生成したいとしましょう。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Callback('strrev');
+
+print $filter->filter('Hello!');
+// "!olleH"を返します
+]]></programlisting>
+
+        <para>
+            おわかりのように、自分自身のフィルタを定義するために本当に簡単にコールバックを使えます。
+            メソッド（それはクラス内で定義されます）をコールバックとして配列を与えることによって使うこともできます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// クラスの定義
+class MyClass
+{
+    public function Reverse($param);
+}
+
+// フィルター定義
+$filter = new Zend_Filter_Callback(array('MyClass', 'Reverse'));
+print $filter->filter('Hello!');
+]]></programlisting>
+
+        <para>
+            実際に設定されているコールバックを取得するには <methodname>getCallback()</methodname> を使い、
+            他のコールバックを設定するには <methodname>setCallback()</methodname> を使います。
+        </para>
+
+        <note>
+            <title>起こりうる例外</title>
+
+            <para>
+                呼ばれることができないコールバック・メソッドを定義すると、
+                例外が発生する点に注意しなければなりません。
+            </para>
+        </note>
+    </sect3>
+
+    <sect3 id="zend.filter.set.callback.parameters">
+        <title>Default parameters within a callback</title>
+
+        <para>
+            フィルタが実行されるとき、
+            呼ばれるメソッドに配列として与えられるデフォルト・パラメータを定義できます。
+            この配列は、フィルターされた値で結合されます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Callback(
+    array(
+        'callback' => 'MyMethod',
+        'options'  => array('key' => 'param1', 'key2' => 'param2')
+    )
+);
+$filter->filter(array('value' => 'Hello'));
+]]></programlisting>
+
+        <para>
+            手動で上記のメソッド定義を呼ぶと、それはこのように見えます:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$value = MyMethod('Hello', 'param1', 'param2');
+]]></programlisting>
+
+    </sect3>
+</sect2>

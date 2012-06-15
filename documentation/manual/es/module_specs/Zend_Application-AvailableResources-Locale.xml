@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.application.available-resources.locale">
+    <title>Zend_Application_Resource_Locale</title>
+
+    <para>
+        <classname>Zend_Application_Resource_Locale</classname> puede ser usado para configurar
+        una localidad en el ámbito de una aplicación entera. Ésta localidad es usada en todas las
+        clases y componentes que trabajen con localización o internacionalización. Por defecfto
+        la localidad es guardada en una entrada en 
+        <classname>Zend_Registry</classname> baje la
+        clave '
+        <property>Zend_Locale</property>'.
+    </para>
+
+    <para>
+        Hay básicamente tres casos de uso para el Locale Resource Plugin. Cada uno deberá ser usado
+        dependiendo de la necesidad de la apliación.
+    </para>
+
+    <sect3 id="zend.application.available-resources.locale.auto">
+        <title>Autodetectando la localidad a usar</title>
+
+        <para>
+            Sin especificar ninguna opción para
+            <classname>Zend_Application_Resource_Locale</classname>,
+            <classname>Zend_Locale</classname> detectará la localidad y la aplicación la usará
+            automaticamente.
+        </para>
+
+        <para>
+            Ésta detección funciona porque el cliente envía el idioma deseado en su pedido
+            <acronym>HTTP</acronym>. Normalmente el navegador envía los idiomas que desea ver
+            y 
+            <classname>Zend_Locale</classname> usa esta información para la detección.
+        </para>
+
+        <para>
+            Pero hay dos problemas con este enfoque:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    El navegador podría estar configurado para no enviar el idioma
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    El usuario podría haber configurado manualmente una localidad que no exista
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            En ambos casos 
+            <classname>Zend_Locale</classname> se apoyará en otros mecanismos
+            para realizar la detección de la localidad:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Cuando se configuró una localidad que no existe,
+                    <classname>Zend_Locale</classname> trata de degradar la cadena.
+                </para>
+
+                <para>
+                    Cuando, por ejemplo se configura 
+                    <emphasis>en_ZZ</emphasis>, automáticamente
+                    será degradado a 
+                    <emphasis>en</emphasis>. En este caso 
+                    <emphasis>en</emphasis>
+                    será usado como la localidad de la aplicación.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Cuando la localidad tampoco haya podido ser detectada incluso degradando la
+                    cadena, la localidad de su entorno (servidor web) será usada. La mayoría de 
+                    los entornos disponibles en la web usan 
+                    <emphasis>en</emphasis> como localidad.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Cuando la localidad del sistema no se haya podido detectar,
+                    <classname>Zend_Locale</classname> usara su localidad por defecto, que está 
+                    configurada como 
+                    <emphasis>en</emphasis>.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            Para más información acerda de la detección de localidad, vea 
+            <link
+            linkend="zend.locale.selection.automatic">este capitulo acerca de detección automática
+            de Zend_Locale
+            </link>
+        </para>
+    </sect3>
+
+    <sect3 id="zend.application.available-resources.locale.fallback">
+        <title>Autodetectando la localidad y agregando su mecanismo propio de reserva</title>
+
+        <para>
+            La detección descrita más arriba podría llegar a provocar problemas cuando la localidad
+            no haya podido ser detectada y se desea tener otra localidad como defecto que no sea
+            <emphasis>en</emphasis>. Para prevenir esto,
+            <classname>Zend_Application_Resource_Locale</classname> permite configurar su propia
+            localidad, que será usada en el cado de que una localidad no se haya podido detectar.
+        </para>
+
+        <example id="zend.application.available-resources.locale.configExampleDetectAndFallback">
+            <title>Autodetectar la loclidad configurando un mecanismo de reserva</title>
+
+            <para>
+                El siguiente ejemplo muestra como configurar su propia localidad que será usada
+                cuando el cliente no especifique ninguna localidad.
+            </para>
+
+            <programlisting language="ini"><![CDATA[
+; Try to determine automatically first,
+; if unsuccessful, use nl_NL as fallback.
+resources.locale.default = "nl_NL"
+]]>
+            </programlisting>
+        </example>
+    </sect3>
+
+    <sect3 id="zend.application.available-resources.locale.forcing">
+        <title>Forzando una localidad en particular</title>
+
+        <para>
+            Muchas veces es útil definir una única localidad para ser usada. Esto se puede
+            conseguir usando la opción 
+            <property>force</property>.
+        </para>
+
+        <para>
+            En este caso, ésta única localidad será usada y detección automática será desactivada.
+        </para>
+
+        <example id="zend.application.available-resources.locale.configExampleFallbackOnly">
+            <title>Definiendo una única localidad a ser usada</title>
+
+            <para>
+                El siguiente ejemplo muestra como usar una única localidad para la aplicación
+                entera.
+            </para>
+
+            <programlisting language="ini"><![CDATA[
+; No matter what, the nl_NL locale will be used.
+resources.locale.default = "nl_NL"
+resources.locale.force = true
+]]>
+            </programlisting>
+        </example>
+    </sect3>
+    
+    <sect3 id="zend.application.available-resources.locale.cache">
+        <title>Configure cache template</title>
+
+        <para>
+            When you have set no cache, 
+            <classname>Zend_Locale</classname> will set itself a cache 
+            with the file backend by default. But if you want to choose the backend or others 
+            options, you can use the name of a cache template or an instance of
+            <classname>Zend_Cache_Core</classname>.
+            For more informations look into 
+            <xref linkend="zend.locale.cache" />.
+        </para>
+
+        <example id="zend.application.available-resources.locale.configExampleCache">
+            <title>Defining a cache template to use</title>
+
+            <programlisting language="ini"><![CDATA[
+; Optionally you can also the cache template to use for caching:
+resources.locale.cache = "locale"
+]]>
+            </programlisting>
+        </example>
+    </sect3>
+</sect2>

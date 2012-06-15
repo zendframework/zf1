@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.application.core-functionality.bootstrap-bootstrap">
+    <title>Zend_Application_Bootstrap_Bootstrap(日本語)</title>
+
+    <para>
+        <classname>Zend_Application_Bootstrap_Bootstrap</classname>は
+        <link linkend="zend.application.core-functionality.bootstrap-bootstrapabstract">Zend_Application_Bootstrap_BootstrapAbstract</link>
+        を具体的に実装したものです。
+        これは
+        <link linkend="zend.application.available-resources.frontcontroller">フロントコントローラリソース</link>
+        を登録し、デフォルトのモジュールが定義されていることと、
+        それからフロントコントローラをディスパッチすることを最初にチェックする
+        <methodname>run()</methodname>メソッドという主要なフィーチャーです。
+    </para>
+
+    <para>
+        多くの場合、ブートストラップする必要性に応じて拡張するか、
+        このクラスを単純に使って、利用するリソースプラグインのリストを与えたいことでしょう。
+    </para>
+
+    <sect3 id="zend.application.core-functionality.bootstrap-bootstrap.autoloading">
+        <title>アプリケーションのオートローディングを有効にする</title>
+
+        <para>
+            さらに、このブートストラップ実装により、
+            そのツリーに位置するリソースに対する "namespace" またはクラス接頭辞を指定できるようになります。
+            それにより、様々なアプリケーション・リソースをオートローディングできるようになります。
+            基本的に、それは <link
+                linkend="zend.loader.autoloader-resource.module">Zend_Application_Module_Autoloader</link>
+            オブジェクトのインスタンスを生成します。
+            そして引数として、要求された名前空間およびブートストラップのディレクトリを提示します。
+            "appnamespace" 構成オプションに名前空間を提示することにより、この機能を使用可能にできるでしょう。
+            INI 例としては、
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+appnamespace = "Application"
+]]></programlisting>
+
+        <para>
+            または XMLで、
+        </para>
+
+        <programlisting language="xml"><![CDATA[
+<appnamespace>Application</appnamespace>
+]]></programlisting>
+
+        <para>
+            デフォルトでは、<classname>Zend_Tool</classname> は、
+            "Application" 変数でこのオプションを有効にします。
+        </para>
+
+        <para>
+            あるいは、ブートストラップ・クラスの <varname>$_appNamespace</varname>
+            プロパティを適切な値で簡単に定義できます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+{
+    protected $_appNamespace = 'Application';
+}
+]]></programlisting>
+    </sect3>
+</sect2>

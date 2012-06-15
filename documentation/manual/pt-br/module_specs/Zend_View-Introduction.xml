@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.view.introduction">
+    <title>Introdução</title>
+
+    <para>
+        <classname>Zend_View</classname> é uma classe para trabalhar com a parte de visualização do
+        padrão de projeto MVC. Basicamente ela existe para separar o script de visualização dos
+        controladores e modelos. Ela fornece um sistema de assistentes, filtros de saída e escape
+        de variáveis.
+    </para>
+
+    <para>
+        <classname>Zend_View</classname> é um sistema de template agnóstico; você pode usar o
+        <acronym>PHP</acronym> como sua linguagem de template, ou criar instâncias de outros
+        sistemas de template e manipulá-las dentro do seu script de visualização.
+    </para>
+
+    <para>
+        Essencialmente, o funcionamento do <classname>Zend_View</classname> acontece em duas etapas
+        principais: 1. Seu script controlador cria uma instância de
+        <classname>Zend_View</classname>, atribuindo-lhe variáveis. 2. O controlador instrui o
+        <classname>Zend_View</classname> a renderizar uma determinada visualização, passando o
+        controle ao script de visualização, responsável pela geração da saída a ser visualizada.
+    </para>
+
+    <sect2 id="zend.view.introduction.controller">
+        <title>Script Controlador</title>
+
+        <para>
+            Neste exemplo simples, suponhamos que seu controlador tenha uma listagem contendo dados
+            sobre livros, que queremos renderizar para uma visualização. O controlador poderia ser
+            algo como isto:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// use um modelo para obter os dados para autores e títulos de livros.
+$data = array(
+    array(
+        'author' => 'Hernando de Soto',
+        'title' => 'The Mystery of Capitalism'
+    ),
+    array(
+        'author' => 'Henry Hazlitt',
+        'title' => 'Economics in One Lesson'
+    ),
+    array(
+        'author' => 'Milton Friedman',
+        'title' => 'Free to Choose'
+    )
+);
+
+// agora atribua os dados do livro a uma instância Zend_View
+Zend_Loader::loadClass('Zend_View');
+$view = new Zend_View();
+$view->books = $data;
+
+// e renderize um script de visualização chamado "booklist.php"
+echo $view->render('booklist.php');
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zend.view.introduction.view">
+        <title>Script Visualizador</title>
+
+        <para>
+            Agora necessitaremos do script de visualização associado, "booklist.php". Trata-se de um
+            script <acronym>PHP</acronym> como qualquer outro, com uma exceção: ele executa dentro
+            do escopo da instância de <classname>Zend_View</classname>, o que implica que as
+            referências a $this apontam para as propriedades e métodos da instância
+            <classname>Zend_View</classname>. (Variáveis atribuídas à instância pelo controlador são
+            propriedades públicas da instância de <classname>Zend_View</classname>). Deste modo, um
+            script de visualização muito básico poderia se parecer com isto:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+ if ($this->books): ?>
+
+    <!-- Uma tabela contendo alguns livros. -->
+    <table>
+        <tr>
+            <th>Autor</th>
+            <th>Título</th>
+        </tr>
+
+        <?php foreach ($this->books as $key => $val): ?>
+        <tr>
+            <td><?php echo $this->escape($val['author']) ?></td>
+            <td><?php echo $this->escape($val['title']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+
+    </table>
+
+<?php else: ?>
+
+    <p>Não existem livros a serem exibidos.</p>
+
+<?php endif;?>
+]]></programlisting>
+
+        <para>
+            Observe a forma como empregamos o método "escape()" para escapar o conteúdo das
+            variáveis para a saída.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.view.introduction.options">
+        <title>Opções</title>
+
+        <para>
+            <classname>Zend_View</classname> possui diversas opções que podem ser definidas para
+            configurar o comportamento de seus scripts de visualização.
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <property>basePath</property>: indica o caminho base na qual será definido os
+                    caminhos dos scripts, assistentes e filtros. Ele assume esta estrutura de
+                    diretórios:
+                </para>
+
+                <programlisting language="php"><![CDATA[
+base/path/
+    helpers/
+    filters/
+    scripts/
+]]></programlisting>
+
+                <para>
+                    Isto pode ser definido via <methodname>setBasePath()</methodname>,
+                    <methodname>addBasePath()</methodname> ou passar a opção
+                    <property>basePath</property> para o construtor.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <property>encoding</property>: indica a codificação de caracteres para usar com
+                    <methodname>htmlentities()</methodname>,
+                    <methodname>htmlspecialchars()</methodname>, e outras operações. O padrão é
+                    UTF-8. Pode ser definido através <methodname>setEncoding()</methodname> ou
+                    passar a opção <property>encoding</property> para o construtor.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <property>escape</property>: indica uma chamada de retorno para ser usada por
+                    <methodname>escape()</methodname>. Pode ser definido através
+                    <methodname>setEscape()</methodname> ou passar a opção <property>escape</property> para
+                    o construtor.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <property>filter</property>: indica um filtro para uso após a renderização de um
+                    script de visualização. Pode ser definido através
+                    <methodname>setFilter()</methodname>, <methodname>addFilter()</methodname> ou
+                    passar a opção <property>filter</property> para o construtor.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <property>strictVars</property>: força <classname>Zend_View</classname> para
+                    emitir avisos e alertas quando as variáveis de visualização ​​não inicializadas
+                    são acessadas. Pode ser definido chamando
+                    <methodname>strictVars(true)</methodname> ou passar a opção
+                    <property>strictVars</property> para o construtor.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="zend.view.introduction.shortTags">
+        <title>Tags Curtas em Scripts de Visualização</title>
+
+        <para>
+            Em nossos exemplos, fazemos uso das tags longas do <acronym>PHP</acronym>:
+            <emphasis>&lt;?php</emphasis>. Nós também favorecemos o uso da <ulink
+                url="http://us.php.net/manual/en/control-structures.alternative-syntax.php">sintaxe
+                alternativa para estruturas de controle</ulink>. Estes são atalhos convenientes para
+            usar quando escrevemos scripts de visualização, pois fazem as construções mais concisas,
+            mantem as declarações sobre linhas simples e eliminam a necessidade de caçar os
+            parênteses dentro de <acronym>HTML</acronym>.
+        </para>
+
+        <para>
+            Em versões anteriores, muitas vezes recomendamos o uso de tags curtas
+            (<emphasis>&lt;?</emphasis> e <emphasis>&lt;?=</emphasis>), que tornam os scripts de
+            visualização um pouco menos prolixos. No entanto, o padrão para a configuração
+            <constant>short_open_tag</constant> do <filename>php.ini</filename> é tipicamente off em
+            hosts em produção ou compartilhados - tornando o seu uso não muito portátil. Se você
+            usar template <acronym>XML</acronym> em scripts de visualização, tags curtas de abertura
+            farão com que os templates falhem na validação. Finalmente, se você usar tags curtas
+            quando <constant>short_open_tag</constant> está off, os scripts de visualização ou
+            causarão erros ou simplesmente imprimirão o código PHP de volta para o visualizador.
+        </para>
+
+        <para>
+            Se, apesar destas advertências, você deseja usar tags curtas, mas elas estão
+            desativadas, você tem duas opções:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Ative as tags curtas em seu arquivo <filename>.htaccess</filename>:
+                </para>
+
+                <programlisting language="apache"><![CDATA[
+php_value "short_open_tag" "on"
+]]></programlisting>
+
+                <para>
+                    Isso só será possível se você tiver permissão para criar e utilizar arquivos
+                    <filename>.htaccess</filename>. Esta diretiva também podem ser adicionada ao seu
+                    arquivo <filename>httpd.conf</filename>.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Habilitar um stream wrapper opcional para converter tags curtas para tags longas
+                    em tempo real:
+                </para>
+
+                <programlisting language="php"><![CDATA[
+$view->setUseStreamWrapper(true);
+]]></programlisting>
+
+                <para>
+                    Isso registra <classname>Zend_View_Stream</classname> como um stream wrapper
+                    para scripts de visualização, e garantirá que seu código continue trabalhando
+                    como se as tags curtas estivessem habilitadas.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <warning>
+            <title>Stream Wrapper Prejudica o Desempenho</title>
+
+            <para>
+                O uso do stream wrapper <emphasis>irá</emphasis> prejudicar o desempenho de sua
+                aplicação, embora benchmarks atuais estejam indisponíveis para quantificar o
+                montante da degradação. Recomendamos que você ative as tags curtas, converta seus
+                scripts para usar tags completas, ou tenha uma boa estratégia de cache completo e/ou
+                parcial do conteúdo da página no lugar.
+            </para>
+        </warning>
+    </sect2>
+
+    <sect2 id="zend.view.introduction.accessors">
+        <title>Acessadores Utilitários</title>
+
+        <para>
+            Normalmente, você somente precisará invocar <methodname>assign()</methodname>,
+            <methodname>render()</methodname>, ou um dos métodos para configurar/adicionar caminhos
+            de filtro, ajudante e script. No entanto, se você desejar estender
+            <classname>Zend_View</classname> você mesmo, ou ter acesso a alguns de seus internos,
+            existe para isso alguns acessadores:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>getVars()</methodname> retornará todas as variáveis ​​atribuídas.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>clearVars()</methodname> limpará todas as variáveis ​​atribuídas; útil
+                    quando você quer reutilizar um objeto visualização, mas quer controlar quais
+                    variáveis ​​estão disponíveis.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getScriptPath($script)</methodname> recuperará o caminho resolvido
+                    para um dado script de visualização.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getScriptPaths()</methodname> recuperará todos os caminhos de script
+                    registrados.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getHelperPath($helper)</methodname> recuperará o caminho resolvido
+                    para a classe assistente chamada.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getHelperPaths()</methodname> recuperará os caminhos de todos os
+                    assistentes registrados.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getFilterPath($filter)</methodname> recuperará o caminho resolvido
+                    para a classe filtro chamada.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getFilterPaths()</methodname> recuperará os caminhos de todos os
+                    filtros registrados.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect3 id="zend.view.helpers.initial.tiny-src">
+    <title>TinySrc Helper</title>
+
+    <sect4 id="zend.view.helpers.initial.tiny-src.intro">
+        <title>Overview</title>
+
+        <para>
+            <ulink url="http://tinysrc.net/">tinysrc.net</ulink> provides an API for automatic scaling
+            and image format conversion for use with mobile devices. The API is quite simple: you
+            simply create a standard HTML image tag, but append your image URL to a URL on the
+            tinysrc.net domain:
+        </para>
+
+        <programlisting language="html"><![CDATA[
+<img src="http://i.tinysrc.net/http://yourdomain.com/images/foo.jpg" />
+]]></programlisting>
+
+        <para>
+            Their service then sizes the image appropriately for the device requesting it.
+        </para>
+
+        <para>
+            You can control a number of aspects regarding image display, including:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis>Image dimensions</emphasis>. You may specify a width and optional
+                    height. These dimensions can be in absolute pixels, or use one of the adaptive
+                    mechanisms tinysrc.net offers. One is <emphasis>subtractive</emphasis>;
+                    prepending a dimension with a minus ("-") indicates that the image should fill
+                    the maximum physical dimensions, <emphasis>minus</emphasis> the value given in
+                    pixels. The other is <emphasis>percentage</emphasis> based; prepending a
+                    dimension with an "x" tells the service to size that dimension by that
+                    percentage -- e.g., "x20" indicates "20%".
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>Image format</emphasis>. By default, tinysrc.net autodiscovers the
+                    format. Internally, it supports only <acronym>JPEG</acronym> or
+                    <acronym>PNG</acronym>, and autoconverts <acronym>GIF</acronym> to
+                    <acronym>PNG</acronym>. You can specifically request that it should convert an
+                    image to either <acronym>PNG</acronym> or <acronym>JPEG</acronym>, however.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            The <classname>TinySrc</classname> view helper provides functionality around the
+            tinysrc.net API, and gives you the ability to:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    selectively enable or disable whether it returns just the tinysrc.net URL or a
+                    fully-populated HTML <acronym>img</acronym> tag (enabled by default);
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    specify default values for image format as well as width and height;
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    specify a default value for the base URL used (uses the <link
+                        linkend="zend.view.helpers.initial.baseurl">BaseUrl</link> view helper
+                    by default);
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    override the default options on a per-image basis, via passed in options.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect4>
+
+    <sect4 id="zend.view.helpers.initial.tiny-src.quick-start">
+        <title>Quick Start</title>
+
+        <para>
+            The most basic usage is simply to pass the path to an image, relative to your document
+            root or base URL, to create the appropriate image tag:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->tinySrc('/images/foo.png'); ?>
+]]></programlisting>
+
+        <para>
+            You may specify default values for the base URL, conversion format, dimensions, and
+            whether or not to create an <acronym>img</acronym> tag by default:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php $this->tinySrc()
+           ->setBaseUrl('http://example.com/foo/')
+           ->setCreateTag(false)                // disable tag creation
+           ->setDefaultFormat('png')            // convert images to PNG
+           ->setDefaultDimensions('-5', 'x20'); // width should be 5 less than screen width;
+                                                // height should be 20% of total screen height
+?>
+]]></programlisting>
+
+        <para>
+            Finally, you can also pass in values as an array of options, passed as the second
+            parameter:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->tinySrc('/images/foo.png', array(
+    'format' => 'jpg', // convert to JPEG
+    'width'  => 'x50', // 1/2 screen width
+); ?>
+]]></programlisting>
+    </sect4>
+
+    <sect4 id="zend.view.helpers.initial.tiny-src.options">
+        <title>Configuration Options</title>
+
+        <variablelist>
+            <title>TinySrc Helper Options</title>
+
+            <para>
+                The following options may be passed to the <varname>$options</varname> (second)
+                argument of the helper.
+            </para>
+
+            <varlistentry>
+                <term>base_url</term>
+
+                <listitem>
+                    <para>
+                        The base URL, including scheme, host, and optionally port and/or path; this
+                        value will be prepended to the image path provided in the first argument. By
+                        default, this uses the <classname>BaseUrl</classname> and
+                        <classname>ServerUrl</classname> view helpers to determine the value.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>create_tag</term>
+
+                <listitem>
+                    <para>
+                        A boolean value indicating whether or not the helper should return an HTML
+                        <acronym>img</acronym> tag, or simply the tinysrc.net URL. By default, this
+                        flag is enabled.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>format</term>
+
+                <listitem>
+                    <para>
+                        Should be one of the values "png" or "jpeg". If specified, this value will
+                        be used to indicate the image conversion format. If not specified, the
+                        default format will be used, or the format will be auto-determined based on
+                        the image itself.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>width</term>
+
+                <listitem>
+                    <para>
+                        This should be either <constant>null</constant>, or an integer (optionally
+                        prefixed by "x" or "-"). If specified, this value will be used to determine
+                        the converted image width. If null, neither a width nor a height value will
+                        be used. If not specified, the default dimensions will be used.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>height</term>
+
+                <listitem>
+                    <para>
+                        This should be either <constant>null</constant>, or an integer (optionally
+                        prefixed by "x" or "-"). If specified, this value will be used to determine
+                        the converted image height. If null, no height value will be used. If not
+                        specified, the default height will be used.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+
+        <para>
+            Any other options provided will be used as attributes to the HTML <acronym>img</acronym>
+            tag (if created).
+        </para>
+    </sect4>
+
+    <sect4 id="zend.view.helpers.initial.tiny-src.methods">
+        <title>Available Methods</title>
+
+        <variablelist>
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.tiny-src">
+                <term>
+                    <methodsynopsis>
+                        <methodname>tinySrc</methodname>
+                        <methodparam>
+                            <funcparams>$image = null, array $options = array()</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Called with no arguments, returns the helper instance. This is useful for
+                        configuring the helper.
+                    </para>
+
+                    <para>
+                        If the <varname>$image</varname> argument is provided, it will either create and
+                        return the tinysrc.net URL for the image, or an image tag containing that URL as
+                        the source, depending on the status of the "create tag" flag (either the default
+                        value, or the value passed via <varname>$options</varname>).
+                    </para>
+
+                    <para>
+                        See the <link linkend="zend.view.helpers.initial.tiny-src.options">configuration
+                            section</link> for details on the <varname>$options</varname> array.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.set-base-url">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setBaseUrl</methodname>
+                        <methodparam>
+                            <funcparams>$url</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Use this method to manually specify the base URL to prepend to the
+                        <varname>$image</varname> argument of the <methodname>tinySrc()</methodname>
+                        method.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.get-base-url">
+                <term>
+                    <methodsynopsis>
+                        <methodname>getBaseUrl</methodname>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Retrieve the base URL for prepending to image URLs. By default, autodiscovers
+                        this from the <classname>BaseUrl</classname> and
+                        <classname>ServerUrl</classname> view helpers.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.set-default-format">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setDefaultFormat</methodname>
+                        <methodparam>
+                            <funcparams>$format = null</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Specifiy the default image conversion format. If none provided, the value is
+                        cleared. Otherwise, expects either "png" or "jpeg".
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.set-default-dimensions">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setDefaultDimensions</methodname>
+                        <methodparam>
+                            <funcparams>$width = null, $height = null</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Set the default dimensions for image conversion. If no <varname>$width</varname>
+                        is specified, an empty value is provided for all dimensions (setting the height
+                        requires a width as well). Passing no value for the height will set only a
+                        width. Dimensions should be specified as either pixel dimensions, or:
+                    </para>
+
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                A pixel value, preceded by a "-" sign. This will indicate the width
+                                should take the entire screen size, minus the number of pixels
+                                specified.
+                            </para>
+                        </listitem>
+
+                        <listitem>
+                            <para>
+                                A percentage of the total screen dimensions, expressed as "x" followed
+                                by the percentage: "x20" is equivalent to 20%.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.set-create-tag">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setCreateTag</methodname>
+                        <methodparam>
+                            <funcparams>$flag</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Indicate whether the <methodname>tinySrc()</methodname> method should create an
+                        HTML image tag. If boolean <constant>false</constant>, only a tinysrc.net URL
+                        will be returned.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.create-tag">
+                <term>
+                    <methodsynopsis>
+                        <methodname>createTag</methodname>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Returns the status of the "create tag" flag.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect4>
+
+    <sect4 id="zend.view.helpers.initial.tiny-src.examples">
+        <title>Examples</title>
+
+        <example id="zend.view.helpers.initial.tiny-src.examples.url">
+            <title>Returning only a tinysrc.net URL</title>
+
+            <para>
+                You may want to return only a tinysrc.net URL. To do this, you have two options:
+                make this the default behavior, or specify in your <varname>$options</varname> not
+                to create a tag.
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Specifying default behavior:
+$this->tinySrc()->setCreateTag(false);
+echo $this->tinySrc('image.jpg');
+
+// Per-image:
+echo $this->tinySrc('image.jpg', array('create_tag' => false));
+]]></programlisting>
+        </example>
+    </sect4>
+</sect3>

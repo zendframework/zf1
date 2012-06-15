@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="learning.paginator.simple">
+    <title>Exemplos simples</title>
+
+    <para>
+        No primeiro exemplo nós não faremos nada espetacular, mas com certeza isso vai
+        te dar uma boa idéia do que o <classname>Zend_Paginator</classname> é capaz de fazer.
+        Vamos pensar em um array chamado $data, com números de 1 a 100 dentro dele, que
+        queremos dividir em algumas páginas. Podemos usar o método estático
+        <methodname>factory()</methodname> da classe <classname>Zend_Paginator</classname>
+        para ter um objeto <classname>Zend_Paginator</classname> com nosso array dentro dele.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+// Cria um array com números de 1 a 100
+$data = range(1, 100);
+
+// Cria um objeto Paginator usando o método factory do Zend_Paginator
+$paginator = Zend_Paginator::factory($data);
+]]></programlisting>
+
+    <para>
+        Estamos quase lá! A variável $paginator agora contém uma referência para o
+        objeto Paginator. Por padrão ele é configurado para mostrar 10 items por página.
+        Para mostrar os items para a página atual, tudo que você tem a fazer é colocar
+        o objeto Paginator dentro de um laço foreach. Por padrão a página ativa será a
+        primeira caso nada esteja especificado. Nós vamos ver como você pode
+        especificar uma página mais tarde. O trecho abaixo vai mostrar uma lista fora de
+        ordem contendo números de 1 a 10, os quais são os números da primeira página.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+// Criando array com números de 1 a 100
+$data = range(1, 100);
+
+// Cria um objeto Paginator usando o método factory do Zend_Paginator
+$paginator = Zend_Paginator::factory($data);
+
+?><ul><?php
+
+// Insere cada item para a página atual dentro de uma tag <li>
+foreach ($paginator as $item) {
+    echo '<li>' . $item . '</li>';
+}
+
+?></ul>
+]]></programlisting>
+
+    <para>
+        Agora vamos tentar trazer os items da segunda página. Você pode usar o método
+        <methodname>setCurrentPageNumber()</methodname> para selecionar qual página você quer ver.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+// Criando array com números de 1 a 100
+$data = range(1, 100);
+
+// Cria um objeto Paginator usando o método factory do Zend_Paginator
+$paginator = Zend_Paginator::factory($data);
+
+// Seleciona a segunda página
+$paginator->setCurrentPageNumber(2);
+
+?><ul><?php
+
+// Insere cada item para a página atual dentro de uma tag <li>
+foreach ($paginator as $item) {
+    echo '<li>' . $item . '</li>';
+}
+
+?></ul>
+]]></programlisting>
+
+    <para>
+        Como esperado, esse trecho de código vai montar uma lista não ordenada com números
+        do 11 ao 20.
+    </para>
+
+    <para>
+        Esse simples exemplo demonstra um pouco do que pode ser feito com
+        <classname>Zend_Paginator</classname>. Entretanto, uma aplicação de verdade raramente
+        lê seus dados de um array estático, então a próxima sessão é responsável por mostrar
+        como você pode usar o <classname>Zend_Paginator</classname> para paginar resultados de
+        uma consulta vindo do banco de dados. Antes de prosseguir, tenha certeza de estar
+        familiarizado com a maneira com que o <classname>Zend_Db_Select</classname> funciona!
+    </para>
+
+    <para>
+        Em nossa base de exemplos nos vamos ter uma tabela com posts de um blog chamada 'posts'.
+        A tabela 'posts' tem quatro colunas: id, titulo, texto, data_criacao.
+        Vamos dar uma olhada em um exemplo simples.
+    </para>
+
+    <programlisting language="php"><![CDATA[
+// Criando uma consulta. $db é o objeto Zend_Db_Adapter, que assumimos
+// que já exista em seu código.
+$select = $db->select()->from('posts')->order('data_criacao DESC');
+
+// Cria um objeto Paginator usando o método factory do Zend_Paginator
+$paginator = Zend_Paginator::factory($select);
+
+// Seleciona a segunda página
+$paginator->setCurrentPageNumber(2);
+
+?><ul><?php
+
+// Insere cada item para a página atual dentro de uma tag <li>
+foreach ($paginator as $item) {
+    echo '<li>' . $item->title . '</li>';
+}
+
+?></ul>
+]]></programlisting>
+
+    <para>
+        Como você pode ver, esse exemplo não é tão diferente do anterior.
+        A única diferença é que você passa um objeto <classname>Zend_Db_Select</classname> para o
+        método <methodname>factory()</methodname> da classe paginator ao invés de um array.
+        Para mais detalhes de como o adaptador de banco de dados executa a sua consulta de maneira
+        eficiente, veja o capítulo <classname>Zend_Paginator</classname> no manual de referência
+        sobre os adaptadores DbSelect e DbTableSelect.
+    </para>
+</sect1>

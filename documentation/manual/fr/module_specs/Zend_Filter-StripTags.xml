@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.filter.set.striptags">
+    <title>StripTags</title>
+
+    <para>
+        Ce filtre peut supprimer des tags <acronym>XML</acronym> et <acronym>HTML</acronym> depuis
+        une chaine.
+    </para>
+
+    <warning>
+        <title>Zend_Filter_StripTags est potentiellement non sécurisé</title>
+
+        <para>
+            Soyez avertis que <classname>Zend_Filter_StripTags</classname> ne devrait être utilisé que
+            pour supprimer tous les tags.
+        </para>
+
+        <para>
+            Utiliser <classname>Zend_Filter_StripTags</classname> pour créer un site
+            <emphasis>securisé</emphasis> en supprimant certains tags non voulus mènera à un code
+            dangereux.
+        </para>
+
+        <para>
+            <classname>Zend_Filter_StripTags</classname> ne doit pas être utilisé pour éviter les attaques
+            <acronym>XSS</acronym>. Ce filtre n'est pas un remplaçant de Tidy ou HtmlPurifier.
+        </para>
+    </warning>
+
+    <sect3 id="zend.filter.set.striptags.options">
+        <title>Options supportées par Zend_Filter_StripTags</title>
+
+        <para>
+            Les options suivantes sont supportées par <classname>Zend_Filter_StripTags</classname>:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowAttribs</property></emphasis>: Cette option précise les attributs
+                    à accepter. Tous les autres attributs seront supprimés.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>allowTags</property></emphasis>: Cette option liste les tags à accepter.
+                    Tous les autres tags seront supprimés.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.basic">
+        <title>Utilisation de base</title>
+
+        <para>
+            Voyez l'exemple qui suit pour l'utilisation de base du filtre:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags();
+
+print $filter->filter('<B>My content</B>');
+]]></programlisting>
+
+        <para>
+            La chaine 'My content' sera affichée.
+        </para>
+
+        <para>
+            Si un tag est cassé ou non fermé, alors tout le contenu qui le suit sera
+            supprimé. Voyez l'exemple qui suit:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags();
+
+print $filter->filter('This contains <a href="http://example.com">no ending tag');
+]]></programlisting>
+
+        <para>
+            Ceci affichera 'This contains'.
+        </para>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.allowtags">
+        <title>Autoriser des tags</title>
+
+        <para>
+            <classname>Zend_Filter_StripTags</classname> permet d'autoriser certains tags. Ceci peut
+            être utilisé pour par exemple autoriser les liens dans un texte.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags(array('allowTags' => 'a'));
+
+$input  = "A text with <br/> a <a href='link.com'>link</a>";
+print $filter->filter($input);
+// retourne: A text with a <a href='link.com'>link</a>
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus supprime tous les tags sauf ceux des liens.
+        </para>
+
+        <warning>
+            <para>
+                N'utilisez pas cette fonctionnalité pour obtenir un code <emphasis>probablement sécurisé</emphasis>. Ce
+                composant ne remplace pas l'utilisation d'un filtre html configuré convenablement.
+            </para>
+        </warning>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.allowattribs">
+        <title>Autoriser des attributs</title>
+
+        <para>
+            Il est possible d'autoriser des attributs.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags(array('allowAttribs' => 'src'));
+
+$input  = "A text with <br/> a <img src='picture.com' width='100'>picture</img>";
+print $filter->filter($input);
+// retourne: A text with a <img src='picture.com'>picture</img>
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus supprime tous les tags sauf img. Aussi, pour le tag img, tous les attributs sont
+            supprimés sauf src.
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

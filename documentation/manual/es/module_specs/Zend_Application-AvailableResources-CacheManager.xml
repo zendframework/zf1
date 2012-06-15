@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.application.available-resources.cachemanager">
+    <title>Zend_Application_Resource_Cachemanager</title>
+
+    <para>
+        <classname>Zend_Application_Resource_Cachemanager</classname> puede ser
+        utilizado para configurar un grupo de opciones de <classname>Zend_Cache</classname>
+        para ser usado para cargar caches bajo demanda usando
+        <classname>Zend_Cache_Manager</classname>
+    </para>
+
+    <para>
+        Como el Cache Manager usa un mecanismo de carga bajo demanda, las opciones son traducidas
+        a plantillas de opciones usadas para instanciar un objeto de cache a pedido.
+    </para>
+
+    <example id="zend.application.available-resources.cachemanager.configExample">
+        <title>Ejemplo de configuración del recurso Cachemanager</title>
+
+        <para>
+            Aquí abajo se muestra un archivo <acronym>INI</acronym> de ejemplo
+            que muestra como se puede configurar el <classname>Zend_Cache_Manager</classname>.
+            El formato consta de un prefijo de recurso Cachemanager (
+            <property>resources.cachemanager</property>) seguido por el nombre de la plantilla
+            de cache (por ejemplo <property>resources.cachemanager.database</property>)
+            y finalmente seguido de una opción típica de <classname>Zend_Cache</classname>.
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+resources.cachemanager.database.frontend.name = Core
+resources.cachemanager.database.frontend.customFrontendNaming = false
+resources.cachemanager.database.frontend.options.lifetime = 7200
+resources.cachemanager.database.frontend.options.automatic_serialization = true
+resources.cachemanager.database.backend.name = File
+resources.cachemanager.database.backend.customBackendNaming = false
+resources.cachemanager.database.backend.options.cache_dir = "/path/to/cache"
+resources.cachemanager.database.frontendBackendAutoload = false
+]]></programlisting>
+
+        <para>
+            En realidad, buscar éste cache desde el Cache Manager es tan simple como
+            acceder a una instancia del Manager (<classname>Zend_Cache_Manager</classname>)
+            tomada desde <classname>Zend_Application_Resource_Cachemanager</classname>
+            y llamar <methodname>$cacheManager->getCache('database');</methodname>.
+            El siguiente ejemplo fue tomado de un controlador donde la clase bootstrap puede
+            ser accedida como un parametro de Front Controller (que es automáticamente asignado
+            durante el proceso de bootstrap). Como se puede ver, el recurso Cache Manager
+            implementa el método <methodname>getCacheManager()</methodname> para obtener una
+            instancia de <classname>Zend_Cache_Manager</classname>.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$manager = $this->getFrontController()
+            ->getParam('bootstrap')
+            ->getResource('cachemanager')
+            ->getCacheManager();
+$dbCache = $manager->getCache('database');
+]]></programlisting>
+
+        <para>
+            Ver el método <methodname>Zend_Cache::factory()</methodname> para una descripción
+            de los valores por defecto que se pueden asignar al momento de configurar un cache
+            como el del ejemplo usando un archivo de configuración <acronym>INI</acronym>.
+        </para>
+    </example>
+</sect2>

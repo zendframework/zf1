@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect3 id="zend.view.helpers.initial.headstyle">
+    <title>Assistente HeadStyle</title>
+
+    <para>
+        O elemento <acronym>HTML</acronym> <emphasis>&lt;style&gt;</emphasis> é usado para incluir
+        folhas de estilo <acronym>CSS</acronym> de forma inline no elemento <acronym>HTML</acronym>
+        <emphasis>&lt;head&gt;</emphasis>.
+    </para>
+
+    <note>
+        <title>Use o HeadLink para "linkar" arquivos CSS</title>
+
+        <para>
+            O <link linkend="zend.view.helpers.initial.headlink">HeadLink</link> deve ser usado para
+            criar elementos <emphasis>&lt;link&gt;</emphasis> para a inclusão de folhas de estilo
+            externas. <classname>HeadStyle</classname> é usado quando você deseja definir folhas de
+            estilo inline.
+        </para>
+    </note>
+
+    <para>
+        O assistente <classname>HeadStyle</classname> dá suporte aos seguintes métodos para a
+        configuração e adição de declarações de folhas de estilo:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                <command>appendStyle($content, $attributes = array())</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>offsetSetStyle($index, $content, $attributes = array())</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>prependStyle($content, $attributes = array())</command>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <command>setStyle($content, $attributes = array())</command>
+            </para>
+        </listitem>
+    </itemizedlist>
+
+    <para>
+        Em todos os casos, <varname>$content</varname> é a verdadeira declaração
+        <acronym>CSS</acronym>. <varname>$attributes</varname> são quaisquer atributos adicionais
+        que você dejesa prover para a tag <property>style</property>: lang, title, media, ou dir são
+        todos admissíveis.
+    </para>
+
+    <note>
+        <title>Configurando Comentários Condicionais</title>
+
+        <para>
+            <classname>HeadStyle</classname> permite que você envolva a tag style em comentários
+            condicionais, que permitem que você as esconda de navegadores específicos. Para
+            adicionar as tags condicionais, passe o valor condicional como parte do parâmetro
+            <varname>$attributes</varname> nas chamadas do método.
+        </para>
+
+        <example id="zend.view.helpers.initial.headstyle.conditional">
+            <title>Headstyle com Comentários Condicionais</title>
+
+            <programlisting language="php"><![CDATA[
+// adicionando scripts
+$this->headStyle()->appendStyle($styles, array('conditional' => 'lt IE 7'));
+]]></programlisting>
+        </example>
+    </note>
+
+    <para>
+        <classname>HeadStyle</classname> também permite a captura de declarações de estilo; isso
+        pode ser útil se você quiser criar as declarações através de programação, e então colocá-las
+        em outro lugar. A utilização disso será mostrada em um exemplo abaixo.
+    </para>
+
+    <para>
+        Finalmente, você pode usar o método <methodname>headStyle()</methodname> para acrescentar
+        rapidamente elementos de declaração; a assinatura para isso é
+        <methodname>headStyle($content$placement = 'APPEND', $attributes = array())</methodname>.
+        <varname>$placement</varname> deve ser 'APPEND', 'PREPEND', ou 'SET'.
+    </para>
+
+    <para>
+        <classname>HeadStyle</classname> sobrescreve <methodname>append()</methodname>,
+        <methodname>offsetSet()</methodname>, <methodname>prepend()</methodname>, e
+        <methodname>set()</methodname> para forçar o uso dos métodos especiais listados acima.
+        Internamente ele armazena cada item como um token <property>stdClass</property>, que depois
+        é serializado usando o método <methodname>itemToString()</methodname>. Isso permite que você
+        faça verificações nos itens da pilha, e opcionalmente modifique estes itens simplesmente
+        modificando o objeto retornado.
+    </para>
+
+    <para>
+        O assistente <classname>HeadStyle</classname> é uma implementação concreta do <link
+            linkend="zend.view.helpers.initial.placeholder">assistente Placeholder</link>.
+    </para>
+
+    <note>
+        <title>Codificação UTF-8 usada por padrão</title>
+
+        <para>
+            Por padrão, o Zend Framework usa <acronym>UTF-8</acronym> como sua codificação padrão,
+            e, especificamente neste caso, o <classname>Zend_View</classname> faz isto muito bem. A
+            codificação de caracteres pode ser definida de forma diferente no objeto de visualização
+            em si usando o método <methodname>setEncoding()</methodname> (ou a instanciação do
+            parâmetro <varname>encoding</varname>). No entanto, como
+            <classname>Zend_View_Interface</classname> não define acessadores para codificação, é
+            possível que se você estiver usando uma implementação de visualização personalizada com
+            este assistente de visualização, você não terá um método
+            <methodname>getEncoding()</methodname>, que é o que o assistente de visualização usa
+            internamente para determinar o conjunto de caracteres na qual irá codificar.
+        </para>
+
+        <para>
+            Se você não quiser utilizar <acronym>UTF-8</acronym> nessa situação, será necessário
+            implementar um método <methodname>getEncoding()</methodname> em sua implementação de
+            visualização personalizada.
+        </para>
+    </note>
+
+    <example id="zend.view.helpers.initial.headstyle.basicusage">
+        <title>Uso Básico do Assistente HeadStyle</title>
+
+        <para>
+            Você pode especificar uma nova tag de estilo a qualquer momento:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// adding styles
+$this->headStyle()->appendStyle($styles);
+]]></programlisting>
+
+        <para>
+            A ordenação é muito importante no <acronym>CSS</acronym>; você talvez tenha que
+            assegurar que as declarações sejam carregadas em uma ordem específica devido à ordem da
+            cascata; use as diretivas append, prepend, e offsetSet para lhe auxiliar nessa tarefa:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Putting styles in order
+
+// place at a particular offset:
+$this->headStyle()->offsetSetStyle(100, $customStyles);
+
+// place at end:
+$this->headStyle()->appendStyle($finalStyles);
+
+// place at beginning
+$this->headStyle()->prependStyle($firstStyles);
+]]></programlisting>
+
+        <para>
+            Quando você estiver finalmente pronto para liberar todas as declarações de estilo em seu
+            script layout, simplesmente imprima o assistente:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->headStyle() ?>
+]]></programlisting>
+    </example>
+
+    <example id="zend.view.helpers.initial.headstyle.capture">
+        <title>Capturando Declarações de Estilo Usando o Assistente HeadStyle</title>
+
+        <para>
+            Às vezes você precisa gerar declarações de estilo <acronym>CSS</acronym> de forma
+            programática. Embora você possa usar concatenação de strings, heredocs, e assim por
+            diante, muitas vezes é mais fácil apenas para fazer isso criando estilos e
+            distribuindo-os em tags <acronym>PHP</acronym>. <classname>HeadStyle</classname> permite
+            que você faça exatamente isso, capturando-os para a pilha:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php $this->headStyle()->captureStart() ?>
+body {
+    background-color: <?php echo $this->bgColor ?>;
+}
+<?php $this->headStyle()->captureEnd() ?>
+]]></programlisting>
+
+        <para>
+            As seguintes suposições são feitas:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    As declarações de estilo serão anexados à pilha. Se você deseja que elas
+                    substituam a pilha ou que sejam adicionadas ao topo, você vai precisar passar
+                    'SET' ou 'PREPEND', respectivamente, como o primeiro argumento para
+                    <methodname>captureStart()</methodname>.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    Se você deseja especificar todos os atributos adicionais para a tag
+                    <emphasis>&lt;style&gt;</emphasis>, passe-os em uma matriz como o segundo
+                    argumento para <methodname>captureStart()</methodname>.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </example>
+</sect3>
+<!--
+vim:se ts=4 sw=4 et:
+-->

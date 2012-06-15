@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.http.user-agent-storage">
+    <title>The UserAgent Storage Interface</title>
+
+    <sect2 id="zend.http.user-agent-storage.intro">
+        <title>Overview</title>
+
+        <para>
+            Because discovering and identifying mobile device capabilities can involve a number of
+            resources, it's often useful to identify the capabilities on the first visit, and cache
+            it for subsequent visits.
+        </para>
+
+        <para>
+            The <interfacename>Zend_Http_UserAgent_Storage</interfacename> interface provides a
+            simple definition for defining storage adapters capable of persisting definitions. By
+            default, a <classname>Session</classname> storage adapter is used, which persists the
+            data in a <classname>Zend_Session_Namespace</classname> instance.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-storage.quick-start">
+        <title>Quick Start</title>
+
+        <para>
+            The interface provides simply the ability to read from, write to, test for, and clear
+            data in the persistence backend.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+interface Zend_Http_UserAgent_Storage
+{
+    public function isEmpty();
+    public function read();
+    public function write($contents);
+    public function clear();
+}
+]]></programlisting>
+
+        <para>
+            By default, the <classname>Zend_Http_UserAgent_Storage_Session</classname> adapter is
+            utilized. That adapter writes to a unique <classname>Zend_Session_Namespace</classname>
+            for the given user.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-storage.options">
+        <title>Configuration Options</title>
+
+        <para>
+            See the individual storage adapters for configuration options. Most adapters will accept
+            an array or object as an argument to the constructor, and the
+            <classname>UserAgent</classname> class allows passing an array of options.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-storage.methods">
+        <title>Available Methods</title>
+
+        <variablelist>
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.is-empty">
+                <term>
+                    <methodsynopsis>
+                        <methodname>isEmpty</methodname>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Test whether ornot the storage adapter has an entry. Returns true if the
+                        storage is currently unpopulated.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.read">
+                <term>
+                    <methodsynopsis>
+                        <methodname>read</methodname>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Reads data from storage; the data will be serialized PHP.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.write">
+                <term>
+                    <methodsynopsis>
+                        <methodname>write</methodname>
+                        <methodparam>
+                            <funcparams>$contents</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Write a serialized string to the storage engine.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry id="zend.view.helpers.initial.tiny-src.methods.clear">
+                <term>
+                    <methodsynopsis>
+                        <methodname>clear</methodname>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Should empty the storage; calling <methodname>isEmpty()</methodname> following a
+                        <methodname>clear()</methodname> operation should return
+                        <constant>true</constant>.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect2>
+</sect1>

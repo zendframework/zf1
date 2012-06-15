@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.cloud.documentservice">
+    <title>Document Service Introduction</title>
+
+    <para>
+        <classname>Zend_Cloud_DocumentService</classname> abstracts the interfaces to all major
+        document databases - both in the cloud and locally deployed - so developers can access their
+        common functionality through one API. In other words, an application can make use of these
+        databases and services with no concern over how the application will be deployed. The data
+        source can be chosen through configuration changes alone at the time of deployment.
+    </para>
+
+    <para>
+        Document databases and services are increasingly common in application development. These
+        data sources are somewhat different from traditional relational data sources, as they eschew
+        complex relationships for performance, scalability, and flexibility. Examples of
+        document-oriented services include Amazon SimpleDB and Azure Table Storage.
+    </para>
+
+    <para>
+        The Simple Cloud API offers some flexibility for vendor-specific features with an
+        <varname>$options</varname> array in each method signature.  Some adapters require certain
+        options that also must be added to the <varname>$options</varname> array. It is a good
+        practice to retrieve these options from a configuration file to maintain compatibility with
+        all services and databases; unrecognized options will simply be discarded, making it
+        possible to use different services based on environment.
+    </para>
+
+    <para>
+        If more vendor-specific requirements are required, the developer should extend the specific
+        <classname>Zend_Cloud_DocumentService</classname> adapter to add support for these features.
+        In this manner, vendor-specific features can be called out in the application by referring
+        to the Simple Cloud API extensions in the subclass of the Simple Cloud adapter.
+    </para>
+
+    <sect2 id="zend.cloud.documentservice.adapterinterface">
+        <title>Zend_Cloud_DocumentService_Adapter Interface</title>
+
+        <para>
+            The <classname>Zend_Cloud_DocumentService_Adapter</classname> interface defines methods
+            that each concrete document service adapter implements. The following adapters are
+            shipped with the Simple Cloud API:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <ulink url="http://aws.amazon.com/simpledb/"><classname>Zend_Cloud_DocumentService_Adapter_SimpleDb</classname></ulink>
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <ulink url="http://msdn.microsoft.com/en-us/library/dd179423.aspx"><classname>Zend_Cloud_DocumentService_Adapter_WindowsAzure</classname></ulink>
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            To instantiate a document service adapter, use the static method
+            <methodname>Zend_Cloud_DocumentService_Factory::getAdapter()</methodname>, which accepts
+            a configuration array or a <classname>Zend_Config</classname> object. The
+            <varname>document_adapter</varname> key should specify the concrete adapter class by
+            classname. Adapter-specific keys may also be passed in this configuration parameter.
+        </para>
+
+        <example id="zend.cloud.documentservice.factory.example">
+            <title>Example: Using the SimpleDB adapter</title>
+
+            <programlisting language="php"><![CDATA[
+$adapterClass = 'Zend_Cloud_DocumentService_Adapter_SimpleDb';
+$documents = Zend_Cloud_DocumentService_Factory::getAdapter(array(
+    Zend_Cloud_DocumentService_Factory::DOCUMENT_ADAPTER_KEY    => $adapterClass,
+    Zend_Cloud_DocumentService_Adapter_SimpleDb::AWS_ACCESS_KEY => $amazonKey,
+    Zend_Cloud_DocumentService_Adapter_SimpleDb::AWS_SECRET_KEY => $amazonSecret
+));
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.adapteroptions">
+        <title>Supported Adapter Options</title>
+
+        <table frame="all" id="zend.cloud.documentservice.options.general">
+            <title>Zend_Cloud_DocumentService_Adapter Common Options</title>
+            <tgroup cols="5">
+                <thead>
+                    <row>
+                        <entry>Option key</entry>
+                        <entry>Description</entry>
+                        <entry>Used in</entry>
+                        <entry>Required</entry>
+                        <entry>Default</entry>
+                    </row>
+                </thead>
+
+                <tbody>
+                    <row>
+                        <entry>document_class</entry>
+                        <entry>
+                            <para>
+                                Class to use to represent returned documents. The class provided must extend
+                                <classname>Zend_Cloud_DocumentService_Document</classname> to ensure
+                                compatibility with all document services. For all methods that
+                                return a document or collection of documents, this class will be
+                                used.
+                            </para>
+                        </entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><classname>Zend_Cloud_Document_Service_Document</classname></entry>
+                    </row>
+
+                    <row>
+                        <entry>documentset_class</entry>
+                        <entry>
+                            <para>
+                                Class to use to represent collections of documents,
+                                <classname>Zend_Cloud_DocumentService_DocumentSet</classname> by
+                                default. Typically, objects of this class will be returned by
+                                <methodname>listDocuments()</methodname> and
+                                <methodname>query()</methodname>. Any class provided for this
+                                configuration value must extend
+                                <classname>Zend_Cloud_DocumentService_DocumentSet</classname>.
+                            </para>
+                        </entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><classname>Zend_Cloud_DocumentService_DocumentSet</classname></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+        <table frame="all" id="zend.cloud.documentservice.options.sdb">
+            <title>Zend_Cloud_DocumentService_Adapter_SimpleDb Options</title>
+
+            <tgroup cols="5">
+                <thead>
+                    <row>
+                        <entry>Option key</entry>
+                        <entry>Description</entry>
+                        <entry>Used in</entry>
+                        <entry>Required</entry>
+                        <entry>Default</entry>
+                    </row>
+                </thead>
+
+                <tbody>
+                    <row>
+                        <entry>query_class</entry>
+                        <entry>
+                            <para>
+                                Class to use for creating and assembling queries for this document
+                                service; <methodname>select()</methodname> will create objects of
+                                this class name, as will <methodname>listDocuments()</methodname>.
+                            </para>
+                        </entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><classname>Zend_Cloud_DocumentService_Adapter_SimpleDb_Query</classname></entry>
+                    </row>
+
+                    <row>
+                        <entry>aws_accesskey</entry>
+                        <entry>Your Amazon AWS access key</entry>
+                        <entry>Constructor</entry>
+                        <entry>Yes</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>aws_secretkey</entry>
+                        <entry>Your Amazon AWS secret key</entry>
+                        <entry>Constructor</entry>
+                        <entry>Yes</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>http_adapter</entry>
+                        <entry>HTTP adapter to use in all access operations</entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><classname>Zend_Http_Client_Adapter_Socket</classname></entry>
+                    </row>
+
+                    <row>
+                        <entry>merge</entry>
+                        <entry>
+                            <para>
+                                If a boolean true, all attribute values are merged.  You may also
+                                specify an array of key pairs, where the key is the attribute key to
+                                merge, and the value indicates whether or not to merge; a boolean
+                                true value will merge the given key. Any attributes not specified in
+                                this array will be replaced.
+                            </para>
+                        </entry>
+                        <entry><methodname>updateDocument()</methodname></entry>
+                        <entry>No</entry>
+                        <entry>True</entry>
+                    </row>
+
+                    <row>
+                        <entry>return_documents</entry>
+                        <entry>
+                            <para>
+                                If a boolean true, <methodname>query()</methodname> returns a
+                                <classname>Zend_Cloud_DocumentService_DocumentSet</classname> object
+                                containing
+                                <classname>Zend_Cloud_DocumentService_Document</classname> objects
+                                (default case); otherwise, it returns an array of arrays.
+                            </para>
+                        </entry>
+                        <entry><methodname>query()</methodname></entry>
+                        <entry>No</entry>
+                        <entry>True</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+        <table frame='all' id="zend.cloud.documentservice.options.azure">
+            <title>Zend_Cloud_DocumentService_Adapter_WindowsAzure Options</title>
+
+            <tgroup cols="5">
+                <thead>
+                    <row>
+                        <entry>Option key</entry>
+                        <entry>Description</entry>
+                        <entry>Used in</entry>
+                        <entry>Required</entry>
+                        <entry>Default</entry>
+                    </row>
+                </thead>
+
+                <tbody>
+                    <row>
+                        <entry>query_class</entry>
+                        <entry>
+                            <para>
+                                Class to use for creating and assembling queries for this document
+                                service; <methodname>select()</methodname> will create objects of
+                                this class name, as will <methodname>listDocuments()</methodname>.
+                            </para>
+                        </entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><classname>Zend_Cloud_DocumentService_Adapter_WindowsAzure_Query</classname></entry>
+                    </row>
+
+                    <row>
+                        <entry>default_partition_key</entry>
+                        <entry>
+                            <para>
+                                The default partition key to use if none is specified in the
+                                document identifier. Windows Azure requires a two-fold document ID,
+                                consisting of a PartitionKey and a RowKey. The PartitionKey will
+                                typically be common across your database or a collection, while the
+                                RowKey will vary. As such, this setting allows you to specify the
+                                default PartitionKey to utilize for all documents.
+                            </para>
+
+                            <para>
+                                If not specified, the adapter will default to using the collection
+                                name as the PartitionKey.
+                            </para>
+                        </entry>
+                        <entry>Constructor, <methodname>setDefaultPartitionKey()</methodname></entry>
+                        <entry>Name of whatever collection the document belongs to</entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_accountname</entry>
+                        <entry>Windows Azure account name</entry>
+                        <entry>Constructor</entry>
+                        <entry>Yes</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_accountkey</entry>
+                        <entry>Windows Azure account key</entry>
+                        <entry>Constructor</entry>
+                        <entry>Yes</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_host</entry>
+                        <entry>
+                            <para>
+                                Windows Azure access host, default is
+                                <varname>table.core.windows.net</varname>
+                            </para>
+                        </entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry><varname>table.core.windows.net</varname></entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_proxy_host</entry>
+                        <entry>Proxy hostname</entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_proxy_port</entry>
+                        <entry>Proxy port</entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry>8080</entry>
+                    </row>
+
+                    <row>
+                        <entry>storage_proxy_credentials</entry>
+                        <entry>Proxy credentials</entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>HTTP Adapter</entry>
+                        <entry>HTTP adapter to use in all access operations</entry>
+                        <entry>Constructor</entry>
+                        <entry>No</entry>
+                        <entry>None</entry>
+                    </row>
+
+                    <row>
+                        <entry>verify_etag</entry>
+                        <entry>
+                            <para>
+                                Verify ETag on the target document and perform the operation only if the
+                                ETag matches the expected value
+                            </para>
+                        </entry>
+                        <entry>
+                            <methodname>updateDocument()</methodname>,
+                            <methodname>replaceDocument()</methodname>,
+                            <methodname>deleteDocument()</methodname>
+                        </entry>
+                        <entry>No</entry>
+                        <entry>False</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.concepts">
+        <title>Basic concepts</title>
+
+        <para>
+            Each document-oriented service and database uses its own terminology and constructs in
+            its API. The SimpleCloud API identifies and abstracts a number of common concepts and
+            operations that are shared among providers.
+        </para>
+
+        <para>
+            Document storage consists of a number of <emphasis>collections</emphasis>, which are
+            logical storage units analogous to database tables in the SQL world. Collections contain
+            <emphasis>documents</emphasis>, which are essentially a set of key-value pairs, along
+            with some metadata specific to the storage engine, and are identified by a unique
+            <emphasis>document ID</emphasis>.
+        </para>
+
+        <para>
+            Each document has its own structure (set of fields) that does not necessarily have to
+            match the structure of any other document, even in the same collection. In fact, you can
+            change this structure after the document is created.
+        </para>
+
+        <para>
+            Documents can be retrieved by ID or by querying a collection.
+        </para>
+
+        <para>
+            Documents are represented by the class
+            <classname>Zend_Cloud_DocumentService_Document</classname>.  Note that the document
+            class does not validate the supplied IDs and data, and does not enforce compatibility
+            with each adapter's requirements.
+        </para>
+
+        <para>
+            The document fields can be accessed using keys as object properties and as array
+            elements.
+        </para>
+
+        <para>
+            The basic interface of <classname>Zend_Cloud_DocumentService_Document</classname> is as
+            follows:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+/**
+ * ArrayAccess allows accessing fields by array key:
+ *    $doc['fieldname']
+ *
+ * IteratorAggregate allows iterating over all fields:
+ *    foreach ($document as $field => $value) {
+ *        echo "$field: $value\n";
+ *    }
+ *
+ * Countable provides a count of all fields:
+ *    count($document)
+ */
+class Zend_Cloud_DocumentService_Document
+    implements ArrayAccess, IteratorAggregate, Countable
+{
+    const KEY_FIELD = '_id';
+
+    /**
+     * $fields may be an array or an object implementing ArrayAccess.
+     * If no $id is provided, it will look for a field matching KEY_FIELD to
+     * use as the identifier.
+     */
+    public function __construct($fields, $id = null);
+
+    public function setId($id);
+    public function getId();
+    public function getFields();
+    public function getField($name);
+    public function setField($name, $value);
+
+    /**
+     * These allow overloading, so you may access fields as if they were
+     * native properties of the document
+     */
+    public function __get($name);
+    public function __set($name, $value);
+
+    /**
+     * Alternately, you can acces fields as if via native getters and
+     * setters:
+     *     $document->setFoo($value);    // set "Foo" field to value
+     *     $value = $document->getFoo(); // get "Foo" field value
+    public function __call($name, $args);
+}
+]]></programlisting>
+
+        <note>
+            <title>Windows Azure Document Identifiers</title>
+
+            <para>
+                Windows Azure technically requires a combination of two fields to uniquely
+                identify documents: the <varname>PartitionKey</varname> and
+                <varname>RowKey</varname>, and as such, keys are fully qualified by the structure
+                <code>array(PartitionKey, RowKey)</code> -- which makes them non-portable.  In most
+                situations, the <varname>PartitionKey</varname> will not differ for documents in a
+                single collection -- and potentially not even across your entire table instance. As
+                such, the DocumentService provides several options for specifying keys:
+            </para>
+
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        Array keys will always work as expected.
+                    </para>
+                </listitem>
+
+                <listitem>
+                    <para>
+                        If a string key is provided:
+                    </para>
+
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                If the <varname>default_partition_key</varname> setting was provided
+                                to the constructor, or passed to the
+                                <methodname>setDefaultPartitionKey()</methodname> method, that value
+                                will be used for the <varname>PartitionKey</varname>.
+                            </para>
+                        </listitem>
+
+                        <listitem>
+                            <para>
+                                Otherwise, the name of the collection on which you are operating
+                                will be used.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </itemizedlist>
+
+            <para>
+                The takeaway is that you can utilize string keys if you wish to maximize portability
+                of your application. Just be aware that your record will contain a few extra fields
+                to denote the key (<varname>PartitionKey</varname>, <varname>RowKey</varname>, and
+                the previously undiscussed <varname>Timestamp</varname>) should you ever migrate
+                your data to another service.
+            </para>
+        </note>
+
+        <example id="zend.cloud.documentservice.document.create.example">
+            <title>Creating a document</title>
+
+            <programlisting language="php"><![CDATA[
+$document = new Zend_Cloud_DocumentService_Document(array(
+    'key1' => 'value1',
+    'key2' => 123,
+    'key3' => 'thirdvalue',
+), "DocumentId");
+$document->otherkey = 'some more data';
+echo "key 1: " . $document->key1   . "\n"; // object notation
+echo "key 2: " . $document['key2'] . "\n"; // array notation
+]]></programlisting>
+        </example>
+
+        <example id="zend.cloud.documentservice.document.explore.example">
+            <title>Exploring the document data</title>
+
+            <programlisting language="php"><![CDATA[
+$document = $documents->fetchDocument("mydata", $id);
+echo "Document ID: " . $document->getID() . "\n";
+foreach ($document->getFields() as $key => $value) {
+    echo "Field $key is $value\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.exceptions">
+        <title>Exceptions</title>
+
+        <para>
+            If some error occurs in the document service,
+            <classname>Zend_Cloud_DocumentService_Exception</classname> is thrown.  If the exception
+            was caused by the underlying service driver, you can use the
+            <methodname>getClientException()</methodname> method to retrieve the original exception.
+        </para>
+
+        <para>
+            Since different cloud providers implement different sets of services, some drivers do
+            not implement certain features. In this case, the
+            <classname>Zend_Cloud_OperationNotAvailableException</classname> exception is thrown.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.create-collection">
+        <title>Creating a collection</title>
+
+        <para>
+            A new collection is created using <methodname>createCollection()</methodname>.
+        </para>
+
+        <example id="zend.cloud.documentservice.create-collection.example">
+            <title>Creating collection</title>
+
+            <programlisting language="php"><![CDATA[
+$documents->createCollection("mydata");
+]]></programlisting>
+        </example>
+
+        <para>
+            If you call <methodname>createCollection()</methodname> with a collection name that
+            already exists, the service will do nothing and leave the existing collection untouched.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.delete-collection">
+        <title>Deleting a collection</title>
+
+        <para>
+            A collection is deleted by calling <methodname>deleteCollection()</methodname>.
+        </para>
+
+        <example id="zend.cloud.documentservice.delete-collection.example">
+            <title>Deleting a collection</title>
+
+            <programlisting language="php"><![CDATA[
+$documents->deleteCollection("mydata");
+]]></programlisting>
+        </example>
+
+        <para>
+            Deleting a collection automatically deletes all documents contained in that collection.
+        </para>
+
+        <note>
+            <para>
+                Deleting a collection can take significant time for some services. You cannot
+                re-create a collection with the same name until the collection and all its documents
+                have been completely removed.
+            </para>
+        </note>
+
+        <para>
+            Deleting a non-existent collection will have no effect.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.list-collections">
+        <title>Listing available collections</title>
+
+        <para>
+            A list of existing collections is returned by
+            <methodname>listCollections()</methodname>.  This method returns an array of all the
+            names of collections belonging to the account you specified when you created the
+            adapter.
+        </para>
+
+        <example id="zend.cloud.documentservice.list-collections.example">
+            <title>List collections</title>
+
+            <programlisting language="php"><![CDATA[
+$list = $documents->listCollections();
+foreach ($list as $collection) {
+    echo "My collection: $collection\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.insert">
+        <title>Inserting a document</title>
+
+        <para>
+            To insert a document, you need to provide a
+            <classname>Zend_Cloud_DocumentService_Document</classname> object or associative array
+            of data, as well as the collection in which you are inserting it.
+        </para>
+
+        <para>
+            Many providers require that you provide a document ID with your document. If using a
+            <classname>Zend_Cloud_DocumentService_Document</classname>, you can specify this by
+            passing the identifier to the constructor when you instantiate the object. If using an
+            associative array, the key name will be adapter-specific locations; for example, on
+            Azure, the ID is made up of the PartitionKey and RowKey; on Amazon SimpleDB, the ID is
+            the ItemName; you may also specify the key in the <varname>_id</varname> field to be
+            more portable.
+        </para>
+
+        <para>
+            As such, the easiest and most compatible way to specify the key is to use
+            a Document object.
+        </para>
+
+        <example id="zend.cloud.documentservice.insert.example">
+            <title>Inserting a document</title>
+
+            <programlisting language="php"><![CDATA[
+// Instantiating and creating the document
+$document = new Zend_Cloud_DocumentService_Document(array(
+    'key1' => 'value1',
+    'key2' => 123,
+    'key3' => 'thirdvalue',
+), "DocumentID");
+
+// inserting into the "mydata" collection
+$documents->insertDocument("mydata", $document);
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.replace">
+        <title>Replacing a document</title>
+
+        <para>
+            <emphasis>Replacing</emphasis> a document means removing all document data associated with a particular
+            document key and substituting it with a new set of data. Unlike
+            <emphasis>updating</emphasis>, this operation does not merge old and new data but
+            replaces the document as a whole. The replace operation, like
+            <methodname>insertDocument()</methodname>, accepts a
+            <classname>Zend_Cloud_DocumentService_Document</classname> document or an array of
+            key-value pairs that specify names and values of the new fields, and the collection in
+            which the document exists.
+        </para>
+
+        <note>
+            <title>Document ID is required</title>
+
+            <para>
+                To replace the document, the document ID is required. Just like inserting a document,
+                if you use an associative array to describe the document, you will need to provide a
+                provider-specific key indicating the document ID. As such, the most compatible way
+                to replace a document across providers is to utilize a Document object, as shown in
+                the examples.
+            </para>
+        </note>
+
+        <example id="zend.cloud.documentservice.replace.example">
+            <title>Replacing a document</title>
+
+            <programlisting language="php"><![CDATA[
+$document = new Zend_Cloud_DocumentService_Document(array(
+    'key1' => 'value1',
+    'key2' => 123,
+    'key3' => 'thirdvalue',
+), "DocumentID");
+
+// Update the document as found in the "mydata" collection
+$documents->replaceDocument("mydata", $document);
+]]></programlisting>
+
+            <para>
+                You may also use an existing Document object, re-assign the fields and/or assign new
+                fields, and pass it to the <methodname>replaceDocument()</methodname> method:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+$docment->key4 = '4th value';
+
+// Update the document as found in the "mydata" collection
+$documents->replaceDocument("mydata", $document);
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.update">
+        <title>Updating a document</title>
+
+        <para>
+            <emphasis>Updating</emphasis> a document changes the key/value pairs in an existing
+            document. This operation does not share the <emphasis>replace</emphasis> semantics; the
+            values of the keys that are not specified in the data set will not be changed. You must
+            provide both a document key and data, either via a
+            <classname>Zend_Cloud_DocumentService_Document</classname> document or an array, to this
+            method. If the key is null and a document object is provided, the document key is used.
+        </para>
+
+        <example id="zend.cloud.documentservice.update.example">
+            <title>Updating a document</title>
+
+            <programlisting language="php"><![CDATA[
+// update one field
+$documents->updateDocument("mydata", "DocumentID", array("key2" => "new value"));
+
+// or with document; this could be a document already retrieved from the service
+$document = new Zend_Cloud_DocumentService_Document(array(
+    'key1' => 'value1',
+    'key2' => 123,
+    'key3' => 'thirdvalue',
+), "DocumentID");
+$documents->updateDocument("mydata", null, $document);
+
+// copy document to another ID
+$documents->updateDocument("mydata", "AnotherDocumentID", $document);
+]]></programlisting>
+        </example>
+
+        <para>
+            Amazon SimpleDB supports multi-value fields, so data updates will be merged with the old key
+            value instead of replacing them. Option <property>merge</property> should contain an array
+            of field names to be merged. The array should be key/value pairs, with the key
+            corresponding to the field key, and the value a boolean value indicating merge status
+            (boolean true would merge; false would not). Any keys not specified in the
+            <property>merge</property> option will be replaced instead of merged.
+        </para>
+
+        <example id="zend.cloud.documentservice.update.merge.example">
+            <title>Merging document fields</title>
+
+            <programlisting language="php"><![CDATA[
+// key2 is overwritten, key3 is merged
+$documents->updateDocument('mydata', 'DocumentID',
+    array('key2' => 'new value', 'key3' => 'additional value'),
+    array('merge' => array('key3' => true))
+);
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.delete">
+        <title>Deleting a document</title>
+
+        <para>
+            A document can be deleted by passing its key to
+            <methodname>deleteDocument()</methodname>.  Deleting a non-existant document has no
+            effect.
+        </para>
+
+        <example id="zend.cloud.documentservice.delete.example">
+            <title>Deleting a document</title>
+
+            <programlisting language="php"><![CDATA[
+$documents->deleteDocument("collectionName", "DocumentID");
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.fetch">
+        <title>Fetching a document</title>
+
+        <para>
+            You can fetch a specific document by specifying its key.
+            <methodname>fetchDocument()</methodname> returns one instance of
+            <classname>Zend_Cloud_DocumentService_Document</classname>.
+        </para>
+
+        <example id="zend.cloud.documentservice.fetch.example">
+            <title>Fetching a document</title>
+
+            <programlisting language="php"><![CDATA[
+$document = $service->fetchDocument('collectionName', 'DocumentID');
+echo "Document ID: " . var_export($document->getID(), 1) . "\n";
+foreach ($document->getFields() as $key => $value) {
+    echo "Field $key is $value\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.query">
+        <title>Querying a collection</title>
+
+        <para>
+            To find documents in the collection that meet some criteria, use the
+            <methodname>query()</methodname>method. This method accepts either a string which is an
+            adapter-dependent query and is passed as-is to the concrete adapter, or a structured query
+            object instance of <classname>Zend_Cloud_DocumentService_Query</classname>. The return
+            is a <classname>Zend_Cloud_DocumentService_DocumentSet</classname>, containing instances
+            of <classname>Zend_Cloud_DocumentService_Document</classname> that satisfy the query.
+            The DocumentSet object is iterable and countable.
+        </para>
+
+        <example id="zend.cloud.documentservice.query.example">
+            <title>Querying a collection using a string query</title>
+
+            <programlisting language="php"><![CDATA[
+$docs = $documents->query(
+    "collectionName",
+    "RowKey eq 'rowkey2' or RowKey eq 'rowkey2'"
+);
+
+foreach ($docs as $doc) {
+    $id = $doc->getId();
+    echo "Found document with ID: "
+        . var_export($id, 1)
+        . "\n";
+}
+]]></programlisting>
+        </example>
+
+        <para>
+            If using a structured query object, typically, you will retrieve it using the
+            <methodname>select()</methodname> method. This ensures that the query object is specific
+            to your adapter, which will ensure that it is assembled into a syntax your adapter
+            understands.
+        </para>
+
+        <example id="zend.cloud.documentservice.query.struct-example">
+            <title>Querying a collection with structured query</title>
+
+            <programlisting language="php"><![CDATA[
+$query = $service->select();
+$query->from('collectionName')
+      ->where('year > ?', array(1945))
+      ->limit(3);
+$docs = $documents->query('collectionName', $query);
+
+foreach ($docs as $doc) {
+    $id = $doc->getId();
+    echo "Found document with ID: "
+        . var_export($id, 1)
+        . "\n";
+}
+]]></programlisting>
+        </example>
+
+        <para>
+            <classname>Zend_Cloud_DocumentService_Query</classname> classes do not limit which query
+            clauses can be used, but the clause must be supported by the underlying concrete
+            adapter. Currently supported clauses include:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>select()</methodname> - defines which fields are returned in the
+                    result.
+                </para>
+
+                <note>
+                    <para>
+                        Windows Azure ignores this clause's argument and always returns the whole
+                        document.
+                    </para>
+                </note>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>from()</methodname> - defines the collection name used in the query.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>where()</methodname> - defines the conditions of the query. It
+                    accepts three parameters: condition, array of arguments to replace "?" fields in
+                    the condition, and a conjunction argument which should be "and" or "or", and
+                    which will be used to join this condition with previous conditions.  Multiple
+                    <methodname>where()</methodname> clasues may be specified.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>whereId()</methodname> - defines the condition by document ID (key).
+                    The document matching must have the same key. The method accepts one argument -
+                    the required ID (key).
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>limit()</methodname> - limits the returned data to specified number
+                    of documents.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>order()</methodname> - sorts the returned data by specified field.
+                    Accepts two arguments - first is the field name and second is 'asc' or 'desc'
+                    specifying the sort direction.
+                </para>
+
+                <note>
+                    <para>
+                        This clause is not currently supported by Windows Azure.
+                    </para>
+                </note>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.select">
+        <title>Creating a query</title>
+
+        <para>
+            For the user's convenience, the <methodname>select()</methodname> method instantiates a
+            query object specific to the adapter, and sets the SELECT clause for it.
+        </para>
+
+        <example id="zend.cloud.documentservice.select.example">
+            <title>Creating a structured query</title>
+
+            <programlisting language="php"><![CDATA[
+$query = $documents->select()
+                   ->from('collectionName')
+                   ->where('year > ?', array(1945))
+                   ->limit(3);
+$docs = $documents->query('collectionName', $query);
+foreach ($docs as $doc) {
+    $id = $doc->getId();
+    echo "Found document with ID: "
+        . var_export($id, 1)
+        . "\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.documentservice.adapter">
+        <title>Accessing concrete adapters</title>
+
+        <para>
+            Sometimes it is necessary to retrieve the concrete adapter for the service that the
+            Document API is working with. This can be achieved by using the
+            <methodname>getAdapter()</methodname> method.
+        </para>
+
+        <note>
+            <para>
+                Accessing the underlying adapter breaks portability among services, so it should be
+                reserved for exceptional circumstances only.
+            </para>
+        </note>
+
+        <example id="zend.cloud.documentservice.adapter.example">
+            <title>Using concrete adapters</title>
+
+            <programlisting language="php"><![CDATA[
+// Since SimpleCloud Document API doesn't support batch upload, use concrete adapter
+$amazonSdb = $documents->getAdapter();
+$amazonSdb->batchPutAttributes($items, 'collectionName');
+]]></programlisting>
+        </example>
+    </sect2>
+</sect1>

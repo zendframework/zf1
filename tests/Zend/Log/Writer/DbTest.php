@@ -1,0 +1,164 @@
+<?php
+/**
+ * Zend Framework
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   Zend
+ * @package    Zend_Log
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
+ */
+
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'Zend_Log_Writer_DbTest::main');
+}
+
+/** Zend_Log_Writer_Db */
+require_once 'Zend/Log/Writer/Db.php';
+
+/**
+ * @category   Zend
+ * @package    Zend_Log
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @group      Zend_Log
+ */
+class Zend_Log_Writer_DbTest extends PHPUnit_Framework_TestCase
+{
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite(__CLASS__);
+        $result = PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
+    public function setUp()
+    {
+        $this->tableName = 'db-table-name';
+
+        $this->db     = new Zend_Log_Writer_DbTest_MockDbAdapter();
+        $this->writer = new Zend_Log_Writer_Db($this->db, $this->tableName);
+    }
+
+    public function testFormattingIsNotSupported()
+    {
+        try {
+            require_once 'Zend/Log/Formatter/Simple.php';
+            $this->writer->setFormatter(new Zend_Log_Formatter_Simple());
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertType('Zend_Log_Exception', $e);
+            $this->assertRegExp('/does not support formatting/i', $e->getMessage());
+        }
+    }
+
+    public function testWriteWithDefaults()
+    {
+        // log to the mock db adapter
+        $fields = array('message'  => 'foo',
+                        'priority' => 42);
+
+        $this->writer->write($fields);
+
+        // insert should be called once...
+        $this->assertContains('insert', array_keys($this->db->calls));
+        $this->assertEquals(1, count($this->db->calls['insert']));
+
+        // ...with the correct table and binds for the database
+        $binds = array('message'  => $fields['message'],
+                       'priority' => $fields['priority']);
+        $this->assertEquals(array($this->tableName, $binds),
+                            $this->db->calls['insert'][0]);
+    }
+
+    public function testWriteUsesOptionalCustomColumnNames()
+    {
+        $this->writer = new Zend_Log_Writer_Db($this->db, $this->tableName,
+                                                array('new-message-field'  => 'message',
+                                                      'new-message-field' => 'priority'));
+
+        // log to the mock db adapter
+        $message  = 'message-to-log';
+        $priority = 2;
+        $this->writer->write(array('message' => $message, 'priority' => $priority));
+
+        // insert should be called once...
+        $this->assertContains('insert', array_keys($this->db->calls));
+        $this->assertEquals(1, count($this->db->calls['insert']));
+
+        // ...with the correct table and binds for the database
+        $binds = array('new-message-field' => $message,
+                       'new-message-field' => $priority);
+        $this->assertEquals(array($this->tableName, $binds),
+                            $this->db->calls['insert'][0]);
+    }
+
+    public function testShutdownRemovesReferenceToDatabaseInstance()
+    {
+        $this->writer->write(array('message' => 'this should not fail'));
+        $this->writer->shutdown();
+
+        try {
+            $this->writer->write(array('message' => 'this should fail'));
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertType('Zend_Log_Exception', $e);
+            $this->assertEquals('Database adapter is null', $e->getMessage());
+        }
+    }
+
+    public function testFactory()
+    {
+        $cfg = array('log' => array('memory' => array(
+            'writerName'   => "Db",
+            'writerParams' => array(
+                'db'    => $this->db,
+                'table' => $this->tableName,
+            ),
+        )));
+
+        require_once 'Zend/Log.php';
+        $logger = Zend_Log::factory($cfg['log']);
+        $this->assertTrue($logger instanceof Zend_Log);
+    }
+
+    /**
+     * @group ZF-10089
+     */
+    public function testThrowStrictSetFormatter()
+    {
+        try {
+            $this->writer->setFormatter(new StdClass());
+        } catch (Exception $e) {
+            $this->assertType('PHPUnit_Framework_Error', $e);
+            $this->assertContains('must implement interface', $e->getMessage());
+        }
+    }
+}
+
+
+class Zend_Log_Writer_DbTest_MockDbAdapter
+{
+    public $calls = array();
+
+    public function __call($method, $params)
+    {
+        $this->calls[$method][] = $params;
+    }
+
+}
+
+if (PHPUnit_MAIN_METHOD == 'Zend_Log_Writer_DbTest::main') {
+    Zend_Log_Writer_DbTest::main();
+}

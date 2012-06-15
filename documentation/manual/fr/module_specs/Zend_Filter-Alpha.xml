@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.filter.set.alpha">
+    <title>Alpha</title>
+
+    <para>
+        <classname>Zend_Filter_Alpha</classname> est un filtre qui va retourner
+        <varname>$value</varname> en enlevant tout caractère non alphabétique. Ce filtre propose
+        une option pour autoriser le caractère espace.
+    </para>
+
+    <sect3 id="zend.filter.set.alpha.options">
+        <title>Options supportées par Zend_Filter_Alpha</title>
+
+        <para>
+            Les options suivantes sont supportées par <classname>Zend_Filter_Alpha</classname>:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowwhitespace</property></emphasis>: Si activée, les espaces
+                    seront autorisés. Par défaut, ils sont supprimés.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.alpha.basic">
+        <title>Utilisation de base</title>
+
+        <para>
+            Voici un exemple de base:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alpha();
+
+print $filter->filter('This is (my) content: 123');
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus affiche 'Thisismycontent'. Remarquez que les espaces et le double-point
+            ont été supprimés.
+        </para>
+
+        <note>
+            <para>
+                <classname>Zend_Filter_Alpha</classname> fonctionne sur presque tous les langages. Les exceptions
+                sont le chinois, le japonnais et le coréen. Ces langues utiliseront l'alphabet anglais plutot que
+                le leur. Le langage est détecté par <classname>Zend_Locale</classname>.
+            </para>
+        </note>
+    </sect3>
+
+     <sect3 id="zend.filter.set.alpha.whitespace">
+         <title>Autoriser les espaces</title>
+
+        <para>
+            <classname>Zend_Filter_Alpha</classname> peut aussi autoriser les espaces. Ca peut être utile, voyez
+            l'exemple suivant:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alpha(array('allowwhitespace' => true));
+
+print $filter->filter('This is (my) content: 123');
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus retourne 'This is my content'. Comme vous le voyez, le double-point ainsi que
+            les chiffres et les parenthèses sont filtrés mais pas les espaces.
+        </para>
+
+        <para>
+            Pour changer <property>allowWhiteSpace</property> après construction de l'objet, utilisez
+            <methodname>setAllowWhiteSpace()</methodname> et
+            <methodname>getAllowWhiteSpace()</methodname>.
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect2 id="zend.mail.file-transport">
+    <title>Using File Transport</title>
+
+    <para>
+        <classname>Zend_Mail_Transport_File</classname> is useful in a
+        development environment or for testing purposes. Instead of sending any real
+        emails it simply dumps the email's body and headers to a file in the filesystem.
+        Like the other transports, it may be configured using
+        <classname>Zend_Application_Resource_Mail</classname>, or by passing an instance to the
+        <methodname>send()</methodname> method of a <classname>Zend_Mail</classname> instance.
+    </para>
+
+    <para>
+        The transport has two optional parameters that can be passed to the constructor or
+        via <methodname>setOptions()</methodname> method. The <property>path</property>
+        option specifies the base path where new files are saved. If nothing is set, the transport
+        uses the default system directory for temporary files.  The second parameter,
+        <property>callback</property>, defines what PHP callback should be used to generate a
+        filename. As an example, assume we need to use the recipient's email plus some
+        hash as the filename:
+    </para>
+
+    <programlisting language="php"><![CDATA[
+function recipientFilename($transport)
+{
+    return $transport->recipients . '_' . mt_rand() . '.tmp';
+}
+
+$mail = new Zend_Mail();
+$mail->addTo('somebody@example.com', 'Some Recipient');
+// build message...
+$tr = new Zend_Mail_Transport_File(array('callback' => 'recipientFilename'));
+$mail->send($tr);
+]]></programlisting>
+
+    <para>
+        The resulting file will be something like <filename>somebody@example.com_1493362665.tmp</filename>
+    </para>
+
+    <note>
+        <title>Include randomness in filename generation</title>
+
+        <para>
+            When generating filenames, you should inject some sort of randomness into the generation
+            to ensure that the filenames are unique. This is especially important on servers where
+            you may expect high load, as it will ensure that despite a number of requests coming in
+            during the same second or millisecond, the filename will still be unique.
+        </para>
+    </note>
+</sect2>

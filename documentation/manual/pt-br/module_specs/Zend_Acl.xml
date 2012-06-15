@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.acl.introduction">
+    <title>Introdução</title>
+
+    <para>
+        <classname>Zend_Acl</classname> fornece uma implementação de lista de controle de acesso
+        (<acronym>ACL</acronym>, na sigla em inglês) leve e flexível para a gestão privilégios.
+        Em geral, uma aplicação pode utilizar essa <acronym>ACL</acronym> para controlar o acesso a
+        determinados objetos protegidos por outros objetos requerentes.
+    </para>
+
+    <para>
+        Para o propósito desta documentação:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                Um <emphasis>recurso</emphasis> é um objeto cujo acesso é controlado
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                Um <emphasis>papel</emphasis> é um objeto que pode solicitar acesso a um Recurso.
+            </para>
+        </listitem>
+    </itemizedlist>
+
+    <para>
+        De modo simples, <emphasis>papéis requisitam acesso a recursos</emphasis>. Por exemplo, se
+        um atendente de estacionamento solicita acesso ao um carro, o atendente é o papel
+        requisitante e o carro é o recurso, pois o acesso ao carro pode não ser garantido a qualquer
+        um.
+    </para>
+
+    <para>
+        Através da especificação e uso de uma <acronym>ACL</acronym>, uma aplicação pode controlar
+        como os papéis têm acesso aos recursos.
+    </para>
+
+    <sect2 id="zend.acl.introduction.resources">
+        <title>Recursos</title>
+
+        <para>
+            A criação de um recurso em <classname>Zend_Acl</classname> é muito simples.
+            <classname>Zend_Acl</classname> fornece um meio,
+            <classname>Zend_Acl_Resource_Interface</classname>, para facilitar a criação de recursos
+            em uma aplicação. Uma classe precisa apenas implementar esta interface, que consiste em
+            um único método, <methodname>getResourceId()</methodname>, para que
+            <classname>Zend_Acl</classname> reconheça o objeto como um recurso. Adicionalmente,
+            <classname>Zend_Acl_Resource</classname> é fornecida por <classname>Zend_Acl</classname>
+            como uma implementação básica de recurso para que desenvolvedores a extendam conforme
+            necessário.
+        </para>
+
+        <para>
+            <classname>Zend_Acl</classname> fornece uma estrutura de árvore na qual múltiplos
+            recursos podem ser adicionados. Como os recursos são armazenados em uma estrutura de
+            árvore, eles podem ser organizados do geral (em direção à raiz da árvore) para o
+            específico (em direção às folhas da árvore). Consultas em um recurso específico irá
+            automaticamente pesquisar sua hierarquia por regras definidas em recursos ancenstrais,
+            permitindo herança simplificada de regras. Por exemplo, se uma regra deve ser aplicada a
+            cada construção em uma cidade, pode-se simplesmente aplicar a regra à cidade, ao invés
+            de atribuir a mesma regra para cada construção. Contudo, algumas construções podem
+            necessitar de exceções para tal regra e isto pode ser feito em
+            <classname>Zend_Acl</classname> atribuindo tal exceção a cada construção que a
+            necessite. Um recurso pode descender de apenas um recurso pai, embora este recurso pai
+            pode possuir seu próprio pai, etc.
+        </para>
+
+        <para>
+            <classname>Zend_Acl</classname> também suporta privilégios em recursos (ex., "criar",
+            "ler", "atualizar", "excluir") e o desenvolvedor pode atribuir regras que afetam todos
+            os privilégios ou apenas privilégios específicos em um ou mais recursos.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.acl.introduction.roles">
+        <title>Papéis</title>
+
+        <para>
+            Assim como recursos, criar um papel é também muito simples. Todos os papéis devem
+            implementar <classname>Zend_Acl_Role_Interface</classname>. Esta interface consiste
+            em um único método, <methodname>getRoleId()</methodname>. Adicionalmente,
+            <classname>Zend_Acl_Role</classname> é fornecida por <classname>Zend_Acl</classname>
+            como uma implementação de papel básica da qual desenvolvedores podem extender,
+            quando necessário.
+        </para>
+
+        <para>
+            Em <classname>Zend_Acl</classname>, um papel pode derivar de um ou mais papéis. Isto
+            é para suportar herança de regras através de papéis. Por exemplo, um papel de usuário,
+            tal como "sally", pode derivar de um ou mais papéis pai, como "editor" e
+            "administrador". O desenvolvedor pode atribuir regras para "editor" e "administrador"
+            separadamente, e "sally" herdará tais regras de ambos, sem a necessidade de atribuir
+            regras diretamente a "sally".
+        </para>
+
+        <para>
+            Embora a abilidade de herdaer de múltiplios papéis seja muito útil, herança múltipla
+            também introduz algum grau de complexidade. O exemplo a seguir ilustra a condição
+            ambígua e como <classname>Zend_Acl</classname> a soluciona.
+        </para>
+
+        <example id="zend.acl.introduction.roles.example.multiple_inheritance">
+            <title>Herança múltipla através de Papéis</title>
+
+            <para>
+                O código a seguir define três papéis fundamentais - "visitante", "membro" e
+                "admin" - dos quais outros papéis irão descender. Então, um papel identificado por
+                "algumUsuario" é estabelecido e descende dos outros três papéis. A ordem em que
+                estes papéis aparecem no array <varname>$parents</varname> é importante. Quando
+                necessário, <classname>Zend_Acl</classname> procura por regras de acesso definidas
+                não somente para o papél consultado (aqui, "algumUsuario"), mas também em papéis
+                do qual o papel consultado descende (aqui, "visitante", "membro" e "admin"):
+            </para>
+
+            <programlisting language="php"><![CDATA[
+$acl = new Zend_Acl();
+
+$acl->addRole(new Zend_Acl_Role('visitante'))
+    ->addRole(new Zend_Acl_Role('membro'))
+    ->addRole(new Zend_Acl_Role('admin'));
+
+$parents = array('visitante', 'membro', 'admin');
+$acl->addRole(new Zend_Acl_Role('algumUsuario'), $parents);
+
+$acl->add(new Zend_Acl_Resource('algumRecurso'));
+
+$acl->deny('visitante', 'algumRecurso');
+$acl->allow('membro', 'algumRecurso');
+
+echo $acl->isAllowed('algumUsuario', 'algumRecurso') ? 'permitido' : 'negado';
+]]></programlisting>
+
+            <para>
+                Como não há regra especificamente definida para o papel "algumUsuario" e
+                "algumRecurso", <classname>Zend_Acl</classname> deve procurar por regras que tenham
+                sido definidas para papéis dos quais "algumUsuario" descende. Primeiro, o papel
+                "admin" é visitado e não há regra de acesso definida para ele. Depois, o papel
+                "membro" é visitado e <classname>Zend_Acl</classname> verifica que há uma regra
+                especificando que "membro" tem acesso permitido a "algumRecurso".
+            </para>
+
+            <para>
+                Se <classname>Zend_Acl</classname> continuar examinando as regras definidas para
+                outros papéis pai, contudo, ela encontrará que "visitante" tem acesso negado a
+                "algumRecurso". Este é o fato que introduz uma ambiguidade, pois agora
+                "algumUsuario" possui, ao mesmo tempo, acesso negado e permitido a "algumRecurso",
+                pelo motivo de herdar regras conflitantes de diferentes papéis pai.
+            </para>
+
+            <para>
+                <classname>Zend_Acl</classname> soluciona esta ambiguidade concluindo a consulta
+                quando ela encontra a primeira regra diretamente aplicável a consulta. Neste caso,
+                como o papel "membro" é examinado antes do papel "visitante", o código de exemplo
+                exibirá "permitido".
+            </para>
+        </example>
+
+        <note>
+            <para>
+                Quando especificando múltiplos pais para um papel, tenha em mente que o último pai
+                listado será o primeiro buscado para regras aplicáveis a uma consulta de
+                autorização.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zend.acl.introduction.creating">
+        <title>Criando Listas de Controle de Acesso</title>
+
+        <para>
+            Uma Lista de Controle de Acesso (<acronym>ACL</acronym>, na sigla em inglês) pode
+            representar qualquer conjunto de objetos físicos ou virtuais que você desejar. Contudo,
+            para o propósito de demonstração, criaremos uma <acronym>ACL</acronym> básica de um
+            Sistema de Gerenciamento de Conteúdo (<acronym>CMS</acronym>, na sigla em inglês) que
+            mentém diversas camadas de grupos através de uma grande variedade de áreas. Para criar
+            um novo objeto <acronym>ACL</acronym>, instanciamos a <acronym>ACL</acronym> sem
+            parâmetros:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$acl = new Zend_Acl();
+]]></programlisting>
+
+        <note>
+            <para>
+                A menos que um desenvolvedor especifique uma regra "allow" (permitir - em inglês),
+                <classname>Zend_Acl</classname> negará acesso a todo privilégio em todo recurso para
+                todo papel.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zend.acl.introduction.role_registry">
+        <title>Registrando Papéis</title>
+
+        <para>
+            O <acronym>CMS</acronym> irá quase sempre necessitar de uma hierarquia de permissões
+            para determinar as capacidades de autoridade de seus usuários. Pode haver um grupo
+            'Visitante' para permitir acesso limitado para demonstrações, um grupo 'Equipe' para
+            que a maioria dos usuários do <acronym>CMS</acronym> que executam grande parte das
+            operações diárias, um grupo 'Editor' responsável pela publicação, revisão, arquivamento
+            e exclusão de conteúdo, e finalmente um grupo 'Administrador' cujas tarefas podem
+            incluir todas as de outros grupos bem como a manutenção de informações sensíveis,
+            gerenciamento de usuários, configuração de back-end, dados de configuração, cópias de
+            segurança e exportação. Este conjunto de permissões podem ser representadas em um
+            registro de papéis, permitindo a cada grupo herdar privilégios de grupos 'pai', assim
+            como fornecer privilégios distintos para grupos únicos. As permissões podem ser
+            expressas como:
+        </para>
+
+        <table id="zend.acl.introduction.role_registry.table.example_cms_access_controls">
+            <title>Controles de Acesso para um CMS de Exemplo</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Nome</entry>
+                        <entry>Permissões Únicas</entry>
+                        <entry>Permissões herdadas de</entry>
+                    </row>
+                </thead>
+
+                <tbody>
+                    <row>
+                        <entry>Visitante</entry>
+                        <entry>Visualizar</entry>
+                        <entry>N/D</entry>
+                    </row>
+
+                    <row>
+                        <entry>Equipe</entry>
+                        <entry>Editar, Enviar, Revisar</entry>
+                        <entry>Visitante</entry>
+                    </row>
+
+                    <row>
+                        <entry>Editor</entry>
+                        <entry>Publicar, Arquivar, Excluir</entry>
+                        <entry>Equipe</entry>
+                    </row>
+
+                    <row>
+                        <entry>Administrador</entry>
+                        <entry>(Todos os acessos garantidos)</entry>
+                        <entry>N/D</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+        <para>
+            Para este exemplo, <classname>Zend_Acl_Role</classname> é usado, mas qualquer objeto
+            que implemente <classname>Zend_Acl_Role_Interface</classname> é aceitável. Estes
+            grupos podem ser adicionados ao registro de papéis, como a seguir:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$acl = new Zend_Acl();
+// Adiciona grupos ao registro de papéis usando Zend_Acl_Role
+// 'Visitante' não herda controles de acesso
+$roleGuest = new Zend_Acl_Role('visitante');
+$acl->addRole($roleGuest);
+
+// 'Equipe' descende de 'Visitante'
+$acl->addRole(new Zend_Acl_Role('equipe'), $roleGuest);
+
+/*
+Alternativamente, o código acima poderia ser escrito como:
+$acl->addRole(new Zend_Acl_Role('equipe'), 'visitante');
+*/
+
+// 'Editor' descende de 'Equipe'
+$acl->addRole(new Zend_Acl_Role('editor'), 'equipe');
+
+// 'Administrador' não herda controles de acesso
+$acl->addRole(new Zend_Acl_Role('administrator'));
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zend.acl.introduction.defining">
+        <title>Definindo Controles de Acesso</title>
+        <para>
+            Agora que a <acronym>ACL</acronym> contém os papéis relevantes, regras podem ser
+            estabelecidas para definir quais recursos podem ser acessados por quais papéis. Você
+            pode notar que não definimos nenhum recurso em particular para este exemplo, que é
+            simplificado para ilustrar que regras se aplicam a todos os recursos.
+            <classname>Zend_Acl</classname> fornece uma implementação onde regras necessitam apenas
+            serem atribuidas do caso geral para o específico, minimizando o número de regras
+            necessárias, pois recursos e papéis herdam regras definidas em seus ancestrais.
+        </para>
+
+        <note>
+            <para>
+                Em geral, <classname>Zend_Acl</classname> obedecerá uma regra dada se e somente se
+                uma regra mais específica não for aplicável.
+            </para>
+        </note>
+
+        <para>
+            Consequentemente, podemos definir um conjunto razoavelmente complexo de regras com o
+            mínimo de código. Para aplicar as permissões básicas, tal como definido acima:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$acl = new Zend_Acl();
+
+$roleGuest = new Zend_Acl_Role('visitante');
+$acl->addRole($roleGuest);
+$acl->addRole(new Zend_Acl_Role('equipe'), $roleGuest);
+$acl->addRole(new Zend_Acl_Role('editor'), 'equipe');
+$acl->addRole(new Zend_Acl_Role('administrador'));
+
+// 'Visitante' pode apenas visualizar conteúdo
+$acl->allow($roleGuest, null, 'visualizar');
+
+/*
+Alternatively, the above could be written:
+$acl->allow('visitante', null, 'visualizar');
+//*/
+
+// 'Equipe' herda privilégios de 'Visitante', porém precisa de
+// privilégios adicionais
+$acl->allow('equipe', null, array('editar', 'enviar', 'revisar'));
+
+// 'Editor' herda os privilégios visualizar, editar, enviar, e revisar de
+// 'Equipe', mas também precisa de privilégios adicionais
+$acl->allow('editor', null, array('publicar', 'arquivar', 'excluir'));
+
+// Administrador não herda nada, mas têm acesso a tudo
+$acl->allow('administrador');
+]]></programlisting>
+
+        <para>
+            Os valores <constant>NULL</constant> nas chamadas <methodname>allow()</methodname>
+            acima indicam que as regras para permitir acesso se aplicam a todos os recursos.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.acl.introduction.querying">
+        <title>Consultando uma ACL</title>
+
+        <para>
+            Temos agora uma <acronym>ACL</acronym> flexível que pode ser usada para determinar quais
+            solicitantes têm permissão para executar funções através da aplicação web.
+            Realizar consultas é bastante simples usando o método
+            <methodname>isAllowed()</methodname>:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+echo $acl->isAllowed('visitante', null, 'visualizar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('equipe', null, 'publicar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('equipe', null, 'revisar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('editor', null, 'visualizar') ?
+     "permitido" : "negado";
+// 'permitido' por conta da herança de 'visitante'
+
+echo $acl->isAllowed('editor', null, 'atualizar') ?
+     "permitido" : "negado";
+// 'negado' pois não há regra 'atualizar'
+
+echo $acl->isAllowed('administrador', null, 'visualizar') ?
+     "permitido" : "negado";
+// permitido, pois administrador é permitido a todos os privilégios
+
+echo $acl->isAllowed('administrador') ?
+     "permitido" : "negado";
+// permitido, pois administrador é permitido a todos os privilégios
+
+echo $acl->isAllowed('administrador', null, 'atualizar') ?
+     "permitido" : "negado";
+// permitido, pois administrador é permitido a todos os privilégios
+]]></programlisting>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

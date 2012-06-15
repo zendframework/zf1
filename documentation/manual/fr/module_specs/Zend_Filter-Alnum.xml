@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.filter.set.alnum">
+    <title>Alnum</title>
+
+    <para>
+        <classname>Zend_Filter_Alnum</classname> est un filtre qui ne retourne que des caractères
+        alphabétiques et des chiffres. Tout autre caractère est supprimé.
+    </para>
+
+    <sect3 id="zend.filter.set.alnum.options">
+        <title>Options supportées par Zend_Filter_Alnum</title>
+
+        <para>
+            Les options suivantes sont supportées par <classname>Zend_Filter_Alnum</classname>:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowwhitespace</property></emphasis>: Si activée, les espaces
+                    seront autorisés, autrement ils sont supprimés. Par défaut, les espaces ne sont pas
+                    autorisés et supprimés.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.alnum.basic">
+        <title>Utilisation de base</title>
+
+        <para>
+            Voyez l'exemple suivant pour le comportement par défaut de ce filtre.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alnum();
+$return = $filter->filter('This is (my) content: 123');
+// retourne 'Thisismycontent123'
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus retourne 'Thisismycontent123'. Comme vous le voyez, tous les espaces et le double-point
+            sont filtrés.
+        </para>
+
+        <note>
+            <para>
+                <classname>Zend_Filter_Alnum</classname> fonctionne sur presque tous les langages. Les exceptions
+                sont le chinois, le japonnais et le coréen. Ces langues utiliseront l'alphabet anglais plutot que
+                le leur. Le langage est détecté par <classname>Zend_Locale</classname>.
+            </para>
+        </note>
+    </sect3>
+
+    <sect3 id="zend.filter.set.alnum.whitespace">
+        <title>Autoriser les espaces</title>
+
+        <para>
+            <classname>Zend_Filter_Alnum</classname> peut aussi autoriser les espaces. Ca peut être utile, voyez
+            l'exemple suivant:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alnum(array('allowwhitespace' => true));
+$return = $filter->filter('This is (my) content: 123');
+// retourne 'This is my content 123'
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus retourne 'This is my content 123'. Comme vous le voyez, le double-point est filtré
+            ainsi que les parenthèses, mais pas les espaces.
+        </para>
+
+        <para>
+            Pour changer <property>allowWhiteSpace</property> après construction de l'objet, utilisez
+            <methodname>setAllowWhiteSpace()</methodname> et
+            <methodname>getAllowWhiteSpace()</methodname>.
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

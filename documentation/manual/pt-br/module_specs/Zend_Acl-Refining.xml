@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.acl.refining">
+    <title>Refinando Controles de Acesso</title>
+
+    <sect2 id="zend.acl.refining.precise">
+        <title>Controles de Acesso Precisos</title>
+
+        <para>
+            A <acronym>ACL</acronym> básica definida na
+            <link linkend="zend.acl.introduction">seção anterior</link> mostra como vários
+            privilégios podem ser permitidos em toda a <acronym>ACL</acronym> (todos os recursos).
+            Contudo, na prática, controles de acesso tendem a possuir exceções e diversos níveis
+            de complexidade. <classname>Zend_Acl</classname> permite a você realizar estas melhorias
+            de uma forma simples e flexível.
+        </para>
+
+        <para>
+            Para o <acronym>CMS</acronym> de exemplo, foi determinado que, embora o grupo 'equipe'
+            cubra as necessidades da grande maioria dos usuários, há necessidade de um novo
+            grupo 'marketing', que necessita de acesso a newsletter e últimas notícias no
+            <acronym>CMS</acronym>. O grupo é quase auto-suficiente e terá a habilidade de publicar
+            e arquivar tanto newsletters como últimas notícias.
+        </para>
+
+        <para>
+            Adicionalmente, também foi solicitado que o grupo 'equipe' tenha acesso liberado para
+            visualizar notícias mas não possam revisar as notícias mais recentes. Finalmente, deve
+            ser impossível para qualquer um (inclusive adminsitradores) arquivar qualquer notícia
+            de 'comunicado', pois eles ficam visíveis por somente 1 ou 2 dias.
+        </para>
+
+        <para>
+            Primeiro, revisamos o registro de papéis para refletir estas alterações. Determinamos
+            que o grupo 'marketing' tem o mesmo conjunto básico de permissões que 'equipe',
+            portanto definimos 'marketing' de modo a herdar as permissões de 'equipe':
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// O novo grupo 'marketing' herda permissões de 'equipe'
+$acl->addRole(new Zend_Acl_Role('marketing'), 'equipe');
+]]></programlisting>
+
+        <para>
+            Em seguida, note que os controles de acesso acima se referem a recursos específicos
+            (ex., "newsletter", "últimas notícias", "comunicados"). Agora vamos adicionar esses
+            recursos:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Create Resources for the rules
+
+// newsletter
+$acl->addResource(new Zend_Acl_Resource('newsletter'));
+
+// Notícias
+$acl->addResource(new Zend_Acl_Resource('notícias'));
+
+// Últimas notícias
+$acl->addResource(new Zend_Acl_Resource('últimas'), 'notícias');
+
+// Comunicados
+$acl->addResource(new Zend_Acl_Resource('comunicados'), 'notícias');
+]]></programlisting>
+
+        <para>
+            Então é simplesmente uma questão de definição dessas regras mais específicas para as
+            áreas da <acronym>ACL</acronym>:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Marketing deve publicar e arquivar newsletters e últimas notícias
+$acl->allow('marketing',
+            array('newsletter', 'últimas'),
+            array('publicar', 'arquivar'));
+
+// 'Equipe' (e 'Marketing', por herança) são negados a revisar últimas
+//notícias
+$acl->deny('equipe', 'últimas', 'revisar');
+
+// Todos (incluindo administradores) não podem arquivar notícias de comunicados
+$acl->deny(null, 'comunicados', 'arquivar');
+]]></programlisting>
+
+        <para>
+            Agora podemos consultar a <acronym>ACL</acronym>, respeitando as últimas alterações:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+echo $acl->isAllowed('equipe', 'newsletter', 'publicar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('marketing', 'newsletter', 'publicar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('equipe', 'últimas', 'publicar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('marketing', 'últimas', 'publicar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('marketing', 'últimas', 'arquivar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('marketing', 'últimas', 'revisar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('editor', 'comunicados', 'arquivar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('administrador', 'comunicados', 'arquivar') ?
+     "permitido" : "negado";
+// negado
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zend.acl.refining.removing">
+        <title>Removendo Controles de Acesso</title>
+
+        <para>
+            Para remover um ou mais regras de acesso da <acronym>ACL</acronym>, simplesmente use os
+            métodos disponíveis <methodname>removeAllow()</methodname> ou
+            <methodname>removeDeny()</methodname>. Assim como <methodname>allow()</methodname> e
+            <methodname>deny()</methodname>, você pode fornecer um valor <constant>NULL</constant>
+            para indicar aplicação a todos os papéis, recursos e/ou privilégios:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Remove a recusa de revisão de últimas notícias para 'equipe' (e marketing,
+// por herança)
+$acl->removeDeny('equipe', 'últimas', 'revisar');
+
+echo $acl->isAllowed('marketing', 'últimas', 'revisar') ?
+     "permitido" : "negado";
+// permitido
+
+// Remove a permissão para publicar e arquivar newsletters para 'marketing'
+$acl->removeAllow('marketing',
+                  'newsletter',
+                  array('publicar', 'arquivar'));
+
+echo $acl->isAllowed('marketing', 'newsletter', 'publicar') ?
+     "permitido" : "negado";
+// negado
+
+echo $acl->isAllowed('marketing', 'newsletter', 'arquivar') ?
+     "permitido" : "negado";
+// negado
+]]></programlisting>
+
+        <para>
+            Privilégios podem ser modificados incrementalmente, como indicado acima, mas um valor
+            <constant>NULL</constant> para privilégios sobrescreve tais mudanças incrementais:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+// Concede a 'marketing' todas as permissões sobre 'últimas notícias'
+$acl->allow('marketing', 'últimas');
+
+echo $acl->isAllowed('marketing', 'últimas', 'publicar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('marketing', 'últimas', 'arquivar') ?
+     "permitido" : "negado";
+// permitido
+
+echo $acl->isAllowed('marketing', 'útlimas', 'qualquer coisa') ?
+     "permitido" : "negado";
+// permitido
+]]></programlisting>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

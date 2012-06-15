@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.acl.advanced">
+    <title>Uso Avançado</title>
+
+    <sect2 id="zend.acl.advanced.storing">
+        <title>Armazenando ACL para Persistência de Dados</title>
+
+        <para>
+            <classname>Zend_Acl</classname> foi projetado de uma maneira que não requer nenhuma
+            teconologia de backend em particular, como um banco de dados ou servidor de cache, para
+            armazenamento de dados <acronym>ACL</acronym>. Sua implementação completamente em
+            <acronym>PHP</acronym> permite que ferramentas personalizadas de admnistração sejam
+            construídas sob <classname>Zend_Acl</classname> com relativa facilidade e flexibilidade.
+            Muitas situações necessitam de alguma forma de manutenção da <acronym>ACL</acronym> e
+            <classname>Zend_Acl</classname> fornece métodos para estabelecer e consultar os
+            controles de acesso de uma aplicação.
+        </para>
+
+        <para>
+            O armazenamento dos dados da <acronym>ACL</acronym> é uma tarefa deixada para o
+            desenvolvedor, visto que espera-se que os casos de uso possam variar muito de acordo com
+            situações diversas. Por conta de <classname>Zend_Acl</classname> ser serializável,
+            objetos <acronym>ACL</acronym> podem ser serializados com a função
+            <ulink url="http://php.net/serialize"><methodname>serialize()</methodname></ulink> do
+            <acronym>PHP</acronym> e o resultado pode ser armazenado em qualquer lugar que o
+            desenvolvedor desejar, como um arquivo, banco de dados ou mecanismo de cache.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.acl.advanced.assertions">
+        <title>Escrevendo Regras ACL Condicionais com Asserções</title>
+
+        <para>
+            Algumas vezes uma regra para permitir ou negar acesso de um papel a um recurso não deve
+            ser absoluta, mas dependente de vários critérios. Por exemplo, suponha que certo acesso
+            deva ser liberado, mas somente entre o horário entre 8h00 e 17h00. Outro exemplo seria
+            negar um acesso por conta de uma requisição vinda de um <acronym>IP</acronym> que foi
+            identificado como fonte de abuso. <classname>Zend_Acl</classname> foi construído para
+            suportar a implementação de regras baseadas em quaisquer condições que o desenvolvedor
+            necessitar.
+        </para>
+
+        <para>
+            <classname>Zend_Acl</classname> fornece suporte para regras condicionais com
+            <classname>Zend_Acl_Assert_Interface</classname>. Para utilizar a interface de asserção
+            de regra, o desenvolvedor escreve uma classe que implemente o método
+            <methodname>assert()</methodname> da interface:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+class CleanIPAssertion implements Zend_Acl_Assert_Interface
+{
+    public function assert(Zend_Acl $acl,
+                           Zend_Acl_Role_Interface $role = null,
+                           Zend_Acl_Resource_Interface $resource = null,
+                           $privilege = null)
+    {
+        return $this->_isCleanIP($_SERVER['REMOTE_ADDR']);
+    }
+
+    protected function _isCleanIP($ip)
+    {
+        // ...
+    }
+}
+]]></programlisting>
+
+        <para>
+            Uma vez que uma classe de asserção está disponível, o desenvolvedor deve fornecer uma
+            instância de classe de asserção ao atribuir regras condicionais. Uma regra criada com
+            uma asserção somente se aplica quando o método de asserção retorna
+            <constant>TRUE</constant>.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$acl = new Zend_Acl();
+$acl->allow(null, null, null, new CleanIPAssertion());
+]]></programlisting>
+
+        <para>
+            O código acima cria uma regra condicional que permite acesso a todos os priviégios, para
+            tudo e para todos, exceto quando o <acronym>IP</acronym> solicitante está em uma
+            "lista negra". Se a requisição vem de um <acronym>IP</acronym> que não é considerado
+            "confiável" a regra não se aplicará. Um vez que a regra se aplica a todos os papéis,
+            todos os recursos e todos os privilégios, um <acronym>IP</acronym> "não confiável"
+            resultará em uma recusa de acesso. Contudo, este é um caso especial, e deve ser
+            entendido que para todos os outros casos (ex., quando um papel específico, recurso ou
+            privilégio é especificado para a regra), um asserção falsa resultará na regra não sendo
+            aplicada, e outras regras serão utilizadas para determinar se o acesso é permitido ou
+            negado.
+        </para>
+
+        <para>
+            Ao método <methodname>assert()</methodname> de um objeto de asserção é passada a
+            <acronym>ACL</acronym>, o papel, recurso e privilégio de que a consulta de autorização
+            (ex., <methodname>isAllowed()</methodname>) se aplica, a fim de fornecer um contexto
+            para que a classe de asserção possa determinar se suas condições são necessárias.
+        </para>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

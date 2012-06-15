@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24362 -->
+<!-- Reviewed: no -->
+<sect1 id="learning.layout.usage">
+    <title>Usando Zend_Layout</title>
+
+    <para>
+        O uso básico do <classname>Zend_Layout</classname> é bastante trivial. Assumindo que você já
+        está usando <classname>Zend_Application</classname>, você pode simplesmente fornecer algumas
+        opções de configuração e criar um script de vizualização para o layout.
+    </para>
+
+    <sect2 id="learning.layout.usage.configuration">
+        <title>Configuração do Layout</title>
+
+        <para>
+            A localização recomendada dos layouts é no subdiretório
+            "<filename>layouts/scripts/</filename>" de sua aplicação:
+        </para>
+
+        <programlisting language="text"><![CDATA[
+application
+|-- Bootstrap.php
+|-- configs
+|   `-- application.ini
+|-- controllers
+|-- layouts
+|   `-- scripts
+|       |-- layout.phtml
+]]></programlisting>
+
+        <para>
+            Para inicializar o <classname>Zend_Layout</classname>, adicione o seguinte no seu
+            arquivo de configuração ("<filename>application/configs/application.ini</filename>"):
+        </para>
+
+        <programlisting language="dosini"><![CDATA[
+resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts"
+resources.layout.layout = "layout"
+]]></programlisting>
+
+        <para>
+            A primeira linha indica onde procurar pelos scripts de layout; a segunda linha dá o
+            nome do layout a ser usado, menos a extensão do script de vizualização (que é assumida
+            como "<filename>.phtml</filename>" por padrão).
+        </para>
+    </sect2>
+
+    <sect2 id="learning.layout.usage.layout-script">
+        <title>Criando um Script de Layout</title>
+
+        <para>
+            Agora que você tem suas configurações no lugar, você precisa criar seu script de layout.
+            Primeiro tenha certeza de que você criou o diretório
+            "<filename>application/layouts/scripts</filename>"; depois abra um editor e crie as
+            marcações para o seu layout. Scripts de layout são simplesmente scripts de vizualização,
+            com algumas pequenas diferenças.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<html>
+<head>
+    <title>Meu Site</title>
+</head>
+<body>
+    <?php echo $this->layout()->content ?>
+</body>
+</html>
+]]></programlisting>
+
+        <para>
+            No exemplo acima, você notará a chamada de um assitente de vizualização
+            <methodname>layout()</methodname>. Quando você registra o recurso
+            <classname>Zend_Layout</classname>, você também ganha acesso a uma ação e ao assistente
+            de vizualização que permitem a você acesso à instância
+            <classname>Zend_Layout</classname>; você pode então chamar operações no objeto layout.
+            Neste caso, nós estamos recuperando uma variável chamada <varname>$content</varname>, e
+            imprimindo ela. Por padrão, a variável <varname>$content</varname> é populada por você
+            pelo script de vizualização da aplicação renderizado. Por outro lado, nada que você
+            normalmente faça em um script de vizualização é perfeitamente válido -- chamar quaisquer
+            assistentes ou métodos de vizualização que você desejar.
+        </para>
+
+        <para>
+            Neste ponto, você tem um script de vizualização funcionando e sua aplicação é informada
+            de sua localização e sabe como renderizá-lo.
+        </para>
+    </sect2>
+
+    <sect2 id="learning.layout.usage.access">
+        <title>Acessando o Objeto Layout</title>
+
+        <para>
+            De vez em quando, você pode precisar de acesso direto ao objeto layout. Há três modos de
+            fazer isso:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis>Dentro dos scripts de vizualização:</emphasis> use o assistente de
+                    vizualização <methodname>layout()</methodname>, que retorna a instância
+                    <classname>Zend_Layout</classname> registrada com o plugin controlador frontal.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+<?php $layout = $this->layout(); ?>
+]]></programlisting>
+
+                <para>
+                    Uma vez que retornar a instância layout, você pode também simplesmente chamar os
+                    métodos nele, ao invés de atribuir ela a uma variável.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>Dentro dos controladores de ação:</emphasis> use o assitente de
+                    ação <methodname>layout()</methodname>, que atua apenas como um
+                    assistente de vizualização.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+// Chamando assistente como um método de corretor de ajuda.
+$layout = $this->_helper->layout();
+
+// Ou, mais detalhadamente:
+$helper = $this->_helper->getHelper('Layout');
+$layout = $helper->getLayoutInstance();
+]]></programlisting>
+
+                <para>
+                    Assim como no assitente de vizualização, desde que o assistente de ação retorne
+                    a instância layout, você pode também simplesmente chamar métodos nele, ao invés
+                    de atribuir a ele variáveis.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>Em outro lugar: </emphasis> use o método estático
+                    <methodname>getMvcInstance()</methodname>. Isso retornará a instância layout
+                    registrada pelo recurso de inicialização da aplicação.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+$layout = Zend_Layout::getMvcInstance();
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>Via inicialização da aplicação:</emphasis> recupera o recurso layout,
+                    que será a instância <classname>Zend_Layout</classname>.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+$layout = $bootstrap->getResource('Layout');
+]]></programlisting>
+
+                <para>
+                    Em qualquer lugar que você tenha acesso ao objeto inicialização da aplicação,
+                    neste método é preferível usar o método estático
+                    <methodname>getMvcInstance()</methodname>.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2 id="learning.layout.usage.other-operations">
+        <title>Outras Operações</title>
+        <para>
+            Na maioria dos casos, a configuração acmia e o script layout (com modificações) lhe
+            darão o que você precisa. Porém, existe algumas outras funcionalidades que você
+            provavelmente vai usar mais cedo ou mais tarde. Nos exemplos seguintes, você pode usar
+            um dos <link linkend="learning.layout.usage.access">métodos listados acima</link> para
+            recuperar o objeto layout.
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis>Configurando vairáveis layout</emphasis>.
+                    O <classname>Zend_Layout</classname> mantém o seu próprio registro das variáveis
+                    de visualização específicas de layout que você pode acessar; a chave
+                    <varname>$content</varname> observada no exemplo de script de layout inicial é
+                    um exemplo. Você pode atribuir e recuperá-las usando acesso normal, ou via
+                    método <methodname>assign()</methodname>.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+// Configuração de conteúdo:
+$layout->somekey = "foo"
+
+// Imprimindo esse mesmo conteúdo:
+echo $layout->somekey; // 'foo'
+
+// Usando o método assign():
+$layout->assign('someotherkey', 'bar');
+
+// Acesso às variáveis assign()'d permanece o mesmo:
+echo $layout->someotherkey; // 'bar'
+]]></programlisting>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>disableLayout()</methodname>. Ocasionalmente, você pode querer
+                    desabilitar layouts; por exemplo, quando responder um pedido Ajax, ou fornecer
+                    uma representação RESTful de um recurso. Nesses casos, você pode chamar o método
+                    <methodname>disableLayout()</methodname> no seu objeto layout.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+$layout->disableLayout();
+]]></programlisting>
+
+                <para>
+                    O contrário deste método é, claro, o <methodname>enableLayout()</methodname>,
+                    que pode ser chamado a qualquer hora para reabilitar layouts para a ação
+                    solicitada.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>Selecionando um layout alternativo</emphasis>: se você possui layouts
+                    múltiplos para o seu site ou aplicação, você pode selecionar o layout a ser
+                    usado a qualquer hora simplesmente chamando o método
+                    <methodname>setLayout()</methodname>. Chame ele especificando o nome do script
+                    de layout sem o sufixo do arquivo.
+                </para>
+
+                <programlisting language="php"><![CDATA[
+// Use o script de layout "alternate.phtml":
+$layout->setLayout('alternate');
+]]></programlisting>
+
+                <para>
+                    O script de layout deve encontrar-se no diretório <varname>$layoutPath</varname>
+                    especificado nas suas configurações. O <classname>Zend_Layout</classname> irá
+                    então usar esse novo layout quando renderizar.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+</sect1>

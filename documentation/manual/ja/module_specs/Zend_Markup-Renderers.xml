@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24548 -->
+<sect1 id="zend.markup.renderers">
+    <title>Zend_Markup レンダラー</title>
+ 
+    <para>
+        <classname>Zend_Markup</classname> には現在ひとつのレンダラー、
+        <acronym>HTML</acronym> レンダラーが同梱されています。
+    </para>
+ 
+    <sect2 id="zend.markup.renderers.add">
+        <title>自作のマークアップを追加</title>
+ 
+        <para>
+            自作のマークアップを追加することによって、<classname>Zend_Markup</classname> レンダラーに
+            自作の機能の追加できます。 マークアップ構造とともに、
+            あなたが望むいかなる機能も追加ができます。
+            簡潔なマークアップから複雑なマークアップ構造まで。 'foo' マークアップでの単純な例:
+        </para>
+ 
+        <programlisting language="php"><![CDATA[
+// Zend_Markup_Parser_BbCode をパーサーとして、
+// Zend_Markup_Renderer_Html のインスタンスを生成します。
+$bbcode = Zend_Markup::factory('Bbcode');
+ 
+// これは単純な 'foo' マークアップを作成するでしょう
+// 第一引数は自身のマークアップ名を定義します。
+// 第二引数はマークアップの定数で定義された整数を引数に取ります。
+// 第三引数は、マークアップについて、マークアップグループと(この例では)開始ならびに終了マークアップのように
+// 他のことを配列にて定義します。
+$bbcode->addMarkup(
+    'foo',
+    Zend_Markup_Renderer_RendererAbstract::TYPE_REPLACE,
+    array(
+        'start' => '-bar-',
+        'end'   => '-baz-',
+        'group' => 'inline'
+    )
+);
+ 
+// これは 'my -bar-markup-baz-' と出力されるでしょう。
+echo $bbcode->render('my [foo]markup[/foo]');
+]]></programlisting>
+
+        <para>
+            あなたの作成したマークアップは、あなたのパーサーがマークアップ構造もサポートするときに
+            機能することに注意してください。現在、 BBCode はこれをサポートします。
+            Textile はカスタムマークアップをサポートしません。
+        </para>
+
+        <!-- TODO : to be translated -->
+        <para>
+            Some renderers (like the <acronym>HTML</acronym> renderer) also have support for a
+            'markup' parameter. This replaces the 'start' and 'end' parameters, and
+            it renders the markups including some default attributes and the
+            closing markup.
+        </para>
+
+        <sect3 id="zend.markup.renderers.add.callback">
+            <title>Add a callback markup</title>
+
+            <para>
+                By adding a callback markup, you can do a lot more then just a
+                simple replace of the markups. For instance, you can change the
+                contents, use the parameters to influence the output etc.
+            </para>
+
+            <para>
+                A callback is a class that implements the
+                <classname>Zend_Markup_Renderer_TokenInterface</classname>
+                interface. An example of a callback class:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+class My_Markup_Renderer_Html_Upper
+    implements Zend_Markup_Renderer_TokenConverterInterface
+{
+
+    public function convert(Zend_Markup_Token $token, $text)
+    {
+        return '!up!' . strtoupper($text) . '!up!';
+    }
+
+}
+]]></programlisting>
+
+            <para>
+                Now you can add the 'upper' markup, with as callback, an instance
+                of the <classname>My_Markup_Renderer_Html_Upper</classname>
+                class. A simple example:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+// Zend_Markup_Parser_BbCode をパーサーとして、
+// Zend_Markup_Renderer_Html のインスタンスを生成します。
+$bbcode = Zend_Markup::factory('Bbcode');
+
+// これは単純な 'foo' マークアップを作成するでしょう
+// 第一引数は自身のマークアップ名を定義します。
+// 第二引数はマークアップ型を定義する整数を引数に取ります。
+// The third parameter is an array that defines other things about a
+// markup, like the markup's group, and (in this case) a start and end markup.
+$bbcode->addMarkup(
+    'upper',
+    Zend_Markup_Renderer_RendererAbstract::TYPE_CALLBACK,
+    array(
+        'callback' => new My_Markup_Renderer_Html_Upper(),
+        'group'    => 'inline'
+    )
+);
+
+// これは 'my !up!MARKUP!up!' と出力されるでしょう。
+echo $bbcode->render('my [upper]markup[/upper]');
+]]></programlisting>
+        </sect3>
+    </sect2>
+
+    <sect2 id="zend.markup.renderers.list">
+        <title>マークアップ一覧</title>
+
+        <table id="zend.markup.renderers.list.markups">
+            <title>マークアップ一覧</title>
+
+            <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                <thead>
+                    <row>
+                        <entry>入力例 (bbcode)</entry>
+
+                        <entry>出力例</entry>
+                    </row>
+                </thead>
+
+                <tbody>
+                    <row>
+                        <entry>[b]foo[/b]</entry>
+
+                        <entry><![CDATA[<strong>foo</strong>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[i]foo[/i]</entry>
+
+                        <entry><![CDATA[<em>foo</em>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[cite]foo[/cite]</entry>
+
+                        <entry><![CDATA[<cite>foo</cite>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[del]foo[/del]</entry>
+
+                        <entry><![CDATA[<del>foo</del>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[ins]foo[/ins]</entry>
+
+                        <entry><![CDATA[<ins>foo</ins>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[sup]foo[/sup]</entry>
+
+                        <entry><![CDATA[<sup>foo</sup>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[sub]foo[/sub]</entry>
+
+                        <entry><![CDATA[<sub>foo</sub>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[span]foo[/span]</entry>
+
+                        <entry><![CDATA[<span>foo</span>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[acronym title="PHP Hypertext Preprocessor]PHP[/acronym]</entry>
+
+                        <entry><![CDATA[<acronym title="PHP Hypertext Preprocessor">PHP</acronym>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[url=http://framework.zend.com/]Zend Framework[/url]</entry>
+
+                        <entry><![CDATA[<a href="http://framework.zend.com/">Zend Framework</a>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[h1]foobar[/h1]</entry>
+
+                        <entry><![CDATA[<h1>foobar</h1>]]></entry>
+                    </row>
+
+                    <row>
+                        <entry>[img]http://framework.zend.com/images/logo.gif[/img]</entry>
+
+                        <entry><![CDATA[<img src="http://framework.zend.com/images/logo.gif" />]]></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </sect2>
+</sect1>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.filter.set.alpha">
+    <title>Alpha(日本語)</title>
+
+    <para>
+        <classname>Zend_Filter_Alpha</classname> は、
+        アルファベットを残して全てを削除した、文字列 <varname>$value</varname>
+        を返すフィルターです。このフィルターには、空白文字を許すオプションもあります。
+        （訳注：ここでいうアルファベット、とはアラビア文字やタイ文字、キリール文字など、各言語で使われる文字の集合を意味します。英字<emphasis>とは限りません</emphasis>）
+    </para>
+
+    <sect3 id="zend.filter.set.alpha.options">
+        <title>Zend_Filter_Alpha でサポートされるオプション</title>
+
+        <para>
+            下記のオプションが <classname>Zend_Filter_Alpha</classname> でサポートされます。
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowwhitespace</property></emphasis>:
+                    このオプションが設定されていると、空白文字が許されます。
+                    設定されていない場合は抑止されます。既定値では、空白文字は許されません。
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.alpha.basic">
+        <title>基本的な使用法</title>
+
+        <para>
+            下記は基本的な使用例です。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alpha();
+
+print $filter->filter('This is (my) content: 123');
+]]></programlisting>
+
+        <para>
+            上記の例は 'Thisismycontent' を返します。
+            空白文字と括弧が削除されていることに注意してください。
+        </para>
+
+        <note>
+            <para>
+                <classname>Zend_Filter_Alpha</classname> はほとんどの言語で動作します。
+                しかしながら、３つの例外、中国語、日本語、Koreanがあります。
+                これらの言語では、英語のアルファベットが使用されます。
+                言語は <classname>Zend_Locale</classname> の使用を通じて検出されます。
+            </para>
+        </note>
+    </sect3>
+
+     <sect3 id="zend.filter.set.alpha.whitespace">
+         <title>空白文字を許す</title>
+
+        <para>
+            <classname>Zend_Filter_Alpha</classname> は空白文字も許せます。
+            文字列から特別な文字を取り除きたい場合に役立つでしょう。
+            下記の例をご覧ください。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_Alpha(array('allowwhitespace' => true));
+
+print $filter->filter('This is (my) content: 123');
+]]></programlisting>
+
+        <para>
+            上記の例は 'This is my content ' を返します。
+            括弧やコロン、数字が全て除去された一方で、空白文字が残っていることに注意してください。
+        </para>
+
+        <para>
+            メソッド初期化後に <property>allowWhiteSpace</property> を変更するには、
+            <methodname>setAllowWhiteSpace()</methodname> が使えるでしょう。
+        </para>
+
+        <para>
+            メソッドの現在の <property>allowWhiteSpace</property> の値を照会するには、
+            <methodname>getAllowWhiteSpace()</methodname> が使えるでしょう。
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

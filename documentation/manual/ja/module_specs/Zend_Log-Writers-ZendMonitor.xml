@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.log.writers.zendmonitor">
+    <title>Zend Server モニターへの書き込み</title>
+
+    <para>
+        <classname>Zend_Log_Writer_ZendMonitor</classname> では、Zend Server のモニター
+        <acronym>API</acronym> を介してイベントを記録できます。
+        これにより、アプリケーション環境全体のログ・メッセージを一箇所に集約できます。
+        内部的には、それは単に Zend モニター <acronym>API</acronym> 由来の
+        <methodname>monitor_custom_event()</methodname> 関数を使用します。
+    </para>
+
+    <para>
+        モニター <acronym>API</acronym> で特に役立つ機能は、
+        ログ・メッセージと一緒に任意のカスタム情報を指定できることです。
+        たとえば、例外を記録したい場合、まさにその例外メッセージを記録できません。
+        しかし、関数に例外オブジェクトを全て渡せます。
+        そして、Zend Server イベント・モニターの内部でオブジェクトを調査できます。
+    </para>
+
+    <note>
+        <title>Zend モニターがインストールされ、使用可能にされなければいけません</title>
+
+        <para>
+            このログ・ライタを使用するには、Zend モニターがインストールされ、使用可能にされなければなりません。
+            しかしながら、Zend モニターが検出されない場合、<constant>NULL</constant>
+            ロガーとして単純に動作するように設計されています。
+        </para>
+    </note>
+
+    <para>
+        <classname>ZendMonitor</classname>ログ・ライタのインスタンス生成は特記するまでもありません。
+    </para>
+
+    <programlisting language="php"><![CDATA[
+$writer = new Zend_Log_Writer_ZendMonitor();
+$log    = new Zend_Log($writer);
+]]></programlisting>
+
+    <para>
+        それから、通常通り単純にメッセージを記録します。
+    </para>
+
+    <programlisting language="php"><![CDATA[
+$log->info('This is a message');
+]]></programlisting>
+
+    <para>
+        イベントと共に記録する追加の情報を指定したい場合は、
+        ２番目の引数でその情報を渡します。
+    </para>
+
+    <programlisting language="php"><![CDATA[
+$log->info('Exception occurred', $e);
+]]></programlisting>
+
+    <para>
+        ２番目の引数は、スカラー、オブジェクトまたは配列です。
+        情報の複数の部分を渡す必要があるならば、そうする最高の方法は連想配列を渡すことです。
+    </para>
+
+    <programlisting language="php"><![CDATA[
+$log->info('Exception occurred', array(
+    'request'   => $request,
+    'exception' => $e,
+));
+]]></programlisting>
+
+    <para>
+        Zend Server 内では、イベントは「カスタム・イベント」として記録されます。
+        「モニター」タブから「イベント」項目を選び、カスタム・イベントを見るために、「カスタム」上で絞り込みます。
+    </para>
+
+    <para>
+        <inlinegraphic fileref="figures/zend.log.writers.zendmonitor-events.png" format="PNG" />
+    </para>
+
+    <para>
+        Zend Server のモニター・ダッシュボードのイベント
+    </para>
+
+    <para>
+        このスクリーン・ショットで、一覧表示される最初の2つのイベントは、
+        <classname>ZendMonitor</classname>ログ・ライタを通して記録されるカスタム・イベントです。
+        関連した情報を全て見るには、イベントをクリックします。
+    </para>
+
+    <para>
+        <inlinegraphic fileref="figures/zend.log.writers.zendmonitor-event.png" format="PNG" />
+    </para>
+
+    <para>
+        Zend Server のモニターのイベント詳細
+    </para>
+
+    <para>
+        「カスタム」タブをクリックすると、ログ収集メソッドに２番目の引数を渡して記録した
+        追加の情報を全て詳しく表示します。
+        この情報は、<varname>info</varname> キーとして記録されます。
+        この例では、リクエスト・オブジェクトが記録されることを確認できます。
+    </para>
+
+    <note>
+        <title>Zend_Application との統合</title>
+
+        <para>
+            <command>zf.sh</command> と <command>zf.bat</command> コマンドは、デフォルトで
+            <link linkend="zend.application.available-resources.log"><classname>Zend_Application</classname>
+            ログ・リソース</link>用の構成を追加します。
+            そして、それは <classname>ZendMonitor</classname> ログ・ライタ用の構成を含みます。
+            さらに、<classname>ErrorController</classname> は、アプリケーション例外を記録するために
+            構成されたロガーを使います。それは、デフォルトでZend モニター・イベント統合とともに提供します。
+        </para>
+
+        <para>
+            前述のように、モニター <acronym>API</acronym> が <acronym>PHP</acronym> インストールで検出されない場合、
+            ロガーは単純に <constant>NULL</constant> ロガーとして動作します。
+        </para>
+    </note>
+</sect2>

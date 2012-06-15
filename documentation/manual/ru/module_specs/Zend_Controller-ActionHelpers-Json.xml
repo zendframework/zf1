@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect3 id="zend.controller.actionhelpers.json">
+    <title>JSON</title>
+
+    <para>
+        Ответы в формате <acronym>JSON</acronym> становятся все более популярными
+        для работы с <acronym>AJAX</acronym> запросами, которые предполагают отправку
+        и получение массивов данных; <acronym>JSON</acronym> может быть немедленно
+        обработан на стороне клиента, что существенно ускоряет выполнение скриптов.
+    </para>
+
+    <para>
+        Помощник действий <acronym>JSON</acronym> выполняет несколько функций:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                Отключает макеты, если они включены.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                Альтернативно, можно передавать массив параметров, который будет использован
+                в качестве второго аргумента для <methodname>Zend_Json::encode()</methodname>.
+                Передавая массив параметров, можно включить макеты и кодирование
+                с использованием <classname>Zend_Json_Expr</classname>.
+            </para>
+
+            <programlisting language="php"><![CDATA[
+$this->_helper->json($data, array('enableJsonExprFinder' => true));
+]]></programlisting>
+        </listitem>
+
+        <listitem>
+            <para>
+                Отключает ViewRenderer, если он включен.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                Присваивает заголовку ответа 'Content-Type' значение
+                '<filename>application/json</filename>'.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                По умолчанию немедленно возвращает ответ, не дожидаясь завершения
+                выполнения действия.
+            </para>
+        </listitem>
+    </itemizedlist>
+
+    <para>
+        Использование: помощник может быть вызван как метод брокера помощников действий
+        или посредством вызова одного из его методов <methodname>encodeJson()</methodname>
+        или <methodname>sendJson()</methodname>:
+    </para>
+
+    <programlisting language="php"><![CDATA[
+class FooController extends Zend_Controller_Action
+{
+    public function barAction()
+    {
+        // выполнить некоторые действия...
+
+        // отправить ответ в формате JSON
+        $this->_helper->json($data);
+        // или...
+        $this->_helper->json->sendJson($data);
+
+        // или получить ответ в формате json:
+        $json = $this->_helper->json->encodeJson($data);
+    }
+}
+]]></programlisting>
+
+    <note>
+        <title>Использование макетов</title>
+
+        <para>
+            В случае необходимости использования макета для возвращения ответов
+            в формате <acronym>JSON</acronym> (например, для возвращения <acronym>JSON</acronym>
+            как части некоторого контекста), при вызове любого из методов помощника
+            <acronym>JSON</acronym> нужно передавать второй, необязательный, аргумент:
+            флаг для включения/отключения макетов. Передача булевого значения
+            <constant>TRUE</constant> оставит макеты включенными:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$this->_helper->json($data, true);
+]]></programlisting>
+
+        <para>
+            Альтернативно, в качестве второго аргумента можно передавать массив параметров,
+            среди которых и <emphasis>keepLayouts</emphasis>:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$this->_helper->json($data, array('keepLayouts' => true);
+]]></programlisting>
+    </note>
+
+    <note>
+        <title>Включение кодирования с использованием Zend_Json_Expr</title>
+
+        <para>
+            Метод <methodname>Zend_Json::encode()</methodname> позволяет кодировать "родные"
+            <acronym>JSON</acronym> выражения при помощи объектов класса
+            <classname>Zend_Json_Expr</classname>. По умолчанию эта возможность отключена.
+            Для того, чтоб ее включить, нужно передать параметр
+            <emphasis>enableJsonExprFinder</emphasis> со значением <constant>TRUE</constant>:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$this->_helper->json($data, array('enableJsonExprFinder' => true);
+]]></programlisting>
+
+        <para>
+            Для использования описанной возможности <emphasis>необходимо</emphasis> передавать
+            массив в качестве второго аргумента. Кроме указанного параметра, в массив
+            можно включить и другие, к примеру <emphasis>keepLayouts</emphasis>.
+            Все параметры из этого массива будут переданы как аргумент при вызове
+            <methodname>Zend_Json::encode()</methodname>.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$this->_helper->json($data, array(
+    'enableJsonExprFinder' => true,
+    'keepLayouts'          => true,
+));
+]]></programlisting>
+    </note>
+</sect3>
+<!--
+vim:se ts=4 sw=4 et:
+-->

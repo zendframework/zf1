@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.filter.set.htmlentities">
+    <title>HtmlEntities</title>
+
+    <para>
+        Retourne la chaine <varname>$value</varname> en convertissant les caractères en leur entité
+        <acronym>HTML</acronym> équivalente si elle existe.
+    </para>
+
+    <sect3 id="zend.filter.set.htmlentities.options">
+        <title>Options gérées par Zend_Filter_HtmlEntities</title>
+
+        <para>
+            Les options suivantes sont supportées par <classname>Zend_Filter_HtmlEntities</classname>:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>quotestyle</property></emphasis>: Equivalent au paramètre
+                    <emphasis>quote_style</emphasis> de la fonction <acronym>PHP</acronym> htmlentities.
+                    Ceci permet de définir ce qui sera fait avec les 'simples' et "doubles" quotes.
+                    Les constantes suivantes sont acceptées:
+                    <constant>ENT_COMPAT</constant>, <constant>ENT_QUOTES</constant>
+                    <constant>ENT_NOQUOTES</constant>, par défaut il s'agira de
+                    <constant>ENT_COMPAT</constant>.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>charset</property></emphasis>: Equivalent au paramètre
+                    <emphasis>charset</emphasis> de la fonction <acronym>PHP</acronym> htmlentities.
+                    Ceci indique le jeu de caractères à utiliser pour le filtre. Contrairement à la fonction
+                    <acronym>PHP</acronym> native, la valeur par défaut est 'UTF-8'. Voyez
+                    "http://php.net/htmlentities" pour la liste des jeux de caractères supportés.
+                </para>
+
+                <note>
+                    <para>
+                     Cette option peut être passées via le paramètre <varname>$options</varname> comme un
+                     tableau ou objet <classname>Zend_Config</classname>. L'encodage ou le jeu de caractères
+                     seront reconnus.
+                    </para>
+                </note>
+            </listitem>
+
+             <listitem>
+                <para>
+                    <emphasis><property>doublequote</property></emphasis>: Equivalent au paramètre
+                    <emphasis>double_encode</emphasis> de la fonction <acronym>PHP</acronym> htmlentities.
+                    Si passé à false, les entités html existantes ne seront pas encodées. Par défaut sur
+                    true (conversion totale).
+                </para>
+
+                <note>
+                    <para>
+                        Cette option peut être passée via le paramètre <varname>$options</varname> ou la
+                        méthode <methodname>setDoubleEncode()</methodname>.
+                    </para>
+                </note>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.htmlentities.basic">
+        <title>Utilisation de base</title>
+
+        <para>
+            Voyez l'exemple qui suit pour le comportement de ce filtre.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities();
+
+print $filter->filter('<');
+]]></programlisting>
+    </sect3>
+
+    <sect3 id="zend.filter.set.htmlentities.quotestyle">
+        <title>Styles de quote</title>
+
+        <para>
+            <classname>Zend_Filter_HtmlEntities</classname> permet de changer les styles de quote
+            à filtrer. Ceci est utile si vous voulez laisser intactes les doubles, simples ou les deux
+            types de quotes. Voici un exemple:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities(array('quotestyle' => ENT_QUOTES));
+
+$input  = "A 'single' and " . '"double"';
+print $filter->filter($input);
+]]></programlisting>
+
+        <para>
+            Ceci affiche
+            <emphasis>A &#039;single&#039; and &quot;double&quot;</emphasis>. Notez que les 'simples'
+            et les "doubles" quotes ont été filtrées.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities(array('quotestyle' => ENT_COMPAT));
+
+$input  = "A 'single' and " . '"double"';
+print $filter->filter($input);
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus affichera <emphasis>A 'single' and &quot;double&quot;</emphasis>.
+            Notez que seules les "doubles" quotes ont été filtrées.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities(array('quotestyle' => ENT_NOQUOTES));
+
+$input  = "A 'single' and " . '"double"';
+print $filter->filter($input);
+]]></programlisting>
+
+        <para>
+            L'exemple ci-dessus affichera <emphasis>A 'single' and "double"</emphasis>. Notez qu'ici aucune
+            des "doubles" ou 'simples' quotes n'ont été altérées.
+        </para>
+    </sect3>
+
+    <sect3 id="zend.filter.set.htmlentities.">
+        <title>Méthodes d'aide</title>
+
+        <para>
+            Pour changer ou récupérer la valeur de <property>quotestyle</property> après instantiation,
+            les méthodes <methodname>setQuoteStyle()</methodname> et
+            <methodname>getQuoteStyle()</methodname> peuvent être utilisées.
+            <methodname>setQuoteStyle()</methodname> accepte un paramètre
+            <varname>$quoteStyle</varname>. Les constantes suivantes sont autorisées:
+            <constant>ENT_COMPAT</constant>, <constant>ENT_QUOTES</constant>,
+            <constant>ENT_NOQUOTES</constant>
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities();
+
+$filter->setQuoteStyle(ENT_QUOTES);
+print $filter->getQuoteStyle(ENT_QUOTES);
+]]></programlisting>
+
+        <para>
+            Pour changer ou récupérer la valeur de <property>charset</property> après instantiation,
+            les méthodes <methodname>setCharSet()</methodname> et <methodname>getCharSet()</methodname>
+            peuvent être utilisées. <methodname>setCharSet()</methodname> accepte un paramètre
+            <varname>$charSet</varname>. Voyez "http://php.net/htmlentities" pour une liste des valeurs
+            acceptées.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities();
+
+$filter->setQuoteStyle(ENT_QUOTES);
+print $filter->getQuoteStyle(ENT_QUOTES);
+]]></programlisting>
+
+        <para>
+            Pour changer ou récupérer la valeur de <property>doublequote</property> après instantiation,
+            les méthodes <methodname>setDoubleQuote()</methodname> et
+            <methodname>getDoubleQuote()</methodname> peuvent être utilisées.
+            <methodname>setDoubleQuote()</methodname> accepte un booléen
+            <varname>$doubleQuote</varname>.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_HtmlEntities();
+
+$filter->setQuoteStyle(ENT_QUOTES);
+print $filter->getQuoteStyle(ENT_QUOTES);
+]]></programlisting>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.cloud.queueservice">
+    <title>Queue Service Introduction</title>
+
+    <para>
+        The QueueService implements access to message queues available as local or remote services.
+        The simple queues that QueueService supports implement a messaging pattern that enables
+        different processes to exchange messages in a reliable and scalable way. One common use case
+        for such message queues is job dispatching, in which a frontend web server adds a complex
+        job to a queue for a backend worker to do the expensive processing. The frontend web server
+        can then return the page without waiting for the work to be completed.
+    </para>
+
+    <para>
+        The interface <classname>Zend_Cloud_QueueService_Adapter</classname> defines the methods
+        which concrete queue service adapters must implement. The following adapters are shipped
+        with the Simple Cloud API:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                <ulink
+                    url="http://aws.amazon.com/sqs/"><classname>Zend_Cloud_QueueService_Adapter_Sqs</classname></ulink>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <ulink
+                    url="http://msdn.microsoft.com/en-us/library/dd179363.aspx"><classname>Zend_Cloud_QueueService_Adapter_WindowsAzure</classname></ulink>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <ulink
+                    url="http://aws.amazon.com/sqs/"><classname>Zend_Cloud_QueueService_Adapter_ZendQueue</classname></ulink>
+            </para>
+        </listitem>
+    </itemizedlist>
+
+    <sect2 id="zend.cloud.queueservice.adapters">
+        <title>Instantiating and Configuring QueueService Adapters</title>
+
+        <para>
+            To instantiate a QueueService adapter, use the static method
+            <methodname>Zend_Cloud_QueueService_Factory::getAdapter()</methodname>, which accepts
+            either an array or a <classname>Zend_Config</classname> object. Three parameters apply
+            to all adapters, while the remaining
+            parameters are adapter-specific properties; these adapter-specific properties often
+            contain access details.
+        </para>
+
+        <para>
+            The general parameters are as follows:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para><varname>queue_adapter</varname> specifies the concrete adapter class;</para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <varname>message_class</varname> specifies the class to use to
+                    represent queue messages; defaults to
+                    <classname>Zend_Cloud_QueueService_Message</classname>; and
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <varname>messageset_class</varname> specifies the class to use
+                    to represent collections of queue messages; defaults to
+                    <classname>Zend_Cloud_QueueService_MesageSet</classname>.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <example id="zend.cloud.queueservice.factory.example">
+            <title>Instantiating an Amazon SQS adapter via the factory</title>
+
+            <programlisting language="php"><![CDATA[
+$queues = Zend_Cloud_QueueService_Factory::getAdapter(array(
+    Zend_Cloud_QueueService_Factory::QUEUE_ADAPTER_KEY  => 'Zend_Cloud_QueueService_Adapter_Sqs',
+    Zend_Cloud_QueueService_Adapter_Sqs::AWS_ACCESS_KEY => $amazonKey,
+    Zend_Cloud_QueueService_Adapter_Sqs::AWS_SECRET_KEY => $amazonSecret,
+));
+]]></programlisting>
+        </example>
+
+        <sect3 id="zend.cloud.queueservice.adapters.options">
+            <title>Service-Specific Options</title>
+
+            <table frame='all' id="zend.cloud.queueservice.adapters.options.sqs">
+                <title>Zend_Cloud_QueueService_Adapter_Sqs Options</title>
+
+                <tgroup cols="5">
+                    <thead>
+                        <row>
+                            <entry>Option key</entry>
+                            <entry>Description</entry>
+                            <entry>Used in</entry>
+                            <entry>Required</entry>
+                            <entry>Default</entry>
+                        </row>
+                    </thead>
+
+                    <tbody>
+                        <row>
+                            <entry>aws_accesskey</entry>
+                            <entry>Your Amazon AWS access key</entry>
+                            <entry>Constructor</entry>
+                            <entry>Yes</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>aws_secretkey</entry>
+                            <entry>Your Amazon AWS secret key</entry>
+                            <entry>Constructor</entry>
+                            <entry>Yes</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>http_adapter</entry>
+                            <entry>HTTP adapter to use in all access operations</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry><classname>Zend_Http_Client_Adapter_Socket</classname></entry>
+                        </row>
+
+                        <row>
+                            <entry>http_adapter</entry>
+                            <entry>HTTP adapter to use in all access operations</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry><classname>Zend_Http_Client_Adapter_Socket</classname></entry>
+                        </row>
+
+                        <row>
+                            <entry>visibility_timeout</entry>
+                            <entry>Message visibility timeout</entry>
+                            <entry><methodname>receiveMessages()</methodname></entry>
+                            <entry>No</entry>
+                            <entry>60</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <table frame='all' id="zend.cloud.queueservice.adapters.options.azure">
+                <title>Zend_Cloud_QueueService_Adapter_WindowsAzure Options</title>
+
+                <tgroup cols="5">
+                    <thead>
+                        <row>
+                            <entry>Option key</entry>
+                            <entry>Description</entry>
+                            <entry>Used in</entry>
+                            <entry>Required</entry>
+                            <entry>Default</entry>
+                        </row>
+                    </thead>
+
+                    <tbody>
+                        <row>
+                            <entry>storage_accountname</entry>
+                            <entry>Windows Azure account name</entry>
+                            <entry>Constructor</entry>
+                            <entry>Yes</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>storage_accountkey</entry>
+                            <entry>Windows Azure account key</entry>
+                            <entry>Constructor</entry>
+                            <entry>Yes</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>storage_host</entry>
+                            <entry>Windows Azure access host</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry><varname>queue.core.windows.net</varname></entry>
+                        </row>
+
+                        <row>
+                            <entry>storage_proxy_host</entry>
+                            <entry>Proxy hostname</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>storage_proxy_port</entry>
+                            <entry>Proxy port</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry>8080</entry>
+                        </row>
+
+                        <row>
+                            <entry>storage_proxy_credentials</entry>
+                            <entry>Proxy credentials</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>http_adapter</entry>
+                            <entry>HTTP adapter to use in all access operations</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry><classname>Zend_Http_Client_Adapter_Socket</classname></entry>
+                        </row>
+
+                        <row>
+                            <entry>visibility_timeout</entry>
+                            <entry>Message visibility timeout</entry>
+                            <entry><methodname>receiveMessages()</methodname></entry>
+                            <entry>No</entry>
+                            <entry>60</entry>
+                        </row>
+
+                        <row>
+                            <entry>prefix</entry>
+                            <entry>
+                                Filter the results to only queue names beginning with given prefix
+                            </entry>
+                            <entry><methodname>listQueues()</methodname></entry>
+                            <entry>No</entry>
+                            <entry>None</entry>
+                        </row>
+
+                        <row>
+                            <entry>max_results</entry>
+                            <entry>Limit queue list to certain number of results</entry>
+                            <entry><methodname>listQueues()</methodname></entry>
+                            <entry>No</entry>
+                            <entry>5,000</entry>
+                        </row>
+
+                        <row>
+                            <entry>ttl</entry>
+                            <entry>Set time-to-live for message</entry>
+                            <entry><methodname>sendMessage()</methodname></entry>
+                            <entry>No</entry>
+                            <entry>7 days</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <table frame='all' id="zend.cloud.queueservice.adapters.options.zend-queue">
+                <title>Zend_Cloud_QueueService_Adapter_ZendQueue Options</title>
+
+                <tgroup cols="5">
+                    <thead>
+                        <row>
+                            <entry>Option key</entry>
+                            <entry>Description</entry>
+                            <entry>Used in</entry>
+                            <entry>Required</entry>
+                            <entry>Default</entry>
+                        </row>
+                    </thead>
+
+                    <tbody>
+                        <row>
+                            <entry>adapter</entry>
+                            <entry>
+                                Concrete <classname>Zend_Queue</classname> adapter to use. See the
+                                <link linkend="zend.queue">Zend_Queue</link> documentation for supported
+                                adapters and their options.</entry>
+                            <entry>Constructor</entry>
+                            <entry>No</entry>
+                            <entry>Filesystem</entry>
+                        </row>
+
+                        <row>
+                            <entry>timeout</entry>
+                            <entry>Visibility timeout for messages</entry>
+                            <entry>
+                                <methodname>createQueue()</methodname>,
+                                <methodname>receiveMessages()</methodname>
+                            </entry>
+                            <entry>No</entry>
+                            <entry>30</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect3>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.concepts">
+        <title>Basic concepts</title>
+
+        <para>
+            Every queue service typically offers one or more <emphasis>queues</emphasis>. Each queue
+            can store zero or more <emphasis>messages</emphasis>. A process can send a message to a
+            queue, and another process can remove it. Usually processes remove the oldest message in
+            the queue, observing a first in, first out (FIFO) queue-style interface.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.exceptions">
+        <title>Exceptions</title>
+
+        <para>
+            If some error occurs inside the storage service, a
+            <classname>Zend_Cloud_QueueService_Exception</classname> is thrown. If the exception was
+            caused by underlying service driver, you can use the
+            <methodname>getClientException()</methodname> method to retrieve the original exception.
+        </para>
+
+        <para>
+            Since different cloud providers implement different sets of services, some adapters do
+            not implement certain features. In this case, the
+            <classname>Zend_Cloud_OperationNotAvailableException</classname> exception is thrown.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.create-queue">
+        <title>Create a queue</title>
+
+        <para>
+            The <methodname>createQueue()</methodname> method creates a message queue with the given
+            name.  It returns a queue identifier, the format of which is service-dependent.  Some
+            services return a URL for the queue identifier, while others return a GUID to use in
+            future operations.
+        </para>
+
+        <example id="zend.cloud.queueservice.create-queue.example">
+            <title>Creating a queue</title>
+
+            <programlisting language="php"><![CDATA[
+$queueId = $queues->createQueue('my-queue');
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.delete-queue">
+        <title>Delete a queue</title>
+
+        <para>
+            The <methodname>deleteQueue()</methodname> method removes the queue from the service.
+            You must use the identifier received from <methodname>createQueue()</methodname> when
+            calling <methodname>deleteQueue()</methodname>.
+        </para>
+
+        <example id="zend.cloud.queueservice.delete-queue.example">
+              <title>Deleting a queue</title>
+
+            <programlisting language="php"><![CDATA[
+$queueId = $queues->createQueue('my-queue');
+
+// ... do stuff ...
+
+$queues->deleteQueue($queueId);
+]]></programlisting>
+        </example>
+
+        <note>
+            <para>
+                Deleting a queue can take significant time for some services. Typically, you cannot
+                re-create a queue with the same name until the original queue is fully removed.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.list">
+        <title>List queues</title>
+
+        <para>
+            To retrieve the list of all queues in the system, use the
+            <methodname>listQueues()</methodname> method.
+        </para>
+
+        <example id="zend.cloud.queueservice.list.example">
+              <title>Listing queues</title>
+
+            <programlisting language="php"><![CDATA[
+$names = $queues->listQueues();
+foreach ($names as $name) {
+    echo "Found queue $name\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.store-metadata">
+        <title>Set queue metadata</title>
+
+        <para>
+            In some services, you can associate a set of key-value pairs with the queue as queue
+            metadata. To set queue metadata, use the <methodname>storeQueueMetadata()</methodname>
+            method:
+        </para>
+
+        <example id="zend.cloud.queueservice.store-metadata.example">
+              <title>Setting queue metadata</title>
+
+            <programlisting language="php"><![CDATA[
+$queues->storeQueueMetadata($queueId, array(
+    'purpose'       => 'Operations',
+    'administrator' => 'joe@example.com',
+));
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.fetch-metadata">
+        <title>Fetch queue metadata</title>
+
+        <para>
+            To retrieve queue metadata, use the <methodname>fetchQueueMetadata()</methodname>
+            method.
+        </para>
+
+        <example id="zend.cloud.queueservice.fetch-metadata.example">
+            <title>Fetching queue metadata</title>
+
+            <programlisting language="php"><![CDATA[
+$metadata = $queues->fetchQueueMetadata($queueId);
+foreac h($metadata as $key => $value) {
+    echo "Metadata $key: $value\n";
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.send">
+        <title>Send a message</title>
+
+        <para>
+            To add a message to a queue, use the <methodname>sendMessage()</methodname> method.  The
+            message is passed as an unstructured string.
+        </para>
+
+        <example id="zend.cloud.queueservice.send.example">
+              <title>Sending a message</title>
+
+            <programlisting language="php"><![CDATA[
+$queues->sendMessage($queueId, "Hello world!");
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.receive">
+        <title>Receive a message</title>
+
+        <para>
+            To receive one or more messages from the queue, use the
+            <methodname>receiveMessages()</methodname> method. This method returns a
+            <classname>Zend_Cloud_QueueService_MessageSet</classname> instance by default, unless
+            configured otherwise. Each element of the MessageSet is an instance of
+            <classname>Zend_Cloud_QueueService_Message</classname> by default, unless configuired
+            otherwise.
+        </para>
+
+        <example id="zend.cloud.queueservice.receive.example">
+              <title>Receiving a message</title>
+            <programlisting language="php"><![CDATA[
+// Get the first message
+$messages = $queues->receiveMessages($queueId);
+if (count($messages)) {
+    foreach ($messages as $message) {
+        echo "Message: " . $message->getBody();
+        break;
+    }
+}
+
+// Get two messages
+$messages = $queues->receiveMessages($queueId, 2);
+]]></programlisting>
+        </example>
+
+        <para>
+            When a message is received, it is not visible to other clients. It is not deleted from
+            the queue, however, until the client that has received the message calls the
+            <methodname>deleteMessage()</methodname> method. If it is not deleted during the
+            specfied visibility timeout, it will become visible to all other clients again. In other
+            words, all clients will be able to retrieve the message with the
+            <methodname>receiveMessages()</methodname> method if the visibility timeout is exceeded.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.delete">
+        <title>Delete a message</title>
+
+        <para>
+            In order to delete the message from the queue, use the
+            <methodname>deleteMessage()</methodname> method.  This method deletes the specified
+            message.
+        </para>
+
+        <example id="zend.cloud.queueservice.delete.example">
+              <title>Deleting a message</title>
+
+            <programlisting language="php"><![CDATA[
+// process and delete $max messages
+$messages = $queues->receiveMessages($queueId, $max);
+if (count($messages)) {
+    foreach ($messages as $message) {
+        process($message);
+        $queues->deleteMessage($queueId, $message);
+    }
+}
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.cloud.queueservice.concreteadapters">
+        <title>Accessing concrete adapters</title>
+
+        <para>
+            Sometimes it is necessary to retrieve the concrete adapter for the service that the
+            Queue API is working with. This can be achieved by using the
+            <methodname>getAdapter()</methodname> method.
+        </para>
+
+        <note>
+            <para>
+                Accessing the underlying adapter breaks portability among services, so it should be
+                reserved for exceptional circumstances only.
+            </para>
+        </note>
+
+        <example id="zend.cloud.queueservice.concreteadapters.example">
+            <title>Using a concrete adapter</title>
+
+            <programlisting language="php"><![CDATA[
+// send the message directly with the SQS client library
+$sqs = $queues->getAdapter();
+$sqs->sendMessage("myQueue", "hello!");
+]]></programlisting>
+        </example>
+    </sect2>
+</sect1>

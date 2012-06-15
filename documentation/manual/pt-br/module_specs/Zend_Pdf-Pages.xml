@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect1 id="zend.pdf.pages">
+    <title>Trabalhando com Páginas</title>
+
+    <sect2 id="zend.pdf.pages.creation">
+        <title>Criação de Página</title>
+
+        <para>
+            As páginas em um documento <acronym>PDF</acronym> são representadas como instâncias de
+            <classname>Zend_Pdf_Page</classname> em <classname>Zend_Pdf</classname>.
+        </para>
+
+        <para>
+            Páginas <acronym>PDF</acronym> podem ser carregadas de um <acronym>PDF</acronym>
+            existente ou criadas usando a <acronym>API</acronym> de <classname>Zend_Pdf</classname>.
+        </para>
+
+        <para>
+            Novas páginas podem ser criadas instanciando novos objetos
+            <classname>Zend_Pdf_Page</classname> diretamente ou chamando o método
+            <methodname>Zend_Pdf::newPage()</methodname>, que retorna um objeto
+            <classname>Zend_Pdf_Page</classname>. <methodname>Zend_Pdf::newPage()</methodname> cria
+            uma página já anexada à um documento. Páginas anexadas não podem ser usadas com outros
+            documentos <acronym>PDF</acronym> até que não esteja clonado. Veja a seção <link
+                linkend="zend.pdf.pages.cloning">Clonagem de página</link> para obter mais detalhes.
+        </para>
+
+        <para>
+            O método <methodname>Zend_Pdf::newPage()</methodname> e o construtor
+            <classname>Zend_Pdf_Page</classname> recebem os mesmos parâmetros de definição do
+            tamanho da página. Eles podem receber tanto o tamanho da página ($x, $y) em pontos
+            (1/72 polegadas) quanto uma constante pré-definida representando um tipo de página:
+
+            <itemizedlist>
+                <listitem><para>Zend_Pdf_Page::SIZE_A4</para></listitem>
+                <listitem><para>Zend_Pdf_Page::SIZE_A4_LANDSCAPE</para></listitem>
+                <listitem><para>Zend_Pdf_Page::SIZE_LETTER</para></listitem>
+                <listitem><para>Zend_Pdf_Page::SIZE_LETTER_LANDSCAPE</para></listitem>
+            </itemizedlist>
+        </para>
+
+        <para>
+            As páginas de um documento são armazenadas no atributo público <varname>$pages</varname>
+            da classe <classname>Zend_Pdf</classname>. O atributo contém uma matriz de objetos
+            <classname>Zend_Pdf_Page</classname> e define completamente as instâncias e ordem das
+            páginas. Esta matriz pode ser manipulada como qualquer outra matriz do
+            <acronym>PHP</acronym>:
+        </para>
+
+        <example id="zend.pdf.pages.example-1">
+            <title>Gerenciamento de páginas de documentos PDF</title>
+
+            <programlisting language="php"><![CDATA[
+...
+// Inverte a ordem das páginas
+$pdf->pages = array_reverse($pdf->pages);
+...
+// Adiciona nova página
+$pdf->pages[] = new Zend_Pdf_Page(Zend_Pdf_Page::SIZE_A4);
+// Adiciona nova página
+$pdf->pages[] = $pdf->newPage(Zend_Pdf_Page::SIZE_A4);
+
+// Remove uma página específica
+unset($pdf->pages[$id]);
+
+...
+]]></programlisting>
+        </example>
+    </sect2>
+
+    <sect2 id="zend.pdf.pages.cloning">
+        <title>Clonagem de página</title>
+
+        <para>
+            Páginas <acronym>PDF</acronym> podem ser duplicadas através da criação de um novo objeto
+            <classname>Zend_Pdf_Page</classname> com uma página já existente como parâmetro:
+        </para>
+
+        <example id="zend.pdf.pages.example-2">
+            <title>Duplicando páginas existentes</title>
+
+            <programlisting language="php"><![CDATA[
+...
+// Armazena a página template em uma variável separada
+$template = $pdf->pages[$templatePageIndex];
+...
+// Adiciona nova página
+$page1 = new Zend_Pdf_Page($template);
+$page1->drawText('Algum texto...', $x, $y);
+$pdf->pages[] = $page1;
+...
+
+// Adiciona outra página
+$page2 = new Zend_Pdf_Page($template);
+$page2->drawText('Outro texto...', $x, $y);
+$pdf->pages[] = $page2;
+...
+
+// Remove a fonte da página template dos documentos
+unset($pdf->pages[$templatePageIndex]);
+
+...
+]]></programlisting>
+        </example>
+
+        <para>
+            É útil caso você precise criar diversas páginas usando um template.
+        </para>
+
+        <caution>
+            <para>
+                Importante! Uma página duplicada compartilha alguns recursos do
+                <acronym>PDF</acronym> com uma página template, então ela só pode ser usada no mesmo
+                documento como uma página template. Um documento modificado pode ser salvo como um
+                novo documento.
+            </para>
+        </caution>
+
+        <para>
+            <code>clone</code> operator may be used to create page which is not attached to any
+            document. It takes more time than duplicating page since it needs to copy all dependent
+            objects (used fonts, images and other resources), but it allows to use pages from
+            different source documents to create new one:
+        </para>
+
+        <example id="zend.pdf.pages.example-3">
+            <title>Cloning existing page</title>
+
+            <programlisting language="php"><![CDATA[
+$page1 = clone $pdf1->pages[$templatePageIndex1];
+$page2 = clone $pdf2->pages[$templatePageIndex2];
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
+
+        <para>
+            If several template pages are planned to be used as templates then it could be more
+            efficient to utilize <classname>Zend_Pdf_Resource_Extractor</classname> class which
+            gives an ability to share resources between cloned pages - fonts, images, etc.
+            (otherwise new resource copy will be created for each cloned page):
+        </para>
+
+        <example id="zend.pdf.pages.example-4">
+            <title>
+                Cloning existing page using <classname>Zend_Pdf_Resource_Extractor</classname> class
+            </title>
+
+            <programlisting language="php"><![CDATA[
+$extractor = new Zend_Pdf_Resource_Extractor();
+....
+$page1 = $extractor->clonePage($pdf->pages[$templatePageIndex1]);
+$page2 = $extractor->clonePage($pdf->pages[$templatePageIndex2]);
+$page1->drawText('Some text...', $x, $y);
+$page2->drawText('Another text...', $x, $y);
+...
+$pdf = new Zend_Pdf();
+$pdf->pages[] = $page1;
+$pdf->pages[] = $page2;
+]]></programlisting>
+        </example>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

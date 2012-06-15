@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.http.user-agent-features-browscap">
+    <title>The Browscap UserAgent Features Adapter</title>
+
+    <sect2 id="zend.http.user-agent-features-browscap.intro">
+        <title>Overview</title>
+
+        <para>
+            <ulink url="http://browsers.garykeith.com/">Browscap</ulink> is an open project
+            dedicated to collecting an disseminating a "database" of browser capabilities --
+            actually a set of different files describing browser capablities. PHP has built-in
+            support for using these files via the <ulink
+                url="http://php.net/get_browser"><function>get_browser()</function></ulink>
+            function. This function requires that your <filename>php.ini</filename> provides a
+            <varname>browscap</varname> entry pointing to the PHP-specific
+            <filename>php_browscap.ini</filename> file, which <ulink
+                url="http://browsers.garykeith.com/stream.asp?PHP_BrowsCapINI">you can download from
+                the browscap site</ulink>.
+        </para>
+
+        <para>
+            This class provides a <link linkend="zend.http.user-agent-features">features
+                adapter</link> that calls <function>get_browser()</function> in order to discover
+            mobile device capabilities to inject into <classname>UserAgent</classname> device
+            instances.
+        </para>
+
+        <note id="zend.http.user-agent-features-browscap.intro.browscap-usage">
+            <title>You may need to restart your webserver</title>
+
+            <para>
+                The <varname>browscap</varname> <filename>php.ini</filename> setting is a
+                <constant>PHP_INI_SYSTEM</constant> setting, meaning it can only be set in your
+                <filename>php.ini</filename> file or in your web server configuration. As such, you
+                may need to restart your web server after adding the entry.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-features-browscap.quick-start">
+        <title>Quick Start</title>
+
+        <para>
+            First, if you haven't already, <ulink
+                url="http://browsers.garykeith.com/stream.asp?PHP_BrowsCapINI">download the
+                php_browscap.ini file</ulink>, and put it somewhere your web server can access it;
+            make sure the web server has permissions to read the file. Typically, you'll place this
+            in the same location as your <filename>php.ini</filename> file.
+        </para>
+
+        <para>
+            Next, update your <filename>php.ini</filename> file to add the following line:
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+browscap = /path/to/php_browscap.ini
+]]></programlisting>
+
+        <note>
+            <title>Keep it simple</title>
+
+            <para>
+                If you put your <filename>php_browscap.ini</filename> file next to the
+                <filename>php.ini</filename> file, you can omit the path information, and simply
+                specify the filename.
+            </para>
+        </note>
+
+        <para>
+            Next, simply provide configuration to your application as follows:
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+resources.useragent.mobile.features.classname = "Zend_Http_UserAgent_Device_Features_Browscap"
+]]></programlisting>
+
+        <para>
+            At this point, you're all set.  You can access the browser information in a variety of
+            ways. From within the MVC portion of your application, you can access it via the
+            bootstrap. Within plugins, this is done by grabbing the bootstrap from the front
+            controller.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
+$userAgent = $bootstrap->getResource('useragent');
+]]></programlisting>
+
+        <para>
+            From your action controller, use <methodname>getInvokeArg()</methodname> to grab the
+            bootstrap, and from there, the user agent object.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$bootstrap = $this->getInvokeArg('bootstrap');
+$userAgent = $bootstrap->getResource('useragent');
+]]></programlisting>
+
+        <para>
+            Within your view, you can grab it using the <classname>UserAgent</classname> view
+            helper.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$userAgent = $this->userAgent();
+]]></programlisting>
+
+        <para>
+            Once you have the user agent object, you can query it for different capabilities. As one
+            example, you may want to use an alternate layout script based on the user agent
+            capabilities.
+        </para>
+        
+        <programlisting language="php"><![CDATA[
+$device = $userAgent->getDevice();
+
+$cssSupport    = $device->getFeature('cssversion');
+$jsSupport     = $device->getFeature('javascript');
+
+switch (true) {
+    case ($jsSupport && $cssSupport >= 3):
+        $layout->setLayout('layout-html5');
+        break;
+    case ($jsSupport && $cssSupport < 3):
+        $layout->setLayout('layout-xhtml');
+        break;
+    case (!$jsSupport && $cssSupport < 3):
+        $layout->setLayout('layout-html-transitional');
+        break;
+    default:
+        $layout->setLayout('layout-web-1');
+        break;
+}
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-features-browscap.options">
+        <title>Configuration Options</title>
+
+        <para>
+            The browscap adapter has no configuration options.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.http.user-agent-features-browscap.methods">
+        <title>Available Methods</title>
+
+        <variablelist>
+            <varlistentry id="zend.http.user-agent-features-browscap.methods.get-from-request">
+                <term>
+                    <methodsynopsis>
+                        <methodname>getFromRequest</methodname>
+                        <methodparam>
+                            <funcparams>array $request, array $config</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
+
+                <listitem>
+                    <para>
+                        Decompose the request in order to return an array of device capabilities.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect2>
+</sect1>

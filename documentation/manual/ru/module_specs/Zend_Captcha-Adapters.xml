@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zend.captcha.adapters">
+    <title>Адаптеры CAPTCHA</title>
+
+    <para>
+        Следующие адаптеры поставляются с Zend Framework по умолчанию.
+    </para>
+
+    <sect2 id="zend.captcha.adapters.word">
+        <title>Zend_Captcha_Word</title>
+
+        <para>
+            <classname>Zend_Captcha_Word</classname> -- абстрактный адаптер, реализующий функционал,
+            используемый большинством других адаптеров. Данный адаптер предоставляет мутаторы
+            для задания длины слова, сессии, времени жизни токена, объекта пространства имён сессии,
+            в котором будет храниться токен и класс сессии, если вы не используете
+            <classname>Zend_Session_Namespace</classname>.
+            <classname>Zend_Captcha_Word</classname> реализует логику проверки.
+        </para>
+
+        <para>
+            По умолчанию, длина слова -- 8 символов, таймаут сессии -- 5 минут и для хранения
+            данных <acronym>CAPTCHA</acronym> используется <classname>Zend_Session_Namespace</classname>
+            (используется пространство имён "<classname>Zend_Form_Captcha_&lt;captcha ID&gt;</classname>").
+        </para>
+
+        <para>
+            В дополнении к методам, требуемым интерфейсом <classname>Zend_Captcha_Adapter</classname>,
+            <classname>Zend_Captcha_Word</classname> реализует следующие методы:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>setWordLen($length)</methodname> и
+                    <methodname>getWordLen()</methodname> задаёт и получает
+                    длину генерируемого "слова" в символах.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setTimeout($ttl)</methodname> и
+                    <methodname>getTimeout()</methodname> задаёт и получает время жизни сессионного
+                    токена в секундах.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setUseNumbers($numbers)</methodname> и
+                    <methodname>getUseNumbers()</methodname> указывают, будут ли использоваться
+                    цифры при генерации "слова".
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setSessionClass($class)</methodname> и
+                    <methodname>getSessionClass()</methodname> задаёт и получает класс, реализующий
+                    функциональность <classname>Zend_Session_Namespace</classname> для
+                    хранения сессионного токена и "слова" между клиентскими запросами.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getId()</methodname> возвращает текущий идентификационный токен.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>getWord()</methodname> возвращает сгенерированное ранее слово.
+                    Если слово ещё не было сгенерировано, оно будет автоматически сгенерировано.
+                    <!-- слишком много "генераторов". надо переписать -->
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setSession(Zend_Session_Namespace $session)</methodname>
+                    задаёт объект сессии для хранения токена и слова между клиентскими запросами.
+                    <methodname>getSession()</methodname> возвращает текущий объект сессии.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            Все словесные <acronym>CAPTCHA</acronym> могут принимать массив параметров
+            в конструкторе. Параметры можно передать через метод <methodname>setOptions()</methodname>.
+            Вы так же можете передать объект <classname>Zend_Config</classname>
+            методу <methodname>setConfig()</methodname>. По умолчанию используются параметры
+            <emphasis>wordLen</emphasis>, <emphasis>timeout</emphasis> и
+            <emphasis>sessionClass</emphasis>. Каждая конкретная реализация
+            <acronym>CAPTCHA</acronym> может определять дополнительные параметры.
+        </para>
+
+        <note>
+            <para>
+                <classname>Zend_Captcha_Word</classname> -- абстрактный класс и не может
+                использоваться напрямую.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zend.captcha.adapters.dumb">
+        <title>Zend_Captcha_Dumb</title>
+
+        <para>
+            Адаптер <classname>Zend_Captch_Dumb</classname> генерирует случайную строку,
+            которая должна быть набрана в обратном порядке. Никогда не используйте этот
+            адаптер на реальных проектах, так как его легко взломать.
+            Его следует использовать только в целях тестирования. Адаптер наследует
+            <classname>Zend_Captcha_Word</classname>.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.captcha.adapters.figlet">
+        <title>Zend_Captcha_Figlet</title>
+
+        <para>
+            Адаптер <classname>Zend_Captcha_Figlet</classname> aнаследует <link
+                linkend="zend.text.figlet"><classname>Zend_Text_Figlet</classname></link> 
+            и отображает figlet пользователю.
+        </para>
+
+        <para>
+            Параметры, передаваемые в конструкторе так же передаются объекту
+            <link linkend="zend.text.figlet"><classname>Zend_Text_Figlet</classname></link>.
+            Список возможных опций можно посмотреть в разделе о
+            <link linkend="zend.text.figlet"><classname>Zend_Text_Figlet</classname></link>.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.captcha.adapters.image">
+        <title>Zend_Captcha_Image</title>
+
+        <para>
+            Адаптер <classname>Zend_Captcha_Image</classname> отрисовывает сгенерированное слово
+            на картинке с искажением и зашумлением, затрудняющими автоматическое
+            распознавание. Адаптер требует расширение
+            <ulink url="http://php.net/gd">GD</ulink>, скомпилированное с поддержкой
+            шрифтов в формате TrueType или Freetype. На текущий момент адаптер генерирует
+            картинки только в формате <acronym>PNG</acronym>.
+        </para>
+
+        <para>
+            <classname>Zend_Captcha_Image</classname> наследует
+            <classname>Zend_Captcha_Word</classname>, и предоставляет следующие
+            дополнительные методы:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>setExpiration($expiration)</methodname> и
+                    <methodname>getExpiration()</methodname> задаёт и получает максимальное время жизни
+                    файла с изображением. Обычно оно больше времени жизни
+                    сессии. Сборка мусора осуществляется каждый раз, когда используется объект
+                    <acronym>CAPTCHA</acronym>. Время жизни задаётся в секундах.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setGcFreq($gcFreq)</methodname> и
+                    <methodname>getGcFreg()</methodname> задаёт и получает периодичность сборки мусора. Сборка
+                    запускается через каждые <command>1/$gcFreq</command> запросов. По умолчанию 100.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setFont($font)</methodname> и <methodname>getFont()</methodname>
+                    задаёт и получает шрифт, которым отрисовывается слово. Переменная
+                    <varname>$font</varname>
+                    должна содержать полный квалифицированный путь к файлу со шрифтом.
+                    Этот параметр обязателен. <acronym>CAPTCHA</acronym> выбросит исключение
+                    при попытке отрисовать изображение без указанного файла со шрифтом.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setFontSize($fsize)</methodname> и
+                    <methodname>getFontSize()</methodname> задаёт и получает размер шрифта в пикселях.
+                    По умолчанию 24.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setHeight($height)</methodname> и
+                    <methodname>getHeight()</methodname> задаёт и получает высоту генерируемого
+                    изображения в пикселях. По умолчанию 50.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setWidth($width)</methodname> и
+                    <methodname>getWidth()</methodname> задаёт и получает ширину генерируемого
+                    изображения в пикселях. По умолчанию 200.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setImgDir($imgDir)</methodname> и
+                    <methodname>getImgDir()</methodname> задаёт  получает директорию для
+                    хранения сгенерированных изображений <acronym>CAPTCHA</acronym>. По умолчанию
+                    "<filename>./images/captcha/</filename>", относительно загрузочного скрипта.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setImgUrl($imgUrl)</methodname> и
+                    <methodname>getImgUrl()</methodname> задаёт и получает относительный путь к
+                    <acronym>CAPTCHA</acronym> для использования в <acronym>HTML</acronym> верстке.
+                    По умолчанию "<filename>/images/captcha/</filename>".
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setSuffix($suffix)</methodname> и
+                    <methodname>getSuffix()</methodname> задаёт и получает окончание имени файла
+                    <acronym>CAPTCHA</acronym>. По умолчанию "<filename>.png</filename>".
+                    Примечание: смена этого значения не изменит формат изображения.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setDotNoiseLevel($level)</methodname> и
+                    <methodname>getDotNoiseLevel()</methodname>, совместно с
+                    <methodname>setLineNoiseLevel($level)</methodname> и
+                    <methodname>getLineNoiseLevel()</methodname>, контролируют
+                    зашумлённость изображения случайными точками и линиями.
+                    <varname>$level</varname> определяет количество точек и линий.
+                    По умолчанию используется 100 точек и 5 линий. Шумы добавляются
+                    в два этапа -- до и после искажения картинки.
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            Все вышеперечисленные параметры могут быть заданы в конструкторе.
+            Нужно только убрать приставку "set" из названия соответствующего
+            метода и привести первую букву к нижнему регистру.
+            Например: "suffix", "height", "imgUrl", и т. д.
+        </para>
+    </sect2>
+
+    <sect2 id="zend.captcha.adapters.recaptcha">
+        <title>Zend_Captcha_ReCaptcha</title>
+
+        <para>
+            Адаптер <classname>Zend_Captcha_ReCaptcha</classname> наследует <link
+                linkend="zend.service.recaptcha">Zend_Service_ReCaptcha</link>.
+            Реализует следующие методы:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <methodname>setPrivKey($key)</methodname> и
+                    <methodname>getPrivKey()</methodname> задаёт и получает секретный ключ, используемый
+                    в сервисе ReCaptcha. Ключ должен задаваться во время конструирования объекта, но может быть
+                    изменён в любой момент.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setPubKey($key)</methodname> и
+                    <methodname>getPubKey()</methodname> задаёт и получает публичный ключ для использования
+                    в сервисе ReCaptcha. Ключ должен быть задан во время конструирования объекта,
+                    но может быть изменён в любой момент.
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <methodname>setService(Zend_Service_ReCaptcha $service)</methodname> и
+                    <methodname>getService()</methodname> задаёт и получает объект
+                    сервиса ReCaptcha.
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: 22741 -->
+<sect2 id="zend.test.phpunit.testing">
+    <title>Testen eigener Controller und MVC Anwendungen</title>
+
+    <para>
+        Sobald man sein Bootstrap hat, kann man mit dem Testen beginnen. Testen funktioniert
+        grundsätzlich so, wie man es in einer PHPUnit-TestSuite erwarten würde, mit ein paar kleinen
+        Unterschieden.
+    </para>
+
+    <para>
+        Zuerst muss man eine <acronym>URL</acronym> ausführen, die getestet werden soll, indem die
+        <methodname>dispatch()</methodname>-Methode des Testfalls ausgeführt wird:
+    </para>
+
+    <programlisting language="php"><![CDATA[
+class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+{
+    // ...
+
+    public function testHomePage()
+    {
+        $this->dispatch('/');
+        // ...
+    }
+}
+]]></programlisting>
+
+    <para>
+        Manchmal ist es trotzdem nötig, zusätzliche Informationen anzugeben -- 
+        <constant>GET</constant> und POST Variablen, COOKIE Informationen, usw.
+        Man kann die Anfrage mit folgenden Informationen ausstatten:
+    </para>
+
+    <programlisting language="php"><![CDATA[
+class FooControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+{
+    // ...
+
+    public function testBarActionShouldReceiveAllParameters()
+    {
+        // Setzt GET Variablen:
+        $this->request->setQuery(array(
+            'foo' => 'bar',
+            'bar' => 'baz',
+        ));
+
+        // Setzt POST Variablen:
+        $this->request->setPost(array(
+            'baz'  => 'bat',
+            'lame' => 'bogus',
+        ));
+
+        // Setzt einen Cookie Wert:
+        $this->request->setCookie('user', 'matthew');
+        // or many:
+        $this->request->setCookies(array(
+            'timestamp' => time(),
+            'host'      => 'foobar',
+        ));
+
+        // Setzt sogar Header:
+        $this->request->setHeader('X-Requested-With', 'XmlHttpRequest');
+
+        // Setzt die Anfrage Methode:
+        $this->request->setMethod('POST');
+
+        // Ausführung:
+        $this->dispatch('/foo/bar');
+
+        // ...
+    }
+}
+]]></programlisting>
+
+    <para>
+        Jetzt wurde die Anfrage durchgeführt, es ist also Zeit Zusicherungen zu prüfen.
+    </para>
+
+    <sect3 id="zend.test.phpunit.testing.redirector">
+        <title>Controller Tests und der Redirector Action Helper</title>
+
+        <important>
+            <para>
+                Der Redirect Action Helper hat Probleme mit der Anweisung <methodname>exit()</methodname>,
+                wenn die Methode <methodname>gotoAndExit()</methodname> verwendet wird
+                und wird dann natürlich auch einen Test beenden, der für diese Methode läuft. Um die
+                eigene Anwendung testbar zu machen, sollte diese Methode nicht am Redirector
+                verwendet werden.
+            </para>
+        </important>
+
+        <para>
+            Durch seine Natur führt das Redirector Action Helper Plugin ein Redirect aus und steigt
+            nach diesem aus. Weil man Teile einer Anwendung nicht testen kann, wenn diese
+            Exit-Aufrufe durchführen, deaktiviert
+            <classname>Zend_Test_PHPUnit_ControllerTestCase</classname> den Exit-Teil des
+            Redirectors automatisch, was zu unterschiedlichen Verhaltensweisen in Tests und echter Anwendung
+            führen kann. Um sicherzustellen, dass der Redirect richtig arbeitet, sollte man diesen
+            auf folgendem Weg durchführen:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+class MyController extends Zend_Controller_Action
+{
+    public function indexAction()
+    {
+        if ($someCondition == true) {
+            return $this->_redirect(...);
+        } else if ($anotherCondition == true) {
+            $this->_redirector->gotoSimple("foo");
+            return;
+        }
+
+        // Mach was
+    }
+}
+]]></programlisting>
+
+        <important>
+            <para>
+                Abhängig von der eigenen Anwendung kann es sein, dass das nicht genug ist, da eine
+                zusätzliche <methodname>preDispatch()</methodname>- oder
+                <methodname>postDispatch()</methodname>-Logik ausgeführt werden könnte. Das kann
+                aktuell mit Zend_Test auf keine vernünftige Weise behandelt werden.
+            </para>
+        </important>
+    </sect3>
+</sect2>

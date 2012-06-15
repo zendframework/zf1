@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EN-Revision: 24249 -->
+<!-- Reviewed: no -->
+<sect2 id="zend.application.available-resources.db">
+    <title>Zend_Application_Resource_Db</title>
+
+    <para>
+        <classname>Zend_Application_Resource_Db</classname> irá inicializar um
+        <classname>Zend_Db</classname> adaptador com base nas opções passados para ele. Por
+        padrão, ele também define o adaptador como o adaptador padrão para uso com
+        <classname>Zend_Db_Table</classname>. Se você quiser usar múltiplas base de dados
+        simultaneamente, você pode usar o <link
+        linkend="zend.application.available-resources.multidb">Multidb Resource
+        Plugin</link>.
+    </para>
+
+    <para>
+        As chaves de configuração a seguir são reconhecidas:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                <emphasis><property>adapter</property></emphasis>: <classname>Zend_Db</classname>
+                tipo de adaptador.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <emphasis><property>params</property></emphasis>: array associativo de parâmetros de
+                configuração para usar ao recuperar a instância do adaptador.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <emphasis><property>isDefaultTableAdapter</property></emphasis>: se deve ou não
+                estabelecer esse adaptador como o adaptador padrão de tabela.
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                <emphasis><property>defaultMetadataCache</property></emphasis>: o nome do modelo de
+                cache ou uma instãncia de <classname>Zend_Cache_Core</classname> para uso do
+                cache de metadados para <classname>Zend_Db_Table</classname>.
+            </para>
+        </listitem>
+    </itemizedlist>
+
+    <example id="zend.application.available-resources.db.configExample">
+        <title>Exemplo de configuração do recurso DB</title>
+
+        <para>
+            Abaixo está um exemplo <acronym>INI</acronym> configuração que pode ser usada para inicializar
+            o recurso DB.
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+[production]
+resources.db.adapter = "pdo_mysql"
+resources.db.params.host = "localhost"
+resources.db.params.username = "webuser"
+resources.db.params.password = "XXXXXXX"
+resources.db.params.dbname = "test"
+resources.db.isDefaultTableAdapter = true
+
+; Optionally you can also the cache template to use for metadata caching:
+resources.db.defaultMetadataCache = "database"
+]]></programlisting>
+    </example>
+
+    <note>
+        <title>Recuperar uma instância do Adaptador</title>
+
+        <para>
+            Se você optar por não fazer o adaptador instanciado com este
+            recurso o adaptador padrão de tabela, como você recupera a instância do
+            adaptador?
+        </para>
+
+        <para>
+            Como acontece com qualquer plugin recurso, você pode buscar o plugin recurso DB
+            a partir de seu bootstrap:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$resource = $bootstrap->getPluginResource('db');
+]]></programlisting>
+
+        <para>
+            Depois de ter o objeto recurso, você pode buscar o adaptador DB
+            usando o método <methodname>getDbAdapter()</methodname>:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$db = $resource->getDbAdapter();
+]]></programlisting>
+    </note>
+</sect2>

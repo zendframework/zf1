@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<!-- EN-Revision: 24249 -->
+<sect2 id="zend.filter.set.localizedtonormalized">
+    <title>LocalizedToNormalized および NormalizedToLocalized</title>
+
+    <!-- TODO : to be translated -->
+    <para>
+        These two filters can change given localized input to it's normalized representation and
+        reverse. They use in Background <classname>Zend_Locale</classname> to do this transformation
+        for you.
+    </para>
+
+    <sect3 id="zend.filter.set.localizedtonormalized.options">
+        <title>
+            Zend_Filter_LocalizedToNormalized および
+            Zend_Filter_NormalizedToLocalized でサポートされるオプション
+        </title>
+
+        <para>
+            <classname>Zend_Filter_LocalizedToNormalized</classname> および
+            <classname>Zend_Filter_NormalizedToLocalized</classname> では、下記のオプションがサポートされます。
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>date_format</property></emphasis>: 正規化で使う日付形式や、
+                    地域化された日付形式を検出する日付形式を設定します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>locale</property></emphasis>: 正規化で使うロケールや、
+                    地域化された形式を検出するロケールを設定します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>precision</property></emphasis>: 数値変換で使う精度を設定します。
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.localizedtonormalized.workflow">
+        <title>ワークフロー</title>
+
+        <para>
+            正規化により、ユーザーがユーザー固有の言語表記で情報を入力でき、
+            さらに例えば正規化された値をデータベースに保存できるようになります。
+            一方で地域化により、
+            保管された正規化された値をローカルな流儀でユーザーに提示できるようになります。
+        </para>
+
+        <note>
+            <para>
+                正規化および地域化と翻訳とは同一ではないことに注意してください。
+                これらのフィルタでは、月や日の名前で期待するような、
+                ある言語から別のものへの文字列の翻訳は行えません。
+            </para>
+        </note>
+
+        <para>
+            下記の入力型が正規化および地域化されます。
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis>integer</emphasis>: 整数値。正規化では英語表記を返します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>float</emphasis>: フロート値。正規化では英語表記を返します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>numbers</emphasis>: 実数のようなその他の数値。正規化では英語表記を返します。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>time</emphasis>: 時刻値。連想配列に正規化されます。
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis>date</emphasis>: 日付値。連想配列に正規化されます。
+                </para>
+            </listitem>
+        </itemizedlist>
+
+        <para>
+            その他の入力はいずれも変更無しにそのまま返されます。
+        </para>
+
+        <note>
+            <para>
+                正規化された出力が常に文字列として与えられることに注意するべきです。
+                これ以外の場合には、
+                環境は正規化された出力から、
+                環境で設定されたロケールで使われる表記法に
+                自動的に変換します。
+            </para>
+        </note>
+    </sect3>
+
+    <sect3 id="zend.filter.set.localizedtonormalized.numbersnormal">
+        <title>数値の正規化</title>
+
+        <para>
+            整数、フロートまたは実数のようなあらゆる数が正規化されます。
+            指数表記の数値は、実はこのフィルタで扱えないので注意してください。
+        </para>
+
+        <para>
+            数値についての詳しい正規化方法
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//フィルタ初期化
+$filter = new Zend_Filter_LocalizedToNormalized();
+$filter->filter('123.456,78');
+//値 '123456.78' を返します。
+]]></programlisting>
+
+        <para>
+            アプリケーション全体のロケールとしてロケール 'de' を設定したつもりになりましょう。
+            <classname>Zend_Filter_LocalizedToNormalized</classname>は設定されたロケールを受け取って、
+            どの種類の入力をあなたが与えたか検出するために、それを使います。
+            われわれの例ではそれは精度を持つ値でした。
+            そこで、この値を文字列として正規化した表現をフィルタは返します。
+        </para>
+
+        <para>
+            正規化した数がどのようになるべきか、コントロールすることもできます。
+            このために<classname>Zend_Locale_Format</classname>でも使用されるオプションを
+            全て与えられます。利用可能なオプションについて詳しくは、この
+            <link linkend="zend.locale.parsing">Zend_Locale の章</link>をご覧ください。
+        </para>
+
+        <para>
+            下記はオプションの動作方法が分かるように精度を定義した例です。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//数値フィルタ
+$filter = new Zend_Filter_LocalizedToNormalized(array('precision' => 2));
+
+$filter->filter('123.456');
+//値 '123456.00' を返します。
+
+$filter->filter('123.456,78901');
+//値 '123456.79' を返します。
+]]></programlisting>
+    </sect3>
+
+    <sect3 id="zend.filter.set.localizedtonormalized.dates">
+        <title>日時の正規化</title>
+
+        <para>
+            日付や時刻の値の入力もまた、正規化できます。
+            与えられた日付および時刻は全て、独自のキーの範囲内で日付の各部分が与えられた
+            配列として返されます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//フィルタ初期化
+$filter = new Zend_Filter_LocalizedToNormalized();
+$filter->filter('12.April.2009');
+// array('day' => '12', 'month' => '04', 'year' => '2009') を返します。
+]]></programlisting>
+
+        <para>
+            ふたたびロケール 'de' を設定したつもりになりましょう。
+            そこで、入力は自動的に日付として検出され、
+            返り値に連想配列を受け取ります。
+        </para>
+
+        <para>
+            もちろん、日付の入力値をどのようにするか
+            <emphasis>date_format</emphasis>や<emphasis>locale</emphasis>オプションで
+            コントロールすることもできます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//日付フィルタ
+$filter = new Zend_Filter_LocalizedToNormalized(
+    array('date_format' => 'ss:mm:HH')
+);
+
+$filter->filter('11:22:33');
+// array('hour' => '33', 'minute' => '22', 'second' => '11') を返します。
+]]></programlisting>
+    </sect3>
+
+    <sect3 id="zend.filter.set.localizedtonormalized.numberslocal">
+        <title>数値の地域化</title>
+
+        <para>
+            整数、フロートまたは実数のようなあらゆる数が地域化されます。
+            指数表記の数値は、実はこのフィルタで扱えないので注意してください。
+        </para>
+
+        <para>
+            数値についての詳しい地域化方法
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//フィルタを初期化
+$filter = new Zend_Filter_NormalizedToLocalized();
+$filter->filter(123456.78);
+//値 '123.456,78' を返します。
+]]></programlisting>
+
+        <para>
+            アプリケーション全体のロケールとしてロケール 'de' を設定したつもりになりましょう。
+            <classname>Zend_Filter_NormalizedToLocalized</classname>は設定されたロケールを受け取って、
+            どの種類の出力をあなたが受け取りたいのか検出するために、それを使います。
+            われわれの例ではそれは精度を持つ値でした。
+            そこで、この値を文字列として地域化した表現をフィルタは返します。
+        </para>
+
+        <para>
+            地域化した数がどのようになるべきか、コントロールすることもできます。
+            このために<classname>Zend_Locale_Format</classname>でも使用されるオプションを
+            全て与えられます。
+            これらのオプションの使い方について詳しくは、この
+            <link linkend="zend.locale.parsing">Zend_Locale の章</link> をご覧ください。
+        </para>
+
+        <para>
+            下記はオプションの動作方法が分かるように精度を定義した例です。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//数値フィルタ
+$filter = new Zend_Filter_NormalizedToLocalized(array('precision' => 2));
+
+$filter->filter(123456);
+//値 '123.456,00' を返します。
+
+$filter->filter(123456.78901);
+//値 '123.456,79' を返します。
+]]></programlisting>
+
+    </sect3>
+
+    <sect3 id="zend.filter.set.normalizedtolocalized.dates">
+        <title>日時の地域化</title>
+
+        <para>
+            日付や時刻の値を正規化したものもまた、地域化できます。
+            与えられた日付および時刻は全て、設定されたロケールで定義された形式で
+            文字列として返されます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//フィルタを初期化
+$filter = new Zend_Filter_NormalizedToLocalized();
+$filter->filter(array('day' => '12', 'month' => '04', 'year' => '2009');
+// '12.04.2009' を返します。
+]]></programlisting>
+
+        <para>
+            ふたたびロケール 'de' を設定したつもりになりましょう。
+            そこで、入力は自動的に日付として検出され、
+            ロケール 'de' で定義された形式で返されます。
+        </para>
+
+        <para>
+            もちろん、日付の入力値をどのようにするか
+            <emphasis>date_format</emphasis>や<emphasis>locale</emphasis>オプションで
+            コントロールすることもできます。
+        </para>
+
+        <programlisting language="php"><![CDATA[
+//日付フィルタ
+$filter = new Zend_Filter_LocalizedToNormalized(
+    array('date_format' => 'ss:mm:HH')
+);
+
+$filter->filter(array('hour' => '33', 'minute' => '22', 'second' => '11'));
+// '11:22:33' を返します。
+]]></programlisting>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->

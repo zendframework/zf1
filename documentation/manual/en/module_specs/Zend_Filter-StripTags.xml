@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect2 id="zend.filter.set.striptags">
+    <title>StripTags</title>
+
+    <para>
+        This filter can strip <acronym>XML</acronym> and <acronym>HTML</acronym> tags from given
+        content.
+    </para>
+
+    <warning>
+        <title>Zend_Filter_StripTags is potentially unsecure</title>
+
+        <para>
+            Be warned that <classname>Zend_Filter_StripTags</classname> should only be used to strip
+            all available tags.
+        </para>
+
+        <para>
+            Using <classname>Zend_Filter_StripTags</classname> to make your site
+            <emphasis>secure</emphasis> by stripping some unwanted tags will lead to unsecure and
+            dangerous code.
+        </para>
+
+        <para>
+            <classname>Zend_Filter_StripTags</classname> must not be used to prevent
+            <acronym>XSS</acronym> attacks. This filter is no replacement for using Tidy or
+            HtmlPurifier.
+        </para>
+    </warning>
+
+    <sect3 id="zend.filter.set.striptags.options">
+        <title>Supported options for Zend_Filter_StripTags</title>
+
+        <para>
+            The following options are supported for <classname>Zend_Filter_StripTags</classname>:
+        </para>
+
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <emphasis><property>allowAttribs</property></emphasis>: This option sets the
+                    attributes which are accepted. All other attributes are stripped from the given
+                    content
+                </para>
+            </listitem>
+
+            <listitem>
+                <para>
+                    <emphasis><property>allowTags</property></emphasis>: This option sets the tags
+                    which are accepted. All other tags will be stripped from the given content
+                </para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.basic">
+        <title>Basic usage</title>
+
+        <para>
+            See the following example for the default behaviour of this filter:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags();
+
+print $filter->filter('<B>My content</B>');
+]]></programlisting>
+
+        <para>
+            As result you will get the stripped content 'My content'.
+        </para>
+
+        <para>
+            When the content contains broken or partitial tags then the complete following content
+            will be erased. See the following example:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags();
+
+print $filter->filter('This contains <a href="http://example.com">no ending tag');
+]]></programlisting>
+
+        <para>
+            The above will return 'This contains' with the rest being stripped.
+        </para>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.allowtags">
+        <title>Allowing defined tags</title>
+
+        <para>
+            <classname>Zend_Filter_StripTags</classname> allows stripping of all but defined tags.
+            This can be used for example to strip all tags but links from a text.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags(array('allowTags' => 'a'));
+
+$input  = "A text with <br/> a <a href='link.com'>link</a>";
+print $filter->filter($input);
+// returns: A text with a <a href='link.com'>link</a>
+]]></programlisting>
+
+        <para>
+            The above example strips all tags but the link. By providing an array you can set
+            multiple tags at once.
+        </para>
+
+        <warning>
+            <para>
+                Do not use this feature to get a <emphasis>probably secure</emphasis> content. This
+                component does not replace the use of a proper configured html filter.
+            </para>
+        </warning>
+    </sect3>
+
+    <sect3 id="zend.filter.set.striptags.allowattribs">
+        <title>Allowing defined attributes</title>
+
+        <para>
+            It is also possible to strip all but allowed attributes from a tag.
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$filter = new Zend_Filter_StripTags(array('allowAttribs' => 'src'));
+
+$input  = "A text with <br/> a <img src='picture.com' width='100'>picture</img>";
+print $filter->filter($input);
+// returns: A text with a <img src='picture.com'>picture</img>
+]]></programlisting>
+
+        <para>
+            The above example strips all tags but img. Additionally from the img tag all
+            attributes but src will be stripped. By providing an array you can set multiple
+            attributes at once.
+        </para>
+    </sect3>
+</sect2>
+<!--
+vim:se ts=4 sw=4 et:
+-->
