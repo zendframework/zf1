@@ -132,7 +132,7 @@ class Zend_Form_Decorator_Fieldset extends Zend_Form_Decorator_Abstract
         $name    = $element->getFullyQualifiedName();
         $id      = (string)$element->getId();
 
-        if (!array_key_exists('id', $attribs) && '' !== $id) {
+        if ((!array_key_exists('id', $attribs) || $attribs['id'] == $id) && '' !== $id) {
             $attribs['id'] = 'fieldset-' . $id;
         }
 

@@ -243,6 +243,20 @@ class Zend_Form_Decorator_FieldsetTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('<fieldset></fieldset>', $html);
     }
+    
+    /**
+     * @group ZF-10803
+     */
+    public function testFormIdOverridesFieldsetId()
+    {
+        $form = new Zend_Form();
+        $form->setAttrib('id', 'form-id')
+             ->setView($this->getView());
+        
+        $html = $this->decorator->setElement($form)->render('content');
+        
+        $this->assertContains('<fieldset id="fieldset-form-id"', $html);
+    }
 }
 
 // Call Zend_Form_Decorator_FieldsetTest::main() if this source file is executed directly.
