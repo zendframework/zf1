@@ -1,17 +1,29 @@
-Welcome to the Zend Framework 1.10 Release! 
+Welcome to the Zend Framework 1.12 Release! 
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.10dev Release ([INSERT REV NUM HERE]).
+Zend Framework 1.12rc1 Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
 NEW FEATURES
 ------------
 
-* Zend_Filter_Null, contributed by Thomas Weidner
-* Zend_Filter_Compress/Decompress, contributed by Thomas Weidner
-* Zend_Validate_Callback, contributed by Thomas Weidner
-* Zend_Validate_PostCode, contributed by Thomas Weidner
+* Backported autoloaders from Zend Framework 2
+  * Zend_Loader_StandardAutoloader - PSR-0-compliant autoloader, with
+    optimizations for specifying path/namespace or path/vendor prefix pairs.
+  * Zend_Loader_ClassMapAutoloader - Use class map tables for autoloading.
+  * Zend_Loader_AutoloaderFactory - Use multiple autoloader strategies.
+* Backported EventManager from Zend Framework 2
+  * Provides an implementation of subject/observer, publish/subscribe, signal
+    slots, and traditional eventing systems.
+* Zend_Cloud_Infrastructure
+  * Manage IAAS services via PHP. Includes support for Amazon EC2, WindowsAzure,
+    Rackspace, and GoGrid
+* MVC: Create and set Cookie headers in the response
+* JSON: Allow encoding objects that implement a toJson() method
+* PHP 5.4 support
+
+In all, more than 100 features and bugfixes are included in this release.
 
 A detailed list of all features and bug fixes in this release may be found at:
 
@@ -19,11 +31,6 @@ http://framework.zend.com/changelog/
 
 MIGRATION NOTES
 ---------------
-
-* Zend_Cache_Backend_File
-  * renamed options, old names still exists but triggers an E_USER_NOTICE error
-    * 'hashed_directory_umask' to 'hashed_directory_perm'
-    * 'cache_file_umask' to 'cache_file_perm'
 
 A detailed list of migration notes may be found at:
 
