@@ -317,6 +317,34 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($messages), 'Expected error message');
         $this->assertArrayHasKey('isEmpty', $messages, 'Expected \'isEmpty\' error message');
     }
+
+    /**
+     * @group ZF-12059
+     */
+    public function testDisabledForAttribute()
+    {
+        $this->element->setLabel('Foo');
+
+        $expected = '<dt id="foo-label"><label class="optional">Foo</label></dt>'
+                  . "\n"
+                  . '<dd id="foo-element">'
+                  . "\n"
+                  . '</dd>';
+        $this->assertSame($expected, $this->element->render($this->getView()));
+    }
+
+    /**
+     * @group ZF-12059
+     */
+    public function testDisabledForAttributeWithoutLabelDecorator()
+    {
+        $this->element->setLabel('Foo')->removeDecorator('label');
+
+        $expected = '<dd id="foo-element">'
+                  . "\n"
+                  . '</dd>';
+        $this->assertSame($expected, $this->element->render($this->getView()));
+    }
 }
 
 // Call Zend_Form_Element_MultiCheckboxTest::main() if this source file is executed directly.

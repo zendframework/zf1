@@ -49,4 +49,25 @@ class Zend_Form_Element_MultiCheckbox extends Zend_Form_Element_Multi
      * @var bool
      */
     protected $_isArray = true;
+
+    /**
+     * Load default decorators
+     *
+     * @return Zend_Form_Element_MultiCheckbox
+     */
+    public function loadDefaultDecorators()
+    {
+        if ($this->loadDefaultDecoratorsIsDisabled()) {
+            return $this;
+        }
+
+        parent::loadDefaultDecorators();
+
+        // Disable 'for' attribute
+        if (false !== $decorator = $this->getDecorator('label')) {
+            $decorator->setOption('disableFor', true);
+        }
+
+        return $this;
+    }
 }
