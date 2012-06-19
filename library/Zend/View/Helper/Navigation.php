@@ -157,9 +157,17 @@ class Zend_View_Helper_Navigation
         }
 
         if (!$this->view->getPluginLoader('helper')->getPaths(self::NS)) {
+            // Add navigation helper path at the beginning
+            $paths = $this->view->getHelperPaths();
+            $this->view->setHelperPath(null);
+            
             $this->view->addHelperPath(
                     str_replace('_', '/', self::NS),
                     self::NS);
+            
+            foreach ($paths as $ns => $path) {
+                $this->view->addHelperPath($path, $ns);
+            }
         }
 
         if ($strict) {
