@@ -379,6 +379,57 @@ class Zend_View_Helper_Navigation_NavigationTest
 
         $this->assertEquals($expected, $actual);
     }
+    
+    /**
+     * @group ZF-10458
+     */
+    public function testFindCustomHelper()
+    {
+        $this->_helper->view->addHelperPath(
+            $this->_files . '/helpers',
+            'My_View_Helper_Navigation'
+        );                
+        
+        $this->assertTrue(
+            $this->_helper->findHelper('menu') instanceof
+                My_View_Helper_Navigation_Menu
+        );
+    }
+    
+    /**
+     * @group ZF-10458
+     */
+    public function testAddHelperPath()
+    {
+        $this->_helper->view->addHelperPath(
+            $this->_files . '/helpers',
+            'My_View_Helper_Navigation'
+        );
+        
+        $expected = array(
+            'Zend_View_Helper_' => array(
+                'Zend/View/Helper/',
+            ),
+            'My_View_Helper_Navigation_' => array(
+                $this->_files . '/helpers/',
+            ),
+        );
+        
+        $this->assertSame($expected, $this->_helper->view->getHelperPaths());
+    }
+    
+    /**
+     * @group ZF-10458
+     */
+    public function testRenderCustomHelper()
+    {
+        $this->_helper->view->addHelperPath(
+            $this->_files . '/helpers',
+            'My_View_Helper_Navigation'
+        );
+        
+        $this->assertSame('<menu/>', (string) $this->_helper->menu());
+    }
 
     /**
      * @group ZF-6854
