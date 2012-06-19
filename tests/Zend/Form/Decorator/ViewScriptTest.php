@@ -232,7 +232,7 @@ class Zend_Form_Decorator_ViewScriptTest extends PHPUnit_Framework_TestCase
             ->setElement($this->getElement());
 
         $expected = 'Foo:'
-                  . "\n"
+                  . PHP_EOL
                   . '<input type="text" name="foo" id="foo" value="">';
 
         $this->assertSame($expected, $this->decorator->render('Foo:'));
