@@ -39,6 +39,7 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
     const LOAD_NS          = 'namespaces';
     const LOAD_PREFIX      = 'prefixes';
     const ACT_AS_FALLBACK  = 'fallback_autoloader';
+    const AUTOREGISTER_ZF  = 'autoregister_zf';
 
     /**
      * @var array Namespace/directory pairs to search; ZF library added by default
@@ -68,13 +69,6 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
      */
     public function __construct($options = null)
     {
-        $this->registerPrefix('Zend', dirname(dirname(__FILE__)));
-
-        $zfDir = dirname(dirname(dirname(__FILE__))) . '/Zend';
-        if (file_exists($zfDir)) {
-             $this->registerPrefix('Zend', $zfDir);
-        }
-
         if (null !== $options) {
             $this->setOptions($options);
         }
@@ -110,6 +104,11 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
 
         foreach ($options as $type => $pairs) {
             switch ($type) {
+                case self::AUTOREGISTER_ZF:
+                    if ($pairs) {
+                        $this->registerPrefix('Zend', dirname(dirname(__FILE__)));
+                    }
+                    break;
                 case self::LOAD_NS:
                     if (is_array($pairs) || $pairs instanceof Traversable) {
                         $this->registerNamespaces($pairs);
