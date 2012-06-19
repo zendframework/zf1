@@ -199,6 +199,22 @@ class Zend_Loader_StandardAutoloaderTest extends PHPUnit_Framework_TestCase
         $loader->autoload('ZendTest\UnusualNamespace\Name_Space\Namespaced_Class');
         $this->assertTrue(class_exists('ZendTest\UnusualNamespace\Name_Space\Namespaced_Class', false));
     }
+
+    public function testZendFrameworkPrefixIsNotLoadedByDefault()
+    {
+        $loader = new Zend_Loader_StandardAutoloader();
+        $expected = array();
+        $this->assertAttributeEquals($expected, 'prefixes', $loader);
+    }
+
+    public function testCanTellAutoloaderToRegisterZfPrefixAtInstantiation()
+    {
+        $loader = new Zend_Loader_StandardAutoloader(array('autoregister_zf' => true));
+        $r      = new ReflectionClass($loader);
+        $file   = $r->getFileName();
+        $expected = array('Zend_' => dirname(dirname($file)) . DIRECTORY_SEPARATOR);
+        $this->assertAttributeEquals($expected, 'prefixes', $loader);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Loader_StandardAutoloaderTest::main') {
