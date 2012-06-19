@@ -176,11 +176,15 @@ class Zend_XmlRpc_Response
             return false;
         }
 
+        // @see ZF-12293 - disable external entities for security purposes
+        $loadEntities         = libxml_disable_entity_loader(true);
+        $useInternalXmlErrors = libxml_use_internal_errors(true);
         try {
-            $useInternalXmlErrors = libxml_use_internal_errors(true);
             $xml = new SimpleXMLElement($response);
+            libxml_disable_entity_loader($loadEntities);
             libxml_use_internal_errors($useInternalXmlErrors);
         } catch (Exception $e) {
+            libxml_disable_entity_loader($loadEntities);
             libxml_use_internal_errors($useInternalXmlErrors);
             // Not valid XML
             $this->_fault = new Zend_XmlRpc_Fault(651);
@@ -205,6 +209,7 @@ class Zend_XmlRpc_Response
 
         try {
             if (!isset($xml->params) || !isset($xml->params->param) || !isset($xml->params->param->value)) {
+                require_once 'Zend/XmlRpc/Value/Exception.php';
                 throw new Zend_XmlRpc_Value_Exception('Missing XML-RPC value in XML');
             }
             $valueXml = $xml->params->param->value->asXML();
