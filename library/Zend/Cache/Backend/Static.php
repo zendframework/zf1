@@ -99,17 +99,13 @@ class Zend_Cache_Backend_Static
      */
     public function getOption($name)
     {
+        $name = strtolower($name);
+
         if ($name == 'tag_cache') {
             return $this->getInnerCache();
-        } else {
-            if (in_array($name, $this->_options)) {
-                return $this->_options[$name];
-            }
-            if ($name == 'lifetime') {
-                return parent::getLifetime();
-            }
-            return null;
         }
+
+        return parent::getOption($name);
     }
 
     /**
