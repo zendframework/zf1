@@ -235,17 +235,18 @@ class Zend_Cache_Core
      */
     public function getOption($name)
     {
-        if (is_string($name)) {
-            $name = strtolower($name);
-            if (array_key_exists($name, $this->_options)) {
-                // This is a Core option
-                return $this->_options[$name];
-            }
-            if (array_key_exists($name, $this->_specificOptions)) {
-                // This a specic option of this frontend
-                return $this->_specificOptions[$name];
-            }
+        $name = strtolower($name);
+
+        if (array_key_exists($name, $this->_options)) {
+            // This is a Core option
+            return $this->_options[$name];
         }
+
+        if (array_key_exists($name, $this->_specificOptions)) {
+            // This a specic option of this frontend
+            return $this->_specificOptions[$name];
+        }
+
         Zend_Cache::throwException("Incorrect option name : $name");
     }
 

@@ -231,5 +231,4 @@ class Zend_Cache_FileFrontendTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, count($this->_instance3->getOption('master_files')));
         $this->assertNotNull($this->_instance3->getOption('master_file'));
     }
-
 }

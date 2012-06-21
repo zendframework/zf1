@@ -112,6 +112,28 @@ class Zend_Cache_Backend
     }
 
     /**
+     * Returns an option
+     *
+     * @param string $name Optional, the options name to return
+     * @throws Zend_Cache_Exceptions
+     * @return mixed
+     */
+    public function getOption($name)
+    {
+        $name = strtolower($name);
+
+        if (array_key_exists($name, $this->_options)) {
+            return $this->_options[$name];
+        }
+
+        if (array_key_exists($name, $this->_directives)) {
+            return $this->_directives[$name];
+        }
+
+        Zend_Cache::throwException("Incorrect option name : {$name}");
+    }
+
+    /**
      * Get the life time
      *
      * if $specificLifetime is not false, the given specific life time is used
