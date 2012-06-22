@@ -2,32 +2,117 @@ Welcome to the Zend Framework 1.12 Release!
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.12rc1 Release ([INSERT REV NUM HERE]).
+Zend Framework 1.12rc2 Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
+SECURITY FIXES FOR 1.12.0
+-------------------------
+
+This release includes patches to each of the Request and Response
+objects within Zend_XmlRpc. These objects were found to be vulnerable to
+XML eXternal Entity Injection attacks due to insecure usage of the
+SimpleXMLElement class (SimpleXML PHP extension).  External entities
+could be specified by adding a specific DOCTYPE element to XML-RPC
+requests; exploiting this vulnerability could coerce opening arbitrary
+files and/or TCP connections.
+
+The patch in 1.11.12 ensures libxml_disable_entity_loader() is called
+before any SimpleXML calls are executed, thus removing the
+vulnerability.
+
+Thanks goes to Johannes Greil and Kestutis Gudinavicius of SEC-Consult
+for reporting the vulnerability and working with us to provide a working
+solution.
+
+
 NEW FEATURES
-------------
+============
 
-* Backported autoloaders from Zend Framework 2
-  * Zend_Loader_StandardAutoloader - PSR-0-compliant autoloader, with
-    optimizations for specifying path/namespace or path/vendor prefix pairs.
-  * Zend_Loader_ClassMapAutoloader - Use class map tables for autoloading.
-  * Zend_Loader_AutoloaderFactory - Use multiple autoloader strategies.
-* Backported EventManager from Zend Framework 2
-  * Provides an implementation of subject/observer, publish/subscribe, signal
-    slots, and traditional eventing systems.
-* Zend_Cloud_Infrastructure
-  * Manage IAAS services via PHP. Includes support for Amazon EC2, WindowsAzure,
-    Rackspace, and GoGrid
-* MVC: Create and set Cookie headers in the response
-* JSON: Allow encoding objects that implement a toJson() method
-* PHP 5.4 support
+Zend_Loader changes
+----
 
-In all, more than 100 features and bugfixes are included in this release.
+A number of autoloaders and autoloader facilities were back ported from
+ZF2 to provide performant alternatives to those already available in the
+1.X releases.  These include: Zend_Loader_StandardAutoloader, which
+improves on Zend_Loader_Autoloader by allowing the ability to specify a
+specific path to associate with a vendor prefix or namespace;
+Zend_Loader_ClassMapAutoloader, which provides the ability to use lookup
+tables for autoloading (which are typically the fastest possible way to
+autoload); and Zend_Loader_AutoloaderFactory, which can both create and
+update autoloaders for you, as well as register them with
+spl_autoload_register().
 
-A detailed list of all features and bug fixes in this release may be found at:
+The Zend_Loader changes were back ported from ZF2 by Matthew Weier
+O’Phinney
 
-http://framework.zend.com/changelog/
+Zend_EventManager
+----
+
+Zend_EventManager is a component that allows you to attach and detach
+listeners to named events, both on a per-instance basis as well as via
+shared collections; trigger events; and interrupt execution of
+listeners.
+
+Zend_EventManager was back ported from ZF2 by Matthew Weier O’Phinney
+
+Zend_Http_UserAgent_Features_Adapter_Browscap
+----
+
+This class provides a features adapter that calls get_browser() in order
+to discover mobile device capabilities to inject into UserAgent device
+instances.
+
+Browscap (http://browsers.garykeith.com/) is an open project dedicated
+to collecting an disseminating a “database” of browser capabilities. PHP
+has built-in support for using these files via the get_browser()
+function. This function requires that your php.ini provides a browscap
+entry pointing to the PHP-specific php_browscap.ini file which is
+available at http://browsers.garykeith.com/stream.asp?PHP_BrowsCapINI.
+
+Zend_Http_UserAgent_Features_Adapter_Browscap was created by Matthew
+Weier O’Phinney
+
+Zend_Mobile_Push
+----
+
+Zend_Mobile_Push is a component for implementing push notifications for
+the 3 major push notification platforms (Apple (Apns), Google (C2dm) and
+Microsoft (Mpns).
+
+Zend_Mobile_Push was contributed by Mike Willbanks.
+
+Zend_Gdata_Analytics
+----
+
+Zend_Gdata_Analytics is an extension to Zend_Gdata to allow interaction
+with Google’s Analytics Data Export API. This extension does not
+encompass any major changes in the overall operation of Zend_Gdata
+components.
+
+Zend_Gdata_Analytics was contributed by Daniel Hartmann.
+
+Removed features
+================
+
+Zend_Http_UserAgent_Features_Adapter_WurflApi
+----
+
+Due to the changes in licensing of WURFL, we have removed the WurflApi
+adapter. We will be providing the WurflApi adapter to ScientiaMobile so
+that users of WURFL will still have that option.
+
+Bug Fixes
+=========
+
+In addition,  over 200 reported issues in the tracker have been fixed.
+We’d like to particularly thank Adam Lundrigan, Frank Brückner and
+Martin Hujer for their efforts in making this happen. Thanks also to the
+many people who ran the ZF1 unit tests and reported their results!
+
+For a complete list, visit:
+
+ * http://framework.zend.com/issues/secure/IssueNavigator.jspa?requestId=12877
+ * http://framework.zend.com/changelog/
 
 MIGRATION NOTES
 ---------------
