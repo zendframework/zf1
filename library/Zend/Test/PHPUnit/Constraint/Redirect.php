@@ -148,9 +148,11 @@ class Zend_Test_PHPUnit_Constraint_Redirect extends PHPUnit_Framework_Constraint
             case self::ASSERT_REDIRECT:
             default:
                 $headers  = $response->sendHeaders();
-                $redirect = $headers['location'];
-                $redirect = str_replace('Location: ', '', $redirect);
-                $this->_actual = $redirect;
+                if (isset($headers['location'])) {
+                    $redirect = $headers['location'];
+                    $redirect = str_replace('Location: ', '', $redirect);
+                    $this->_actual = $redirect;
+                }
                 return ($this->_negate) ? !$response->isRedirect() : $response->isRedirect();
         }
     }
