@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reviewed: no -->
-<!-- EN-Revision: 24249 -->
+<!-- EN-Revision: 24997 -->
 <sect3 id="zend.view.helpers.initial.headscript">
     <title>HeadScript ヘルパー</title>
     <!-- Skip-EN-Revisions: 19437 -->
@@ -68,8 +68,36 @@ $this->headScript()->appendFile(
         </example>
     </note>
 
+    <!-- TODO : to be translated -->
+    <note>
+        <title>Preventing HTML style comments or CDATA wrapping of scripts</title>
+
+        <para>
+            By default <classname>HeadScript</classname> will wrap scripts with HTML
+            comments or it wraps scripts with XHTML cdata. This behavior can be
+            problematic when you intend to use the script tag in an alternative way by
+            setting the type to something other then 'text/javascript'. To prevent such
+            escaping, pass an <varname>noescape</varname> with a value of true as part of
+            the <varname>$attrs</varname> parameter in the method calls.
+        </para>
+
+        <example id="zend.view.helpers.initial.headscript.noescape">
+            <title>headScript で jQuery テンプレートを作成 </title>
+
+            <programlisting language="php"><![CDATA[
+// jquery テンプレート
+$template = '<div class="book">{{:title}}</div>';
+$this->headScript()->appendScript(
+    $template,
+    'text/x-jquery-tmpl',
+    array('id='tmpl-book', 'noescape' => true)
+);
+]]></programlisting>
+        </example>
+    </note>
+
     <para>
-        <code>HeadScript</code> はスクリプトのキャプチャも行います。
+        <classname>HeadScript</classname> はスクリプトのキャプチャも行います。
         これは、クライアント側スクリプトをプログラム上で作成してから
         どこか別の場所で使いたい場合に便利です。
         使用法は、以下の例で示します。
