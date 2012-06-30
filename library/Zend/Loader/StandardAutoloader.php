@@ -313,8 +313,8 @@ class Zend_Loader_StandardAutoloader implements Zend_Loader_SplAutoloader
         // Fallback autoloading
         if ($type === self::ACT_AS_FALLBACK) {
             // create filename
-            $filename     = $this->transformClassNameToFilename($class, '');
-            if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            $filename = $this->transformClassNameToFilename($class, '');
+            if (version_compare(PHP_VERSION, '5.3.2', '>=')) {
                 $resolvedName = stream_resolve_include_path($filename);
                 if ($resolvedName !== false) {
                     return include $resolvedName;
