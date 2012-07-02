@@ -27,7 +27,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'Zend/Mobile/Push/Message/Mpns/AllTests.php';
 require_once 'Zend/Mobile/Push/Message/AbstractTest.php';
 require_once 'Zend/Mobile/Push/Message/ApnsTest.php';
-require_once 'Zend/Mobile/Push/Message/C2dmTest.php';
+require_once 'Zend/Mobile/Push/Message/GcmTest.php';
 
 /**
  * @category   Zend
@@ -52,7 +52,7 @@ class Zend_Mobile_Push_Message_AllTests
          
         $suite->addTestSuite('Zend_Mobile_Push_Message_AbstractTest');
         $suite->addTestSuite('Zend_Mobile_Push_Message_ApnsTest');
-        $suite->addTestSuite('Zend_Mobile_Push_Message_C2dmTest');
+        $suite->addTestSuite('Zend_Mobile_Push_Message_GcmTest');
 
         return $suite;
     }

@@ -67,7 +67,7 @@ class Zend_Mobile_Push_Mpns extends Zend_Mobile_Push_Abstract
     /**
      * Set Http Client
      *
-     * @return Zend_Mobile_Push_C2dm
+     * @return Zend_Mobile_Push_Mpns
      */
     public function setHttpClient(Zend_Http_Client $client)
     {

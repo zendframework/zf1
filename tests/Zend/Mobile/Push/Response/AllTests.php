@@ -13,7 +13,7 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Mobile_Push
+ * @package    Zend_Mobile
  * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
@@ -21,25 +21,20 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Mobile_Push_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Zend_Mobile_Push_Response_AllTests::main');
 }
 
-require_once 'Zend/Mobile/Push/Message/AllTests.php';
-require_once 'Zend/Mobile/Push/Response/AllTests.php';
-require_once 'Zend/Mobile/Push/AbstractTest.php';
-require_once 'Zend/Mobile/Push/ApnsTest.php';
-require_once 'Zend/Mobile/Push/GcmTest.php';
-require_once 'Zend/Mobile/Push/MpnsTest.php';
+require_once 'Zend/Mobile/Push/Response/GcmTest.php';
 
 /**
  * @category   Zend
- * @package    Zend_Mobile_Push
+ * @package    Zend_Mobile_Push_Response
  * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Mobile
  */
-class Zend_Mobile_Push_AllTests
+class Zend_Mobile_Push_Response_AllTests
 {
     public static function main()
     {
@@ -48,19 +43,16 @@ class Zend_Mobile_Push_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Mobile_Push');
+        $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Mobile_Push_Response');
 
-        $suite->addTest(Zend_Mobile_Push_Message_AllTests::suite());
+        $suite->addTest(Zend_Mobile_Push_Response_Mpns_AllTests::suite());
          
-        $suite->addTestSuite('Zend_Mobile_Push_AbstractTest');
-        $suite->addTestSuite('Zend_Mobile_Push_ApnsTest');
-        $suite->addTestSuite('Zend_Mobile_Push_GcmTest');
-        $suite->addTestSuite('Zend_Mobile_Push_MpnsTest');
+        $suite->addTestSuite('Zend_Mobile_Push_Response_GcmTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Mobile_Push_AllTests::main') {
-    Zend_Mobile_Push_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Mobile_Push_Response_AllTests::main') {
+    Zend_Mobile_Push_Response_AllTests::main();
 }
