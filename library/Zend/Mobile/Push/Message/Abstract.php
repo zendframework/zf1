@@ -30,8 +30,8 @@ require_once 'Zend/Mobile/Push/Message/Exception.php';
  * Message Abstract
  *
  * @category   Zend
- * @package    Zend\Mobile
- * @subpackage Zend\Mobile\Push\Message
+ * @package    Zend_Mobile
+ * @subpackage Zend_Mobile_Push_Message
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
@@ -65,7 +65,8 @@ abstract class Zend_Mobile_Push_Message_Abstract implements Zend_Mobile_Push_Mes
     /**
      * Set Token
      *
-     * @return MessageAbstract
+     * @param  string $token
+     * @return Zend_Mobile_Push_Message_Abstract
      */
     public function setToken($token)
     {
@@ -90,7 +91,7 @@ abstract class Zend_Mobile_Push_Message_Abstract implements Zend_Mobile_Push_Mes
      * Set Message ID
      *
      * @param scalar $id
-     * @return MessageAbstract
+     * @return Zend_Mobile_Push_Message_Abstract
      * @throws Exception
      */
     public function setId($id)
