@@ -137,4 +137,11 @@ class Zend_Mobile_Push_Message_GcmTest extends PHPUnit_Framework_TestCase
         $msg->setTtl(10);
         $this->assertFalse($msg->validate());
     }
+
+    public function testToJsonIntCollapseKeyEncodedAsString()
+    {
+        $msg = new Zend_Mobile_Push_Message_Gcm();
+        $msg->setId(10);
+        $this->assertEquals('{"collapse_key":"10"}', $msg->toJson());
+    }
 }

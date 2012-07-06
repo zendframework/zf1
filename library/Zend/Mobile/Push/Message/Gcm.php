@@ -257,7 +257,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
             $json['registration_ids'] = $this->_token;
         }
         if ($this->_id) {
-            $json['collapse_key'] = $this->_id;
+            $json['collapse_key'] = (string) $this->_id;
         }
         if ($this->_data) {
             $json['data'] = $this->_data;
