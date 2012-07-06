@@ -146,7 +146,11 @@ abstract class Zend_View_Helper_Navigation_TestAbstract
      */
     protected function _getExpected($file)
     {
-        return file_get_contents($this->_files . '/expected/' . $file);
+        return str_replace(
+            "\n",
+            PHP_EOL,
+            file_get_contents($this->_files . '/expected/' . $file)
+        );        
     }
 
     /**
