@@ -68,7 +68,7 @@ class Zend_Service_Rackspace_Files_ObjectList implements Countable, Iterator, Ar
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass a Zend_Service_Rackspace_Files object");
         }
-        if (empty($list)) {
+        if (!is_array($list)) {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass an array of data objects");
         }
