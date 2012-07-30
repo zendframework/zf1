@@ -2,7 +2,7 @@ Welcome to the Zend Framework 1.12 Release!
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.12rc2 Release ([INSERT REV NUM HERE]).
+Zend Framework 1.12rc3 Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
 SECURITY FIXES FOR 1.12.0
@@ -16,8 +16,8 @@ could be specified by adding a specific DOCTYPE element to XML-RPC
 requests; exploiting this vulnerability could coerce opening arbitrary
 files and/or TCP connections.
 
-The patch in 1.11.12 ensures libxml_disable_entity_loader() is called
-before any SimpleXML calls are executed, thus removing the
+The patch in 1.11.12 and 1.12.0 ensures libxml_disable_entity_loader()
+is called before any SimpleXML calls are executed, thus removing the
 vulnerability.
 
 Thanks goes to Johannes Greil and Kestutis Gudinavicius of SEC-Consult
