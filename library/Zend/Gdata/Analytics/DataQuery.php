@@ -32,7 +32,7 @@ require_once 'Zend/Gdata/Query.php';
  */
 class Zend_Gdata_Analytics_DataQuery extends Zend_Gdata_Query
 {
-    const ANALYTICS_FEED_URI = 'http://www.google.com/analytics/feeds/data';
+    const ANALYTICS_FEED_URI = 'https://www.googleapis.com/analytics/v2.4/data';
 
     /**
      * The default URI used for feeds.
@@ -327,15 +327,6 @@ class Zend_Gdata_Analytics_DataQuery extends Zend_Gdata_Query
     }
     
     /**
-     * @deprecated
-     * @param string $value
-     * @return Zend_Gdata_Analytics_DataQuery
-     */
-    public function setFilter($value)
-    {
-        return $this->addFilter($value);
-    }
-    /**
      * @param string $sort
      * @param boolean[optional] $descending
      * @return Zend_Gdata_Analytics_DataQuery
@@ -345,17 +336,6 @@ class Zend_Gdata_Analytics_DataQuery extends Zend_Gdata_Query
         // add to sort storage
         $this->_sort[] = ($descending?'-':'').$sort;
         return $this;
-    }
-    
-    /**
-     * @deprecated
-     * @param string $sort
-     * @param boolean[optional] $descending
-     * @return Zend_Gdata_Analytics_DataQuery
-     */
-    public function setSort($sort, $descending=false)
-    {
-        return $this->addSort($sort, $descending);
     }
     
     /**

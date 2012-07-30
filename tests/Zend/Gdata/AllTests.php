@@ -33,6 +33,9 @@ require_once 'Zend/Gdata/AuthSubTest.php';
  * 
  */
 require_once 'Zend/Gdata/Analytics/AccountFeedTest.php';
+require_once 'Zend/Gdata/Analytics/AccountQueryTest.php';
+require_once 'Zend/Gdata/Analytics/DataFeedTest.php';
+require_once 'Zend/Gdata/Analytics/DataQueryTest.php';
 
 /**
  * Tests that do not require online access to servers

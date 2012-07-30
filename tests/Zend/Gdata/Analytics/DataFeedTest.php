@@ -35,18 +35,18 @@ require_once 'Zend/Http/Client.php';
 class Zend_Gdata_Analytics_DataFeedTest extends PHPUnit_Framework_TestCase
 {
     public $testData = array(
-        'blogger.com' => 68140,
-        'google.com'  => 29666,
-        'stumbleupon.com' => 4012, 
-        'google.co.uk' => 2968, 
-        'google.co.in' => 2793,        
+        'foobarbaz.de' => 12,
+        'foobar.de' => 3,
+        'foobarbaz.ch' => 1,
+        'baz.ch' => 1,
     );
-    
+    /** @var DataFeed */
+    public $dataFeed;
+
     public function setUp()
     {
         $this->dataFeed = new Zend_Gdata_Analytics_DataFeed(
-            file_get_contents(dirname(__FILE__) . '/_files/TestDataFeed.xml'),
-            true
+            file_get_contents(dirname(__FILE__) . '/_files/TestDataFeed.xml')
         );
     }
 
@@ -59,18 +59,18 @@ class Zend_Gdata_Analytics_DataFeedTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($entry instanceof Zend_Gdata_Analytics_DataEntry);
         }
     }
-    
+
     public function testGetters()
     {
         $sources = array_keys($this->testData);
         $values = array_values($this->testData);
-        
+
         foreach ($this->dataFeed as $index => $row) {
             $source = $row->getDimension(Zend_Gdata_Analytics_DataQuery::DIMENSION_SOURCE);
             $medium = $row->getDimension('ga:medium');
             $visits = $row->getMetric('ga:visits');
             $visitsValue = $row->getValue('ga:visits');
-            
+
             $this->assertEquals("$medium", 'referral');
             $this->assertEquals("$source", $sources[$index]);
             $this->assertEquals("$visits", $values[$index]);
