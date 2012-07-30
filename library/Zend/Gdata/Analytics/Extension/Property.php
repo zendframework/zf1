@@ -60,8 +60,9 @@ class Zend_Gdata_Analytics_Extension_Property extends Zend_Gdata_Extension
     {
         switch ($attribute->localName) {
             case 'name':
-            	$this->_name = substr($attribute->nodeValue, 3);
-    	        break;
+                $name = explode(':', $attribute->nodeValue);
+                $this->_name = end($name);
+                break;
             case 'value':
                 $this->_value = $attribute->nodeValue;
                 break;
@@ -98,8 +99,8 @@ class Zend_Gdata_Analytics_Extension_Property extends Zend_Gdata_Extension
      */
     public function setName($name)
     {
-    	$this->_name = $name;
-    	return $this;
+        $this->_name = $name;
+        return $this;
     }
 
     /**
@@ -107,7 +108,7 @@ class Zend_Gdata_Analytics_Extension_Property extends Zend_Gdata_Extension
      */
     public function getName()
     {
-    	return $this->_name;
+        return $this->_name;
     }
 
     /**

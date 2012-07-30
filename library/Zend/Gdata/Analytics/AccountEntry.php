@@ -52,18 +52,20 @@ require_once 'Zend/Gdata/Analytics/Extension/TableId.php';
  */
 class Zend_Gdata_Analytics_AccountEntry extends Zend_Gdata_Entry
 {
-	protected $_accountId;
-	protected $_accountName;
-	protected $_profileId;
-	protected $_webPropertyId;
-	protected $_currency;
-	protected $_timezone;
-	protected $_tableId;
+    protected $_accountId;
+    protected $_accountName;
+    protected $_profileId;
+    protected $_webPropertyId;
+    protected $_currency;
+    protected $_timezone;
+    protected $_tableId;
+    protected $_profileName;
+    protected $_goal;
 
-	/**
-	 * @see Zend_Gdata_Entry::__construct()
-	 */
-	public function __construct($element = null)
+    /**
+     * @see Zend_Gdata_Entry::__construct()
+     */
+    public function __construct($element = null)
     {
         $this->registerAllNamespaces(Zend_Gdata_Analytics::$namespaces);
         parent::__construct($element);
@@ -77,18 +79,23 @@ class Zend_Gdata_Analytics_AccountEntry extends Zend_Gdata_Entry
     {
         $absoluteNodeName = $child->namespaceURI . ':' . $child->localName;
         switch ($absoluteNodeName){
-        	case $this->lookupNamespace('ga') . ':' . 'property';
-	            $property = new Zend_Gdata_Analytics_Extension_Property();
-	            $property->transferFromDOM($child);
-	            $this->{$property->getName()} = $property;
+            case $this->lookupNamespace('analytics') . ':' . 'property';
+                $property = new Zend_Gdata_Analytics_Extension_Property();
+                $property->transferFromDOM($child);
+                $this->{$property->getName()} = $property;
                 break;
-        	case $this->lookupNamespace('ga') . ':' . 'tableId';
-	            $tableId = new Zend_Gdata_Analytics_Extension_TableId();
-	            $tableId->transferFromDOM($child);
-	            $this->_tableId = $tableId;
+            case $this->lookupNamespace('analytics') . ':' . 'tableId';
+                $tableId = new Zend_Gdata_Analytics_Extension_TableId();
+                $tableId->transferFromDOM($child);
+                $this->_tableId = $tableId;
                 break;
-        	default:
-            	parent::takeChildFromDOM($child);
+            case $this->lookupNamespace('ga') . ':' . 'goal';
+                $goal = new Zend_Gdata_Analytics_Extension_Goal();
+                $goal->transferFromDOM($child);
+                $this->_goal = $goal;
+                break;
+            default:
+                parent::takeChildFromDOM($child);
                 break;
         }
     }

@@ -34,21 +34,38 @@ require_once 'Zend/Http/Client.php';
  */
 class Zend_Gdata_Analytics_AccountFeedTest extends PHPUnit_Framework_TestCase
 {
+    /** @var AccountFeed */
+    public $accountFeed;
 
     public function setUp()
     {
         $this->accountFeed = new Zend_Gdata_Analytics_AccountFeed(
-            file_get_contents(dirname(__FILE__) . '/_files/TestAccountFeed.xml'),
-            true
+            file_get_contents(dirname(__FILE__) . '/_files/TestAccountFeed.xml')
         );
     }
 
     public function testAccountFeed()
     {
-        $this->assertEquals(count($this->accountFeed->entries), 3);
-        $this->assertEquals($this->accountFeed->entries->count(), 3);
+        $this->assertEquals(2, count($this->accountFeed->entries));
+
         foreach ($this->accountFeed->entries as $entry) {
-            $this->assertTrue($entry instanceof Zend_Gdata_Analytics_AccountEntry);
+            $this->assertInstanceOf('Zend_Gdata_Analytics_AccountEntry', $entry);
         }
+    }
+
+	public function testFirstAccountProperties()
+    {
+        $account = $this->accountFeed->entries[0];
+        $this->assertEquals(876543, "{$account->accountId}");
+        $this->assertEquals('foobarbaz', "{$account->accountName}");
+        $this->assertInstanceOf('Zend_GData_App_Extension_Link', $account->link[0]);
+    }
+
+    public function testSecondAccountProperties()
+    {
+        $account = $this->accountFeed->entries[1];
+        $this->assertEquals(23456789, "{$account->accountId}");
+        $this->assertEquals('brain dump', "{$account->accountName}");
+        $this->assertInstanceOf('Zend_GData_App_Extension_Link', $account->link[0]);
     }
 }
