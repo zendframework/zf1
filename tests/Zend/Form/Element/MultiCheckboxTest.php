@@ -326,9 +326,9 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
         $this->element->setLabel('Foo');
 
         $expected = '<dt id="foo-label"><label class="optional">Foo</label></dt>'
-                  . "\n"
+                  . PHP_EOL
                   . '<dd id="foo-element">'
-                  . "\n"
+                  . PHP_EOL
                   . '</dd>';
         $this->assertSame($expected, $this->element->render($this->getView()));
     }
@@ -341,7 +341,7 @@ class Zend_Form_Element_MultiCheckboxTest extends PHPUnit_Framework_TestCase
         $this->element->setLabel('Foo')->removeDecorator('label');
 
         $expected = '<dd id="foo-element">'
-                  . "\n"
+                  . PHP_EOL
                   . '</dd>';
         $this->assertSame($expected, $this->element->render($this->getView()));
     }
