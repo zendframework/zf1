@@ -27,6 +27,8 @@ require_once 'Zend/Soap/Server/Exception.php';
 
 require_once "Zend/Config.php";
 
+require_once dirname(__FILE__) . '/TestAsset/commontypes.php';
+
 /**
  * Zend_Soap_Server
  *
@@ -542,6 +544,9 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(SOAP_PERSISTENCE_SESSION, $server->getPersistence());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetLastRequest()
     {
         if (headers_sent()) {
@@ -575,6 +580,9 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($request, $server->getLastRequest());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testWsiCompliant()
     {
         $server = new Zend_Soap_Server(null, array('wsi_compliant' => true));
@@ -877,11 +885,13 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testErrorHandlingOfSoapServerChangesToThrowingSoapFaultWhenInHandleMode()
     {
         if (headers_sent()) {
             $this->markTestSkipped('Cannot run ' . __METHOD__ . '() when headers have already been sent; enable output buffering to run this test');
-            return;
         }
 
         $server = new Zend_Soap_Server();
@@ -966,6 +976,35 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $server = new Zend_Soap_MockServer();
         $r = $server->handle(new DomDocument('1.0', 'UTF-8'));
         $this->assertTrue(is_string($server->mockSoapServer->handle[0]));
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testShouldThrowExceptionIfHandledRequestContainsDoctype()
+    {
+        $server = new Zend_Soap_Server();
+        $server->setOptions(array('location'=>'test://', 'uri'=>'http://framework.zend.com'));
+        $server->setReturnResponse(true);
+
+        $server->setClass('Zend_Soap_TestAsset_ServerTestClass');
+
+        $request =
+            '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<!DOCTYPE foo>' . "\n"
+          . '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" '
+                             . 'xmlns:ns1="http://framework.zend.com" '
+                             . 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" '
+                             . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                             . 'xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" '
+                             . 'SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">'
+          .     '<SOAP-ENV:Body>'
+          .         '<ns1:testFunc2>'
+          .             '<param0 xsi:type="xsd:string">World</param0>'
+          .         '</ns1:testFunc2>'
+          .     '</SOAP-ENV:Body>'
+          . '</SOAP-ENV:Envelope>' . "\n";
+        $response = $server->handle($request);
+        $this->assertContains('Invalid XML', $response->getMessage());
     }
 }
 

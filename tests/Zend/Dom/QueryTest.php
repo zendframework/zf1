@@ -348,6 +348,20 @@ EOB;
         $this->query->setDocument($xhtmlWithXmlDecl, 'utf-8');
         $this->assertEquals(1, $this->query->query('//p')->count());
     }
+
+    public function testLoadingXmlContainingDoctypeShouldFailToPreventXxeAndXeeAttacks()
+    {
+        $xml = <<<XML
+<?xml version="1.0"?>
+<!DOCTYPE results [<!ENTITY harmless "completely harmless">]>
+<results>
+    <result>This result is &harmless;</result>
+</results>
+XML;
+        $this->query->setDocumentXml($xml);
+        $this->setExpectedException("Zend_Dom_Exception");
+        $this->query->queryXpath('/');
+    }
 }
 
 // Call Zend_Dom_QueryTest::main() if this source file is executed directly.

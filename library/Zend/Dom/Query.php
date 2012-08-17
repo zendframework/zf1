@@ -245,6 +245,7 @@ class Zend_Dom_Query
 
         $encoding = $this->getEncoding();
         libxml_use_internal_errors(true);
+        libxml_disable_entity_loader(true);
         if (null === $encoding) {
             $domDoc = new DOMDocument('1.0');
         } else {
@@ -254,6 +255,14 @@ class Zend_Dom_Query
         switch ($type) {
             case self::DOC_XML:
                 $success = $domDoc->loadXML($document);
+                foreach ($domDoc->childNodes as $child) {
+                    if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                        require_once 'Zend/Dom/Exception.php';
+                        throw new Zend_Dom_Exception(
+                            'Invalid XML: Detected use of illegal DOCTYPE'
+                        );
+                    }
+                }
                 break;
             case self::DOC_HTML:
             case self::DOC_XHTML:
@@ -266,6 +275,7 @@ class Zend_Dom_Query
             $this->_documentErrors = $errors;
             libxml_clear_errors();
         }
+        libxml_disable_entity_loader(false);
         libxml_use_internal_errors(false);
 
         if (!$success) {

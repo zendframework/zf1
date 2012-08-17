@@ -306,7 +306,17 @@ class Zend_XmlRpc_Request
         // @see ZF-12293 - disable external entities for security purposes
         $loadEntities = libxml_disable_entity_loader(true);
         try {
-            $xml = new SimpleXMLElement($request);
+            $dom = new DOMDocument;
+            $dom->loadXML($request);
+            foreach ($dom->childNodes as $child) {
+                if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                    require_once 'Zend/XmlRpc/Exception.php';
+                    throw new Zend_XmlRpc_Exception(
+                        'Invalid XML: Detected use of illegal DOCTYPE'
+                    );
+                }
+            }
+            $xml = simplexml_import_dom($dom);
             libxml_disable_entity_loader($loadEntities);
         } catch (Exception $e) {
             // Not valid XML

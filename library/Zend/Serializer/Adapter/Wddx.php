@@ -100,7 +100,19 @@ class Zend_Serializer_Adapter_Wddx extends Zend_Serializer_Adapter_AdapterAbstra
             // check if the returned NULL is valid
             // or based on an invalid wddx string
             try {
-                $simpleXml = new SimpleXMLElement($wddx);
+                $oldLibxmlDisableEntityLoader = libxml_disable_entity_loader(true);
+                $dom = new DOMDocument;
+                $dom->loadXML($wddx);
+                foreach ($dom->childNodes as $child) {
+                    if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                        require_once 'Zend/Serializer/Exception.php';
+                        throw new Zend_Serializer_Exception(
+                            'Invalid XML: Detected use of illegal DOCTYPE'
+                        );
+                    }
+                }
+                $simpleXml = simplexml_import_dom($dom);
+                libxml_disable_entity_loader($oldLibxmlDisableEntityLoader);
                 if (isset($simpleXml->data[0]->null[0])) {
                     return null; // valid null
                 }

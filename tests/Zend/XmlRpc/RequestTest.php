@@ -352,6 +352,9 @@ class Zend_XmlRpc_RequestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group ZF-12293
++     *
++     * Test should remain, but is defunct since DOCTYPE presence should return FALSE
++     * from loadXml()
      */
     public function testDoesNotAllowExternalEntities()
     {
@@ -364,4 +367,11 @@ class Zend_XmlRpc_RequestTest extends PHPUnit_Framework_TestCase
             $this->assertNotContains('Local file inclusion', $method);
         }
     }
+
+     public function testShouldDisallowsDoctypeInRequestXmlAndReturnFalseOnLoading()
+     {
+         $payload = file_get_contents(dirname(__FILE__) . '/_files/ZF12293-request.xml');
+         $payload = sprintf($payload, 'file://' . realpath(dirname(__FILE__) . '/_files/ZF12293-payload.txt'));
+         $this->assertFalse($this->_request->loadXml($payload));
+     }
 }
