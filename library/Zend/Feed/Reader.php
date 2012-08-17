@@ -333,10 +333,19 @@ class Zend_Feed_Reader
      */
     public static function importString($string)
     {
-        
         $libxml_errflag = libxml_use_internal_errors(true);
+        $oldValue = libxml_disable_entity_loader(true);
         $dom = new DOMDocument;
         $status = $dom->loadXML($string);
+        foreach ($dom->childNodes as $child) {
+            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                require_once 'Zend/Feed/Exception.php';
+                throw new Zend_Feed_Exception(
+                    'Invalid XML: Detected use of illegal DOCTYPE'
+                );
+            }
+        }
+        libxml_disable_entity_loader($oldValue);
         libxml_use_internal_errors($libxml_errflag);
 
         if (!$status) {
@@ -407,8 +416,10 @@ class Zend_Feed_Reader
         }
         $responseHtml = $response->getBody();
         $libxml_errflag = libxml_use_internal_errors(true);
+        $oldValue = libxml_disable_entity_loader(true);
         $dom = new DOMDocument;
         $status = $dom->loadHTML($responseHtml);
+        libxml_disable_entity_loader($oldValue);
         libxml_use_internal_errors($libxml_errflag);
         if (!$status) {
             // Build error message
@@ -442,8 +453,18 @@ class Zend_Feed_Reader
             $dom = $feed;
         } elseif(is_string($feed) && !empty($feed)) {
             @ini_set('track_errors', 1);
+            $oldValue = libxml_disable_entity_loader(true);
             $dom = new DOMDocument;
             $status = @$dom->loadXML($feed);
+            foreach ($dom->childNodes as $child) {
+                if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+                    require_once 'Zend/Feed/Exception.php';
+                    throw new Zend_Feed_Exception(
+                        'Invalid XML: Detected use of illegal DOCTYPE'
+                    );
+                }
+            }
+            libxml_disable_entity_loader($oldValue);
             @ini_restore('track_errors');
             if (!$status) {
                 if (!isset($php_errormsg)) {

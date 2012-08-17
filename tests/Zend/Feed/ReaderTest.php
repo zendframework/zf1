@@ -336,6 +336,14 @@ class Zend_Feed_ReaderTest extends PHPUnit_Framework_TestCase
         $result = Zend_Feed_Reader::import('http://www.example.com');
     }
 
+     public function testXxePreventionOnFeedParsing()
+     {
+         $string = file_get_contents($this->_feedSamplePath.'/Reader/xxe-atom10.xml');
+         $string = str_replace('XXE_URI', $this->_feedSamplePath.'/Reader/xxe-info.txt', $string);
+         $this->setExpectedException('Zend_Feed_Exception');
+         $feed = Zend_Feed_Reader::importString($string);
+     }
+ 
     protected function _getTempDirectory()
     {
         $tmpdir = array();

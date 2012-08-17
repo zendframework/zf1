@@ -221,6 +221,28 @@ class Zend_Serializer_Adapter_WddxTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $data);
     }
 
+    public function testUnserializeInvalidXml()
+    {
+        if (!class_exists('SimpleXMLElement', false)) {
+            $this->markTestSkipped('Skipped by missing ext/simplexml');
+        }
+
+        $value = 'not a serialized string';
+        $this->setExpectedException(
+            'Zend_Serializer_Exception',
+            'DOMDocument::loadXML(): Start tag expected'
+        );
+        $this->_adapter->unserialize($value);
+    }
+
+    public function testShouldThrowExceptionIfXmlToUnserializeFromContainsADoctype()
+    {
+        $value    = '<!DOCTYPE>'
+                  . '<wddxPacket version=\'1.0\'><header/>'
+                  . '<data><string>test</string></data></wddxPacket>';
+        $this->setExpectedException("Zend_Serializer_Exception");
+        $data = $this->_adapter->unserialize($value);
+    }
 }
 
 
