@@ -2,7 +2,7 @@ Welcome to the Zend Framework 1.12 Release!
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.12rc4 Release ([INSERT REV NUM HERE]).
+Zend Framework 1.12.0 Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
 SECURITY FIXES FOR 1.12.0
