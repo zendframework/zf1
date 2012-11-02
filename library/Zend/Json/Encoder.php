@@ -74,7 +74,6 @@ class Zend_Json_Encoder
     public static function encode($value, $cycleCheck = false, $options = array())
     {
         $encoder = new self(($cycleCheck) ? true : false, $options);
-
         return $encoder->_encodeValue($value);
     }
 
@@ -138,7 +137,9 @@ class Zend_Json_Encoder
         if (method_exists($value, 'toJson')) {
             $props =',' . preg_replace("/^\{(.*)\}$/","\\1",$value->toJson());
         } else {
-            if ($value instanceof Iterator) {
+            if ($value instanceof IteratorAggregate) {
+                $propCollection = $value->getIterator();
+            } elseif ($value instanceof Iterator) {
                 $propCollection = $value;
             } else {
                 $propCollection = get_object_vars($value);
