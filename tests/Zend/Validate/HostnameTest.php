@@ -454,5 +454,12 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validator->isValid('tàrø.si'));
         $this->assertFalse($validator->isValid('رات.si'));
     }
+    /**
+     * @ZF-12314
+     */
+    public function testDKSpecialChars()
+    {
+        $this->assertTrue($this->_validator->isValid('testæøå.dk'));
+    }
 
 }
