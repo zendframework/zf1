@@ -117,16 +117,17 @@ class Zend_Form_Decorator_File
             $markup[] = $view->formHidden('UPLOAD_IDENTIFIER', uniqid(), array('id' => 'progress_key'));
         }
 
+        $helper = $element->helper;
         if ($element->isArray()) {
             $name .= "[]";
             $count = $element->getMultiFile();
             for ($i = 0; $i < $count; ++$i) {
                 $htmlAttribs        = $attribs;
                 $htmlAttribs['id'] .= '-' . $i;
-                $markup[] = $view->formFile($name, $htmlAttribs);
+                $markup[] = $view->$helper($name, $htmlAttribs);
             }
         } else {
-            $markup[] = $view->formFile($name, $attribs);
+            $markup[] = $view->$helper($name, $attribs);
         }
 
         $markup = implode($separator, $markup);
