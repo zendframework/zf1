@@ -1060,6 +1060,9 @@ class Zend_Gdata_App
                      break;
                  } catch (Zend_Exception $e) {
                      // package wasn't here- continue searching
+                 } catch (ErrorException $e) {
+                     // package wasn't here- continue searching
+                     // @see ZF-7013 and ZF-11959
                  }
             }
             if ($foundClassName != null) {
