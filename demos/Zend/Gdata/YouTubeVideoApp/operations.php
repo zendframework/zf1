@@ -1083,10 +1083,10 @@ function updatePlaylist($newPlaylistTitle, $newPlaylistDescription, $oldPlaylist
  * @param array $post (Optional) The post variables that accompanied the operation, if available.
  * @return void
  */
-function unsupportedOperation($_POST)
+function unsupportedOperation($post)
 {
     $message = 'ERROR An unsupported operation has been called - post variables received '
-             . print_r($_POST, true);
+             . print_r($post, true);
 
     if (loggingEnabled()) {
         logMessage($message, 'error');
