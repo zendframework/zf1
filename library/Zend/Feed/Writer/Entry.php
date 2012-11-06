@@ -114,7 +114,7 @@ class Zend_Feed_Writer_Entry
          * Array notation (above) is preferred and will be the sole supported input from ZF 2.0
          */
         } else {
-            if (empty($name['name']) || !is_string($name['name'])) {
+            if (empty($name) || !is_string($name)) {
                 require_once 'Zend/Feed/Exception.php';
                 throw new Zend_Feed_Exception('Invalid parameter: "name" must be a non-empty string value');
             }

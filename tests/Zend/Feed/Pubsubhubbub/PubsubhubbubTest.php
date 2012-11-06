@@ -41,7 +41,9 @@ class Zend_Feed_Pubsubhubbub_PubsubhubbubTest extends PHPUnit_Framework_TestCase
     public function testCanSetCustomHttpClient()
     {
         Zend_Feed_Pubsubhubbub::setHttpClient(new Test_Http_Client_Pubsub());
-        $this->assertType('Test_Http_Client_Pubsub', Zend_Feed_Pubsubhubbub::getHttpClient());
+        $this->assertTrue(
+            Zend_Feed_Pubsubhubbub::getHttpClient() instanceof Test_Http_Client_Pubsub
+        );
     }
 
     public function testCanDetectHubs()
