@@ -1072,14 +1072,12 @@ class Zend_Form_Element implements Zend_Validate_Interface
                 return $this;
             case null:
                 $nsSeparator = (false !== strpos($prefix, '\\'))?'\\':'_';
-                $prefix = rtrim($prefix, $nsSeparator);
-                $path   = rtrim($path, DIRECTORY_SEPARATOR);
+                $prefix = rtrim($prefix, $nsSeparator) . $nsSeparator;
+                $path   = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 foreach (array(self::DECORATOR, self::FILTER, self::VALIDATE) as $type) {
                     $cType        = ucfirst(strtolower($type));
-                    $pluginPath   = $path . DIRECTORY_SEPARATOR . $cType . DIRECTORY_SEPARATOR;
-                    $pluginPrefix = $prefix . $nsSeparator . $cType;
                     $loader       = $this->getPluginLoader($type);
-                    $loader->addPrefixPath($pluginPrefix, $pluginPath);
+                    $loader->addPrefixPath($prefix . $cType, $path . $cType . DIRECTORY_SEPARATOR);
                 }
                 return $this;
             default:
