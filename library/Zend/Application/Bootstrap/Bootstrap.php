@@ -120,7 +120,7 @@ class Zend_Application_Bootstrap_Bootstrap
     public function getResourceLoader()
     {
         if ((null === $this->_resourceLoader)
-            && (false !== ($namespace = $this->getAppNamespace()))
+            && (false != ($namespace = $this->getAppNamespace()))
         ) {
             $r    = new ReflectionClass($this);
             $path = $r->getFileName();
