@@ -212,7 +212,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
     public function testRssImportFullArray()
     {
         $feed = Zend_Feed::importArray($this->_getFullArray(), 'rss');
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
     }
 
     /**
@@ -240,7 +240,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
     public function testRssImportFullBuilder()
     {
         $feed = Zend_Feed::importBuilder(new Zend_Feed_Builder($this->_getFullArray()), 'rss');
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
     }
 
     /**
@@ -259,7 +259,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
         $array['itunes']['block'] = 'no';
         $array['itunes']['new-feed-url'] = 'http://www.example/itunes.xml';
         $feed = Zend_Feed::importBuilder(new Zend_Feed_Builder($array), 'rss');
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
     }
 
     /**
@@ -279,7 +279,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
         $feed = Zend_Feed::importBuilder(new Zend_Feed_Builder($this->_getFullArray()), 'atom');
 
         $feed = Zend_Feed::importString($feed->saveXml());
-        $this->assertType('Zend_Feed_Atom', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Atom);
     }
 
     /**
@@ -288,9 +288,9 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
     public function testRssImportFullBuilderValid()
     {
         $feed = Zend_Feed::importBuilder(new Zend_Feed_Builder($this->_getFullArray()), 'rss');
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
         $feed = Zend_Feed::importString($feed->saveXml());
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
     }
 
     /**
@@ -299,9 +299,9 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
     public function testAtomGetLink()
     {
         $feed = Zend_Feed::importBuilder(new Zend_Feed_Builder($this->_getFullArray()), 'atom');
-        $this->assertType('Zend_Feed_Atom', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Atom);
         $feed = Zend_Feed::importString($feed->saveXml());
-        $this->assertType('Zend_Feed_Atom', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Atom);
         $href = $feed->link('self');
         $this->assertEquals('http://www.example.com', $href);
     }
@@ -323,7 +323,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
             $feed = Zend_Feed::import('http://localhost');
             $this->fail('Expected Zend_Feed_Exception not thrown');
         } catch (Zend_Feed_Exception $e) {
-            $this->assertType('Zend_Feed_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Feed_Exception);
             $this->assertRegExp('/(XDebug is running|Empty string)/', $e->getMessage());
         }
     }
@@ -416,7 +416,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
         $this->_adapter->setResponse($response);
 
         $feed = Zend_Feed::import('http://localhost');
-        $this->assertType('Zend_Feed_Atom', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Atom);
     }
 
     /**
@@ -428,7 +428,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
         $this->_adapter->setResponse($response);
 
         $feed = Zend_Feed::import('http://localhost');
-        $this->assertType('Zend_Feed_Rss', $feed);
+        $this->assertTrue($feed instanceof Zend_Feed_Rss);
         return $feed;
     }
 
@@ -444,7 +444,7 @@ class Zend_Feed_ImportTest extends PHPUnit_Framework_TestCase
             $feed = Zend_Feed::import('http://localhost');
             $this->fail('Expected Zend_Feed_Exception not thrown');
         } catch (Zend_Feed_Exception $e) {
-            $this->assertType('Zend_Feed_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Feed_Exception);
         }
     }
 
