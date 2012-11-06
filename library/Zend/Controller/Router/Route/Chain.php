@@ -72,9 +72,10 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
      */
     public function match($request, $partial = null)
     {
-        $path    = trim($request->getPathInfo(), self::URI_DELIMITER);
-        $subPath = $path;
-        $values  = array();
+        $path      = trim($request->getPathInfo(), self::URI_DELIMITER);
+        $subPath   = $path;
+        $values    = array();
+        $numRoutes = count($this->_routes);
 
         foreach ($this->_routes as $key => $route) {
             if ($key > 0
@@ -99,7 +100,7 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
                 $match = $request;
             }
 
-            $res = $route->match($match, true);
+            $res = $route->match($match, true, ($key == $numRoutes - 1));
             if ($res === false) {
                 return false;
             }
