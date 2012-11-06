@@ -547,7 +547,7 @@ class Zend_Json_Server extends Zend_Server_Abstract
                 if( isset( $params[ $refParam->getName() ] ) ) {
                     $orderedParams[ $refParam->getName() ] = $params[ $refParam->getName() ];
                 } elseif( $refParam->isOptional() ) {
-                    $orderedParams[ $refParam->getName() ] = null;
+                    $orderedParams[ $refParam->getName() ] = $refParam->getDefaultValue();
                 } else {
                     throw new Zend_Server_Exception(
                         'Missing required parameter: ' . $refParam->getName()
