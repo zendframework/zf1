@@ -148,6 +148,18 @@ class Zend_File_Transfer_Adapter_HttpTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group ZF-12451
+     */
+    public function testReceiveEmptyArray()
+    {
+        $_SERVER['CONTENT_LENGTH'] = 10;
+        $_FILES = array();
+
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $this->assertFalse($adapter->receive(array()));
+    }
+
     public function testReceiveValidatedFile()
     {
         $_FILES = array(
