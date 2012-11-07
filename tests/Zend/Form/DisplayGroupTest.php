@@ -803,6 +803,32 @@ class Zend_Form_DisplayGroupTest extends PHPUnit_Framework_TestCase
         $t2 = $this->group->getDecorators();
         $this->assertEquals($t1, $t2);
     }
+
+    /**
+     * @group ZF-12375
+     */
+    public function testHasTranslatorWithDefaultValue()
+    {
+        $this->assertFalse($this->group->hasTranslator());
+    }
+
+    /**
+     * @group ZF-12375
+     */
+    public function testHasTranslatorWithTranslateObject()
+    {
+        $this->group->setTranslator(
+            new Zend_Translate(
+                array(
+                    'adapter' => 'array',
+                    'content' => array(
+                        'foo' => 'Foo',
+                    ),
+                )
+            )
+        );
+        $this->assertTrue($this->group->hasTranslator());
+    }
 }
 
 class Zend_Form_DisplayGroupTest_DisplayGroup extends Zend_Form_DisplayGroup

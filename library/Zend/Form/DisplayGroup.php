@@ -977,6 +977,16 @@ class Zend_Form_DisplayGroup implements Iterator,Countable
     }
 
     /**
+     * Does this display group have its own specific translator?
+     *
+     * @return bool
+     */
+    public function hasTranslator()
+    {
+        return (bool) $this->getTranslator();
+    }
+
+    /**
      * Indicate whether or not translation should be disabled
      *
      * @param  bool $flag
