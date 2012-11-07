@@ -117,7 +117,16 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
 
     public function testIsXhtmlReturnsTrueForXhtmlDoctypes()
     {
-        foreach (array('XHTML1_STRICT', 'XHTML1_TRANSITIONAL', 'XHTML1_FRAMESET', 'XHTML1_RDFA', 'XHTML5') as $type) {
+        $types = array(
+            'XHTML1_STRICT',
+            'XHTML1_TRANSITIONAL',
+            'XHTML1_FRAMESET',
+            'XHTML1_RDFA',
+            'XHTML1_RDFA11',
+            'XHTML5',
+        );
+
+        foreach ($types as $type) {
             $doctype = $this->helper->doctype($type);
             $this->assertEquals($type, $doctype->getDoctype());
             $this->assertTrue($doctype->isXhtml());
@@ -157,8 +166,8 @@ class Zend_View_Helper_DoctypeTest extends PHPUnit_Framework_TestCase
 
     public function testIsRdfa()
     {
-        $doctype = $this->helper->doctype('XHTML1_RDFA');
-        $this->assertTrue($doctype->isRdfa());
+        $this->assertTrue($this->helper->doctype('XHTML1_RDFA')->isRdfa());
+        $this->assertTrue($this->helper->doctype('XHTML1_RDFA11')->isRdfa());
 
         // built-in doctypes
         foreach (array('HTML4_STRICT', 'HTML4_LOOSE', 'HTML4_FRAMESET', 'XHTML1_STRICT', 'XHTML1_TRANSITIONAL', 'XHTML1_FRAMESET') as $type) {
