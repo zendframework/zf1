@@ -74,8 +74,17 @@ class Zend_View_Helper_Navigation_Menu
 
     /**
      * Expand all sibling nodes of active branch nodes
+     *
+     * @var bool
      */
     protected $_expandSiblingNodesOfActiveBranch = false;
+
+    /**
+     * Adds CSS class from page to li element
+     *
+     * @var bool
+     */
+    protected $_addPageClassToLi = false;
     
     /**
      * View helper entry point:
@@ -260,6 +269,46 @@ class Zend_View_Helper_Navigation_Menu
         return $this->_partial;
     }
 
+    /**
+     * Adds CSS class from page to li element
+     *
+     * Before:
+     * <code>
+     * <li>
+     *     <a href="#" class="foo">Bar</a>
+     * </li>
+     * </code>
+     *
+     * After:
+     * <code>
+     * <li class="foo">
+     *     <a href="#">Bar</a>
+     * </li>
+     * </code>
+     *
+     * @param bool $flag                        [optional] adds CSS class from
+     *                                          page to li element
+     *
+     * @return Zend_View_Helper_Navigation_Menu fluent interface, returns self
+     */
+    public function addPageClassToLi($flag = true)
+    {
+        $this->_addPageClassToLi = (bool) $flag;
+
+        return $this;
+    }
+
+    /**
+     * Returns a flag indicating whether the CSS class from page to be added to
+     * li element
+     *
+     * @return bool
+     */
+    public function getAddPageClassToLi()
+    {
+        return $this->_addPageClassToLi;
+    }
+
     // Public methods:
 
     /**
@@ -291,8 +340,11 @@ class Zend_View_Helper_Navigation_Menu
         $attribs = array(
             'id'     => $page->getId(),
             'title'  => $title,
-            'class'  => $page->getClass()
         );
+
+        if (false === $this->getAddPageClassToLi()) {
+            $attribs['class'] = $page->getClass();
+        }
 
         // does page have a href?
         if ($href = $page->getHref()) {
@@ -371,6 +423,10 @@ class Zend_View_Helper_Navigation_Menu
             $options['renderParents'] = $this->getRenderParents();
         }
 
+        if (!isset($options['addPageClassToLi'])) {
+            $options['addPageClassToLi'] = $this->getAddPageClassToLi();
+        }
+
         return $options;
     }
 
@@ -381,13 +437,14 @@ class Zend_View_Helper_Navigation_Menu
      * from {@link renderMenu()})
      *
      * @param  Zend_Navigation_Container $container  container to render
-     * @param  array                     $active     active page and depth
      * @param  string                    $ulClass    CSS class for first UL
      * @param  string                    $indent     initial indentation
      * @param  int|null                  $minDepth   minimum depth
      * @param  int|null                  $maxDepth   maximum depth
      * @param  string|null               $ulId       unique identifier (id) for
      *                                               first UL
+     * @param  bool                      $addPageClassToLi  adds CSS class from
+     *                                                      page to li element
      * @return string                                rendered menu
      */
     protected function _renderDeepestMenu(Zend_Navigation_Container $container,
@@ -395,7 +452,8 @@ class Zend_View_Helper_Navigation_Menu
                                           $indent,
                                           $minDepth,
                                           $maxDepth,
-                                          $ulId)
+                                          $ulId,
+                                          $addPageClassToLi)
     {
         if (!$active = $this->findActive($container, $minDepth - 1, $maxDepth)) {
             return '';
@@ -435,7 +493,19 @@ class Zend_View_Helper_Navigation_Menu
             if (!$this->accept($subPage)) {
                 continue;
             }
-            $liClass = $subPage->isActive(true) ? ' class="active"' : '';
+
+            $liClass = '';
+            if ($subPage->isActive(true) && $addPageClassToLi) {
+                $liClass = $this->_htmlAttribs(
+                    array('class' => 'active ' . $subPage->getClass())
+                );
+            } else if ($subPage->isActive(true)) {
+                $liClass = $this->_htmlAttribs(array('class' => 'active'));
+            } else if ($addPageClassToLi) {
+                $liClass = $this->_htmlAttribs(
+                    array('class' => $subPage->getClass())
+                );
+            }
             $html .= $indent . '    <li' . $liClass . '>' . self::EOL;
             $html .= $indent . '        ' . $this->htmlify($subPage) . self::EOL;
             $html .= $indent . '    </li>' . self::EOL;
@@ -459,6 +529,8 @@ class Zend_View_Helper_Navigation_Menu
      *                                                branch nodes?
      * @param  string|null               $ulId        unique identifier (id) for
      *                                                first UL
+     * @param  bool                      $addPageClassToLi  adds CSS class from
+     *                                                      page to li element
      * @return string
      */
     protected function _renderMenu(Zend_Navigation_Container $container,
@@ -468,7 +540,8 @@ class Zend_View_Helper_Navigation_Menu
                                    $maxDepth,
                                    $onlyActive,
                                    $expandSibs,
-                                   $ulId)
+                                   $ulId,
+                                   $addPageClassToLi)
     {
         $html = '';
 
@@ -574,7 +647,18 @@ class Zend_View_Helper_Navigation_Menu
             }
 
             // render li tag and page
-            $liClass = $isActive ? ' class="active"' : '';
+            $liClass = '';
+            if ($isActive && $addPageClassToLi) {
+                $liClass = $this->_htmlAttribs(
+                    array('class' => 'active ' . $page->getClass())
+                );
+            } else if ($isActive) {
+                $liClass = $this->_htmlAttribs(array('class' => 'active'));
+            } else if ($addPageClassToLi) {
+                $liClass = $this->_htmlAttribs(
+                    array('class' => $page->getClass())
+                );
+            }
             $html .= $myIndent . '    <li' . $liClass . '>' . self::EOL
                    . $myIndent . '        ' . $this->htmlify($page) . self::EOL;
 
@@ -628,7 +712,8 @@ class Zend_View_Helper_Navigation_Menu
                                               $options['indent'],
                                               $options['minDepth'],
                                               $options['maxDepth'],
-                                              $options['ulId']);
+                                              $options['ulId'],
+                                              $options['addPageClassToLi']);
         } else {
             $html = $this->_renderMenu($container,
                                        $options['ulClass'],
@@ -637,7 +722,8 @@ class Zend_View_Helper_Navigation_Menu
                                        $options['maxDepth'],
                                        $options['onlyActiveBranch'],
                                        $options['expandSiblingNodesOfActiveBranch'],
-                                       $options['ulId']);
+                                       $options['ulId'],
+                                       $options['addPageClassToLi']);
         }
 
         return $html;
@@ -673,12 +759,15 @@ class Zend_View_Helper_Navigation_Menu
      *                                               {@link getIndent()}.
      * @param  string|null               $ulId       [optional] Unique identifier
      *                                               (id) use for UL element
+     * @param  bool                      $addPageClassToLi  adds CSS class from
+     *                                                      page to li element
      * @return string                                rendered content
      */
     public function renderSubMenu(Zend_Navigation_Container $container = null,
                                   $ulClass = null,
                                   $indent = null,
-                                  $ulId   = null)
+                                  $ulId   = null,
+                                  $addPageClassToLi = false)
     {
         return $this->renderMenu($container, array(
             'indent'           => $indent,
@@ -688,6 +777,7 @@ class Zend_View_Helper_Navigation_Menu
             'onlyActiveBranch' => true,
             'renderParents'    => false,
             'ulId'             => $ulId,
+            'addPageClassToLi' => $addPageClassToLi,
         ));
     }
 
@@ -712,6 +802,8 @@ class Zend_View_Helper_Navigation_Menu
      *                                               and the module where the
      *                                               script can be found.
      * @return string                                helper output
+     *
+     * @throws Zend_View_Exception   When no partial script is set
      */
     public function renderPartial(Zend_Navigation_Container $container = null,
                                   $partial = null)
