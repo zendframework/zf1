@@ -57,21 +57,27 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
     {
         $pages = array(
             Zend_Navigation_Page::factory(array(
-                'label' => 'MVC Page',
+                'label'  => 'MVC Page',
                 'action' => 'index'
             )),
             Zend_Navigation_Page::factory(array(
-                'label' => 'MVC Page',
+                'label'      => 'MVC Page',
                 'controller' => 'index'
             )),
             Zend_Navigation_Page::factory(array(
-                'label' => 'MVC Page',
+                'label'  => 'MVC Page',
                 'module' => 'index'
             )),
             Zend_Navigation_Page::factory(array(
                 'label' => 'MVC Page',
                 'route' => 'home'
-            ))
+            )),
+            Zend_Navigation_Page::factory(array(
+                'label'  => 'MVC Page',
+                'params' => array(
+                    'foo' => 'bar',
+                ),
+            )),
         );
 
         $this->assertContainsOnly('Zend_Navigation_Page_Mvc', $pages);
@@ -81,62 +87,50 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
     {
         $page = Zend_Navigation_Page::factory(array(
             'label' => 'URI Page',
-            'uri' => '#'
+            'uri'   => '#'
         ));
 
-        $this->assertType('Zend_Navigation_Page_Uri', $page);
-    }
-
-    public function testMvcShouldHaveDetectionPrecedence()
-    {
-        $page = Zend_Navigation_Page::factory(array(
-            'label' => 'MVC Page',
-            'action' => 'index',
-            'controller' => 'index',
-            'uri' => '#'
-        ));
-
-        $this->assertType('Zend_Navigation_Page_Mvc', $page);
+        $this->assertTrue($page instanceof Zend_Navigation_Page_Uri);
     }
 
     public function testSupportsMvcShorthand()
     {
         $mvcPage = Zend_Navigation_Page::factory(array(
-            'type' => 'mvc',
-            'label' => 'MVC Page',
-            'action' => 'index',
+            'type'       => 'mvc',
+            'label'      => 'MVC Page',
+            'action'     => 'index',
             'controller' => 'index'
         ));
 
-        $this->assertType('Zend_Navigation_Page_Mvc', $mvcPage);
+        $this->assertTrue($mvcPage instanceof Zend_Navigation_Page_Mvc);
     }
 
     public function testSupportsUriShorthand()
     {
         $uriPage = Zend_Navigation_Page::factory(array(
-            'type' => 'uri',
+            'type'  => 'uri',
             'label' => 'URI Page',
-            'uri' => 'http://www.example.com/'
+            'uri'   => 'http://www.example.com/'
         ));
 
-        $this->assertType('Zend_Navigation_Page_Uri', $uriPage);
+        $this->assertTrue($uriPage instanceof Zend_Navigation_Page_Uri);
     }
 
     public function testSupportsCustomPageTypes()
     {
         $page = Zend_Navigation_Page::factory(array(
-            'type' => 'My_Page',
+            'type'  => 'My_Page',
             'label' => 'My Custom Page'
         ));
 
-        return $this->assertType('My_Page', $page);
+        return $this->assertTrue($page instanceof My_Page);
     }
 
     public function testShouldFailForInvalidType()
     {
         try {
             $page = Zend_Navigation_Page::factory(array(
-                'type' => 'My_InvalidPage',
+                'type'  => 'My_InvalidPage',
                 'label' => 'My Invalid Page'
             ));
         } catch(Zend_Navigation_Exception $e) {
@@ -149,18 +143,23 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
     public function testShouldFailForNonExistantType()
     {
         $pageConfig = array(
-            'type' => 'My_NonExistant_Page',
+            'type'  => 'My_NonExistant_Page',
             'label' => 'My non-existant Page'
         );
 
         try {
             $page = Zend_Navigation_Page::factory($pageConfig);
-        } catch(Zend_Exception $e) {
-            return;
-        }
 
-        $msg = 'A Zend_Exception has not been thrown for non-existant class';
-        $this->fail($msg);
+            $this->fail(
+                'A Zend_Exception has not been thrown for non-existant class'
+            );
+        } catch(Zend_Exception $e) {
+            $this->assertEquals(
+                'File "My/NonExistant/Page.php" does not exist or class '
+                . '"My_NonExistant_Page" was not found in the file',
+                $e->getMessage()
+            );
+        }
     }
 
     public function testShouldFailIfUnableToDetermineType()
@@ -169,10 +168,40 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
             $page = Zend_Navigation_Page::factory(array(
                 'label' => 'My Invalid Page'
             ));
-        } catch(Zend_Navigation_Exception $e) {
-            return;
-        }
 
-        $this->fail('An exception has not been thrown for invalid page type');
+            $this->fail(
+                'An exception has not been thrown for invalid page type'
+            );
+        } catch(Zend_Navigation_Exception $e) {
+            $this->assertEquals(
+                'Invalid argument: Unable to determine class to instantiate '
+                . '(Page label: My Invalid Page)',
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @group ZF-10048
+     */
+    public function testMvcShouldFailIfOptionsContainsUriAndMvcProperties()
+    {
+        try {
+            $page = Zend_Navigation_Page::factory(array(
+                'label'      => 'MVC Page',
+                'action'     => 'index',
+                'controller' => 'index',
+                'uri'        => '#'
+            ));
+            $this->fail(
+                'An exception has not been thrown for invalid properties'
+            );
+        } catch(Zend_Navigation_Exception $e) {
+            $this->assertEquals(
+                'Invalid argument: Unable to determine class to instantiate '
+                . '(Page label: MVC Page)',
+                $e->getMessage()
+            );
+        }
     }
 }
