@@ -57,17 +57,19 @@ class Zend_View_Helper_Json extends Zend_View_Helper_Abstract
     public function json($data, $keepLayouts = false, $encodeData = true)
     {
         $options = array();
-        if (is_array($keepLayouts))
-        {
-            $options     = $keepLayouts;
-            $keepLayouts = (array_key_exists('keepLayouts', $keepLayouts))
-                            ? $keepLayouts['keepLayouts']
-                            : false;
-            unset($options['keepLayouts']);
-            $encodeData  = (array_key_exists('encodeData', $keepLayouts))
-                            ? $keepLayouts['encodeData']
-                            : $encodeData;
-            unset($options['encodeData']);
+        if (is_array($keepLayouts)) {
+            $options = $keepLayouts;
+
+            $keepLayouts = false;
+            if (array_key_exists('keepLayouts', $options)) {
+                $keepLayouts = $options['keepLayouts'];
+                unset($options['keepLayouts']);
+            }
+
+            if (array_key_exists('encodeData', $options)) {
+                $encodeData = $options['encodeData'];
+                unset($options['encodeData']);
+            }
         }
 
         if ($encodeData) {
