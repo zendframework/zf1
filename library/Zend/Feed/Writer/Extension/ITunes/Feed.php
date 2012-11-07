@@ -205,7 +205,7 @@ class Zend_Feed_Writer_Extension_ITunes_Feed
     /**
      * Set "explicit" flag
      *
-     * @param  bool $value
+     * @param  string $value    Valid values: "yes", "no" or "clean"
      * @return Zend_Feed_Writer_Extension_ITunes_Feed
      */
     public function setItunesExplicit($value)
