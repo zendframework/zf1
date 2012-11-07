@@ -143,6 +143,26 @@ class Zend_View_Helper_JsonTest extends PHPUnit_Framework_TestCase
         $data = $this->helper->json(array('foobar'), true);
         $this->assertTrue($layout->isEnabled());
     }
+
+    /**
+     * @group ZF-12397
+     */
+    public function testJsonHelperWithKeepLayoutAsArray()
+    {
+        $layout = Zend_Layout::startMvc();
+        $this->assertTrue($layout->isEnabled());
+        $data = $this->helper->json(
+            array(
+                 'foobar',
+            ),
+            array(
+                 'keepLayouts' => true,
+                 'encodeData'  => false,
+            )
+        );
+        $this->assertTrue($layout->isEnabled());
+        $this->assertSame(array('foobar'), $data);
+    }
     
     /**
      * @group ZF-10977
