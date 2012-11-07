@@ -181,7 +181,9 @@ class Zend_Form_Element_RadioTest extends PHPUnit_Framework_TestCase
 
         $element = $form->getElement('foo');
 
-        $this->assertType('My_Decorator_Label', $element->getDecorator('Label'));
+        $this->assertTrue(
+            $element->getDecorator('Label') instanceof My_Decorator_Label
+        );
     }
 
     /**
@@ -196,6 +198,45 @@ class Zend_Form_Element_RadioTest extends PHPUnit_Framework_TestCase
              ->setLabel('Foo');
         $html = $this->element->render($this->getView());
         $this->assertNotContains('for="foo"', $html);
+    }
+
+    /**
+     * @group ZF-11517
+     */
+    public function testCreationWithIndividualDecoratorsAsConstructorOptionsWithoutLabel()
+    {
+        $element = new Zend_Form_Element_Radio(array(
+            'name'         => 'foo',
+            'multiOptions' => array(
+                'bar'  => 'Bar',
+                'baz'  => 'Baz',
+            ),
+            'decorators' => array(
+                'ViewHelper',
+            ),
+        ));
+
+        $this->assertFalse($element->getDecorator('label'));
+    }
+
+    /**
+     * @group ZF-11517
+     */
+    public function testRenderingWithIndividualDecoratorsAsConstructorOptionsWithoutLabel()
+    {
+        $element = new Zend_Form_Element_Radio(array(
+            'name'         => 'foo',
+            'multiOptions' => array(
+                'bar'  => 'Bar',
+                'baz'  => 'Baz',
+            ),
+            'decorators' => array(
+                'ViewHelper',
+            ),
+        ));
+
+        $html = $element->render($this->getView());
+        $this->assertNotContains('<dt id="foo-label">&#160;</dt>', $html);
     }
 
     /**
