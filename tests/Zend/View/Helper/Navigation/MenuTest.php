@@ -704,4 +704,72 @@ class Zend_View_Helper_Navigation_MenuTest
             $this->_helper->renderSubMenu(null, null, null, 'foo')
         );
     }
+
+    /**
+     * @group ZF-7212
+     */
+    public function testRenderingDeepestMenuWithUlId()
+    {
+        $this->assertContains(
+            '<ul class="navigation" id="foo">',
+            $this->_helper->renderMenu(null, array('ulId' => 'foo'))
+        );
+    }
+
+    /**
+     * @group ZF-7003
+     */
+    public function testSetAddPageClassToLi()
+    {
+        $this->_helper->addPageClassToLi();
+        $this->assertTrue($this->_helper->getAddPageClassToLi());
+    }
+
+    /**
+     * @group ZF-7003
+     */
+    public function testRenderingWithPageClassToLi()
+    {
+        $this->_helper->addPageClassToLi();
+
+        // Add css class
+        $container = $this->_helper->getContainer();
+        $container->findBy('href', 'page1')->setClass('foo');
+
+        // Tests
+        $this->assertContains(
+            '<li class="foo">',
+            $this->_helper->renderMenu()
+        );
+        $this->assertNotContains(
+            '<a class="foo" href="page1">Page 1</a>',
+            $this->_helper->renderMenu()
+        );
+    }
+
+    /**
+     * @group ZF-7003
+     */
+    public function testRenderDeepestMenuWithPageClassToLi()
+    {
+        // Add css class
+        $container = $this->_helper->getContainer();
+        $container->findBy('label', 'Page 2.3.3.1')->setClass('foo');
+
+        // Tests
+        $options = array(
+            'onlyActiveBranch' => true,
+            'renderParents'    => false,
+            'addPageClassToLi' => true,
+        );
+
+        $this->assertContains(
+            '<li class="active foo">',
+            $this->_helper->renderMenu(null, $options)
+        );
+        $this->assertNotContains(
+            '<a class="foo" href="page1">Page 1</a>',
+            $this->_helper->renderMenu(null, $options)
+        );
+    }
 }
