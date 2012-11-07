@@ -230,16 +230,20 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
                 $value = $value->__toString();
             }
         } else {
-            $value = (string)$value;
+            $value = implode((array) $value);
         }
 
         if ($this->getObscureValue()) {
             $value = str_repeat('*', strlen($value));
         }
 
-        $message = str_replace('%value%', (string) $value, $message);
+        $message = str_replace('%value%', $value, $message);
         foreach ($this->_messageVariables as $ident => $property) {
-            $message = str_replace("%$ident%", implode(' ',(array)$this->$property), $message);
+            $message = str_replace(
+                "%$ident%",
+                implode(' ', (array) $this->$property),
+                $message
+            );
         }
 
         $length = self::getMessageLength();
