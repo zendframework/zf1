@@ -4596,6 +4596,35 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
             $this->assertContains('Foo', $paths[0]);
         }
     }
+
+    /**
+     * @group ZF-8942
+     */
+    public function testCreateElementIncludesElementDecorators()
+    {
+        // Init form
+        $form = new Zend_Form();
+        $form->setElementDecorators(
+            array(
+                 new Zend_Form_Decorator_ViewHelper,
+                 new Zend_Form_Decorator_Label,
+            )
+        );
+        $element = $form->createElement('text', 'foo');
+
+        //  Test
+        $expected = array(
+            'Zend_Form_Decorator_ViewHelper',
+            'Zend_Form_Decorator_Label',
+        );
+
+        $actual = array();
+        foreach ($element->getDecorators() as $decorator) {
+            $actual[] = get_class($decorator);
+        }
+
+        $this->assertEquals($expected, $actual);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
