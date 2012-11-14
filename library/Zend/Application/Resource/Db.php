@@ -139,10 +139,13 @@ class Zend_Application_Resource_Db extends Zend_Application_Resource_ResourceAbs
         if ((null === $this->_db)
             && (null !== ($adapter = $this->getAdapter()))
         ) {
-            if ($this->isDefaultTableAdapter()) {
-                Zend_Db_Table::setDefaultAdapter($adapter);
-            }
             $this->_db = Zend_Db::factory($adapter, $this->getParams());
+
+            if ($this->_db instanceof Zend_Db_Adapter_Abstract 
+                && $this->isDefaultTableAdapter()
+            ) {
+                Zend_Db_Table::setDefaultAdapter($this->_db);
+            }
         }
         return $this->_db;
     }
