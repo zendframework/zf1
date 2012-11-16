@@ -258,10 +258,10 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
                   isset($options['module']) || isset($options['route']) ||
                   isset($options['params']);
 
-        if ($hasMvc && !$hasUri) {
+        if ($hasMvc) {
             require_once 'Zend/Navigation/Page/Mvc.php';
             return new Zend_Navigation_Page_Mvc($options);
-        } elseif ($hasUri && !$hasMvc) {
+        } elseif ($hasUri) {
             require_once 'Zend/Navigation/Page/Uri.php';
             return new Zend_Navigation_Page_Uri($options);
         } else {
