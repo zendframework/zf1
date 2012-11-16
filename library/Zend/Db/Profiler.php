@@ -225,7 +225,9 @@ class Zend_Db_Profiler
     }
 
     /**
-     * @param  integer $queryId
+     * Clone a profiler query
+     *
+     * @param  Zend_Db_Profiler_Query $query
      * @return integer or null
      */
     public function queryClone(Zend_Db_Profiler_Query $query)
@@ -287,12 +289,12 @@ class Zend_Db_Profiler
     }
 
     /**
-     * Ends a query.  Pass it the handle that was returned by queryStart().
+     * Ends a query. Pass it the handle that was returned by queryStart().
      * This will mark the query as ended and save the time.
      *
      * @param  integer $queryId
      * @throws Zend_Db_Profiler_Exception
-     * @return void
+     * @return string   Inform that a query is stored or ignored.
      */
     public function queryEnd($queryId)
     {
