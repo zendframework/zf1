@@ -518,6 +518,18 @@ class Zend_EventManager_EventManagerTest extends PHPUnit_Framework_TestCase
         $this->assertSame($identifiers[0], __CLASS__);
     }
 
+    public function testIdentifierGetterSettersWorkWithStrings()
+    {
+        $identifier1 = 'foo';
+        $identifiers = array($identifier1);
+        $this->assertType('Zend_EventManager_EventManager', $this->events->setIdentifiers($identifier1));
+        $this->assertSame($this->events->getIdentifiers(), $identifiers);
+        $identifier2 = 'baz';
+        $identifiers = array($identifier1, $identifier2);
+        $this->assertType('Zend_EventManager_EventManager', $this->events->addIdentifiers($identifier2));
+        $this->assertSame($this->events->getIdentifiers(), $identifiers);
+    }
+
     public function testIdentifierGetterSettersWorkWithArrays()
     {
         $identifiers = array('foo', 'bar');
