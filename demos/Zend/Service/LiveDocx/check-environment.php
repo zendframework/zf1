@@ -5,7 +5,7 @@ include_once './common.php';
 define('TEST_PASS',       'PASS');
 define('TEST_FAIL',       'FAIL');
 
-define('MIN_PHP_VERSION', '5.2.4');
+define('MIN_PHP_VERSION', '5.2.11');
 define('MIN_ZF_VERSION',  '1.10.0beta');
 
 define('SOCKET_TIMEOUT',   5); // seconds

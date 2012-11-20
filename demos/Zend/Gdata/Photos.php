@@ -23,7 +23,7 @@
  * PHP sample code for the Photos data API.  Utilizes the
  * Zend Framework Gdata components to communicate with the Google API.
  *
- * Requires the Zend Framework Gdata components and PHP >= 5.1.4
+ * Requires the Zend Framework Gdata components and PHP >= 5.2.11
  *
  * You can run this sample from a web browser.
  *
