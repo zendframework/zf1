@@ -9,7 +9,7 @@ EXTRA_FLAGS=
 if [ -z "$VERSION" ]; then
     echo "Usage: php-build.sh {VERSION}"
     echo ""
-    echo "e.g. php-build.sh 5.2.4"
+    echo "e.g. php-build.sh 5.2.11"
     exit;
 fi
 

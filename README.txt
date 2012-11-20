@@ -151,7 +151,7 @@ http://framework.zend.com/manual/en/migration.html
 SYSTEM REQUIREMENTS
 -------------------
 
-Zend Framework requires PHP 5.2.4 or later. Please see our reference
+Zend Framework requires PHP 5.2.11 or later. Please see our reference
 guide for more detailed system requirements:
 
 http://framework.zend.com/manual/en/requirements.html

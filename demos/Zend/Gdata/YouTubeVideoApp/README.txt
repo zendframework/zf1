@@ -3,7 +3,7 @@
 PHP sample code for the YouTube data API.  Utilizes the Zend Framework
 Zend_Gdata component to communicate with the YouTube data API.
 
-Requires the Zend Framework Zend_Gdata component and PHP >= 5.1.4
+Requires the Zend Framework Zend_Gdata component and PHP >= 5.2.11
 This sample is run from within a web browser.  These files are required:
 
 session_details.php - a script to view log output and session variables
