@@ -482,6 +482,7 @@ HTML;
 
         /* Fetch an instance of the http client */
         $httpClient = self::getHttpClient();
+        $httpClient->resetParameters(true);
 
         $postParams = array('privatekey' => $this->_privateKey,
                             'remoteip'   => $this->_ip,
