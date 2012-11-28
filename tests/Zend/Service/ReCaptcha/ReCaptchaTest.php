@@ -210,20 +210,6 @@ class Zend_Service_ReCaptcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
         $this->_reCaptcha->setPrivateKey($this->_privateKey);
         $this->_reCaptcha->setIp('127.0.0.1');
 
-        if (defined('TESTS_ZEND_SERVICE_RECAPTCHA_ONLINE_ENABLED') &&
-            constant('TESTS_ZEND_SERVICE_RECAPTCHA_ONLINE_ENABLED')) {
-
-            $this->_testVerifyOnline();
-        } else {
-            $this->_testVerifyOffline();
-        }
-    }
-
-    protected function _testVerifyOnline() {
-
-    }
-
-    protected function _testVerifyOffline() {
         $adapter = new Zend_Http_Client_Adapter_Test();
         $client = new Zend_Http_Client(null, array(
             'adapter' => $adapter
@@ -231,7 +217,10 @@ class Zend_Service_ReCaptcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
 
         Zend_Service_ReCaptcha::setHttpClient($client);
 
+        // Set a header that will be reset in the recaptcha class before sending the request
+        $client->setHeaders('host', 'example.com');
         $resp = $this->_reCaptcha->verify('challengeField', 'responseField');
+        $this->assertNotSame('example.com', $client->getHeader('host'));
 
         // See if we have a valid object and that the status is false
         $this->assertTrue($resp instanceof Zend_Service_ReCaptcha_Response);
