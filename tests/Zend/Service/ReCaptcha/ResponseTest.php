@@ -66,10 +66,32 @@ class Zend_Service_ReCaptcha_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertSame(false, $this->_response->isValid());
     }
 
+    public function testSetFromHttpResponseWhenResponseContentIsMissing() {
+        $responseBody = 'true';
+        $httpResponse = new Zend_Http_Response(200, array('Content-Type' => 'text/html'), $responseBody);
+
+        $this->_response->setFromHttpResponse($httpResponse);
+
+        $this->assertTrue($this->_response->getStatus());
+        $this->assertSame('', $this->_response->getErrorCode());
+    }
+
     public function testSetFromHttpResponse() {
         $status = 'false';
         $errorCode = 'foobar';
         $responseBody = $status . "\n" . $errorCode;
+        $httpResponse = new Zend_Http_Response(200, array('Content-Type' => 'text/html'), $responseBody);
+
+        $this->_response->setFromHttpResponse($httpResponse);
+
+        $this->assertSame(false, $this->_response->getStatus());
+        $this->assertSame($errorCode, $this->_response->getErrorCode());
+    }
+
+    public function testSetFromHttpResponseWhenResponseHasSeveralLinesOfContent() {
+        $status = 'false';
+        $errorCode = 'foobar';
+        $responseBody = $status . "\n" . $errorCode . "\nSome data\nEven more data";
         $httpResponse = new Zend_Http_Response(200, array('Content-Type' => 'text/html'), $responseBody);
 
         $this->_response->setFromHttpResponse($httpResponse);

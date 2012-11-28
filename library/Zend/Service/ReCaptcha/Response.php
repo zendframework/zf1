@@ -142,13 +142,18 @@ class Zend_Service_ReCaptcha_Response
     {
         $body = $response->getBody();
 
-        $parts = explode("\n", $body, 2);
+        // Default status and error code
+        $status = 'false';
+        $errorCode = '';
 
-        if (count($parts) !== 2) {
-            $status = 'false';
-            $errorCode = '';
-        } else {
-            list($status, $errorCode) = $parts;
+        $parts = explode("\n", $body);
+
+        if ($parts[0] === 'true') {
+            $status = 'true';
+        }
+
+        if (!empty($parts[1])) {
+            $errorCode = $parts[1];
         }
 
         $this->setStatus($status);
