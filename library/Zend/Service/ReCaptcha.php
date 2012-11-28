@@ -467,19 +467,6 @@ HTML;
             throw new Zend_Service_ReCaptcha_Exception('Missing ip address');
         }
 
-        if (empty($challengeField)) {
-            /** @see Zend_Service_ReCaptcha_Exception */
-            require_once 'Zend/Service/ReCaptcha/Exception.php';
-            throw new Zend_Service_ReCaptcha_Exception('Missing challenge field');
-        }
-
-        if (empty($responseField)) {
-            /** @see Zend_Service_ReCaptcha_Exception */
-            require_once 'Zend/Service/ReCaptcha/Exception.php';
-
-            throw new Zend_Service_ReCaptcha_Exception('Missing response field');
-        }
-
         /* Fetch an instance of the http client */
         $httpClient = self::getHttpClient();
         $httpClient->resetParameters(true);

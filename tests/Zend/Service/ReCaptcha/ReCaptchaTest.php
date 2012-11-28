@@ -266,18 +266,16 @@ class Zend_Service_ReCaptcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
     }
 
     public function testVerifyWithMissingChallengeField() {
-        $this->setExpectedException('Zend_Service_ReCaptcha_Exception');
-
         $this->_reCaptcha->setPrivateKey($this->_privateKey);
         $this->_reCaptcha->setIp('127.0.0.1');
-        $this->_reCaptcha->verify('', 'response');
+        $response = $this->_reCaptcha->verify('', 'response');
+        $this->assertFalse($response->getStatus());
     }
 
     public function testVerifyWithMissingResponseField() {
-        $this->setExpectedException('Zend_Service_ReCaptcha_Exception');
-
         $this->_reCaptcha->setPrivateKey($this->_privateKey);
         $this->_reCaptcha->setIp('127.0.0.1');
-        $this->_reCaptcha->verify('challenge', '');
+        $response = $this->_reCaptcha->verify('challenge', '');
+        $this->assertFalse($response->getStatus());
     }
 }
