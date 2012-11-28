@@ -89,16 +89,6 @@ class Zend_Service_ReCaptcha_MailHideTest extends PHPUnit_Framework_TestCase
         $this->assertSame($options['lang'], $_options['lang']);
     }
 
-    protected function _checkHtml($html) {
-        $server = Zend_Service_ReCaptcha_MailHide::MAILHIDE_SERVER;
-        $pubKey = $this->_publicKey;
-
-        // Static value of the encrypter version of mail@example.com
-        $encryptedEmail = 'XydrEdd6Eo90PE-LpxkmTEsq2G6SCeDzWkEQpF6f7v8=';
-
-        $this->assertNotSame(false, strstr($html, 'm<a href="' . $server . '?k=' . $pubKey . '&amp;c=' . $encryptedEmail . '" onclick="window.open(\'' . $server . '?k=' . $pubKey . '&amp;c=' . $encryptedEmail . '\', \'\', \'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300\'); return false;" title="Reveal this e-mail address">...</a>@example.com'));
-    }
-
     public function testGetHtml() {
         $mail = 'mail@example.com';
 
@@ -108,7 +98,7 @@ class Zend_Service_ReCaptcha_MailHideTest extends PHPUnit_Framework_TestCase
 
         $html = $this->_mailHide->getHtml();
 
-        $this->_checkHtml($html);
+        $this->assertRegExp('#^m<a href=".*?">\.\.\.</a>@example\.com$#', $html);
     }
 
     public function testGetHtmlWithNoEmail() {
@@ -147,6 +137,6 @@ class Zend_Service_ReCaptcha_MailHideTest extends PHPUnit_Framework_TestCase
 
         $html = $this->_mailHide->getHtml($mail);
 
-        $this->_checkHtml($html);
+        $this->assertRegExp('#m<a href=".*?">\.\.\.</a>@example\.com$#', $html);
     }
 }
