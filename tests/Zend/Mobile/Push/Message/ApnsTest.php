@@ -112,6 +112,12 @@ class Zend_Mobile_Push_Message_ApnsTest extends PHPUnit_Framework_TestCase
         $this->message->setBadge(-5);
     }
 
+    public function testSetBadgeAllowsNull()
+    {
+        $this->message->setBadge(null);
+        $this->assertNull($this->message->getBadge());
+    }
+
     public function testSetExpireReturnsInteger()
     {
         $expire = 100;
