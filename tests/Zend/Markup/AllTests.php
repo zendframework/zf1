@@ -25,7 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once 'Zend/Markup/BbcodeAndHtmlTest.php';
-require_once 'Zend/Markup/TextileAndHtmlTest.php';
 require_once 'Zend/Markup/ParserIntegrityTest.php';
 require_once 'Zend/Markup/FactoryTest.php';
 
@@ -55,7 +54,6 @@ class Zend_Markup_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Markup');
 
         $suite->addTestSuite('Zend_Markup_BbcodeAndHtmlTest');
-        $suite->addTestSuite('Zend_Markup_TextileAndHtmlTest');
         $suite->addTestSuite('Zend_Markup_ParserIntegrityTest');
         $suite->addTestSuite('Zend_Markup_FactoryTest');
 
