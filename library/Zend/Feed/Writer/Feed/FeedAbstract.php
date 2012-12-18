@@ -176,10 +176,10 @@ class Zend_Feed_Writer_Feed_FeedAbstract
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit((string)$date)) {
-            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
+        } elseif (ctype_digit((string)$date)) {
+            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } else {
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception('Invalid Zend_Date object or UNIX Timestamp passed as parameter');
@@ -197,10 +197,10 @@ class Zend_Feed_Writer_Feed_FeedAbstract
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit((string)$date)) {
-            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
+        } elseif (ctype_digit((string)$date)) {
+            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } else {
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception('Invalid Zend_Date object or UNIX Timestamp passed as parameter');
@@ -218,10 +218,10 @@ class Zend_Feed_Writer_Feed_FeedAbstract
         $zdate = null;
         if ($date === null) {
             $zdate = new Zend_Date;
-        } elseif (ctype_digit((string)$date)) {
-            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } elseif ($date instanceof Zend_Date) {
             $zdate = $date;
+        } elseif (ctype_digit((string)$date)) {
+            $zdate = new Zend_Date($date, Zend_Date::TIMESTAMP);
         } else {
             require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception('Invalid Zend_Date object or UNIX Timestamp passed as parameter');
