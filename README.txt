@@ -2,54 +2,36 @@ Welcome to the Zend Framework 1.12 Release!
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.12.0 Release ([INSERT REV NUM HERE]).
+Zend Framework 1.12.1 Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
-SECURITY FIXES FOR 1.12.0
+SECURITY FIXES FOR 1.12.1
 -------------------------
 
-This release incorporates fixes for each of:
+This release incorporates fixes for:
 
- - http://framework.zend.com/security/advisory/ZF2012-01
- - http://framework.zend.com/security/advisory/ZF2012-02
+ - http://framework.zend.com/security/advisory/ZF2012-05
 
-Several components were found to be vulnerable to XML eXternal Entity
-(XXE) Injection attacks due to insecure usage of the SimpleXMLElement
-class (SimpleXML PHP extension).  External entities could be specified
-by adding a specific DOCTYPE element to XML-RPC requests; exploiting
-this vulnerability could coerce opening arbitrary files and/or TCP
-connections.
+Zend_Feed_Rss and Zend_Feed_Atom were found to contain XML eXternal
+Entity (XXE) Injection vectors due to insecure usage of the DOM
+extension.  External entities could be specified by adding a specific
+DOCTYPE element to XML-RPC requests; exploiting this vulnerability could
+coerce opening arbitrary files and/or TCP connections.
 
-Additionally, these same components were found to be vulnerable to XML
-Entity Expansion (XEE) vectors. XEE attacks define custom entities
-within the DOCTYPE that refer to themselves, leading to recursion; the
-end result is excessive consumption of CPU and RAM, making Denial of
-Service (DoS) attacks easier to implement.
+A similar issue was fixed for 1.12.0, in the Zend_Feed::import() method;
+however, the reporter of the issue discovered that the individual
+classes contained similar functionality in their constructors which
+remained vulnerable.
 
-Vulnerable components included:
-
- - Zend_Dom
- - Zend_Feed
- - Zend_Soap
- - Zend_XmlRpc
-
-The patches applied do the following:
-
- - To remove XXE vectors, libxml_disable_entity_loader() is called
-   before any SimpleXML calls are executed.
-
- - To remove XEE vectors, we loop through the DOMDocument child nodes,
-   ensuring none are of type XML_DOCUMENT_TYPE_NODE, and raising an
-   exception if any are. If SimpleXML is used, a DOMDocument is created
-   first, processed as above, and then passed to simplexml_import_dom.
+The patch applied removes the XXE vector by calling
+libxml_disable_entity_loader() before attempting to parse the feed via
+DOMDocument::loadXML().
 
 The above patches are also available in the 1.11 series of releases.
 
-Thanks goes to Johannes Greil and Kestutis Gudinavicius of SEC-Consult
-for reporting the original XXE vulnerability against Zend_XmlRpc and
-working with us to provide a working solution. Thanks goes to Pádraic
-Brady for helping us identify other XXE vectors, as well as identifying
-and patching the XEE vectors.
+Thanks goes to Yury Dyachenko at Positive Research Center for for
+reporting the XXE vulnerability and reviewing the patches created to fix
+the issue.
 
 
 NEW FEATURES
