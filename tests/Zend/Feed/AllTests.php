@@ -32,6 +32,8 @@ require_once 'Zend/Feed/ElementTest.php';
 require_once 'Zend/Feed/ImportTest.php';
 require_once 'Zend/Feed/IteratorTest.php';
 require_once 'Zend/Feed/Entry/RssTest.php';
+require_once 'Zend/Feed/AtomTest.php';
+require_once 'Zend/Feed/RssTest.php';
 
 require_once 'Zend/Feed/ReaderTest.php';
 require_once 'Zend/Feed/Reader/Feed/RssTest.php';
@@ -89,6 +91,8 @@ class Zend_Feed_AllTests
         $suite->addTestSuite('Zend_Feed_ImportTest');
         $suite->addTestSuite('Zend_Feed_IteratorTest');
         $suite->addTestSuite('Zend_Feed_Entry_RssTest');
+        $suite->addTestSuite('Zend_Feed_AtomTest');
+        $suite->addTestSuite('Zend_Feed_RssTest');
 
         /* Zend_Feed_Reader tests */
         // Base parent class
