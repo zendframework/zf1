@@ -581,6 +581,7 @@ class Zend_Oauth_Config implements Zend_Oauth_Config_ConfigInterface
                 Zend_Oauth::POST,
                 Zend_Oauth::PUT,
                 Zend_Oauth::DELETE,
+                Zend_Oauth::OPTIONS,
             ))
         ) {
             require_once 'Zend/Oauth/Exception.php';

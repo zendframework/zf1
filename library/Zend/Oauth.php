@@ -38,6 +38,7 @@ class Zend_Oauth
     const PUT                        = 'PUT';
     const DELETE                     = 'DELETE';
     const HEAD                       = 'HEAD';
+    const OPTIONS                    = 'OPTIONS';
 
     /**
      * Singleton instance if required of the HTTP client
