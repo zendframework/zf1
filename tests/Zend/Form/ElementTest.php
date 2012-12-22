@@ -2232,6 +2232,18 @@ class Zend_Form_ElementTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($paths), var_export($paths, 1));
         $this->assertContains('Decorator', $paths[0]);
     }
+
+    /**
+     * @group ZF-12439
+     */
+    public function testSettingAnEmptyArrayValueGeneratesAValidErrorMessage()
+    {
+        $this->element->setValue(array());
+        $this->element->addErrorMessage('Invalid value entered');
+        $this->element->markAsError();
+        $messages = $this->element->getMessages();
+        $this->assertEquals('Invalid value entered', array_shift($messages));
+    }
 }
 
 class Zend_Form_ElementTest_Decorator extends Zend_Form_Decorator_Abstract
