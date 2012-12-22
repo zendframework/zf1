@@ -2242,14 +2242,14 @@ class Zend_Form_Element implements Zend_Validate_Interface
             if (null !== $translator) {
                 $message = $translator->translate($message);
             }
-            if (($this->isArray() || is_array($value))
-                && !empty($value)
-            ) {
+            if ($this->isArray() || is_array($value)) {
                 $aggregateMessages = array();
                 foreach ($value as $val) {
                     $aggregateMessages[] = str_replace('%value%', $val, $message);
                 }
-                $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
+                if (count($aggregateMessages)) {
+                    $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
+                }
             } else {
                 $messages[$key] = str_replace('%value%', $value, $message);
             }
