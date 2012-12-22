@@ -896,7 +896,7 @@ class Zend_Soap_Server implements Zend_Server_Interface
 
         // Send a fault, if we have one
         if ($fault) {
-            $this->_response = $fault;
+            $soap->fault($fault->faultcode, $fault->faultstring);
         }
 
         if (!$this->_returnResponse) {
