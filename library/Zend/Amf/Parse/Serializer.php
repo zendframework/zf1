@@ -38,6 +38,13 @@ abstract class Zend_Amf_Parse_Serializer
     protected $_stream;
 
     /**
+     * str* functions overloaded using mbstring.func_overload
+     *
+     * @var bool
+     */
+    protected $mbStringFunctionsOverloaded;
+
+    /**
      * Constructor
      *
      * @param  Zend_Amf_Parse_OutputStream $stream
@@ -46,6 +53,7 @@ abstract class Zend_Amf_Parse_Serializer
     public function __construct(Zend_Amf_Parse_OutputStream $stream)
     {
         $this->_stream = $stream;
+        $this->_mbStringFunctionsOverloaded = function_exists('mb_strlen') && (ini_get('mbstring.func_overload') !== '') && ((int)ini_get('mbstring.func_overload') & 2);
     }
 
     /**

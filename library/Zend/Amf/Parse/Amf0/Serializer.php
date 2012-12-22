@@ -127,7 +127,7 @@ class Zend_Amf_Parse_Amf0_Serializer extends Zend_Amf_Parse_Serializer
                 case (is_bool($data)):
                     $markerType = Zend_Amf_Constants::AMF0_BOOLEAN;
                     break;
-                case (is_string($data) && (strlen($data) > 65536)):
+                case (is_string($data) && (($this->_mbStringFunctionsOverloaded ? mb_strlen($data, '8bit') : strlen($data)) > 65536)):
                     $markerType = Zend_Amf_Constants::AMF0_LONGSTRING;
                     break;
                 case (is_string($data)):
