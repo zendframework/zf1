@@ -293,6 +293,17 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($config->usingCapitalOff);
     }
 
+    /**
+     * @group ZF-12277
+     */
+    public function testParsesTypesAccordingToOneDotTwoSpecification()
+    {
+        $config = new Zend_Config_Yaml($this->_booleansConfig, 'production');
+        $this->assertNull($config->usingLowerCasedNull);
+        $this->assertNull($config->usingTitleCasedNull);
+        $this->assertNull($config->usingCapitalNull);
+    }
+
     public function testHonorsPhpConstants()
     {
         if (!defined('ZEND_CONFIG_YAML_ENV')) {
