@@ -375,6 +375,8 @@ class Zend_Config_Yaml extends Zend_Config
             $value = true;
         } elseif (preg_match('/^(f(alse)?|off|n(o)?)$/i', $value)) {
             $value = false;
+        } elseif (strcasecmp($value, 'null') === 0) {
+            $value = null;
         } elseif (!self::$_ignoreConstants) {
             // test for constants
             $value = self::_replaceConstants($value);
