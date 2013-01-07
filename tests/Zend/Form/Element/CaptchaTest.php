@@ -112,17 +112,17 @@ class Zend_Form_Element_CaptchaTest extends PHPUnit_Framework_TestCase
         $element = new Zend_Form_Element_Captcha(
             'foo',
             array(
-                'prefixPath' => array(
-                    'prefix' => 'Zend_Form_Element_CaptchaTest',
-                    'path'   => dirname(__FILE__) . '/_files',
-                ),
-                'captcha' => 'Foo',
+                 'prefixPath' => array(
+                     'prefix' => 'Zend_Form_Element_CaptchaTest',
+                     'path'   => dirname(__FILE__) . '/_files',
+                 ),
+                 'captcha'    => 'Foo',
             )
         );
 
-        $this->assertType(
-            'Zend_Form_Element_CaptchaTest_Captcha_Foo',
-            $element->getCaptcha()
+        $this->assertTrue(
+            $element->getCaptcha() instanceof
+                Zend_Form_Element_CaptchaTest_Captcha_Foo
         );
     }
 
