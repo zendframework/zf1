@@ -251,6 +251,26 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group ZF-8452
+     */
+    public function testRenderingAsArray()
+    {
+        $this->element->addMultiOption('bar', 'Bar')
+                      ->setIsArray(true)
+                      ->setDecorators(array('ViewHelper'));
+
+        $actual   = $this->element->render($this->getView());
+        $expected = PHP_EOL
+                  . '<select name="foo[]" id="foo">'
+                  . PHP_EOL
+                  . '    <option value="bar" label="Bar">Bar</option>'
+                  . PHP_EOL
+                  . '</select>';
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Used by test methods susceptible to ZF-2794, marks a test as incomplete
      *
      * @link   http://framework.zend.com/issues/browse/ZF-2794

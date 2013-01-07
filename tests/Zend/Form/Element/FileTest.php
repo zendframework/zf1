@@ -498,13 +498,21 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
     public function testElementShouldAllowAdapterWithBackslahes()
     {
         if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            $this->markTestSkipped(
+                __CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater'
+            );
             return;
         }
-        $this->element->addPrefixPath('Zend\Form\Element\FileTest\Adapter', dirname(__FILE__) . '/_files/TransferAdapter', 'transfer_adapter');
+        $this->element->addPrefixPath(
+            'Zend\Form\Element\FileTest\Adapter',
+            dirname(__FILE__) . '/_files/TransferAdapter',
+            'transfer_adapter'
+        );
         $this->element->setTransferAdapter('Bar');
         $test = $this->element->getTransferAdapter();
-        $this->assertType('\Zend\Form\Element\FileTest\Adapter\Bar', $test);
+        $this->assertTrue(
+            $test instanceof \Zend\Form\Element\FileTest\Adapter\Bar
+        );
     }
 }
 
