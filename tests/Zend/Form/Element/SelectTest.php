@@ -263,7 +263,7 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
         $expected = PHP_EOL
                   . '<select name="foo[]" id="foo">'
                   . PHP_EOL
-                  . '    <option value="bar" label="Bar">Bar</option>'
+                  . '    <option value="bar">Bar</option>'
                   . PHP_EOL
                   . '</select>';
 
