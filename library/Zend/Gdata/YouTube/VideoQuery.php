@@ -92,7 +92,7 @@ class Zend_Gdata_YouTube_VideoQuery extends Zend_Gdata_Query
                     'Video ID must be set for feed of type: ' . $feedType);
             } else {
                 $this->_url = Zend_Gdata_YouTube::VIDEO_URI . '/' . $videoId .
-                    'responses';
+                    '/responses';
             }
             break;
         case 'comments':
@@ -102,7 +102,7 @@ class Zend_Gdata_YouTube_VideoQuery extends Zend_Gdata_Query
                     'Video ID must be set for feed of type: ' . $feedType);
             } else {
                 $this->_url = Zend_Gdata_YouTube::VIDEO_URI . '/' .
-                    $videoId . 'comments';
+                    $videoId . '/comments';
                 if ($entry !== null) {
                     $this->_url .= '/' . $entry;
                 }

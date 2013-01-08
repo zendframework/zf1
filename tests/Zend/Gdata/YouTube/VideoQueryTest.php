@@ -35,7 +35,8 @@ require_once 'Zend/Gdata/YouTube.php';
 class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testQueryStringConstruction () {
+    public function testQueryStringConstruction()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $query->setOrderBy('viewCount');
@@ -44,7 +45,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, $query->getQueryString());
     }
 
-    public function testQueryStringConstructionV2() {
+    public function testQueryStringConstructionV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $query->setOrderBy('viewCount');
@@ -53,7 +55,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, $query->getQueryString(2));
     }
 
-    public function testSafeSearchQueryV2() {
+    public function testSafeSearchQueryV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -67,7 +70,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
             ' expected but not found');
     }
 
-    public function testLocationRadiusV1() {
+    public function testLocationRadiusV1()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -81,7 +85,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
             ' expected but not found');
     }
 
-    public function testLocationV2() {
+    public function testLocationV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $query->setLocation('-37.122,122.01');
@@ -89,7 +94,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, $query->getQueryString(2));
     }
 
-    public function testLocationExceptionOnNonNumericV2() {
+    public function testLocationExceptionOnNonNumericV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -104,7 +110,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
             'IllegalArgumentException when using alpha in setLocation');
     }
 
-    public function testLocationExceptionOnOnlyOneCoordinateV2() {
+    public function testLocationExceptionOnOnlyOneCoordinateV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -120,7 +127,8 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
             'in setLocation');
     }
 
-    public function testUploaderExceptionOnInvalidV2() {
+    public function testUploaderExceptionOnInvalidV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -136,15 +144,17 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
             'setUploader.');
     }
 
-    public function testProjectionPresentInV2Query() {
+    public function testProjectionPresentInV2Query()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $query->setVideoQuery('foo');
-        $expectedString = 'http://gdata.youtube.com/feeds/api/videos?q=foo';
+        $expectedString = 'https://gdata.youtube.com/feeds/api/videos?q=foo';
         $this->assertEquals($expectedString, $query->getQueryUrl(2));
     }
 
-    public function testSafeSearchParametersInV2() {
+    public function testSafeSearchParametersInV2()
+    {
         $yt = new Zend_Gdata_YouTube();
         $query = $yt->newVideoQuery();
         $exceptionCaught = false;
@@ -209,5 +219,59 @@ class Zend_Gdata_YouTube_VideoQueryTest extends PHPUnit_Framework_TestCase
         $location = '37.42307,-122.08427!';
         $this->assertNull($query->setLocation($location));
         $this->assertEquals($location, $query->getLocation());
+    }
+
+    /**
+     * @group ZF-12500
+     */
+    public function testQueryUrlForFeedTypRelated()
+    {
+        $yt = new Zend_Gdata_YouTube();
+
+        // Query
+        $query = $yt->newVideoQuery();
+        $query->setFeedType('related', 'foo');
+
+        // Test
+        $this->assertSame(
+            'https://gdata.youtube.com/feeds/api/videos/foo/related',
+            $query->getQueryUrl()
+        );
+    }
+
+    /**
+     * @group ZF-12500
+     */
+    public function testQueryUrlForFeedTypResponses()
+    {
+        $yt = new Zend_Gdata_YouTube();
+
+        // Query
+        $query = $yt->newVideoQuery();
+        $query->setFeedType('responses', 'foo');
+
+        // Test
+        $this->assertSame(
+            'https://gdata.youtube.com/feeds/api/videos/foo/responses',
+            $query->getQueryUrl()
+        );
+    }
+
+    /**
+     * @group ZF-12500
+     */
+    public function testQueryUrlForFeedTypComments()
+    {
+        $yt = new Zend_Gdata_YouTube();
+
+        // Query
+        $query = $yt->newVideoQuery();
+        $query->setFeedType('comments', 'foo');
+
+        // Test
+        $this->assertSame(
+            'https://gdata.youtube.com/feeds/api/videos/foo/comments',
+            $query->getQueryUrl()
+        );
     }
 }
