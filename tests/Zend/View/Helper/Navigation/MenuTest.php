@@ -772,4 +772,37 @@ class Zend_View_Helper_Navigation_MenuTest
             $this->_helper->renderMenu(null, $options)
         );
     }
+
+    /**
+     * @group ZF-9543
+     */
+    public function testSetActiveClass()
+    {
+        $this->_helper->setActiveClass('current');
+
+        // Test getter
+        $this->assertEquals('current', $this->_helper->getActiveClass());
+
+        // Test rendering
+        $expected = $this->_getExpected('menu/css_active.html');
+        $this->assertEquals($expected, $this->_helper->render($this->_nav2));
+    }
+
+    /**
+     * @group ZF-9543
+     */
+    public function testRenderDeepestMenuWithCustomActiveClass()
+    {
+        // Tests
+        $options = array(
+            'onlyActiveBranch' => true,
+            'renderParents'    => false,
+            'activeClass'      => 'current',
+        );
+
+        $html = $this->_helper->renderMenu(null, $options);
+
+        $this->assertContains('<li class="current">', $html);
+        $this->assertNotContains('<li class="active">', $html);
+    }
 }

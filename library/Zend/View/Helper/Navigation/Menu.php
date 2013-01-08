@@ -52,6 +52,13 @@ class Zend_View_Helper_Navigation_Menu
     protected $_ulId = null;
 
     /**
+     * CSS class to use for the active elements
+     *
+     * @var string
+     */
+    protected $_activeClass = 'active';
+
+    /**
      * Whether only active branch should be rendered
      *
      * @var bool
@@ -156,6 +163,31 @@ class Zend_View_Helper_Navigation_Menu
     public function getUlId()
     {
         return $this->_ulId;
+    }
+
+    /**
+     * Sets CSS class to use for the active elements when rendering
+     *
+     * @param string $activeClass               CSS class to set
+     * @return Zend_View_Helper_Navigation_Menu fluent interface, returns self
+     */
+    public function setActiveClass($activeClass)
+    {
+        if (is_string($activeClass)) {
+            $this->_activeClass = $activeClass;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns CSS class to use for the active elements when rendering
+     *
+     * @return string  CSS class
+     */
+    public function getActiveClass()
+    {
+        return $this->_activeClass;
     }
 
     /**
@@ -372,24 +404,36 @@ class Zend_View_Helper_Navigation_Menu
      */
     protected function _normalizeOptions(array $options = array())
     {
+        // Ident
         if (isset($options['indent'])) {
             $options['indent'] = $this->_getWhitespace($options['indent']);
         } else {
             $options['indent'] = $this->getIndent();
         }
-        
+
+        // UL class
         if (isset($options['ulClass']) && $options['ulClass'] !== null) {
             $options['ulClass'] = (string) $options['ulClass'];
         } else {
             $options['ulClass'] = $this->getUlClass();
         }
 
+        // UL id
         if (isset($options['ulId']) && $options['ulId'] !== null) {
             $options['ulId'] = (string) $options['ulId'];
         } else {
             $options['ulId'] = $this->getUlId();
         }
 
+        // Active class
+        if (isset($options['activeClass']) && $options['activeClass'] !== null
+        ) {
+            $options['activeClass'] = (string) $options['activeClass'];
+        } else {
+            $options['activeClass'] = $this->getActiveClass();
+        }
+
+        // Minimum depth
         if (array_key_exists('minDepth', $options)) {
             if (null !== $options['minDepth']) {
                 $options['minDepth'] = (int) $options['minDepth'];
@@ -411,18 +455,22 @@ class Zend_View_Helper_Navigation_Menu
             $options['maxDepth'] = $this->getMaxDepth();
         }
 
+        // Only active branch
         if (!isset($options['onlyActiveBranch'])) {
             $options['onlyActiveBranch'] = $this->getOnlyActiveBranch();
         }
-        
+
+        // Expand sibling nodes of active branch
         if (!isset($options['expandSiblingNodesOfActiveBranch'])) {
             $options['expandSiblingNodesOfActiveBranch'] = $this->getExpandSiblingNodesOfActiveBranch();
         }
 
+        // Render parents
         if (!isset($options['renderParents'])) {
             $options['renderParents'] = $this->getRenderParents();
         }
 
+        // Add page CSS class to LI element
         if (!isset($options['addPageClassToLi'])) {
             $options['addPageClassToLi'] = $this->getAddPageClassToLi();
         }
@@ -445,7 +493,9 @@ class Zend_View_Helper_Navigation_Menu
      *                                               first UL
      * @param  bool                      $addPageClassToLi  adds CSS class from
      *                                                      page to li element
-     * @return string                                rendered menu
+     * @param  string|null               $activeClass       CSS class for active
+     *                                                      element
+     * @return string                                       rendered menu (HTML)
      */
     protected function _renderDeepestMenu(Zend_Navigation_Container $container,
                                           $ulClass,
@@ -453,7 +503,8 @@ class Zend_View_Helper_Navigation_Menu
                                           $minDepth,
                                           $maxDepth,
                                           $ulId,
-                                          $addPageClassToLi)
+                                          $addPageClassToLi,
+                                          $activeClass)
     {
         if (!$active = $this->findActive($container, $minDepth - 1, $maxDepth)) {
             return '';
@@ -497,10 +548,10 @@ class Zend_View_Helper_Navigation_Menu
             $liClass = '';
             if ($subPage->isActive(true) && $addPageClassToLi) {
                 $liClass = $this->_htmlAttribs(
-                    array('class' => 'active ' . $subPage->getClass())
+                    array('class' => $activeClass . ' ' . $subPage->getClass())
                 );
             } else if ($subPage->isActive(true)) {
-                $liClass = $this->_htmlAttribs(array('class' => 'active'));
+                $liClass = $this->_htmlAttribs(array('class' => $activeClass));
             } else if ($addPageClassToLi) {
                 $liClass = $this->_htmlAttribs(
                     array('class' => $subPage->getClass())
@@ -531,7 +582,9 @@ class Zend_View_Helper_Navigation_Menu
      *                                                first UL
      * @param  bool                      $addPageClassToLi  adds CSS class from
      *                                                      page to li element
-     * @return string
+     * @param  string|null               $activeClass       CSS class for active
+     *                                                      element
+     * @return string                                       rendered menu (HTML)
      */
     protected function _renderMenu(Zend_Navigation_Container $container,
                                    $ulClass,
@@ -541,7 +594,8 @@ class Zend_View_Helper_Navigation_Menu
                                    $onlyActive,
                                    $expandSibs,
                                    $ulId,
-                                   $addPageClassToLi)
+                                   $addPageClassToLi,
+                                   $activeClass)
     {
         $html = '';
 
@@ -569,7 +623,7 @@ class Zend_View_Helper_Navigation_Menu
                 // page is below minDepth or not accepted by acl/visibilty
                 continue;
             } else if ($expandSibs && $depth > $minDepth) {
-            	// page is not active itself, but might be in the active branch
+                // page is not active itself, but might be in the active branch
                 $accept = false;
                 if ($foundPage) {
                     if ($foundPage->hasPage($page)) {
@@ -650,10 +704,10 @@ class Zend_View_Helper_Navigation_Menu
             $liClass = '';
             if ($isActive && $addPageClassToLi) {
                 $liClass = $this->_htmlAttribs(
-                    array('class' => 'active ' . $page->getClass())
+                    array('class' => $activeClass . ' ' . $page->getClass())
                 );
             } else if ($isActive) {
-                $liClass = $this->_htmlAttribs(array('class' => 'active'));
+                $liClass = $this->_htmlAttribs(array('class' => $activeClass));
             } else if ($addPageClassToLi) {
                 $liClass = $this->_htmlAttribs(
                     array('class' => $page->getClass())
@@ -707,23 +761,29 @@ class Zend_View_Helper_Navigation_Menu
         $options = $this->_normalizeOptions($options);
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
-            $html = $this->_renderDeepestMenu($container,
-                                              $options['ulClass'],
-                                              $options['indent'],
-                                              $options['minDepth'],
-                                              $options['maxDepth'],
-                                              $options['ulId'],
-                                              $options['addPageClassToLi']);
+            $html = $this->_renderDeepestMenu(
+                $container,
+                $options['ulClass'],
+                $options['indent'],
+                $options['minDepth'],
+                $options['maxDepth'],
+                $options['ulId'],
+                $options['addPageClassToLi'],
+                $options['activeClass']
+            );
         } else {
-            $html = $this->_renderMenu($container,
-                                       $options['ulClass'],
-                                       $options['indent'],
-                                       $options['minDepth'],
-                                       $options['maxDepth'],
-                                       $options['onlyActiveBranch'],
-                                       $options['expandSiblingNodesOfActiveBranch'],
-                                       $options['ulId'],
-                                       $options['addPageClassToLi']);
+            $html = $this->_renderMenu(
+                $container,
+                $options['ulClass'],
+                $options['indent'],
+                $options['minDepth'],
+                $options['maxDepth'],
+                $options['onlyActiveBranch'],
+                $options['expandSiblingNodesOfActiveBranch'],
+                $options['ulId'],
+                $options['addPageClassToLi'],
+                $options['activeClass']
+            );
         }
 
         return $html;
