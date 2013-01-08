@@ -353,6 +353,11 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
             unset($options['attribs']);
         }
 
+        if (isset($options['subForms'])) {
+            $this->addSubForms($options['subForms']);
+            unset($options['subForms']);
+        }
+
         $forbidden = array(
             'Options', 'Config', 'PluginLoader', 'SubForms', 'Translator',
             'Attrib', 'Default',
@@ -1640,7 +1645,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     public function addSubForms(array $subForms)
     {
         foreach ($subForms as $key => $spec) {          
-            $name= (string) $key;
+            $name = (string) $key;
             if ($spec instanceof Zend_Form) {
                 $this->addSubForm($spec, $name);
                 continue;
@@ -1654,6 +1659,10 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
                         continue;
                     case (1 <= $argc):
                         $subForm = array_shift($spec);
+
+                        if (!$subForm instanceof Zend_Form) {
+                            $subForm = new Zend_Form_SubForm($subForm);
+                        }
                     case (2 <= $argc):
                         $name  = array_shift($spec);
                     case (3 <= $argc):
