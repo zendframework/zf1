@@ -39,4 +39,18 @@ class Zend_Form_Element_Button extends Zend_Form_Element_Submit
      * @var string
      */
     public $helper = 'formButton';
+
+    /**
+     * Validate element value (pseudo)
+     *
+     * There is no need to reset the value
+     *
+     * @param  mixed $value Is always ignored
+     * @param  mixed $context Is always ignored
+     * @return boolean Returns always TRUE
+     */
+    public function isValid($value, $context = null)
+    {
+        return true;
+    }
 }
