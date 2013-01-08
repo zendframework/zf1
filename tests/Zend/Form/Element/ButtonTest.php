@@ -41,6 +41,11 @@ require_once 'Zend/Translate.php';
 class Zend_Form_Element_ButtonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Zend_Form_Element_Button
+     */
+    protected $element;
+
+    /**
      * Runs the test methods of this class.
      *
      * @return void
@@ -148,6 +153,41 @@ class Zend_Form_Element_ButtonTest extends PHPUnit_Framework_TestCase
     public function testSetDefaultIgnoredToTrueWhenNotDefined()
     {
         $this->assertTrue($this->element->getIgnore());
+    }
+
+    /**
+     * @group ZF-5056
+     */
+    public function testValidateAlwaysReturnsTrue()
+    {
+        $this->element->setValue('foo');
+
+        $this->assertTrue($this->element->isValid('bar'));
+    }
+
+    /**
+     * @group ZF-5056
+     */
+    public function testRenderingWithValueAfterValidation()
+    {
+        // Set element options
+        $this->element->setOptions(
+            array(
+                 'label'      => 'Foo',
+                 'value'      => 'bar',
+                 'decorators' => array(
+                     'ViewHelper',
+                 ),
+            )
+        );
+
+        // Validate
+        $this->element->isValid(null);
+
+        $this->assertEquals(
+            PHP_EOL . '<button name="foo" id="foo" type="button" value="bar">Foo</button>',
+            $this->element->render($this->getView())
+        );
     }
 
     /**

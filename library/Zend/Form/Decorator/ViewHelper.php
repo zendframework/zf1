@@ -196,7 +196,8 @@ class Zend_Form_Decorator_ViewHelper extends Zend_Form_Decorator_Abstract
             if ($element instanceof $type) {
                 if (stristr($type, 'button')) {
                     $element->content = $element->getLabel();
-                    return null;
+
+                    return $element->getValue();
                 }
                 return $element->getLabel();
             }

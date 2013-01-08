@@ -236,6 +236,54 @@ class Zend_Form_Decorator_ViewHelperTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-5056
+     */
+    public function testRenderingButtonWithValue()
+    {
+        // Create element
+        require_once 'Zend/Form/Element/Button.php';
+
+        $element = new Zend_Form_Element_Button('foo');
+        $element->setValue('bar');
+        $element->setLabel('baz');
+        $element->setDecorators(
+            array(
+                 'ViewHelper',
+            )
+        );
+
+        // Test
+        $this->assertEquals(
+            PHP_EOL
+                . '<button name="foo" id="foo" type="button" value="bar">baz</button>',
+            $element->render($this->getView())
+        );
+    }
+
+    /**
+     * @group ZF-5056
+     */
+    public function testRenderingButtonAsTypeSubmit()
+    {
+        // Create element
+        require_once 'Zend/Form/Element/Button.php';
+
+        $element = new Zend_Form_Element_Button('foo');
+        $element->setAttrib('type', 'submit');
+        $element->setDecorators(
+            array(
+                 'ViewHelper',
+            )
+        );
+
+        // Test
+        $this->assertEquals(
+            PHP_EOL . '<button name="foo" id="foo" type="submit">foo</button>',
+            $element->render($this->getView())
+        );
+    }
 }
 
 class Zend_Form_Decorator_ViewHelperTest_Textarea extends Zend_Form_Element
