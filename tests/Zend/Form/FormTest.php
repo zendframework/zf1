@@ -137,7 +137,6 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     {
         $options = $this->getOptions();
         $options['pluginLoader'] = true;
-        $options['subForms']     = true;
         $options['view']         = true;
         $options['translator']   = true;
         $options['default']      = true;
@@ -4375,6 +4374,121 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
             PHP_EOL . '<label for="foo" class="optional">Bar</label>' . PHP_EOL,
             $this->form->render(new Zend_View())
         );
+    }
+
+    public function testNameAttributeOutputForXhtml()
+    {
+        // Create form
+        $form = new Zend_Form();
+        $form->setName('foo');
+        $form->setMethod(Zend_Form::METHOD_GET);
+        $form->removeDecorator('HtmlTag');
+
+        // Set doctype
+        $this->getView()->getHelper('doctype')->doctype(
+            Zend_View_Helper_Doctype::XHTML1_STRICT
+        );
+
+        $expected = '<form id="foo" method="get" action="">'
+                  . PHP_EOL
+                  . '</form>';
+
+        $this->assertSame(
+            $expected,
+            $form->render($this->getView())
+        );
+    }
+
+    /**
+     * @group ZF-5613
+     */
+    public function testAddSubFormsPerConfig()
+    {
+        // Create form
+        $form = new Zend_Form(
+            array(
+                'subForms' => array(
+                    array(
+                        'form' => array(
+                            'elements' => array(
+                                'foo' => array(
+                                    'text',
+                                    array(
+                                        'label'      => 'Foo',
+                                        'decorators' => array(
+                                            'ViewHelper',
+                                            'Label',
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'id'       => 'subform1',
+                            'decorators' => array(
+                                'FormElements',
+                            ),
+                        ),
+                        'name'  => 'subform1',
+                        'order' => 2,
+                    ),
+                    array(
+                        'form' => array(
+                            'elements' => array(
+                                'bar' => array(
+                                    'text',
+                                    array(
+                                        'label'      => 'Bar',
+                                        'decorators' => array(
+                                            'ViewHelper',
+                                            'Label',
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'id'       => 'subform2',
+                            'decorators' => array(
+                                'FormElements',
+                            ),
+                        ),
+                        'name'  => 'subform2',
+                        'order' => 1,
+                    ),
+                ),
+            )
+        );
+        $form->removeDecorator('HtmlTag');
+
+        // Tests
+        $subForms = $form->getSubForms();
+        $subForm1 = current($subForms);
+        $subForm2 = next($subForms);
+
+        $this->assertSame(
+            array(
+                 'subform1',
+                 'subform2',
+            ),
+            array(
+                 $subForm1->getName(),
+                 $subForm2->getName(),
+            )
+        );
+
+        $expected = '<form enctype="application/x-www-form-urlencoded" action="" method="post">'
+                  . PHP_EOL
+                  . PHP_EOL
+                  . '<label for="subform2-bar" class="optional">Bar</label>'
+                  . PHP_EOL
+                  . PHP_EOL
+                  . '<input type="text" name="subform2[bar]" id="subform2-bar" value="" />'
+                  . PHP_EOL
+                  . PHP_EOL
+                  . '<label for="subform1-foo" class="optional">Foo</label>'
+                  . PHP_EOL
+                  . PHP_EOL
+                  . '<input type="text" name="subform1[foo]" id="subform1-foo" value="" />'
+                  . '</form>';
+
+        $this->assertSame($expected, $form->render($this->getView()));
     }
 
     /**
