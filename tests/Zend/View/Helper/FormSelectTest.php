@@ -76,6 +76,32 @@ class Zend_View_Helper_FormSelectTest extends PHPUnit_Framework_TestCase
         unset($this->helper, $this->view);
     }
 
+    /**
+     * @group ZF-10661
+     */
+    public function testRenderingWithOptions()
+    {
+        $html = $this->helper->formSelect(
+            'foo',
+            null,
+            null,
+            array(
+                 'bar' => 'Bar',
+                 'baz' => 'Baz',
+            )
+        );
+
+        $expected = '<select name="foo" id="foo">'
+                  . PHP_EOL
+                  . '    <option value="bar">Bar</option>'
+                  . PHP_EOL
+                  . '    <option value="baz">Baz</option>'
+                  . PHP_EOL
+                  . '</select>';
+
+        $this->assertSame($expected, $html);
+    }
+
     public function testFormSelectWithNameOnlyCreatesEmptySelect()
     {
         $html = $this->helper->formSelect('foo');
