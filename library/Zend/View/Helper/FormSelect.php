@@ -177,8 +177,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
 
 
         $opt = '<option'
-             . ' value="' . $this->view->escape($value) . '"'
-             . ' label="' . $this->view->escape($label) . '"';
+             . ' value="' . $this->view->escape($value) . '"';
 
              if ($class) {
              $opt .= ' class="' . $class . '"';
