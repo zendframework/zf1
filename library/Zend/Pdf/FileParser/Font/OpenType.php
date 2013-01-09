@@ -584,7 +584,7 @@ abstract class Zend_Pdf_FileParser_Font_OpenType extends Zend_Pdf_FileParser_Fon
             $this->isEmbeddable = false;
         } elseif ($this->isBitSet(2, $embeddingFlags)
                 || $this->isBitSet(3, $embeddingFlags)
-                || $this->isBitSet(4)
+                || $this->isBitSet(4, $embeddingFlags)
             ) {
                 /* One of:
                  *     Restricted License embedding (0x0002)
