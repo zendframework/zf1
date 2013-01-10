@@ -2492,9 +2492,18 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
     public function testCanCheckIfErrorsAreRegistered()
     {
-        $this->assertFalse($this->form->isErrors());
+        $this->assertFalse($this->form->hasErrors());
         $this->testCanValidateFullFormContainingOnlyElements();
-        $this->assertTrue($this->form->isErrors());
+        $this->assertTrue($this->form->hasErrors());
+    }
+
+    /**
+     * @group ZF-9914
+     */
+    public function testDeprecatedIsErrorsProxiesToHasErrors()
+    {
+        $this->testCanValidateFullFormContainingOnlyElements();
+        $this->assertEquals($this->form->isErrors(), $this->form->hasErrors());
     }
 
     public function testCanRetrieveErrorCodesFromAllElementsAfterFailedValidation()
@@ -2887,9 +2896,9 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     public function testShouldAllowMarkingFormAsInvalid()
     {
         $this->form->addErrorMessage('Invalid values entered');
-        $this->assertFalse($this->form->isErrors());
+        $this->assertFalse($this->form->hasErrors());
         $this->form->markAsError();
-        $this->assertTrue($this->form->isErrors());
+        $this->assertTrue($this->form->hasErrors());
         $messages = $this->form->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertEquals('Invalid values entered', array_shift($messages));
@@ -2897,11 +2906,11 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
     public function testShouldAllowPushingErrorsOntoErrorStackWithErrorMessages()
     {
-        $this->assertFalse($this->form->isErrors());
+        $this->assertFalse($this->form->hasErrors());
         $this->form->setErrors(array('Error 1', 'Error 2'))
                    ->addError('Error 3')
                    ->addErrors(array('Error 4', 'Error 5'));
-        $this->assertTrue($this->form->isErrors());
+        $this->assertTrue($this->form->hasErrors());
         $messages = $this->form->getMessages();
         $this->assertEquals(5, count($messages));
         foreach (range(1, 5) as $id) {
@@ -4615,7 +4624,7 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
     public function testExceptionThrownWhenAddElementsIsGivenNullValue()
     {
         $form = new Zend_Form();
-        $form->addElement(NULL);
+        $form->addElement(null);
     }
 
     /**
