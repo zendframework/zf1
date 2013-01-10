@@ -166,9 +166,29 @@ class Zend_View_Helper_FormErrorsTest extends PHPUnit_Framework_TestCase
      */
     public function testCanSetClassAttribute()
     {
-        $options = array('class' => 'custom-class');
-        $acutallHtml = $this->helper->formErrors(array(), $options);
-        $this->assertEquals('<ul class="custom-class"><li></li></ul>', $acutallHtml);
+        $options    = array('class' => 'custom-class');
+        $actualHtml = $this->helper->formErrors(array(), $options);
+        $this->assertEquals(
+            '<ul class="custom-class"><li></li></ul>',
+            $actualHtml
+        );
+    }
+
+    /**
+     * @group ZF-5962
+     */
+    public function testCanSetElementStringsPerOptions()
+    {
+        $actual = $this->helper->formErrors(
+            array('foo', 'bar', 'baz'),
+            array(
+                 'elementStart'     => '<p>',
+                 'elementEnd'       => '</p>',
+                 'elementSeparator' => '<br>',
+            )
+        );
+
+        $this->assertEquals('<p>foo<br>bar<br>baz</p>', $actual);
     }
 }
 

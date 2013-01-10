@@ -69,6 +69,16 @@ class Zend_View_Helper_FormErrors extends Zend_View_Helper_FormElement
             $options['class'] = 'errors';
         }
 
+        if (isset($options['elementStart'])) {
+            $this->setElementStart($options['elementStart']);
+        }
+        if (isset($options['elementEnd'])) {
+            $this->setElementEnd($options['elementEnd']);
+        }
+        if (isset($options['elementSeparator'])) {
+            $this->setElementSeparator($options['elementSeparator']);
+        }
+
         $start = $this->getElementStart();
         if (strstr($start, '%s')) {
             $attribs = $this->_htmlAttribs($options);
