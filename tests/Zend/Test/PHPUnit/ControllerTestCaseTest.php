@@ -822,6 +822,38 @@ class Zend_Test_PHPUnit_ControllerTestCaseTest extends PHPUnit_Framework_TestCas
         $this->testCase->assertRedirectTo('/login');
         $this->assertNotEquals('action body', $this->testCase->getResponse()->getBody());
     }
+
+    /**
+     * @group ZF-12492
+     * @internal Since header value is being cast into a string, we should only
+     * need to check 0 and 0.0
+     */
+    public function testHeaderAssertionShouldDoNothingForValidComparisonWithZeroForValue()
+    {
+        $this->testCase->getResponse()->setHeader('Expires', '0', true);
+        $this->testCase->assertResponseCode(200);
+        $this->testCase->assertNotResponseCode(500);
+        $this->testCase->assertHeader('Expires');
+        $this->testCase->assertNotHeader('X-Bogus');
+        $this->testCase->assertHeaderContains('Expires', '0');
+        $this->testCase->assertNotHeaderContains('Expires', 'my-bar');
+        $this->testCase->assertHeaderRegex('Expires', '#^\d#i');
+        $this->testCase->assertNotHeaderRegex(
+            'Expires', '#^[a-z-]+/[a-z-]+$#i'
+        );
+
+        $this->testCase->getResponse()->setHeader('Expires', '0.0', true);
+        $this->testCase->assertResponseCode(200);
+        $this->testCase->assertNotResponseCode(500);
+        $this->testCase->assertHeader('Expires');
+        $this->testCase->assertNotHeader('X-Bogus');
+        $this->testCase->assertHeaderContains('Expires', '0.0');
+        $this->testCase->assertNotHeaderContains('Expires', 'my-bar');
+        $this->testCase->assertHeaderRegex('Expires', '#^\d+#i');
+        $this->testCase->assertNotHeaderRegex(
+            'Expires', '#^[a-z-]+/[a-z-]+$#i'
+        );
+    }
     
     /**
      * Data provider for testRedirectWorksAsExpectedFromHookMethodsInFrontControllerPlugin
