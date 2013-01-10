@@ -373,6 +373,33 @@ class Zend_View_Helper_PartialLoopTest extends PHPUnit_Framework_TestCase
             $this->assertContains($string, $result);
         }
     }
+
+    /**
+     * @see ZF-7157
+     */
+    public function testPartialLoopSetsTotalCount()
+    {
+        $data = array(
+            array('message' => 'foo'),
+            array('message' => 'bar'),
+            array('message' => 'baz'),
+            array('message' => 'bat')
+        );
+
+        $view = new Zend_View(
+            array(
+                 'scriptPath' =>
+                 $this->basePath . '/default/views/scripts'
+            )
+        );
+        $this->helper->setView($view);
+
+        $result = $this->helper->partialLoop('partialLoopCouter.phtml', $data);
+        foreach ($data as $key => $item) {
+            $string = 'Total count: ' . count($data);
+            $this->assertContains($string, $result);
+        }
+    }
 }
 
 class Zend_View_Helper_PartialLoop_IteratorTest implements Iterator
