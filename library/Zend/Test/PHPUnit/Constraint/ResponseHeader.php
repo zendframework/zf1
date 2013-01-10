@@ -347,7 +347,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
 
         $contents = str_replace($header . ': ', '', $fullHeader);
 
-        return (strstr($contents, $match));
+        return (strstr($contents, $match) !== false);
     }
 
     /**
@@ -366,7 +366,7 @@ class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Cons
 
         $contents = str_replace($header . ': ', '', $fullHeader);
 
-        return (!strstr($contents, $match));
+        return (strstr($contents, $match) === false);
     }
 
     /**
