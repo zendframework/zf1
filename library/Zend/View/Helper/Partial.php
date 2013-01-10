@@ -71,6 +71,10 @@ class Zend_View_Helper_Partial extends Zend_View_Helper_Abstract
         if (isset($this->partialCounter)) {
             $view->partialCounter = $this->partialCounter;
         }
+        if (isset($this->partialTotalCount)) {
+            $view->partialTotalCount = $this->partialTotalCount;
+        }
+
         if ((null !== $module) && is_string($module)) {
             require_once 'Zend/Controller/Front.php';
             $moduleDir = Zend_Controller_Front::getInstance()->getControllerDirectory($module);
