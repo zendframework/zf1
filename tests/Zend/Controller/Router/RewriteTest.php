@@ -94,13 +94,13 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         $routes = $this->_router->getRoutes();
 
         $this->assertEquals(1, count($routes));
-        $this->assertType('Zend_Controller_Router_Route', $routes['archive']);
+        $this->assertTrue($routes['archive'] instanceof Zend_Controller_Router_Route);
 
         $this->_router->addRoute('register', new Zend_Controller_Router_Route('register/:action', array('controller' => 'profile', 'action' => 'register')));
         $routes = $this->_router->getRoutes();
 
         $this->assertEquals(2, count($routes));
-        $this->assertType('Zend_Controller_Router_Route', $routes['register']);
+        $this->assertTrue($routes['register'] instanceof Zend_Controller_Router_Route);
     }
 
     public function testAddRoutes()
@@ -114,8 +114,8 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         $values = $this->_router->getRoutes();
 
         $this->assertEquals(2, count($values));
-        $this->assertType('Zend_Controller_Router_Route', $values['archive']);
-        $this->assertType('Zend_Controller_Router_Route', $values['register']);
+        $this->assertTrue($values['archive'] instanceof Zend_Controller_Router_Route);
+        $this->assertTrue($values['register'] instanceof Zend_Controller_Router_Route);
     }
 
     public function testHasRoute()
@@ -133,7 +133,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
 
         $route = $this->_router->getRoute('archive');
 
-        $this->assertType('Zend_Controller_Router_Route', $route);
+        $this->assertTrue($route instanceof Zend_Controller_Router_Route);
         $this->assertSame($route, $archive);
     }
 
@@ -151,7 +151,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         try {
             $route = $this->_router->removeRoute('archive');
         } catch (Zend_Controller_Router_Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
             return true;
         }
 
@@ -163,7 +163,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         try {
             $route = $this->_router->getRoute('bogus');
         } catch (Zend_Controller_Router_Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
             return true;
         }
 
@@ -176,7 +176,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
 
         $token = $this->_router->route($request);
 
-        $this->assertType('Zend_Controller_Request_Http', $token);
+        $this->assertTrue($token instanceof Zend_Controller_Request_Http);
     }
 
     public function testRouteWithIncorrectRequest()
@@ -187,7 +187,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
             $token = $this->_router->route($request);
             $this->fail('Should throw an Exception');
         } catch (Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
         }
     }
 
@@ -198,7 +198,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         $token = $this->_router->route($request);
 
         $routes = $this->_router->getRoutes();
-        $this->assertType('Zend_Controller_Router_Route_Module', $routes['default']);
+        $this->assertTrue($routes['default'] instanceof Zend_Controller_Router_Route_Module);
     }
 
     public function testDefaultRouteWithEmptyAction()
@@ -308,14 +308,14 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
             $route = $this->_router->getCurrentRoute();
             $this->fail();
         } catch (Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
         }
 
         try {
             $route = $this->_router->getCurrentRouteName();
             $this->fail();
         } catch (Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
         }
 
         $token = $this->_router->route($request);
@@ -328,7 +328,7 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals('default', $name);
-        $this->assertType('Zend_Controller_Router_Route_Module', $route);
+        $this->assertTrue($route instanceof Zend_Controller_Router_Route_Module);
     }
 
     public function testAddConfig()
@@ -339,13 +339,13 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
 
         $this->_router->addConfig($config, 'routes');
 
-        $this->assertType('Zend_Controller_Router_Route_Static', $this->_router->getRoute('news'));
-        $this->assertType('Zend_Controller_Router_Route', $this->_router->getRoute('archive'));
+        $this->assertTrue($this->_router->getRoute('news') instanceof Zend_Controller_Router_Route_Static);
+        $this->assertTrue($this->_router->getRoute('archive') instanceof Zend_Controller_Router_Route);
 
         try {
             $this->_router->addConfig($config, 'database');
         } catch (Exception $e) {
-            $this->assertType('Zend_Controller_Router_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Controller_Router_Exception);
             return true;
         }
     }
@@ -358,8 +358,8 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
 
         $this->_router->addConfig($config->routes);
 
-        $this->assertType('Zend_Controller_Router_Route_Static', $this->_router->getRoute('news'));
-        $this->assertType('Zend_Controller_Router_Route', $this->_router->getRoute('archive'));
+        $this->assertTrue($this->_router->getRoute('news') instanceof Zend_Controller_Router_Route_Static);
+        $this->assertTrue($this->_router->getRoute('archive') instanceof Zend_Controller_Router_Route);
     }
 
     public function testAddConfigWithRootNode()
@@ -370,8 +370,8 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
 
         $this->_router->addConfig($config);
 
-        $this->assertType('Zend_Controller_Router_Route_Static', $this->_router->getRoute('news'));
-        $this->assertType('Zend_Controller_Router_Route', $this->_router->getRoute('archive'));
+        $this->assertTrue($this->_router->getRoute('news') instanceof Zend_Controller_Router_Route_Static);
+        $this->assertTrue($this->_router->getRoute('archive') instanceof Zend_Controller_Router_Route);
     }
 
     public function testRemoveDefaultRoutes()
@@ -487,8 +487,8 @@ class Zend_Controller_Router_RewriteTest extends PHPUnit_Framework_TestCase
         $this->_router->addRoute('req', new Zend_Controller_Router_Route_Interface_Mockup());
         $routeRequest = $this->_router->getRoute('req')->getRequest();
 
-        $this->assertType('Zend_Controller_Request_Abstract', $request);
-        $this->assertType('Zend_Controller_Request_Abstract', $routeRequest);
+        $this->assertTrue($request instanceof Zend_Controller_Request_Abstract);
+        $this->assertTrue($routeRequest instanceof Zend_Controller_Request_Abstract);
         $this->assertSame($request, $routeRequest);
     }
 

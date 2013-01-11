@@ -40,7 +40,7 @@ class Zend_Controller_Router_Route_StaticTest extends PHPUnit_Framework_TestCase
         $route = new Zend_Controller_Router_Route_Static('users/all');
         $values = $route->match('users/all');
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
     }
 
     public function testStaticMatchFailure()
@@ -57,7 +57,7 @@ class Zend_Controller_Router_Route_StaticTest extends PHPUnit_Framework_TestCase
                     array('controller' => 'ctrl', 'action' => 'act'));
         $values = $route->match('users/all');
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
         $this->assertSame('ctrl', $values['controller']);
         $this->assertSame('act', $values['action']);
     }
@@ -67,7 +67,7 @@ class Zend_Controller_Router_Route_StaticTest extends PHPUnit_Framework_TestCase
         $route = new Zend_Controller_Router_Route_Static('żółć');
         $values = $route->match('żółć');
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
     }
 
     public function testRootRoute()
@@ -93,7 +93,7 @@ class Zend_Controller_Router_Route_StaticTest extends PHPUnit_Framework_TestCase
 
         $values = $route->getDefaults();
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
         $this->assertSame('ctrl', $values['controller']);
         $this->assertSame('act', $values['action']);
     }
@@ -121,7 +121,7 @@ class Zend_Controller_Router_Route_StaticTest extends PHPUnit_Framework_TestCase
         $config = new Zend_Config($routeConf);
         $route = Zend_Controller_Router_Route_Static::getInstance($config);
 
-        $this->assertType('Zend_Controller_Router_Route_Static', $route);
+        $this->assertTrue($route instanceof Zend_Controller_Router_Route_Static);
 
         $values = $route->match('users/all');
 
