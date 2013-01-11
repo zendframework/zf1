@@ -805,4 +805,107 @@ class Zend_View_Helper_Navigation_MenuTest
         $this->assertContains('<li class="current">', $html);
         $this->assertNotContains('<li class="active">', $html);
     }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testSetRenderParentClass()
+    {
+        $this->_helper->setRenderParentClass(true);
+
+        $this->assertTrue($this->_helper->getRenderParentClass());
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testSetParentClass()
+    {
+        $this->_helper->setParentClass('foo');
+
+        $this->assertEquals('foo', $this->_helper->getParentClass());
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testOptionRenderParentClass()
+    {
+        $expected = $this->_getExpected('menu/parentclass_standard.html');
+        $actual   = $this->_helper->renderMenu(
+            null ,
+            array(
+                 'renderParentClass' => true,
+            )
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testOptionRenderParentClassAndParentClass()
+    {
+        $expected = $this->_getExpected('menu/parentclass_custom.html');
+        $actual   = $this->_helper->renderMenu(
+            null ,
+            array(
+                 'renderParentClass' => true,
+                 'parentClass'       => 'foo',
+            )
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testRenderingWithStandardParentClass()
+    {
+        $this->_helper->setRenderParentClass(true);
+        $expected = $this->_getExpected('menu/parentclass_standard.html');
+
+        $this->assertEquals($expected, $this->_helper->render());
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testRenderingWithCustomParentClass()
+    {
+        $this->_helper->setRenderParentClass(true);
+        $this->_helper->setParentClass('foo');
+        $expected = $this->_getExpected('menu/parentclass_custom.html');
+
+        $this->assertEquals($expected, $this->_helper->render());
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testRenderingWithParentClassAndBothDepts()
+    {
+        $this->_helper->setRenderParentClass(true);
+
+        $expected = $this->_getExpected('menu/parentclass_bothdepts.html');
+        $actual   = $this->_helper->setMinDepth(1)->setMaxDepth(2)->render();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-8951
+     */
+    public function testRenderingWithParentClassAndOnlyActiveBranchAndBothDepts()
+    {
+        $this->_helper->setRenderParentClass(true);
+        $this->_helper->setOnlyActiveBranch(true);
+
+        $expected = $this->_getExpected('menu/parentclass_onlyactivebranch_bothdepts.html');
+        $actual   = $this->_helper->setMinDepth(1)->setMaxDepth(2)->render();
+
+        $this->assertEquals($expected, $actual);
+    }
 }
