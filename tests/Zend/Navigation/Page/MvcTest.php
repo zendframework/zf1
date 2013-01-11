@@ -763,4 +763,61 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(true, $page->isActive());
     }
+
+    /**
+     * @group ZF-12414
+     */
+    public function testNullValueInParameters()
+    {
+        // Create pages
+        $pages         = array();
+        $pages['home'] = new Zend_Navigation_Page_Mvc(
+            array(
+                 'label'      => 'Home',
+                 'route'      => 'page',
+                 'params'     => array(
+                     'slug' => '',
+                 ),
+            )
+        );
+        $pages['news'] = new Zend_Navigation_Page_Mvc(
+            array(
+                 'label'      => 'News',
+                 'route'      => 'page',
+                 'params'     => array(
+                     'slug' => 'news',
+                 ),
+            )
+        );
+
+        // Add route
+        $this->_front->getRouter()->addRoute(
+            'page',
+            new Zend_Controller_Router_Route_Regex(
+                '((?!(admin|page)).*)',
+                array(
+                    'module'     => 'page',
+                    'controller' => 'index',
+                    'action'     => 'index',
+                ),
+                array(
+                    1 => 'slug',
+                ),
+                '%s'
+            )
+        );
+
+        // Set request
+        $this->_front->getRequest()->setParams(
+            array(
+                 'module'     => 'page',
+                 'controller' => 'index',
+                 'action'     => 'index',
+                 'slug'       => 'news',
+            )
+        );
+
+        $this->assertTrue($pages['news']->isActive());
+        $this->assertFalse($pages['home']->isActive());
+    }
 }
