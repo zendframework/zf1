@@ -427,7 +427,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
     {
         $route = new Zend_Controller_Router_Route('archives/:year/:month');
         $values = $route->match('archives/2006/07');
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
 
         $url = $route->assemble(array('month' => '03'));
         $this->assertEquals('archives/2006/03', $url);
@@ -455,7 +455,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
     {
         $route = new Zend_Controller_Router_Route('archives/:year/:month/*', array('controller' => 'archive'));
         $values = $route->match('archives/2006/07/controller/test/year/10000/sort/author');
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
 
         $this->assertEquals('archive', $values['controller']);
         $this->assertEquals('2006', $values['year']);
@@ -470,7 +470,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
 
         $values = $route->getDefaults();
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
         $this->assertEquals('ctrl', $values['controller']);
         $this->assertEquals('act', $values['action']);
     }
@@ -498,7 +498,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
         $config = new Zend_Config($routeConf);
         $route = Zend_Controller_Router_Route::getInstance($config);
 
-        $this->assertType('Zend_Controller_Router_Route', $route);
+        $this->assertTrue($route instanceof Zend_Controller_Router_Route);
 
         $values = $route->match('users/all');
 
@@ -600,7 +600,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('families', $route->assemble());
 
         $values = $route->match('families/edit/id/4');
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
 
         $this->assertEquals('families/edit/id/4', $route->assemble());
     }
@@ -640,7 +640,7 @@ class Zend_Controller_Router_RouteTest extends PHPUnit_Framework_TestCase
 
         $values = $route->match('en/tmp/ctrl/action/id/1', true);
 
-        $this->assertType('array', $values);
+        $this->assertTrue(is_array($values));
         $this->assertEquals('en', $values['lang']);
         $this->assertEquals('tmp', $values['temp']);
         $this->assertEquals('en/tmp', $route->getMatchedPath());

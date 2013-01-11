@@ -169,13 +169,15 @@ class Zend_Controller_Action_Helper_ActionStackTest extends PHPUnit_Framework_Te
         $helper = new Zend_Controller_Action_Helper_ActionStack();
         /** FC should be reseted to test ActionStack with a really blank FC */
         $this->front->resetInstance();
-        try{
+        try {
             $helper->direct('baz', 'bar', 'foo');
             $this->fail('Zend_Controller_Action_Exception should be thrown');
-        }catch(Zend_Exception $e){
-            $this->assertType('Zend_Controller_Action_Exception',
-                   $e,
-                   'Zend_Controller_Action_Exception expected, '.get_class($e).' caught');
+        } catch (Zend_Exception $e) {
+            $this->assertTrue(
+                $e instanceof Zend_Controller_Action_Exception,
+                'Zend_Controller_Action_Exception expected, ' . get_class($e)
+                    . ' caught'
+            );
         }
     }
 
