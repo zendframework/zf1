@@ -4729,8 +4729,8 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $form = new Zend_Form();
         $form->setElementDecorators(
             array(
-                 new Zend_Form_Decorator_ViewHelper,
-                 new Zend_Form_Decorator_Label,
+                 new Zend_Form_Decorator_ViewHelper(),
+                 new Zend_Form_Decorator_Label(),
             )
         );
         $element = $form->createElement('text', 'foo');
@@ -4743,6 +4743,73 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
         $actual = array();
         foreach ($element->getDecorators() as $decorator) {
+            $actual[] = get_class($decorator);
+        }
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-12387
+     */
+    public function testAddElementAsObjectWithDecoratorsShouldNotLoseDecorators()
+    {
+        // Init form
+        $form = new Zend_Form();
+        $form->setElementDecorators(
+            array(
+                 new Zend_Form_Decorator_ViewHelper(),
+                 new Zend_Form_Decorator_Label(),
+            )
+        );
+
+        $element = new Zend_Form_Element_Text('foo');
+        $element->setDecorators(array('Errors', 'Description'));
+        $form->addElement($element);
+
+        // Test
+        $expected = array(
+            'Zend_Form_Decorator_Errors',
+            'Zend_Form_Decorator_Description',
+        );
+
+        $actual = array();
+        foreach ($form->getElement('foo')->getDecorators() as $decorator) {
+            $actual[] = get_class($decorator);
+        }
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group ZF-12387
+     */
+    public function testAddElementAsObjectGetsElementDecoratorsIfNoneIsExplicitlySet()
+    {
+        // Init form
+        $form = new Zend_Form();
+        $form->setElementDecorators(
+            array(
+                 new Zend_Form_Decorator_ViewHelper(),
+                 new Zend_Form_Decorator_Label(),
+            )
+        );
+
+        // Add element
+        $element = new Zend_Form_Element_Text(
+            'foo',
+            array('disableLoadDefaultDecorators' => true)
+        );
+        $form->addElement($element);
+
+        // Test
+        $expected = array(
+            'Zend_Form_Decorator_ViewHelper',
+            'Zend_Form_Decorator_Label',
+        );
+
+        $actual = array();
+        foreach ($form->getElement('foo')->getDecorators() as $decorator) {
             $actual[] = get_class($decorator);
         }
 
