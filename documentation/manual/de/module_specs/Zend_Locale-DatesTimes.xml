@@ -173,39 +173,59 @@
             <title>Normalisieren von Daten</title>
 
             <programlisting language="php"><![CDATA[
-$dateString = Zend_Locale_Format::getDate('13.04.2006',
-                                          array('date_format' =>
-                                                    'dd.MM.yyyy')
-                                         );
+$dateString = Zend_Locale_Format::getDate(
+    '13.04.2006',
+    array(
+        'date_format' => 'dd.MM.yyyy',
+    )
+);
 
-// Erstellt ein Zend_Date Objekt für dieses Datum
-$dateObject = Zend_Date('13.04.2006',
-                        array('date_format' => 'dd.MM.yyyy'));
-
-print_r($dateString); // Ausgabe
+print_r($dateString); // Ausgabe:
 
 Array
 (
-    [format] => dd.MM.yyyy
+    [date_format] => dd.MM.yyyy
+    [locale] => de_DE
     [day] => 13
-    [month] => 4
+    [month] => 04
     [year] => 2006
+)
+
+// Erstellt ein Zend_Date Objekt für dieses Datum
+$dateObject = new Zend_Date('13.04.2006', 'dd.MM.yyyy');
+
+print_r($dateObject); // Ausgabe
+
+Zend_Date Object
+(
+    [_locale:Zend_Date:private] => de_DE
+    [_fractional:Zend_Date:private] => 0
+    [_precision:Zend_Date:private] => 3
+    [_unixTimestamp:Zend_Date_DateObject:private] => 1144879200
+    [_timezone:Zend_Date_DateObject:private] => Europe/Berlin
+    [_offset:Zend_Date_DateObject:private] => -3600
+    [_syncronised:Zend_Date_DateObject:private] => 0
+    [_dst:protected] => 1
 )
 
 // Alternativ können einige Arten von Problemen mit
 // den Eingabedaten automatisch korrigiert werden
-$date = Zend_Locale_Format::getDate('04.13.2006',
-                                    array('date_format' => 'dd.MM.yyyy',
-                                          'fix_date' => true)
-                                   );
+$date = Zend_Locale_Format::getDate(
+    '04.13.2006',
+    array(
+        'date_format' => 'dd.MM.yyyy',
+        'fix_date'    => true,
+    )
+);
 
 print_r($date); // Ausgabe
 
 Array
 (
-    [format] => dd.MM.yyyy
+    [date_format] => dd.MM.yyyy
+    [locale] => de_DE
     [day] => 13
-    [month] => 4
+    [month] => 04
     [year] => 2006
     [fixed] => 4
 )
