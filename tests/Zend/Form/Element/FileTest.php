@@ -514,6 +514,25 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
             $test instanceof \Zend\Form\Element\FileTest\Adapter\Bar
         );
     }
+
+    /**
+     * @group ZF-12210
+     */
+    public function testAutoInsertNotEmptyValidator()
+    {
+        $this->testElementShouldAllowSpecifyingAdapterUsingConcreteInstance();
+        $this->element->setRequired(true);
+
+        // Test before validation
+        $this->assertNull($this->element->getValidator('NotEmpty'));
+
+        // Test after validation
+        $this->element->isValid('foo.jpg');
+
+        $this->assertTrue(
+            $this->element->getValidator('NotEmpty') instanceof Zend_Validate_NotEmpty
+        );
+    }
 }
 
 class Zend_Form_Element_FileTest_MockAdapter extends Zend_File_Transfer_Adapter_Abstract

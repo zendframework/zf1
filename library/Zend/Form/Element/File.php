@@ -431,7 +431,7 @@ class Zend_Form_Element_File extends Zend_Form_Element_Xhtml
         } else {
             $adapter->setOptions(array('ignoreNoFile' => false), $this->getName());
             if ($this->autoInsertNotEmptyValidator() && !$this->getValidator('NotEmpty')) {
-                $this->addValidator = array('validator' => 'NotEmpty', 'breakChainOnFailure' => true);
+                $this->addValidator('NotEmpty', true);
             }
         }
 
