@@ -168,39 +168,59 @@
             <title>Normalizing a date</title>
 
             <programlisting language="php"><![CDATA[
-$dateString = Zend_Locale_Format::getDate('13.04.2006',
-                                          array('date_format' =>
-                                                    'dd.MM.yyyy')
-                                         );
-
-// creates a Zend_Date object for this date
-$dateObject = Zend_Date('13.04.2006',
-                         array('date_format' => 'dd.MM.yyyy'));
+$dateString = Zend_Locale_Format::getDate(
+    '13.04.2006',
+    array(
+        'date_format' => 'dd.MM.yyyy',
+    )
+);
 
 print_r($dateString); // outputs:
 
 Array
 (
-    [format] => dd.MM.yyyy
+    [date_format] => dd.MM.yyyy
+    [locale] => de_DE
     [day] => 13
-    [month] => 4
+    [month] => 04
     [year] => 2006
+)
+
+// creates a Zend_Date object for this date
+$dateObject = new Zend_Date('13.04.2006', 'dd.MM.yyyy');
+
+print_r($dateObject); // outputs:
+
+Zend_Date Object
+(
+    [_locale:Zend_Date:private] => de_DE
+    [_fractional:Zend_Date:private] => 0
+    [_precision:Zend_Date:private] => 3
+    [_unixTimestamp:Zend_Date_DateObject:private] => 1144879200
+    [_timezone:Zend_Date_DateObject:private] => Europe/Berlin
+    [_offset:Zend_Date_DateObject:private] => -3600
+    [_syncronised:Zend_Date_DateObject:private] => 0
+    [_dst:protected] => 1
 )
 
 // alternatively, some types of problems with input data can be
 // automatically corrected
-$date = Zend_Locale_Format::getDate('04.13.2006',
-                                    array('date_format' => 'dd.MM.yyyy',
-                                          'fix_date' => true)
-                                   );
+$date = Zend_Locale_Format::getDate(
+    '04.13.2006',
+    array(
+        'date_format' => 'dd.MM.yyyy',
+        'fix_date'    => true,
+    )
+);
 
 print_r($date); // outputs:
 
 Array
 (
-    [format] => dd.MM.yyyy
+    [date_format] => dd.MM.yyyy
+    [locale] => de_DE
     [day] => 13
-    [month] => 4
+    [month] => 04
     [year] => 2006
     [fixed] => 4
 )
