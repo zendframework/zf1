@@ -297,6 +297,12 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
             $port = null;
         }
 
+        if (isset($this->_config['socket'])) {
+            $socket = $this->_config['socket'];
+        } else {
+            $socket = null;
+        }
+
         $this->_connection = mysqli_init();
 
         if(!empty($this->_config['driver_options'])) {
@@ -320,7 +326,8 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
             $this->_config['username'],
             $this->_config['password'],
             $this->_config['dbname'],
-            $port
+            $port,
+            $socket
         );
 
         if ($_isConnected === false || mysqli_connect_errno()) {
