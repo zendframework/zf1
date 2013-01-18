@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="migration.112">
+    <title>Zend Framework 1.12</title>
+
+    <para>
+        When upgrading from a previous release to Zend Framework 1.12 or higher you
+        should note the following migration notes.
+    </para>
+
+    <sect2 id="migration.12.zend.view.helper.navigation">
+        <title>Zend_View_Helper_Navigation</title>
+
+        <para>
+            Prior to the 1.12 release, a helper with the name
+            "My_View_Helper_Navigation_Menu" can not be used, because the proxy
+            helper returns always the standard view helper
+            "Zend_View_Helper_Navigation_Menu".
+        </para>
+
+        <para>
+            Starting from version 1.12, you can use our own navigation helpers
+            with the name "menu", "breadcrumbs", ...
+        </para>
+
+        <para>
+            Create your own helper with name "Menu":
+        </para>
+
+        <programlisting language="php"><![CDATA[
+class My_View_Helper_Navigation_Menu
+    extends Zend_View_Helper_Navigation_HelperAbstract
+{
+    public function menu(Zend_Navigation_Container $container = null)
+    {
+        if (null !== $container) {
+            $this->setContainer($container);
+        }
+
+        return $this;
+    }
+
+    public function render(Zend_Navigation_Container $container = null)
+    {
+        return '<nav>Example</nav>';
+    }
+}
+]]></programlisting>
+
+        <para>
+            Add the helper path to <classname>Zend_View</classname> in your
+            Bootstrap class:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+    protected function _initView()
+    {
+        $this->bootstrap('view');
+        $this->view->addHelperPath(
+            'path/to/helper',
+            'My_View_Helper_Navigation'
+        );
+    }
+]]></programlisting>
+
+        <para>
+            Or add the helper path in your "application.ini" file:
+        </para>
+
+        <programlisting language="ini"><![CDATA[
+resources.view.helperPath.My_View_Helper_Navigation = "path/to/helper"
+]]></programlisting>
+
+        <para>
+            The following code is used in a view script:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->navigation()->menu(); ?>
+]]></programlisting>
+
+        <para>
+            Output:
+        </para>
+
+        <programlisting language="html"><![CDATA[
+<nav>Example</nav>
+]]></programlisting>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->
