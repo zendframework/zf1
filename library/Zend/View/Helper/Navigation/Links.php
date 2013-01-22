@@ -769,7 +769,7 @@ class Zend_View_Helper_Navigation_Links
             foreach ($types as $relation => $pages) {
                 foreach ($pages as $page) {
                     if ($r = $this->renderLink($page, $attrib, $relation)) {
-                        $output .= $indent . $r . self::EOL;
+                        $output .= $indent . $r . $this->getEOL();
                     }
                 }
             }

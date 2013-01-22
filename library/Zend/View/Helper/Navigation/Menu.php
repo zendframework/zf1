@@ -106,6 +106,13 @@ class Zend_View_Helper_Navigation_Menu
      * @var bool
      */
     protected $_addPageClassToLi = false;
+
+    /**
+     * Inner indentation string
+     *
+     * @var string
+     */
+    protected $_innerIndent = '    ';
     
     /**
      * View helper entry point:
@@ -404,6 +411,38 @@ class Zend_View_Helper_Navigation_Menu
         return $this->_addPageClassToLi;
     }
 
+    /**
+     * Set the inner indentation string for using in {@link render()}, optionally
+     * a number of spaces to indent with
+     *
+     * @param  string|int $indent                          indentation string or
+     *                                                     number of spaces
+     * @return Zend_View_Helper_Navigation_HelperAbstract  fluent interface,
+     *                                                     returns self
+     */
+    public function setInnerIndent($indent)
+    {
+        $this->_innerIndent = $this->_getWhitespace($indent);
+
+        return $this;
+    }
+
+    /**
+     * Returns inner indentation (format output is respected)
+     *
+     * @see getFormatOutput()
+     *
+     * @return string       indentation string or an empty string
+     */
+    public function getInnerIndent()
+    {
+        if (false === $this->getFormatOutput()) {
+            return '';
+        }
+
+        return $this->_innerIndent;
+    }
+
     // Public methods:
 
     /**
@@ -472,6 +511,14 @@ class Zend_View_Helper_Navigation_Menu
             $options['indent'] = $this->_getWhitespace($options['indent']);
         } else {
             $options['indent'] = $this->getIndent();
+        }
+
+        // Inner ident
+        if (isset($options['innerIndent'])) {
+            $options['innerIndent'] =
+                $this->_getWhitespace($options['innerIndent']);
+        } else {
+            $options['innerIndent'] = $this->getInnerIndent();
         }
 
         // UL class
@@ -559,13 +606,14 @@ class Zend_View_Helper_Navigation_Menu
      * Renders the deepest active menu within [$minDepth, $maxDeth], (called
      * from {@link renderMenu()})
      *
-     * @param  Zend_Navigation_Container $container  container to render
-     * @param  string                    $ulClass    CSS class for first UL
-     * @param  string                    $indent     initial indentation
-     * @param  int|null                  $minDepth   minimum depth
-     * @param  int|null                  $maxDepth   maximum depth
-     * @param  string|null               $ulId       unique identifier (id) for
-     *                                               first UL
+     * @param  Zend_Navigation_Container $container     container to render
+     * @param  string                    $ulClass       CSS class for first UL
+     * @param  string                    $indent        initial indentation
+     * @param  string                    $innerIndent   inner indentation
+     * @param  int|null                  $minDepth      minimum depth
+     * @param  int|null                  $maxDepth      maximum depth
+     * @param  string|null               $ulId          unique identifier (id)
+     *                                                  for first UL
      * @param  bool                      $addPageClassToLi  adds CSS class from
      *                                                      page to li element
      * @param  string|null               $activeClass       CSS class for active
@@ -578,6 +626,7 @@ class Zend_View_Helper_Navigation_Menu
     protected function _renderDeepestMenu(Zend_Navigation_Container $container,
                                           $ulClass,
                                           $indent,
+                                          $innerIndent,
                                           $minDepth,
                                           $maxDepth,
                                           $ulId,
@@ -615,7 +664,7 @@ class Zend_View_Helper_Navigation_Menu
         $html = $indent . '<ul'
                         . $this->_htmlAttribs($attribs)
                         . '>'
-                        . self::EOL;
+                        . $this->getEOL();
 
         // Reset prefix for IDs
         $this->_skipPrefixForId = $skipValue;
@@ -637,9 +686,10 @@ class Zend_View_Helper_Navigation_Menu
                     array('class' => $subPage->getClass())
                 );
             }
-            $html .= $indent . '    <li' . $liClass . '>' . self::EOL;
-            $html .= $indent . '        ' . $this->htmlify($subPage) . self::EOL;
-            $html .= $indent . '    </li>' . self::EOL;
+            $html .= $indent . $innerIndent . '<li' . $liClass . '>' . $this->getEOL();
+            $html .= $indent . str_repeat($innerIndent, 2) . $this->htmlify($subPage)
+                                                           . $this->getEOL();
+            $html .= $indent . $innerIndent . '</li>' . $this->getEOL();
         }
 
         $html .= $indent . '</ul>';
@@ -650,16 +700,17 @@ class Zend_View_Helper_Navigation_Menu
     /**
      * Renders a normal menu (called from {@link renderMenu()})
      *
-     * @param  Zend_Navigation_Container $container   container to render
-     * @param  string                    $ulClass     CSS class for first UL
-     * @param  string                    $indent      initial indentation
-     * @param  int|null                  $minDepth    minimum depth
-     * @param  int|null                  $maxDepth    maximum depth
-     * @param  bool                      $onlyActive  render only active branch?
-     * @param  bool                      $expandSibs  render siblings of active
-     *                                                branch nodes?
-     * @param  string|null               $ulId        unique identifier (id) for
-     *                                                first UL
+     * @param  Zend_Navigation_Container $container     container to render
+     * @param  string                    $ulClass       CSS class for first UL
+     * @param  string                    $indent        initial indentation
+     * @param  string                    $innerIndent   inner indentation
+     * @param  int|null                  $minDepth      minimum depth
+     * @param  int|null                  $maxDepth      maximum depth
+     * @param  bool                      $onlyActive    render only active branch?
+     * @param  bool                      $expandSibs    render siblings of active
+     *                                                  branch nodes?
+     * @param  string|null               $ulId          unique identifier (id)
+     *                                                  for first UL
      * @param  bool                      $addPageClassToLi  adds CSS class from
      *                                                      page to li element
      * @param  string|null               $activeClass       CSS class for active
@@ -672,6 +723,7 @@ class Zend_View_Helper_Navigation_Menu
     protected function _renderMenu(Zend_Navigation_Container $container,
                                    $ulClass,
                                    $indent,
+                                   $innerIndent,
                                    $minDepth,
                                    $maxDepth,
                                    $onlyActive,
@@ -747,7 +799,7 @@ class Zend_View_Helper_Navigation_Menu
 
             // make sure indentation is correct
             $depth   -= $minDepth;
-            $myIndent = $indent . str_repeat('        ', $depth);
+            $myIndent = $indent . str_repeat($innerIndent, $depth * 2);
 
             if ($depth > $prevDepth) {
                 $attribs = array();
@@ -767,22 +819,22 @@ class Zend_View_Helper_Navigation_Menu
                 $html .= $myIndent . '<ul'
                                    . $this->_htmlAttribs($attribs)
                                    . '>'
-                                   . self::EOL;
+                                   . $this->getEOL();
 
                 // Reset prefix for IDs
                 $this->_skipPrefixForId = $skipValue;
             } else if ($prevDepth > $depth) {
                 // close li/ul tags until we're at current depth
                 for ($i = $prevDepth; $i > $depth; $i--) {
-                    $ind = $indent . str_repeat('        ', $i);
-                    $html .= $ind . '    </li>' . self::EOL;
-                    $html .= $ind . '</ul>' . self::EOL;
+                    $ind   = $indent . str_repeat($innerIndent, $i * 2);
+                    $html .= $ind . $innerIndent . '</li>' . $this->getEOL();
+                    $html .= $ind . '</ul>' . $this->getEOL();
                 }
                 // close previous li tag
-                $html .= $myIndent . '    </li>' . self::EOL;
+                $html .= $myIndent . $innerIndent . '</li>' . $this->getEOL();
             } else {
                 // close previous li tag
-                $html .= $myIndent . '    </li>' . self::EOL;
+                $html .= $myIndent . $innerIndent . '</li>' . $this->getEOL();
             }
 
             // render li tag and page
@@ -805,10 +857,12 @@ class Zend_View_Helper_Navigation_Menu
                 }
             }
 
-            $html .= $myIndent . '    <li'
+            $html .= $myIndent . $innerIndent . '<li'
                    . $this->_htmlAttribs(array('class' => implode(' ', $liClasses)))
-                   . '>' . self::EOL
-                   . $myIndent . '        ' . $this->htmlify($page) . self::EOL;
+                   . '>' . $this->getEOL()
+                   . $myIndent . str_repeat($innerIndent, 2)
+                   . $this->htmlify($page)
+                   . $this->getEOL();
 
             // store as previous depth for next iteration
             $prevDepth = $depth;
@@ -817,11 +871,11 @@ class Zend_View_Helper_Navigation_Menu
         if ($html) {
             // done iterating container; close open ul/li tags
             for ($i = $prevDepth+1; $i > 0; $i--) {
-                $myIndent = $indent . str_repeat('        ', $i-1);
-                $html .= $myIndent . '    </li>' . self::EOL
-                       . $myIndent . '</ul>' . self::EOL;
+                $myIndent = $indent . str_repeat($innerIndent . $innerIndent, $i - 1);
+                $html    .= $myIndent . $innerIndent . '</li>' . $this->getEOL()
+                         . $myIndent . '</ul>' . $this->getEOL();
             }
-            $html = rtrim($html, self::EOL);
+            $html = rtrim($html, $this->getEOL());
         }
 
         return $html;
@@ -859,6 +913,7 @@ class Zend_View_Helper_Navigation_Menu
                 $container,
                 $options['ulClass'],
                 $options['indent'],
+                $options['innerIndent'],
                 $options['minDepth'],
                 $options['maxDepth'],
                 $options['ulId'],
@@ -872,6 +927,7 @@ class Zend_View_Helper_Navigation_Menu
                 $container,
                 $options['ulClass'],
                 $options['indent'],
+                $options['innerIndent'],
                 $options['minDepth'],
                 $options['maxDepth'],
                 $options['onlyActiveBranch'],
@@ -919,16 +975,23 @@ class Zend_View_Helper_Navigation_Menu
      *                                               (id) use for UL element
      * @param  bool                      $addPageClassToLi  adds CSS class from
      *                                                      page to li element
-     * @return string                                rendered content
+     * @param  string|int                $innerIndent   [optional] inner
+     *                                                  indentation as a string
+     *                                                  or number of spaces.
+     *                                                  Default is to use the
+     *                                                  {@link getInnerIndent()}.
+     * @return string                                   rendered content
      */
     public function renderSubMenu(Zend_Navigation_Container $container = null,
                                   $ulClass = null,
                                   $indent = null,
                                   $ulId   = null,
-                                  $addPageClassToLi = false)
+                                  $addPageClassToLi = false,
+                                  $innerIndent = null)
     {
         return $this->renderMenu($container, array(
             'indent'           => $indent,
+            'innerIndent'      => $innerIndent,
             'ulClass'          => $ulClass,
             'minDepth'         => null,
             'maxDepth'         => null,

@@ -300,4 +300,18 @@ class Zend_View_Helper_Navigation_SitemapTest
 
         $this->fail('A Zend_View_Exception was not thrown when using Schema validation');
     }
+
+    /**
+     * @group ZF-8874
+     */
+    public function testRenderingWithoutWhitespace()
+    {
+        // Reset format output option
+        $this->_helper->setFormatOutput(false);
+
+        $expected = $this->_helper->render();
+        $actual   = $this->_getExpected('sitemap/without_whitespace.xml');
+
+        $this->assertEquals($expected, $actual);
+    }
 }

@@ -54,13 +54,6 @@ class Zend_View_Helper_Navigation_Sitemap
     const SITEMAP_XSD = 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd';
 
     /**
-     * Whether XML output should be formatted
-     *
-     * @var bool
-     */
-    protected $_formatOutput = false;
-
-    /**
      * Whether the XML declaration should be included in XML output
      *
      * @var bool
@@ -107,31 +100,6 @@ class Zend_View_Helper_Navigation_Sitemap
     }
 
     // Accessors:
-
-    /**
-     * Sets whether XML output should be formatted
-     *
-     * @param  bool $formatOutput                   [optional] whether output
-     *                                              should be formatted. Default
-     *                                              is true.
-     * @return Zend_View_Helper_Navigation_Sitemap  fluent interface, returns
-     *                                              self
-     */
-    public function setFormatOutput($formatOutput = true)
-    {
-        $this->_formatOutput = (bool) $formatOutput;
-        return $this;
-    }
-
-    /**
-     * Returns whether XML output should be formatted
-     *
-     * @return bool  whether XML output should be formatted
-     */
-    public function getFormatOutput()
-    {
-        return $this->_formatOutput;
-    }
 
     /**
      * Sets whether the XML declaration should be used in output
@@ -471,6 +439,6 @@ class Zend_View_Helper_Navigation_Sitemap
                $dom->saveXML() :
                $dom->saveXML($dom->documentElement);
 
-        return rtrim($xml, PHP_EOL);
+        return rtrim($xml, self::EOL);
     }
 }
