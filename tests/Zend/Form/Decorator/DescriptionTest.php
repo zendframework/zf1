@@ -181,6 +181,39 @@ class Zend_Form_Decorator_DescriptionTest extends PHPUnit_Framework_TestCase
         $html = $this->decorator->render('');
         $this->assertContains($translations['description'], $html);
     }
+
+    /**
+     * @group ZF-8694
+     */
+    public function testDescriptionIsNotTranslatedTwice()
+    {
+        // Init translator
+        require_once 'Zend/Translate.php';
+        $translate = new Zend_Translate(
+            array(
+                 'adapter' => 'array',
+                 'content' => array(
+                     'firstDescription'  => 'secondDescription',
+                     'secondDescription' => 'thirdDescription',
+                 ),
+                 'locale'  => 'en'
+            )
+        );
+
+        // Create element
+        $element = new Zend_Form_Element('foo');
+        $element->setView($this->getView())
+                ->setDescription('firstDescription')
+                ->setTranslator($translate);
+
+        $this->decorator->setElement($element);
+
+        // Test
+        $this->assertEquals(
+            '<p class="hint">secondDescription</p>',
+            trim($this->decorator->render(''))
+        );
+    }
 }
 
 // Call Zend_Form_Decorator_DescriptionTest::main() if this source file is executed directly.
