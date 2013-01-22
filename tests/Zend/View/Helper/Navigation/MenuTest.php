@@ -908,4 +908,62 @@ class Zend_View_Helper_Navigation_MenuTest
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-8874
+     */
+    public function testSetAndGetInnerIndent()
+    {
+        // Test standard
+        $this->assertSame('    ', $this->_helper->getInnerIndent());
+
+        // Test with format output true
+        $this->_helper->setInnerIndent(0);
+        $this->assertSame('', $this->_helper->getInnerIndent());
+
+        $this->_helper->setInnerIndent('        ');
+        $this->assertSame('        ', $this->_helper->getInnerIndent());
+
+        // Test with format output false
+        $this->_helper->setFormatOutput(false);
+        $this->assertSame('', $this->_helper->getInnerIndent());
+    }
+
+    /**
+     * @group ZF-8874
+     */
+    public function testRenderingWithoutWhitespace()
+    {
+        $this->_helper->setFormatOutput(false);
+
+        $expected = $this->_getExpected('menu/without_whitespace.html');
+
+        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
+    }
+
+    /**
+     * @group ZF-8874
+     */
+    public function testRenderingWithInnerIndent()
+    {
+        $this->_helper->setIndent(4);
+
+        // Inner indent = 0
+        $this->_helper->setInnerIndent(0);
+        $expected = $this->_getExpected('menu/innerindent0.html');
+
+        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
+
+        // Inner indent = 4
+        $this->_helper->setInnerIndent(4);
+        $expected = $this->_getExpected('menu/innerindent4.html');
+
+        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
+
+        // Inner indent = 8
+        $this->_helper->setInnerIndent(8);
+        $expected = $this->_getExpected('menu/innerindent8.html');
+
+        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
+    }
 }
