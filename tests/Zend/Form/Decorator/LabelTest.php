@@ -398,6 +398,36 @@ class Zend_Form_Decorator_LabelTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group ZF-8694
+     */
+    public function testLabelIsNotTranslatedTwice()
+    {
+        // Init translator
+        require_once 'Zend/Translate.php';
+        $translate = new Zend_Translate(
+            array(
+                 'adapter' => 'array',
+                 'content' => array(
+                     'firstLabel'  => 'secondLabel',
+                     'secondLabel' => 'thirdLabel',
+                 ),
+                 'locale'  => 'en'
+            )
+        );
+
+        // Create element
+        $element = new Zend_Form_Element('foo');
+        $element->setView($this->getView())
+                ->setLabel('firstLabel')
+                ->setTranslator($translate);
+
+        $this->decorator->setElement($element);
+
+        // Test
+        $this->assertEquals('secondLabel', $this->decorator->getLabel());
+    }
 }
 
 // Call Zend_Form_Decorator_LabelTest::main() if this source file is executed directly.

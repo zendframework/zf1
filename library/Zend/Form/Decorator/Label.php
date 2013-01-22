@@ -308,10 +308,6 @@ class Zend_Form_Decorator_Label extends Zend_Form_Decorator_Abstract
             return '';
         }
 
-        if (null !== ($translator = $element->getTranslator())) {
-            $label = $translator->translate($label);
-        }
-
         $optPrefix = $this->getOptPrefix();
         $optSuffix = $this->getOptSuffix();
         $reqPrefix = $this->getReqPrefix();
