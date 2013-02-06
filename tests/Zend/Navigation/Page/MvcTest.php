@@ -24,6 +24,7 @@ require_once 'Zend/Navigation/Page/Mvc.php';
 require_once 'Zend/Controller/Request/Http.php';
 require_once 'Zend/Controller/Router/Route.php';
 require_once 'Zend/Controller/Router/Route/Regex.php';
+require_once 'Zend/Controller/Router/Route/Chain.php';
 
 /**
  * Tests the class Zend_Navigation_Page_Mvc
@@ -819,5 +820,59 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($pages['news']->isActive());
         $this->assertFalse($pages['home']->isActive());
+    }
+
+    /**
+     * @group ZF-11442
+     */
+    public function testIsActiveIsChainedRouteAware()
+    {
+        // Create page
+        $page = new Zend_Navigation_Page_Mvc(
+            array(
+                 'action' => 'myaction',
+                 'route'  => 'myroute',
+                 'params' => array(
+                     'page' => 1337,
+                     'item' => 1234
+                 )
+            )
+        );
+
+        // Create chained route
+        $chain = new Zend_Controller_Router_Route_Chain();
+
+        $foo = new Zend_Controller_Router_Route(
+            'lolcat/:action',
+            array(
+                 'module'     => 'default',
+                 'controller' => 'foobar',
+                 'action'     => 'bazbat'
+            )
+        );
+        $bar = new Zend_Controller_Router_Route(
+            ':page/:item',
+            array(
+                 'page' => 1,
+                 'item' => 1
+            )
+        );
+        $chain->chain($foo)->chain($bar);
+
+        // Set up router
+        $this->_front->getRouter()->addRoute('myroute', $chain);
+
+        $this->_front->getRequest()->setParams(
+            array(
+                 'module'     => 'default',
+                 'controller' => 'foobar',
+                 'action'     => 'myaction',
+                 'page'       => 1337,
+                 'item'       => 1234
+            )
+        );
+
+        // Test
+        $this->assertTrue($page->isActive());
     }
 }
