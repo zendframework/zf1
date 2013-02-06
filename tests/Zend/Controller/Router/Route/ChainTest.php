@@ -815,6 +815,113 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $res['bar']);
     }
 
+    /**
+     * @group ZF-11443
+     */
+    public function testGetDefault()
+    {
+        // Create chained route
+        $chain = new Zend_Controller_Router_Route_Chain();
+
+        $foo = new Zend_Controller_Router_Route_Hostname(
+            'www.example.com', array('foo' => 'foo')
+        );
+        $bar = new Zend_Controller_Router_Route_Regex(
+            'bar', array('bar' => 'bar'), array(), 'bar'
+        );
+        $baz = new Zend_Controller_Router_Route_Static(
+            'baz', array('baz' => 'baz')
+        );
+
+        $chain->chain($foo)->chain($bar)->chain($baz);
+
+        // Test
+        $this->assertSame('foo', $chain->getDefault('foo'));
+        $this->assertSame('bar', $chain->getDefault('bar'));
+        $this->assertSame('baz', $chain->getDefault('baz'));
+    }
+
+    /**
+     * @group ZF-11443
+     */
+    public function testGetDefaultPriority()
+    {
+        // Create chained route
+        $chain = new Zend_Controller_Router_Route_Chain();
+
+        $foo = new Zend_Controller_Router_Route_Hostname(
+            'www.example.com', array('priority' => 1)
+        );
+        $bar = new Zend_Controller_Router_Route_Regex(
+            'bar', array('priority' => 2), array(), 'bar'
+        );
+        $baz = new Zend_Controller_Router_Route_Static(
+            'baz', array('priority' => 3)
+        );
+
+        $chain->chain($foo)->chain($bar)->chain($baz);
+
+        // Test
+        $this->assertSame(3, $chain->getDefault('priority'));
+    }
+
+    /**
+     * @group ZF-11443
+     */
+    public function testGetDefaults()
+    {
+        // Create chained route
+        $chain = new Zend_Controller_Router_Route_Chain();
+
+        $foo = new Zend_Controller_Router_Route_Hostname(
+            'www.example.com', array('foo' => 'foo')
+        );
+        $bar = new Zend_Controller_Router_Route_Regex(
+            'bar', array('bar' => 'bar'), array(), 'bar'
+        );
+        $baz = new Zend_Controller_Router_Route_Static(
+            'baz', array('baz' => 'baz')
+        );
+
+        $chain->chain($foo)->chain($bar)->chain($baz);
+
+        // Get defaults
+        $values = $chain->getDefaults();
+
+        // Test
+        $this->assertTrue(is_array($values));
+        $this->assertSame('foo', $values['foo']);
+        $this->assertSame('bar', $values['bar']);
+        $this->assertSame('baz', $values['baz']);
+    }
+
+    /**
+     * @group ZF-11443
+     */
+    public function testGetDefaultsPriority()
+    {
+        // Create chained route
+        $chain = new Zend_Controller_Router_Route_Chain();
+
+        $foo = new Zend_Controller_Router_Route_Hostname(
+            'www.zend.com', array('priority' => 1)
+        );
+        $bar = new Zend_Controller_Router_Route_Regex(
+            'bar', array('priority' => 2), array(), 'bar'
+        );
+        $baz = new Zend_Controller_Router_Route_Static(
+            'baz', array('priority' => 3)
+        );
+
+        $chain->chain($foo)->chain($bar)->chain($baz);
+
+        // Get defaults
+        $values = $chain->getDefaults();
+
+        // Test
+        $this->assertSame(3, $values['priority']);
+    }
+
     protected function _getRouter()
     {
         $router = new Zend_Controller_Router_Rewrite();
