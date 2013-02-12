@@ -28,6 +28,7 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 require_once 'Zend/Form/Decorator/Errors.php';
 
 require_once 'Zend/Form/Element.php';
+require_once 'Zend/Form/SubForm.php';
 require_once 'Zend/View.php';
 
 /**
@@ -144,6 +145,74 @@ class Zend_Form_Decorator_ErrorsTest extends PHPUnit_Framework_TestCase
         $content = 'test content';
         $test = $this->decorator->render($content);
         $this->assertContains($content . $this->decorator->getSeparator() . '<ul', $test, $test);
+    }
+
+    /**
+     * @group ZF-11476?
+     */
+    public function testRenderingWithFormAsElement()
+    {
+        // Set up form
+        $form = new Zend_Form(
+            array(
+                 'elements'         => array(
+                     'foo' => new Zend_Form_Element('foo'),
+                     'bar' => new Zend_Form_Element('bar'),
+                 ),
+                 'view'             => $this->getView(),
+                 'elementsBelongTo' => 'foobar',
+            )
+        );
+
+        $this->decorator->setElement($form);
+
+        // Tests
+        $this->assertEquals(
+            array('foobar' => array()),
+            $form->getMessages()
+        );
+        $this->assertEquals(
+            array(),
+            $form->getMessages(null, true)
+        );
+        $this->assertEquals(
+            'test content',
+            $this->decorator->render('test content')
+        );
+    }
+
+    /**
+     * @group ZF-11476?
+     */
+    public function testRenderingWithSubFormAsElement()
+    {
+        // Set up sub form
+        $subForm = new Zend_Form_SubForm(
+            array(
+                 'elements' => array(
+                     'foo' => new Zend_Form_Element('foo'),
+                     'bar' => new Zend_Form_Element('bar'),
+                 ),
+                 'view'     => $this->getView(),
+                 'name'     => 'foobar',
+            )
+        );
+
+        $this->decorator->setElement($subForm);
+
+        // Tests
+        $this->assertEquals(
+            array('foobar' => array()),
+            $subForm->getMessages()
+        );
+        $this->assertEquals(
+            array(),
+            $subForm->getMessages(null, true)
+        );
+        $this->assertEquals(
+            'test content',
+            $this->decorator->render('test content')
+        );
     }
 }
 

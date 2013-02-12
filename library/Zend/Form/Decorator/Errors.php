@@ -50,7 +50,15 @@ class Zend_Form_Decorator_Errors extends Zend_Form_Decorator_Abstract
             return $content;
         }
 
-        $errors = $element->getMessages();
+        // Get error messages
+        if ($element instanceof Zend_Form
+            && null !== $element->getElementsBelongTo()
+        ) {
+            $errors = $element->getMessages(null, true);
+        } else {
+            $errors = $element->getMessages();
+        }
+
         if (empty($errors)) {
             return $content;
         }
