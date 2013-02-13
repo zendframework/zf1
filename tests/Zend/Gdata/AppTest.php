@@ -128,7 +128,7 @@ class Zend_Gdata_AppTest extends PHPUnit_Framework_TestCase
         $this->adapter->setResponse(array('HTTP/1.1 200 OK\r\n\r\n'));
 
         $this->service->setMajorProtocolVersion(1);
-        $this->service->setMinorProtocolVersion(NULL);
+        $this->service->setMinorProtocolVersion(null);
         $this->service->get('http://www.example.com');
 
         $headers = $this->adapter->popRequest()->headers;
@@ -162,7 +162,7 @@ class Zend_Gdata_AppTest extends PHPUnit_Framework_TestCase
         $this->adapter->setResponse(array('HTTP/1.1 200 OK\r\n\r\n'));
 
         $this->service->setMajorProtocolVersion(2);
-        $this->service->setMinorProtocolVersion(NULL);
+        $this->service->setMinorProtocolVersion(null);
         $this->service->get('http://www.example.com');
 
         $headers = $this->adapter->popRequest()->headers;
@@ -613,5 +613,21 @@ class Zend_Gdata_AppTest extends PHPUnit_Framework_TestCase
             restore_error_handler();
             $this->fail('Did not expect ErrorException');
         }
+    }
+
+    /**
+     * @group ZF-10243
+     */
+    public function testStaticImportWithoutUsingObjectMapping()
+    {
+        $this->adapter->setResponse($this->httpEntrySample);
+        $feed = Zend_Gdata_App::import(
+            'http://www.example.com',
+            $this->client,
+            'Zend_Gdata_App_Feed',
+            false
+        );
+
+        $this->assertContains('<id>12345678901234567890</id>', $feed);
     }
 }
