@@ -442,6 +442,26 @@ class Zend_View_Helper_Placeholder_ContainerTest extends PHPUnit_Framework_TestC
         $this->assertTrue((strstr($string, "    <ul>\n")) ? true : false, $string);
         $this->assertTrue((strstr($string, "\n    </ul>")) ? true : false);
     }
+
+    /**
+     * @group ZF-12044
+     */
+    public function testContainerWithoutItemsShouldAlwaysReturnEmptyString()
+    {
+        $this->assertEquals('', (string) $this->container);
+
+        $this->container->setIndent(4);
+        $this->assertEquals('', (string) $this->container);
+
+        $this->container->setPrefix('<ul><li>');
+        $this->assertEquals('', (string) $this->container);
+
+        $this->container->setSeparator('</li><li>');
+        $this->assertEquals('', (string) $this->container);
+
+        $this->container->setPrefix('</li></ul>');
+        $this->assertEquals('', (string) $this->container);
+    }
 }
 
 // Call Zend_View_Helper_Placeholder_ContainerTest::main() if this source file is executed directly.

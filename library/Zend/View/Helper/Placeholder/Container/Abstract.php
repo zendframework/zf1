@@ -93,7 +93,7 @@ abstract class Zend_View_Helper_Placeholder_Container_Abstract extends ArrayObje
     /**
      * Constructor - This is needed so that we can attach a class member as the ArrayObject container
      *
-     * @return void
+     * @return \Zend_View_Helper_Placeholder_Container_Abstract
      */
     public function __construct()
     {
@@ -252,9 +252,10 @@ abstract class Zend_View_Helper_Placeholder_Container_Abstract extends ArrayObje
     /**
      * Start capturing content to push into placeholder
      *
-     * @param  int $type How to capture content into placeholder; append, prepend, or set
+     * @param int|string $type How to capture content into placeholder; append, prepend, or set
+     * @param null       $key
+     * @throws Zend_View_Helper_Placeholder_Container_Exception
      * @return void
-     * @throws Zend_View_Helper_Placeholder_Exception if nested captures detected
      */
     public function captureStart($type = Zend_View_Helper_Placeholder_Container_Abstract::APPEND, $key = null)
     {
@@ -349,10 +350,16 @@ abstract class Zend_View_Helper_Placeholder_Container_Abstract extends ArrayObje
     /**
      * Render the placeholder
      *
+     * @param null $indent
      * @return string
      */
     public function toString($indent = null)
     {
+        // Check items
+        if (0 === $this->count()) {
+            return '';
+        }
+
         $indent = ($indent !== null)
                 ? $this->getWhitespace($indent)
                 : $this->getIndent();
