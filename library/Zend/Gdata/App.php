@@ -724,14 +724,14 @@ class Zend_Gdata_App
      * @param  string $uri
      * @param  Zend_Http_Client $client The client used for communication
      * @param  string $className The class which is used as the return type
+     * @param  bool $useObjectMapping Enable/disable the use of XML to object mapping.
      * @throws Zend_Gdata_App_Exception
-     * @return string|Zend_Gdata_App_Feed Returns string only if the object
-     *                                    mapping has been disabled explicitly
-     *                                    by passing false to the
-     *                                    useObjectMapping() function.
+     * @return string|Zend_Gdata_App_Feed Returns string only if the fourth
+     *                                    parameter ($useObjectMapping) is set
+     *                                    to false.
      */
     public static function import($uri, $client = null,
-        $className='Zend_Gdata_App_Feed')
+        $className='Zend_Gdata_App_Feed', $useObjectMapping = true)
     {
         $app = new Zend_Gdata_App($client);
         $requestData = $app->prepareRequest('GET', $uri);
@@ -739,7 +739,7 @@ class Zend_Gdata_App
             $requestData['method'], $requestData['url']);
 
         $feedContent = $response->getBody();
-        if (!$this->_useObjectMapping) {
+        if (false === $useObjectMapping) {
             return $feedContent;
         }
         $feed = self::importString($feedContent, $className);
