@@ -457,6 +457,11 @@ class Zend_Form_Decorator_FormErrors extends Zend_Form_Decorator_Abstract
         $label = $element->getLabel();
         if (empty($label)) {
             $label = $element->getName();
+
+            // Translate element name
+            if (null !== ($translator = $element->getTranslator())) {
+                $label = $translator->translate($label);
+            }
         }
 
         if ($this->getEscape()) {
