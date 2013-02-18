@@ -174,12 +174,12 @@ class Zend_Layout
     {
         if (null === self::$_mvcInstance) {
             self::$_mvcInstance = new self($options, true);
-        }
-
-        if (is_string($options)) {
-            self::$_mvcInstance->setLayoutPath($options);
-        } elseif (is_array($options) || $options instanceof Zend_Config) {
-            self::$_mvcInstance->setOptions($options);
+        } else {
+            if (is_string($options)) {
+                self::$_mvcInstance->setLayoutPath($options);
+            } elseif (is_array($options) || $options instanceof Zend_Config) {
+                self::$_mvcInstance->setOptions($options);
+            }
         }
 
         return self::$_mvcInstance;
