@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zendx.jquery.form">
+    <title>ZendX_JQuery Form Elements and Decorators</title>
+
+    <para>All View Helpers are pressed into Zend_Form elements or decorators also. They can even be
+        easily integrated into your already existing forms. To enable a Form for Zend_JQuery support
+        you can use two ways: Init your form as <code>$form = new ZendX_JQuery_Form();</code> or
+        use the static method <methodname>ZendX_JQuery::enableForm($form)</methodname> to enable jQuery element support.
+    </para>
+
+    <sect2 id="zendx.jquery.form.usage">
+        <title>General Elements and Decorator Usage</title>
+
+        <para>Both elements and decorators of the Zend jQuery Form set can be initialized with
+            the option key <code>jQueryParams</code> to set certain jQuery object related parameters.
+            This jQueryParams array of options matches to the <varname>$params</varname> variable
+            of the corresponding view helpers. For example:</para>
+
+        <programlisting language="php"><![CDATA[
+$element = new ZendX_JQuery_Form_Element_DatePicker(
+                    'dp1',
+                    array('jQueryParams' => array('defaultDate' => '2007/10/10'))
+                );
+// would internally call to:
+$view->datePicker("dp1", "", array('defaultDate' => '2007/10/10'), array());
+]]></programlisting>
+
+        <para>Additionally elements jQuery options can be customized by the following methods:</para>
+
+        <itemizedlist>
+            <listitem><para><methodname>setJQueryParam($name, $value)</methodname>: Set the jQuery option <varname>$name</varname> to
+                    the given value.</para></listitem>
+            <listitem><para><methodname>setJQueryParams($params)</methodname>: Set key value pairs of jQuery options and merge
+                    them with the already set options.</para></listitem>
+            <listitem><para><methodname>getJQueryParam($name)</methodname>: Return the jQuery option with the given name.</para></listitem>
+            <listitem><para><methodname>getJQueryParams()</methodname>: Return an array of all currently set jQuery options.</para></listitem>
+        </itemizedlist>
+
+        <para>Each jQuery related Decorator also owns a <methodname>getJQueryParams()</methodname> method, to set options you have to
+            use the <methodname>setDecorators()</methodname>, <methodname>addDecorator()</methodname> or <methodname>addDecorators()</methodname> functionality
+            of a form element and set the jQueryParams key as option:</para>
+
+        <programlisting language="php"><![CDATA[
+$form->setDecorators(array(
+    'FormElements',
+    array('AccordionContainer', array(
+        'id'          => 'tabContainer',
+        'style'       => 'width: 600px;',
+        'jQueryParams' => array(
+            'alwaysOpen' => false,
+            'animated'   => "easeslide"
+        ),
+    )),
+    'Form'
+));
+]]></programlisting>
+    </sect2>
+
+    <sect2 id="zendx.jquery.form.elements">
+        <title>Form Elements</title>
+
+        <para>The Zend Framework jQuery Extras Extension comes with the following Form Elements:</para>
+
+        <itemizedlist>
+            <listitem><para><code>ZendX_JQuery_Form_Element_AutoComplete</code>: Proxy to AutoComplete View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Element_ColorPicker</code>: Proxy to ColorPicker View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Element_DatePicker</code>: Proxy to DatePicker View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Element_Slider</code>: Proxy to Slider View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Element_Spinner</code>: Proxy to Spinner View Helper</para></listitem>
+        </itemizedlist>
+
+        <note id="zendx.jquery.form.elements.markerinterface">
+            <title>jQuery Decorators: Beware the Marker Interface for UiWidgetElements</title>
+
+            <para>By default all the jQuery Form elements use the <code>ZendX_JQuery_Form_Decorator_UiWidgetElement</code> decorator
+                for rendering the jQuery element with its specific view helper. This decorator is inheritly different
+                from the ViewHelper decorator that is used for most of the default form elements in Zend_Form.
+                To ensure that rendering works correctly for jQuery form elements at least one decorator has to
+                implement the <code>ZendX_JQuery_Form_Decorator_UiWidgetElementMarker</code> interface, which
+                the default decorator does. If no marker interface is found an exception is thrown. Use the marker
+                interface if you want to implement your own decorator for the jQuery form element specific rendering.
+            </para>
+        </note>
+    </sect2>
+
+    <sect2 id="zendx.jquery.form.decorators">
+        <title>Form Decorators</title>
+
+        <para>The following Decorators come with the Zend Framework jQuery Extension:</para>
+
+        <itemizedlist>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_AccordionContainer</code>: Proxy to AccordionContainer View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_AccordionPane</code>: Proxy to AccordionPane View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_DialogContainer</code>: Proxy to DialogContainer View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_TabContainer</code>: Proxy to TabContainer View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_TabPane</code>: Proxy to TabPane View Helper</para></listitem>
+            <listitem><para><code>ZendX_JQuery_Form_Decorator_UiWidgetElement</code>: Decorator to Display jQuery Form Elements</para></listitem>
+        </itemizedlist>
+
+        <para>Utilizing the Container elements is a bit more complicated, the following example builds a Form with 2 SubForms in a TabContainer:</para>
+
+        <example id="zendx.jquery.form.decorators.tabexample">
+            <title>SubForms with TabContainer Decorator</title>
+
+            <para>The following example makes use of all Form elements and wraps them into 2 subforms that are decorated with a tab container. First
+                we build the basic <code>ZendX_JQuery_Form</code>:</para>
+
+            <programlisting language="php"><![CDATA[
+$form = new ZendX_JQuery_Form();
+$form->setAction('formdemo.php');
+$form->setAttrib('id', 'mainForm');
+$form->setAttrib('class', 'flora');
+
+$form->setDecorators(array(
+    'FormElements',
+    array('TabContainer', array(
+        'id'          => 'tabContainer',
+        'style'       => 'width: 600px;',
+    )),
+    'Form',
+));
+]]></programlisting>
+
+            <para>Setting the Form Id (in this case to 'mainForm') is an important step for the TabContainer. It is needed that the subforms can relate
+                to the Container Id in a later form building stage. We now initialize two SubForms that will be decorated with the <code>TabPane</code>
+                decorators:</para>
+
+            <programlisting language="php"><![CDATA[
+$subForm1 = new ZendX_JQuery_Form();
+$subForm1->setDecorators(array(
+    'FormElements',
+    array('HtmlTag',
+          array('tag' => 'dl')),
+    array('TabPane',
+          array('jQueryParams' => array('containerId' => 'mainForm',
+                                        'title' => 'DatePicker and Slider')))
+));
+
+$subForm2 = new ZendX_JQuery_Form();
+$subForm2->setDecorators(array(
+   'FormElements',
+   array('HtmlTag',
+         array('tag' => 'dl')),
+   array('TabPane',
+         array('jQueryParams' => array('containerId' => 'mainForm',
+                                       'title' => 'AutoComplete and Spinner')))
+));
+]]></programlisting>
+
+            <para>In this stage it is important that the <code>'containerId'</code> option is set in each SubForm TabPane, or the subforms
+                cannot relate back to the tab Container and would not be displayed. To enforce this setting, an exception of the type <code>ZendX_JQuery_Exception</code>
+                is thrown if the option is not set. We can now add all the desired elements to the subforms:</para>
+
+            <programlisting language="php"><![CDATA[
+// Add Element Date Picker
+$elem = new ZendX_JQuery_Form_Element_DatePicker(
+                "datePicker1", array("label" => "Date Picker:")
+            );
+$elem->setJQueryParam('dateFormat', 'dd.mm.yy');
+$subForm1->addElement($elem);
+
+// Add Element Spinner
+$elem = new ZendX_JQuery_Form_Element_Spinner(
+                "spinner1", array('label' => 'Spinner:')
+            );
+$elem->setJQueryParams(array('min' => 0, 'max' => 1000, 'start' => 100));
+$subForm1->addElement($elem);
+
+// Add Slider Element
+$elem = new ZendX_JQuery_Form_Element_Slider(
+                "slider1", array('label' => 'Slider:')
+            );
+$elem->setJQueryParams(array('defaultValue' => '75'));
+$subForm2->addElement($elem);
+
+// Add Autocomplete Element
+$elem = new ZendX_JQuery_Form_Element_AutoComplete(
+                "ac1", array('label' => 'Autocomplete:')
+            );
+$elem->setJQueryParams(array('source' => array('New York',
+                                             'Berlin',
+                                             'Bern',
+                                             'Boston')));
+$subForm2->addElement($elem);
+
+// Submit Button
+$elem = new Zend_Form_Element_Submit("btn1", array('value' => 'Submit'));
+$subForm1->addElement($elem);
+]]></programlisting>
+
+            <para>Three additional lines are missing to put it all together and we have a jQuery animated form:</para>
+
+            <programlisting language="php"><![CDATA[
+$form->addSubForm($subForm1, 'subform1');
+$form->addSubForm($subForm2, 'subform2');
+
+$formString = $form->render($view);
+]]></programlisting>
+        </example>
+
+        <example id="zendx.jquery.form.decorators.dialogexample">
+            <title>Wrapping a Form into the Dialog Container</title>
+
+            <para>The only use for the Dialog Container in Zend Form context is to wrap itself around a form and
+            display it in a dialog. Its important to remember that the order of the decorators has to be different than in the Accordion and
+            Tab Container examples.</para>
+
+            <programlisting language="php"><![CDATA[
+// Create new jQuery Form
+$form = new ZendX_JQuery_Form();
+$form->setAction('formdemo.php');
+
+// Wrap the complete form inside a Dialog box
+$form->setDecorators(array(
+    'FormElements',
+    'Form',
+    array('DialogContainer', array(
+        'id'          => 'tabContainer',
+        'style'       => 'width: 600px;',
+        'jQueryParams' => array(
+            'tabPosition' => 'top'
+        ),
+    )),
+));
+
+// Add Element Spinner
+$elem = new ZendX_JQuery_Form_Element_Spinner("spinner1", array('label' => 'Spinner:', 'attribs' => array('class' => 'flora')));
+$elem->setJQueryParams(array('min' => 0, 'max' => 1000, 'start' => 100));
+
+$form->addElement($elem);
+]]></programlisting>
+        </example>
+    </sect2>
+</sect1>

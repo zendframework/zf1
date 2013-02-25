@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect2 id="zendx.jquery.view.jquery">
+    <title>jQuery() View Helper</title>
+
+    <para>
+        The <methodname>jQuery()</methodname> view helper simplifies setup of your jQuery environment
+        in your application. It takes care of loading the core and ui library dependencies if necessary
+        and acts as a stack for all the registered onLoad javascript statements. All jQuery view helpers
+        put their javascript code onto this stack. It acts as a collector for everything jQuery in your
+        application with the following responsibilities:
+    </para>
+
+    <itemizedlist>
+        <listitem><para>Handling deployment of CDN or a local path jQuery Core
+                and UI libraries.</para></listitem>
+        <listitem><para>Handling <ulink url="http://api.jquery.com/ready">$(document).ready()</ulink> events.</para></listitem>
+        <listitem><para>Specifying additional stylesheet themes to use.</para></listitem>
+    </itemizedlist>
+
+    <para>
+        The <methodname>jQuery()</methodname> view helper implementation, like its <methodname>dojo()</methodname> pendant,
+        follows the placeholder architecture implementation; the data set in it persists between view
+        objects, and may be directly echo'd from your layout script. Since views specified in a Zend_Layout
+        script file are rendered before the layout itself, the <methodname>jQuery()</methodname> helper can act as a
+        stack for jQuery statements and render them into the head segment of the html page.
+    </para>
+
+    <para>Contrary to Dojo, themes cannot be loaded from a CDN for the jQuery UI widgets and have to be implemented
+        in your pages stylesheet file or loaded from an extra stylesheet file. A default theme called Flora can be
+        obtained from the jQuery UI downloadable file.</para>
+
+    <example id="zend.jquery.view.jquery.usage">
+        <title>jQuery() View Helper Example</title>
+
+        <para>
+            In this example a jQuery environment using the core and UI libraries will be needed. UI Widgets should
+            be rendered with the Flora thema that is installed in 'public/styles/flora.all.css'. The jQuery libraries
+            are both loaded from local paths.
+        </para>
+
+        <para>
+            To register the jQuery functionality inside the view object, you have to add the appropriate helpers
+            to the view helper path. There are many ways of accomplishing this, based on the requirements that the
+            jQuery helpers have. If you need them in one specific view only, you can use the addHelperPath method
+            on initialization of this view, or right before rendering:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$view->addHelperPath('ZendX/JQuery/View/Helper/', 'ZendX_JQuery_View_Helper');
+]]></programlisting>
+
+        <para>If you need them throughout your application, you can register them in your bootstrap
+            file using access to the Controller Plugin ViewRenderer:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$view = new Zend_View();
+$view->addHelperPath('ZendX/JQuery/View/Helper/', 'ZendX_JQuery_View_Helper');
+
+$viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
+$viewRenderer->setView($view);
+Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+]]></programlisting>
+
+        <para>Now in the view script we want to display a Date Picker and an Ajax based Link.</para>
+
+        <programlisting language="php"><![CDATA[
+<?php echo $this->ajaxLink("Show me something",
+                    "/hello/world",
+                    array('update' => '#content'));?>
+
+<div id="content"></div>
+
+<form method="post" action="/hello/world">
+Pick your Date: <?php echo $this->datePicker("dp1",
+                                             '',
+                                             array(
+                                                'defaultDate' =>
+                                                    date('Y/m/d', time())));?>
+<input type="submit" value="Submit" />
+</form>
+]]></programlisting>
+
+        <para>Both helpers now stacked some javascript statements on the jQuery helper and printed a link and
+            a form element respectively. To access the javascript we have to utilize the jQuery()
+            functionality. Both helpers already activated their dependencies that is they have called
+            <methodname>jQuery()->enable()</methodname> and <methodname>jQuery()->uiEnable()</methodname>. We only have to print
+            the jQuery() environment, and we choose to do so in the layout script's head segment:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+<html>
+    <head>
+        <title>A jQuery View Helper Example</title>
+        <?php echo $this->jQuery(); ?>
+    </head>
+
+    <body>
+        <?php echo $this->layout()->content; ?>
+    </body>
+</html>
+]]></programlisting>
+
+        <para>Although <code>$this->layout()->content;</code> is printed behind the <code>$this->jQuery()</code> statement,
+            the content of the view script is rendered before. This way all the javascript onLoad code has already been put
+            on the onLoad stack and can be printed within the head segment of the html document.
+        </para>
+    </example>
+
+    <sect3 id="zendx.jquery.view.jquery.noconflict">
+        <title>jQuery NoConflict Mode</title>
+
+        <para>jQuery offers a noConflict mode that allows the library to be run side by side with other javascript libraries
+            that operate in the global namespace, Prototype for example. The Zend Framework jQuery View Helper makes usage of
+            the noConflict mode very easy. If you want to run Prototype and jQuery side by side you can call
+            <code>ZendX_JQuery_View_Helper_JQuery::enableNoConflictMode();</code> and all jQuery helpers will operate in the No Conflict
+            Mode.</para>
+
+        <example id="zend.jquery.view.jquery.noconflict">
+            <title>Building your own Helper with No Conflict Mode</title>
+
+            <para>To make use of the NoConflict Mode in your own jQuery helper, you only have to use the static method
+                <methodname>ZendX_JQuery_View_Helper_JQuery::getJQueryHandler()</methodname> method. It returns the variable jQuery is operating
+                in at the moment, either <code>$</code> or <varname>$j</varname>
+            </para>
+
+            <programlisting language="php"><![CDATA[
+class MyHelper_SomeHelper extends Zend_View_Helper_Abstract
+{
+    public function someHelper()
+    {
+        $jquery = $this->view->jQuery();
+        $jquery->enable(); // enable jQuery Core Library
+
+        // get current jQuery handler based on noConflict settings
+        $jqHandler = ZendX_JQuery_View_Helper_JQuery::getJQueryHandler();
+
+        $function = '("#element").click(function() '
+                  . '{ alert("noConflict Mode Save Helper!"); }'
+                  . ')';
+        $jquery->addOnload($jqHandler . $function);
+        return '';
+    }
+}
+]]></programlisting>
+        </example>
+    </sect3>
+
+    <sect3 id="zendx.jquery.view.jquery.themes">
+        <title>jQuery UI Themes</title>
+
+        <para>Since there are no online available themes to use out of the box, the implementation of the UI library themes
+            is a bit more complex than with the Dojo helper. The jQuery UI documentation describes for each component
+            what stylesheet information is needed and the Default and Flora Themes from the downloadable archive give hints
+            on the usage of stylesheets. The jQuery helper offers the function <code>jQuery()->addStylesheet($path);</code>
+            function to include the dependant stylesheets whenever the helper is enabled and rendered. You can optionally
+            merge the required stylesheet information in your main stylesheet file.
+        </para>
+    </sect3>
+
+    <sect3 id="zendx.jquery.view.jquery.methods">
+        <title>Methods Available</title>
+
+        <para>
+            The <methodname>jQuery()</methodname> view helper always returns an instance of
+            the jQuery placeholder container. That container object has the
+            following methods available:
+        </para>
+
+        <sect4 id="zendx.jquery.view.jquery.methods.core">
+            <title>jQuery Core Library methods</title>
+            <itemizedlist>
+                <listitem><para><methodname>enable()</methodname>: explicitly enable jQuery
+                        integration.</para></listitem>
+                <listitem><para><methodname>disable()</methodname>: disable jQuery
+                        integration.</para></listitem>
+                <listitem><para><methodname>isEnabled()</methodname>: determine whether or not
+                        jQuery integration is enabled.</para></listitem>
+                <listitem><para><methodname>setVersion()</methodname>: set the jQuery version
+                        that is used. This also decides on the library loaded
+                        from the Google Ajax Library CDN</para></listitem>
+                <listitem><para><methodname>getVersion()</methodname>: get the current jQuery
+                        that is used. This also decides on the library loaded
+                        from the Google Ajax Library CDN</para></listitem>
+                <listitem><para><methodname>useCdn()</methodname>: Return true, if CDN usage is
+                        currently enabled</para></listitem>
+                <listitem><para><methodname>useLocalPath()</methodname>: Return true, if local usage
+                        is currently enabled</para></listitem>
+                <listitem><para><methodname>setLocalPath()</methodname>: Set the local path to the
+                        jQuery Core library</para></listitem>
+                <listitem><para><methodname>getLocalPath()</methodname>: If set, return the local path to the
+                        jQuery Core library</para></listitem>
+            </itemizedlist>
+        </sect4>
+
+        <sect4 id="zendx.jquery.view.jquery.methods.ui">
+            <title>jQuery UI Library methods</title>
+
+            <itemizedlist>
+                <listitem><para><methodname>uiEnable()</methodname>: explicitly enable jQuery UI
+                        integration.</para></listitem>
+                <listitem><para><methodname>uiDisable()</methodname>: disable jQuery UI
+                        integration.</para></listitem>
+                <listitem><para><methodname>uiIsEnabled()</methodname>: determine whether or not
+                        jQuery UI integration is enabled.</para></listitem>
+                <listitem><para><methodname>setUiVersion()</methodname>: set the jQuery UI version
+                        that is used. This also decides on the library loaded
+                        from the Google Ajax Library CDN</para></listitem>
+                <listitem><para><methodname>getUiVersion()</methodname>: get the current jQuery UI
+                        that is used. This also decides on the library loaded
+                        from the Google Ajax Library CDN</para></listitem>
+                <listitem><para><methodname>useUiCdn()</methodname>: Return true, if CDN usage is
+                        currently enabled for jQuery UI</para></listitem>
+                <listitem><para><methodname>useUiLocal()</methodname>: Return true, if local usage
+                        is currently enabled for jQuery UI</para></listitem>
+                <listitem><para><methodname>setUiLocalPath()</methodname>: Set the local path to the
+                        jQuery UI library</para></listitem>
+                <listitem><para><methodname>getUiLocalPath()</methodname>: If set, get the local path
+                        to the jQuery UI library</para></listitem>
+            </itemizedlist>
+        </sect4>
+
+        <sect4 id="zendx.jquery.view.jquery.methods.other">
+            <title>jQuery Helper Utility methods</title>
+
+            <itemizedlist>
+                <listitem><para><methodname>setView(Zend_View_Interface $view)</methodname>: set
+                        a view instance in the container.</para></listitem>
+                <listitem><para><methodname>onLoadCaptureStart()</methodname>: Start capturing javascript code
+                        for jQuery onLoad execution.</para></listitem>
+                <listitem><para><methodname>onLoadCaptureEnd()</methodname>: Stop capturing</para></listitem>
+                <listitem><para><methodname>javascriptCaptureStart()</methodname>: Start capturing javascript code
+                        that has to be rendered after the inclusion of either jQuery Core or UI libraries.</para></listitem>
+                <listitem><para><methodname>javascriptCaptureEnd()</methodname>: Stop capturing.</para></listitem>
+                <listitem><para><methodname>addJavascriptFile($path)</methodname>: Add javascript file to be included after
+                                jQuery Core or UI library.</para></listitem>
+                <listitem><para><methodname>getJavascriptFiles()</methodname>: Return all currently registered
+                        additional javascript files.</para></listitem>
+                <listitem><para><methodname>clearJavascriptFiles()</methodname>: Clear the javascript files</para></listitem>
+                <listitem><para><methodname>addJavascript($statement)</methodname>: Add javascript statement to be included
+                        after jQuery Core or UI library.</para></listitem>
+                <listitem><para><methodname>getJavascript()</methodname>: Return all currently registered
+                        additional javascript statements.</para></listitem>
+                <listitem><para><methodname>clearJavascript()</methodname>: Clear the javascript statements.</para></listitem>
+                <listitem><para><methodname>addStylesheet($path)</methodname>: Add a stylesheet file that is needed
+                        for a jQuery view helper to display correctly.</para></listitem>
+                <listitem><para><methodname>getStylesheets()</methodname>: Get all currently registered
+                        additional stylesheets.</para></listitem>
+                <listitem><para><methodname>addOnLoad($statement)</methodname>: Add javascript statement that should
+                        be executed on document loading.</para></listitem>
+                <listitem><para><methodname>getOnLoadActions()</methodname>: Return all currently registered
+                        onLoad statements.</para></listitem>
+                <listitem><para><methodname>setRenderMode($mask)</methodname>: Render only a specific subset of the
+                        jQuery environment via ZendX_JQuery::RENDER_ constants. Rendering all elements
+                        is the default behaviour.</para></listitem>
+                <listitem><para><methodname>getRenderMode()</methodname>: Return the current
+                        jQuery environment rendering mode.</para></listitem>
+                <listitem><para><methodname>setCdnSsl($bool)</methodname>: Set if the CDN Google Ajax Library should be loaded
+                        from an SSL or a Non-SSL location.</para></listitem>
+            </itemizedlist>
+
+            <para>These are quite a number of methods, but many of them are used for internally by all the
+                additional view helpers and during the printing of the jQuery environment. Unless you
+                want to build your own jQuery helper or have a complex use-case, you will probably only
+                get in contact with a few methods of these.</para>
+        </sect4>
+
+    </sect3>
+
+    <sect3 id="zendx.jquery.view.jquery.refactor">
+        <title>Refactoring jQuery environment with setRenderMode()</title>
+
+        <para>Using the current setup that was described, each page of your website would show
+            a different subset of jQuery code that would be needed to keep the current jQuery related
+            items running. Also different files or stylesheets may be included depending on which
+            helpers you implemented in your application. In production stage you might want to centralize
+            all the javascript your application generated into a single file, or disable stylesheet
+            rendering because you have merged all the stylesheets into a single file and include it statically
+            in your layout. To allow a smooth refactoring you can enable or disable the rendering
+            of certain jQuery environment blocks with help of the following constants and the
+        <methodname>jQuery()->setRenderMode($bitmask)</methodname> function.</para>
+
+        <itemizedlist>
+            <listitem><para><code>ZendX_JQuery::RENDER_LIBRARY</code>: Renders jQuery Core and UI library</para></listitem>
+            <listitem><para><code>ZendX_JQuery::RENDER_SOURCES</code>: Renders additional javascript files</para></listitem>
+            <listitem><para><code>ZendX_JQuery::RENDER_STYLESHEETS</code>: Renders jQuery related stylesheets</para></listitem>
+            <listitem><para><code>ZendX_JQuery::RENDER_JAVASCRIPT</code>: Render additional javascript statements</para></listitem>
+            <listitem><para><code>ZendX_JQuery::RENDER_JQUERY_ON_LOAD</code>: Render jQuery onLoad statements</para></listitem>
+            <listitem><para><code>ZendX_JQuery::RENDER_ALL</code>: Render all previously mentioned blocks, this is default behaviour.</para></listitem>
+        </itemizedlist>
+
+        <para>
+            For an example, if you would have merged jQuery Core and UI libraries as well as other files into a single large file
+            as well as merged stylesheets to keep HTTP requests low on your production application.
+            You could disallow the jQuery helper to render those parts, but render all the other stuff
+            with the following statement in your view:
+        </para>
+
+        <programlisting language="php"><![CDATA[
+$view->jQuery()
+     ->setRenderMode(ZendX_JQuery::RENDER_JAVASCRIPT |
+                     ZendX_JQuery::RENDER_JQUERY_ON_LOAD);
+]]></programlisting>
+
+        <para>This statement makes sure only the required javascript statements and onLoad blocks of the current page are rendered by the jQuery helper.</para>
+    </sect3>
+
+    <sect3 id="zendx.jquery.view.jquery.migrations">
+        <title>Migrations</title>
+
+        <para>Prior to 1.8 the methods <methodname>setCdnVersion()</methodname>, <methodname>setLocalPath()</methodname>
+            <methodname>setUiCdnVersion()</methodname> and <methodname>setUiLocalPath()</methodname> all enabled the view
+            helper upon calling, which is considered a bug from the following perspective: If
+            you want to use the any non-default library option, you would have to manually disable the
+            jQuery helper aftwards if you only require it to be loaded in some scenarios. With version
+            1.8 the jQuery helper does only enable itsself, when <methodname>enable()</methodname> is called,
+            which all internal jQuery View helpers do upon being called.
+        </para>
+    </sect3>
+</sect2>

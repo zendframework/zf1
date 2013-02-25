@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect2 id="zendx.jquery.view.helpers">
+    <title>JQuery Helpers</title>
+
+    <sect3 id="zendx.jquery.view.helpers.ajaxlink">
+        <title>AjaxLink Helper</title>
+
+        <para>The AjaxLink helper uses jQuery's ajax capabilities to offer the creation of links that do ajax requests and
+            inject the response into a chosen DOM element. It also offers the possibility to append simple jQuery effects
+            to both the link and the response DOM element. A simple example introduces its functionality:</para>
+
+        <programlisting language="php"><![CDATA[
+<!-- Inside your View Object -->
+<div id="container"></div>
+<?php echo $this->view->ajaxLink("Link Name",
+                          "url.php",
+                          array('update' => '#container')); ?>
+]]></programlisting>
+
+        <para>This example creates a link with the label "Link Name" that fires an ajax request to url.php
+            upon click and renders the response into the div container "#container". The function header
+            for the ajaxLink is as follows: <code>function ajaxLink($label, $url, $options, $params);</code>
+            The options array is very powerful and offers you lots of functionality to customize your
+            ajax requests.</para>
+
+        <para>Available options are:</para>
+
+        <table id="zendx.jquery.view.helpers.ajaxlink.table">
+            <title>AjaxLink options</title>
+            <tgroup cols="4">
+                <thead>
+                    <row>
+                        <entry>Option</entry>
+                        <entry>Data Type</entry>
+                        <entry>Default Value</entry>
+                        <entry>Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry><code>update</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>false</code></entry>
+                        <entry>
+                            Container to inject response content into, use jQuery CSS Selector syntax, ie. "#container" or ".box"
+                        </entry>
+                    </row>
+                    <row>
+                        <entry><code>method</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>Implicit GET or POST</code></entry>
+                        <entry>Request method, is implicitly chosen as GET when no parameters given and POST when parameters given.</entry>
+                    </row>
+                    <row>
+                        <entry><code>complete</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>false</code></entry>
+                        <entry>Javascript callback executed, when ajax request is complete. This option allows for shortcut effects, see next section.</entry>
+                    </row>
+                    <row>
+                        <entry><code>beforeSend</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>false</code></entry>
+                        <entry>Javascript callback executed right before ajax request is started. This option allows for shortcut effects, see next section.</entry>
+                    </row>
+                    <row>
+                        <entry><code>noscript</code></entry>
+                        <entry><code>boolean</code></entry>
+                        <entry><code>true</code></entry>
+                        <entry>If true the link generated will contain a href attribute to the given link for non-javascript enabled browsers. If false href will resolve to "#".</entry>
+                    </row>
+                    <row>
+                        <entry><code>dataType</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>html</code></entry>
+                        <entry>What type of data is the Ajax Response of? Possible are Html, Text, Json. Processing Json responses has to be done with custom "complete" callback functions.</entry>
+                    </row>
+                    <row>
+                        <entry><code>attribs</code></entry>
+                        <entry><code>array</code></entry>
+                        <entry><code>null</code></entry>
+                        <entry>Additional HTML attributes the ajaxable link should have.</entry>
+                    </row>
+                    <row>
+                        <entry><code>title, id, class</code></entry>
+                        <entry><code>string</code></entry>
+                        <entry><code>false</code></entry>
+                        <entry>Convenience shortcuts for HTML Attributes.</entry>
+                    </row>
+                    <row>
+                        <entry><code>inline</code></entry>
+                        <entry><code>boolean</code></entry>
+                        <entry><code>false</code></entry>
+                        <entry>Although far from best practice, you can set javascript for this link inline in "onclick" attribute.</entry>
+                    </row>
+                  </tbody>
+              </tgroup>
+          </table>
+
+          <para>To enlighten the usage of this helper it is best to show another bunch of more complex examples. This
+            example assumes that you have only one view object that you want to display and don't care a lot about
+            html best practices, since we have to output the jQuery environment just before the closing body tag.</para>
+
+          <programlisting language="php"><![CDATA[
+<html>
+    <head>
+        <title>Zend Framework jQuery AjaxLink Example</title>
+        <script language="javascript"
+                type="text/javascript"
+                src="myCallbackFuncs.js"></script>
+    </head>
+
+    <body>
+        <!-- without echoing jQuery this following -->
+        <!-- list only prints a list of for links -->
+        <ul>
+            <li>
+                <?php echo $this->ajaxLink("Example 1",
+                                           "/ctrl/action1",
+                                           array('update' => '#content',
+                                                 'noscript' => false,
+                                                 'method' => 'POST')); ?>
+            </li>
+            <li>
+                <?php echo $this->ajaxLink("Example 2",
+                                           "/ctrl/action2",
+                                           array('update' => '#content',
+                                                 'class' => 'someLink'),
+                                           array('param1' => 'value1',
+                                                 'param2' => 'value2')); ?>
+            </li>
+            <li><?php echo $this->ajaxLink("Example 3",
+                                           "/ctrl/action3",
+                                           array('dataType' => 'json',
+                                                 'complete' =>
+                                                    'alert(data)')); ?>
+            </li>
+            <li><?php echo $this->ajaxLink("Example 4",
+                                           "/ctrl/action4",
+                                           array('beforeSend' => 'hide',
+                                                 'complete' => 'show')); ?>
+            </li>
+            <li>
+                <?php echo $this->ajaxLink("Example 5",
+                                           "/ctrl/action5",
+                                           array(
+                                            'beforeSend' =>
+                                             'myBeforeSendCallbackJsFunc();',
+                                            'complete' =>
+                                             'myCompleteCallbackJsFunc(data);')
+                                           ); ?>
+            </li>
+        </ul>
+
+        <!-- only at this point the javascript is printed to sreen -->
+        <?php echo $this->jQuery(); ?>
+    </body>
+</html>
+]]></programlisting>
+
+          <para>You might have already seen that the 'update', 'complete', and 'beforeSend' options have to be executed in specific order and syntax so that you cannot
+              use those callbacks and override their behaviour completely when you are using <methodname>ajaxLink()</methodname>. For larger use cases you will probably want to
+              write the request via jQuery on your own. The primary use case for the callbacks is effect usage, other uses may very well become hard to maintain.
+              As shown in Example Link 5, you can also forward the beforeSend/complete Callbacks to your own javascript functions.</para>
+
+          <sect4 id="zendx.jquery.view.helpers.ajaxlink.effects">
+            <title>Shortcut Effects</title>
+
+            <para>You can use shortcut effect names to make your links actions more fancy. For example the Container that will contain
+                the ajax response may very well be invisible in the first place. Additionally you can use shortcut effects on the link
+                to hide it after clicking. The following effects can be used for callbacks:</para>
+
+            <itemizedlist>
+                <listitem><para><code>complete</code> callback: 'show', 'showslow', 'shownormal', 'showfast', 'fadein', 'fadeinslow',
+                'fadeinfast', 'slidedown', 'slidedownslow', 'slidedownfast'. These all correspond to the jQuery effects
+                fadeIn(), show() and slideDown() and will be executed on the container specified in <code>update</code>.</para></listitem>
+
+                <listitem><para><code>beforeSend</code> callback: 'fadeout', 'fadeoutslow', 'fadeoutfast', 'hide',
+                'hideslow', 'hidefast', 'slideup'. These correspond to the jQuery effects fadeOut(), hide(), slideUp() and
+                are executed on the clicked link.</para></listitem>
+            </itemizedlist>
+
+            <programlisting language="php"><![CDATA[
+<?php echo $this->ajaxLink("Example 6",
+                           "/ctrl/action6",
+                           array('beforeSend' => 'hide',
+                                 'complete' => 'show')); ?>
+]]></programlisting>
+          </sect4>
+    </sect3>
+
+    <sect3 id="zendx.jquery.view.helpers.ui">
+        <title>jQuery UI Library Helpers</title>
+
+        <para>The jQuery UI Library offers a range of layout and form specific widgets that are integrated into the
+            Zend Framework via View Helpers. The form-elements are easy to handle and will be described first, whereas
+            the layout specific widgets are a bit more complex to use.</para>
+
+        <sect4 id="zendx.jquery.view.helpers.ui.form">
+            <title>jQuery UI Form Helpers</title>
+
+            <para>The method signature for all form view helpers closely resembles the Dojo View helpers signature,
+                <methodname>helper($id, $value, $params, $attribs)</methodname>. A description of the parameters follows:</para>
+
+            <itemizedlist>
+                <listitem><para><varname>$id</varname>: Will act as the identifier name for the helper element inside a form. If in the attributes
+                        no id element is given, this will also become the form element id, that has to be unique across
+                        the DOM.</para></listitem>
+                <listitem><para><varname>$value</varname>: Default value of the element.</para></listitem>
+                <listitem><para><varname>$params</varname>: Widget specific parameters that customize the look and feel
+                        of the widget. These options are unique to each widget and <ulink url="http://docs.jquery.com/UI">
+                        described in the jQuery UI documentation</ulink>. The data is casted to JSON, so make sure
+                        to use the <classname>Zend_Json_Expr</classname> class to mark executable javascript as safe.</para></listitem>
+                <listitem><para><varname>$attribs</varname>: HTML Attributes of the Form Helper</para></listitem>
+            </itemizedlist>
+
+            <para>The following UI widgets are available as form view helpers. Make sure you use the correct
+                version of jQuery UI library to be able to use them. The Google CDN always offers you the latest
+                released version.</para>
+
+            <itemizedlist>
+                <listitem><para><methodname>autoComplete($id, $value, $params, $attribs)</methodname>: The AutoComplete View helper
+                    is part of jQuery UI since version 1.8 and creates a text field and registeres
+                    it to have auto complete functionality. The completion data source has to be given as jQuery
+                    related parameters 'url' or 'data' as described in the jQuery UI manual.
+                </para></listitem>
+                <listitem><para><methodname>colorPicker($id, $value, $params, $attribs)</methodname>: ColorPicker is still
+                a ZendX_JQuery element for legacy reason, but was removed from jQuery UI completly.
+                </para></listitem>
+                <listitem><para><methodname>datePicker($id, $value, $params, $attribs)</methodname>: Create a DatePicker
+                    inside a text field. This widget is available since jQuery UI 1.5 and can therefore currently be used
+                    with the Google CDN. Using the 'handles' option to create multiple handles overwrites the default set value
+                    and the jQuery parameter 'startValue' internally inside the view helper.</para></listitem>
+                <listitem><para><methodname>slider($id, $value, $params, $attribs)</methodname>: Create a Sliding element
+                    that updates its value into a hidden form field. Available since jQuery UI 1.5.</para></listitem>
+                <listitem><para><methodname>spinner($id, $value, $params, $attribs)</methodname>: Create a Spinner element
+                    that can spin through numeric values in a specified range. This element was removed from
+                    the 1.6 jQuery UI release and has not been re-released yet.</para></listitem>
+            </itemizedlist>
+
+            <example id="zendx.jquery.view.helpers.form.example">
+                <title>Showing jQuery Form View Helper Usage</title>
+
+                <para>In this example we want to simulate a fictional web application that offers auctions
+                    on travel locations. A user may specify a city to travel, a start and end date, and a
+                    maximum amount of money he is willing to pay. Therefore we need an autoComplete field
+                    for all the currently known travel locations, a date picker for start and end dates
+                    and a spinner to specify the amount.</para>
+
+                <programlisting language="php"><![CDATA[
+<form method="post" action="bid.php">
+    <label for="locaction">Where do you want to travel?</label>
+    <?php echo $this->autoComplete("location",
+                                   "",
+                                   array('source' => array('New York',
+                                                         'Mexico City',
+                                                         'Sydney',
+                                                         'Ruegen',
+                                                         'Baden Baden'))); ?>
+    <br />
+
+    <label for="startDate">Travel Start Date:</label>
+    <?php echo $this->datePicker("startDate", '',
+             array(
+                'defaultDate' => '+7',
+                'minDate' => '+7',
+                'onClose' => new Zend_Json_Expr('myJsonFuncCechkingValidity'))); ?>
+    <br />
+
+    <label for="startDate">Travel End Date:</label>
+    <?php echo $this->datePicker("endDate", '',
+             array(
+                'defaultDate' => '+14',
+                'minDate' => '+7',
+                'onClose' => new Zend_Json_Expr('myJsonFuncCechkingValidity'))); ?>
+    <br />
+
+    <label for="bid">Your Bid:</label>
+    <?php echo $this->spinner("bid",
+                              "",
+                              array('min' => 1205.50,
+                                    'max' => 10000,
+                                    'start' => 1205.50,
+                                    'currency' => '€')); ?>
+    <br />
+
+    <input type="submit" value="Bid!" />
+</form>
+]]></programlisting>
+
+                <para>You can see the use of jQuery UI Widget specific parameters. These all correspond to those given in the jQuery UI docs
+                    and are converted to JSON and handed through to the view script.</para>
+            </example>
+        </sect4>
+
+        <sect4 id="zendx.jquery.view.helpers.ui.actionhelper">
+            <title>Using an Action Helper to Send Data to AutoComplete</title>
+
+            <para>The jQuery UI Autocomplete Widget can load data from a remote location
+                rather than from an javascript array, making its usage really useful. Zend
+                Framework currently providers a bunch of server-side AutoComplete
+                Helpers and there is one for jQuery too. You register the helper
+                to the controller helper broker and it takes care of disabling layouts
+                and renders an array of data correctly to be read by the AutoComplete field.
+                To use the Action Helper you have to put this rather long statement into
+                your bootstrap or Controller initialization function:
+            </para>
+
+            <programlisting language="php"><![CDATA[
+Zend_Controller_Action_HelperBroker::addHelper(
+    new ZendX_JQuery_Controller_Action_Helper_AutoComplete()
+);
+]]></programlisting>
+
+            <para>You can then directly call the helper to render AutoComplete Output in
+            your Controller</para>
+
+            <programlisting language="php"><![CDATA[
+class MyIndexController extends Zend_Controller_Action
+{
+    public function autocompleteAction()
+    {
+        // The data sent via the ajax call is inside $_GET['q']
+        $filter = $_GET['q'];
+
+        // Disable Layout and stuff, just displaying AutoComplete Information.
+        $this->_helper->autoComplete(array("New York", "Bonn", "Tokio"));
+    }
+}
+]]></programlisting>
+        </sect4>
+
+        <sect4 id="zendx.jquery.view.helpers.ui.layout">
+            <title>jQuery UI Layout Helpers</title>
+
+            <para>There is a wide range of Layout helpers that the UI library offers. The ones covered by Zend Framework view helpers are
+                Accordion, Dialog, Tabs. Dialog is the most simple one, whereas Accordion and Tab extend a common abstract class and
+                offer a secondary view helper for pane generation. The following view helpers exist in the jQuery view helpers collection,
+                an example accompanies them to show their usage.</para>
+
+            <itemizedlist>
+                <listitem><para><methodname>dialogContainer($id, $content, $params, $attribs)</methodname>: Create a Dialog Box that is rendered with
+                        the given content.on startup. If the option 'autoOpen' set to false is specified the box will not be displayed
+                        on load but can be shown with the additional <methodname>dialog("open")</methodname> javascript function. See UI docs
+                        for details.</para></listitem>
+                <listitem><para><methodname>tabPane($id, $content, $options)</methodname>: Add a new pane to a tab container with the given <varname>$id</varname>.
+                        The given <varname>$content</varname> is shown in this tab pane. To set the title use <varname>$options['title']</varname>.
+                        If <varname>$options['contentUrl']</varname> is set, the content of the tab is requested via ajax on tab activation.
+                    </para></listitem>
+                <listitem><para><methodname>tabContainer($id, $params, $attribs)</methodname>: Render a tab container with all the currently registered
+                        panes. This view helper also offers to add panes with the following syntax:
+                        <code>$this->tabContainer()->addPane($id, $label, $content, $options)</code>.
+                    </para></listitem>
+                <listitem><para><methodname>accordionPane($id, $content, $options)</methodname>: Add a new pane to the accordion container with the given <varname>$id</varname>.
+                        The given <varname>$content</varname> is shown in this tab pane. To set the title use <varname>$options['title']</varname>.
+                    </para></listitem>
+                <listitem><para><methodname>accordionContainer($id, $params, $attribs)</methodname>: Render an accordion container with all the currently registered
+                        panes. This view helper also offers to add panes with the following syntax:
+                        <code>$this->accordionContainer()->addPane($id, $label, $content, $options)</code>.
+                    </para></listitem>
+            </itemizedlist>
+
+            <example id="zendx.jquery.view.helpers.ui.layout.example">
+                <title>Showing the latest news in a Tab Container</title>
+
+                <para>For this example we assume the developer already wrote the controller and model side of the script and assigned
+                    an array of news items to the view script. This array contains at most 5 news elements, so we don't have to care
+                    about the tab container getting to many tabs.</para>
+
+                <programlisting language="php"><![CDATA[
+<?php foreach($this->news AS $article): ?>
+<?php $this->tabPane("newstab",
+                     $article->body,
+                     array('title' => $article->title)); ?>
+<?php endforeach; ?>
+
+<h2>Latest News</h2>
+<?php echo $this->tabContainer("newstab",
+                               array(),
+                               array('class' => 'flora')); ?>
+]]></programlisting>
+            </example>
+        </sect4>
+    </sect3>
+</sect2>
