@@ -58,7 +58,7 @@ class Zend_Service_Twitter extends Zend_Rest_Client
     /**
      * OAuth Endpoint
      */
-    const OAUTH_BASE_URI = 'http://twitter.com/oauth';
+    const OAUTH_BASE_URI = 'https://api.twitter.com/oauth';
 
     /**
      * @var Zend_Http_CookieJar

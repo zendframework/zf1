@@ -109,7 +109,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $token = $this->getMock('Zend_Oauth_Token_Access', array(), array(), '', false);
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $token->expects($this->once())->method('getHttpClient')
-            ->with(array('accessToken'=>$token, 'opt1'=>'val1', 'siteUrl'=>'http://twitter.com/oauth'))
+            ->with(array('accessToken'=>$token, 'opt1'=>'val1', 'siteUrl'=>'https://api.twitter.com/oauth'))
             ->will($this->returnValue($client));
         $twitter = new Zend_Service_Twitter(array('accessToken'=>$token, 'opt1'=>'val1'));
         $this->assertTrue($client === $twitter->getLocalHttpClient());
@@ -126,7 +126,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $token = $this->getMock('Zend_Oauth_Token_Access', array(), array(), '', false);
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $token->expects($this->once())->method('getHttpClient')
-            ->with(array('accessToken'=>$token, 'siteUrl'=>'http://twitter.com/oauth'))
+            ->with(array('accessToken'=>$token, 'siteUrl'=>'https://api.twitter.com/oauth'))
             ->will($this->returnValue($client));
         $twitter = new Zend_Service_Twitter(array('accessToken'=>$token));
         $this->assertTrue($twitter->isAuthorised());
