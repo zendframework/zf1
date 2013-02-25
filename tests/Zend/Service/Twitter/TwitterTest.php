@@ -85,7 +85,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $client->expects($this->any())->method('resetParameters')
             ->will($this->returnValue($client));
         $client->expects($this->once())->method('setUri')
-            ->with('http://api.twitter.com/1/' . $path);
+            ->with('https://api.twitter.com/1/' . $path);
         $response = $this->getMock('Zend_Http_Response', array(), array(), '', false);
         if (!is_null($params)) {
             $setter = 'setParameter' . ucfirst(strtolower($method));
