@@ -443,7 +443,9 @@ class Zend_Feed_Reader
      * Detect the feed type of the provided feed
      *
      * @param  Zend_Feed_Abstract|DOMDocument|string $feed
+     * @param  bool                                  $specOnly
      * @return string
+     * @throws Zend_Feed_Exception
      */
     public static function detectType($feed, $specOnly = false)
     {

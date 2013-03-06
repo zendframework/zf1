@@ -72,9 +72,9 @@ abstract class Zend_Feed_Reader_EntryAbstract
     /**
      * Constructor
      *
-     * @param  DOMElement $entry
-     * @param  int $entryKey
-     * @param  string $type
+     * @param  DOMElement  $entry
+     * @param  int         $entryKey
+     * @param  string|null $type
      * @return void
      */
     public function __construct(DOMElement $entry, $entryKey, $type = null)
@@ -85,7 +85,9 @@ abstract class Zend_Feed_Reader_EntryAbstract
         if ($type !== null) {
             $this->_data['type'] = $type;
         } else {
-            $this->_data['type'] = Zend_Feed_Reader::detectType($feed);
+            $this->_data['type'] = Zend_Feed_Reader::detectType(
+                $this->_domDocument
+            );
         }
         $this->_loadExtensions();
     }
@@ -212,8 +214,10 @@ abstract class Zend_Feed_Reader_EntryAbstract
             }
         }
         require_once 'Zend/Feed/Exception.php';
-        throw new Zend_Feed_Exception('Method: ' . $method
-            . 'does not exist and could not be located on a registered Extension');
+        throw new Zend_Feed_Exception(
+            'Method: ' . $method
+            . 'does not exist and could not be located on a registered Extension'
+        );
     }
 
     /**
