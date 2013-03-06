@@ -66,7 +66,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         'proxy_user'    => '',
         'proxy_pass'    => '',
         'proxy_auth'    => Zend_Http_Client::AUTH_BASIC,
-        'persistent'    => false
+        'persistent'    => false,
     );
 
     /**
@@ -96,7 +96,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
     public function connect($host, $port = 80, $secure = false)
     {
         // If no proxy is set, fall back to Socket adapter
-        if (! $this->config['proxy_host']) {
+        if (!$this->config['proxy_host']) {
             return parent::connect($host, $port, $secure);
         }
 
@@ -124,7 +124,9 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
      * @return string Request as string
      * @throws Zend_Http_Client_Adapter_Exception
      */
-    public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
+    public function write(
+        $method, $uri, $http_ver = '1.1', $headers = array(), $body = ''
+    )
     {
         // If no proxy is set, fall back to default Socket adapter
         if (!$this->config['proxy_host']) {
@@ -142,7 +144,9 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         $host = $this->config['proxy_host'];
         $port = $this->config['proxy_port'];
 
-        if ($this->connected_to[0] != "tcp://$host" || $this->connected_to[1] != $port) {
+        if ($this->connected_to[0] != "tcp://$host"
+            || $this->connected_to[1] != $port
+        ) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Trying to write but we are connected to the wrong proxy server'
@@ -307,7 +311,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
             }
         }
 
-        if (false !== $success) {
+        if (!$success) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Unable to connect to HTTPS server through proxy: could not '
