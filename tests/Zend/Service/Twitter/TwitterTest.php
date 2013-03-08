@@ -21,11 +21,12 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Zend_Service_Twitter_TwitterTest2::main');
+    define('PHPUnit_MAIN_METHOD', 'Zend_Service_Twitter_TwitterTest::main');
 }
 
 /** Zend_Service_Twitter */
 require_once 'Zend/Service/Twitter.php';
+require_once 'Zend/Service/Twitter/Response.php';
 
 /** Zend_Http_Client */
 require_once 'Zend/Http/Client.php';
@@ -37,8 +38,6 @@ require_once 'Zend/Http/Client/Adapter/Test.php';
  * @category   Zend
  * @package    Zend_Service_Twitter
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Service
  * @group      Zend_Service_Twitter
  */
@@ -56,16 +55,11 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    public function teardown()
-    {
-        Zend_Service_Abstract::setHttpClient(new Zend_Http_Client);
-    }
-
     /**
      * Quick reusable Twitter Service stub setup. Its purpose is to fake
      * interactions with Twitter so the component can focus on what matters:
      * 1. Makes correct requests (URI, parameters and HTTP method)
-     * 2. Parses all responses and returns a Zend_Rest_Client_Result
+     * 2. Parses all responses and returns a Zend_Service_Twitter_Response
      * 3. TODO: Correctly utilises all optional parameters
      *
      * If used correctly, tests will be fast, efficient, and focused on
@@ -79,19 +73,19 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
      * @param array $params Expected GET/POST parameters for the request
      * @return Zend_Http_Client
      */
-    protected function _stubTwitter($path, $method, $responseFile = null, array $params = null)
+    protected function stubTwitter($path, $method, $responseFile = null, array $params = null)
     {
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $client->expects($this->any())->method('resetParameters')
             ->will($this->returnValue($client));
         $client->expects($this->once())->method('setUri')
-            ->with('https://api.twitter.com/1/' . $path);
+            ->with('https://api.twitter.com/1.1/' . $path);
         $response = $this->getMock('Zend_Http_Response', array(), array(), '', false);
         if (!is_null($params)) {
             $setter = 'setParameter' . ucfirst(strtolower($method));
             $client->expects($this->once())->method($setter)->with($params);
         }
-        $client->expects($this->once())->method('request')->with($method)
+        $client->expects($this->once())->method('request')->with()
             ->will($this->returnValue($response));
         $response->expects($this->any())->method('getBody')
             ->will($this->returnValue(
@@ -109,10 +103,11 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $token = $this->getMock('Zend_Oauth_Token_Access', array(), array(), '', false);
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $token->expects($this->once())->method('getHttpClient')
-            ->with(array('accessToken'=>$token, 'opt1'=>'val1', 'siteUrl'=>'https://api.twitter.com/oauth'))
+            ->with(array('token'=>$token, 'siteUrl'=>'https://api.twitter.com/oauth'))
             ->will($this->returnValue($client));
+
         $twitter = new Zend_Service_Twitter(array('accessToken'=>$token, 'opt1'=>'val1'));
-        $this->assertTrue($client === $twitter->getLocalHttpClient());
+        $this->assertTrue($client === $twitter->getHttpClient());
     }
 
     public function testNotAuthorisedWithoutToken()
@@ -126,8 +121,9 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $token = $this->getMock('Zend_Oauth_Token_Access', array(), array(), '', false);
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $token->expects($this->once())->method('getHttpClient')
-            ->with(array('accessToken'=>$token, 'siteUrl'=>'https://api.twitter.com/oauth'))
+            ->with(array('token'=>$token, 'siteUrl'=>'https://api.twitter.com/oauth'))
             ->will($this->returnValue($client));
+
         $twitter = new Zend_Service_Twitter(array('accessToken'=>$token));
         $this->assertTrue($twitter->isAuthorised());
     }
@@ -140,6 +136,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $oauth->expects($this->once())->method('redirect')->will($this->returnValue('foo'));
         $oauth->expects($this->once())->method('getAccessToken')->will($this->returnValue('foo'));
         $oauth->expects($this->once())->method('getToken')->will($this->returnValue('foo'));
+
         $twitter = new Zend_Service_Twitter(array('opt1'=>'val1'), $oauth);
         $this->assertEquals('foo', $twitter->getRequestToken());
         $this->assertEquals('foo', $twitter->getRedirectUrl());
@@ -150,24 +147,24 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
 
     public function testResetsHttpClientOnReceiptOfAccessTokenToOauthClient()
     {
+        $this->markTestIncomplete('Problem with resolving classes for mocking');
         $oauth = $this->getMock('Zend_Oauth_Consumer', array(), array(), '', false);
         $client = $this->getMock('Zend_Oauth_Client', array(), array(), '', false);
         $token = $this->getMock('Zend_Oauth_Token_Access', array(), array(), '', false);
         $token->expects($this->once())->method('getHttpClient')->will($this->returnValue($client));
         $oauth->expects($this->once())->method('getAccessToken')->will($this->returnValue($token));
         $client->expects($this->once())->method('setHeaders')->with('Accept-Charset', 'ISO-8859-1,utf-8');
+
         $twitter = new Zend_Service_Twitter(array(), $oauth);
         $twitter->getAccessToken(array(), $this->getMock('Zend_Oauth_Token_Request'));
-        $this->assertTrue($client === $twitter->getLocalHttpClient());
+        $this->assertTrue($client === $twitter->getHttpClient());
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testAuthorisationFailureWithUsernameAndNoAccessToken()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter(array('username'=>'me'));
-        $twitter->statusPublicTimeline();
+        $twitter->statusesPublicTimeline();
     }
 
     /**
@@ -176,11 +173,13 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testUserNameNotRequired()
     {
         $twitter = new Zend_Service_Twitter();
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'users/show.xml', Zend_Http_Client::GET, 'users.show.twitter.xml',
-            array('id'=>'twitter')
+        $twitter->setHttpClient($this->stubTwitter(
+            'users/show.json', Zend_Http_Client::GET, 'users.show.mwop.json',
+            array('screen_name' => 'mwop')
         ));
-        $exists = $twitter->user->show('twitter')->id() !== null;
+        $response = $twitter->users->show('mwop');
+        $this->assertType('Zend_Service_Twitter_Response', $response);
+        $exists = $response->id !== null;
         $this->assertTrue($exists);
     }
 
@@ -190,20 +189,20 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testRetrievingStatusesWithValidScreenNameThrowsNoInvalidScreenNameException()
     {
         $twitter = new Zend_Service_Twitter();
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/user_timeline.xml', Zend_Http_Client::GET, 'user_timeline.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/user_timeline.json', Zend_Http_Client::GET, 'statuses.user_timeline.mwop.json'
         ));
-        $twitter->status->userTimeline(array('screen_name' => 'twitter'));
+        $twitter->statuses->userTimeline(array('screen_name' => 'mwop'));
     }
 
     /**
      * @group ZF-7781
-     * @expectedException Zend_Service_Twitter_Exception
      */
     public function testRetrievingStatusesWithInvalidScreenNameCharacterThrowsInvalidScreenNameException()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter();
-        $twitter->status->userTimeline(array('screen_name' => 'abc.def'));
+        $twitter->statuses->userTimeline(array('screen_name' => 'abc.def'));
     }
 
     /**
@@ -213,7 +212,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter();
-        $twitter->status->userTimeline(array('screen_name' => 'abcdef_abc123_abc123x'));
+        $twitter->statuses->userTimeline(array('screen_name' => 'abcdef_abc123_abc123x'));
     }
 
     /**
@@ -222,17 +221,16 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testStatusUserTimelineConstructsExpectedGetUriAndOmitsInvalidParams()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/user_timeline/783214.xml', Zend_Http_Client::GET, 'user_timeline.twitter.xml', array(
-                'page' => '1',
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/user_timeline.json', Zend_Http_Client::GET, 'statuses.user_timeline.mwop.json', array(
                 'count' => '123',
-                'user_id' => '783214',
+                'user_id' => 783214,
                 'since_id' => '10000',
                 'max_id' => '20000',
                 'screen_name' => 'twitter'
             )
         ));
-        $twitter->status->userTimeline(array(
+        $twitter->statuses->userTimeline(array(
             'id' => '783214',
             'since' => '+2 days', /* invalid param since Apr 2009 */
             'page' => '1',
@@ -247,24 +245,20 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testOverloadingGetShouldReturnObjectInstanceWithValidMethodType()
     {
         $twitter = new Zend_Service_Twitter;
-        $return = $twitter->status;
+        $return = $twitter->statuses;
         $this->assertSame($twitter, $return);
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testOverloadingGetShouldthrowExceptionWithInvalidMethodType()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter;
         $return = $twitter->foo;
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testOverloadingGetShouldthrowExceptionWithInvalidFunction()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter;
         $return = $twitter->foo();
     }
@@ -272,70 +266,58 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testMethodProxyingDoesNotThrowExceptionsWithValidMethods()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/public_timeline.xml', Zend_Http_Client::GET, 'public_timeline.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/sample.json', Zend_Http_Client::GET, 'statuses.sample.json'
         ));
-        $twitter->status->publicTimeline();
+        $twitter->statuses->sample();
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testMethodProxyingThrowExceptionsWithInvalidMethods()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter;
-        $twitter->status->foo();
+        $twitter->statuses->foo();
     }
 
     public function testVerifiedCredentials()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'account/verify_credentials.xml', Zend_Http_Client::GET, 'account.verify_credentials.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'account/verify_credentials.json', Zend_Http_Client::GET, 'account.verify_credentials.json'
         ));
         $response = $twitter->account->verifyCredentials();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    public function testPublicTimelineStatusReturnsResults()
+    public function testSampleTimelineStatusReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/public_timeline.xml', Zend_Http_Client::GET, 'public_timeline.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/sample.json', Zend_Http_Client::GET, 'statuses.sample.json'
         ));
-        $response = $twitter->status->publicTimeline();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->sample();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testRateLimitStatusReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'account/rate_limit_status.xml', Zend_Http_Client::GET, 'rate_limit_status.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'account/rate_limit_status.json', Zend_Http_Client::GET, 'account.rate_limit_status.json'
         ));
         $response = $twitter->account->rateLimitStatus();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testRateLimitStatusHasHitsLeft()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'account/rate_limit_status.xml', Zend_Http_Client::GET, 'rate_limit_status.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'account/rate_limit_status.json', Zend_Http_Client::GET, 'account.rate_limit_status.json'
         ));
         $response = $twitter->account->rateLimitStatus();
-        $remaining_hits = $response->toValue($response->{'remaining-hits'});
-        $this->assertEquals(150, $remaining_hits);
-    }
-
-    public function testAccountEndSession()
-    {
-        $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'account/end_session', Zend_Http_Client::GET
-        ));
-        $response = $twitter->account->endSession();
-        $this->assertTrue($response);
+        $status = $response->toValue();
+        $this->assertEquals(180, $status->resources->statuses->{'/statuses/user_timeline'}->remaining);
     }
 
     /**
@@ -345,42 +327,23 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testFriendshipCreate()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'friendships/create/twitter.xml', Zend_Http_Client::POST, 'friendships.create.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'friendships/create.json', Zend_Http_Client::POST, 'friendships.create.twitter.json',
+            array('screen_name' => 'twitter')
         ));
-        $response = $twitter->friendship->create('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->friendships->create('twitter');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    /**
-     * TODO: Mismatched behaviour from API. Per the API this can assert the
-     * existence of a friendship between any two users (not just the current
-     * user). We should expand the method or add a better fit method for
-     * general use.
-     */
-    public function testFriendshipExists()
-    {
-        $twitter = new Zend_Service_Twitter(array('username'=>'padraicb'));
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'friendships/exists.xml', Zend_Http_Client::GET, 'friendships.exists.twitter.xml',
-            array('user_a'=>'padraicb', 'user_b'=>'twitter')
-        ));
-        $response = $twitter->friendship->exists('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
-    }
-
-    /**
-     * TODO: Add verification for ALL optional parameters
-     */
-    public function testFriendsTimelineWithPageReturnsResults()
+    public function testHomeTimelineWithCountReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/friends_timeline.xml', Zend_Http_Client::GET, 'statuses.friends_timeline.page.xml',
-            array('page'=>3)
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/home_timeline.json', Zend_Http_Client::GET, 'statuses.home_timeline.page.json',
+            array('count' => 3)
         ));
-        $response = $twitter->status->friendsTimeline(array('page' => 3));
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->homeTimeline(array('count' => 3));
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     /**
@@ -389,11 +352,12 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testUserTimelineReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/user_timeline/twitter.xml', Zend_Http_Client::GET, 'user_timeline.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/user_timeline.json', Zend_Http_Client::GET, 'statuses.user_timeline.mwop.json',
+            array('screen_name' => 'mwop')
         ));
-        $response = $twitter->status->userTimeline(array('id' => 'twitter'));
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->userTimeline(array('screen_name' => 'mwop'));
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     /**
@@ -402,134 +366,113 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testPostStatusUpdateReturnsResponse()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/update.xml', Zend_Http_Client::POST, 'statuses.update.xml',
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/update.json', Zend_Http_Client::POST, 'statuses.update.json',
             array('status'=>'Test Message 1')
         ));
-        $response = $twitter->status->update('Test Message 1');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->update('Test Message 1');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testPostStatusUpdateToLongShouldThrowException()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter;
-        $twitter->status->update('Test Message - ' . str_repeat(' Hello ', 140));
+        $twitter->statuses->update('Test Message - ' . str_repeat(' Hello ', 140));
     }
 
-    /**
-     * @expectedException Zend_Service_Twitter_Exception
-     */
     public function testPostStatusUpdateEmptyShouldThrowException()
     {
+        $this->setExpectedException('Zend_Service_Twitter_Exception');
         $twitter = new Zend_Service_Twitter;
-        $twitter->status->update('');
+        $twitter->statuses->update('');
     }
 
     public function testShowStatusReturnsResponse()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/show/15042159587.xml', Zend_Http_Client::GET, 'statuses.show.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/show/307529814640840705.json', Zend_Http_Client::GET, 'statuses.show.json'
         ));
-        $response = $twitter->status->show(15042159587);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->show(307529814640840705);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testCreateFavoriteStatusReturnsResponse()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'favorites/create/15042159587.xml', Zend_Http_Client::POST, 'favorites.create.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'favorites/create.json', Zend_Http_Client::POST, 'favorites.create.json',
+            array('id' => 15042159587)
         ));
-        $response = $twitter->favorite->create(15042159587);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->favorites->create(15042159587);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    public function testFavoriteFavoriesReturnsResponse()
+    public function testFavoritesListReturnsResponse()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'favorites.xml', Zend_Http_Client::GET, 'favorites.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'favorites/list.json', Zend_Http_Client::GET, 'favorites.list.json'
         ));
-        $response = $twitter->favorite->favorites();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->favorites->list();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    /**
-     * TODO: Can we use a HTTP DELETE?
-     */
     public function testDestroyFavoriteReturnsResponse()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'favorites/destroy/15042159587.xml', Zend_Http_Client::POST, 'favorites.destroy.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'favorites/destroy.json', Zend_Http_Client::POST, 'favorites.destroy.json',
+            array('id' => 15042159587)
         ));
-        $response = $twitter->favorite->destroy(15042159587);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->favorites->destroy(15042159587);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testStatusDestroyReturnsResult()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/destroy/15042159587.xml', Zend_Http_Client::POST, 'statuses.destroy.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/destroy/15042159587.json', Zend_Http_Client::POST, 'statuses.destroy.json'
         ));
-        $response = $twitter->status->destroy(15042159587);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->destroy(15042159587);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    /**
-     * TODO: Add verification for ALL optional parameters
-     */
-    public function testUserFriendsReturnsResults()
+    public function testStatusHomeTimelineWithNoOptionsReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/friends.xml', Zend_Http_Client::GET, 'statuses.friends.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/home_timeline.json', Zend_Http_Client::GET, 'statuses.home_timeline.page.json'
         ));
-        $response = $twitter->user->friends();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
-    }
-
-    /**
-     * TODO: Add verification for ALL optional parameters
-     * Note: Implementation does not currently accept ANY optional parameters
-     */
-    public function testUserFollowersReturnsResults()
-    {
-        $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/followers.xml', Zend_Http_Client::GET, 'statuses.followers.xml'
-        ));
-        $response = $twitter->user->followers();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->homeTimeline();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testUserShowByIdReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'users/show.xml', Zend_Http_Client::GET, 'users.show.twitter.xml',
-            array('id'=>'twitter')
+        $twitter->setHttpClient($this->stubTwitter(
+            'users/show.json', Zend_Http_Client::GET, 'users.show.mwop.json',
+            array('screen_name' => 'mwop')
         ));
-        $response = $twitter->user->show('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->users->show('mwop');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     /**
      * TODO: Add verification for ALL optional parameters
+     * @todo rename to "mentions_timeline"
      */
-    public function testStatusRepliesReturnsResults()
+    public function testStatusMentionsReturnsResults()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/mentions.xml', Zend_Http_Client::GET, 'statuses.mentions.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'statuses/mentions_timeline.json', Zend_Http_Client::GET, 'statuses.mentions_timeline.json'
         ));
-        $response = $twitter->status->replies();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->statuses->mentionsTimeline();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     /**
@@ -538,81 +481,57 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     public function testFriendshipDestroy()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'friendships/destroy/twitter.xml', Zend_Http_Client::POST, 'friendships.destroy.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'friendships/destroy.json', Zend_Http_Client::POST, 'friendships.destroy.twitter.json',
+            array('screen_name' => 'twitter')
         ));
-        $response = $twitter->friendship->destroy('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->friendships->destroy('twitter');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     public function testBlockingCreate()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/create/twitter.xml', Zend_Http_Client::POST, 'blocks.create.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'blocks/create.json', Zend_Http_Client::POST, 'blocks.create.twitter.json',
+            array('screen_name' => 'twitter')
         ));
-        $response = $twitter->block->create('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->blocks->create('twitter');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    public function testBlockingExistsReturnsTrueWhenBlockExists()
+    public function testBlockingList()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/exists/twitter.xml', Zend_Http_Client::GET, 'blocks.exists.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'blocks/list.json', Zend_Http_Client::GET, 'blocks.list.json',
+            array('cursor' => -1)
         ));
-        $this->assertTrue($twitter->block->exists('twitter'));
+        $response = $twitter->blocks->list();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    public function testBlockingBlocked()
+    public function testBlockingIds()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/blocking.xml', Zend_Http_Client::GET, 'blocks.blocking.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'blocks/ids.json', Zend_Http_Client::GET, 'blocks.ids.json',
+            array('cursor' => -1)
         ));
-        $response = $twitter->block->blocking();
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
-    }
-
-    public function testBlockingBlockedReturnsIds()
-    {
-        $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/blocking/ids.xml', Zend_Http_Client::GET, 'blocks.blocking.ids.xml',
-            array('page'=>1)
-        ));
-        $response = $twitter->block->blocking(1, true);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
-        $this->assertEquals('23836616', (string) $response->id);
+        $response = $twitter->blocks->ids();
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
+        $this->assertContains('23836616', $response->ids);
     }
 
     public function testBlockingDestroy()
     {
         $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/destroy/twitter.xml', Zend_Http_Client::POST, 'blocks.destroy.twitter.xml'
+        $twitter->setHttpClient($this->stubTwitter(
+            'blocks/destroy.json', Zend_Http_Client::POST, 'blocks.destroy.twitter.json',
+            array('screen_name' => 'twitter')
         ));
-        $response = $twitter->block->destroy('twitter');
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
-    }
-
-    public function testBlockingExistsReturnsFalseWhenBlockDoesNotExists()
-    {
-        $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/exists/padraicb.xml', Zend_Http_Client::GET, 'blocks.exists.padraicb.xml'
-        ));
-        $this->assertFalse($twitter->block->exists('padraicb'));
-    }
-
-    public function testBlockingExistsReturnsObjectWhenFlagPassed()
-    {
-        $twitter = new Zend_Service_Twitter;
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'blocks/exists/padraicb.xml', Zend_Http_Client::GET, 'blocks.exists.padraicb.xml'
-        ));
-        $response = $twitter->block->exists('padraicb', true);
-        $this->assertTrue($response instanceof Zend_Rest_Client_Result);
+        $response = $twitter->blocks->destroy('twitter');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
     /**
@@ -622,65 +541,32 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     {
         $twitter1 = new Zend_Service_Twitter(array('username'=>'zftestuser1'));
         $twitter2 = new Zend_Service_Twitter(array('username'=>'zftestuser2'));
-        $this->assertFalse($twitter1->getLocalHttpClient() === $twitter2->getLocalHttpClient());
+        $this->assertFalse($twitter1->getHttpClient() === $twitter2->getHttpClient());
     }
 
-    /**
-     * @group ZF-10644
-     */
-    public function testStatusUserTimelineShouldHonorAllFlags()
+    public function testSearchTweets()
     {
-        $params = array(
-            'screen_name'      => 'allzend',
-            'page'             => 1,
-            'include_rts'      => '1',
-            'trim_user'        => '1',
-            'include_entities' => '1',
-        );
-        $twitter = new Zend_Service_Twitter();
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/user_timeline.xml', Zend_Http_Client::GET, 'user_timeline.twitter.xml',
-            $params
+        $twitter = new Zend_Service_Twitter;
+        $twitter->setHttpClient($this->stubTwitter(
+            'search/tweets.json', Zend_Http_Client::GET, 'search.tweets.json',
+            array('q' => '#zf2')
         ));
-
-        // Assertions are part of mocking
-        $timeline = $twitter->statusUserTimeline($params);
+        $response = $twitter->search->tweets('#zf2');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
-    /**
-     * @group ZF-11014
-     */
-    public function testStatusFriendsTimelineShouldHonorAllFlags()
+    public function testUsersSearch()
     {
-        $params = array(
-            'page'             => 3,
-            'include_rts'      => '1',
-            'trim_user'        => '1',
-            'include_entities' => '1',
-        );
-        $twitter = new Zend_Service_Twitter();
-        $twitter->setLocalHttpClient($this->_stubTwitter(
-            'statuses/friends_timeline.xml', Zend_Http_Client::GET, 'statuses.friends_timeline.page.xml',
-            $params
-        ));  
-
-        // Assertions are part of mocking
-        $timeline = $twitter->statusFriendsTimeline($params);
+        $twitter = new Zend_Service_Twitter;
+        $twitter->setHttpClient($this->stubTwitter(
+            'users/search.json', Zend_Http_Client::GET, 'users.search.json',
+            array('q' => 'Zend')
+        ));
+        $response = $twitter->users->search('Zend');
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
-
-    /**
-     * @group ZF-11023
-     */
-    public function testConstructorPassedObjectZendConfig()
-    {
-        require_once 'Zend/Config.php';
-        $config = new Zend_Config(array('username' => 'zf'));
-        $twitter = new Zend_Service_Twitter($config);
-        $this->assertEquals('zf', $twitter->getUsername());
-    }
-          
 }
 
-if (PHPUnit_MAIN_METHOD == 'Zend_Service_TwitterTest2::main') {
-    Zend_Service_TwitterTest2::main();
+if (PHPUnit_MAIN_METHOD == 'Zend_Service_TwitterTest::main') {
+    Zend_Service_TwitterTest::main();
 }
