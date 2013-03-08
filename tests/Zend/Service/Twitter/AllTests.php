@@ -25,7 +25,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once 'Zend/Service/Twitter/TwitterTest.php';
-require_once 'Zend/Service/Twitter/TwitterSearchTest.php';
 
 /**
  * @category   Zend
@@ -58,7 +57,6 @@ class Zend_Service_Twitter_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Service_Twitter');
 
         $suite->addTestSuite('Zend_Service_Twitter_TwitterTest');
-        $suite->addTestSuite('Zend_Service_Twitter_TwitterSearchTest');
 
         return $suite;
     }
