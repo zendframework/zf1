@@ -33,7 +33,6 @@
  */
 class Zend_Service_SlideShare_SlideShow
 {
-
     /**
      * Status constant mapping for web service
      *
@@ -328,7 +327,7 @@ class Zend_Service_SlideShare_SlideShow
     /**
      * Sets the description for the Slide show
      *
-     * @param strign $desc The description of the slide show
+     * @param string $desc The description of the slide show
      * @return Zend_Service_SlideShare_SlideShow
      */
     public function setDescription($desc)
