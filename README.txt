@@ -2,19 +2,21 @@ Welcome to the Zend Framework 1.12 Release!
 
 RELEASE INFORMATION
 ---------------
-Zend Framework 1.12.2 Release ([INSERT REV NUM HERE]).
-Released on February 25, 2013
+Zend Framework 1.12.3 Release ([INSERT REV NUM HERE]).
+Released on March 13, 2013
 
-IMPORTANT FIXES FOR 1.12.2
+IMPORTANT FIXES FOR 1.12.3
 --------------------------
 
-This release incorporates over 40 bugfixes. In particular, the following
-issue has been resolved in Zend_Service_Twitter:
+This release incorporates is primarily aimed to update
+Zend_Service_Twitter to the Twitter v1.1 API:
 
- - http://framework.zend.com/issues/browse/ZF-9253
+ - http://framework.zend.com/issues/browse/ZF-12530
 
-This fix ensures that Zend_Service_Twitter uses the new versioned API 
-endpoint required by Twitter.
+Because the Twitter v1.1 API is not backwards compatible with v1.0, the
+API for Zend_Service_Twitter has been changed; if you have been using it
+previously, you will need to update your code accordingly. Both the
+end-user and API documentation have been updated to reflect the changes.
 
 NEW FEATURES
 ============
