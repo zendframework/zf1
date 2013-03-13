@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reviewed: no -->
+<sect1 id="zendx.console.process.unix.overview">
+    <title>ZendX_Console_Process_Unix</title>
+
+    <sect2 id="zendx.console.process.unix.introduction">
+        <title>Introduction</title>
+        <para>
+            <classname>ZendX_Console_Process_Unix</classname> allows developers to spawn
+            an object as a new process, and so do multiple tasks in parallel on
+            console environments. Through its specific nature, it is only
+            working on *nix based systems like Linux, Solaris, Mac/OSx and such.
+            Additionally, the <code>shmop_*</code>, <code>pcntl_*</code> and
+            <code>posix_*</code> modules are required for this component to
+            run. If one of the requirements is not met, it will throw an
+            exception after instantiating the component.
+        </para>
+    </sect2>
+
+    <sect2 id="zendx.console.process.unix.basic">
+        <title>Basic usage of ZendX_Console_Process_Unix</title>
+        <para>
+            <classname>ZendX_Console_Process_Unix</classname> is an abstract class, which
+            requires the user to extend it. It has a single abstract method
+            called <methodname>_run()</methodname> which has to be implemented to create a
+            working process. It also comes with multiple methods for checking
+            the alive status and share variables between the parent and the
+            child process.
+        </para>
+
+        <para>
+            The <methodname>_run()</methodname> method and every method which is called
+            by it is executed by the child process. Every other method which is
+            called directly by the parent is executed by the parent process.
+        </para>
+
+        <para>
+            <methodname>setVariable()</methodname> and <methodname>getVariable()</methodname> can be
+            used from both the parent- and the child process to share variables.
+            To observe the alive status, the child process should call
+            <methodname>_setAlive()</methodname> in a frequent interval, so that the parent
+            process can check the last alive time via <methodname>getLastAlive()</methodname>.
+            To get the PID of the child process, the parent can call
+            <methodname>getPid()</methodname>.
+        </para>
+
+        <example id="zendx.console.process.unix.example">
+            <title>Basic example for processing</title>
+            <para>
+                This example illustrates a basic child process
+            </para>
+
+            <programlisting language="php"><![CDATA[
+class MyProcess extends ZendX_Console_Process_Unix
+{
+    protected function _run()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            // Doing something really important which can't wait: sleeping
+            sleep(1);
+        }
+    }
+}
+
+// This part should last about 10 seconds, not 20.
+$process1 = new MyProcess();
+$process1->start();
+
+$process2 = new MyProcess();
+$process2->start();
+
+while ($process1->isRunning() || $process2->isRunning()) {
+    sleep(1);
+}
+
+echo 'All processes completed';
+]]></programlisting>
+
+            <para>
+                In this example a process is forked twice and executed. As every
+                process runs 10 seconds, the parent process will be finished after
+                10 seconds (and not 20).
+            </para>
+        </example>
+
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->
