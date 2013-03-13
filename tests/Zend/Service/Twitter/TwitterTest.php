@@ -303,9 +303,9 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     {
         $twitter = new Zend_Service_Twitter;
         $twitter->setHttpClient($this->stubTwitter(
-            'account/rate_limit_status.json', Zend_Http_Client::GET, 'account.rate_limit_status.json'
+            'application/rate_limit_status.json', Zend_Http_Client::GET, 'application.rate_limit_status.json'
         ));
-        $response = $twitter->account->rateLimitStatus();
+        $response = $twitter->application->rateLimitStatus();
         $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
@@ -313,9 +313,9 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
     {
         $twitter = new Zend_Service_Twitter;
         $twitter->setHttpClient($this->stubTwitter(
-            'account/rate_limit_status.json', Zend_Http_Client::GET, 'account.rate_limit_status.json'
+            'application/rate_limit_status.json', Zend_Http_Client::GET, 'application.rate_limit_status.json'
         ));
-        $response = $twitter->account->rateLimitStatus();
+        $response = $twitter->application->rateLimitStatus();
         $status = $response->toValue();
         $this->assertEquals(180, $status->resources->statuses->{'/statuses/user_timeline'}->remaining);
     }

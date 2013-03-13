@@ -112,6 +112,7 @@ class Zend_Service_Twitter
      */
     protected $methodTypes = array(
         'account',
+        'application',
         'blocks',
         'directmessages',
         'favorites',
@@ -334,21 +335,6 @@ class Zend_Service_Twitter
     }
 
     /**
-     * Returns the number of api requests you have left per hour.
-     *
-     * @todo   Have a separate payload object to represent rate limits
-     * @throws Zend_Http_Client_Exception if HTTP request fails or times out
-     * @throws Exception\DomainException if unable to decode JSON payload
-     * @return Zend_Service_Twitter_Response
-     */
-    public function accountRateLimitStatus()
-    {
-        $this->init();
-        $response = $this->get('account/rate_limit_status');
-        return new Zend_Service_Twitter_Response($response);
-    }
-
-    /**
      * Verify Account Credentials
      *
      * @throws Zend_Http_Client_Exception if HTTP request fails or times out
@@ -359,6 +345,21 @@ class Zend_Service_Twitter
     {
         $this->init();
         $response = $this->get('account/verify_credentials');
+        return new Zend_Service_Twitter_Response($response);
+    }
+
+    /**
+     * Returns the number of api requests you have left per hour.
+     *
+     * @todo   Have a separate payload object to represent rate limits
+     * @throws Zend_Http_Client_Exception if HTTP request fails or times out
+     * @throws Exception\DomainException if unable to decode JSON payload
+     * @return Zend_Service_Twitter_Response
+     */
+    public function applicationRateLimitStatus()
+    {
+        $this->init();
+        $response = $this->get('application/rate_limit_status');
         return new Zend_Service_Twitter_Response($response);
     }
 
