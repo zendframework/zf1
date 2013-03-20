@@ -185,6 +185,24 @@ class Zend_Captcha_ReCaptchaTest extends PHPUnit_Framework_TestCase
         $captcha = new Zend_Captcha_ReCaptcha;
         $this->assertEquals('Captcha_ReCaptcha', $captcha->getDecorator());
     }
+
+    /**
+     * @group ZF-12086
+     */
+    public function testAllowsSettingCustomTranslationsOptionOnServiceObject()
+    {
+        $options = array(
+            'instructions_visual' => 'Wpisz dwa wyrazy:',
+            'instructions_audio'  => 'Wpisz uslyszany tekst:'
+        );
+
+        $captcha = new Zend_Captcha_ReCaptcha;
+        $captcha->setOption('custom_translations', $options);
+        $this->assertEquals(
+            $options,
+            $captcha->getService()->getOption('custom_translations')
+        );
+    }
 }
 
 class Zend_Captcha_ReCaptchaTest_SessionContainer
