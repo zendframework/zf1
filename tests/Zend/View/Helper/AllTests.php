@@ -72,7 +72,7 @@ require_once 'Zend/View/Helper/ServerUrlTest.php';
 require_once 'Zend/View/Helper/TinySrcTest.php';
 require_once 'Zend/View/Helper/TranslateTest.php';
 require_once 'Zend/View/Helper/UrlTest.php';
-
+require_once 'Zend/View/Helper/UserAgentTest.php';
 
 /**
  * @category   Zend
@@ -142,6 +142,7 @@ class Zend_View_Helper_AllTests
         $suite->addTestSuite('Zend_View_Helper_TinySrcTest');
         $suite->addTestSuite('Zend_View_Helper_TranslateTest');
         $suite->addTestSuite('Zend_View_Helper_UrlTest');
+        $suite->addTestSuite('Zend_View_Helper_UserAgentTest');
 
         return $suite;
     }
