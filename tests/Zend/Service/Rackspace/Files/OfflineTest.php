@@ -212,6 +212,7 @@ class Zend_Service_Rackspace_Files_OfflineTest
             'zf-object-test' . '-copy'
         );
         $this->assertTrue($result);
+        $this->assertNotContains('application/x-www-form-urlencoded', $this->rackspace->getHttpClient()->getLastRequest());
     }
 
     public function testGetObjects()
