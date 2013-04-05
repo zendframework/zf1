@@ -10,7 +10,7 @@ development following these simple instructions.
    - Vagrant (http://vagrantup.com/)
 
 2. Checkout repository to any location
-   > svn checkout http://framework.zend.com/svn/framework/standard/trunk zf1-dev
+   > git clone git://github.com:zendframework/zf1.git zf1-dev
    > cd zf1-dev
    
 3. Start the process by running Vagrant.
