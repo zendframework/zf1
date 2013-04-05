@@ -211,7 +211,7 @@ http://framework.zend.com/manual/en/requirements.html
 INSTALLATION
 ============
 
-Please see [INSTALL.txt](INSTALL.txt).
+Please see [INSTALL.md](INSTALL.md).
 
 REPOSITORY HISTORY
 ==================
@@ -223,6 +223,12 @@ and only contains the tags for the 1.12 series. If you would like an older
 version, you may access the subversion repository linked above, or download an
 older version from http://framework.zend.com/downloads/archives.
 
+CONTRIBUTING
+============
+
+Please see [README-GIT.md](README-GIT.md) and
+[DEVELOPMENT_README.md](DEVELOPMENT_README.md).
+
 QUESTIONS AND FEEDBACK
 ======================
 
@@ -230,18 +236,18 @@ Online documentation can be found at http://framework.zend.com/manual.
 Questions that are not addressed in the manual should be directed to the
 appropriate mailing list:
 
-http://framework.zend.com/wiki/display/ZFDEV/Mailing+Lists
+- http://framework.zend.com/wiki/display/ZFDEV/Mailing+Lists
 
 If you find code in this release behaving in an unexpected manner or
 contrary to its documented behavior, please create an issue in the Zend
 Framework issue tracker at:
 
-http://framework.zend.com/issues
+- https://github.com/zendframework/zf1/issues
 
 If you would like to be notified of new releases, you can subscribe to
 the fw-announce mailing list by sending a blank message to:
 
-fw-announce-subscribe@lists.zend.com.
+- fw-announce-subscribe@lists.zend.com.
 
 LICENSE
 =======

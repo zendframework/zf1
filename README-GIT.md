@@ -12,23 +12,23 @@ review.
 
 ### Option 1: GitHub
 
- 1. Setup a GitHub account (http://github.com/), if you haven't yet
- 2. Fork the ZF1 repository (http://github.com/zendframework/zf1)
- 3. Clone your fork locally and enter it (use your own GitHub username
-    in the statement below)
+1. Setup a GitHub account (http://github.com/), if you haven't yet
+2. Fork the ZF1 repository (http://github.com/zendframework/zf1)
+3. Clone your fork locally and enter it (use your own GitHub username
+   in the statement below)
 
-    ```sh
-    % git clone git@github.com:<username>/zf1.git
-    % cd zf2
-    ```
+   ```sh
+   % git clone git@github.com:<username>/zf1.git
+   % cd zf2
+   ```
 
- 4. Add a remote to the canonical ZF repository, so you can keep your fork
-    up-to-date:
+4. Add a remote to the canonical ZF repository, so you can keep your fork
+   up-to-date:
 
-    ```sh
-    % git remote add zf1 https://github.com/zendframework/zf1.git
-    % git fetch zf1
-    ```
+   ```sh
+   % git remote add zf1 https://github.com/zendframework/zf1.git
+   % git fetch zf1
+   ```
 
 ### Option 2: Personal Repository
 
@@ -38,38 +38,38 @@ own repository.  If you go this route, we will assume you have the knowledge to
 do so, or know where to obtain it. We will not assist you in setting up such a
 repository.
 
- 1.  Create a new repository
+1. Create a new repository
 
-    ```sh
-    % git init
-    ```
+   ```sh
+   % git init
+   ```
 
- 2. Add an "origin" remote pointing to your gitosis/gitolite repo:
+2. Add an "origin" remote pointing to your gitosis/gitolite repo:
 
-    ```sh
-    % git remote add origin git://yourdomain/yourrepo.git
-    ```
+   ```sh
+   % git remote add origin git://yourdomain/yourrepo.git
+   ```
 
- 3. Add a remote for the ZF repository and fetch it
+3. Add a remote for the ZF repository and fetch it
 
-    ```sh
-    % git remote add zf1 https://github.com/zendframework/zf1.git
-    % git fetch zf1
-    ```
+   ```sh
+   % git remote add zf1 https://github.com/zendframework/zf1.git
+   % git fetch zf1
+   ```
 
- 4. Create a new branch for the ZF repository (named "zf/master" here)
+4. Create a new branch for the ZF repository (named "zf/master" here)
 
-    ```sh
-    % git checkout -b zf/master zf1/master
-    ```
+   ```sh
+   % git checkout -b zf/master zf1/master
+   ```
 
- 5. Create your master branch off the ZF branch, and push to your
-    repository
+5. Create your master branch off the ZF branch, and push to your
+   repository
 
-    ```sh
-    % git checkout -b master
-    % git push origin HEAD:master
-    ```
+   ```sh
+   % git checkout -b master
+   % git push origin HEAD:master
+   ```
 
 ## Contributor License Agreement and your git configuration
 
@@ -117,12 +117,12 @@ as of merging your changes into the canonical repository.
 
 A typical work flow will then consist of the following:
 
- 1. Create a new local branch based off your master branch.
- 2. Switch to your new local branch. (This step can be combined with the
-    previous step with the use of `git checkout -b`.)
- 3. Do some work, commit, repeat as necessary.
- 4. Push the local branch to your remote repository.
- 5. Send a pull request.
+1. Create a new local branch based off your master branch.
+2. Switch to your new local branch. (This step can be combined with the
+   previous step with the use of `git checkout -b`.)
+3. Do some work, commit, repeat as necessary.
+4. Push the local branch to your remote repository.
+5. Send a pull request.
 
 The mechanics of this process are actually quite trivial. Below, we will
 create a branch for fixing an issue in the tracker.
@@ -160,13 +160,13 @@ your repository, select the branch you just created, and then select the
 If using your own repository - or even if using GitHub - you can send an
 email indicating you have changes to pull:
 
- -  Send to <zf-devteam@zend.com>
+- Send to <zf-devteam@zend.com>
 
- -  In your message, specify:
-     -  The URL to your repository (e.g., `git://mwop.net/zf1.git`)
-     -  The branch containing the changes you want pulled (e.g., `zf9295`)
-     -  The nature of the changes (e.g., `implements
-        Zend_Service_Twitter`, `fixes ZF-9295`, etc.)
+- In your message, specify:
+  - The URL to your repository (e.g., `git://mwop.net/zf1.git`)
+  - The branch containing the changes you want pulled (e.g., `zf9295`)
+  - The nature of the changes (e.g., `implements
+    Zend_Service_Twitter`, `fixes ZF-9295`, etc.)
 
 ### What branch to issue the pull request against?
 
@@ -186,24 +186,23 @@ get a ton of branches both locally and on your remote.
 Once you know that your changes have been accepted to the master
 repository, we suggest doing some cleanup of these branches.
 
- -  Local branch cleanup
+- Local branch cleanup
 
-    ```sh
-    % git branch -d <branchname>
-    ```
+  ```sh
+  % git branch -d <branchname>
+  ```
 
- -  Remote branch removal
+- Remote branch removal
 
-    ```sh
-    % git push origin :<branchname>
-    ```
-
+  ```sh
+  % git push origin :<branchname>
+  ```
 
 ## FEEDS AND EMAILS
 
 RSS feeds may be found at:
 
-`https://github.com/zendframework/zf1/commits/<branch>.atom`
+- `https://github.com/zendframework/zf1/commits/<branch>.atom`
 
 where &lt;branch&gt; is a branch in the repository.
 
