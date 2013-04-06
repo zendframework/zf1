@@ -222,6 +222,15 @@ class Zend_Service_Rackspace_Files_OfflineTest
         $this->assertEquals($objects[0]->getName(), 'zf-object-test');
         $this->assertEquals($objects[1]->getName(), 'zf-object-test' . '-copy');
     }
+    
+    public function testGetObjectsPseudoDirs()
+    {
+        $objects = $this->rackspace->getObjects('zf-unit-test', array('delimiter' => '/', 'prefix' => 'dir/'));
+        $this->assertTrue($objects !== false);
+
+        $this->assertEquals($objects[0]->getName(), 'dir/subdir1/');
+        $this->assertEquals($objects[1]->getName(), 'dir/subdir2/');
+    }
 
     public function testGetSizeContainers()
     {
