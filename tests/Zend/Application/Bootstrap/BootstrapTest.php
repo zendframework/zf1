@@ -149,6 +149,22 @@ class Zend_Application_Bootstrap_BootstrapTest extends PHPUnit_Framework_TestCas
     }
 
     /**
+     * @group ZF-9435
+     */
+    public function testBootstrapShouldInitializeModuleAutoloaderWhenNamespaceSpecifiedAsEmpty()
+    {
+        $application = new Zend_Application('testing', array(
+            'appnamespace' => "",
+        ));
+        $bootstrap   = new Zend_Application_Bootstrap_Bootstrap(
+            $application
+        );
+        $this->assertTrue($bootstrap->getResourceLoader() instanceof Zend_Application_Module_Autoloader);
+        $al = $bootstrap->getResourceLoader();
+        $this->assertEquals("", $al->getNamespace());
+    }
+
+    /**
      * @group ZF-8496
      */
     public function testBootstrapAutoloaderNamespaceShouldBeConfigurable()
