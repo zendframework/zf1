@@ -329,6 +329,11 @@ abstract class Zend_Service_Rackspace_Abstract
     {
         $client = $this->getHttpClient();
         $client->resetParameters(true);
+        if ($method == 'PUT' && empty($body)) {
+            // if left at NULL a PUT request will always have 
+            // Content-Type: x-url-form-encoded, which breaks copyObject()
+            $client->setEncType(''); 
+        }
         if (empty($headers[self::AUTHUSER_HEADER])) {
             $headers[self::AUTHTOKEN]= $this->getToken();
         } 
