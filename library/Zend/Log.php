@@ -135,8 +135,21 @@ class Zend_Log
             require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception('Configuration must be an array or instance of Zend_Config');
         }
+        
+        if (array_key_exists('instance', $config)) {
+            $class = $config['instance'];
+            unset($config['instance']);
+        } else {
+            $class = __CLASS__;
+        }
 
-        $log = new self;
+        $log = new $class;
+        
+        if (!$log instanceof Zend_Log) {
+            /** @see Zend_Log_Exception */
+            require_once 'Zend/Log/Exception.php';
+            throw new Zend_Log_Exception('Incorrect instance of Zend_Log');
+        }
 
         if (array_key_exists('timestampFormat', $config)) {
             if (null != $config['timestampFormat'] && '' != $config['timestampFormat']) {
