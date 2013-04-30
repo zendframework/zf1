@@ -363,7 +363,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
             'Attrib', 'Default',
         );
 
-        foreach ($options as $key => $value) {
+        foreach ($options as $key => & $value) {
             $normalized = ucfirst($key);
             if (in_array($normalized, $forbidden)) {
                 continue;
@@ -378,6 +378,8 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
             } else {
                 $this->setAttrib($key, $value);
             }
+
+            unset($key, $value);
         }
 
         if (isset($displayGroupDecorators)) {

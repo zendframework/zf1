@@ -361,7 +361,7 @@ class Zend_Form_Element implements Zend_Validate_Interface
         unset($options['options']);
         unset($options['config']);
 
-        foreach ($options as $key => $value) {
+        foreach ($options as $key => & $value) {
             $method = 'set' . ucfirst($key);
 
             if (in_array($method, array('setTranslator', 'setPluginLoader', 'setView'))) {
@@ -377,6 +377,8 @@ class Zend_Form_Element implements Zend_Validate_Interface
                 // Assume it's metadata
                 $this->setAttrib($key, $value);
             }
+
+            unset($key, $value);
         }
         return $this;
     }
