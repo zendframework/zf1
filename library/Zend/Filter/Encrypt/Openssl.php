@@ -128,7 +128,7 @@ class Zend_Filter_Encrypt_Openssl implements Zend_Filter_Encrypt_Interface
         }
 
         foreach ($keys as $type => $key) {
-            if (is_file($key) and is_readable($key)) {
+            if (is_file(realpath($key)) and is_readable($key)) {
                 $file = fopen($key, 'r');
                 $cert = fread($file, 8192);
                 fclose($file);
