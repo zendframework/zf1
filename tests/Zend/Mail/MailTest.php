@@ -209,6 +209,7 @@ class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
         $mail->addTo('address_to1@example.com', 'name_to@example.com');
         $mail->addTo('address_to2@example.com', 'noinclude comma nor at mark');
         $mail->addTo('address_to3@example.com', 'include brackets []');
+        $mail->addTo('address_to4@example.com', 'include dot .');
         $mail->addCc('address_cc@example.com', 'include, name_cc');
 
         $mock = new Zend_Mail_Transport_Mock();
@@ -220,6 +221,7 @@ class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
         $this->assertContains('To: "name_to@example.com" <address_to1@example.com>', $mock->header);
         $this->assertContains('noinclude comma nor at mark <address_to2@example.com>', $mock->header);
         $this->assertContains('"include brackets []" <address_to3@example.com>', $mock->header);
+        $this->assertContains('"include dot ." <address_to4@example.com>', $mock->header);
         $this->assertContains('Cc: "include, name_cc" <address_cc@example.com>', $mock->header);
     }
 
