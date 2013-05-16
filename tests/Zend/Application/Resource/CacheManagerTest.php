@@ -188,6 +188,35 @@ class Zend_Application_Resource_CacheManagerTest extends PHPUnit_Framework_TestC
         $this->assertTrue($cache instanceof Zend_Cache_Core);
     }
 
+    public function testLoggerFactory()
+    {
+        $options = array(
+            'page' => array(
+                'frontend' => array(
+                    'options' => array(
+                        'logging' => true,
+                        'logger' => array(
+                            new Zend_Log_Writer_Mock()
+                        )
+                    )
+                )
+            )
+        );
+
+        $resource = new Zend_Application_Resource_Cachemanager($options);
+        $resource->setBootstrap($this->bootstrap);
+        $resource->init();
+
+        $page = $resource->getCacheManager()->getCache('page');
+        $page->getBackend()->clean(Zend_Cache::CLEANING_MODE_OLD);
+
+        $event = current($options['page']['frontend']['options']['logger'][0]->events);
+
+        $this->assertType('array', $event);
+        $this->assertArrayHasKey('message', $event);
+        $this->assertStringStartsWith('Zend_Cache_Backend_Static', $event['message']);
+    }
+
     /**
      * @group ZF-9738
      */
