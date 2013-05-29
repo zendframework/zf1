@@ -123,7 +123,7 @@ class Zend_Validate_PostCodeTest extends PHPUnit_Framework_TestCase
     public function testSettingLocalesWithoutPostalCodes()
     {
         try {
-            $this->_validator->setLocale('gez_ER');
+            $this->_validator->setLocale('nus_SD');
             $this->fail();
         } catch (Zend_Validate_Exception $e) {
             $this->assertContains('Unable to detect a postcode format', $e->getMessage());
