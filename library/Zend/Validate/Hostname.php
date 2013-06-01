@@ -151,6 +151,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      * (.BIZ) International http://www.iana.org/domains/idn-tables/
      * (.BR) Brazil http://registro.br/faq/faq6.html
      * (.BV) Bouvett Island http://www.norid.no/domeneregistrering/idn/idn_nyetegn.en.html
+     * (.CA) Canada http://www.iana.org/domains/idn-tables/tables/ca_fr_1.0.html
      * (.CAT) Catalan http://www.iana.org/domains/idn-tables/tables/cat_ca_1.0.html
      * (.CH) Switzerland https://nic.switch.ch/reg/ocView.action?res=EF6GW2JBPVTG67DLNIQXU234MN6SC33JNQQGI7L6#anhang1
      * (.CL) Chile http://www.iana.org/domains/idn-tables/tables/cl_latn_1.0.html
@@ -199,6 +200,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'BIZ' => 'Hostname/Biz.php',
         'BR'  => array(1 => '/^[\x{002d}0-9a-zà-ãçéíó-õúü]{1,63}$/iu'),
         'BV'  => array(1 => '/^[\x{002d}0-9a-zàáä-éêñ-ôöøüčđńŋšŧž]{1,63}$/iu'),
+        'CA'  => array(1 => '/^[\x{002d}0-9a-zàâæçéèêëîïôœùûüÿ\x{00E0}\x{00E2}\x{00E7}\x{00E8}\x{00E9}\x{00EA}\x{00EB}\x{00EE}\x{00EF}\x{00F4}\x{00F9}\x{00FB}\x{00FC}\x{00E6}\x{0153}\x{00FF}]{1,63}$/iu'),
         'CAT' => array(1 => '/^[\x{002d}0-9a-z·àç-éíïòóúü]{1,63}$/iu'),
         'CH'  => array(1 => '/^[\x{002d}0-9a-zà-öø-ÿœ]{1,63}$/iu'),
         'CL'  => array(1 => '/^[\x{002d}0-9a-záéíñóúü]{1,63}$/iu'),
@@ -517,14 +519,14 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         }
 
         // RFC3986 3.2.2 states:
-        // 
+        //
         //     The rightmost domain label of a fully qualified domain name
-        //     in DNS may be followed by a single "." and should be if it is 
+        //     in DNS may be followed by a single "." and should be if it is
         //     necessary to distinguish between the complete domain name and
         //     some local domain.
-        //     
+        //
         // (see ZF-6363)
-        
+
         // Local hostnames are allowed to be partitial (ending '.')
         if ($this->_options['allow'] & self::ALLOW_LOCAL) {
             if (substr($value, -1) === '.') {
