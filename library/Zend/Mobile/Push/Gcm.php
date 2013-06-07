@@ -136,14 +136,6 @@ class Zend_Mobile_Push_Gcm extends Zend_Mobile_Push_Abstract
         $client->setUri(self::SERVER_URI);
         $client->setHeaders('Authorization', 'key=' . $this->getApiKey());
 
-        $json = array('registration_ids' => $message->getToken());
-        if ($data = $message->getData()) {
-            $json['data'] = $data;
-        }
-        if ($id = $message->getId()) {
-            $json['id'] = $id;
-        }
-
         $response = $client->setRawData($message->toJson(), 'application/json')
                            ->request('POST');
         $this->close();
