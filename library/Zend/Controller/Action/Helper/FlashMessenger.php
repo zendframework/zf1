@@ -150,7 +150,7 @@ class Zend_Controller_Action_Helper_FlashMessenger extends Zend_Controller_Actio
             self::$_session->setExpirationHops(1, null, true);
         }
 
-        if (!is_array(self::$_session->{$this->_namespace})) {
+        if (!is_array(self::$_session->{$namespace})) {
             self::$_session->{$namespace} = array();
         }
 
