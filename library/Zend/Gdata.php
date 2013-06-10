@@ -121,7 +121,7 @@ class Zend_Gdata extends Zend_Gdata_App
      *                                    useObjectMapping() function.
      */
     public static function import($uri, $client = null,
-        $className='Zend_Gdata_Feed')
+        $className='Zend_Gdata_Feed', $useObjectMapping = true)
     {
         $app = new Zend_Gdata($client);
         $requestData = $app->decodeRequest('GET', $uri);
