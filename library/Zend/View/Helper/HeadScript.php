@@ -449,9 +449,9 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
         {
             // inner wrap with comment end and start if !IE
             if (str_replace(' ', '', $item->attributes['conditional']) === '!IE') {
-                $html = ' <!-->' . $html . '<!-- ';
+                $html = '<!-->' . $html . '<!--';
             }
-            $html = $indent . '<!--[if ' . $item->attributes['conditional'] . ']> ' . $html . '<![endif]-->';
+            $html = $indent . '<!--[if ' . $item->attributes['conditional'] . ']>' . $html . '<![endif]-->';
         } else {
             $html = $indent . $html;
         }

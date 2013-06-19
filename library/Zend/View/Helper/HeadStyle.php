@@ -372,9 +372,9 @@ class Zend_View_Helper_HeadStyle extends Zend_View_Helper_Placeholder_Container_
         if (null == $escapeStart && null == $escapeEnd) {
             // inner wrap with comment end and start if !IE
             if (str_replace(' ', '', $item->attributes['conditional']) === '!IE') {
-                $html = ' <!-->' . $html . '<!-- ';
+                $html = '<!-->' . $html . '<!--';
             }
-            $html = '<!--[if ' . $item->attributes['conditional'] . ']> ' . $html . '<![endif]-->';
+            $html = '<!--[if ' . $item->attributes['conditional'] . ']>' . $html . '<![endif]-->';
         }
 
         return $html;
