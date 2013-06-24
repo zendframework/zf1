@@ -27,6 +27,7 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 
 require_once 'Zend/InfoCard.php';
 require_once 'Zend/InfoCard/Adapter/Default.php';
+require_once 'Zend/InfoCard/Cipher/Symmetric/Adapter/Aes256cbc.php';
 
 /**
  * @category   Zend

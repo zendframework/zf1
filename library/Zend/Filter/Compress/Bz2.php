@@ -151,11 +151,11 @@ class Zend_Filter_Compress_Bz2 extends Zend_Filter_Compress_CompressAbstract
     public function decompress($content)
     {
         $archive = $this->getArchive();
-        if (file_exists($content)) {
+        if (@file_exists($content)) {
             $archive = $content;
         }
 
-        if (file_exists($archive)) {
+        if (@file_exists($archive)) {
             $file = bzopen($archive, 'r');
             if (!$file) {
                 require_once 'Zend/Filter/Exception.php';
