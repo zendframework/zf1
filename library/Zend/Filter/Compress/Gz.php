@@ -182,11 +182,11 @@ class Zend_Filter_Compress_Gz extends Zend_Filter_Compress_CompressAbstract
     {
         $archive = $this->getArchive();
         $mode    = $this->getMode();
-        if (file_exists($content)) {
+        if (@file_exists($content)) {
             $archive = $content;
         }
 
-        if (file_exists($archive)) {
+        if (@file_exists($archive)) {
             $handler = fopen($archive, "rb");
             if (!$handler) {
                 require_once 'Zend/Filter/Exception.php';
