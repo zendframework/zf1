@@ -478,20 +478,6 @@ class Zend_Controller_Action_Helper_ContextSwitchTest extends PHPUnit_Framework_
         $this->checkNothingIsDone();
     }
 
-    public function testInitContextThrowsExceptionIfControllerContextsIsInvalid()
-    {
-        $this->controller->contexts = 'foo';
-        $this->request->setParam('format', 'xml')
-                      ->setActionName('foo');
-        try {
-            $this->helper->initContext();
-            $this->fail('Invalid contexts array should cause failure');
-        } catch (Zend_Controller_Exception $e) {
-            $this->assertContains('Invalid', $e->getMessage());
-        }
-        $this->checkNothingIsDone();
-    }
-
     public function testInitContextDoesNothingIfActionHasNoContexts()
     {
         $this->request->setParam('format', 'xml')

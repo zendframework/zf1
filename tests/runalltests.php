@@ -47,10 +47,18 @@ if (!is_executable($PHPUNIT)) {
 $files = glob('{Zend/*/AllTests.php,Zend/*Test.php}', GLOB_BRACE);
 sort($files);
 
+// we'll capture the result of each phpunit execution in this value, so we'll know if something broke
+$result = 0;
+
 // run through phpunit
 while(list(, $file)=each($files)) {
     echo "Executing {$file}" . PHP_EOL;
-    shell_exec($PHPUNIT . ' --stderr -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file));
+    system($PHPUNIT . ' --stderr -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file), $c_result);
     echo PHP_EOL;
+    
+    if ($c_result) {
+        $result = $c_result;
+    }
 }
-exit(0);
+
+exit($result);
