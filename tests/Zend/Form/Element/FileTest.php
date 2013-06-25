@@ -510,8 +510,10 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
         );
         $this->element->setTransferAdapter('Bar');
         $test = $this->element->getTransferAdapter();
+        
+        $expectedType = 'Zend\Form\Element\FileTest\Adapter\Bar';
         $this->assertTrue(
-            $test instanceof Zend\Form\Element\FileTest\Adapter\Bar
+            $test instanceof $expectedType
         );
     }
 
