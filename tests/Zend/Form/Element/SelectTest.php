@@ -262,9 +262,9 @@ class Zend_Form_Element_SelectTest extends PHPUnit_Framework_TestCase
         $actual   = $this->element->render($this->getView());
         $expected = PHP_EOL
                   . '<select name="foo[]" id="foo">'
-                  . PHP_EOL
+                  . "\n"
                   . '    <option value="bar">Bar</option>'
-                  . PHP_EOL
+                  . "\n"
                   . '</select>';
 
         $this->assertSame($expected, $actual);
