@@ -154,9 +154,12 @@ class Zend_Controller_Action_Helper_FlashMessengerTest extends PHPUnit_Framework
     {
         $this->helper->addMessage('testmessage', 'foobar');
         $this->assertTrue($this->helper->hasCurrentMessages('foobar'));
+
+        $this->helper->addMessage('testmessage2', 'foobar');
+        $this->assertTrue($this->helper->hasCurrentMessages('foobar'));
+
         $foobarMessages = $this->helper->getCurrentMessages('foobar');
-        $this->assertEquals(1, count($foobarMessages));
-        $this->assertEquals('testmessage', array_pop($foobarMessages));
+        $this->assertEquals(array('testmessage', 'testmessage2'), $foobarMessages);
 
         // Ensure it didnt' bleed over into default namespace
         $defaultMessages = $this->helper->getCurrentMessages();
