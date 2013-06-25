@@ -39,14 +39,16 @@ class Zend_Search_Lucene_Storage_DirectoryTest extends PHPUnit_Framework_TestCas
     {
         $tempPath = dirname(__FILE__) . '/_tempFiles/_files';
 
-        // remove files from temporary direcytory
-        $dir = opendir($tempPath);
-        while (($file = readdir($dir)) !== false) {
-            if (!is_dir($tempPath . '/' . $file)) {
-                @unlink($tempPath . '/' . $file);
+        if (is_dir($tempPath)) {
+            // remove files from temporary direcytory
+            $dir = opendir($tempPath);
+            while (($file = readdir($dir)) !== false) {
+                if (!is_dir($tempPath . '/' . $file)) {
+                    @unlink($tempPath . '/' . $file);
+                }
             }
+            closedir($dir);
         }
-        closedir($dir);
 
         $directory = new Zend_Search_Lucene_Storage_Directory_Filesystem($tempPath);
 
