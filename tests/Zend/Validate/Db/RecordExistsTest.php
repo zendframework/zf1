@@ -190,8 +190,8 @@ class Zend_Validate_Db_RecordExistsTest extends PHPUnit_Framework_TestCase
     {
         Zend_Db_Table_Abstract::setDefaultAdapter($this->_adapterHasResult);
         $validator = new Zend_Validate_Db_RecordExists(array('table' => 'users',
-                                                               'schema' => 'my'),
-                                                         'field1');
+                                                             'schema' => 'my',
+                                                             'field' => 'field1'));
         $this->assertTrue($validator->isValid('value1'));
     }
 
@@ -204,8 +204,8 @@ class Zend_Validate_Db_RecordExistsTest extends PHPUnit_Framework_TestCase
     {
         Zend_Db_Table_Abstract::setDefaultAdapter($this->_adapterNoResult);
         $validator = new Zend_Validate_Db_RecordExists(array('table' => 'users',
-                                                               'schema' => 'my'),
-                                                         'field1');
+                                                             'schema' => 'my',
+                                                             'field' => 'field1'));
         $this->assertFalse($validator->isValid('value1'));
     }
 
