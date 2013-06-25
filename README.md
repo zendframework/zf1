@@ -1,6 +1,6 @@
 Welcome to the Zend Framework 1.12 Release! 
 
-Master: [![Build Status](https://travis-ci.org/zendframework/zf1.png?branch=travis-ci)](https://travis-ci.org/zendframework/zf1)
+Master: [![Build Status](https://www.travis-ci.org/zendframework/zf1.png?branch=master)](https://www.travis-ci.org/zendframework/zf1)
 
 RELEASE INFORMATION
 ===================
