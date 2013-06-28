@@ -282,8 +282,8 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         $this->assertSame('$ ٥٣.٢٩٢,١٨', $USD->toCurrency(53292.18, array('script' => 'Arab', 'format' => 'de_AT')));
         $this->assertSame('$ 53.292,18', $USD->toCurrency(53292.18, array('format' => 'de_AT')));
 
-        $this->assertSame('ج.م.‏ 53.292,18', $EGP->toCurrency(53292.18));
-        $this->assertSame('ج.م.‏ ٥٣.٢٩٢,١٨', $EGP->toCurrency(53292.18, array('script' => 'Arab' )));
+        $this->assertSame('53292٫18', $EGP->toCurrency(53292.18));
+        $this->assertSame('٥٣٢٩٢٫١٨', $EGP->toCurrency(53292.18, array('script' => 'Arab' )));
         $this->assertSame('ج.م.‏ ٥٣.٢٩٢,١٨', $EGP->toCurrency(53292.18, array('script' =>'Arab', 'format' => 'de_AT')));
         $this->assertSame('ج.م.‏ 53.292,18', $EGP->toCurrency(53292.18, array('format' => 'de_AT')));
 
@@ -297,10 +297,10 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         }
 
         $INR = new Zend_Currency('INR', 'de_AT');
-        $this->assertSame('Rs 1,20', $INR->toCurrency(1.2));
-        $this->assertSame('Rs 1,00', $INR->toCurrency(1));
-        $this->assertSame('Rs 0,00', $INR->toCurrency(0));
-        $this->assertSame('-Rs 3,00', $INR->toCurrency(-3));
+        $this->assertSame('₹ 1,20', $INR->toCurrency(1.2));
+        $this->assertSame('₹ 1,00', $INR->toCurrency(1));
+        $this->assertSame('₹ 0,00', $INR->toCurrency(0));
+        $this->assertSame('-₹ 3,00', $INR->toCurrency(-3));
     }
 
     /**
@@ -503,8 +503,10 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         }
 
         $currency = new Zend_Currency(array('currency' => 'USD'), 'en_US');
-        $this->assertEquals(array(0 => 'AS', 1 => 'EC', 2 => 'FM', 3 => 'GU', 4 => 'IO', 5 => 'MH', 6 => 'MP',
-            7 => 'PR', 8 => 'PW', 9 => "SV", 10 => 'TC', 11 => 'TL', 12 => 'UM', 13 => 'US', 14 => 'VG', 15 => 'VI'), $currency->getRegionList());
+        $this->assertEquals(array(
+            0 => 'AS', 1 => 'BQ', 2 => 'DG', 3 => 'EC', 4 => 'FM', 5 => 'GU', 6 => 'IO', 7 => 'MH',
+            8 => 'MP', 9 => 'PR', 10 => 'PW', 11 => 'SV', 12 => 'TC', 13 => 'TL', 14 => 'UM',
+            15 => 'US', 16 => 'VG', 17 => 'VI', 18 => 'ZW'), $currency->getRegionList());
     }
 
     /**
