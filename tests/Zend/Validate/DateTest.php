@@ -164,7 +164,7 @@ class Zend_Validate_DateTest extends PHPUnit_Framework_TestCase
             '10.01.2008' => true,
             '32.02.2008' => false,
             '20 April 2008' => true,
-            '1 Jul 2008' => true,
+            '1.Juli.2008' => true,
             '2008/20/03' => false,
             '99/99/2000' => false,
             0            => false,

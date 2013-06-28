@@ -73,25 +73,25 @@ class Zend_Filter_LocalizedToNormalizedTest extends PHPUnit_Framework_TestCase
                 'minute'      => '22',
                 'second'      => '33'),
             '20.04.2009' => array(
-                'date_format' => 'dd.MM.yyyy',
+                'date_format' => 'dd.MM.y',
                 'locale'      => 'de',
                 'day'         => '20',
                 'month'       => '04',
                 'year'        => '2009'),
             '20.April.2009' => array(
-                'date_format' => 'dd.MM.yyyy',
+                'date_format' => 'dd.MM.y',
                 'locale'      => 'de',
                 'day'         => '20',
-                'month'       => '04',
+                'month'       => '4',
                 'year'        => '2009'),
             '20.04.09'      => array(
-                'date_format' => 'dd.MM.yyyy',
+                'date_format' => 'dd.MM.y',
                 'locale'      => 'de',
                 'day'         => '20',
                 'month'       => '04',
                 'year'        => '2009'),
             '20.April.09'   => array(
-                'date_format' => 'dd.MM.yyyy',
+                'date_format' => 'dd.MM.y',
                 'locale'      => 'de',
                 'day'         => '20',
                 'month'       => '04',
@@ -191,7 +191,7 @@ class Zend_Filter_LocalizedToNormalizedTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('10000', $filter->filter(10000));
 
         $this->assertEquals(array(
-            'date_format' => 'dd.MM.yyyy',
+            'date_format' => 'dd.MM.y',
             'locale' => 'de',
             'day' => '1',
             'month' => '2',

@@ -420,7 +420,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(           '2009', $date->toString(    "Y"));
         $this->assertSame(              'F', $date->toString("MMMMM"));
         $this->assertSame(        'Februar', $date->toString( "MMMM"));
-        $this->assertSame(            'Feb', $date->toString(  "MMM"));
+        $this->assertSame(           'Feb.', $date->toString(  "MMM"));
         $this->assertSame(             '02', $date->toString(   "MM"));
         $this->assertSame(              '2', $date->toString(    "M"));
         $this->assertSame(             '07', $date->toString(   "ww"));
@@ -639,7 +639,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(                             '07', $date->get(Zend_Date::WEEK             ));
         $this->assertSame(                        'Februar', $date->get(Zend_Date::MONTH_NAME       ));
         $this->assertSame(                             '02', $date->get(Zend_Date::MONTH            ));
-        $this->assertSame(                            'Feb', $date->get(Zend_Date::MONTH_NAME_SHORT ));
+        $this->assertSame(                           'Feb.', $date->get(Zend_Date::MONTH_NAME_SHORT ));
         $this->assertSame(                              '2', $date->get(Zend_Date::MONTH_SHORT      ));
         $this->assertSame(                             '28', $date->get(Zend_Date::MONTH_DAYS       ));
         $this->assertSame(                              'F', $date->get(Zend_Date::MONTH_NAME_NARROW));
@@ -740,7 +740,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(                           'd.C.', $date->get(Zend_Date::ERA,               'es'));
         $this->assertSame(                   'anno Dómini', $date->get(Zend_Date::ERA_NAME,          'es'));
         $this->assertSame(                     '13/02/2009', $date->get(Zend_Date::DATES,             'es'));
-        $this->assertSame(  'viernes 13 de febrero de 2009', $date->get(Zend_Date::DATE_FULL,         'es'));
+        $this->assertSame( 'viernes, 13 de febrero de 2009', $date->get(Zend_Date::DATE_FULL,         'es'));
         $this->assertSame(          '13 de febrero de 2009', $date->get(Zend_Date::DATE_LONG,         'es'));
         $this->assertSame(                     '13/02/2009', $date->get(Zend_Date::DATE_MEDIUM,       'es'));
         $this->assertSame(                       '13/02/09', $date->get(Zend_Date::DATE_SHORT,        'es'));
@@ -750,7 +750,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(                       '23:31:30', $date->get(Zend_Date::TIME_MEDIUM,       'es'));
         $this->assertSame(                          '23:31', $date->get(Zend_Date::TIME_SHORT,        'es'));
         $this->assertSame(            '13/02/2009 23:31:30', $date->get(Zend_Date::DATETIME,          'es'));
-        $this->assertSame('viernes 13 de febrero de 2009 23:31:30 UTC', $date->get(Zend_Date::DATETIME_FULL, 'es'));
+        $this->assertSame('viernes, 13 de febrero de 2009 23:31:30 UTC', $date->get(Zend_Date::DATETIME_FULL, 'es'));
         $this->assertSame('13 de febrero de 2009 23:31:30 UTC', $date->get(Zend_Date::DATETIME_LONG,  'es'));
         $this->assertSame(            '13/02/2009 23:31:30', $date->get(Zend_Date::DATETIME_MEDIUM,   'es'));
         $this->assertSame(                 '13/02/09 23:31', $date->get(Zend_Date::DATETIME_SHORT,    'es'));
@@ -779,7 +779,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(                                          '07', $date->get(Zend_Date::WEEK             ));
         $this->assertSame(                                     'Februar', $date->get(Zend_Date::MONTH_NAME       ));
         $this->assertSame(                                          '02', $date->get(Zend_Date::MONTH            ));
-        $this->assertSame(                                         'Feb', $date->get(Zend_Date::MONTH_NAME_SHORT ));
+        $this->assertSame(                                        'Feb.', $date->get(Zend_Date::MONTH_NAME_SHORT ));
         $this->assertSame(                                           '2', $date->get(Zend_Date::MONTH_SHORT      ));
         $this->assertSame(                                          '28', $date->get(Zend_Date::MONTH_DAYS       ));
         $this->assertSame(                                           'F', $date->get(Zend_Date::MONTH_NAME_NARROW));
@@ -1291,12 +1291,12 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         }
         $date->set($d2, Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2009-01-14T04:31:30+05:00', $date->get(Zend_Date::W3C));
-        $date->set('Mär', Zend_Date::MONTH_NAME_SHORT);
+        $date->set('Mär.', Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2009-03-14T04:31:30+05:00', $date->get(Zend_Date::W3C));
-        $date->set('Dez', Zend_Date::MONTH_NAME_SHORT);
+        $date->set('Dez.', Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2009-12-14T04:31:30+05:00', $date->get(Zend_Date::W3C));
         $date->setTimeZone('UTC');
-        $date->set('Aug', Zend_Date::MONTH_NAME_SHORT);
+        $date->set('Aug.', Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2009-08-13T23:31:30+00:00', $date->get(Zend_Date::W3C));
         $date->set($d2, Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2009-01-14T04:31:30+05:00', $date->get(Zend_Date::W3C));
@@ -2494,7 +2494,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame('2002-01-04T04:36:50+05:00', $date->get(Zend_Date::W3C));
 
         $date->set($d2);
-        $date->add('Apr', Zend_Date::MONTH_NAME_SHORT);
+        $date->add('Apr.', Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2002-08-04T04:36:50+05:00', $date->get(Zend_Date::W3C));
 
         $date->set($d2);
@@ -2889,7 +2889,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame('2002-01-04T04:36:50+05:00', $date->get(Zend_Date::W3C));
 
         $date->set($d2);
-        $date->sub('Apr', Zend_Date::MONTH_NAME_SHORT);
+        $date->sub('Apr.', Zend_Date::MONTH_NAME_SHORT);
         $this->assertSame('2001-09-04T04:36:50+05:00', $date->get(Zend_Date::W3C));
 
         $date->set($d2);
@@ -5437,7 +5437,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $date->setTimeZone(date_default_timezone_get());
 
         $date->setYear(2000);
-        $date->setMonth('Apr');
+        $date->setMonth('Apr.');
         $this->assertSame('2000-04-01T04:00:00+05:00', $date->get(Zend_Date::W3C));
 
         $date->setYear(2004);
@@ -5669,7 +5669,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $date = new Zend_Date(array('year' => 2008, 'month' => 10, 'day' => 12));
         $this->assertEquals('2008年10月12日', $date->get(Zend_Date::DATE_LONG, 'zh'));
     }
-    /** 
+    /**
      * @group ZF-10492
      */
     public function test_farFutureDate()
