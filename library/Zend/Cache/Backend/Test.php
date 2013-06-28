@@ -125,6 +125,9 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
           || $id == '4a923ef02d7f997ca14d56dfeae25ea7') {
             return serialize(array('foo', 'bar'));
         }
+        if ( $id == 'f53c7d912cc523d9a65834c8286eceb9') {
+            return serialize(array('foobar'));
+        }
         return 'foo';
     }
 
