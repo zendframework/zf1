@@ -77,7 +77,7 @@ class Zend_Tool_Framework_Client_Response
      */
     public function setContent($content, Array $decoratorOptions = array())
     {
-        $this->_applyDecorators($content, $decoratorOptions);
+        $content = $this->_applyDecorators($content, $decoratorOptions);
 
         $this->_content = array();
         $this->appendContent($content);
