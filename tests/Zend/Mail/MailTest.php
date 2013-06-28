@@ -162,7 +162,7 @@ class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
         $this->assertContains('From: test Mail User <testmail@example.com>', $mock->header);
         $this->assertContains('Subject: My Subject', $mock->header);
         $this->assertContains('To: recipient1@example.com', $mock->header);
-        $this->assertContains('Cc: Example no. 1 for cc <recipient1_cc@example.com>', $mock->header);
+        $this->assertContains('Cc: "Example no. 1 for cc" <recipient1_cc@example.com>', $mock->header);
     }
 
     /**
