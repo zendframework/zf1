@@ -77,7 +77,9 @@ class Zend_Json
 
             // php < 5.3
             if (!function_exists('json_last_error')) {
-                if ($decode === null) {
+                if ($encodedValue === 'null') {
+                    return null;
+                } elseif ($decode === null) {
                     require_once 'Zend/Json/Exception.php';
                     throw new Zend_Json_Exception('Decoding failed');
                 }
