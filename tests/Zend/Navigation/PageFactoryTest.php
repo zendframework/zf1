@@ -155,7 +155,7 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
             );
         } catch(Zend_Exception $e) {
             $this->assertEquals(
-                'File "My/NonExistant/Page.php" does not exist or class '
+                'File "My' . DIRECTORY_SEPARATOR . 'NonExistant' . DIRECTORY_SEPARATOR . 'Page.php" does not exist or class '
                 . '"My_NonExistant_Page" was not found in the file',
                 $e->getMessage()
             );
@@ -176,30 +176,6 @@ class Zend_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(
                 'Invalid argument: Unable to determine class to instantiate '
                 . '(Page label: My Invalid Page)',
-                $e->getMessage()
-            );
-        }
-    }
-
-    /**
-     * @group ZF-10048
-     */
-    public function testMvcShouldFailIfOptionsContainsUriAndMvcProperties()
-    {
-        try {
-            $page = Zend_Navigation_Page::factory(array(
-                'label'      => 'MVC Page',
-                'action'     => 'index',
-                'controller' => 'index',
-                'uri'        => '#'
-            ));
-            $this->fail(
-                'An exception has not been thrown for invalid properties'
-            );
-        } catch(Zend_Navigation_Exception $e) {
-            $this->assertEquals(
-                'Invalid argument: Unable to determine class to instantiate '
-                . '(Page label: MVC Page)',
                 $e->getMessage()
             );
         }
