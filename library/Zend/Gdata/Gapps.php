@@ -195,10 +195,10 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      * @throws Zend_Gdata_Gapps_ServiceException
      * @return Zend_Gdata_App_Feed
      */
-    public static function import($uri, $client = null, $className='Zend_Gdata_App_Feed')
+    public static function import($uri, $client = null, $className='Zend_Gdata_App_Feed', $useObjectMapping = true)
     {
         try {
-            return parent::import($uri, $client, $className);
+            return parent::import($uri, $client, $className, $useObjectMapping);
         } catch (Zend_Gdata_App_HttpException $e) {
             self::throwServiceExceptionIfDetected($e);
         }
