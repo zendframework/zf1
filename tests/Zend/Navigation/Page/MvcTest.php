@@ -643,9 +643,11 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
     public function testToArrayMethod()
     {
         $options = array(
+            'accesskey'  => null,
             'label'      => 'foo',
             'action'     => 'index',
             'controller' => 'index',
+            'customHtmlAttribs' => array(),
             'module'     => 'test',
             'fragment'   => 'bar',
             'id'         => 'my-id',
@@ -653,6 +655,7 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
             'title'      => 'my-title',
             'target'     => 'my-target',
             'order'      => 100,
+            'pages'      => array(),
             'active'     => true,
             'visible'    => false,
             'encodeUrl'  => false,
@@ -668,12 +671,15 @@ class Zend_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $options['reset_params'] = true;
         $options['route']        = null;
         $options['params']       = array();
+        $options['privilege']    = null;
         $options['rel']          = array();
+        $options['resource']     = null;
         $options['rev']          = array();
+        $options['type']         = 'Zend_Navigation_Page_Mvc';
 
         $this->assertEquals(
-            array(),
-            array_diff_assoc($options, $page->toArray())
+            $options,
+            $toArray
         );
     }
 
