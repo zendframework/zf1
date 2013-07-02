@@ -92,11 +92,11 @@ class Zend_View_Helper_FormSelectTest extends PHPUnit_Framework_TestCase
         );
 
         $expected = '<select name="foo" id="foo">'
-                  . PHP_EOL
+                  . "\n"
                   . '    <option value="bar">Bar</option>'
-                  . PHP_EOL
+                  . "\n"
                   . '    <option value="baz">Baz</option>'
-                  . PHP_EOL
+                  . "\n"
                   . '</select>';
 
         $this->assertSame($expected, $html);
