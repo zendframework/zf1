@@ -394,7 +394,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
         $twitter->setHttpClient($this->stubTwitter(
             'statuses/show/307529814640840705.json', Zend_Http_Client::GET, 'statuses.show.json'
         ));
-        $response = $twitter->statuses->show(307529814640840705);
+        $response = $twitter->statuses->show('307529814640840705');
         $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
     }
 
