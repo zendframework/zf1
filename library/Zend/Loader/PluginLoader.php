@@ -477,14 +477,18 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
      */
     protected static function _appendIncFile($incFile)
     {
-        if (!file_exists(self::$_includeFileCache)) {
-            $file = '<?php';
-        } else {
-            $file = file_get_contents(self::$_includeFileCache);
+        static $h = null;
+
+        if (null === $h) {
+            $h = fopen(self::$_includeFileCache, 'ab');
+            if (!flock($h, LOCK_EX | LOCK_NB, $wb) || $wb) {
+                $h = false;
+            }
         }
-        if (!strstr($file, $incFile)) {
-            $file .= "\ninclude_once '$incFile';";
-            file_put_contents(self::$_includeFileCache, $file);
+
+        if (false !== $h) {
+            $line = "<?php include_once '$incFile'?>\n";
+            fwrite($h, $line, strlen($line));
         }
     }
 }
