@@ -3358,7 +3358,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
                         $items[$order] = $key;
                     }
                 } elseif (isset($items[$order]) && $items[$order] !== $key) {
-                    throw new \Zend_Form_Exception('Form elements ' .
+                    throw new Zend_Form_Exception('Form elements ' .
                         $items[$order] . ' and ' . $key .
                         ' have the same order (' .
                         $order . ') - ' .
