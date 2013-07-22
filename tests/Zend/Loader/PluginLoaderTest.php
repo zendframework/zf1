@@ -529,6 +529,28 @@ class Zend_Loader_PluginLoaderTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals('Zfns\\Foo\\Bar', $className);
     }
+
+    /**
+     * @url https://github.com/zendframework/zf1/issues/152
+     */
+    public function testLoadClassesWithBackslashAndUnderscoreInName()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped(__CLASS__ . '::' . __METHOD__ . ' requires PHP 5.3.0 or greater');
+            return;
+        }
+
+        $loader = new Zend_Loader_PluginLoader(array());
+        $loader->addPrefixPath('Zfns\\Foo_', dirname(__FILE__) . '/_files/Zfns/Foo');
+
+        try {
+            $className = $loader->load('Demo');
+        } catch (Exception $e) {
+            $this->fail(sprintf("Failed loading helper with backslashes and underscores in name"));
+        }
+
+        $this->assertEquals('Zfns\Foo_Demo', $className);
+    }
 }
 
 // Call Zend_Loader_PluginLoaderTest::main() if this source file is executed directly.
