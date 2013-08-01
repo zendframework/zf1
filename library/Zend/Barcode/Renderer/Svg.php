@@ -327,10 +327,10 @@ class Zend_Barcode_Renderer_Svg extends Zend_Barcode_Renderer_RendererAbstract
             $points[0][1] + $this->_topOffset,
             $points[1][0] + $this->_leftOffset,
             $points[1][1] + $this->_topOffset,
-            $points[2][0] + $this->_leftOffset + cos(-$orientation),
-            $points[2][1] + $this->_topOffset - sin($orientation),
-            $points[3][0] + $this->_leftOffset + cos(-$orientation),
-            $points[3][1] + $this->_topOffset - sin($orientation),
+            $points[2][0] + $this->_leftOffset,
+            $points[2][1] + $this->_topOffset,
+            $points[3][0] + $this->_leftOffset,
+            $points[3][1] + $this->_topOffset,
         );
         $newPoints = implode(' ', $newPoints);
         $attributes['points'] = $newPoints;

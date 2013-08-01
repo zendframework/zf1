@@ -1140,11 +1140,11 @@ abstract class Zend_Barcode_Object_ObjectAbstract
                 $point1 = $this->_rotate($xpos, $ypos + $bar[2] * $barLength);
                 $point2 = $this->_rotate($xpos, $ypos + $bar[3] * $barLength);
                 $point3 = $this->_rotate(
-                    $xpos + $width - 1,
+                    $xpos + $width,
                     $ypos + $bar[3] * $barLength
                 );
                 $point4 = $this->_rotate(
-                    $xpos + $width - 1,
+                    $xpos + $width,
                     $ypos + $bar[2] * $barLength
                 );
                 $this->_addPolygon(array(
