@@ -490,7 +490,7 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
      */
     protected static function _appendIncFile($incFile)
     {
-        if (null === self::$_includeFileCacheHandler) {
+        if (!isset(self::$_includeFileCacheHandler)) {
             self::$_includeFileCacheHandler = fopen(self::$_includeFileCache, 'ab');
 
             if (!flock(self::$_includeFileCacheHandler, LOCK_EX | LOCK_NB, $wouldBlock) || $wouldBlock) {
