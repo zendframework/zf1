@@ -188,11 +188,7 @@ class Zend_Config_JsonTest extends PHPUnit_Framework_TestCase
 
     public function testRaisesExceptionOnInvalidJsonMarkup()
     {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $this->setExpectedException('Zend_Config_Exception', 'Error parsing JSON data');
-        } else {
-            $this->setExpectedException('Zend_Json_Exception', 'Syntax');
-        }
+        $this->setExpectedException('Zend_Config_Exception', 'Error parsing JSON data');
         $config = new Zend_Config_Json($this->_iniFileInvalid);
     }
 
@@ -279,11 +275,7 @@ EOJ;
         }
         $json = '{"env":"ZEND_CONFIG_JSON_ENV","path":"ZEND_CONFIG_JSON_ENV_PATH/tests","int":ZEND_CONFIG_JSON_ENV_INT}';
 
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $this->setExpectedException('Zend_Config_Exception', 'Error parsing JSON data');
-        } else {
-            $this->setExpectedException('Zend_Json_Exception', 'Syntax');
-        }
+        $this->setExpectedException('Zend_Config_Exception', 'Error parsing JSON data');
         $config = new Zend_Config_Json($json, null, array('ignore_constants' => true));
     }
 }
