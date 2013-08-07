@@ -42,7 +42,7 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
 {
     protected function _assertLocalDateTimeString($timestamp, $value)
     {
-        $this->assertEquals(date('YmdHisO', $timestamp), $value);
+        $this->assertEquals(date('YmdHis\Z', $timestamp), $value);
     }
 
     protected function _assertUtcDateTimeString($localTimestamp, $value)
