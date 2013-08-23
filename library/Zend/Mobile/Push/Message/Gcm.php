@@ -63,7 +63,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
      * 
      * @var int
      */
-    protected $_ttl = 0;
+    protected $_ttl = 2419200;
 
     /**
      * Add a Token
@@ -199,11 +199,9 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
     }
 
     /**
-     * Set time to live
-     * If $secs is set to 0 it will be handled as
-     * not being set.
+     * Set time to live.
      *
-     * @param  int $secs
+     * @param int $secs
      * @return Zend_Mobile_Push_Message_Gcm
      */
     public function setTtl($secs)
@@ -236,7 +234,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
         if (!is_array($this->_token) || empty($this->_token)) {
             return false;
         }
-        if ($this->_ttl > 0 &&
+        if ($this->_ttl !== 2419200 &&
             (!is_scalar($this->_id) ||
             strlen($this->_id) === 0)) {
             return false;
@@ -266,7 +264,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
         if ($this->_delay) {
             $json['delay_while_idle'] = $this->_delay;
         }
-        if ($this->_ttl) {
+        if ($this->_ttl !== 2419200) {
             $json['time_to_live'] = $this->_ttl;
         }
         return json_encode($json);
