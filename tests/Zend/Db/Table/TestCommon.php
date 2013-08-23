@@ -498,7 +498,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         } catch (Zend_Exception $e) {
             $this->assertType('Zend_Db_Table_Exception', $e,
                 'Expecting object of type Zend_Db_Table_Exception, got '.get_class($e));
-            $this->assertEquals('A table must have a primary key, but none was found', $e->getMessage());
+            $this->assertEquals("A table must have a primary key, but none was found for table '{$tableName}'", $e->getMessage());
         }
 
         $this->_util->dropTable($tableName);
