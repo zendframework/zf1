@@ -1127,10 +1127,15 @@ abstract class Zend_Db_Adapter_Abstract
         if ($this->_allowSerialization == false) {
             /** @see Zend_Db_Adapter_Exception */
             require_once 'Zend/Db/Adapter/Exception.php';
-            throw new Zend_Db_Adapter_Exception(get_class($this) ." is not allowed to be serialized");
+            throw new Zend_Db_Adapter_Exception(
+                get_class($this) . ' is not allowed to be serialized'
+            );
         }
-        $this->_connection = false;
-        return array_keys(array_diff_key(get_object_vars($this), array('_connection'=>false)));
+        $this->_connection = null;
+
+        return array_keys(
+            array_diff_key(get_object_vars($this), array('_connection' => null))
+        );
     }
 
     /**
