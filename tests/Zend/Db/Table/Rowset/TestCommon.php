@@ -339,4 +339,39 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $rowset->getRow(4);
     }
 
+    /**
+     * @group GH-172
+     */
+    public function testTableRowsetContainsDisconnectedRowObjectsWhenDeserialized()
+    {
+        $table = $this->_table['bugs'];
+        $ser = serialize($table->fetchAll('bug_id = 1', 'bug_id ASC'));
+
+        $rowset = unserialize($ser);
+
+        $row = $rowset->current();
+        $this->assertType('Zend_Db_Table_Row_Abstract', $row); 
+        $this->assertFalse($row->isConnected());
+        $this->assertNull($row->getTable());
+    }
+
+    /**
+     * @group GH-172
+     */
+    public function testConnectedRowObjectsAreCreatedByRowsetAfterSetTableIsCalled()
+    {
+        $table = $this->_table['bugs'];
+        $ser = serialize($table->fetchAll('bug_id = 1', 'bug_id ASC'));
+        $rowset = unserialize($ser);
+
+        // Reconnect the rowset
+        $rowset->setTable($table);
+
+        $this->assertTrue($rowset->isConnected());
+        $row = $rowset->current();
+        $this->assertType('Zend_Db_Table_Row_Abstract', $row);
+        $this->assertTrue($row->isConnected());
+        $this->assertSame($row->getTable(), $table);
+    }
+
 }

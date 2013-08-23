@@ -205,6 +205,7 @@ abstract class Zend_Db_Table_Rowset_Abstract implements SeekableIterator, Counta
                 $this->_connected = true;
             }
         }
+        $this->rewind();
         return $this->_connected;
     }
 
@@ -426,6 +427,9 @@ abstract class Zend_Db_Table_Rowset_Abstract implements SeekableIterator, Counta
                     'readOnly' => $this->_readOnly
                 )
             );
+            if ( $this->_rows[$position] instanceof Zend_Db_Table_Row_Abstract ) {
+                $this->_rows[$position]->setTable($this->getTable());
+            }
         }
 
         // return the row object
