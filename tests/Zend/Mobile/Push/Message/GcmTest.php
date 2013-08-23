@@ -107,6 +107,14 @@ class Zend_Mobile_Push_Message_GcmTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $msg->getTtl());
     }
 
+    public function testTtlSendMessageOnZero()
+    {
+        $msg = new Zend_Mobile_Push_Message_Gcm();
+        $msg->setTtl(0);
+        $this->assertEquals(0, $msg->getTtl());
+        $this->assertEquals('{"time_to_live":0}', $msg->toJson());
+    }
+
     /**
      * @expectedException Zend_Mobile_Push_Message_Exception
      */
