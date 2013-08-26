@@ -25,6 +25,28 @@
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Zend_File_TestAsset_LocatorShouldFindThis
+namespace ZendTest\File\TestAsset
 {
+
+    class LocatorShouldFindFirstClass
+    {
+    }
+
+    class LocatorShouldFindSecondClass
+    {
+    }
+
+}
+
+namespace ZendTest\File\TestAsset\SecondTestNamespace
+{
+
+    class LocatorShouldFindThirdClass
+    {
+    }
+
+    class LocatorShouldFindFourthClass
+    {
+    }
+
 }
