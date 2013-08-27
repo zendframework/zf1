@@ -83,13 +83,65 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($found, "Locator skipped an interface?");
     }
 
+    public function testIterationShouldInjectNamespaceInFoundItems()
+    {
+        $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
+        $found = false;
+        foreach ($locator as $file) {
+            $classes = $file->getClasses();
+            foreach ($classes as $class) {
+                if (strpos($class, '\\', 1)) {
+                    $found = true;
+                }
+            }
+        }
+        $this->assertTrue($found);
+    }
+
     public function testIterationShouldInjectClassInFoundItems()
     {
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $found = false;
         foreach ($locator as $file) {
-            $this->assertTrue(isset($file->classname));
+            $classes = $file->getClasses();
+            foreach ($classes as $class) {
+                $found = true;
+                break;
+            }
         }
+        $this->assertTrue($found);
+    }
+
+    public function testIterationShouldFindMultipleClassesInMultipleNamespacesInSinglePhpFile()
+    {
+        $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
+        $foundFirst = false;
+        $foundSecond = false;
+        $foundThird = false;
+        $foundFourth = false;
+        foreach ($locator as $file) {
+            if (preg_match('/MultipleClassesInMultipleNamespaces\.php$/', $file->getFilename())) {
+                $classes = $file->getClasses();
+                foreach ($classes as $class) {
+                    if ($class === 'ZendTest\File\TestAsset\LocatorShouldFindFirstClass') {
+                        $foundFirst = true;
+                    }
+                    if ($class === 'ZendTest\File\TestAsset\LocatorShouldFindSecondClass') {
+                        $foundSecond = true;
+                    }
+                    if ($class === 'ZendTest\File\TestAsset\SecondTestNamespace\LocatorShouldFindThirdClass') {
+                        $foundThird = true;
+                    }
+                    if ($class === 'ZendTest\File\TestAsset\SecondTestNamespace\LocatorShouldFindFourthClass') {
+                        $foundFourth = true;
+                    }
+                }
+            }
+        }
+        $this->assertTrue($foundFirst);
+        $this->assertTrue($foundSecond);
+        $this->assertTrue($foundThird);
+        $this->assertTrue($foundFourth);
     }
 }
 
