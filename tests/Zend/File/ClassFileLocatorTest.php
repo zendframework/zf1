@@ -85,6 +85,10 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
 
     public function testIterationShouldInjectNamespaceInFoundItems()
     {
+        if (version_compare(PHP_VERSION, '5.3', 'lt')) {
+            $this->markTestSkipped('Test can only be run under 5.3 or later');
+        }
+
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $found = false;
         foreach ($locator as $file) {
@@ -114,6 +118,10 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
 
     public function testIterationShouldFindMultipleClassesInMultipleNamespacesInSinglePhpFile()
     {
+        if (version_compare(PHP_VERSION, '5.3', 'lt')) {
+            $this->markTestSkipped('Test can only be run under 5.3 or later');
+        }
+
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $foundFirst = false;
         $foundSecond = false;
