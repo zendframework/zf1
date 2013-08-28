@@ -22,7 +22,7 @@ require_once 'Zend/File/PhpClassFile.php';
 
 /**
  * Locate files containing PHP classes, interfaces, or abstracts
- * 
+ *
  * @package    Zend_File
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    New BSD {@link http://framework.zend.com/license/new-bsd}
@@ -31,10 +31,10 @@ class Zend_File_ClassFileLocator extends FilterIterator
 {
     /**
      * Create an instance of the locator iterator
-     * 
-     * Expects either a directory, or a DirectoryIterator (or its recursive variant) 
+     *
+     * Expects either a directory, or a DirectoryIterator (or its recursive variant)
      * instance.
-     * 
+     *
      * @param  string|DirectoryIterator $dirOrIterator
      */
     public function __construct($dirOrIterator = '.')
@@ -72,13 +72,13 @@ class Zend_File_ClassFileLocator extends FilterIterator
 
     /**
      * Filter for files containing PHP classes, interfaces, or abstracts
-     * 
+     *
      * @return bool
      */
     public function accept()
     {
         $file = $this->getInnerIterator()->current();
-        // If we somehow have something other than an SplFileInfo object, just 
+        // If we somehow have something other than an SplFileInfo object, just
         // return false
         if (!$file instanceof SplFileInfo) {
             return false;

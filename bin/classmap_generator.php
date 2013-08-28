@@ -24,9 +24,9 @@
  *
  * Usage:
  * --help|-h                    Get usage message
- * --library|-l [ <string> ]    Library to parse; if none provided, assumes 
+ * --library|-l [ <string> ]    Library to parse; if none provided, assumes
  *                              current directory
- * --output|-o [ <string> ]     Where to write autoload file; if not provided, 
+ * --output|-o [ <string> ]     Where to write autoload file; if not provided,
  *                              assumes "autoload_classmap.php" in library directory
  * --append|-a                  Append to autoload file if it exists
  * --overwrite|-w               Whether or not to overwrite existing autoload
