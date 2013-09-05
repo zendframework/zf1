@@ -144,6 +144,6 @@ class Zend_Test_PHPUnit_Db_Connection extends PHPUnit_Extensions_Database_DB_Def
      */
     public function getTruncateCommand()
     {
-        return "DELETE";
+        return "TRUNCATE";
     }
 }
