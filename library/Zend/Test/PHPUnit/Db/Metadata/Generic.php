@@ -164,4 +164,14 @@ class Zend_Test_PHPUnit_Db_Metadata_Generic implements PHPUnit_Extensions_Databa
     {
         return false;
     }
+    
+    public function enablePrimaryKeys($tableName)
+    {
+        return;
+    }
+
+    public function disablePrimaryKeys($tableName)
+    {
+        return;
+    }
 }
