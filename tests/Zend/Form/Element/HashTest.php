@@ -39,6 +39,8 @@ require_once 'Zend/Form/Element/Hash.php';
  */
 class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
 {
+    const HASH_SALT = 'foo-unit-test';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -64,10 +66,11 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         }
 
         $session = new Zend_Form_Element_HashTest_SessionContainer();
-        $session->hash = null;
+        $session->hashes = null;
 
         $this->element = new Zend_Form_Element_Hash('foo', array(
-            'session' => $session,
+                'session' => $session,
+                'salt' => self::HASH_SALT
         ));
     }
 
@@ -103,6 +106,29 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $this->element->setSalt('foobar');
         $this->assertNotEquals($salt, $this->element->getSalt());
         $this->assertEquals('foobar', $this->element->getSalt());
+    }
+
+    public function testSaltChangesHash()
+    {
+        $orgSaltHash = $this->element->getHash();
+        $this->element->setSalt('foobar');
+        $this->assertNotNull($this->element->getHash());
+        $this->assertNotEquals($orgSaltHash, $this->element->getHash());
+    }
+    
+    public function testNewElementSaltChangeWithValueValidation()
+    {
+        $this->element->initCsrfToken();
+        $session = $this->element->getSession();
+        $hash = $this->element->getHash();
+
+        $newElement = new Zend_Form_Element_Hash('foo', array(
+                'session' => $session,
+                'salt' => 'foobar'
+        ));
+        $newElement->setSalt($this->element->getSalt());
+        
+        $this->assertTrue($newElement->isValid($hash));
     }
 
     public function testTimeoutPopulatedByDefault()
@@ -146,10 +172,9 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->element->getLabel());
     }
 
-    public function testSessionNameContainsSaltAndName()
+    public function testSessionNameContainsName()
     {
         $sessionName = $this->element->getSessionName();
-        $this->assertContains($this->element->getSalt(), $sessionName);
         $this->assertContains($this->element->getName(), $sessionName);
     }
 
@@ -166,19 +191,20 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
         $this->_checkZf2794();
 
         $session = $this->element->getSession();
-        $session->hash = $this->element->getHash();
-        $element = new Zend_Form_Element_Hash('foo', array('session' => $session));
+        $session->hashes = array(self::HASH_SALT => $this->element->getHash());
+        $element = new Zend_Form_Element_Hash('foo', array('session' => $session, 'salt' => self::HASH_SALT));
         $validator = $element->getValidator('Identical');
-        $this->assertEquals($session->hash, $validator->getToken());
+        $this->assertEquals($session->hashes[self::HASH_SALT], $validator->getToken());
     }
 
     public function testRenderInitializesSessionHashToken()
     {
         $session = $this->element->getSession();
-        $this->assertNull($session->hash);
+        $this->assertNull($session->hashes);
         $html = $this->element->render($this->getView());
 
-        $this->assertEquals($this->element->getHash(), $session->hash);
+        $this->assertNotNull($session->hashes);
+        $this->assertEquals($this->element->getHash(), $session->hashes[self::HASH_SALT]);
         $this->assertEquals(1, $session->setExpirationHops);
         $this->assertEquals($this->element->getTimeout(), $session->setExpirationSeconds);
     }
@@ -221,12 +247,12 @@ class Zend_Form_Element_HashTest extends PHPUnit_Framework_TestCase
 
 class Zend_Form_Element_HashTest_SessionContainer
 {
-    protected static $_hash;
+    protected static $_hashes;
 
-    public function __get($name)
+    public function & __get($name)
     {
-        if ('hash' == $name) {
-            return self::$_hash;
+        if ('hashes' == $name) {
+            return self::$_hashes;
         }
 
         return null;
@@ -234,8 +260,8 @@ class Zend_Form_Element_HashTest_SessionContainer
 
     public function __set($name, $value)
     {
-        if ('hash' == $name) {
-            self::$_hash = $value;
+        if ('hashes' == $name) {
+            self::$_hashes = $value;
         } else {
             $this->$name = $value;
         }
@@ -243,7 +269,7 @@ class Zend_Form_Element_HashTest_SessionContainer
 
     public function __isset($name)
     {
-        if (('hash' == $name) && (null !== self::$_hash))  {
+        if (('hashes' == $name) && (null !== self::$_hashes))  {
             return true;
         }
 
