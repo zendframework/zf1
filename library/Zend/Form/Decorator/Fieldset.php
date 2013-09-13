@@ -26,6 +26,7 @@ require_once 'Zend/Form/Decorator/Abstract.php';
  * Zend_Form_Decorator_Fieldset
  *
  * Any options passed will be used as HTML attributes of the fieldset tag.
+ * 
  *
  * @category   Zend
  * @package    Zend_Form
