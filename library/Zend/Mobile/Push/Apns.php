@@ -310,7 +310,7 @@ class Zend_Mobile_Push_Apns extends Zend_Mobile_Push_Abstract
         foreach($message->getCustomData() as $k => $v) {
             $payload[$k] = $v;
         }
-        $payload = json_encode($payload);
+        $payload = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         $expire = $message->getExpire();
         if ($expire > 0) {
