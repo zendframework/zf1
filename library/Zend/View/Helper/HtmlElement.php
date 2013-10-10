@@ -76,6 +76,17 @@ abstract class Zend_View_Helper_HtmlElement extends Zend_View_Helper_Abstract
     }
 
     /**
+     * Is doctype HTML5?
+     *
+     * @return boolean
+     */
+    protected function _isHtml5()
+    {
+        $doctype = $this->view->doctype();
+        return $doctype->isHtml5();
+    }
+
+    /**
      * Is doctype strict?
      *
      * @return boolean
