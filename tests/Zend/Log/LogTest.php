@@ -548,6 +548,35 @@ class Zend_Log_LogTest extends PHPUnit_Framework_TestCase
             $this->fail('Unable to load namespaced class');
         }
     }
+
+    /**
+     * @group #85
+     */
+    public function testZendLogCanBeExtendedWhenUsingFactory()
+    {
+        $writer = new Zend_Log_Writer_Null();
+        $log = ZLTest_My_Log::factory(
+            array(
+                'writerName' => $writer,
+                'className' => 'ZLTest_My_Log'
+            )
+        );
+        $this->assertTrue($log instanceof ZLTest_My_Log);
+    }
+
+    /**
+     * @expectedException Zend_Log_Exception
+     */
+    public function testZendLogThrowsAnExceptionWhenPassingIncorrectClassToFactory()
+    {
+        $writer = new Zend_Log_Writer_Null();
+        ZLTest_My_Log::factory(
+            array(
+                'writerName' => $writer,
+                'className' => 'ZLTest_My_LogNotExtending'
+            )
+        );
+    }
 }
 
 class Zend_Log_Writer_NotExtendedWriterAbstract implements Zend_Log_FactoryInterface
@@ -575,6 +604,14 @@ class Custom_Formatter_Mock extends Zend_Log_Formatter_Abstract
     {
     }
 }
+
+/**
+ * Helper classes for testZendLogCanBeExtendedWhenUsingFactory()
+ *
+ * @group #85
+ */
+class ZLTest_My_Log extends Zend_Log {}
+class ZLTest_My_LogNotExtending {}
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Log_LogTest::main') {
     Zend_Log_LogTest::main();
