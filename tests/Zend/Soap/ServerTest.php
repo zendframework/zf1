@@ -987,6 +987,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
      */
     public function testShouldThrowExceptionIfHandledRequestContainsDoctype()
     {
+        $this->markTestSkipped('Cannot test for RuntimeException from Soap Server');
         $server = new Zend_Soap_Server();
         $server->setOptions(array('location'=>'test://', 'uri'=>'http://framework.zend.com'));
         $server->setReturnResponse(true);
