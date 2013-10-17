@@ -546,6 +546,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testGetLastRequest()
     {
@@ -582,6 +583,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testWsiCompliant()
     {
@@ -887,6 +889,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testErrorHandlingOfSoapServerChangesToThrowingSoapFaultWhenInHandleMode()
     {
@@ -980,6 +983,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testShouldThrowExceptionIfHandledRequestContainsDoctype()
     {
