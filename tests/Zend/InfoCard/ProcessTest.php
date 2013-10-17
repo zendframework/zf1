@@ -56,6 +56,10 @@ class Zend_InfoCard_ProcessTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $this->markTestSkipped('SimpleXML implementation changed and CardSpace technology is discontinued');
+        }
+
         $this->tokenDocument = dirname(__FILE__) . '/_files/encryptedtoken.xml';
         $this->sslPubKey     = dirname(__FILE__) . '/_files/ssl_pub.cert';
         $this->sslPrvKey     = dirname(__FILE__) . '/_files/ssl_private.cert';
