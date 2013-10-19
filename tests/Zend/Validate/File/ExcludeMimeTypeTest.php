@@ -61,20 +61,22 @@ class Zend_Validate_File_ExcludeMimeTypeTest extends PHPUnit_Framework_TestCase
     public function testBasic()
     {
         $valuesExpected = array(
-            array('image/gif', false),
+            array('image/gif', true),
+            array('image/jpeg', false),
             array('image', false),
             array('test/notype', true),
             array('image/gif, image/jpeg', false),
-            array(array('image/vasa', 'image/gif'), false),
-            array(array('image/jpeg', 'gif'), false),
-            array(array('image/jpeg', 'jpeg'), true),
+            array(array('image/vasa', 'image/jpeg'), false),
+            array(array('image/gif', 'jpeg'), false),
+            array(array('image/gif', 'gif'), true),
         );
 
+        $filetest = dirname(__FILE__) . '/_files/picture.jpg';
         $files = array(
-            'name'     => 'testsize.mo',
-            'type'     => 'image/gif',
+            'name'     => 'picture.jpg',
+            'type'     => 'image/jpeg',
             'size'     => 200,
-            'tmp_name' => dirname(__FILE__) . '/_files/testsize.mo',
+            'tmp_name' => $filetest,
             'error'    => 0
         );
 
@@ -83,7 +85,7 @@ class Zend_Validate_File_ExcludeMimeTypeTest extends PHPUnit_Framework_TestCase
             $validator->enableHeaderCheck();
             $this->assertEquals(
                 $element[1],
-                $validator->isValid(dirname(__FILE__) . '/_files/testsize.mo', $files),
+                $validator->isValid($filetest, $files),
                 "Tested with " . var_export($element, 1)
             );
         }
