@@ -153,6 +153,21 @@ class Zend_Validate_File_ExcludeMimeTypeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('image/gif,text,jpg,to,zip,ti', $validator->getMimeType());
         $this->assertEquals(array('image/gif', 'text', 'jpg', 'to', 'zip', 'ti'), $validator->getMimeType(true));
     }
+
+
+    /**
+     * Ensure validator is not affected by PHP bug #63976
+     */
+    public function testShouldHaveProperErrorMessageOnNotReadableFile()
+    {
+        $validator = new Zend_Validate_File_ExcludeMimeType('image/jpeg');
+
+        $this->assertFalse($validator->isValid('notexisting'), array('name' => 'notexisting'));
+        $this->assertEquals(
+            array('fileExcludeMimeTypeNotReadable' => "File 'notexisting' is not readable or does not exist"),
+            $validator->getMessages()
+        );
+    }
 }
 
 // Call Zend_Validate_File_ExcludeMimeTypeTest::main() if this source file is executed directly.
