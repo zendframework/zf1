@@ -66,6 +66,7 @@ class Zend_Validate_File_AllTests
         $suite->addTestSuite('Zend_Validate_File_CountTest');
         $suite->addTestSuite('Zend_Validate_File_Crc32Test');
         $suite->addTestSuite('Zend_Validate_File_ExcludeExtensionTest');
+        $suite->addTestSuite('Zend_Validate_File_ExcludeMimeTypeTest');
         $suite->addTestSuite('Zend_Validate_File_ExistsTest');
         $suite->addTestSuite('Zend_Validate_File_ExtensionTest');
         $suite->addTestSuite('Zend_Validate_File_FilesSizeTest');
