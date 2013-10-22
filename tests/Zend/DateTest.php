@@ -4964,7 +4964,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
 
             $info = $server->getInfo();
 
-            if (($info['offset'] >= 1) || ($info['offset'] <= -1)) {
+            if (($info['offset'] >= 0.5) || ($info['offset'] <= -0.52)) {
                 $this->assertFalse($date1->getTimestamp() == $date2->getTimestamp());
             } else {
                 $this->assertEquals($date1->getTimestamp(), $date2->getTimestamp());
