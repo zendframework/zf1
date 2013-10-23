@@ -77,6 +77,19 @@ class Zend_Db_Statement_Pdo_MysqlTest extends Zend_Db_Statement_Pdo_TestCommon
         $this->assertType('PDOStatement', $statement->getDriverStatement());
     }
 
+    public function testStatementExceptionMessageContainsSqlQuery()
+    {
+        $sql = "SELECT * FROM nonexistent";
+        try {
+            $stmt = $this->_db->query($sql);
+        } catch (Zend_Db_Statement_Exception $e) {
+            $message = $e->getMessage();
+            $this->assertContains($sql, $message);
+            return;
+        }
+        $this->fail('Expected exception');
+    }
+
     public function getDriver()
     {
         return 'Pdo_Mysql';
