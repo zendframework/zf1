@@ -13,6 +13,8 @@ IMPORTANT FIXES FOR 1.12.4
 
 - [#221](https://github.com/zendframework/zf1/pull/221) removes the TinySrc view
   helper, as the TinySrc service no longer exists.
+- [#222](https://github.com/zendframework/zf1/pull/222) removes the InfoCard
+  component, as the CardSpace service no longer exists.
 
 IMPORTANT FIXES FOR 1.12.3
 --------------------------
