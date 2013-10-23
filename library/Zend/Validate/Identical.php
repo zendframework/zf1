@@ -102,7 +102,7 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
      */
     public function setToken($token)
     {
-        $this->_tokenString = (string) $token;
+        $this->_tokenString = $token;
         $this->_token       = $token;
         return $this;
     }
@@ -140,7 +140,7 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
      */
     public function isValid($value, $context = null)
     {
-        $this->_setValue((string) $value);
+        $this->_setValue($value);
 
         if (($context !== null) && isset($context) && array_key_exists($this->getToken(), $context)) {
             $token = $context[$this->getToken()];
