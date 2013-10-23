@@ -41,6 +41,11 @@ require_once 'Zend/Validate/Identical.php';
  */
 class Zend_Validate_IdenticalTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Zend_Validate_Identical
+     */
+    private $validator;
+
     public static function main()
     {
         $suite  = new PHPUnit_Framework_TestSuite('Zend_Validate_IdenticalTest');
