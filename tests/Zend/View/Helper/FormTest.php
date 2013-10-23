@@ -167,6 +167,17 @@ class Zend_View_Helper_FormTest extends PHPUnit_Framework_TestCase
         $form = $this->helper->form('FormName', array('action' => '/foo', 'method' => 'get'));
         $this->assertNotRegexp('/<form[^>]*(name="FormName")/', $form);
     }    
+
+    public function testEmptyActionShouldNotRenderActionAttributeInHTML5()
+    {
+        $this->view->doctype(Zend_View_Helper_Doctype::HTML5);
+        $form = $this->helper->form('', array('action' => ''));
+        $this->assertNotRegexp('/<form[^>]*(action="")/', $form);
+        $form = $this->helper->form('', array('action' => null));
+        $this->assertNotRegexp('/<form[^>]*(action="")/', $form);
+        $form = $this->helper->form('');
+        $this->assertNotRegexp('/<form[^>]*(action="")/', $form);
+    }
 }
 
 // Call Zend_View_Helper_FormTest::main() if this source file is executed directly.
