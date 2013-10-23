@@ -39,6 +39,13 @@ require_once 'Zend/InfoCard/Cipher/Pki/Adapter/Rsa.php';
 class Zend_InfoCard_CipherTest extends PHPUnit_Framework_TestCase
 {
 
+    public function setUp()
+    {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $this->markTestSkipped('SimpleXML implementation changed and CardSpace technology is discontinued');
+        }
+    }
+
     public function testPkiPadding()
     {
         if (!extension_loaded('openssl')) {
