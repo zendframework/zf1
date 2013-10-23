@@ -500,6 +500,11 @@ abstract class Zend_XmlRpc_Value
             }
         }
 
+        //if there is a child element, try to parse type for it
+        if (!$type && $value instanceof SimpleXMLElement) {
+            self::_extractTypeAndValue($value->children(), $type, $value);
+        }
+
         // If no type was specified, the default is string
         if (!$type) {
             $type = self::XMLRPC_TYPE_STRING;
