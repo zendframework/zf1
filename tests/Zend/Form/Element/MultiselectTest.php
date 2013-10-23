@@ -53,6 +53,11 @@ class Zend_Form_Element_MultiselectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @var Zend_Form_Element_Multiselect
+     */
+    public $element;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -341,6 +346,35 @@ class Zend_Form_Element_MultiselectTest extends PHPUnit_Framework_TestCase
         if (strtolower(substr(PHP_OS, 0, 3)) == 'win' && version_compare(PHP_VERSION, '5.1.4', '=')) {
             $this->markTestIncomplete('Error occurs for PHP 5.1.4 on Windows');
         }
+    }
+
+    /**
+     * @group ZF-11667
+     */
+    public function testSimilarErrorMessagesForMultiElementAreNotDuplicated()
+    {
+        $this->element->setConcatJustValuesInErrorMessage(true);
+
+        // create element with 4 checkboxes
+        $this->element->setMultiOptions(array(
+            'multiOptions' => array(
+                array('key' => 'a', 'value' => 'A'),
+                array('key' => 'b', 'value' => 'B'),
+                array('key' => 'c', 'value' => 'C'),
+                array('key' => 'd', 'value' => 'D'),
+            )
+        ));
+
+        // check 3 of them
+        $this->element->setValue(array('A', 'B', 'D'));
+
+        // later on, fails some validation on submit
+        $this->element->addError('some error! %value%');
+
+        $this->assertEquals(
+            array('some error! A; B; D'),
+            $this->element->getMessages()
+        );
     }
 }
 

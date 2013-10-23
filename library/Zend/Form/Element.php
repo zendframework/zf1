@@ -227,6 +227,13 @@ class Zend_Form_Element implements Zend_Validate_Interface
     protected $_isPartialRendering = false;
 
     /**
+     * Use one error message for array elements with concatenated values
+     *
+     * @var bool
+     */
+    protected $_concatJustValuesInErrorMessage = false;
+
+    /**
      * Constructor
      *
      * $spec may be:
@@ -912,6 +919,28 @@ class Zend_Form_Element implements Zend_Validate_Interface
         }
 
         return $attribs;
+    }
+
+    /**
+     * Use one error message for array elements with concatenated values
+     *
+     * @param boolean $concatJustValuesInErrorMessage
+     * @return Zend_Form_Element
+     */
+    public function setConcatJustValuesInErrorMessage($concatJustValuesInErrorMessage)
+    {
+        $this->_concatJustValuesInErrorMessage = $concatJustValuesInErrorMessage;
+        return $this;
+    }
+
+    /**
+     * Use one error message for array elements with concatenated values
+     *
+     * @return boolean
+     */
+    public function getConcatJustValuesInErrorMessage()
+    {
+        return $this->_concatJustValuesInErrorMessage;
     }
 
     /**
@@ -2248,7 +2277,12 @@ class Zend_Form_Element implements Zend_Validate_Interface
                     $aggregateMessages[] = str_replace('%value%', $val, $message);
                 }
                 if (count($aggregateMessages)) {
-                    $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
+                    if ($this->_concatJustValuesInErrorMessage) {
+                        $values = implode($this->getErrorMessageSeparator(), $value);
+                        $messages[$key] = str_replace('%value%', $values, $message);
+                    } else {
+                        $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
+                    }
                 }
             } else {
                 $messages[$key] = str_replace('%value%', $value, $message);
