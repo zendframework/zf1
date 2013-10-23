@@ -178,13 +178,19 @@ class Zend_Validate_File_IsImageTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('This PHP Version has no finfo installed');
         }
 
+        if (version_compare(PHP_VERSION, '5.3', '>=')) {
+            $magicFile = dirname(__FILE__) . '/_files/magic-php53.mime';
+        } else {
+            $magicFile = dirname(__FILE__) . '/_files/magic.mime';
+        }
+
         $validator = new Zend_Validate_File_IsImage(array(
             'image/gif',
             'image/jpg',
-            'magicfile' => dirname(__FILE__) . '/_files/magic.mime',
+            'magicfile' => $magicFile,
             'headerCheck' => true));
 
-        $this->assertEquals(dirname(__FILE__) . '/_files/magic.mime', $validator->getMagicFile());
+        $this->assertEquals($magicFile, $validator->getMagicFile());
         $this->assertTrue($validator->getHeaderCheck());
         $this->assertEquals('image/gif,image/jpg', $validator->getMimeType());
     }
