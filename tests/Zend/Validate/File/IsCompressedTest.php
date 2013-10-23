@@ -199,7 +199,12 @@ class Zend_Validate_File_IsCompressedTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('This PHP Version has no finfo installed');
         }
 
-        $magicFile = dirname(__FILE__) . '/_files/magic.mime';
+        if (version_compare(PHP_VERSION, '5.3', '>=')) {
+            $magicFile = dirname(__FILE__) . '/_files/magic-php53.mime';
+        } else {
+            $magicFile = dirname(__FILE__) . '/_files/magic.mime';
+        }
+
         $validator = new Zend_Validate_File_IsCompressed(array(
             'image/gif',
             'image/jpg',
