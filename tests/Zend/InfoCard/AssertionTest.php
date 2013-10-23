@@ -54,6 +54,10 @@ class Zend_InfoCard_AssertionTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $this->markTestSkipped('SimpleXML implementation changed and CardSpace technology is discontinued');
+        }
+
         $this->tokenDocument = dirname(__FILE__) . '/_files/signedToken.xml';
         $this->sslPubKey     = dirname(__FILE__) . '/_files/ssl_pub.cert';
         $this->sslPrvKey     = dirname(__FILE__) . '/_files/ssl_private.cert';
@@ -72,14 +76,12 @@ class Zend_InfoCard_AssertionTest extends PHPUnit_Framework_TestCase
         $assertions = Zend_InfoCard_Xml_Assertion::getInstance($this->_xmlDocument);
 
         $this->assertTrue($assertions instanceof Zend_InfoCard_Xml_Assertion_Saml);
-
-        $this->assertSame($assertions->getMajorVersion(), 1);
-        $this->assertSame($assertions->getMinorVersion(), 1);
-        $this->assertSame($assertions->getAssertionID(), "uuid:5cf2cd76-acf6-45ef-9059-a811801b80cc");
-        $this->assertSame($assertions->getIssuer(), "http://schemas.xmlsoap.org/ws/2005/05/identity/issuer/self");
-        $this->assertSame($assertions->getConfirmationMethod(), Zend_InfoCard_Xml_Assertion_Saml::CONFIRMATION_BEARER);
-        $this->assertSame($assertions->getIssuedTimestamp(), 1190153823);
-
+        $this->assertSame(1, $assertions->getMajorVersion());
+        $this->assertSame(1, $assertions->getMinorVersion());
+        $this->assertSame("uuid:5cf2cd76-acf6-45ef-9059-a811801b80cc", $assertions->getAssertionID());
+        $this->assertSame("http://schemas.xmlsoap.org/ws/2005/05/identity/issuer/self", $assertions->getIssuer());
+        $this->assertSame(Zend_InfoCard_Xml_Assertion_Saml::CONFIRMATION_BEARER, $assertions->getConfirmationMethod());
+        $this->assertSame(1190153823, $assertions->getIssuedTimestamp());
     }
 
     public function testAssertionErrors()
