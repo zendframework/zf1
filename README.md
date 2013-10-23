@@ -8,6 +8,12 @@ RELEASE INFORMATION
 Zend Framework 1.12.4dev Release ([INSERT REV NUM HERE]).
 Released on <Month> <Day>, <Year>.
 
+IMPORTANT FIXES FOR 1.12.4
+--------------------------
+
+- [#221](https://github.com/zendframework/zf1/pull/221) removes the TinySrc view
+  helper, as the TinySrc service no longer exists.
+
 IMPORTANT FIXES FOR 1.12.3
 --------------------------
 
