@@ -39,6 +39,15 @@ class Zend_Validate_File_ExcludeMimeType extends Zend_Validate_File_MimeType
     const NOT_READABLE = 'fileExcludeMimeTypeNotReadable';
 
     /**
+     * @var array Error message templates
+     */
+    protected $_messageTemplates = array(
+        self::FALSE_TYPE   => "File '%value%' has a false mimetype of '%type%'",
+        self::NOT_DETECTED => "The mimetype of file '%value%' could not be detected",
+        self::NOT_READABLE => "File '%value%' is not readable or does not exist",
+    );
+
+    /**
      * Defined by Zend_Validate_Interface
      *
      * Returns true if the mimetype of the file does not matche the given ones. Also parts

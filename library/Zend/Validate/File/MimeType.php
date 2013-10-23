@@ -34,13 +34,12 @@ require_once 'Zend/Validate/Abstract.php';
  */
 class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
 {
-    /**#@+
+    /**
      * @const Error type constants
      */
     const FALSE_TYPE   = 'fileMimeTypeFalse';
     const NOT_DETECTED = 'fileMimeTypeNotDetected';
     const NOT_READABLE = 'fileMimeTypeNotReadable';
-    /**#@-*/
 
     /**
      * @var array Error message templates
