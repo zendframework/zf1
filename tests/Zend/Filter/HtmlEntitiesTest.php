@@ -214,9 +214,13 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
      */
     public function testCorrectsForEncodingMismatch()
     {
+        if (version_compare(phpversion(), '5.4', '>=')) {
+            $this->markTestIncomplete('Tested feature ZF-11344 is not available because of PHP bug #63450');
+        }
+
         $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-text.txt');
 
-        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as
         // we want to test the returned value
         set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
         $result = $this->_filter->filter($string);
@@ -230,9 +234,13 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
      */
     public function testStripsUnknownCharactersWhenEncodingMismatchDetected()
     {
+        if (version_compare(phpversion(), '5.4', '>=')) {
+            $this->markTestIncomplete('Tested feature ZF-11344 is not available because of PHP bug #63450');
+        }
+
         $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-text.txt');
 
-        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as
         // we want to test the returned value
         set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
         $result = $this->_filter->filter($string);
@@ -248,7 +256,7 @@ class Zend_Filter_HtmlEntitiesTest extends PHPUnit_Framework_TestCase
     {
         $string = file_get_contents(dirname(__FILE__) . '/_files/latin-1-dash-only.txt');
 
-        // restore_error_handler can emit an E_WARNING; let's ignore that, as 
+        // restore_error_handler can emit an E_WARNING; let's ignore that, as
         // we want to test the returned value
         // Also, explicit try, so that we don't mess up PHPUnit error handlers
         set_error_handler(array($this, 'errorHandler'), E_NOTICE | E_WARNING);
