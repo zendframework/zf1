@@ -368,27 +368,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             return $this->_throw($file, self::NOT_READABLE);
         }
 
-        $mimefile = $this->getMagicFile();
-        if (class_exists('finfo', false)) {
-            $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
-            if (!empty($mimefile) && empty($this->_finfo)) {
-                $this->_finfo = @finfo_open($const, $mimefile);
-            }
-
-            if (empty($this->_finfo)) {
-                $this->_finfo = @finfo_open($const);
-            }
-
-            $this->_type = null;
-            if (!empty($this->_finfo)) {
-                $this->_type = finfo_file($this->_finfo, $value);
-            }
-        }
-
-        if (empty($this->_type) &&
-            (function_exists('mime_content_type') && ini_get('mime_magic.magicfile'))) {
-                $this->_type = mime_content_type($value);
-        }
+        $this->_type = $this->_detectMimeType($value);
 
         if (empty($this->_type) && $this->_headerCheck) {
             $this->_type = $file['type'];
@@ -427,5 +407,39 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
         $this->_value = $file['name'];
         $this->_error($errorType);
         return false;
+    }
+
+    /**
+     * Try to detect mime type of given file.
+     * @param string $file File which mime type should be detected
+     * @return string File mime type or null if not detected
+     */
+    protected function _detectMimeType($file)
+    {
+        $mimefile = $this->getMagicFile();
+        $type = null;
+
+        if (class_exists('finfo', false)) {
+            $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
+
+            if (!empty($mimefile) && empty($this->_finfo)) {
+                $this->_finfo = @finfo_open($const, $mimefile);
+            }
+
+            if (empty($this->_finfo)) {
+                $this->_finfo = @finfo_open($const);
+            }
+
+            if (!empty($this->_finfo)) {
+                $type = finfo_file($this->_finfo, $file);
+            }
+        }
+
+        if (empty($type) &&
+            (function_exists('mime_content_type') && ini_get('mime_magic.magicfile'))) {
+                $type = mime_content_type($file);
+        }
+
+        return $type;
     }
 }
