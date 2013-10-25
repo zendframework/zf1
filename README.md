@@ -1,3 +1,5 @@
+![Logo](http://framework.zend.com/images/logos/ZendFramework-logo.png)
+
 Welcome to the Zend Framework 1.12 Release! 
 
 Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=master)](https://www.travis-ci.org/zendframework/zf1)
