@@ -93,7 +93,7 @@ class Zend_Ldap_AttributeTest extends PHPUnit_Framework_TestCase
     {
         $data=array('uid' => array('value'));
         $value=Zend_Ldap_Attribute::getAttribute($data, 'uid');
-        $this->assertTrue(is_array());
+        $this->assertTrue(is_array($value));
         $this->assertEquals(1, count($value));
         $this->assertContains('value', $value);
     }
