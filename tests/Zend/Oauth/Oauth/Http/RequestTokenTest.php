@@ -52,7 +52,7 @@ class Zend_Oauth_Http_RequestTokenTest extends PHPUnit_Framework_TestCase
     public function testConstructorSetsConsumerInstance()
     {
         $request = new Zend_Oauth_Http_RequestToken($this->stubConsumer, null, $this->stubHttpUtility);
-        $this->assertType('Test_Consumer_32874', $request->getConsumer());
+        $this->assertTrue($request->getConsumer() instanceof Test_Consumer_32874);
     }
 
     public function testConstructorSetsCustomServiceParameters()

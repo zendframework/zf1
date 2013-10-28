@@ -44,7 +44,7 @@ class Zend_Service_Nirvanix_Namespace_ImfsTest extends Zend_Service_Nirvanix_Fun
     public function testInheritsFromNirvanixBase()
     {
         $imfs = new Zend_Service_Nirvanix_Namespace_Imfs();
-        $this->assertType('Zend_Service_Nirvanix_Namespace_Base', $imfs);
+        $this->assertTrue($imfs instanceof Zend_Service_Nirvanix_Namespace_Base);
     }
 
     // putContents()

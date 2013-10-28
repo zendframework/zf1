@@ -54,7 +54,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
     public function testSelect()
     {
         $select = $this->_select();
-        $this->assertType('Zend_Db_Select', $select,
+        $this->assertTrue($select instanceof Zend_Db_Select,
             'Expecting object of type Zend_Db_Select, got '.get_class($select));
         $stmt = $this->_db->query($select);
         $row = $stmt->fetch();
@@ -75,7 +75,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
     public function testSelectQuery()
     {
         $select = $this->_select();
-        $this->assertType('Zend_Db_Select', $select,
+        $this->assertTrue($select instanceof Zend_Db_Select,
             'Expecting object of type Zend_Db_Select, got '.get_class($select));
         $stmt = $select->query();
         $row = $stmt->fetch();
@@ -95,7 +95,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $select = $this->_select()->where("$product_id = :product_id")
                                   ->bind(array(':product_id' => 1));
 
-        $this->assertType('Zend_Db_Select', $select,
+        $this->assertTrue($select instanceof Zend_Db_Select,
             'Expecting object of type Zend_Db_Select, got '.get_class($select));
         $stmt = $select->query();
         $row = $stmt->fetch();
@@ -342,7 +342,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
                    ->columns('product_id');
             $this->fail('Expected exception of type "Zend_Db_Select_Exception"');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Select_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Select_Exception,
                               'Expected exception of type "Zend_Db_Select_Exception", got ' . get_class($e));
             $this->assertEquals("No table has been specified for the FROM clause", $e->getMessage());
         }
@@ -630,7 +630,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
             $select->foo();
             $this->fail('Expected exception of type "Zend_Db_Select_Exception"');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Select_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Select_Exception,
                               'Expected exception of type "Zend_Db_Select_Exception", got ' . get_class($e));
             $this->assertEquals("Unrecognized method 'foo()'", $e->getMessage());
         }
@@ -676,7 +676,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
             $select->joinFooUsing();
             $this->fail('Expected exception of type "Zend_Db_Select_Exception"');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Select_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Select_Exception,
                               'Expected exception of type "Zend_Db_Select_Exception", got ' . get_class($e));
             $this->assertEquals("Unrecognized method 'joinFooUsing()'", $e->getMessage());
         }
@@ -702,7 +702,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
             $select->joinCrossUsing("zfbugs_products", "$product_id");
             $this->fail('Expected exception of type "Zend_Db_Select_Exception"');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Select_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Select_Exception,
                               'Expected exception of type "Zend_Db_Select_Exception", got ' . get_class($e));
             $this->assertEquals("Cannot perform a joinUsing with method 'joinCrossUsing()'", $e->getMessage());
         }
@@ -1695,7 +1695,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         /* checks if the adapter has effectively gotten serialized,
            no exceptions are thrown here, so it's all right */
         $serialize = serialize($this->_select());
-        $this->assertType('string',$serialize);
+        $this->assertTrue(is_string($serialize));
     }
     
     /**

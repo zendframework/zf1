@@ -44,7 +44,7 @@ class Zend_Oauth_Http_UserAuthorizationTest extends PHPUnit_Framework_TestCase
     public function testConstructorSetsConsumerInstance()
     {
         $redirect = new Zend_Oauth_Http_UserAuthorization($this->stubConsumer);
-        $this->assertType('Test_Consumer_34879', $redirect->getConsumer());
+        $this->assertTrue($redirect->getConsumer() instanceof Test_Consumer_34879);
     }
 
     public function testConstructorSetsCustomServiceParameters()

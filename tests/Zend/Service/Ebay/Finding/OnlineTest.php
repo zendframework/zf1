@@ -62,7 +62,7 @@ class Zend_Service_Ebay_Finding_OnlineTest extends PHPUnit_Framework_TestCase
             $response = $this->_finding->findItemsByKeywords('harry+potter');
             $this->fail('No exception found');
         } catch (Exception $e) {
-            $this->assertType('Zend_Service_Ebay_Finding_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Service_Ebay_Finding_Exception);
             $this->assertContains('eBay error', $e->getMessage());
         }
     }
@@ -134,7 +134,7 @@ class Zend_Service_Ebay_Finding_OnlineTest extends PHPUnit_Framework_TestCase
             $page1->page($this->_finding, 0);
             $this->fail('No exception found for page #0');
         } catch (Exception $e) {
-            $this->assertType('Zend_Service_Ebay_Finding_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Service_Ebay_Finding_Exception);
             $this->assertContains('Page number ', $e->getMessage());
         }
 
@@ -144,7 +144,7 @@ class Zend_Service_Ebay_Finding_OnlineTest extends PHPUnit_Framework_TestCase
             $page1->page($this->_finding, $number);
             $this->fail("No exception found for page out of range #$number");
         } catch (Exception $e) {
-            $this->assertType('Zend_Service_Ebay_Finding_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Service_Ebay_Finding_Exception);
             $this->assertContains('Page number ', $e->getMessage());
         }
 

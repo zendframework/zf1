@@ -78,7 +78,7 @@ class Zend_Gdata_GdataTest extends PHPUnit_Framework_TestCase
             $feed = $gdata->getFeed(new stdClass());
             $this->fail('Expecting to catch Zend_Gdata_App_InvalidArgumentException');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Gdata_App_InvalidArgumentException', $e,
+            $this->assertTrue($e instanceof Zend_Gdata_App_InvalidArgumentException,
                 'Expecting Zend_Gdata_App_InvalidArgumentException, got '.get_class($e));
             $this->assertEquals('You must specify the location as either a string URI or a child of Zend_Gdata_Query', $e->getMessage());
         }
@@ -93,7 +93,7 @@ class Zend_Gdata_GdataTest extends PHPUnit_Framework_TestCase
             $feed = $gdata->getEntry(new stdClass());
             $this->fail('Expecting to catch Zend_Gdata_App_InvalidArgumentException');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Gdata_App_InvalidArgumentException', $e,
+            $this->assertTrue($e instanceof Zend_Gdata_App_InvalidArgumentException,
                 'Expecting Zend_Gdata_App_InvalidArgumentException, got '.get_class($e));
             $this->assertEquals('You must specify the location as either a string URI or a child of Zend_Gdata_Query', $e->getMessage());
         }

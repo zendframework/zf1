@@ -147,7 +147,7 @@ class Zend_Application_Resource_LocaleTest extends PHPUnit_Framework_TestCase
         $resource = new Zend_Application_Resource_Locale($config);
         $resource->init();
         $backend = Zend_Locale::getCache()->getBackend();
-        $this->assertType('Zend_Cache_Backend_BlackHole', $backend);
+        $this->assertTrue($backend instanceof Zend_Cache_Backend_BlackHole);
         Zend_Locale::removeCache();
     }
 

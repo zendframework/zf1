@@ -82,7 +82,7 @@ class Zend_Service_Technorati_UtilsTest extends Zend_Service_Technorati_TestCase
         $date   = new Zend_Date('2007-11-11 08:47:26 GMT');
         $result = Zend_Service_Technorati_Utils::normalizeDate($date);
 
-        $this->assertType('Zend_Date', $result);
+        $this->assertTrue($result instanceof Zend_Date);
         $this->assertEquals($date, $result);
     }
 

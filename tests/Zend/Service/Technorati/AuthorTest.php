@@ -62,22 +62,22 @@ class Zend_Service_Technorati_AuthorTest extends Zend_Service_Technorati_TestCas
     {
         $author = new Zend_Service_Technorati_Author($this->domElement);
 
-        $this->assertType('string', $author->getFirstName());
+        $this->assertTrue(is_string($author->getFirstName()));
         $this->assertEquals('Cesare', $author->getFirstName());
 
-        $this->assertType('string', $author->getLastName());
+        $this->assertTrue(is_string($author->getLastName()));
         $this->assertEquals('Lamanna', $author->getLastName());
 
-        $this->assertType('string', $author->getUsername());
+        $this->assertTrue(is_string($author->getUsername()));
         $this->assertEquals('cesarehtml', $author->getUsername());
 
-        $this->assertType('string', $author->getDescription());
+        $this->assertTrue(is_string($author->getDescription()));
         $this->assertEquals('This is a description.', $author->getDescription());
 
-        $this->assertType('string', $author->getFirstName());
+        $this->assertTrue(is_string($author->getFirstName()));
         $this->assertEquals('This is a bio.', $author->getBio());
 
-        $this->assertType('Zend_Uri_Http', $author->getThumbnailPicture());
+        $this->assertTrue($author->getThumbnailPicture() instanceof Zend_Uri_Http);
         $this->assertEquals(Zend_Uri::factory('http://static.technorati.com/progimages/photo.jpg?uid=117217'), $author->getThumbnailPicture());
     }
 
@@ -88,43 +88,43 @@ class Zend_Service_Technorati_AuthorTest extends Zend_Service_Technorati_TestCas
         // check first name
         $set = 'first';
         $get = $author->setFirstName($set)->getFirstName();
-        $this->assertType('string', $get);
+        $this->assertTrue(is_string($get));
         $this->assertEquals($set, $get);
 
         // check last name
         $set = 'last';
         $get = $author->setLastName($set)->getLastName();
-        $this->assertType('string', $get);
+        $this->assertTrue(is_string($get));
         $this->assertEquals($set, $get);
 
         // check username
         $set = 'user';
         $get = $author->setUsername($set)->getUsername();
-        $this->assertType('string', $get);
+        $this->assertTrue(is_string($get));
         $this->assertEquals($set, $get);
 
         // check description
         $set = 'desc';
         $get = $author->setUsername($set)->getUsername();
-        $this->assertType('string', $get);
+        $this->assertTrue(is_string($get));
         $this->assertEquals($set, $get);
 
         // check bio
         $set = 'biography';
         $get = $author->setBio($set)->getBio();
-        $this->assertType('string', $get);
+        $this->assertTrue(is_string($get));
         $this->assertEquals($set, $get);
 
         // check thubmnail picture
 
         $set = Zend_Uri::factory('http://www.simonecarletti.com/');
         $get = $author->setThumbnailPicture($set)->getThumbnailPicture();
-        $this->assertType('Zend_Uri_Http', $get);
+        $this->assertTrue($get instanceof Zend_Uri_Http);
         $this->assertEquals($set, $get);
 
         $set = 'http://www.simonecarletti.com/';
         $get = $author->setThumbnailPicture($set)->getThumbnailPicture();
-        $this->assertType('Zend_Uri_Http', $get);
+        $this->assertTrue($get instanceof Zend_Uri_Http);
         $this->assertEquals(Zend_Uri::factory($set), $get);
 
         $set = 'http:::/foo';

@@ -101,9 +101,8 @@ class Zend_Service_DeveloperGarden_OfflineLocalSearchParametersTest extends PHPU
     public function testSetHits()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setHits(1000)
+        $this->assertTrue(
+            $param->setHits(1000) instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
@@ -113,45 +112,40 @@ class Zend_Service_DeveloperGarden_OfflineLocalSearchParametersTest extends PHPU
     public function testCollapseValuesWrong()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setCollapse('SomeStrangeValue')
+        $this->assertTrue(
+            $param->setCollapse('SomeStrangeValue') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
     public function testCollapseValuesTrue()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setCollapse(true)
+        $this->assertTrue(
+            $param->setCollapse(true) instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
     public function testCollapseValuesFalse()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setCollapse(false)
+        $this->assertTrue(
+            $param->setCollapse(false) instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
     public function testCollapseValuesAddressCompany()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setCollapse('ADDRESS_COMPANY')
+        $this->assertTrue(
+            $param->setCollapse('ADDRESS_COMPANY') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
     public function testCollapseValuesDomain()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setCollapse('DOMAIN')
+        $this->assertTrue(
+            $param->setCollapse('DOMAIN') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
@@ -161,9 +155,8 @@ class Zend_Service_DeveloperGarden_OfflineLocalSearchParametersTest extends PHPU
     public function testWhereEmpty()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setWhere(null)
+        $this->assertTrue(
+            $param->setWhere(null) instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
@@ -173,9 +166,8 @@ class Zend_Service_DeveloperGarden_OfflineLocalSearchParametersTest extends PHPU
     public function testRadiusWithString()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setRadius('foobar')
+        $this->assertTrue(
+            $param->setRadius('foobar') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
@@ -185,18 +177,16 @@ class Zend_Service_DeveloperGarden_OfflineLocalSearchParametersTest extends PHPU
     public function testRadiusWithStringAndInteger()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setRadius('1a')
+        $this->assertTrue(
+            $param->setRadius('1a') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 
     public function testRadiusWithIntegerAsString()
     {
         $param = new Zend_Service_DeveloperGarden_LocalSearch_SearchParameters();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_LocalSearch_SearchParameters',
-            $param->setRadius('-100')
+        $this->assertTrue(
+            $param->setRadius('-100') instanceof Zend_Service_DeveloperGarden_LocalSearch_SearchParameters
         );
     }
 }

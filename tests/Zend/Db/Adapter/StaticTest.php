@@ -53,7 +53,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
     public function testDbConstructor()
     {
         $db = new Zend_Db_Adapter_Static( array('dbname' => 'dummy') );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract);
         $this->assertEquals('dummy', $db->config['dbname']);
     }
 
@@ -82,16 +82,16 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
         );
         $config1 = new Zend_Config($configData1);
         $db = new Zend_Db_Adapter_Static($config1->params);
-        $this->assertType('Zend_Db_Adapter_Abstract', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract);
         $this->assertEquals('dummy', $db->config['dbname']);
     }
 
     public function testDbFactory()
     {
         $db = Zend_Db::factory('Static', array('dbname' => 'dummy') );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract);
         $this->assertTrue(class_exists('Zend_Db_Adapter_Static'));
-        $this->assertType('Zend_Db_Adapter_Static', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Static);
         $this->assertEquals('dummy', $db->config['dbname']);
     }
 
@@ -112,11 +112,11 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
 
         set_include_path($ip);
 
-        $this->assertType('Zend_Db_Adapter_Abstract', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract);
         $this->assertTrue(class_exists('Zend_Db_Adapter_Static'));
-        $this->assertType('Zend_Db_Adapter_Static', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Static);
         $this->assertTrue(class_exists('TestNamespace_Static'));
-        $this->assertType('TestNamespace_Static', $db);
+        $this->assertTrue($db instanceof TestNamespace_Static);
     }
 
     public function testDbFactoryAlternateNamespaceExceptionInvalidAdapter()
@@ -132,7 +132,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
             $this->fail('Expected to catch Zend_Db_Exception');
         } catch (Zend_Exception $e) {
             set_include_path($ip);
-            $this->assertType('Zend_Db_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Exception,
                 'Expected exception of type Zend_Db_Exception, got '.get_class($e));
             $this->assertEquals("Adapter class 'Zend_Version' does not extend Zend_Db_Adapter_Abstract", $e->getMessage());
         }
@@ -144,7 +144,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
             $db = Zend_Db::factory(null);
             $this->fail('Expected to catch Zend_Db_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Exception,
                 'Expected exception of type Zend_Db_Exception, got '.get_class($e));
             $this->assertEquals($e->getMessage(), 'Adapter name must be specified in a string');
         }
@@ -186,7 +186,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
             $db = Zend_Db::factory('Static', array());
             $this->fail('Expected to catch Zend_Db_Adapter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Adapter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Adapter_Exception,
                 'Expected exception of type Zend_Db_Adapter_Exception, got '.get_class($e));
             $this->assertEquals("Configuration must have a key for 'dbname' that names the database instance", $e->getMessage());
         }
@@ -202,7 +202,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
         );
         $config1 = new Zend_Config($configData1);
         $db = Zend_Db::factory($config1);
-        $this->assertType('Zend_Db_Adapter_Static', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Static);
         $this->assertEquals('dummy', $db->config['dbname']);
     }
 
@@ -218,7 +218,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
             $db = Zend_Db::factory($config1);
             $this->fail('Expected to catch Zend_Db_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Exception,
                 'Expected exception of type Zend_Db_Exception, got '.get_class($e));
             $this->assertEquals($e->getMessage(), 'Adapter name must be specified in a string');
         }
@@ -237,7 +237,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
         );
         $config1 = new Zend_Config($configData1);
         $db = Zend_Db::factory($config1, $configData2);
-        $this->assertType('Zend_Db_Adapter_Static', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Static);
         // second arg should be ignored
         $this->assertEquals('dummy', $db->config['dbname']);
     }
@@ -256,7 +256,7 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
         $config1 = new Zend_Config($configData1);
         $config2 = new Zend_Config($configData2);
         $db = Zend_Db::factory($config1, $config2);
-        $this->assertType('Zend_Db_Adapter_Static', $db);
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Static);
         // second arg should be ignored
         $this->assertEquals('dummy', $db->config['dbname']);
     }
@@ -265,14 +265,14 @@ class Zend_Db_Adapter_StaticTest extends PHPUnit_Framework_TestCase
     {
         $db = Zend_Db::factory('Static', array('dbname' => 'dummy'));
         $conn = $db->getConnection();
-        $this->assertType('Zend_Db_Adapter_Static', $conn);
+        $this->assertTrue($conn instanceof Zend_Db_Adapter_Static);
     }
 
     public function testDbGetFetchMode()
     {
         $db = Zend_Db::factory('Static', array('dbname' => 'dummy'));
         $mode = $db->getFetchMode();
-        $this->assertType('integer', $mode);
+        $this->assertTrue(is_int($mode));
     }
 
     /**

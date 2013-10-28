@@ -39,6 +39,6 @@ class Zend_Service_Nirvanix_ExceptionTest extends PHPUnit_Framework_TestCase
     public function testInheritsFromZendException()
     {
         $exc = new Zend_Service_Nirvanix_Exception();
-        $this->assertType('Zend_Exception', $exc);
+        $this->assertTrue($exc instanceof Zend_Exception);
     }
 }

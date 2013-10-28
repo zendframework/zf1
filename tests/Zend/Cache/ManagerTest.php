@@ -63,7 +63,7 @@ class Zend_Cache_ManagerTest extends PHPUnit_Framework_TestCase
         $manager = new Zend_Cache_Manager();
         $caches  = $manager->getCaches();
 
-        $this->assertType('array', $caches);
+        $this->assertTrue(is_array($caches));
         $this->assertArrayHasKey('default', $caches);
     }
 

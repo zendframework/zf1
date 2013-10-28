@@ -99,10 +99,10 @@ class Zend_EventManager_EventManagerTest extends PHPUnit_Framework_TestCase
         $callback = array($this, 'returnName');
         $listeners = $this->events->attach(array('foo', 'bar'), $callback);
 
-        $this->assertType('array', $listeners);
+        $this->assertTrue(is_array($listeners));
 
         foreach ($listeners as $listener) {
-            $this->assertType('Zend_Stdlib_CallbackHandler', $listener);
+            $this->assertTrue($listener instanceof Zend_Stdlib_CallbackHandler);
             $this->assertSame($callback, $listener->getCallback());
         }
     }
@@ -522,31 +522,31 @@ class Zend_EventManager_EventManagerTest extends PHPUnit_Framework_TestCase
     {
         $identifier1 = 'foo';
         $identifiers = array($identifier1);
-        $this->assertType('Zend_EventManager_EventManager', $this->events->setIdentifiers($identifier1));
+        $this->assertTrue($this->events->setIdentifiers($identifier1) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), $identifiers);
         $identifier2 = 'baz';
         $identifiers = array($identifier1, $identifier2);
-        $this->assertType('Zend_EventManager_EventManager', $this->events->addIdentifiers($identifier2));
+        $this->assertTrue($this->events->addIdentifiers($identifier2) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), $identifiers);
     }
 
     public function testIdentifierGetterSettersWorkWithArrays()
     {
         $identifiers = array('foo', 'bar');
-        $this->assertType('Zend_EventManager_EventManager', $this->events->setIdentifiers($identifiers));
+        $this->assertTrue($this->events->setIdentifiers($identifiers) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), $identifiers);
         $identifiers[] = 'baz';
-        $this->assertType('Zend_EventManager_EventManager', $this->events->addIdentifiers($identifiers));
+        $this->assertTrue($this->events->addIdentifiers($identifiers) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), $identifiers);
     }
 
     public function testIdentifierGetterSettersWorkWithTraversables()
     {
         $identifiers = new ArrayIterator(array('foo', 'bar'));
-        $this->assertType('Zend_EventManager_EventManager', $this->events->setIdentifiers($identifiers));
+        $this->assertTrue($this->events->setIdentifiers($identifiers) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), (array) $identifiers);
         $identifiers = new ArrayIterator(array('foo', 'bar', 'baz'));
-        $this->assertType('Zend_EventManager_EventManager', $this->events->addIdentifiers($identifiers));
+        $this->assertTrue($this->events->addIdentifiers($identifiers) instanceof Zend_EventManager_EventManager);
         $this->assertSame($this->events->getIdentifiers(), (array) $identifiers);
     }
 
