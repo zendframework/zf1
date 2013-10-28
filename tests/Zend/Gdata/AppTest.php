@@ -601,7 +601,7 @@ class Zend_Gdata_AppTest extends PHPUnit_Framework_TestCase
         try { 
             $eq = $this->service->newEventQuery();
             restore_error_handler();
-            $this->assertType('Zend_Gdata_Calendar_EventQuery', $eq);
+            $this->assertTrue($eq instanceof Zend_Gdata_Calendar_EventQuery);
         } catch ( Zend_Gdata_App_Exception $ex ) {
             // If we catch this exception, it means the ErrorException resulting
             // from the include_once E_NOTICE was caught in the right place,

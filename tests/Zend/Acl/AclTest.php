@@ -75,7 +75,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
     {
         $role = $this->_acl->addRole('area')
                           ->getRole('area');
-        $this->assertType('Zend_Acl_Role', $role);
+        $this->assertTrue($role instanceof Zend_Acl_Role);
         $this->assertEquals('area', $role->getRoleId());
     }
 
@@ -279,7 +279,7 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
     {
         $resource = $this->_acl->addResource('area')
                           ->get('area');
-        $this->assertType('Zend_Acl_Resource', $resource);
+        $this->assertTrue($resource instanceof Zend_Acl_Resource);
         $this->assertEquals('area', $resource->getResourceId());
     }
 
@@ -1158,8 +1158,8 @@ class Zend_Acl_AclTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($acl->isAllowed($user, $blogPost, 'modify'), 'Assertion should return false');
 
         // check to see if the last assertion has the proper objets
-        $this->assertType('Zend_Acl_UseCase1_User', $assertion->lastAssertRole, 'Assertion did not recieve proper role object');
-        $this->assertType('Zend_Acl_UseCase1_BlogPost', $assertion->lastAssertResource, 'Assertion did not recieve proper resource object');
+        $this->assertTrue($assertion->lastAssertRole instanceof Zend_Acl_UseCase1_User, 'Assertion did not recieve proper role object');
+        $this->assertTrue($assertion->lastAssertResource instanceof Zend_Acl_UseCase1_BlogPost, 'Assertion did not recieve proper resource object');
 
     }
 

@@ -77,7 +77,7 @@ class Zend_View_Helper_HtmlObjectTest extends PHPUnit_Framework_TestCase
 
     public function testViewObjectIsSet()
     {
-        $this->assertType('Zend_View_Interface', $this->helper->view);
+        $this->assertTrue($this->helper->view instanceof Zend_View_Interface);
     }
 
     public function testMakeHtmlObjectWithoutAttribsWithoutParams()

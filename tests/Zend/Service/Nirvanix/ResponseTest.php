@@ -85,7 +85,7 @@ class Zend_Service_Nirvanix_ResponseTest extends PHPUnit_Framework_TestCase
                   </Response>";
 
         $resp = new Zend_Service_Nirvanix_Response($xml);
-        $this->assertType('SimpleXMLElement', $resp->getSxml());
+        $this->assertTrue($resp->getSxml() instanceof SimpleXMLElement);
     }
 
     // __get()

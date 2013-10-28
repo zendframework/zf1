@@ -105,11 +105,11 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($response->ack);
         $this->assertNotNull($response->timestamp);
         $this->assertNotNull($response->version);
-        $this->assertType('Zend_Service_Ebay_Finding_Error_Message', $response->errorMessage);
+        $this->assertTrue($response->errorMessage instanceof Zend_Service_Ebay_Finding_Error_Message);
 
         // Zend_Service_Ebay_Finding_Error_Message
         $object = $response->errorMessage;
-        $this->assertType('Zend_Service_Ebay_Finding_Error_Data_Set', $object->error);
+        $this->assertTrue($object->error instanceof Zend_Service_Ebay_Finding_Error_Data_Set);
 
         // Zend_Service_Ebay_Finding_Error_Data
         $object = $object->error->current();
@@ -117,8 +117,8 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($object->domain);
         $this->assertNotNull($object->errorId);
         $this->assertNotNull($object->message);
-        $this->assertType('array', $object->parameter);
-        $this->assertType('array', $object->attributes('parameter', 'name'));
+        $this->assertTrue(is_array($object->parameter));
+        $this->assertTrue(is_array($object->attributes('parameter', 'name')));
         $this->assertNotNull($object->severity);
         $this->assertNotNull($object->subdomain);
 
@@ -139,8 +139,8 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $xml = file_get_contents(dirname(__FILE__) . '/_files/find-items-advanced.xml');
         $response = $this->_createResponseItems($xml);
 
-        $this->assertType('Zend_Service_Ebay_Finding_PaginationOutput', $response->paginationOutput);
-        $this->assertType('Zend_Service_Ebay_Finding_Search_Result', $response->searchResult);
+        $this->assertTrue($response->paginationOutput instanceof Zend_Service_Ebay_Finding_PaginationOutput);
+        $this->assertTrue($response->searchResult instanceof Zend_Service_Ebay_Finding_Search_Result);
         $this->assertNotNull($response->attributes('searchResult', 'count'));
     }
 
@@ -162,7 +162,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $response = $this->_createResponseItems($xml);
 
         $object = $response->searchResult;
-        $this->assertType('Zend_Service_Ebay_Finding_Search_Item_Set', $object->item);
+        $this->assertTrue($object->item instanceof Zend_Service_Ebay_Finding_Search_Item_Set);
     }
 
     public function testSearchItem()
@@ -173,24 +173,24 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         // general attributes
         $response->searchResult->item->seek(0);
         $object = $response->searchResult->item->current();
-        $this->assertType('Zend_Service_Ebay_Finding_Search_Item', $object);
+        $this->assertTrue($object instanceof Zend_Service_Ebay_Finding_Search_Item);
         $this->assertNotNull($object->autoPay);
         $this->assertNotNull($object->country);
-        $this->assertType('array', $object->galleryPlusPictureURL);
+        $this->assertTrue(is_array($object->galleryPlusPictureURL));
         $this->assertNotNull($object->galleryPlusPictureURL[0]);
         $this->assertNotNull($object->galleryURL);
         $this->assertNotNull($object->globalId);
         $this->assertNotNull($object->itemId);
-        $this->assertType('Zend_Service_Ebay_Finding_ListingInfo', $object->listingInfo);
+        $this->assertTrue($object->listingInfo instanceof Zend_Service_Ebay_Finding_ListingInfo);
         $this->assertNotNull($object->location);
-        $this->assertType('array', $object->paymentMethod);
+        $this->assertTrue(is_array($object->paymentMethod));
         $this->assertNotNull($object->paymentMethod[0]);
         $this->assertNotNull($object->postalCode);
-        $this->assertType('Zend_Service_Ebay_Finding_Category', $object->primaryCategory);
-        $this->assertType('Zend_Service_Ebay_Finding_SellerInfo', $object->sellerInfo);
-        $this->assertType('Zend_Service_Ebay_Finding_SellingStatus', $object->sellingStatus);
-        $this->assertType('Zend_Service_Ebay_Finding_ShippingInfo', $object->shippingInfo);
-        $this->assertType('Zend_Service_Ebay_Finding_Storefront', $object->storeInfo);
+        $this->assertTrue($object->primaryCategory instanceof Zend_Service_Ebay_Finding_Category);
+        $this->assertTrue($object->sellerInfo instanceof Zend_Service_Ebay_Finding_SellerInfo);
+        $this->assertTrue($object->sellingStatus instanceof Zend_Service_Ebay_Finding_SellingStatus);
+        $this->assertTrue($object->shippingInfo instanceof Zend_Service_Ebay_Finding_ShippingInfo);
+        $this->assertTrue($object->storeInfo instanceof Zend_Service_Ebay_Finding_Storefront);
         $this->assertNotNull($object->title);
         $this->assertNotNull($object->viewItemURL);
 
@@ -203,7 +203,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         // sub category
         $response->searchResult->item->seek(2);
         $object = $response->searchResult->item->current();
-        $this->assertType('Zend_Service_Ebay_Finding_Category', $object->secondaryCategory);
+        $this->assertTrue($object->secondaryCategory instanceof Zend_Service_Ebay_Finding_Category);
 
         // missing attributes in XML
         //$this->assertNotNull($object->charityId);
@@ -281,7 +281,7 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($object->shippingServiceCost);
         $this->assertNotNull($object->attributes('shippingServiceCost', 'currencyId'));
         $this->assertNotNull($object->shippingType);
-        $this->assertType('array', $object->shipToLocations);
+        $this->assertTrue(is_array($object->shipToLocations));
         $this->assertNotNull($object->shipToLocations[0]);
     }
 
@@ -303,17 +303,17 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $response = $this->_createResponseHistograms($xml);
 
         $this->assertNotNull($response->aspectHistogramContainer);
-        $this->assertType('Zend_Service_Ebay_Finding_Aspect_Histogram_Container', $response->aspectHistogramContainer);
+        $this->assertTrue($response->aspectHistogramContainer instanceof Zend_Service_Ebay_Finding_Aspect_Histogram_Container);
         $this->assertNull($response->categoryHistogramContainer);
 
         // Zend_Service_Ebay_Finding_Aspect_Set
         $object = $response->aspectHistogramContainer;
-        $this->assertType('Zend_Service_Ebay_Finding_Aspect_Set', $object->aspect);
+        $this->assertTrue($object->aspect instanceof Zend_Service_Ebay_Finding_Aspect_Set);
 
         // Zend_Service_Ebay_Finding_Aspect
         $object = $object->aspect->current();
-        $this->assertType('Zend_Service_Ebay_Finding_Aspect_Histogram_Value_Set', $object->valueHistogram);
-        $this->assertType('array', $object->attributes('valueHistogram', 'valueName'));
+        $this->assertTrue($object->valueHistogram instanceof Zend_Service_Ebay_Finding_Aspect_Histogram_Value_Set);
+        $this->assertTrue(is_array($object->attributes('valueHistogram', 'valueName')));
 
         // Zend_Service_Ebay_Finding_Aspect_Histogram_Value
         $object = $object->valueHistogram->current();
@@ -327,17 +327,17 @@ class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase
         $response = $this->_createResponseHistograms($xml);
 
         $this->assertNotNull($response->categoryHistogramContainer);
-        $this->assertType('Zend_Service_Ebay_Finding_Category_Histogram_Container', $response->categoryHistogramContainer);
+        $this->assertTrue($response->categoryHistogramContainer instanceof Zend_Service_Ebay_Finding_Category_Histogram_Container);
         $this->assertNull($response->aspectHistogramContainer);
 
         // Zend_Service_Ebay_Finding_Category_Histogram_Container
         $object = $response->categoryHistogramContainer;
-        $this->assertType('Zend_Service_Ebay_Finding_Category_Histogram_Set', $object->categoryHistogram);
+        $this->assertTrue($object->categoryHistogram instanceof Zend_Service_Ebay_Finding_Category_Histogram_Set);
 
         // Zend_Service_Ebay_Finding_Category_Histogram
         $object = $object->categoryHistogram->current();
-        $this->assertType('Zend_Service_Ebay_Finding_Category_Histogram', $object);
-        $this->assertType('Zend_Service_Ebay_Finding_Category_Histogram_Set', $object->childCategoryHistogram);
+        $this->assertTrue($object instanceof Zend_Service_Ebay_Finding_Category_Histogram);
+        $this->assertTrue($object->childCategoryHistogram instanceof Zend_Service_Ebay_Finding_Category_Histogram_Set);
         $this->assertNotNull($object->count);
     }
 

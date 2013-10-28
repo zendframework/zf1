@@ -62,7 +62,7 @@ class Zend_Db_Statement_Db2Test extends Zend_Db_Statement_TestCommon
         $n = $stmt->columnCount();
         $stmt->closeCursor();
 
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
         $this->assertEquals(2, $n);
     }
 
@@ -88,7 +88,7 @@ class Zend_Db_Statement_Db2Test extends Zend_Db_Statement_TestCommon
             $this->assertTrue($stmt->bindParam('name', $productNameValue), 'Expected bindParam(\'name\') to return true');
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals("Invalid bind-variable name ':id'", $e->getMessage());
         }
@@ -116,7 +116,7 @@ class Zend_Db_Statement_Db2Test extends Zend_Db_Statement_TestCommon
             $this->assertTrue($stmt->bindParam('name', $productNameValue), 'Expected bindParam(\'name\') to return true');
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals("Invalid bind-variable name ':id'", $e->getMessage());
         }

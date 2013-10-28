@@ -157,7 +157,7 @@ abstract class Zend_Db_Table_Select_TestCommon extends Zend_Db_Select_TestCommon
             $query = $select->assemble();
             $this->fail('Expected to catch Zend_Db_Table_Select_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Table_Select_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Db_Table_Select_Exception);
             $this->assertEquals('Select query cannot join with another table', $e->getMessage());
         }
     }
@@ -314,7 +314,7 @@ abstract class Zend_Db_Table_Select_TestCommon extends Zend_Db_Select_TestCommon
 //        try {
 //            $select = $table->select()->columns('product_id');
 //
-//            $this->assertType('Zend_Db_Table_Select', $select);
+//            $this->assertTrue($select instanceof Zend_Db_Table_Select);
 //        } catch (Zend_Db_Table_Select_Exception $e) {
 //            $this->fail('Exception thrown: ' . $e->getMessage());
 //        }

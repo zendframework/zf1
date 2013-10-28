@@ -48,7 +48,8 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             ->from('zfproducts');
         $sql = $select->__toString();
         $stmt = new $statementClass($this->_db, $sql);
-        $this->assertType('Zend_Db_Statement_Interface', $stmt);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
         $stmt->closeCursor();
     }
 
@@ -59,7 +60,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $select = $this->_db->select()
             ->from('zfproducts');
         $stmt = new $statementClass($this->_db, $select);
-        $this->assertType('Zend_Db_Statement_Interface', $stmt);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
         $stmt->closeCursor();
     }
 
@@ -68,7 +69,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $select = $this->_db->select()
             ->from('zfproducts');
         $stmt = $this->_db->prepare($select->__toString());
-        $this->assertType('Zend_Db_Statement_Interface', $stmt);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
         $stmt->closeCursor();
     }
 
@@ -77,7 +78,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $select = $this->_db->select()
             ->from('zfproducts');
         $stmt = $this->_db->query($select);
-        $this->assertType('Zend_Db_Statement_Interface', $stmt);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
         $stmt->closeCursor();
     }
 
@@ -86,7 +87,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $stmt = $this->_db->select()
             ->from('zfproducts')
             ->query();
-        $this->assertType('Zend_Db_Statement_Interface', $stmt);
+        $this->assertTrue($stmt instanceof Zend_Db_Statement_Interface);
         $stmt->closeCursor();
     }
 
@@ -97,7 +98,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             $stmt = $this->_db->query($sql);
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
         }
     }
@@ -110,7 +111,8 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $stmt = $this->_db->prepare("DELETE FROM $products WHERE $product_id = 1");
 
         $n = $stmt->rowCount();
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
+        $this->assertTrue(is_int($n));
         $this->assertEquals(0, $n, 'Expecting row count to be 0 before executing query');
 
         $stmt->execute();
@@ -118,7 +120,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $n = $stmt->rowCount();
         $stmt->closeCursor();
 
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
         $this->assertEquals(1, $n, 'Expected row count to be one after executing query');
     }
 
@@ -137,7 +139,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $n = $stmt->columnCount();
         $stmt->closeCursor();
 
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
         $this->assertEquals(2, $n);
     }
 
@@ -190,7 +192,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             }
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
         }
         $code = $stmt->errorCode();
@@ -212,7 +214,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             }
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
         }
         $code = $stmt->errorCode();
@@ -306,7 +308,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetchAll();
 
         $this->assertEquals(2, count($result));
-        $this->assertType('stdClass', $result[0]);
+        $this->assertTrue($result[0] instanceof stdClass);
 
         // check for FETCH_OBJ entries
         $this->assertEquals(2, $result[0]->product_id);
@@ -324,7 +326,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             $stmt->setFetchMode(-999);
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertRegExp('#invalid fetch mode#i', $e->getMessage());
         }
@@ -398,7 +400,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetchAll(Zend_Db::FETCH_OBJ);
 
         $this->assertEquals(2, count($result));
-        $this->assertType('stdClass', $result[0]);
+        $this->assertTrue($result[0] instanceof stdClass);
         $this->assertEquals(2, $result[0]->product_id);
     }
 
@@ -424,7 +426,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN, 1);
 
         $this->assertEquals(2, count($result));
-        $this->assertType('string', $result[0]);
+        $this->assertTrue(is_string($result[0]));
         $this->assertEquals('Linux', $result[0]);
         $this->assertEquals('OS X', $result[1]);
     }
@@ -439,7 +441,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             $result = $stmt->fetchAll(-99);
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
         }
         $stmt->closeCursor();
@@ -498,7 +500,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetchObject();
         $stmt->closeCursor();
 
-        $this->assertType('stdClass', $result,
+        $this->assertTrue($result instanceof stdClass,
             'Expecting object of type stdClass, got '.get_class($result));
         $this->assertEquals('Linux', $result->product_name);
     }
@@ -525,7 +527,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetch(Zend_Db::FETCH_NUM);
         $stmt->closeCursor();
 
-        $this->assertType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertEquals('Linux', $result[1]);
         $this->assertFalse(isset($result['product_name']));
     }
@@ -539,7 +541,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        $this->assertType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertEquals('Linux', $result['product_name']);
         $this->assertFalse(isset($result[1]));
     }
@@ -553,7 +555,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetch(Zend_Db::FETCH_BOTH);
         $stmt->closeCursor();
 
-        $this->assertType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertEquals('Linux', $result[1]);
         $this->assertEquals('Linux', $result['product_name']);
     }
@@ -567,7 +569,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $result = $stmt->fetch(Zend_Db::FETCH_OBJ);
         $stmt->closeCursor();
 
-        $this->assertType('stdClass', $result,
+        $this->assertTrue($result instanceof stdClass,
             'Expecting object of type stdClass, got '.get_class($result));
         $this->assertEquals('Linux', $result->product_name);
     }
@@ -582,7 +584,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             $result = $stmt->fetch(-99);
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
         }
         $stmt->closeCursor();
@@ -803,7 +805,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
         $stmt->execute();
         for ($i = 0; $i < $stmt->columnCount(); ++$i) {
             $meta = $stmt->getColumnMeta($i);
-            $this->assertType('array', $meta);
+            $this->assertTrue(is_array($meta));
             foreach ($this->_getColumnMetaKeys as $key) {
                 if ($key == 'table' && version_compare(PHP_VERSION, '5.2.0', '<')) {
                     continue;
@@ -822,7 +824,7 @@ abstract class Zend_Db_Statement_TestCommon extends Zend_Db_TestSetup
             $stmt->nextRowset();
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals('nextRowset() is not implemented', $e->getMessage());
         }

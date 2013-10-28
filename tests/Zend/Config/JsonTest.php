@@ -81,7 +81,7 @@ class Zend_Config_JsonTest extends PHPUnit_Framework_TestCase
     {
         $config = new Zend_Config_Json($this->_iniFileConfig, 'debug');
 
-        $this->assertType('string', $config->special->no);
+        $this->assertTrue(is_string($config->special->no));
         $this->assertEquals('no', $config->special->no);
         $this->assertNull($config->special->null);
         $this->assertFalse($config->special->false);

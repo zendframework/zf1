@@ -304,9 +304,9 @@ EOF;
     {
         $this->query->setDocument($this->getHtml(), 'utf-8');
         $test = $this->query->query('.foo');
-        $this->assertType('Zend_Dom_Query_Result', $test);
+        $this->assertTrue($test instanceof Zend_Dom_Query_Result);
         $doc  = $test->getDocument();
-        $this->assertType('DOMDocument', $doc);
+        $this->assertTrue($doc instanceof DOMDocument);
         $this->assertEquals('utf-8', $doc->encoding);
     }
     

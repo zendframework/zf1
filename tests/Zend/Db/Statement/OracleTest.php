@@ -92,7 +92,7 @@ class Zend_Db_Statement_OracleTest extends Zend_Db_Statement_TestCommon
             $stmt->nextRowset();
             $this->fail('Expected to catch Zend_Db_Statement_Oracle_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Oracle_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Oracle_Exception,
                 'Expecting object of type Zend_Db_Statement_Oracle_Exception, got '.get_class($e));
             $this->assertEquals('HYC00 Optional feature not implemented', $e->getMessage());
         }

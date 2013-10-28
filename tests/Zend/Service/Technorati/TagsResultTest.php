@@ -63,9 +63,9 @@ class Zend_Service_Technorati_TagsResultTest extends Zend_Service_Technorati_Tes
         $object = new Zend_Service_Technorati_TagsResult($this->domElements->item(2));
 
         // check properties
-        $this->assertType('string', $object->getTag());
+        $this->assertTrue(is_string($object->getTag()));
         $this->assertEquals('Weblog', $object->getTag());
-        $this->assertType('integer', $object->getPosts());
+        $this->assertTrue(is_int($object->getPosts()));
         $this->assertEquals(8336350, $object->getPosts());
     }
 

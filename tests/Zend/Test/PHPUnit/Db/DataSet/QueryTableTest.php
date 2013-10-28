@@ -118,7 +118,7 @@ class Zend_Test_PHPUnit_Db_DataSet_QueryTableTest extends Zend_Test_PHPUnit_Db_D
         $queryTable = new Zend_Test_PHPUnit_Db_DataSet_QueryTable("foo", null, $this->connectionMock);
 
         $metadata = $queryTable->getTableMetaData();
-        $this->assertType('PHPUnit_Extensions_Database_DataSet_ITableMetaData', $metadata);
+        $this->assertTrue($metadata instanceof PHPUnit_Extensions_Database_DataSet_ITableMetaData);
         $this->assertEquals(array(), $metadata->getColumns());
         $this->assertEquals(array(), $metadata->getPrimaryKeys());
         $this->assertEquals("foo", $metadata->getTableName());

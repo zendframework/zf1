@@ -206,7 +206,7 @@ class Zend_Oauth_ConsumerTest extends PHPUnit_Framework_TestCase
         $config = array('consumerKey'=>'12345','consumerSecret'=>'54321');
         $consumer = new Zend_Oauth_Consumer($config);
         $token = $consumer->getRequestToken(null, null, new Test_Http_RequestToken_48231);
-        $this->assertType('Zend_Oauth_Token_Request', $token);
+        $this->assertTrue($token instanceof Zend_Oauth_Token_Request);
     }
 
     public function testGetRedirectUrlReturnsUserAuthorizationUrlWithParameters()
@@ -232,21 +232,21 @@ class Zend_Oauth_ConsumerTest extends PHPUnit_Framework_TestCase
         $rtoken = new Zend_Oauth_Token_Request;
         $rtoken->setToken('token');
         $token = $consumer->getAccessToken(array('oauth_token'=>'token'), $rtoken, null, new Test_Http_AccessToken_48231);
-        $this->assertType('Zend_Oauth_Token_Access', $token);
+        $this->assertTrue($token instanceof Zend_Oauth_Token_Access);
     }
 
     public function testGetLastRequestTokenReturnsInstanceWhenExists()
     {
         $config = array('consumerKey'=>'12345','consumerSecret'=>'54321');
         $consumer = new Test_Consumer_48231($config);
-        $this->assertType('Zend_Oauth_Token_Request', $consumer->getLastRequestToken());
+        $this->assertTrue($consumer->getLastRequestToken() instanceof Zend_Oauth_Token_Request);
     }
 
     public function testGetLastAccessTokenReturnsInstanceWhenExists()
     {
         $config = array('consumerKey'=>'12345','consumerSecret'=>'54321');
         $consumer = new Test_Consumer_48231($config);
-        $this->assertType('Zend_Oauth_Token_Access', $consumer->getLastAccessToken());
+        $this->assertTrue($consumer->getLastAccessToken() instanceof Zend_Oauth_Token_Access);
     }
 
 }

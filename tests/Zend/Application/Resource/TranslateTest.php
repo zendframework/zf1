@@ -120,7 +120,7 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
             $resource->getTranslate();
             $this->fail('Expected Zend_Application_Resource_Exception');
         } catch (Zend_Application_Resource_Exception $e) {
-            $this->assertType('Zend_Application_Resource_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Application_Resource_Exception);
         }
     }
 
@@ -171,7 +171,7 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
         $resource->setBootstrap($this->bootstrap);
         $resource->init();
 
-        $this->assertType('Zend_Cache_Core', Zend_Translate::getCache());
+        $this->assertTrue(Zend_Translate::getCache() instanceof Zend_Cache_Core);
         Zend_Translate::removeCache();
     }
 

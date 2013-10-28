@@ -64,7 +64,7 @@ class Zend_Log_Formatter_FirebugTest extends PHPUnit_Framework_TestCase
     {
         $options = array();
         $formatter = Zend_Log_Formatter_Firebug::factory($options);
-        $this->assertType('Zend_Log_Formatter_Firebug', $formatter);
+        $this->assertTrue($formatter instanceof Zend_Log_Formatter_Firebug);
     }
 }
 

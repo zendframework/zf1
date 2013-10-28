@@ -167,7 +167,7 @@ class Zend_Auth_Adapter_Http_ProxyTest extends PHPUnit_Framework_TestCase
         $digest = $this->_digestChallenge();
 
         // Make sure the result is false
-        $this->assertType('Zend_Auth_Result', $result);
+        $this->assertTrue($result instanceof Zend_Auth_Result);
         $this->assertFalse($result->isValid());
 
         // Verify the status code and the presence of both challenges
@@ -431,7 +431,7 @@ class Zend_Auth_Adapter_Http_ProxyTest extends PHPUnit_Framework_TestCase
         extract($data); // $result, $status, $headers
 
         // Make sure the result is false
-        $this->assertType('Zend_Auth_Result', $result);
+        $this->assertTrue($result instanceof Zend_Auth_Result);
         $this->assertFalse($result->isValid());
 
         // Verify the status code and the presence of the challenge
@@ -453,7 +453,7 @@ class Zend_Auth_Adapter_Http_ProxyTest extends PHPUnit_Framework_TestCase
         extract($data); // $result, $status, $headers
 
         // Make sure the result is true
-        $this->assertType('Zend_Auth_Result', $result);
+        $this->assertTrue($result instanceof Zend_Auth_Result);
         $this->assertTrue($result->isValid());
 
         // Verify we got a 200 response
@@ -471,7 +471,7 @@ class Zend_Auth_Adapter_Http_ProxyTest extends PHPUnit_Framework_TestCase
         extract($data); // $result, $status, $headers
 
         // Make sure the result is false
-        $this->assertType('Zend_Auth_Result', $result);
+        $this->assertTrue($result instanceof Zend_Auth_Result);
         $this->assertFalse($result->isValid());
 
         // Make sure it set the right HTTP code

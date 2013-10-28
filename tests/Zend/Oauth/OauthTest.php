@@ -43,7 +43,7 @@ class Zend_OauthTest extends PHPUnit_Framework_TestCase
     public function testCanSetCustomHttpClient()
     {
         Zend_Oauth::setHttpClient(new Test_Http_Client_19485876());
-        $this->assertType('Test_Http_Client_19485876', Zend_Oauth::getHttpClient());
+        $this->assertTrue(Zend_Oauth::getHttpClient() instanceof Test_Http_Client_19485876);
     }
 
     public function testGetHttpClientResetsParameters()

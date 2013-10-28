@@ -92,10 +92,10 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestCosmosSuccess.xml')->cosmos(self::TEST_PARAM_COSMOS);
 
-        $this->assertType('Zend_Service_Technorati_CosmosResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_CosmosResultSet);
         $this->assertEquals(2, $result->totalResults());
         $result->seek(0);
-        $this->assertType('Zend_Service_Technorati_CosmosResult', $result->current());
+        $this->assertTrue($result->current() instanceof Zend_Service_Technorati_CosmosResult);
         // content is validated in Zend_Service_Technorati_CosmosResultSet tests
     }
 
@@ -155,10 +155,10 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestSearchSuccess.xml')->search(self::TEST_PARAM_SEARCH);
 
-        $this->assertType('Zend_Service_Technorati_SearchResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_SearchResultSet);
         $this->assertEquals(2, $result->totalResults());
         $result->seek(0);
-        $this->assertType('Zend_Service_Technorati_SearchResult', $result->current());
+        $this->assertTrue($result->current() instanceof Zend_Service_Technorati_SearchResult);
         // content is validated in Zend_Service_Technorati_SearchResultSet tests
     }
 
@@ -218,10 +218,10 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestTagSuccess.xml')->tag(self::TEST_PARAM_TAG);
 
-        $this->assertType('Zend_Service_Technorati_TagResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_TagResultSet);
         $this->assertEquals(2, $result->totalResults());
         $result->seek(0);
-        $this->assertType('Zend_Service_Technorati_TagResult', $result->current());
+        $this->assertTrue($result->current() instanceof Zend_Service_Technorati_TagResult);
         // content is validated in Zend_Service_Technorati_TagResultSet tests
     }
 
@@ -275,10 +275,10 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestDailyCountsSuccess.xml')->dailyCounts(self::TEST_PARAM_DAILYCOUNT);
 
-        $this->assertType('Zend_Service_Technorati_DailyCountsResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_DailyCountsResultSet);
         $this->assertEquals(180, $result->totalResults());
         $result->seek(0);
-        $this->assertType('Zend_Service_Technorati_DailyCountsResult', $result->current());
+        $this->assertTrue($result->current() instanceof Zend_Service_Technorati_DailyCountsResult);
         // content is validated in Zend_Service_Technorati_DailyCountsResultSet tests
     }
 
@@ -325,7 +325,7 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestBlogInfoSuccess.xml')->blogInfo(self::TEST_PARAM_BLOGINFO);
 
-        $this->assertType('Zend_Service_Technorati_BlogInfoResult', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_BlogInfoResult);
         // content is validated in Zend_Service_Technorati_BlogInfoResult tests
     }
 
@@ -362,7 +362,7 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestBlogPostTagsSuccess.xml')->blogPostTags(self::TEST_PARAM_BLOGPOSTTAGS);
 
-        $this->assertType('Zend_Service_Technorati_TagsResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_TagsResultSet);
         // content is validated in Zend_Service_Technorati_TagsResultSet tests
     }
 
@@ -410,7 +410,7 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestTopTagsSuccess.xml')->topTags();
 
-        $this->assertType('Zend_Service_Technorati_TagsResultSet', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_TagsResultSet);
         // content is validated in Zend_Service_Technorati_TagsResultSet tests
     }
 
@@ -451,7 +451,7 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestGetInfoSuccess.xml')->getInfo(self::TEST_PARAM_GETINFO);
 
-        $this->assertType('Zend_Service_Technorati_GetInfoResult', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_GetInfoResult);
         // content is validated in Zend_Service_Technorati_GetInfoResult tests
     }
 
@@ -476,7 +476,7 @@ class Zend_Service_Technorati_TechnoratiTest extends Zend_Service_Technorati_Tes
     {
         $result = $this->_setResponseFromFile('TestKeyInfoSuccess.xml')->keyInfo();
 
-        $this->assertType('Zend_Service_Technorati_KeyInfoResult', $result);
+        $this->assertTrue($result instanceof Zend_Service_Technorati_KeyInfoResult);
         // content is validated in Zend_Service_Technorati_KeyInfoResult tests
     }
 

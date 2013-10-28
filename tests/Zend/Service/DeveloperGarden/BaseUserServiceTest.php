@@ -202,21 +202,20 @@ class Zend_Service_DeveloperGarden_BaseUserServiceTest extends PHPUnit_Framework
     {
         $result = $this->service->getAccountBalance();
         $this->assertEquals('0000', $result->getErrorCode());
-        $this->assertType('array', $result->Account);
+        $this->assertTrue(is_array($result->Account));
     }
 
     public function testAccountBalanceLoop()
     {
         $result = $this->service->getAccountBalance();
         $this->assertEquals('0000', $result->getErrorCode());
-        $this->assertType('array', $result->Account);
+        $this->assertTrue(is_array($result->Account));
         foreach ($result->Account as $k => $v) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_BaseUserService_AccountBalance',
-                $v
+            $this->assertTrue(
+                $v instanceof Zend_Service_DeveloperGarden_BaseUserService_AccountBalance
             );
-            $this->assertType('string', $v->getAccount());
-            $this->assertType('integer', $v->getCredits());
+            $this->assertTrue(is_string($v->getAccount()));
+            $this->assertTrue(is_int($v->getCredits()));
         }
     }
 }

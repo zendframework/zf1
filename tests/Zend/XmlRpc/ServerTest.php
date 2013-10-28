@@ -244,7 +244,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
         $request = new Zend_XmlRpc_Request();
         $request->setMethod('invalid');
         $response = $this->_server->handle($request);
-        $this->assertType('Zend_XmlRpc_Fault', $response);
+        $this->assertTrue($response instanceof Zend_XmlRpc_Fault);
         $this->assertSame('Method "invalid" does not exist', $response->getMessage());
         $this->assertSame(620, $response->getCode());
     }
