@@ -508,7 +508,9 @@ abstract class Zend_XmlRpc_Value
         // If no type was specified, the default is string
         if (!$type) {
             $type = self::XMLRPC_TYPE_STRING;
-            $value = str_replace(array('<value>', '</value>'), '', $xml->asXML());
+            if (preg_match('#^<value>.*</value>$#', $xml->asXML())) {
+                $value = str_replace(array('<value>', '</value>'), '', $xml->asXML());
+            }
         }
     }
 
