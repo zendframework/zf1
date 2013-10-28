@@ -402,7 +402,7 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_ARRAY);
         $this->assertTrue(is_array($cookies), '$cookies is expected to be an array, but it is not');
-        $this->assertTrue('string', $cookies[0], '$cookies[0] is expected to be a string');;
+        $this->assertTrue(is_string($cookies[0]), '$cookies[0] is expected to be a string');;
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_CONCAT);
         $this->assertTrue(is_string($cookies), '$cookies is expected to be a string');
