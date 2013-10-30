@@ -373,5 +373,41 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertTrue($row->isConnected());
         $this->assertSame($row->getTable(), $table);
     }
+ 
+    /**
+      * @group GH-172
+      */
+    public function testFixForRowsetContainsDisconnectedRowObjectsWhenDeserializedDoesNotBreakPaginator()
+    {
+        $table = $this->_table['bugs'];
+        $tableClass = get_class($table);
+
+        $select = $table->select();
+        $select->from('zfbugs', array('bug_id'));
+
+        require_once 'Zend/Paginator.php';
+        $paginator = Zend_Paginator::factory($select);
+        foreach ($paginator as $test) {
+            $this->assertTrue($test instanceof Zend_Db_Table_Row);
+        }
+    }
+
+    /**
+      * @group GH-172
+      * @see https://github.com/zendframework/zf1/commit/d418b73b53964c3bd84a6624075008106e7d5962#commitcomment-4438005
+      */
+    public function testFixForRowsetContainsDisconnectedRowObjectsWhenDeserializedDoesNotBreakTableJoin()
+    {
+        $table = $this->_table['bugs'];
+        $tableClass = get_class($table);
+
+        $select = $table->select(Zend_Db_Table::SELECT_WITH_FROM_PART)->setIntegrityCheck(false);
+        $select->from('zfbugs', array('bug_id'));
+        $select->join('zfaccounts', 'zfaccounts.account_name = zfbugs.reported_by', 'account_name');
+        $select->where('zfaccounts.account_name = ?', 'Bob');
+
+        $result = $table->fetchAll($select);
+        $this->assertTrue($result instanceof Zend_Db_Table_Rowset);
+    }
 
 }
