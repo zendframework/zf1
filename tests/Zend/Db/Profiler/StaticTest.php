@@ -50,10 +50,10 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => false
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
         $this->assertFalse($prof->getEnabled());
     }
@@ -69,10 +69,10 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => true
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
         $this->assertTrue($prof->getEnabled());
     }
@@ -98,10 +98,10 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                     'profiler' => $profilerString
                     )
                 );
-            $this->assertType('Zend_Db_Adapter_Abstract', $db,
+            $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
                 'Expected object of type Zend_Db_Adapter_Abstract, got ' . get_class($db));
             $prof = $db->getProfiler();
-            $this->assertType('Zend_Db_Profiler', $prof,
+            $this->assertTrue($prof instanceof Zend_Db_Profiler,
                 'Expected object of type Zend_Db_Profiler, got ' . get_class($prof));
             $this->assertTrue($prof->getEnabled());
         }
@@ -120,12 +120,12 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => $profiler
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got ' . get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got ' . get_class($prof));
-        $this->assertType('Zend_Db_Profiler_ProfilerCustom', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler_ProfilerCustom,
             'Expected object of type Zend_Db_Profiler_ProfilerCustom, got ' . get_class($prof));
         $this->assertFalse($prof->getEnabled());
     }
@@ -143,10 +143,10 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 )
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
         $this->assertTrue($prof->getEnabled());
     }
@@ -164,12 +164,12 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 )
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
-        $this->assertType('Zend_Db_Profiler_ProfilerCustom', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler_ProfilerCustom,
             'Expected object of type Zend_Db_Profiler_ProfilerCustom, got '.get_class($prof));
         $this->assertFalse($prof->getEnabled());
     }
@@ -189,12 +189,12 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 )
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
-        $this->assertType('Zend_Db_Profiler_ProfilerCustom', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler_ProfilerCustom,
             'Expected object of type Zend_Db_Profiler_ProfilerCustom, got '.get_class($prof));
         $this->assertFalse($prof->getEnabled());
     }
@@ -214,12 +214,12 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => $config
             )
         );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got '.get_class($db));
         $prof = $db->getProfiler();
-        $this->assertType('Zend_Db_Profiler', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler,
             'Expected object of type Zend_Db_Profiler, got '.get_class($prof));
-        $this->assertType('Zend_Db_Profiler_ProfilerCustom', $prof,
+        $this->assertTrue($prof instanceof Zend_Db_Profiler_ProfilerCustom,
             'Expected object of type Zend_Db_Profiler_ProfilerCustom, got '.get_class($prof));
         $this->assertFalse($prof->getEnabled());
     }
@@ -240,7 +240,7 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => $profiler
                 )
             );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got ' . get_class($db));
         $profiler2 = $db->getProfiler();
         $this->assertSame($profiler, $profiler2);
@@ -287,7 +287,7 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                 'profiler' => $config
                 )
             );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got ' . get_class($db));
         $profiler2 = $db->getProfiler();
         $this->assertSame($profiler, $profiler2);
@@ -312,7 +312,7 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
                     )
                 )
             );
-        $this->assertType('Zend_Db_Adapter_Abstract', $db,
+        $this->assertTrue($db instanceof Zend_Db_Adapter_Abstract,
             'Expected object of type Zend_Db_Adapter_Abstract, got ' . get_class($db));
         $profiler2 = $db->getProfiler();
         $this->assertSame($profiler, $profiler2);
@@ -624,8 +624,9 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
 
         $queryId = $prof->queryStart('sql');
 
-        $this->assertType('Zend_Db_Profiler_Query',
-            $prof->getQueryProfile($queryId));
+        $this->assertTrue(
+            $prof->getQueryProfile($queryId) instanceof Zend_Db_Profiler_Query
+        );
     }
 
     /**
@@ -796,8 +797,8 @@ class Zend_Db_Profiler_StaticTest extends Zend_Db_TestSetup
 
         $prof->queryStart('sql 2');
 
-        $this->assertType('Zend_Db_Profiler_Query',
-            $queryProfile = $prof->getLastQueryProfile());
+        $queryProfile = $prof->getLastQueryProfile();
+        $this->assertTrue($queryProfile instanceof Zend_Db_Profiler_Query);
 
         $this->assertEquals('sql 2', $queryProfile->getQuery());
 

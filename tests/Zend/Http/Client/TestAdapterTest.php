@@ -192,7 +192,7 @@ class Zend_Http_Client_TestAdapterTest extends PHPUnit_Framework_TestCase
                 $this->fail();
             } catch (Exception $e) {
                 $class = 'Zend_Http_Client_Adapter_Exception';
-                $this->assertType($class, $e);
+                $this->assertTrue($e instanceof $class);
                 $this->assertRegexp('/out of range/i', $e->getMessage());
             }
         }

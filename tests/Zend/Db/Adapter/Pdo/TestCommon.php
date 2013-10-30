@@ -57,7 +57,7 @@ abstract class Zend_Db_Adapter_Pdo_TestCommon extends Zend_Db_Adapter_TestCommon
             $this->_db->exec('Bogus query');
             $this->fail('Expected exception not thrown');
         } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertType('Zend_Db_Adapter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Adapter_Exception,
                 'Expecting object of type Zend_Db_Adapter_Exception, got ' . get_class($e));
         }
     }
@@ -73,7 +73,7 @@ abstract class Zend_Db_Adapter_Pdo_TestCommon extends Zend_Db_Adapter_TestCommon
             $this->_db->exec('DELETE FROM BogusTable');
             $this->fail('Expected exception not thrown');
         } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertType('Zend_Db_Adapter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Adapter_Exception,
                 'Expecting object of type Zend_Db_Adapter_Exception, got ' . get_class($e));
         }
     }

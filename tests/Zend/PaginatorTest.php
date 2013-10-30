@@ -214,14 +214,14 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
     public function testFactoryReturnsArrayAdapter()
     {
         $paginator = Zend_Paginator::factory($this->_testCollection);
-        $this->assertType('Zend_Paginator_Adapter_Array', $paginator->getAdapter());
+        $this->assertTrue($paginator->getAdapter() instanceof Zend_Paginator_Adapter_Array);
     }
 
     public function testFactoryReturnsDbSelectAdapter()
     {
         $paginator = Zend_Paginator::factory($this->_query);
 
-        $this->assertType('Zend_Paginator_Adapter_DbSelect', $paginator->getAdapter());
+        $this->assertTrue($paginator->getAdapter() instanceof Zend_Paginator_Adapter_DbSelect);
     }
 
     // ZF-4607
@@ -231,19 +231,19 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
 
         $paginator = Zend_Paginator::factory($table->select());
 
-        $this->assertType('Zend_Paginator_Adapter_DbSelect', $paginator->getAdapter());
+        $this->assertTrue($paginator->getAdapter() instanceof Zend_Paginator_Adapter_DbSelect);
     }
 
     public function testFactoryReturnsIteratorAdapter()
     {
         $paginator = Zend_Paginator::factory(new ArrayIterator($this->_testCollection));
-        $this->assertType('Zend_Paginator_Adapter_Iterator', $paginator->getAdapter());
+        $this->assertTrue($paginator->getAdapter() instanceof Zend_Paginator_Adapter_Iterator);
     }
 
     public function testFactoryReturnsNullAdapter()
     {
         $paginator = Zend_Paginator::factory(101);
-        $this->assertType('Zend_Paginator_Adapter_Null', $paginator->getAdapter());
+        $this->assertTrue($paginator->getAdapter() instanceof Zend_Paginator_Adapter_Null);
     }
 
     public function testFactoryThrowsInvalidClassExceptionAdapter()
@@ -251,7 +251,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         try {
             $paginator = Zend_Paginator::factory(new stdClass());
         } catch (Exception $e) {
-            $this->assertType('Zend_Paginator_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Paginator_Exception);
             $this->assertContains('stdClass', $e->getMessage());
         }
     }
@@ -261,7 +261,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         try {
             $paginator = Zend_Paginator::factory('invalid argument');
         } catch (Exception $e) {
-            $this->assertType('Zend_Paginator_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Paginator_Exception);
             $this->assertContains('string', $e->getMessage());
         }
     }
@@ -569,7 +569,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
     public function testGetsCurrentItems()
     {
         $items = $this->_paginator->getCurrentItems();
-        $this->assertType('ArrayIterator', $items);
+        $this->assertTrue($items instanceof ArrayIterator);
 
         $count = 0;
 
@@ -583,7 +583,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
     public function testGetsIterator()
     {
         $items = $this->_paginator->getIterator();
-        $this->assertType('ArrayIterator', $items);
+        $this->assertTrue($items instanceof ArrayIterator);
 
         $count = 0;
 
@@ -628,7 +628,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         try {
             $paginator->getItem(1);
         } catch (Exception $e) {
-            $this->assertType('Zend_Paginator_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Paginator_Exception);
             $this->assertContains('Page 1 does not exist', $e->getMessage());
         }
     }
@@ -638,7 +638,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         try {
             $this->_paginator->getItem(10, 11);
         } catch (Exception $e) {
-            $this->assertType('Zend_Paginator_Exception', $e);
+            $this->assertTrue($e instanceof Zend_Paginator_Exception);
             $this->assertContains('Page 11 does not contain item number 10', $e->getMessage());
         }
     }
@@ -728,18 +728,18 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->setView(new Zend_View());
 
-        $this->assertType('Zend_View_Interface', $this->_paginator->getView());
+        $this->assertTrue($this->_paginator->getView() instanceof Zend_View_Interface);
     }
 
     public function testGeneratesViewIfNonexistent()
     {
-        $this->assertType('Zend_View_Interface', $this->_paginator->getView());
+        $this->assertTrue($this->_paginator->getView() instanceof Zend_View_Interface);
     }
 
     public function testGetsAndSetsView()
     {
         $this->_paginator->setView(new Zend_View());
-        $this->assertType('Zend_View_Interface', $this->_paginator->getView());
+        $this->assertTrue($this->_paginator->getView() instanceof Zend_View_Interface);
     }
 
     public function testRenders()
@@ -747,7 +747,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         try {
             $this->_paginator->render(new Zend_View());
         } catch (Exception $e) {
-            $this->assertType('Zend_View_Exception', $e);
+            $this->assertTrue($e instanceof Zend_View_Exception);
             $this->assertEquals('No view partial provided and no default set', $e->getMessage());
         }
     }
@@ -810,7 +810,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
     public function testAcceptsTraversableInstanceFromAdapter()
     {
         $paginator = new Zend_Paginator(new Zf4207());
-        $this->assertType('ArrayObject', $paginator->getCurrentItems());
+        $this->assertTrue($paginator->getCurrentItems() instanceof ArrayObject);
     }
 
     public function testCachedItem()
@@ -971,7 +971,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         $p = Zend_Paginator::factory(new Zend_Paginator_TestArrayAggregate());
 
         $this->assertEquals(1, count($p));
-        $this->assertType('Zend_Paginator_Adapter_Array', $p->getAdapter());
+        $this->assertTrue($p->getAdapter() instanceof Zend_Paginator_Adapter_Array);
         $this->assertEquals(4, count($p->getAdapter()));
     }
 
@@ -983,7 +983,7 @@ class Zend_PaginatorTest extends PHPUnit_Framework_TestCase
         $p = new Zend_Paginator(new Zend_Paginator_TestArrayAggregate());
 
         $this->assertEquals(1, count($p));
-        $this->assertType('Zend_Paginator_Adapter_Array', $p->getAdapter());
+        $this->assertTrue($p->getAdapter() instanceof Zend_Paginator_Adapter_Array);
         $this->assertEquals(4, count($p->getAdapter()));
     }
 

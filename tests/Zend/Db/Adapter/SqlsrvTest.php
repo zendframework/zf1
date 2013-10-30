@@ -98,7 +98,7 @@ class Zend_Db_Adapter_SqlsrvTest extends Zend_Db_Adapter_TestCommon
         $this->assertEquals(1, $rowsAffected);
 
         $lastInsertId = $this->_db->lastInsertId();
-        $this->assertType('string', $lastInsertId);
+        $this->assertTrue(is_string($lastInsertId));
         $this->assertEquals('5', (string) $lastInsertId,
             'Expected new id to be 5');
 

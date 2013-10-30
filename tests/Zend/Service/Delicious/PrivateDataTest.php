@@ -73,7 +73,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLastUpdate()
     {
-        $this->assertType('Zend_Date', $this->_delicious->getLastUpdate());
+        $this->assertTrue($this->_delicious->getLastUpdate() instanceof Zend_Date);
     }
 
     /**
@@ -84,7 +84,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
     {
         // get tags
         $tags = $this->_delicious->getTags();
-        $this->assertType('array', $tags);
+        $this->assertTrue(is_array($tags));
         $tags = array_keys($tags);
 
         if (count($tags) < 1) {
@@ -115,7 +115,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
 
         // check if bundle was added
         $bundles = $this->_delicious->getBundles();
-        $this->assertType('array', $bundles);
+        $this->assertTrue(is_array($bundles));
         $this->assertArrayHasKey($newBundleName, $bundles);
         $this->assertEquals($tags, $bundles[$newBundleName]);
 
@@ -174,9 +174,9 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(self::$TEST_POST_NOTES, $savedPost->getNotes());
         $this->assertEquals(self::$TEST_POST_TAGS, $savedPost->getTags());
         $this->assertEquals(self::$TEST_POST_SHARED, $savedPost->getShared());
-        $this->assertType('Zend_Date', $savedPost->getDate());
-        $this->assertType('string', $savedPost->getHash());
-        $this->assertType('int', $savedPost->getOthers());
+        $this->assertTrue($savedPost->getDate() instanceof Zend_Date);
+        $this->assertTrue(is_string($savedPost->getHash()));
+        $this->assertTrue(is_int($savedPost->getOthers()));
 
         // delete post
         $savedPost->delete();
@@ -196,7 +196,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
     public function testGetAllPosts()
     {
         $posts = $this->_delicious->getAllPosts('zfSite');
-        $this->assertType('Zend_Service_Delicious_PostList', $posts);
+        $this->assertTrue($posts instanceof Zend_Service_Delicious_PostList);
 
         foreach ($posts as $post) {
             $this->assertContains('zfSite', $post->getTags());
@@ -211,7 +211,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
     public function testGetRecentPosts()
     {
         $posts = $this->_delicious->getRecentPosts('zfSite', 10);
-        $this->assertType('Zend_Service_Delicious_PostList', $posts);
+        $this->assertTrue($posts instanceof Zend_Service_Delicious_PostList);
         $this->assertTrue(count($posts) <= 10);
 
         foreach ($posts as $post) {
@@ -227,7 +227,7 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
     public function testGetPosts()
     {
         $posts = $this->_delicious->getPosts('zfSite', new Zend_Date(), 'help');
-        $this->assertType('Zend_Service_Delicious_PostList', $posts);
+        $this->assertTrue($posts instanceof Zend_Service_Delicious_PostList);
         $this->assertTrue(count($posts) <= 10);
 
         foreach ($posts as $post) {
@@ -241,6 +241,6 @@ class Zend_Service_Delicious_PrivateDataTest extends PHPUnit_Framework_TestCase
      */
     public function testDates()
     {
-        $this->assertType('array', $this->_delicious->getDates());
+        $this->assertTrue(is_array($this->_delicious->getDates()));
     }
 }

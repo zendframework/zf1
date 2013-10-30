@@ -60,7 +60,7 @@ class Zend_Test_PHPUnit_Db_DataSet_DbTableDataSetTest extends PHPUnit_Framework_
         $dataSet = new Zend_Test_PHPUnit_Db_DataSet_DbTableDataSet();
         $dataSet->addTable($table);
 
-        $this->assertType('Zend_Test_PHPUnit_Db_DataSet_DbTable', $dataSet->getTable($fixtureTable));
+        $this->assertTrue($dataSet->getTable($fixtureTable) instanceof Zend_Test_PHPUnit_Db_DataSet_DbTable);
     }
 
     public function testGetUnknownTableThrowsException()

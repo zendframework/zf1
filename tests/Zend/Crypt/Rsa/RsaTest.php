@@ -139,13 +139,13 @@ CERT;
     public function testSetPemStringParsesPemForPrivateKey()
     {
         $rsa = new Zend_Crypt_Rsa(array('pemString'=>$this->_testPemString));
-        $this->assertType('Zend_Crypt_Rsa_Key_Private', $rsa->getPrivateKey());
+        $this->assertTrue($rsa->getPrivateKey() instanceof Zend_Crypt_Rsa_Key_Private);
     }
 
     public function testSetPemStringParsesPemForPublicKey()
     {
         $rsa = new Zend_Crypt_Rsa(array('pemString'=>$this->_testPemString));
-        $this->assertType('Zend_Crypt_Rsa_Key_Public', $rsa->getPublicKey());
+        $this->assertTrue($rsa->getPublicKey() instanceof Zend_Crypt_Rsa_Key_Public);
     }
 
     public function testSetCertificateStringParsesCertificateForNullPrivateKey()
@@ -157,7 +157,7 @@ CERT;
     public function testSetCertificateStringParsesCertificateForPublicKey()
     {
         $rsa = new Zend_Crypt_Rsa(array('certificateString'=>$this->_testCertificateString));
-        $this->assertType('Zend_Crypt_Rsa_Key_Public', $rsa->getPublicKey());
+        $this->assertTrue($rsa->getPublicKey() instanceof Zend_Crypt_Rsa_Key_Public);
     }
 
     public function testSignGeneratesExpectedBinarySignature()
@@ -274,7 +274,7 @@ CERT;
         }
 
         $keys = $rsa->generateKeys(array('private_key_bits'=>512));
-        $this->assertType('ArrayObject', $keys);
+        $this->assertTrue($keys instanceof ArrayObject);
     }
 
     public function testKeyGenerationCreatesPrivateKeyInArrayObject()
@@ -287,7 +287,7 @@ CERT;
         }
 
         $keys = $rsa->generateKeys(array('private_key_bits'=>512));
-        $this->assertType('Zend_Crypt_Rsa_Key_Private', $keys->privateKey);
+        $this->assertTrue($keys->privateKey instanceof Zend_Crypt_Rsa_Key_Private);
     }
 
     public function testKeyGenerationCreatesPublicKeyInArrayObject()
@@ -300,7 +300,7 @@ CERT;
         }
 
         $keys = $rsa->generateKeys(array('privateKeyBits'=>512));
-        $this->assertType('Zend_Crypt_Rsa_Key_Public', $keys->publicKey);
+        $this->assertTrue($keys->publicKey instanceof Zend_Crypt_Rsa_Key_Public);
     }
 
     public function testKeyGenerationCreatesPassphrasedPrivateKey()

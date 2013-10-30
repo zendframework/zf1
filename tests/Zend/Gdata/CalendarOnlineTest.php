@@ -71,7 +71,7 @@ class Zend_Gdata_CalendarOnlineTest extends PHPUnit_Framework_TestCase
                 !== false);
         $eventCount = 0;
         foreach ( $eventFeed as $event ) {
-            $this->assertType('Zend_Gdata_Calendar_EventEntry', $event);
+            $this->assertTrue($event instanceof Zend_Gdata_Calendar_EventEntry);
             $eventCount++;
         }
         $this->assertTrue($eventCount > 0 );

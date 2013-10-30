@@ -69,7 +69,9 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
 
     public function testSingletonInstanceIsInstanceOfClass()
     {
-        $this->assertType('Zend_EventManager_StaticEventManager', Zend_EventManager_StaticEventManager::getInstance());
+        $this->assertTrue(
+            Zend_EventManager_StaticEventManager::getInstance() instanceof Zend_EventManager_StaticEventManager
+        );
     }
 
     public function testCanAttachCallbackToEvent()
@@ -80,7 +82,7 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
         $expected  = array($this, __FUNCTION__);
         $found     = false;
         $listeners = $events->getListeners('foo', 'bar');
-        $this->assertType('Zend_Stdlib_PriorityQueue', $listeners);
+        $this->assertTrue($listeners instanceof Zend_Stdlib_PriorityQueue);
         $this->assertTrue(0 < count($listeners), 'Empty listeners!');
         foreach ($listeners as $listener) {
             if ($expected === $listener->getCallback()) {
@@ -101,7 +103,7 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
         foreach (array('foo', 'test') as $event) {
             $found     = false;
             $listeners = $events->getListeners('bar', $event);
-            $this->assertType('Zend_Stdlib_PriorityQueue', $listeners);
+            $this->assertTrue($listeners instanceof Zend_Stdlib_PriorityQueue);
             $this->assertTrue(0 < count($listeners), 'Empty listeners!');
             foreach ($listeners as $listener) {
                 if ($expected === $listener->getCallback()) {
@@ -123,7 +125,7 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
         foreach (array('foo', 'test') as $id) {
             $found     = false;
             $listeners = $events->getListeners($id, 'bar');
-            $this->assertType('Zend_Stdlib_PriorityQueue', $listeners);
+            $this->assertTrue($listeners instanceof Zend_Stdlib_PriorityQueue);
             $this->assertTrue(0 < count($listeners), 'Empty listeners!');
             foreach ($listeners as $listener) {
                 if ($expected === $listener->getCallback()) {
@@ -146,7 +148,7 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
             foreach (array('foo', 'test') as $event) {
                 $found     = false;
                 $listeners = $events->getListeners($resource, $event);
-                $this->assertType('Zend_Stdlib_PriorityQueue', $listeners);
+                $this->assertTrue($listeners instanceof Zend_Stdlib_PriorityQueue);
                 $this->assertTrue(0 < count($listeners), 'Empty listeners!');
                 foreach ($listeners as $listener) {
                     if ($expected === $listener->getCallback()) {
@@ -200,7 +202,7 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
         $events = Zend_EventManager_StaticEventManager::getInstance();
         $events->attach('foo', 'bar', array($this, __FUNCTION__));
         $listeners = $events->getListeners('foo', 'bar');
-        $this->assertType('Zend_Stdlib_PriorityQueue', $listeners);
+        $this->assertTrue($listeners instanceof Zend_Stdlib_PriorityQueue);
         $this->assertEquals(1, count($listeners));
     }
 
@@ -221,11 +223,11 @@ class Zend_EventManager_StaticEventManagerTest extends PHPUnit_Framework_TestCas
         $events->attach('foo', 'baz', array($this, __FUNCTION__));
         $events->attach('foo', 'bat', array($this, __FUNCTION__));
         $events->clearListeners('foo', 'baz');
-        $this->assertType('Zend_Stdlib_PriorityQueue', $events->getListeners('foo', 'baz'));
+        $this->assertTrue($events->getListeners('foo', 'baz') instanceof Zend_Stdlib_PriorityQueue);
         $this->assertEquals(0, count($events->getListeners('foo', 'baz')));
-        $this->assertType('Zend_Stdlib_PriorityQueue', $events->getListeners('foo', 'bar'));
+        $this->assertTrue($events->getListeners('foo', 'bar') instanceof Zend_Stdlib_PriorityQueue);
         $this->assertEquals(1, count($events->getListeners('foo', 'bar')));
-        $this->assertType('Zend_Stdlib_PriorityQueue', $events->getListeners('foo', 'bat'));
+        $this->assertTrue($events->getListeners('foo', 'bat') instanceof Zend_Stdlib_PriorityQueue);
         $this->assertEquals(1, count($events->getListeners('foo', 'bat')));
     }
 

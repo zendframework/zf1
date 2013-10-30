@@ -58,7 +58,7 @@ class Zend_Application_Resource_SessionTest extends PHPUnit_Framework_TestCase
 
         $this->resource->setSaveHandler($saveHandlerClassName);
 
-        $this->assertType($saveHandlerClassName, $this->resource->getSaveHandler());
+        $this->assertTrue($this->resource->getSaveHandler() instanceof $saveHandlerClassName);
     }
 
     public function testSetSaveHandlerArray()
@@ -68,7 +68,7 @@ class Zend_Application_Resource_SessionTest extends PHPUnit_Framework_TestCase
 
         $this->resource->setSaveHandler(array('class' => $saveHandlerClassName));
 
-        $this->assertType($saveHandlerClassName, $this->resource->getSaveHandler());
+        $this->assertTrue($this->resource->getSaveHandler() instanceof $saveHandlerClassName);
     }
 
     public function testSetOptions()

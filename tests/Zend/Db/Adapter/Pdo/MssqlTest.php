@@ -313,7 +313,7 @@ class Zend_Db_Adapter_Pdo_MssqlTest extends Zend_Db_Adapter_Pdo_TestCommon
         $rowsAffected = $this->_db->insert('zfbugs', $row);
         $this->assertEquals(1, $rowsAffected);
         $lastInsertId = $this->_db->lastInsertId();
-        $this->assertType('integer', $lastInsertId);
+        $this->assertTrue(is_int($lastInsertId));
         $this->assertEquals('5', (string) $lastInsertId,
             'Expected new id to be 5');
     }

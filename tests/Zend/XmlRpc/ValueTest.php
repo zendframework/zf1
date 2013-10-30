@@ -910,7 +910,7 @@ class Zend_XmlRpc_ValueTest extends PHPUnit_Framework_TestCase
     public function assertXmlRpcType($type, $object)
     {
         $type = 'Zend_XmlRpc_Value_' . ucfirst($type);
-        $this->assertType($type, $object);
+        $this->assertTrue($object instanceof $type);
     }
 
     public function wrapXml($xml)

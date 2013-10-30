@@ -76,8 +76,8 @@ class Zend_Db_Adapter_Pdo_OciTest extends Zend_Db_Adapter_Pdo_TestCommon
         $this->assertEquals(1, $rowsAffected);
         $lastInsertId = $this->_db->lastInsertId('zfproducts', null); // implies 'products_seq'
         $lastSequenceId = $this->_db->lastSequenceId('zfproducts_seq');
-        $this->assertType('string', $lastInsertId);
-        $this->assertType('string', $lastSequenceId);
+        $this->assertTrue(is_string($lastInsertId));
+        $this->assertTrue(is_string($lastSequenceId));
         $this->assertEquals('4', (string) $lastInsertId, 'Expected new id to be 4');
         $this->assertEquals('4', (string) $lastSequenceId, 'Expected new id to be 4');
     }
@@ -95,7 +95,7 @@ class Zend_Db_Adapter_Pdo_OciTest extends Zend_Db_Adapter_Pdo_TestCommon
             ->from('zfproducts')
             ->where("$product_id = 4");
         $result = $this->_db->fetchAll($select);
-        $this->assertType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertEquals('SOLARIS', $result[0]['product_name']);
     }
 

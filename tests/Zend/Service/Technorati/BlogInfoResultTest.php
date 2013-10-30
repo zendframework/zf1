@@ -64,19 +64,19 @@ class Zend_Service_Technorati_BlogInfoResultTest extends Zend_Service_Technorati
 
         // check weblog
         $weblog = $object->getWeblog();
-        $this->assertType('Zend_Service_Technorati_Weblog', $weblog);
+        $this->assertTrue($weblog instanceof Zend_Service_Technorati_Weblog);
         $this->assertEquals('Simone Carletti\'s Blog', $weblog->getName());
 
         // check url
-        $this->assertType('Zend_Uri_Http', $object->getUrl());
+        $this->assertTrue($object->getUrl() instanceof Zend_Uri_Http);
         $this->assertEquals(Zend_Uri::factory('http://www.simonecarletti.com/blog'), $object->getUrl());
 
         // check inboundblogs
-        $this->assertType('integer', $object->getInboundBlogs());
+        $this->assertTrue(is_int($object->getInboundBlogs()));
         $this->assertEquals(86, $object->getInboundBlogs());
 
         // check inboundlinks
-        $this->assertType('integer', $object->getInboundLinks());
+        $this->assertTrue(is_int($object->getInboundLinks()));
         $this->assertEquals(114, $object->getInboundLinks());
     }
 
@@ -86,7 +86,7 @@ class Zend_Service_Technorati_BlogInfoResultTest extends Zend_Service_Technorati
         $object = new Zend_Service_Technorati_BlogInfoResult($dom);
 
         // check url
-        $this->assertType('Zend_Uri_Http', $object->getUrl());
+        $this->assertTrue($object->getUrl() instanceof Zend_Uri_Http);
         $this->assertEquals($object->getWeblog()->getUrl(), $object->getUrl());
     }
 }

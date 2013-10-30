@@ -45,6 +45,6 @@ class Zend_Paginator_Adapter_DbTableSelect_OracleTest extends Zend_Paginator_Ada
         $adapter = new Zend_Paginator_Adapter_DbTableSelect($query);
         $items   = $adapter->getItems(0, 10);
 
-        $this->assertType('Zend_Db_Table_Rowset', $items);
+        $this->assertTrue($items instanceof Zend_Db_Table_Rowset);
     }
 }

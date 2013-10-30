@@ -356,9 +356,9 @@ class Zend_ConfigTest extends PHPUnit_Framework_TestCase
             );
         $config = new Zend_Config($configData);
         $this->assertEquals($config->toArray(), $configData);
-        $this->assertType('stdClass', $config->a);
-        $this->assertType('stdClass', $config->b->c);
-        $this->assertType('stdClass', $config->b->d);
+        $this->assertTrue($config->a instanceof stdClass);
+        $this->assertTrue($config->b->c instanceof stdClass);
+        $this->assertTrue($config->b->d instanceof stdClass);
     }
 
     /**

@@ -55,7 +55,7 @@ class Zend_Service_StrikeIron_NoSoapTest extends PHPUnit_Framework_TestCase
                                                              'password' => 'pass'));
             $this->fail('Expecting exception of type Zend_Service_StrikeIron_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Service_StrikeIron_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Service_StrikeIron_Exception,
                 'Expecting exception of type Zend_Service_StrikeIron_Exception, got '.get_class($e));
             $this->assertEquals('SOAP extension is not enabled', $e->getMessage());
         }

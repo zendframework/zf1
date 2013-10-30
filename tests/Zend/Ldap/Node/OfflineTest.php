@@ -56,7 +56,7 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
     {
         $data=$this->_createTestArrayData();
         $node=Zend_Ldap_Node::fromArray($data);
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertFalse($node->isAttached());
         $this->assertFalse($node->willBeDeleted());
         $this->assertFalse($node->willBeMoved());
@@ -68,7 +68,7 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
         $data=$this->_createTestArrayData();
         $data['dn']=Zend_Ldap_Dn::fromString($data['dn']);
         $node=Zend_Ldap_Node::fromArray($data);
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertFalse($node->isAttached());
     }
 
@@ -107,7 +107,7 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
         $data=$this->_createTestArrayData();
         $data['dn']=Zend_Ldap_Dn::fromString($data['dn']);
         $node=Zend_Ldap_Node::fromArray($data);
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertFalse($node->isAttached());
         unset($data['dn']);
         $this->assertEquals($data, $node->getData());
@@ -346,7 +346,7 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
     public function testAttributeAccessDnGet()
     {
         $node=$this->_createTestNode();
-        $this->assertType('string', $node->dn);
+        $this->assertTrue(is_string($node->dn));
         $this->assertEquals($node->getDn()->toString(), $node->dn);
     }
 
