@@ -65,7 +65,7 @@ class Zend_Auth_Adapter_Ldap_OfflineTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('LDAP is not enabled');
         }
         $this->_adapter->setLdap(new Zend_Ldap());
-        $this->assertType('Zend_Ldap', $this->_adapter->getLdap());
+        $this->assertTrue($this->_adapter->getLdap() instanceof Zend_Ldap);
     }
 
     public function testUsernameIsNullIfNotSet()

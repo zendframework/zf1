@@ -200,12 +200,12 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
             $this->_commonQueue->sendMessage($queueURL, $message);
             $this->_wait();
             $receivedMessages = $this->_commonQueue->receiveMessages($queueURL);
-            $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages);
+            $this->assertTrue($receivedMessages instanceof Zend_Cloud_QueueService_MessageSet);
             $this->assertEquals(1, count($receivedMessages));
             foreach ($receivedMessages as $m) {
                 $this->assertEquals($message, $m->getBody());
             }
-		  $this->_commonQueue->deleteQueue($queueURL);
+            $this->_commonQueue->deleteQueue($queueURL);
         } catch (Exception $e) {
             if(isset($queueURL)) $this->_commonQueue->deleteQueue($queueURL);
             throw $e;
@@ -229,10 +229,10 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
 
             // receive one message
             $receivedMessages1 = $this->_commonQueue->receiveMessages($queueURL);
-            $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages1);
+            $this->assertTrue($receivedMessages1 instanceof Zend_Cloud_QueueService_MessageSet);
             $this->assertEquals(1, count($receivedMessages1));
             foreach ($receivedMessages1 as $receivedMessage1) {
-                $this->assertType('Zend_Cloud_QueueService_Message', $receivedMessage1);
+                $this->assertTrue($receivedMessage1 instanceof Zend_Cloud_QueueService_Message);
             }
 
             // cleanup the queue
@@ -252,7 +252,7 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
 
             // receive both messages
             $receivedMessages2 = $this->_commonQueue->receiveMessages($queueURL, 2);
-            $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages2);
+            $this->assertTrue($receivedMessages2 instanceof Zend_Cloud_QueueService_MessageSet);
             $this->assertEquals(2, count($receivedMessages2));
 
             $tests = array();
@@ -286,7 +286,7 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
             $receivedMessages1 = $this->_commonQueue->receiveMessages($queueURL);
 
             // should receive one $message1
-            $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages1);
+            $this->assertTrue($receivedMessages1 instanceof Zend_Cloud_QueueService_MessageSet);
             $this->assertEquals(1, count($receivedMessages1));
             foreach ($receivedMessages1 as $receivedMessage1) {
                 $this->assertEquals($message1, $receivedMessage1->getBody());
@@ -297,10 +297,10 @@ abstract class Zend_Cloud_QueueService_TestCase extends PHPUnit_Framework_TestCa
 
             // now there should be no messages left
             $receivedMessages2 = $this->_commonQueue->receiveMessages($queueURL);
-            $this->assertType('Zend_Cloud_QueueService_MessageSet', $receivedMessages2);
-		    $this->assertEquals(0, count($receivedMessages2));
+            $this->assertTrue($receivedMessages2 instanceof Zend_Cloud_QueueService_MessageSet);
+            $this->assertEquals(0, count($receivedMessages2));
 
-		    $this->_commonQueue->deleteQueue($queueURL);
+            $this->_commonQueue->deleteQueue($queueURL);
         } catch (Exception $e) {
             if(isset($queueURL)) $this->_commonQueue->deleteQueue($queueURL);
             throw $e;

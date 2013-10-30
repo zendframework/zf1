@@ -174,7 +174,7 @@ class Zend_Application_Resource_LogTest extends PHPUnit_Framework_TestCase
         $resource->setBootstrap($this->bootstrap);
         $log = $resource->init();
 
-        $this->assertType('Zend_Log', $log);
+        $this->assertTrue($log instanceof Zend_Log);
 
         $log->log($message, Zend_Log::INFO);
         rewind($stream);

@@ -78,9 +78,9 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
     {
         $config = new Zend_Config_Yaml($this->_iniFileConfig, 'debug');
 
-        $this->assertType('string', $config->debug);
+        $this->assertTrue(is_string($config->debug));
         $this->assertEquals('1', $config->debug);
-        $this->assertType('string', $config->values->changed);
+        $this->assertTrue(is_string($config->values->changed));
         $this->assertEquals('1', $config->values->changed);
     }
 
@@ -88,13 +88,13 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
     {
         $config = new Zend_Config_Yaml($this->_iniFileConfig, 'debug');
 
-        $this->assertType('string', $config->special->no);
+        $this->assertTrue(is_string($config->special->no));
         $this->assertEquals('', $config->special->no);
-        $this->assertType('string', $config->special->null);
+        $this->assertTrue(is_string($config->special->null));
         $this->assertEquals('', $config->special->null);
-        $this->assertType('string', $config->special->false);
+        $this->assertTrue(is_string($config->special->false));
         $this->assertEquals('', $config->special->false);
-        $this->assertType('string', $config->special->zero);
+        $this->assertTrue(is_string($config->special->zero));
         $this->assertEquals('0', $config->special->zero);
     }
 
@@ -338,11 +338,10 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
     public function testAllowsInlineCommentsInValuesUsingHash()
     {
         $config = new Zend_Config_Yaml($this->_yamlInlineCommentsConfig, null);
-        $this->assertType('Zend_Config', $config->resources);
-        $this->assertType('Zend_Config', $config->resources->frontController);
-        $this->assertType(
-            'string', 
-            $config->resources->frontController->controllerDirectory
+        $this->assertTrue($config->resources instanceof Zend_Config);
+        $this->assertTrue($config->resources->frontController instanceof Zend_Config);
+        $this->assertTrue(
+            is_string($config->resources->frontController->controllerDirectory)
         );
         $this->assertSame(
             'APPLICATION_PATH/controllers',
@@ -356,11 +355,10 @@ class Zend_Config_YamlTest extends PHPUnit_Framework_TestCase
     public function testAllowsIndentedCommentsUsingHash()
     {
         $config = new Zend_Config_Yaml($this->_yamlIndentedCommentsConfig, null);
-        $this->assertType('Zend_Config', $config->resources);
-        $this->assertType('Zend_Config', $config->resources->frontController);
-        $this->assertType(
-            'string', 
-            $config->resources->frontController->controllerDirectory
+        $this->assertTrue($config->resources instanceof Zend_Config);
+        $this->assertTrue($config->resources->frontController instanceof Zend_Config);
+        $this->assertTrue(
+            is_string($config->resources->frontController->controllerDirectory)
         );
         $this->assertSame(
             'APPLICATION_PATH/controllers',

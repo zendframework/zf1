@@ -344,7 +344,7 @@ class Zend_Service_Amazon_OfflineTest extends PHPUnit_Framework_TestCase
     	} catch (Zend_Service_Amazon_Exception $e) {
     		$this->fail('Unexpected exception was triggered');
     	}
-    	$this->assertType('Zend_Service_Amazon_Item', $currentItem);
+    	$this->assertTrue($currentItem instanceof Zend_Service_Amazon_Item);
     	$this->assertEquals('0754512673', $currentItem->ASIN);
     }
 

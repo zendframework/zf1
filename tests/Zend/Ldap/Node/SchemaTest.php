@@ -62,8 +62,8 @@ class Zend_Ldap_Node_SchemaTest extends Zend_Ldap_OnlineTestCase
 
     public function testGetters()
     {
-        $this->assertType('array', $this->_schema->getAttributeTypes());
-        $this->assertType('array', $this->_schema->getObjectClasses());
+        $this->assertTrue(is_array($this->_schema->getAttributeTypes()));
+        $this->assertTrue(is_array($this->_schema->getObjectClasses()));
 
         switch ($this->_getLdap()->getRootDse()->getServerType()) {
             case Zend_Ldap_Node_RootDse::SERVER_TYPE_ACTIVEDIRECTORY:
@@ -71,9 +71,9 @@ class Zend_Ldap_Node_SchemaTest extends Zend_Ldap_OnlineTestCase
             case Zend_Ldap_Node_RootDse::SERVER_TYPE_EDIRECTORY:
                 break;
             case Zend_Ldap_Node_RootDse::SERVER_TYPE_OPENLDAP:
-                $this->assertType('array', $this->_schema->getLdapSyntaxes());
-                $this->assertType('array', $this->_schema->getMatchingRules());
-                $this->assertType('array', $this->_schema->getMatchingRuleUse());
+                $this->assertTrue(is_array($this->_schema->getLdapSyntaxes()));
+                $this->assertTrue(is_array($this->_schema->getMatchingRules()));
+                $this->assertTrue(is_array($this->_schema->getMatchingRuleUse()));
                 break;
         }
     }
@@ -122,7 +122,7 @@ class Zend_Ldap_Node_SchemaTest extends Zend_Ldap_OnlineTestCase
 
         $this->assertArrayHasKey('organizationalUnit', $objectClasses);
         $ou=$objectClasses['organizationalUnit'];
-        $this->assertType('Zend_Ldap_Node_Schema_ObjectClass_OpenLdap', $ou);
+        $this->assertTrue($ou instanceof Zend_Ldap_Node_Schema_ObjectClass_OpenLdap);
         $this->assertEquals('organizationalUnit', $ou->getName());
         $this->assertEquals('2.5.6.5', $ou->getOid());
         $this->assertEquals(array('objectClass', 'ou'), $ou->getMustContain());
@@ -163,7 +163,7 @@ class Zend_Ldap_Node_SchemaTest extends Zend_Ldap_OnlineTestCase
 
         $this->assertArrayHasKey('ou', $attributeTypes);
         $ou=$attributeTypes['ou'];
-        $this->assertType('Zend_Ldap_Node_Schema_AttributeType_OpenLdap', $ou);
+        $this->assertTrue($ou instanceof Zend_Ldap_Node_Schema_AttributeType_OpenLdap);
         $this->assertEquals('ou', $ou->getName());
         $this->assertEquals('2.5.4.11', $ou->getOid());
         $this->assertEquals('1.3.6.1.4.1.1466.115.121.1.15', $ou->getSyntax());

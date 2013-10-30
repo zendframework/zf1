@@ -211,7 +211,7 @@ class Zend_Application_Resource_MultidbTest extends PHPUnit_Framework_TestCase
         $options['defaultMetadataCache'] = $cache;
         $resource = new Zend_Application_Resource_Multidb($options);
         $resource->init();
-        $this->assertType('Zend_Cache_Core', Zend_Db_Table::getDefaultMetadataCache());
+        $this->assertTrue(Zend_Db_Table::getDefaultMetadataCache() instanceof Zend_Cache_Core);
     }
 
     /**
@@ -240,7 +240,7 @@ class Zend_Application_Resource_MultidbTest extends PHPUnit_Framework_TestCase
         $resource = new Zend_Application_Resource_Multidb($options);
         $resource->setBootstrap($this->bootstrap);
         $resource->init();
-        $this->assertType('Zend_Cache_Core', Zend_Db_Table::getDefaultMetadataCache());
+        $this->assertTrue(Zend_Db_Table::getDefaultMetadataCache() instanceof Zend_Cache_Core);
     }
 }
 

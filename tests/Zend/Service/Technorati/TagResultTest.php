@@ -63,19 +63,19 @@ class Zend_Service_Technorati_TagResultTest extends Zend_Service_Technorati_Test
         $object = new Zend_Service_Technorati_TagResult($this->domElements->item(1));
 
         // check properties
-        $this->assertType('string', $object->getTitle());
+        $this->assertTrue(is_string($object->getTitle()));
         $this->assertContains('Permalink for : VerveEarth', $object->getTitle());
-        $this->assertType('string', $object->getExcerpt());
+        $this->assertTrue(is_string($object->getExcerpt()));
         $this->assertContains('VerveEarth: Locate Your Blog!', $object->getExcerpt());
-        $this->assertType('Zend_Uri_Http', $object->getPermalink());
+        $this->assertTrue($object->getPermalink() instanceof Zend_Uri_Http);
         $this->assertEquals(Zend_Uri::factory('http://scienceroll.com/2007/11/14/verveearth-locate-your-blog/'), $object->getPermalink());
-        $this->assertType('Zend_Date', $object->getCreated());
+        $this->assertTrue($object->getCreated() instanceof Zend_Date);
         $this->assertEquals(new Zend_Date('2007-11-14 21:52:11'), $object->getCreated());
-        $this->assertType('Zend_Date', $object->getUpdated());
+        $this->assertTrue($object->getUpdated() instanceof Zend_Date);
         $this->assertEquals(new Zend_Date('2007-11-14 21:57:59'), $object->getUpdated());
 
         // check weblog
-        $this->assertType('Zend_Service_Technorati_Weblog', $object->getWeblog());
+        $this->assertTrue($object->getWeblog() instanceof Zend_Service_Technorati_Weblog);
         $this->assertEquals(' ScienceRoll', $object->getWeblog()->getName());
     }
 

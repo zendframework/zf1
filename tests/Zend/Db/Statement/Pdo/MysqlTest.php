@@ -43,7 +43,7 @@ class Zend_Db_Statement_Pdo_MysqlTest extends Zend_Db_Statement_Pdo_TestCommon
         try {
             $stmt->nextRowset();
         } catch (Zend_Db_Statement_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals('SQLSTATE[HYC00]: Optional feature not implemented', $e->getMessage());
         }
@@ -74,7 +74,7 @@ class Zend_Db_Statement_Pdo_MysqlTest extends Zend_Db_Statement_Pdo_TestCommon
     public function testStatementCanReturnDriverStatement()
     {
         $statement = parent::testStatementCanReturnDriverStatement();
-        $this->assertType('PDOStatement', $statement->getDriverStatement());
+        $this->assertTrue($statement->getDriverStatement() instanceof PDOStatement);
     }
 
     public function testStatementExceptionMessageContainsSqlQuery()

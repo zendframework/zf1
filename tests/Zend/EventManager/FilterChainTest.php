@@ -138,7 +138,7 @@ class Zend_EventManager_FilterChainTest extends PHPUnit_Framework_TestCase
 
     public function filterReceivalCallback($context, array $params, $chain)
     {
-        $this->assertType('Zend_EventManager_Filter_FilterIterator', $chain);
+        $this->assertTrue($chain instanceof Zend_EventManager_Filter_FilterIterator);
     }
 
     public function filterTrim($context, $params, $chain)

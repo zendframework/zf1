@@ -55,7 +55,9 @@ class Zend_Ldap_ChangePasswordTest extends Zend_Ldap_OnlineTestCase
         try {
             $this->_getLdap()->add($dn, $data);
 
-            $this->assertType('Zend_Ldap', $this->_getLdap()->bind($dn, $password));
+            $this->assertTrue(
+                $this->_getLdap()->bind($dn, $password) instanceof Zend_Ldap
+            );
 
             $this->_getLdap()->bind();
             $this->_getLdap()->delete($dn);
@@ -104,7 +106,9 @@ class Zend_Ldap_ChangePasswordTest extends Zend_Ldap_OnlineTestCase
                     strstr($message, 'Server is unwilling to perform'));
             }
 
-            $this->assertType('Zend_Ldap', $this->_getLdap()->bind($dn, $newPasswd));
+            $this->assertTrue(
+                $this->_getLdap()->bind($dn, $newPasswd) instanceof Zend_Ldap
+            );
 
             $this->_getLdap()->bind();
             $this->_getLdap()->delete($dn);
@@ -144,7 +148,9 @@ class Zend_Ldap_ChangePasswordTest extends Zend_Ldap_OnlineTestCase
         try {
             $this->_getLdap()->add($dn, $data);
 
-            $this->assertType('Zend_Ldap', $this->_getLdap()->bind($dn, $password));
+            $this->assertTrue(
+                $this->_getLdap()->bind($dn, $password) instanceof Zend_Ldap
+            );
 
             $this->_getLdap()->bind();
             $this->_getLdap()->delete($dn);
@@ -200,7 +206,9 @@ class Zend_Ldap_ChangePasswordTest extends Zend_Ldap_OnlineTestCase
                     strstr($message, 'Server is unwilling to perform'));
             }
 
-            $this->assertType('Zend_Ldap', $this->_getLdap()->bind($dn, $newPasswd));
+            $this->assertTrue(
+                $this->_getLdap()->bind($dn, $newPasswd) instanceof Zend_Ldap
+            );
 
             $this->_getLdap()->bind();
             $this->_getLdap()->delete($dn);

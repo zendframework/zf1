@@ -186,7 +186,7 @@ class Zend_Auth_Adapter_Ldap_OnlineTest extends PHPUnit_Framework_TestCase
         $account = $adapter->getAccountObject();
 
         $this->assertTrue($result->isValid());
-        $this->assertType('stdClass', $account);
+        $this->assertTrue($account instanceof stdClass);
         $this->assertEquals(TESTS_ZEND_LDAP_ALT_DN, $account->dn);
     }
 
@@ -201,7 +201,7 @@ class Zend_Auth_Adapter_Ldap_OnlineTest extends PHPUnit_Framework_TestCase
         $result = $adapter->authenticate();
         $account = $adapter->getAccountObject(array(), array('userPassword'));
 
-        $this->assertType('stdClass', $account);
+        $this->assertTrue($account instanceof stdClass);
         $this->assertFalse(isset($account->userpassword));
     }
 }

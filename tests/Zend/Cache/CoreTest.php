@@ -120,7 +120,7 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
         $this->_instance->setBackend($backend);
         $log = $backend->getLastLog();
         $this->assertEquals('setDirectives', $log['methodName']);
-        $this->assertType('array', $log['args'][0]);
+        $this->assertTrue(is_array($log['args'][0]));
     }
 
     public function testSetOptionCorrectCall()
@@ -527,7 +527,7 @@ class Zend_Cache_CoreTest extends PHPUnit_Framework_TestCase
         $this->_instance->setBackend($this->_backend);
 
         $logger = $this->_instance->getOption('logger');
-        $this->assertType('Zend_Log', $logger);
+        $this->assertTrue($logger instanceof Zend_Log);
     }
 
     /**

@@ -386,7 +386,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $f1 = $input->field1;
-        $this->assertType('array', $f1);
+        $this->assertTrue(is_array($f1));
         $this->assertEquals(array('foo', 'bar', 'baz'), $f1);
     }
 
@@ -425,15 +425,15 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
-        $this->assertType('array', $messages['month']);
+        $this->assertTrue(is_array($messages['month']));
         $this->assertEquals("'6abc ' must contain only digits", current($messages['month']));
 
         $errors = $input->getErrors();
-        $this->assertType('array', $errors);
+        $this->assertTrue(is_array($errors));
         $this->assertEquals(array('month'), array_keys($errors));
-        $this->assertType('array', $errors['month']);
+        $this->assertTrue(is_array($errors['month']));
         $this->assertEquals("notDigits", $errors['month'][0]);
     }
 
@@ -486,7 +486,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('6', $month);
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month2'), array_keys($messages));
         $this->assertEquals("'13' is not between '1' and '12', inclusively", current($messages['month2']));
     }
@@ -513,10 +513,10 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field2', 'field3'), array_keys($messages));
-        $this->assertType('array', $messages['field2']);
-        $this->assertType('array', $messages['field3']);
+        $this->assertTrue(is_array( $messages['field2']));
+        $this->assertTrue(is_array($messages['field3']));
         $this->assertEquals("'abc123' must contain only digits", current($messages['field2']));
         $this->assertEquals("'150' is not between '1' and '100', inclusively",
             current($messages['field3']));
@@ -546,10 +546,10 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field2a', 'field2b'), array_keys($messages));
-        $this->assertType('array', $messages['field2a']);
-        $this->assertType('array', $messages['field2b']);
+        $this->assertTrue(is_array($messages['field2a']));
+        $this->assertTrue(is_array($messages['field2b']));
         $this->assertEquals("'abc123' must contain only digits",
             current($messages['field2a']));
         $this->assertEquals("'abc123' is not between '1' and '100', inclusively",
@@ -595,7 +595,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field2'), array_keys($messages));
         $this->assertEquals("'123' contains non alphabetic characters",
             current($messages['field2']));
@@ -636,7 +636,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 
         set_include_path($ip);
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('rule2'), array_keys($messages));
         $this->assertEquals("Not all strings in the argument are equal",
             current($messages['rule2']));
@@ -688,7 +688,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 
         set_include_path($ip);
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('rule2', 'rule3'), array_keys($messages));
         $this->assertEquals(array('isEmpty' => "You must give a non-empty value for field 'password3'"),
                             $messages['rule2']);
@@ -725,7 +725,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1', 'field2'), array_keys($messages));
         $this->assertEquals(
             $messageUserDefined,
@@ -765,7 +765,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertNull($input->field1);
         $this->assertNotNull($input->field2);
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1'), array_keys($messages));
         $this->assertEquals("You must give a non-empty value for field 'field1'", current($messages['field1']));
     }
@@ -793,7 +793,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return true');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1'), array_keys($messages));
         $this->assertEquals("You must give a non-empty value for field 'field1'", current($messages['field1']));
     }
@@ -866,7 +866,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('nick'), array_keys($messages));
         $this->assertEquals(1, count($messages['nick']));
     }
@@ -896,9 +896,9 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($input->field1);
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1Rule'), array_keys($messages));
-        $this->assertType('array', $messages['field1Rule']);
+        $this->assertTrue(is_array($messages['field1Rule']));
         $this->assertEquals("You cannot give an empty value for field 'field1', according to rule 'field1Rule'", current($messages['field1Rule']));
     }
 
@@ -923,7 +923,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         // make sure field5 and field7 are not counted as missing
         $this->assertEquals(array('field1', 'field3'), array_keys($missing));
 
@@ -956,7 +956,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('rule1'), array_keys($missing));
         $this->assertEquals(array("Field 'field2' is required by rule 'rule1', but the field is missing"), $missing['rule1']);
     }
@@ -1012,9 +1012,9 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field2', 'field3'), array_keys($messages));
-        $this->assertType('array', $messages['field2']);
+        $this->assertTrue(is_array($messages['field2']));
         $this->assertEquals("You must give a non-empty value for field 'field2'", current($messages['field2']));
     }
 
@@ -1036,7 +1036,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(1, count($messages['month']));
         $this->assertEquals($digitsMesg, current($messages['month']));
@@ -1066,7 +1066,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(2, count($messages['month']));
         $this->assertEquals($digitsMesg, $messages['month']['notDigits']);
@@ -1097,7 +1097,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1'), array_keys($messages));
         $this->assertEquals(3, count($messages['field1']));
         $this->assertEquals($digitsMesg, $messages['field1']['notDigits']);
@@ -1126,7 +1126,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(2, count($messages['month']));
         $this->assertEquals("'13abc' must contain only digits", current($messages['month']));
@@ -1153,7 +1153,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(1, count($messages['month']));
         // $this->assertEquals($digitsMesg, $messages['month'][0]);
@@ -1183,7 +1183,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(2, count($messages['month']));
         // $this->assertEquals($digitsMesg, $messages['month'][0]);
@@ -1214,7 +1214,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month'), array_keys($messages));
         $this->assertEquals(2, count($messages['month']));
         // $this->assertEquals($digitsMesg, $messages['month'][0]);
@@ -1272,7 +1272,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('month'), array_keys($missing));
         $this->assertEquals("Field 'month' is required by rule 'month', but the field is missing", $missing['month'][0]);
     }
@@ -1298,7 +1298,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('monthRule'), array_keys($missing));
         $this->assertEquals("I looked for month but I did not find it; it is required by rule monthRule", $missing['monthRule'][0]);
     }
@@ -1335,7 +1335,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $unknown = $input->getUnknown();
-        $this->assertType('array', $unknown);
+        $this->assertTrue(is_array($unknown));
         $this->assertThat($unknown, $this->arrayHasKey('unknown'));
     }
 
@@ -1359,11 +1359,11 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $invalid = $input->getInvalid();
         $missing = $input->getMissing();
 
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('month', 'field2'), array_keys($messages));
-        $this->assertType('array', $invalid);
+        $this->assertTrue(is_array($invalid));
         $this->assertEquals(array('month'), array_keys($invalid));
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('field2'), array_keys($missing));
         $this->assertEquals(array_merge($invalid, $missing), $messages);
     }
@@ -1432,7 +1432,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('123', (string) $input->field3);
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertThat($messages, $this->arrayHasKey('field1'));
         $this->assertEquals("'abc' must contain only digits", current($messages['field1']));
     }
@@ -1442,14 +1442,14 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $input = new Zend_Filter_Input(null, null);
 
         $loader = $input->getPluginLoader(Zend_Filter_Input::VALIDATE);
-        $this->assertType('Zend_Loader_PluginLoader', $loader,
+        $this->assertTrue($loader instanceof Zend_Loader_PluginLoader,
             'Expected object of type Zend_Loader_PluginLoader, got ' , get_class($loader));
 
         try {
             $loader = $input->getPluginLoader('foo');
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals('Invalid type "foo" provided to getPluginLoader()',
                 $e->getMessage());
@@ -1476,7 +1476,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $input->setPluginLoader($loader, 'foo');
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals('Invalid type "foo" provided to setPluginLoader()',
                 $e->getMessage());
@@ -1497,7 +1497,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($input->hasInvalid(), 'Expected hasInvalid() to return true');
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Loader_PluginLoader_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Loader_PluginLoader_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertContains("not found in the registry", $e->getMessage());
         }
@@ -1519,7 +1519,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($input->hasInvalid(), 'Expected hasInvalid() to return true');
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals("Class 'Zend_Validate_Exception' based on basename 'Exception' must implement the 'Zend_Validate_Interface' interface",
                 $e->getMessage());
@@ -1549,7 +1549,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $input->setDefaultEscapeFilter(new StdClass());
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals("Escape filter specified does not implement Zend_Filter_Interface", $e->getMessage());
         }
@@ -1599,7 +1599,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertEquals(array('field1'), array_keys($messages));
         $this->assertEquals(1, count($messages['field1']), 'Expected rule for field1 to break 1 validator');
         $this->assertEquals("'150' is not between '1' and '100', inclusively",
@@ -1657,7 +1657,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('123', (string) $input->field3);
 
         $messages = $input->getMessages();
-        $this->assertType('array', $messages);
+        $this->assertTrue(is_array($messages));
         $this->assertThat($messages, $this->arrayHasKey('field1'));
         $this->assertEquals("'abc' must contain only digits", current($messages['field1']));
     }
@@ -1683,7 +1683,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('field2'), array_keys($missing));
         $this->assertEquals("Field 'field2' is required by rule 'field2', but the field is missing", $missing['field2'][0]);
     }
@@ -1697,7 +1697,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $input = new Zend_Filter_Input(null, null, null, $options);
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals("Unknown option 'unknown'", $e->getMessage());
         }
@@ -1763,7 +1763,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasValid(), 'Expected hasValid() to return true');
 
         $multi = $input->getEscaped('multiSelect');
-        $this->assertType('array', $multi);
+        $this->assertTrue(is_array($multi));
         $this->assertEquals(3, count($multi));
         $this->assertEquals(array('C&amp;H', 'B&amp;O', 'AT&amp;T'), $multi);
     }
@@ -1896,7 +1896,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $input->process();
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals("Input has invalid fields", $e->getMessage());
             $this->assertFalse($input->hasMissing(), 'Expected hasMissing() to return false');
@@ -1930,7 +1930,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
             $input->process();
             $this->fail('Expected to catch Zend_Filter_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Filter_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Filter_Exception,
                 'Expected object of type Zend_Filter_Exception, got '.get_class($e));
             $this->assertEquals("Input has missing fields", $e->getMessage());
             $this->assertTrue($input->hasMissing(), 'Expected hasMissing() to return true');
@@ -2149,7 +2149,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($input->hasMissing(), 'Expected hasMissing() to return true');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('rule1'), array_keys($missing));
         $this->assertEquals(array("Still missing"), $missing['rule1']);
     }
@@ -2178,7 +2178,7 @@ class Zend_Filter_InputTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($input->hasValid(), 'Expected hasValid() to return false');
 
         $missing = $input->getMissing();
-        $this->assertType('array', $missing);
+        $this->assertTrue(is_array($missing));
         $this->assertEquals(array('rule1'), array_keys($missing));
         $this->assertEquals(array("Still missing"), $missing['rule1']);
     }

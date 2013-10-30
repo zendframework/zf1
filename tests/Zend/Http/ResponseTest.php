@@ -249,7 +249,7 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
 
         // Check we get an array if no code is passed
         $codes = Zend_Http_Response::responseCodeAsText();
-        $this->assertType('array', $codes);
+        $this->assertTrue(is_array($codes));
         $this->assertEquals('OK', $codes[200]);
     }
 

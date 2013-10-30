@@ -38,7 +38,7 @@ class Zend_Oauth_Token_RequestTest extends PHPUnit_Framework_TestCase
     {
         $response = new Zend_Http_Response(200, array());
         $token = new Zend_Oauth_Token_Request($response);
-        $this->assertType('Zend_Http_Response', $token->getResponse());
+        $this->assertTrue($token->getResponse() instanceof Zend_Http_Response);
     }
 
     public function testConstructorParsesRequestTokenFromResponseBody()

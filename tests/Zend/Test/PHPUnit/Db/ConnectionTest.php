@@ -63,7 +63,7 @@ class Zend_Test_PHPUnit_Db_ConnectionTest extends PHPUnit_Framework_TestCase
         $connection = $this->createConnection();
         $ret = $connection->createQueryTable("foo", "foo");
 
-        $this->assertType('Zend_Test_PHPUnit_Db_DataSet_QueryTable', $ret);
+        $this->assertTrue($ret instanceof Zend_Test_PHPUnit_Db_DataSet_QueryTable);
     }
 
     public function testGetSchema()
@@ -79,7 +79,7 @@ class Zend_Test_PHPUnit_Db_ConnectionTest extends PHPUnit_Framework_TestCase
         $connection = $this->createConnection();
         $metadata = $connection->getMetaData();
 
-        $this->assertType('Zend_Test_PHPUnit_Db_Metadata_Generic', $metadata);
+        $this->assertTrue($metadata instanceof Zend_Test_PHPUnit_Db_Metadata_Generic);
     }
 
     public function testGetTruncateCommand()

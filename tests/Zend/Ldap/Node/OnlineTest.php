@@ -56,7 +56,7 @@ class Zend_Ldap_Node_OnlineTest extends Zend_Ldap_OnlineTestCase
     {
         $dn=$this->_createDn('ou=Test1,');
         $node=Zend_Ldap_Node::fromLdap($dn, $this->_getLdap());
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertTrue($node->isAttached());
     }
 
@@ -110,7 +110,7 @@ class Zend_Ldap_Node_OnlineTest extends Zend_Ldap_OnlineTestCase
     {
         $dn=$this->_createDn('ou=Test1,');
         $node=Zend_Ldap_Node::fromLdap($dn, $this->_getLdap());
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertTrue($node->isAttached());
         $node->detachLdap();
         $this->assertFalse($node->isAttached());
@@ -216,7 +216,7 @@ class Zend_Ldap_Node_OnlineTest extends Zend_Ldap_OnlineTestCase
         $node=$this->_getLdap()->getNode($this->_createDn('ou=Node,'));
         $items=$node->searchSubtree('(objectClass=organizationalUnit)', Zend_Ldap::SEARCH_SCOPE_SUB,
             array(), 'ou');
-        $this->assertType('Zend_Ldap_Node_Collection', $items);
+        $this->assertTrue($items instanceof Zend_Ldap_Node_Collection);
         $this->assertEquals(3, $items->count());
 
         $i=0;
@@ -283,7 +283,7 @@ class Zend_Ldap_Node_OnlineTest extends Zend_Ldap_OnlineTestCase
     {
         $dn=Zend_Ldap_Dn::fromString($this->_createDn('ou=Test1,'));
         $node=Zend_Ldap_Node::fromLdap($dn, $this->_getLdap());
-        $this->assertType('Zend_Ldap_Node', $node);
+        $this->assertTrue($node instanceof Zend_Ldap_Node);
         $this->assertTrue($node->isAttached());
     }
 }

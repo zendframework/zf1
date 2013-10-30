@@ -50,7 +50,7 @@ class Zend_Service_StrikeIron_SalesUseTaxBasicTest extends PHPUnit_Framework_Tes
 
     public function testInheritsFromBase()
     {
-        $this->assertType('Zend_Service_StrikeIron_Base', $this->service);
+        $this->assertTrue($this->service instanceof Zend_Service_StrikeIron_Base);
     }
 
     public function testWsdl()
@@ -64,6 +64,6 @@ class Zend_Service_StrikeIron_SalesUseTaxBasicTest extends PHPUnit_Framework_Tes
         $strikeIron = new Zend_Service_StrikeIron(array('client' => $this->soapClient));
         $client = $strikeIron->getService(array('class' => 'SalesUseTaxBasic'));
 
-        $this->assertType('Zend_Service_StrikeIron_SalesUseTaxBasic', $client);
+        $this->assertTrue($client instanceof Zend_Service_StrikeIron_SalesUseTaxBasic);
     }
 }

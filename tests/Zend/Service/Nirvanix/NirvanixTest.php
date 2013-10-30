@@ -41,13 +41,13 @@ class Zend_Service_Nirvanix_NirvanixTest extends Zend_Service_Nirvanix_Functiona
     public function testFactoryReturnsBaseWhenNoSubclassAvailable()
     {
         $base = $this->nirvanix->getService('Foo');
-        $this->assertType('Zend_Service_Nirvanix_Namespace_Base', $base);
+        $this->assertTrue($base instanceof Zend_Service_Nirvanix_Namespace_Base);
     }
 
     public function testFactoryReturnsImfsSubclassForImfsNamespace()
     {
         $imfs = $this->nirvanix->getService('IMFS');
-        $this->assertType('Zend_Service_Nirvanix_Namespace_Imfs', $imfs);
+        $this->assertTrue($imfs instanceof Zend_Service_Nirvanix_Namespace_Imfs);
     }
 
     public function testFactoryPassesHttpClientInstanceWithOptions()

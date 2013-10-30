@@ -136,7 +136,9 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
      */
     public function testGetAdapter()
     {
-        $this->assertType('Zend_Service_Rackspace_Servers',$this->infrastructure->getAdapter());
+        $this->assertTrue(
+            $this->infrastructure->getAdapter() instanceof Zend_Service_Rackspace_Servers
+        );
     }
     /**
      * Test create an instance

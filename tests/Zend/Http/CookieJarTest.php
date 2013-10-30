@@ -401,16 +401,16 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(8, count($jar->getAllCookies()), 'Cookie count is expected to be 8');
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_ARRAY);
-        $this->assertType('array', $cookies, '$cookies is expected to be an array, but it is not');
-        $this->assertType('string', $cookies[0], '$cookies[0] is expected to be a string');;
+        $this->assertTrue(is_array($cookies), '$cookies is expected to be an array, but it is not');
+        $this->assertTrue(is_string($cookies[0]), '$cookies[0] is expected to be a string');;
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_CONCAT);
-        $this->assertType('string', $cookies, '$cookies is expected to be a string');
+        $this->assertTrue(is_string($cookies), '$cookies is expected to be a string');
         $expected = 'foo1=bar1;foo2=bar2;foo4=bar4;foo7=bar7;';
         $this->assertEquals($expected, $cookies, 'Concatenated string is not as expected');
 
         $cookies = $jar->getMatchingCookies('http://www.foo.com/path/file.txt', true, Zend_Http_CookieJar::COOKIE_STRING_CONCAT_STRICT);
-        $this->assertType('string', $cookies, '$cookies is expected to be a string');
+        $this->assertTrue(is_string($cookies), '$cookies is expected to be a string');
         $expected = 'foo1=bar1; foo2=bar2; foo4=bar4; foo7=bar7';
         $this->assertEquals($expected, $cookies, 'Concatenated string is not as expected');
     }
@@ -481,7 +481,7 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
         foreach ($cookies as $cookie) $jar->addCookie($cookie);
         $cookies = $jar->getMatchingCookies('http://www.example.com/a/b/file.txt');
 
-        $this->assertType('array', $cookies);
+        $this->assertTrue(is_array($cookies));
         $this->assertEquals(2, count($cookies));
     }
 
@@ -494,7 +494,7 @@ class Zend_Http_CookieJarTest extends PHPUnit_Framework_TestCase
         );
         foreach ($cookies as $cookie) $jar->addCookie($cookie);
         foreach ($jar as $cookie) {
-            $this->assertType('Zend_Http_Cookie', $cookie);
+            $this->assertTrue($cookie instanceof Zend_Http_Cookie);
         }
         $this->assertEquals(2, count($jar));
         $this->assertFalse($jar->isEmpty());

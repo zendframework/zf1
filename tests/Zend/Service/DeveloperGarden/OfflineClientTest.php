@@ -111,9 +111,8 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
         $this->assertNull($this->service->getOption('not_existing'));
         foreach ($options as $key => $value) {
             $this->assertNull($this->service->getOption($key));
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Client_ClientAbstract',
-                $this->service->setOption($key, $value)
+            $this->assertTrue(
+                $this->service->setOption($key, $value) instanceof Zend_Service_DeveloperGarden_Client_ClientAbstract
             );
         }
     }
@@ -142,21 +141,18 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
         );
 
         $this->service = new Zend_Service_DeveloperGarden_OfflineClient_Mock($options);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_OfflineClient_Mock',
-            $this->service
+        $this->assertTrue(
+            $this->service instanceof Zend_Service_DeveloperGarden_OfflineClient_Mock
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_Soap',
-            $this->service->getSoapClient()
+        $this->assertTrue(
+            $this->service->getSoapClient() instanceof Zend_Service_DeveloperGarden_Client_Soap
         );
     }
 
     public function testOnlineWsdl()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_ClientAbstract',
-            $this->service->setUseLocalWsdl(false)
+        $this->assertTrue(
+            $this->service->setUseLocalWsdl(false) instanceof Zend_Service_DeveloperGarden_Client_ClientAbstract
         );
         $this->assertEquals(
             'http://framework.zend.com',
@@ -166,9 +162,8 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
 
     public function testSetLocalWsdl()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_ClientAbstract',
-            $this->service->setLocalWsdl('my.wsdl')
+        $this->assertTrue(
+            $this->service->setLocalWsdl('my.wsdl') instanceof Zend_Service_DeveloperGarden_Client_ClientAbstract
         );
 
         $this->assertEquals(
@@ -179,14 +174,12 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
 
     public function testSetWsdl()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_ClientAbstract',
-            $this->service->setWsdl('http://my.wsdl')
+        $this->assertTrue(
+            $this->service->setWsdl('http://my.wsdl') instanceof Zend_Service_DeveloperGarden_Client_ClientAbstract
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Client_ClientAbstract',
-            $this->service->setUseLocalWsdl(false)
+        $this->assertTrue(
+            $this->service->setUseLocalWsdl(false) instanceof Zend_Service_DeveloperGarden_Client_ClientAbstract
         );
 
         $this->assertEquals(
@@ -222,10 +215,7 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
     public function testParticipantsAction()
     {
         $actions = $this->service->getParticipantActions();
-        $this->assertType(
-            'array',
-            $actions
-        );
+        $this->assertTrue(is_array($actions));
         $this->assertEquals(3, count($actions));
     }
 
@@ -255,10 +245,7 @@ class Zend_Service_DeveloperGarden_OfflineClientTest extends PHPUnit_Framework_T
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setWsdlCache(WSDL_CACHE_BOTH)
         );
         $options = $this->service->getClientOptions();
-        $this->assertType(
-            'array',
-            $options
-        );
+        $this->assertTrue(is_array($options));
         $this->assertArrayHasKey('cache_wsdl', $options);
         $this->assertEquals(
             WSDL_CACHE_BOTH,

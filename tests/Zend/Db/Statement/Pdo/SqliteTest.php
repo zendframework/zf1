@@ -55,7 +55,7 @@ class Zend_Db_Statement_Pdo_SqliteTest extends Zend_Db_Statement_Pdo_TestCommon
     public function testStatementCanReturnDriverStatement()
     {
         $statement = parent::testStatementCanReturnDriverStatement();
-        $this->assertType('PDOStatement', $statement->getDriverStatement());
+        $this->assertTrue($statement->getDriverStatement() instanceof PDOStatement);
     }
 
     public function getDriver()

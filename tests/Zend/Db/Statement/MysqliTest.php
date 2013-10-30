@@ -158,7 +158,7 @@ INPUT;
         $stmt = $this->_db->prepare("DELETE FROM $products WHERE $product_id = 1");
 
         $n = $stmt->rowCount();
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
         $this->assertEquals(-1, $n, 'Expecting row count to be -1 before executing query');
 
         $stmt->execute();
@@ -166,7 +166,7 @@ INPUT;
         $n = $stmt->rowCount();
         $stmt->closeCursor();
 
-        $this->assertType('integer', $n);
+        $this->assertTrue(is_int($n));
         $this->assertEquals(1, $n, 'Expected row count to be one after executing query');
     }
 
@@ -187,7 +187,7 @@ INPUT;
             $this->assertTrue($stmt->bindParam('name', $productNameValue), 'Expected bindParam(\'name\') to return true');
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals("Invalid bind-variable name ':id'", $e->getMessage());
         }
@@ -210,7 +210,7 @@ INPUT;
             $this->assertTrue($stmt->bindParam('name', $productNameValue), 'Expected bindParam(\'name\') to return true');
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('Zend_Db_Statement_Exception', $e,
+            $this->assertTrue($e instanceof Zend_Db_Statement_Exception,
                 'Expecting object of type Zend_Db_Statement_Exception, got '.get_class($e));
             $this->assertEquals("Invalid bind-variable name ':id'", $e->getMessage());
         }
@@ -233,7 +233,7 @@ INPUT;
             $stmt = $this->_db->query($sql);
             $this->fail('Expected to catch Zend_Db_Statement_Exception');
         } catch (Zend_Exception $e) {
-            $this->assertType('int', $e->getCode());
+            $this->assertTrue(is_int($e->getCode()));
         }
     }
 
@@ -243,7 +243,7 @@ INPUT;
     public function testStatementCanReturnDriverStatement()
     {
         $statement = parent::testStatementCanReturnDriverStatement();
-        $this->assertType('mysqli_stmt', $statement->getDriverStatement());
+        $this->assertTrue($statement->getDriverStatement() instanceof mysqli_stmt);
     }
 
     /**
@@ -293,7 +293,7 @@ INPUT;
         	$this->fail('Bounding params failed: ' . $e->getMessage());
         }
         $result = $stmt->fetch();
-        $this->assertType('array', $result);
+        $this->assertTrue(is_array($result));
         $this->assertEquals(5, count($result));
         $this->assertEquals(1, $result['object_id']);
         $this->assertEquals(1, $result['object_type']);

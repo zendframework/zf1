@@ -63,9 +63,9 @@ class Zend_Service_Technorati_SearchResultSetTest extends Zend_Service_Technorat
         $object = new Zend_Service_Technorati_SearchResultSet($this->dom);
 
         // check counts
-        $this->assertType('integer', $object->totalResults());
+        $this->assertTrue(is_int($object->totalResults()));
         $this->assertEquals(3, $object->totalResults());
-        $this->assertType('integer', $object->totalResultsAvailable());
+        $this->assertTrue(is_int($object->totalResultsAvailable()));
         $this->assertEquals(4298362, $object->totalResultsAvailable());
     }
 

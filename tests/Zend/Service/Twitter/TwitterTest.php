@@ -178,7 +178,7 @@ class Zend_Service_Twitter_TwitterTest extends PHPUnit_Framework_TestCase
             array('screen_name' => 'mwop')
         ));
         $response = $twitter->users->show('mwop');
-        $this->assertType('Zend_Service_Twitter_Response', $response);
+        $this->assertTrue($response instanceof Zend_Service_Twitter_Response);
         $exists = $response->id !== null;
         $this->assertTrue($exists);
     }

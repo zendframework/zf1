@@ -93,9 +93,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
         $this->assertNotNull($result->getConferenceId());
         $this->assertTrue($result->isValid());
@@ -127,9 +127,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
     }
 
@@ -154,25 +154,25 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
         $this->assertNotNull($conferenceId);
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setName('Marco Kaiser')
+        $this->assertTrue(
+            $conferenceDetails->setName('Marco Kaiser') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDescription('Zend Framework')
+        $this->assertTrue(
+            $conferenceDetails->setDescription('Zend Framework') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDuration(600)
+        $this->assertTrue(
+            $conferenceDetails->setDuration(600) instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
 
@@ -182,9 +182,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
         $this->assertEquals('0000', $result->getStatusCode());
         $this->assertNotNull($result->getStatusMessage());
@@ -211,9 +211,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -228,9 +228,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $this->assertNotNull($result->getParticipantId());
 
@@ -242,9 +242,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $this->assertNotNull($result->getParticipantId());
     }
@@ -270,9 +270,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -287,9 +287,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $participantId = $result->getParticipantId();
         $this->assertNotNull($participantId);
@@ -301,9 +301,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
                 $k,
                 $participant
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
         }
     }
@@ -332,9 +332,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -349,9 +349,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $participantId = $result->getParticipantId();
         $this->assertNotNull($participantId);
@@ -385,9 +385,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -402,9 +402,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $participantId = $result->getParticipantId();
         $this->assertNotNull($participantId);
@@ -415,25 +415,22 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             Zend_Service_DeveloperGarden_ConferenceCall_Mock::PARTICIPANT_MUTE_ON,
             $participant
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
 
         $result = $this->service->getParticipantStatus($conferenceId, $participantId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetParticipantStatusResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetParticipantStatusResponseType
         );
         $status = $result->getStatus();
-        $this->assertType(
-            'array',
-            $status
-        );
+        $this->assertTrue(is_array($status));
         foreach ($status as $k => $v ) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantStatus',
-                $v
+            $this->assertTrue(
+                $v instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantStatus
             );
             switch ($v->getName()) {
                 case 'muted' : {
@@ -465,9 +462,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -482,9 +479,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $this->assertNotNull($result->getParticipantId());
 
@@ -496,16 +493,16 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $this->assertNotNull($result->getParticipantId());
 
         $result = $this->service->removeConference($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
     }
 
@@ -530,9 +527,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -547,9 +544,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -562,23 +559,23 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->removeParticipant($conferenceId, $part1Id);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
 
         $result = $this->service->removeParticipant($conferenceId, $part2Id);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
     }
 
@@ -603,9 +600,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -620,9 +617,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -635,17 +632,17 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->commitConference($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
     }
 
@@ -654,9 +651,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
      */
     public function testCommitConferenceWithOutInitiator()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -677,9 +674,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -693,17 +690,17 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->commitConference($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
     }
 
@@ -712,9 +709,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
      */
     public function testCommitConferenceWithThresholdException()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -739,9 +736,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
     public function testGetConferenceList()
     {
         //$this->markTestSkipped('Throws internal error on mock environment');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -762,24 +759,21 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
         $this->assertNotNull($conferenceId);
 
         $result = $this->service->getConferenceList(0, 'My Name');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceListResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceListResponseType
         );
 
-        $this->assertType(
-            'array',
-            $result->getConferenceIds()
-        );
+        $this->assertTrue(is_array($result->getConferenceIds()));
         $this->assertTrue(count($result->getConferenceIds()) > 0);
     }
 
@@ -804,9 +798,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -821,9 +815,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -836,23 +830,23 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->commitConference($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
 
         $result = $this->service->getRunningConference($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetRunningConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetRunningConferenceResponseType
         );
         $this->assertNotNull($result->getConferenceId());
     }
@@ -860,9 +854,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
     public function testGetConferenceStatusSandBox()
     {
         //$this->markTestSkipped('Throws internal error on mock environment');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -883,9 +877,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -900,9 +894,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -915,23 +909,23 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->getConferenceStatus($conferenceId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceStatusResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceStatusResponseType
         );
 
         $detail = $result->getDetail();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $detail
+        $this->assertTrue(
+            $detail instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
         $this->assertEquals('This is the Conference Description', $detail->getDescription());
         $this->assertEquals(30, $detail->getDuration());
@@ -940,19 +934,19 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         $this->assertNull($result->getSchedule());
         $this->assertEquals(0, $result->getStartTime());
 
-        $this->assertType('array', $result->getParticipants());
+        $this->assertTrue(is_array($result->getParticipants()));
         $this->assertTrue(count($result->getParticipants()) === 2);
         foreach ($result->getParticipants() as $v) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_Participant',
-                $v
+            $this->assertTrue(
+                $v instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_Participant
             );
         }
 
         if ($this->service->getEnvironment() === Zend_Service_DeveloperGarden_ConferenceCall::ENV_PRODUCTION) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceAccount',
-                $result->getAccount()
+            $this->assertTrue(
+                $result->getAccount() instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ConferenceAccount
             );
         }
     }
@@ -979,9 +973,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -996,9 +990,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -1011,9 +1005,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
@@ -1025,15 +1019,15 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
                 $this->markTestSkipped('Internal Error still exists on MOCK!');
             }
         }
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceStatusResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceStatusResponseType
         );
 
         $detail = $result->getDetail();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $detail
+        $this->assertTrue(
+            $detail instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
         $this->assertEquals('This is the Conference Description', $detail->getDescription());
         $this->assertEquals(30, $detail->getDuration());
@@ -1042,19 +1036,19 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         $this->assertNull($result->getSchedule());
         $this->assertEquals(0, $result->getStartTime());
 
-        $this->assertType('array', $result->getParticipants());
+        $this->assertTrue(is_array($result->getParticipants()));
         $this->assertTrue(count($result->getParticipants()) === 2);
         foreach ($result->getParticipants() as $v) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_Participant',
-                $v
+            $this->assertTrue(
+                $v instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_Participant
             );
         }
 
         if ($this->service->getEnvironment() === Zend_Service_DeveloperGarden_ConferenceCall::ENV_PRODUCTION) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceAccount',
-                $result->getAccount()
+            $this->assertTrue(
+                $result->getAccount() instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ConferenceAccount
             );
         }
     }
@@ -1065,9 +1059,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
     public function testGetConferenceStatusException()
     {
         //$this->markTestSkipped('Throws internal error on mock environment');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -1112,9 +1106,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             }
         }
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceResponseType
         );
 
         $conferenceId = $result->getConferenceId();
@@ -1129,9 +1123,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part1Id = $result->getParticipantId();
         $this->assertNotNull($part1Id);
@@ -1144,21 +1138,23 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->newParticipant($conferenceId, $participant);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_NewParticipantResponseType
         );
         $part2Id = $result->getParticipantId();
         $this->assertNotNull($part2Id);
 
         $result = $this->service->getParticipantStatus($conferenceId, $part1Id);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetParticipantStatusResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetParticipantStatusResponseType
         );
-        $this->assertType('array', $result->getStatus());
+        $this->assertTrue(is_array($result->getStatus()));
         foreach ($result->getStatus() as $v) {
-            $this->assertType('Zend_Service_DeveloperGarden_ConferenceCall_ParticipantStatus', $v);
+            $this->assertTrue(
+                $v instanceof Zend_Service_DeveloperGarden_ConferenceCall_ParticipantStatus
+            );
             $this->assertNotNull($v->getName());
             $this->assertNotNull($v->getValue());
         }
@@ -1167,16 +1163,16 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
     public function testRemoveConferenceLooped()
     {
         //$this->markTestSkipped('Throws internal error on mock environment');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $result = $this->service->getConferenceList(0, 'My Name');
         foreach ($result->getConferenceIds() as $k => $v) {
             $this->assertNotNull($v);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $this->service->removeConference($v)
+            $this->assertTrue(
+                $this->service->removeConference($v) instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
         }
     }
@@ -1214,9 +1210,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
@@ -1252,18 +1248,18 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
         $result = $this->service->removeConferenceTemplate($templateId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
         $this->assertEquals('0000', $result->getStatusCode());
     }
@@ -1297,27 +1293,27 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDescription('Some Description')
+        $this->assertTrue(
+            $conferenceDetails->setDescription('Some Description') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDuration(123)
+        $this->assertTrue(
+            $conferenceDetails->setDuration(123) instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setName('Marco Kaiser')
+        $this->assertTrue(
+            $conferenceDetails->setName('Marco Kaiser') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
         $result = $this->service->updateConferenceTemplate(
@@ -1325,9 +1321,8 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             null,
             $conferenceDetails
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
         $this->assertEquals('0000', $result->getStatusCode());
     }
@@ -1361,27 +1356,27 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDescription('Some Description')
+        $this->assertTrue(
+            $conferenceDetails->setDescription('Some Description') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setDuration(123)
+        $this->assertTrue(
+            $conferenceDetails->setDuration(123) instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $conferenceDetails->setName('Marco Kaiser')
+        $this->assertTrue(
+            $conferenceDetails->setName('Marco Kaiser') instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
 
         $result = $this->service->updateConferenceTemplate(
@@ -1389,52 +1384,49 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             null,
             $conferenceDetails
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
         );
         $this->assertEquals('0000', $result->getStatusCode());
 
         $result = $this->service->getConferenceTemplate($templateId);
 
         $detail = $result->getDetail();
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail',
-            $detail
+        $this->assertTrue(
+            $detail instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail
         );
         $this->assertEquals('Marco Kaiser', $detail->getName());
         $this->assertEquals('Some Description', $detail->getDescription());
         $this->assertEquals(123, $detail->getDuration());
 
-        $this->assertType('array', $result->getParticipants());
+        $this->assertTrue(is_array($result->getParticipants()));
         $this->assertTrue(count($result->getParticipants()) > 0);
         foreach ($result->getParticipants() as $k => $v) {
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_Participant',
-                $v
+            $this->assertTrue(
+                $v instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_Participant
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $v->getDetail()
+            $this->assertTrue(
+                $v->getDetail() instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
-            $this->assertType(
-                'array',
-                $v->getStatus()
-            );
+            $this->assertTrue(is_array($v->getStatus()));
         }
 
         $pid1 = $result->getParticipantById('pid1');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Participant',
-            $pid1
+        $this->assertTrue(
+            $pid1 instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_Participant
         );
 
         $this->assertEquals('pid1', $pid1->getParticipantId());
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-            $pid1->getDetail()
+        $this->assertTrue(
+            $pid1->getDetail() instanceof
+            Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
         );
-        $this->assertType('array', $pid1->getStatus());
+        $this->assertTrue(is_array($pid1->getStatus()));
     }
 
     public function testGetConferenceTemplateList()
@@ -1466,21 +1458,21 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
         $result = $this->service->getConferenceTemplateList('My Name');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType
         );
         $list = $result->getTemplateIds();
-        $this->assertType('array', $list);
+        $this->assertTrue(is_array($list));
         foreach ($list as $k => $v) {
             $this->assertNotNull($v);
         }
@@ -1514,20 +1506,20 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails->getName(),
             $conferenceDetails
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
-        $this->assertType('array', $participants);
+        $this->assertTrue(is_array($participants));
         foreach ($participants as $k => $v) {
             $result = $this->service->addConferenceTemplateParticipant($templateId, $v);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_AddConferenceTemplateParticipantResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_AddConferenceTemplateParticipantResponseType
             );
             $this->assertEquals('pid'. ($k+1), $result->getParticipantId());
             $this->assertEquals('0000', $result->getStatusCode());
@@ -1563,9 +1555,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
@@ -1574,16 +1566,16 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         $pidArray = array('pid1', 'pid2');
         foreach ($pidArray as $k => $v) {
             $result = $this->service->removeConferenceTemplateParticipant($templateId, $v);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
             $this->assertEquals('0000', $result->getStatusCode());
         }
         $result = $this->service->getConferenceTemplate($templateId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateResponseType
         );
         $this->assertEquals(0, count($result->getParticipants()));
     }
@@ -1617,9 +1609,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
@@ -1628,13 +1620,13 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         $pidArray = array('pid1', 'pid2');
         foreach ($pidArray as $k => $v) {
             $result = $this->service->getConferenceTemplateParticipant($templateId, $v);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateParticipantResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateParticipantResponseType
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $result->getParticipant()
+            $this->assertTrue(
+                $result->getParticipant() instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
             $this->assertEquals('0000', $result->getStatusCode());
         }
@@ -1643,9 +1635,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
     public function testUpdateConferenceTemplateParticipant()
     {
         // works only on sandbox
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
 
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
@@ -1675,36 +1667,36 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
             $conferenceDetails,
             $participants
         );
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_CreateConferenceTemplateResponseType
         );
 
         $templateId = $result->getTemplateId();
         $this->assertNotNull($templateId);
 
         $result = $this->service->getConferenceTemplate($templateId);
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateResponseType
         );
         $list = $result->getParticipants();
-        $this->assertType('array', $list);
+        $this->assertTrue(is_array($list));
 
         foreach ($list as $k => $v) {
             $participantId = $v->getParticipantId();
             $detail = $v->getDetail();
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $detail
+            $this->assertTrue(
+                $detail instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $detail->setFirstName('Zend')
+            $this->assertTrue(
+                $detail->setFirstName('Zend') instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $detail->setLastName('Framework')
+            $this->assertTrue(
+                $detail->setLastName('Framework') instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
 
             $result = $this->service->updateConferenceTemplateParticipant(
@@ -1712,22 +1704,22 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
                 $participantId,
                 $detail
             );
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
             $this->assertEquals('0000', $result->getStatusCode());
 
             // ask for part
             $result = $this->service->getConferenceTemplateParticipant($templateId, $participantId);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateParticipantResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateParticipantResponseType
             );
             $newPart = $result->getParticipant();
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail',
-                $newPart
+            $this->assertTrue(
+                $newPart instanceof
+                Zend_Service_DeveloperGarden_ConferenceCall_ParticipantDetail
             );
             $this->assertEquals('Zend', $newPart->getFirstName());
             $this->assertEquals('Framework', $newPart->getLastName());
@@ -1761,19 +1753,19 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->getConferenceTemplateList('My Name');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType
         );
         $list = $result->getTemplateIds();
-        $this->assertType('array', $list);
+        $this->assertTrue(is_array($list));
         foreach ($list as $k => $v) {
             $templateId = $v;
             $this->assertNotNull($templateId);
             $result = $this->service->removeConferenceTemplate($templateId);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
             $this->assertEquals('0000', $result->getStatusCode());
         }
@@ -1781,9 +1773,9 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
 
     public function testRemoveConferenceTemplateLoopedSandbox()
     {
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_ConferenceCall_Mock',
+        $this->assertTrue(
             $this->service->setEnvironment(Zend_Service_DeveloperGarden_ConferenceCall_Mock::ENV_SANDBOX)
+            instanceof Zend_Service_DeveloperGarden_ConferenceCall_Mock
         );
         $conferenceDetails = new Zend_Service_DeveloperGarden_ConferenceCall_ConferenceDetail(
             'My Name',
@@ -1808,19 +1800,19 @@ class Zend_Service_DeveloperGarden_ConferenceCallTest extends PHPUnit_Framework_
         );
 
         $result = $this->service->getConferenceTemplateList('My Name');
-        $this->assertType(
-            'Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType',
-            $result
+        $this->assertTrue(
+            $result instanceof
+            Zend_Service_DeveloperGarden_Response_ConferenceCall_GetConferenceTemplateListResponseType
         );
         $list = $result->getTemplateIds();
-        $this->assertType('array', $list);
+        $this->assertTrue(is_array($list));
         foreach ($list as $k => $v) {
             $templateId = $v;
             $this->assertNotNull($templateId);
             $result = $this->service->removeConferenceTemplate($templateId);
-            $this->assertType(
-                'Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType',
-                $result
+            $this->assertTrue(
+                $result instanceof
+                Zend_Service_DeveloperGarden_Response_ConferenceCall_CCSResponseType
             );
             $this->assertEquals('0000', $result->getStatusCode());
         }

@@ -79,8 +79,9 @@ class Zend_Service_DeveloperGarden_LocalSearchTest extends PHPUnit_Framework_Tes
                          ->setHits(3);
         try {
             $result = $this->service->localSearch($searchParameters);
-            $this->assertType('Zend_Service_DeveloperGarden_Response_LocalSearch_LocalSearchResponseType',
-                              $result->getSearchResult());
+            $this->assertTrue(
+                $result->getSearchResult() instanceof Zend_Service_DeveloperGarden_Response_LocalSearch_LocalSearchResponseType
+            );
             $this->assertEquals('0000', $result->getErrorCode());
         } catch (Exception $e) {
             if ($e->getMessage() != 'quotas have exceeded') {
