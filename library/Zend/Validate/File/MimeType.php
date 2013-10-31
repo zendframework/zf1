@@ -209,7 +209,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             throw new Zend_Validate_Exception('The given magicfile can not be read');
         } else {
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
-            $this->_finfo = @finfo_open($const, $file);
+            $this->_finfo = finfo_open($const, $file);
             if (empty($this->_finfo)) {
                 $this->_finfo = null;
                 require_once 'Zend/Validate/Exception.php';
@@ -423,11 +423,11 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 
             if (!empty($mimefile) && empty($this->_finfo)) {
-                $this->_finfo = @finfo_open($const, $mimefile);
+                $this->_finfo = finfo_open($const, $mimefile);
             }
 
             if (empty($this->_finfo)) {
-                $this->_finfo = @finfo_open($const);
+                $this->_finfo = finfo_open($const);
             }
 
             if (!empty($this->_finfo)) {
