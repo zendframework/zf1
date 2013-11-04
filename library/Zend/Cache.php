@@ -217,7 +217,7 @@ abstract class Zend_Cache
      */
     protected static function _normalizeName($name)
     {
-        if( strtolower($name) == 'zendserver_shmem' ){
+        if (strtolower($name) == 'zendserver_shmem') {
             return 'ZendServer_ShMem';
         }
         
