@@ -575,6 +575,25 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
         $id = self::ID;
         $this->assertFalse( $consumer->discovery($id, $server, $version) );
 
+        // Test Yardis Discovery
+        $storage->delDiscoveryInfo(self::ID);
+        $test->setResponse("HTTP/1.1 200 OK\r\n\r\n" .
+                           "<html><head>\n" .
+                           "<meta http-equiv=\"X-XRDS-Location\" content=\"" . self::SERVER . "\" />" .
+                           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" .
+                           "<xrds:XRDS xmlns:xrds=\"xri://\$xrds\" xmlns=\"xri://\$xrd*(\$v*2.0)\">\n" .
+                           "  <XRD>\n" .
+                           "  <Service priority=\"0\">\n" .
+                           "  <Type>http://specs.openid.net/auth/2.0/server</Type>\n" .
+                           "  <URI>" . self::SERVER . "</URI>\n" .
+                           "  </Service>\n" .
+                           "  </XRD>\n" .
+                           "</xrds:XRDS>");
+        $this->assertTrue( $consumer->discovery($id, $server, $version) );
+        $this->assertSame( "http://specs.openid.net/auth/2.0/identifier_select", $id );
+        $this->assertSame( self::SERVER, $server );
+        $this->assertSame( 2.0, $version );
+
         // Test HTML based discovery (OpenID 1.1)
         $storage->delDiscoveryInfo(self::ID);
         $test->setResponse("HTTP/1.1 200 OK\r\n\r\n" .
