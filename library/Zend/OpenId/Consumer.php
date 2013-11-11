@@ -18,7 +18,7 @@
  * @subpackage Zend_OpenId_Consumer
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Consumer.php 24593 2012-01-05 20:35:02Z matthew $
  */
 
 /**
@@ -730,14 +730,34 @@ class Zend_OpenId_Consumer
             return true;
         }
 
-        /* TODO: OpenID 2.0 (7.3) XRI and Yadis discovery */
-
-        /* HTML-based discovery */
         $response = $this->_httpRequest($id, 'GET', array(), $status);
         if ($status != 200 || !is_string($response)) {
             return false;
         }
+
+        /* OpenID 2.0 (7.3) XRI and Yadis discovery */
         if (preg_match(
+                '/<meta[^>]*http-equiv=(["\'])[ \t]*(?:[^ \t"\']+[ \t]+)*?X-XRDS-Location[ \t]*[^"\']*\\1[^>]*content=(["\'])([^"\']+)\\2[^>]*\/?>/i',
+                $response,
+                $r)) {
+            $XRDS = $r[3];
+            $version = 2.0;
+            $response = $this->_httpRequest($XRDS); 
+            if (preg_match(
+                    '/<URI>([^\t]*)<\/URI>/i',
+                    $response,
+                    $x)) {
+                $server = $x[1];
+                // $realId 
+                $realId = 'http://specs.openid.net/auth/2.0/identifier_select';
+            }
+            else {
+                $this->_setError("Unable to get URI for XRDS discovery");
+            }
+        }
+
+        /* HTML-based discovery */
+        else if (preg_match(
                 '/<link[^>]*rel=(["\'])[ \t]*(?:[^ \t"\']+[ \t]+)*?openid2.provider[ \t]*[^"\']*\\1[^>]*href=(["\'])([^"\']+)\\2[^>]*\/?>/i',
                 $response,
                 $r)) {
