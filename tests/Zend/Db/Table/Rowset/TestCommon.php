@@ -345,10 +345,21 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
     public function testTableRowsetContainsDisconnectedRowObjectsWhenDeserialized()
     {
         $table = $this->_table['bugs'];
-        $ser = serialize($table->fetchAll('bug_id = 1', 'bug_id ASC'));
+        $onlineRowset = $table->fetchAll('bug_id = 1', 'bug_id ASC');
 
+        // Test that initial rowset and it's rows are connected
+        $this->assertTrue($onlineRowset instanceof Zend_Db_Table_Rowset_Abstract);
+        $this->assertTrue($onlineRowset->isConnected());
+        $onlineRow = $onlineRowset->current();
+        $this->assertTrue($onlineRow instanceof Zend_Db_Table_Row_Abstract);
+        $this->assertTrue($onlineRow->isConnected());
+
+        $ser = serialize($onlineRowset);
         $rowset = unserialize($ser);
 
+        // Test that newly-unserialized rowset and it's rows are not connected
+        $this->assertTrue($rowset instanceof Zend_Db_Table_Rowset_Abstract);
+        $this->assertFalse($rowset->isConnected());
         $row = $rowset->current();
         $this->assertTrue($row instanceof Zend_Db_Table_Row_Abstract);
         $this->assertFalse($row->isConnected());
@@ -367,11 +378,49 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         // Reconnect the rowset
         $rowset->setTable($table);
 
+        // Test that unserialized rowset and it's rows are now connected
+        $this->assertTrue($rowset instanceof Zend_Db_Table_Rowset_Abstract);
         $this->assertTrue($rowset->isConnected());
         $row = $rowset->current();
         $this->assertTrue($row instanceof Zend_Db_Table_Row_Abstract);
         $this->assertTrue($row->isConnected());
-        $this->assertSame($row->getTable(), $table);
+        $this->assertTrue($row->getTable() instanceof Zend_Db_Table_Abstract);
+    }
+ 
+    /**
+      * @group GH-172
+      */
+    public function testFixForRowsetContainsDisconnectedRowObjectsWhenDeserializedDoesNotBreakPaginator()
+    {
+        $table = $this->_table['bugs'];
+        $tableClass = get_class($table);
+
+        $select = $table->select();
+        $select->from('zfbugs', array('bug_id'));
+
+        require_once 'Zend/Paginator.php';
+        $paginator = Zend_Paginator::factory($select);
+        foreach ($paginator as $test) {
+            $this->assertTrue($test instanceof Zend_Db_Table_Row);
+        }
+    }
+
+    /**
+      * @group GH-172
+      * @see https://github.com/zendframework/zf1/commit/d418b73b53964c3bd84a6624075008106e7d5962#commitcomment-4438005
+      */
+    public function testFixForRowsetContainsDisconnectedRowObjectsWhenDeserializedDoesNotBreakTableJoin()
+    {
+        $table = $this->_table['bugs'];
+        $tableClass = get_class($table);
+
+        $select = $table->select(Zend_Db_Table::SELECT_WITH_FROM_PART)->setIntegrityCheck(false);
+        $select->from('zfbugs', array('bug_id'));
+        $select->join('zfaccounts', 'zfaccounts.account_name = zfbugs.reported_by', 'account_name');
+        $select->where('zfaccounts.account_name = ?', 'Bob');
+
+        $result = $table->fetchAll($select);
+        $this->assertTrue($result instanceof Zend_Db_Table_Rowset);
     }
 
 }
