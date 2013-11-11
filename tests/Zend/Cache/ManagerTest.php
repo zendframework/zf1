@@ -235,6 +235,30 @@ class Zend_Cache_ManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($tagCache instanceof Zend_Cache_Core);
     }
 
+    /**
+     * @group GH-189
+     */
+    public function testSetsOptionsWithCustomFrontendAndBackendNamingAndAutoload()
+    {
+        $manager = new Zend_Cache_Manager;
+        $manager->setTemplateOptions(
+            'page',
+            array(
+                 'frontend' => array(
+                     'customFrontendNaming' => true,
+                 ),
+                 'backend'  => array(
+                     'customBackendNaming' => true,
+                 ),
+                 'frontendBackendAutoload' => true,
+            )
+        );
+        $config = $manager->getCacheTemplate('page');
+        $this->assertTrue($config['frontend']['customFrontendNaming']);
+        $this->assertTrue($config['backend']['customBackendNaming']);
+        $this->assertTrue($config['frontendBackendAutoload']);
+    }
+
     // Helper Methods
 
     public function mkdir()
