@@ -53,7 +53,6 @@ class Zend_Application_Bootstrap_Bootstrap
      * Ensure FrontController resource is registered
      *
      * @param  Zend_Application|Zend_Application_Bootstrap_Bootstrapper $application
-     * @return void
      */
     public function __construct($application)
     {
@@ -120,7 +119,7 @@ class Zend_Application_Bootstrap_Bootstrap
     public function getResourceLoader()
     {
         if ((null === $this->_resourceLoader)
-            && (false != ($namespace = $this->getAppNamespace()))
+            && (false !== ($namespace = $this->getAppNamespace()))
         ) {
             $r    = new ReflectionClass($this);
             $path = $r->getFileName();
