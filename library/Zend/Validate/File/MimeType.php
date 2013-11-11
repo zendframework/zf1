@@ -115,6 +115,13 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
     protected $_headerCheck = false;
 
     /**
+     * Holds error information returned by finfo_open
+     *
+     * @var array
+     */
+    protected $_finfoError;
+
+    /**
      * Sets validator options
      *
      * Mimetype to accept
@@ -209,11 +216,17 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             throw new Zend_Validate_Exception('The given magicfile can not be read');
         } else {
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
+            set_error_handler(array($this, '_errorHandler'), E_NOTICE | E_WARNING);
             $this->_finfo = finfo_open($const, $file);
+            restore_error_handler();
             if (empty($this->_finfo)) {
                 $this->_finfo = null;
                 require_once 'Zend/Validate/Exception.php';
-                throw new Zend_Validate_Exception('The given magicfile is not accepted by finfo');
+                throw new Zend_Validate_Exception(
+                    sprintf('The given magicfile ("%s") is not accepted by finfo', $file),
+                    null,
+                    $this->_finfoError
+                );
             } else {
                 $this->_magicfile = $file;
             }
@@ -423,11 +436,15 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 
             if (!empty($mimefile) && empty($this->_finfo)) {
+                set_error_handler(array($this, '_errorHandler'), E_NOTICE | E_WARNING);
                 $this->_finfo = finfo_open($const, $mimefile);
+                restore_error_handler();
             }
 
             if (empty($this->_finfo)) {
+                set_error_handler(array($this, '_errorHandler'), E_NOTICE | E_WARNING);
                 $this->_finfo = finfo_open($const);
+                restore_error_handler();
             }
 
             if (!empty($this->_finfo)) {
@@ -441,5 +458,20 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
         }
 
         return $type;
+    }
+
+    /**
+     * Saves the provided error information by finfo_open to this instance
+     *
+     * @param  integer $errno
+     * @param  string  $errstr
+     * @param  string  $errfile
+     * @param  integer $errline
+     * @param  array   $errcontext
+     * @return void
+     */
+    protected function _errorHandler($errno, $errstr, $errfile, $errline)
+    {
+        $this->_finfoError = new ErrorException($errstr, $errno, 0, $errfile, $errline);
     }
 }
