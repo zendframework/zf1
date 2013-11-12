@@ -46,6 +46,11 @@ require_once 'Zend/Validate/File/Extension.php';
 class Zend_File_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Zend_File_Transfer_Adapter_AbstractTest_MockAdapter
+     */
+    protected $adapter;
+
+    /**
      * Runs the test methods of this class.
      *
      * @return void
@@ -855,6 +860,33 @@ class Zend_File_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestCase
                 'useByteString' => true,
                 'detectInfos' => false))
             , $this->adapter->getOptions('foo'));
+    }
+
+    /**
+     * @group GH-65
+     */
+    public function testSetDestinationWithNonExistingPathShouldThrowException()
+    {
+        // Create temporary directory
+        $directory = dirname(__FILE__) . '/_files/destination';
+        if (!is_dir($directory)) {
+            @mkdir($directory);
+        }
+        chmod($directory, 0655);
+
+        // Test
+        try {
+            $this->adapter->setDestination($directory);
+            $this->fail('Destination is writable');
+        } catch (Zend_File_Transfer_Exception $e) {
+            $this->assertEquals(
+                'The given destination is not writable',
+                $e->getMessage()
+            );
+        }
+
+        // Remove temporary directory
+        @rmdir($directory);
     }
 }
 
