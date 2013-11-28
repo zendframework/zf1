@@ -84,7 +84,10 @@ class Zend_Form_Element_File extends Zend_Form_Element_Xhtml
             $this->addDecorator('File')
                  ->addDecorator('Errors')
                  ->addDecorator('Description', array('tag' => 'p', 'class' => 'description'))
-                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                 ->addDecorator('HtmlTag', array(
+                     'tag' => 'dd',
+                     'id'  => array('callback' => array(get_class($this), 'resolveElementId'))
+                 ))
                  ->addDecorator('Label', array('tag' => 'dt'));
         }
         return $this;
