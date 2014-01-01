@@ -45,6 +45,14 @@ require_once 'Zend/View.php';
  */
 class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Zend_Form_Element_File
+     */
+    protected $element;
+
+    /**
+     * @var bool
+     */
     protected $_errorOccurred = false;
 
     /**
@@ -533,6 +541,41 @@ class Zend_Form_Element_FileTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $this->element->getValidator('NotEmpty') instanceof Zend_Validate_NotEmpty
+        );
+    }
+
+    /**
+     * @group GH-247
+     */
+    public function testCallbackFunctionAtHtmlTag()
+    {
+        $this->assertEquals(
+            array(
+                 'callback' => array(
+                     'Zend_Form_Element_File',
+                     'resolveElementId',
+                 ),
+            ),
+            $this->element->getDecorator('HtmlTag')->getOption('id')
+        );
+    }
+
+    /**
+     * @group GH-247
+     */
+    public function testDefaultDecoratorOrder()
+    {
+        $expected = array(
+            'Zend_Form_Decorator_File',
+            'Zend_Form_Decorator_Errors',
+            'Zend_Form_Decorator_Description',
+            'Zend_Form_Decorator_HtmlTag',
+            'Zend_Form_Decorator_Label',
+        );
+
+        $this->assertEquals(
+            $expected,
+            array_keys($this->element->getDecorators())
         );
     }
 }
