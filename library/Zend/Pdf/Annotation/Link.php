@@ -70,18 +70,19 @@ class Zend_Pdf_Annotation_Link extends Zend_Pdf_Annotation
     /**
      * Create link annotation object
      *
-     * @param float $x1
-     * @param float $y1
-     * @param float $x2
-     * @param float $y2
+     * @param float                  $x1
+     * @param float                  $y1
+     * @param float                  $x2
+     * @param float                  $y2
      * @param Zend_Pdf_Target|string $target
      * @return Zend_Pdf_Annotation_Link
+     * @throws Zend_Pdf_Exception
      */
     public static function create($x1, $y1, $x2, $y2, $target)
     {
         if (is_string($target)) {
             require_once 'Zend/Pdf/Destination/Named.php';
-            $destination = Zend_Pdf_Destination_Named::create($target);
+            $target = Zend_Pdf_Destination_Named::create($target);
         }
         if (!$target instanceof Zend_Pdf_Target) {
             require_once 'Zend/Pdf/Exception.php';
