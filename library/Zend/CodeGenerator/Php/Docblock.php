@@ -206,10 +206,11 @@ class Zend_CodeGenerator_Php_Docblock extends Zend_CodeGenerator_Php_Abstract
      */
     protected function _docCommentize($content)
     {
-        $indent = $this->getIndentation();
-        $output = $indent . '/**' . self::LINE_FEED;
+        $indent  = $this->getIndentation();
+        $output  = $indent . '/**' . self::LINE_FEED;
         $content = wordwrap($content, 80, self::LINE_FEED);
-        $lines = explode(self::LINE_FEED, $content);
+        $lines   = explode(self::LINE_FEED, $content);
+
         foreach ($lines as $line) {
             $output .= $indent . ' *';
             if ($line) {
@@ -217,8 +218,10 @@ class Zend_CodeGenerator_Php_Docblock extends Zend_CodeGenerator_Php_Abstract
             }
             $output .= self::LINE_FEED;
         }
+
+        $output = rtrim($output, ' *' . self::LINE_FEED) . self::LINE_FEED;
+
         $output .= $indent . ' */' . self::LINE_FEED;
         return $output;
     }
-
 }
