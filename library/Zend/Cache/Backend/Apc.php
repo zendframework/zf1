@@ -257,10 +257,9 @@ class Zend_Cache_Backend_Apc extends Zend_Cache_Backend implements Zend_Cache_Ba
     public function getIds()
     {
         $res = array();
-        $array = apc_cache_info('user', false);
-        $records = $array['cache_list'];
-        foreach ($records as $record) {
-            $res[] = $record['info'];
+        $iter = new APCIterator('user');
+        foreach ($iter as $item) {
+            $res[] = $item['key'];
         }
         return $res;
     }
