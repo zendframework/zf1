@@ -255,6 +255,52 @@ class Zend_Translate_Adapter_GettextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group GH-66
+     */
+    public function testPluralToPlural()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(
+            dirname(__FILE__) . '/_files/translation_plural_fr.mo', 'fr'
+        );
+
+        $this->assertEquals(
+            'Il ya %d message',
+            $adapter->plural('There is %d message', 'There are %d messages', 0)
+        );
+        $this->assertEquals(
+            'Il ya %d message',
+            $adapter->plural('There is %d message', 'There are %d messages', 1)
+        );
+        $this->assertEquals(
+            'Il ya %d messages',
+            $adapter->plural('There is %d message', 'There are %d messages', 2)
+        );
+    }
+
+    /**
+     * @group GH-66
+     */
+    public function testPluralToSingular()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(
+            dirname(__FILE__) . '/_files/translation_plural_tr.mo', 'tr'
+        );
+
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 0)
+        );
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 1)
+        );
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 2)
+        );
+    }
+
+    /**
      * Ignores a raised PHP error when in effect, but throws a flag to indicate an error occurred
      *
      * @param  integer $errno
