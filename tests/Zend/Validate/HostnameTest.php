@@ -486,4 +486,16 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validator->isValid('самобраноч.com.ua'));
         $this->assertTrue($validator->isValid('hostmaster.ua'));
     }
+
+    /**
+     * Test for IDN serbia .rs
+     *
+     * @group GH-115
+     */
+    public function testIDNRS()
+    {
+        $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+
+        $this->assertTrue($validator->isValid('test.rs'));
+    }
 }

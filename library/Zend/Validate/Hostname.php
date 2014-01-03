@@ -180,6 +180,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      * (.PR) Puerto Rico http://www.nic.pr/idn_rules.asp
      * (.PT) Portugal https://online.dns.pt/dns_2008/do?com=DS;8216320233;111;+PAGE(4000058)+K-CAT-CODIGO(C.125)+RCNT(100);
      * (.RU) Russia http://www.iana.org/domains/idn-tables/tables/ru_ru-ru_1.0.html
+     * (.RS) Serbia http://www.iana.org/domains/idn-tables/tables/rs_sr-rs_1.0.pdf
      * (.SA) Saudi Arabia http://www.iana.org/domains/idn-tables/tables/sa_ar_1.0.html
      * (.SE) Sweden http://www.iis.se/english/IDN_campaignsite.shtml?lang=en
      * (.SH) Saint Helena http://www.nic.sh/SH-IDN-Policy.pdf
@@ -282,6 +283,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             33=> '/^[\x{002d}0-9א-ת]{1,63}$/iu'),
         'PR'  => array(1 => '/^[\x{002d}0-9a-záéíóúñäëïüöâêîôûàèùæçœãõ]{1,63}$/iu'),
         'PT'  => array(1 => '/^[\x{002d}0-9a-záàâãçéêíóôõú]{1,63}$/iu'),
+        'RS'  => array(1 => '/^[\x{002D}\x{0030}-\x{0039}\x{0061}-\x{007A}\x{0107}\x{010D}\x{0111}\x{0161}\x{017E}]{1,63}$/iu)'),
         'RU'  => array(1 => '/^[\x{002d}0-9а-яё]{1,63}$/iu'),
         'SA'  => array(1 => '/^[\x{002d}.0-9\x{0621}-\x{063A}\x{0641}-\x{064A}\x{0660}-\x{0669}]{1,63}$/iu'),
         'SE'  => array(1 => '/^[\x{002d}0-9a-zäåéöü]{1,63}$/iu'),
