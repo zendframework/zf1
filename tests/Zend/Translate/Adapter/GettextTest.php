@@ -90,6 +90,24 @@ class Zend_Translate_Adapter_GettextTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Cooking furniture (en)', $adapter->translate('Küchen Möbel'));
     }
 
+    public function testPluralToPlural()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(dirname(__FILE__) . '/_files/translation_plural_fr.mo', 'fr');
+        // French plural rules are different to English - 0 is singular
+        $this->assertEquals('Il ya %d poisson',  $adapter->plural('There is %d fish', 'There are %d fishes', 0));
+        $this->assertEquals('Il ya %d poisson',  $adapter->plural('There is %d fish', 'There are %d fishes', 1));
+        $this->assertEquals('Il ya %d poissons', $adapter->plural('There is %d fish', 'There are %d fishes', 2));
+    }
+
+    public function testPluralToSingular()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(dirname(__FILE__) . '/_files/translation_plural_tr.mo', 'tr');
+        // Turkish plural rules are different to English - everything is singular
+        $this->assertEquals('%d balıklar var', $adapter->plural('There is %d fish', 'There are %d fishes', 0));
+        $this->assertEquals('%d balıklar var', $adapter->plural('There is %d fish', 'There are %d fishes', 1));
+        $this->assertEquals('%d balıklar var', $adapter->plural('There is %d fish', 'There are %d fishes', 2));
+    }
+
     public function testIsTranslated()
     {
         $adapter = new Zend_Translate_Adapter_Gettext(dirname(__FILE__) . '/_files/translation_en.mo', 'en');
