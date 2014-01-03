@@ -60,6 +60,15 @@ class Zend_Application_Resource_Cachemanager extends Zend_Application_Resource_R
 
             $options = $this->getOptions();
             foreach ($options as $key => $value) {
+                // Logger
+                if (isset($value['frontend']['options']['logger'])) {
+                    $logger = $value['frontend']['options']['logger'];
+                    if (is_array($logger)) {
+                        $value['frontend']['options']['logger'] = Zend_Log::factory($logger);
+                    }
+                }
+
+                // Cache templates
                 if ($this->_manager->hasCacheTemplate($key)) {
                     $this->_manager->setTemplateOptions($key, $value);
                 } else {
