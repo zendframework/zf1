@@ -124,6 +124,23 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLogFactory()
+    {
+        $options = $this->_translationOptions;
+        $options['log'][0] = new Zend_Log_Writer_Mock();
+        $options['logUntranslated'] = true;
+
+        $resource = new Zend_Application_Resource_Translate($options);
+        $resource->setBootstrap($this->bootstrap);
+
+        $resource->init()->translate('untranslated');
+        $event = current($options['log'][0]->events);
+
+        $this->assertType('array', $event);
+        $this->assertArrayHasKey('message', $event);
+        $this->assertEquals("Untranslated message within 'en': untranslated", $event['message']);
+    }
+
     /**
      * @group ZF-7352
      */

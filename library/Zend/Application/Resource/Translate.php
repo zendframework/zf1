@@ -85,6 +85,12 @@ class Zend_Application_Resource_Translate extends Zend_Application_Resource_Reso
                 $options['content'] = $options['data'];
                 unset($options['data']);
             }
+            
+            if (isset($options['log'])) {
+                if (is_array($options['log'])) {
+                    $options['log'] = Zend_Log::factory($options['log']);
+                }
+            }
 
             if (isset($options['options'])) {
                 foreach($options['options'] as $key => $value) {
