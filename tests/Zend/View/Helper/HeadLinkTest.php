@@ -347,6 +347,32 @@ class Zend_View_Helper_HeadLinkTest extends PHPUnit_Framework_TestCase
         $this->assertContains('<![endif]-->', $string);
     }
 
+    public function testConditionalStylesheetCreationNoIE()
+    {
+        $this->helper->setStylesheet('/styles.css', 'screen', '!IE');
+        $item = $this->helper->getValue();
+        $this->assertObjectHasAttribute('conditionalStylesheet', $item);
+        $this->assertEquals('!IE', $item->conditionalStylesheet);
+
+        $string = $this->helper->toString();
+        $this->assertContains('/styles.css', $string);
+        $this->assertContains('<!--[if !IE]><!--><', $string);
+        $this->assertContains('<!--<![endif]-->', $string);
+    }
+
+    public function testConditionalStylesheetCreationNoIEWidthSpaces()
+    {
+        $this->helper->setStylesheet('/styles.css', 'screen', '! IE');
+        $item = $this->helper->getValue();
+        $this->assertObjectHasAttribute('conditionalStylesheet', $item);
+        $this->assertEquals('! IE', $item->conditionalStylesheet);
+
+        $string = $this->helper->toString();
+        $this->assertContains('/styles.css', $string);
+        $this->assertContains('<!--[if ! IE]><!--><', $string);
+        $this->assertContains('<!--<![endif]-->', $string);
+    }
+
     public function testSettingAlternateWithTooFewArgsRaisesException()
     {
         try {
