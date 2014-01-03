@@ -94,39 +94,45 @@ class Zend_Service_Rackspace_Files_Object
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass a RackspaceFiles and an array");
         }
-        if (!array_key_exists('name', $data)) {
-            require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the name of the object in the array (name)");
-        }
         if (!array_key_exists('container', $data)) {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass the container of the object in the array (container)");
         }
-        if (!array_key_exists('hash', $data)) {
-            require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the hash of the object in the array (hash)");
+        if (array_key_exists('name', $data)) {
+            if (!array_key_exists('hash', $data)) {
+                require_once 'Zend/Service/Rackspace/Files/Exception.php';
+                throw new Zend_Service_Rackspace_Files_Exception("You must pass the hash of the object in the array (hash)");
+            }
+            if (!array_key_exists('bytes', $data)) {
+                require_once 'Zend/Service/Rackspace/Files/Exception.php';
+                throw new Zend_Service_Rackspace_Files_Exception("You must pass the byte size of the object in the array (bytes)");
+            }
+            if (!array_key_exists('content_type', $data)) {
+                require_once 'Zend/Service/Rackspace/Files/Exception.php';
+                throw new Zend_Service_Rackspace_Files_Exception("You must pass the content type of the object in the array (content_type)");
+            }
+            if (!array_key_exists('last_modified', $data)) {
+                require_once 'Zend/Service/Rackspace/Files/Exception.php';
+                throw new Zend_Service_Rackspace_Files_Exception("You must pass the last modified data of the object in the array (last_modified)");
+            }
+            $this->name= $data['name'];
+            $this->hash= $data['hash'];
+            $this->size= $data['bytes'];
+            $this->contentType= $data['content_type'];
+            $this->lastModified= $data['last_modified'];
+            if (!empty($data['content'])) {
+                $this->content= $data['content'];
+            }
         }
-        if (!array_key_exists('bytes', $data)) {
-            require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the byte size of the object in the array (bytes)");
+        elseif (array_key_exists('subdir', $data)) {
+            $this->name = $data['subdir'];
         }
-        if (!array_key_exists('content_type', $data)) {
+        else {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the content type of the object in the array (content_type)");
+            throw new Zend_Service_Rackspace_Files_Exception("You must pass the name of the object in the array (name)");
         }
-        if (!array_key_exists('last_modified', $data)) {
-            require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the last modified data of the object in the array (last_modified)");
-        }
-        $this->name= $data['name'];
+        
         $this->container= $data['container'];
-        $this->hash= $data['hash'];
-        $this->size= $data['bytes'];
-        $this->contentType= $data['content_type'];
-        $this->lastModified= $data['last_modified'];
-        if (!empty($data['content'])) {
-            $this->content= $data['content'];
-        }
         $this->service= $service;
     }
     /**
