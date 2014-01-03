@@ -54,12 +54,20 @@ class test {
         return "foobar2_return($param1, $param2)";
     }
 
+    public function foobar3($param1, $param2)
+    {
+        echo $this->dummyMethod($param1, $param2);
+    }
+
+    private function dummyMethod($param1, $param2) {
+        return "foobar_output($param1,$param2)";
+    }
+
     public function throwException()
     {
         echo 'throw exception';
         throw new Exception('test exception');
     }
-
 }
 
 /**
@@ -218,6 +226,21 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         ob_implicit_flush(true);
         $this->assertEquals('foobar_return(param1, param2)', $return);
         $this->assertEquals('foobar_output(param1, param2)', $data);
+    }
+
+    public function testCallCorrectCall8()
+    {
+        $this->_instance2->setOption('cache_by_default', true);
+        $this->_instance2->setOption('cached_methods', array('foobar3'));
+        ob_start();
+        ob_implicit_flush(false);
+        $return = $this->_instance2->foobar3('param1', 'param2');
+        $data = ob_get_clean();
+        ob_implicit_flush(true);
+
+        $this->assertNull($return);
+        $this->assertEquals('foobar_output(param1,param2)',$data);
+      
     }
 
     public function testConstructorWithABadCachedEntity()
