@@ -37,8 +37,8 @@ require_once 'Zend/Cache/Backend/Test.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
-class test {
-
+class test
+{
     private $_string = 'hello !';
 
     public static function foobar($param1, $param2)
@@ -78,8 +78,8 @@ class test {
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
-class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
-
+class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase
+{
     private $_instance1;
     private $_instance2;
 
@@ -228,6 +228,9 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foobar_output(param1, param2)', $data);
     }
 
+    /**
+     * @group GH-125
+     */
     public function testCallCorrectCall8()
     {
         $this->_instance2->setOption('cache_by_default', true);
@@ -239,7 +242,7 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         ob_implicit_flush(true);
 
         $this->assertNull($return);
-        $this->assertEquals('foobar_output(param1,param2)',$data);
+        $this->assertEquals('foobar_output(param1,param2)', $data);
       
     }
 
@@ -295,6 +298,4 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         $this->setExpectedException('Zend_Cache_Exception');
         $this->_instance2->unknownMethod();
     }
-
 }
-
