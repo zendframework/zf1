@@ -29,51 +29,59 @@ class Zend_Service_Rackspace_Files_Object
      * @var Zend_Service_Rackspace_Files
      */
     protected $service;
+
     /**
      * Name of the object
      *
      * @var string
      */
     protected $name;
+
     /**
      * MD5 value of the object's content
      *
      * @var string
      */
     protected $hash;
+
     /**
      * Size in bytes of the object's content
      *
      * @var integer
      */
     protected $size;
+
     /**
      * Content type of the object's content
      *
      * @var string
      */
     protected $contentType;
+
     /**
      * Date of the last modified of the object
      *
      * @var string
      */
     protected $lastModified;
+
     /**
      * Object content
      *
      * @var string
      */
     protected $content;
+
     /**
      * Name of the container where the object is stored
      *
      * @var string
      */
     protected $container;
+
     /**
      * Constructor
-     * 
+     *
      * You must pass the Zend_Service_Rackspace_Files object of the caller and an associative
      * array with the keys "name", "container", "hash", "bytes", "content_type",
      * "last_modified", "file" where:
@@ -84,57 +92,73 @@ class Zend_Service_Rackspace_Files_Object
      * content_type= content type of the object's content
      * last_modified= date of the last modified of the object
      * content= content of the object
-     * 
+     *
      * @param Zend_Service_Rackspace_Files $service
-     * @param array $data 
+     * @param array                        $data
+     * @throws Zend_Service_Rackspace_Files_Exception
      */
-    public function __construct($service,$data)
+    public function __construct($service, $data)
     {
         if (!($service instanceof Zend_Service_Rackspace_Files) || !is_array($data)) {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass a RackspaceFiles and an array");
+            throw new Zend_Service_Rackspace_Files_Exception(
+                'You must pass a RackspaceFiles and an array'
+            );
         }
         if (!array_key_exists('container', $data)) {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the container of the object in the array (container)");
+            throw new Zend_Service_Rackspace_Files_Exception(
+                'You must pass the container of the object in the array (container)'
+            );
         }
         if (array_key_exists('name', $data)) {
             if (!array_key_exists('hash', $data)) {
                 require_once 'Zend/Service/Rackspace/Files/Exception.php';
-                throw new Zend_Service_Rackspace_Files_Exception("You must pass the hash of the object in the array (hash)");
+                throw new Zend_Service_Rackspace_Files_Exception(
+                    'You must pass the hash of the object in the array (hash)'
+                );
             }
             if (!array_key_exists('bytes', $data)) {
                 require_once 'Zend/Service/Rackspace/Files/Exception.php';
-                throw new Zend_Service_Rackspace_Files_Exception("You must pass the byte size of the object in the array (bytes)");
+                throw new Zend_Service_Rackspace_Files_Exception(
+                    'You must pass the byte size of the object in the array (bytes)'
+                );
             }
             if (!array_key_exists('content_type', $data)) {
                 require_once 'Zend/Service/Rackspace/Files/Exception.php';
-                throw new Zend_Service_Rackspace_Files_Exception("You must pass the content type of the object in the array (content_type)");
+                throw new Zend_Service_Rackspace_Files_Exception(
+                    'You must pass the content type of the object in the array (content_type)'
+                );
             }
             if (!array_key_exists('last_modified', $data)) {
                 require_once 'Zend/Service/Rackspace/Files/Exception.php';
-                throw new Zend_Service_Rackspace_Files_Exception("You must pass the last modified data of the object in the array (last_modified)");
+                throw new Zend_Service_Rackspace_Files_Exception(
+                    'You must pass the last modified data of the object in the array (last_modified)'
+                );
             }
-            $this->name= $data['name'];
-            $this->hash= $data['hash'];
-            $this->size= $data['bytes'];
-            $this->contentType= $data['content_type'];
-            $this->lastModified= $data['last_modified'];
+
+            $this->name         = $data['name'];
+            $this->hash         = $data['hash'];
+            $this->size         = $data['bytes'];
+            $this->contentType  = $data['content_type'];
+            $this->lastModified = $data['last_modified'];
+
             if (!empty($data['content'])) {
-                $this->content= $data['content'];
+                $this->content = $data['content'];
             }
-        }
-        elseif (array_key_exists('subdir', $data)) {
+        } elseif (array_key_exists('subdir', $data)) {
             $this->name = $data['subdir'];
-        }
-        else {
+        } else {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
-            throw new Zend_Service_Rackspace_Files_Exception("You must pass the name of the object in the array (name)");
+            throw new Zend_Service_Rackspace_Files_Exception(
+                'You must pass the name of the object in the array (name)'
+            );
         }
-        
-        $this->container= $data['container'];
-        $this->service= $service;
+
+        $this->container = $data['container'];
+        $this->service   = $service;
     }
+
     /**
      * Get name
      *
@@ -144,6 +168,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->name;
     }
+
     /**
      * Get the name of the container
      *
@@ -153,6 +178,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->container;
     }
+
     /**
      * Get the MD5 of the object's content
      *
@@ -162,6 +188,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->hash;
     }
+
     /**
      * Get the size (in bytes) of the object's content
      *
@@ -171,6 +198,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->size;
     }
+
     /**
      * Get the content type of the object's content
      *
@@ -180,6 +208,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->contentType;
     }
+
     /**
      * Get the data of the last modified of the object
      *
@@ -189,6 +218,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->lastModified;
     }
+
     /**
      * Get the content of the object
      *
@@ -198,6 +228,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->content;
     }
+
     /**
      * Get the metadata of the object
      * If you don't pass the $key it returns the entire array of metadata value
@@ -218,6 +249,7 @@ class Zend_Service_Rackspace_Files_Object
         }
         return false;
     }
+
     /**
      * Set the metadata value
      * The old metadata values are replaced with the new one
@@ -229,6 +261,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->service->setMetadataObject($this->container,$this->name,$metadata);
     }
+
     /**
      * Copy the object to another container
      * You can add metadata information to the destination object, change the
@@ -244,6 +277,7 @@ class Zend_Service_Rackspace_Files_Object
     {
         return $this->service->copyObject($this->container,$this->name,$container_dest,$name_dest,$metadata,$content_type);
     }
+
     /**
      * Get the CDN URL of the object
      *
@@ -259,6 +293,7 @@ class Zend_Service_Rackspace_Files_Object
         }
         return false;
     }
+
     /**
      * Get the CDN SSL URL of the object
      *
