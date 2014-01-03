@@ -476,4 +476,14 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($validator->isValid('رات.ca'));
     }
 
+    /**
+     * @group ZF-12413
+     */
+    public function testIDNUA()
+    {
+        $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+
+        $this->assertTrue($validator->isValid('самобраноч.com.ua'));
+        $this->assertTrue($validator->isValid('hostmaster.ua'));
+    }
 }
