@@ -46,7 +46,7 @@ class Zend_Db_Adapter_Exception extends Zend_Db_Exception
 
     public function hasChainedException()
     {
-        return ($this->_previous !== null);
+        return ($this->getPrevious() !== null);
     }
 
     public function getChainedException()
