@@ -7,10 +7,20 @@ php:
 
 env: TMPDIR=/tmp
 
+services:
+  - memcached
+
 before_install:
  - phpenv rehash
  - sh ./tests/install_dependencies.sh
  - phpenv rehash
+
+before_script:
+  - mysql -e 'create database zftest;'
+  - psql -c 'create database zftest;' -U postgres
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
 
 script:
  - cd tests/
