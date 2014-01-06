@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Translate
  * @subpackage Ressource
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id:$
  */
@@ -76,14 +76,14 @@ return array(
     "'%value%' is an empty string" => "'%value%' é uma string vazia",
 
     // Zend_Validate_EmailAddress
-    "Invalid type given, value should be a string" => "O tipo especificado é inválido, o valor deve ser uma string",
-    "'%value%' is not a valid email address in the basic format local-part@hostname" => "'%value%' não é um endereço de e-mail válido no formato local-part@hostname",
-    "'%hostname%' is not a valid hostname for email address '%value%'" => "'%hostname%' não é um nome de host válido para o endereço de e-mail '%value%'",
+    "Invalid type given. String expected" => "O tipo especificado é inválido, o valor deve ser uma string",
+    "'%value%' is no valid email address in the basic format local-part@hostname" => "'%value%' não é um endereço de e-mail válido no formato nome@provedor",
+    "'%hostname%' is no valid hostname for email address '%value%'" => "'%hostname%' não é um nome de host válido para o endereço de e-mail '%value%'",
     "'%hostname%' does not appear to have a valid MX record for the email address '%value%'" => "'%hostname%' não parece ter um registro MX válido para o endereço de e-mail '%value%'",
     "'%hostname%' is not in a routable network segment. The email address '%value%' should not be resolved from public network." => "'%hostname%' não é um segmento de rede roteável. O endereço de e-mail '%value%' não deve ser resolvido a partir de um rede pública.",
     "'%localPart%' can not be matched against dot-atom format" => "'%localPart%' não corresponde com o formato dot-atom",
     "'%localPart%' can not be matched against quoted-string format" => "'%localPart%' não corresponde com o formato quoted-string",
-    "'%localPart%' is not a valid local part for email address '%value%'" => "'%localPart%' não é uma parte local válida para o endereço de e-mail '%value%'",
+    "'%localPart%' is no valid local part for email address '%value%'" => "'%localPart%' não é uma parte local válida para o endereço de e-mail '%value%'",
     "'%value%' exceeds the allowed length" => "'%value%' excede o comprimento permitido",
 
     // Zend_Validate_File_Count
@@ -181,7 +181,7 @@ return array(
 
     // Zend_Validate_Float
     "Invalid type given, value should be float, string, or integer" => "O tipo especificado é inválido, o valor deve ser float, string, ou inteiro",
-    "'%value%' does not appear to be a float" => "'%value%' não parece ser um float",
+    "'%value%' does not appear to be a float" => "'%value%' não parece ser um número real",
 
     // Zend_Validate_GreaterThan
     "'%value%' is not greater than '%min%'" => "'%value%' não é maior que '%min%'",
