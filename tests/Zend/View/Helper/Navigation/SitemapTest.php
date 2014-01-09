@@ -240,7 +240,7 @@ class Zend_View_Helper_Navigation_SitemapTest
         $this->_helper->setUseSitemapValidators(false);
 
         $expected = $this->_getExpected('sitemap/invalid.xml');
-        $this->assertEquals($expected, $this->_helper->render($nav));
+        $this->assertXmlStringEqualsXmlString($expected, $this->_helper->render($nav));
     }
 
     public function testSetServerUrlRequiresValidUri()

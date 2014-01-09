@@ -402,7 +402,6 @@ document.write(bar.strlen());');
             $this->helper->headScript()->captureEnd();
             $this->assertContains('Cannot nest', $e->getMessage());
         }
-        $this->helper->headScript()->captureEnd();
     }
 
     /**

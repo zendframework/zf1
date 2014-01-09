@@ -369,7 +369,6 @@ h1 {
                 $this->helper->headStyle()->captureEnd();
                 $this->assertContains('Cannot nest', $e->getMessage());
             }
-        $this->helper->headStyle()->captureEnd();
     }
 
     public function testMediaAttributeAsArray()
