@@ -76,7 +76,12 @@ abstract class Zend_Test_PHPUnit_Db_Integration_AbstractTestCase extends PHPUnit
         $xmlDataSet = new PHPUnit_Extensions_Database_DataSet_FlatXmlDataSet(
             dirname(__FILE__)."/_files/sqliteIntegrationFixture.xml"
         );
-        $this->assertTrue($xmlDataSet->assertEquals($dataSet));
+
+        if (method_exists($xmlDataSet, 'assertEquals')) {
+            $this->assertTrue($xmlDataSet->assertEquals($dataSet));
+        } else {
+            $this->assertTrue($xmlDataSet->matches($dataSet));
+        }
     }
 
     /**
@@ -103,7 +108,11 @@ abstract class Zend_Test_PHPUnit_Db_Integration_AbstractTestCase extends PHPUnit
         $this->assertEquals(3, count($rows));
 
         $rowsetTable = new Zend_Test_PHPUnit_Db_DataSet_DbRowset($rows);
-        $rowsetTable->assertEquals($fooDataTable);
+        if (method_exists($rowsetTable, 'assertEquals')) {
+            $rowsetTable->assertEquals($fooDataTable);
+        } else {
+            $rowsetTable->matches($fooDataTable);
+        }
     }
 
     /**
