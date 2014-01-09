@@ -373,7 +373,7 @@ class Zend_Loader_AutoloaderTest extends PHPUnit_Framework_TestCase
     {
         $this->autoloader->setDefaultAutoloader(array($this, 'autoload'));
         $class = $this->autoloader->autoload('Zend_ThisClass_WilNever_Exist');
-        $this->assertEquals('Zend_ThisClass_WilNever_Exist', $class);
+        $this->assertTrue($class);
         $this->assertFalse(class_exists($class, false));
     }
 
