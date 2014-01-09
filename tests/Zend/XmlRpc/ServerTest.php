@@ -166,7 +166,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
         $request = new Zend_XmlRpc_Request();
         $request->setMethod('test.test4');
         $response = $this->_server->handle($request);
-        $this->assertNotType('Zend_XmlRpc_Fault', $response);
+        $this->assertFalse($response instanceof Zend_XmlRpc_Fault);
         $this->assertSame(
             array('test1' => 'argv-argument',
                 'test2' => null,
@@ -184,7 +184,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
         $request->setMethod('test.test4');
         $request->setParams(array('foo'));
         $response = $this->_server->handle($request);
-        $this->assertNotType('Zend_XmlRpc_Fault', $response);
+        $this->assertFalse($response instanceof Zend_XmlRpc_Fault);
         $this->assertSame(array('test1' => 'a1', 'test2' => 'a2', 'arg' => array('foo')), $response->getReturnValue());
     }
 
