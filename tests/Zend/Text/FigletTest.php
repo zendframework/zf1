@@ -29,6 +29,7 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
  * Zend_Text_Figlet
  */
 require_once 'Zend/Text/Figlet.php';
+require_once 'Zend/Text/Figlet/Exception.php';
 
 /**
  * Zend_Config
