@@ -23,6 +23,7 @@ require_once 'Zend/Feed/Pubsubhubbub/Subscriber.php';
 require_once 'Zend/Http/Client.php';
 require_once 'Zend/Http/Client/Adapter/Socket.php';
 require_once 'Zend/Uri/Http.php';
+require_once 'Zend/Feed/Pubsubhubbub/Entity/TopicSubscription.php';
 
 /**
  * Note that $this->_baseuri must point to a directory on a web server

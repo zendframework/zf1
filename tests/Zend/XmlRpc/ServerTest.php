@@ -24,6 +24,9 @@ require_once 'Zend/XmlRpc/Server.php';
 require_once 'Zend/XmlRpc/Request.php';
 require_once 'Zend/XmlRpc/Response.php';
 
+require_once 'Zend/Server/Method/Definition.php';
+require_once 'Zend/Server/Definition.php';
+
 /**
  * Test case for Zend_XmlRpc_Server
  *

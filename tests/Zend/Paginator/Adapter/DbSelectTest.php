@@ -30,6 +30,7 @@ require_once 'Zend/Paginator/Adapter/DbSelect.php';
  */
 require_once 'Zend/Db/Adapter/Pdo/Sqlite.php';
 require_once 'Zend/Debug.php';
+require_once 'Zend/Db/Adapter/Abstract.php';
 
 /**
  * @see PHPUnit_Framework_TestCase

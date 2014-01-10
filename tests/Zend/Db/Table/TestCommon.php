@@ -36,6 +36,10 @@ require_once 'Zend/Registry.php';
  */
 require_once 'Zend/Db/Table.php';
 
+/**
+ * @see Zend_Cache_Backend_BlackHole
+ */
+require_once 'Zend/Cache/Backend/BlackHole.php';
 
 
 

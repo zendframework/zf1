@@ -34,6 +34,8 @@ require_once "Zend/Test/PHPUnit/Db/DataSet/DataSetTestCase.php";
  */
 require_once "Zend/Test/PHPUnit/Db/DataSet/QueryDataSet.php";
 
+require_once 'Zend/Db/Select.php';
+
 /**
  * @category   Zend
  * @package    Zend_Test

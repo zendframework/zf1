@@ -90,6 +90,16 @@ require_once 'Zend/Filter/Callback.php';
 require_once 'Zend/Paginator/Adapter/DbSelect.php';
 
 /**
+ * @see Zend_Db_Adapter_Abstract
+ */
+require_once 'Zend/Db/Adapter/Abstract.php';
+
+/**
+ * @see Zend_Cache_Core
+ */
+require_once 'Zend/Cache/Core.php';
+
+/**
  * @category   Zend
  * @package    Zend_Paginator
  * @subpackage UnitTests
