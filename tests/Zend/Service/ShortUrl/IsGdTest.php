@@ -42,6 +42,12 @@ class Zend_Service_ShortUrl_IsGdTest extends PHPUnit_Framework_TestCase
      */
     public function setUp ()
     {
+        if (!defined('TESTS_ZEND_SERVICE_SHORTURL_ISGD_ENABLED')
+            || !constant('TESTS_ZEND_SERVICE_SHORTURL_ISGD_ENABLED')
+        ) {
+            $this->markTestSkipped('Testing Zend_Service_ShortUrl_IsGdTest only works when TESTS_ZEND_SERVICE_SHORTURL_ISGD_ENABLED is set.');
+        }
+        
         Zend_Service_Abstract::setHttpClient(new Zend_Http_Client());
 
         $this->_s = new Zend_Service_ShortUrl_IsGd();
