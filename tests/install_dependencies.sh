@@ -5,7 +5,6 @@
 pear channel-discover pear.phpunit.de
 pear channel-discover pear.symfony-project.com
 pear update-channels
-pear upgrade-all
 
 # remove any existing phpunit packages
 pear uninstall -n pear.phpunit.de/DbUnit
