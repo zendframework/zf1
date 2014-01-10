@@ -120,6 +120,7 @@ class Zend_Mail_Transport_Sendmail_Mock extends Zend_Mail_Transport_Sendmail
  */
 class Zend_Mail_MailTest extends PHPUnit_Framework_TestCase
 {
+    protected $numAssertions;
 
     public function tearDown() {
         Zend_Mail::clearDefaultFrom();
