@@ -611,6 +611,11 @@ class Zend_XmlRpc_ValueTest extends PHPUnit_Framework_TestCase
 
     public function testMarshalDateTimeFromInvalidString()
     {
+        $phpunitVersion = PHPUnit_Runner_Version::id();
+        if (version_compare($phpunitVersion, '3.7.0', '<=')) {
+            $this->markTestSkipped('Cannot expect generic exceptions prior to PHPUnit 3.7.');
+        }
+
         $this->setExpectedException('Exception', "foobarbaz");
         Zend_XmlRpc_Value::getXmlRpcValue('foobarbaz', Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME);
     }
