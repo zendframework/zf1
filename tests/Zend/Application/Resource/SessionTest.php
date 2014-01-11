@@ -91,6 +91,8 @@ class Zend_Application_Resource_SessionTest extends PHPUnit_Framework_TestCase
 
     public function testInitSetsSaveHandler()
     {
+        Zend_Session::$_unitTestEnabled = true;
+
         $saveHandler = $this->getMock('Zend_Session_SaveHandler_Interface');
 
         $this->resource->setSaveHandler($saveHandler);
