@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-$PHPUNIT = null;
+$PHPUNIT = 'phpunit36';
 if (!$PHPUNIT) {
     if (!$PHPUNIT && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $PHPUNIT = `for %i in (phpunit.bat) do @echo.   %~\$PATH:i)`;
@@ -53,7 +53,7 @@ $result = 0;
 // run through phpunit
 while(list(, $file)=each($files)) {
     echo "Executing {$file}" . PHP_EOL;
-    system($PHPUNIT . ' --debug --stderr -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file), $c_result);
+    system($PHPUNIT . ' --debug -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file), $c_result);
     echo PHP_EOL;
     echo "Finished executing {$file}" . PHP_EOL;
     
