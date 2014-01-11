@@ -53,7 +53,7 @@ $result = 0;
 // run through phpunit
 while(list(, $file)=each($files)) {
     echo "Executing {$file}" . PHP_EOL;
-    system($PHPUNIT . ' --debug -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file), $c_result);
+    system($PHPUNIT . ' --stderr -d memory_limit=-1 -d error_reporting=E_ALL\&E_STRICT -d display_errors=1 ' . escapeshellarg($file), $c_result);
     echo PHP_EOL;
     echo "Finished executing {$file}" . PHP_EOL;
     
