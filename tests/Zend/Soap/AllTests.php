@@ -58,7 +58,8 @@ class Zend_Soap_AllTests
         $suite->addTestSuite('Zend_Soap_Wsdl_ArrayOfTypeSequenceStrategyTest');
         $suite->addTestSuite('Zend_Soap_AutoDiscoverTest');
         
-        if (!defined('TESTS_ZEND_SOAP_AUTODISCOVER_ONLINE_SERVER_BASEURI') || constant('TESTS_ZEND_SOAP_AUTODISCOVER_ONLINE_SERVER_BASEURI') == false) {
+        if (!defined('TESTS_ZEND_SOAP_AUTODISCOVER_ONLINE_SERVER_BASEURI')
+            || constant('TESTS_ZEND_SOAP_AUTODISCOVER_ONLINE_SERVER_BASEURI') == false) {
             $suite->addTestSuite('Zend_Soap_AutoDiscover_OnlineTest');
         }
 
