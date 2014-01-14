@@ -55,6 +55,9 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
     {
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         foreach ($locator as $file) {
+            if (version_compare(PHP_VERSION, '5.3', 'lt') && $file->getFileName() == 'MultipleClassesInMultipleNamespaces.php') {
+                continue;
+            }
             $this->assertRegexp('/\.php$/', $file->getFilename());
         }
     }
@@ -64,6 +67,9 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $found = false;
         foreach ($locator as $file) {
+            if (version_compare(PHP_VERSION, '5.3', 'lt') && $file->getFileName() == 'MultipleClassesInMultipleNamespaces.php') {
+                continue;
+            }
             if (preg_match('/locator-should-skip-this\.php$/', $file->getFilename())) {
                 $found = true;
             }
@@ -76,6 +82,9 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $found = false;
         foreach ($locator as $file) {
+            if (version_compare(PHP_VERSION, '5.3', 'lt') && $file->getFileName() == 'MultipleClassesInMultipleNamespaces.php') {
+                continue;
+            }
             if (preg_match('/LocatorShouldFindThis\.php$/', $file->getFilename())) {
                 $found = true;
             }
@@ -107,6 +116,9 @@ class Zend_File_ClassFileLocatorTest extends PHPUnit_Framework_TestCase
         $locator = new Zend_File_ClassFileLocator(dirname(__FILE__));
         $found = false;
         foreach ($locator as $file) {
+            if (version_compare(PHP_VERSION, '5.3', 'lt') && $file->getFileName() == 'MultipleClassesInMultipleNamespaces.php') {
+                continue;
+            }
             $classes = $file->getClasses();
             foreach ($classes as $class) {
                 $found = true;

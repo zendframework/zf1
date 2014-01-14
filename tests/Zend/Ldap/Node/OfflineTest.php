@@ -273,6 +273,9 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
 
     public function testGetSetAndDeleteMethods()
     {
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('GMT');
+
         $node=$this->_createTestNode();
 
         $node->setAttribute('key', 'value1');
@@ -311,6 +314,8 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
         $this->assertEquals(0, count($node->getAttribute('userPassword')));
         $this->assertTrue($node->existsAttribute('userPassword', true));
         $this->assertFalse($node->existsAttribute('userPassword', false));
+
+        date_default_timezone_set($timezone);
     }
 
     public function testOverloading()

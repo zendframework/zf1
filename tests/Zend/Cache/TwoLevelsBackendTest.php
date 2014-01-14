@@ -25,6 +25,7 @@
  */
 require_once 'Zend/Cache.php';
 require_once 'Zend/Cache/Backend/TwoLevels.php';
+require_once 'Zend/Cache/Backend/Apc.php';
 
 /**
  * Common tests for backends

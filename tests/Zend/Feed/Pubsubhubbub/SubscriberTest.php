@@ -21,6 +21,7 @@
 
 require_once 'Zend/Feed/Pubsubhubbub/Subscriber.php';
 require_once 'Zend/Feed/Pubsubhubbub/Model/Subscription.php';
+require_once 'Zend/Db/Table/Abstract.php';
 
 /**
  * @category   Zend

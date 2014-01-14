@@ -144,7 +144,7 @@ class Zend_Filter_Compress_TarTest extends PHPUnit_Framework_TestCase
                             . DIRECTORY_SEPARATOR . 'compressed.tar', $content);
 
         $content = $filter->decompress($content);
-        $this->assertEquals(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR, $content);
+        $this->assertTrue($content);
         $content = file_get_contents(dirname(__FILE__) . '/../_files/zipextracted.txt');
         $this->assertEquals('compress me', $content);
     }
@@ -230,8 +230,7 @@ class Zend_Filter_Compress_TarTest extends PHPUnit_Framework_TestCase
                             . DIRECTORY_SEPARATOR . 'compressed.tar', $content);
 
         $content = $filter->decompress($content);
-        $this->assertEquals(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'
-                            . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR, $content);
+        $this->assertTrue($content);
         $content = file_get_contents(dirname(__FILE__) . '/../_files/zipextracted.txt');
         $this->assertEquals('compress me', $content);
     }

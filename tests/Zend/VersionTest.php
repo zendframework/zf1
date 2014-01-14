@@ -89,6 +89,13 @@ class Zend_VersionTest extends PHPUnit_Framework_TestCase
      */
     public function testFetchLatestVersion()
     {
+        if (!defined('TESTS_ZEND_VERSION_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_VERSION_ONLINE_ENABLED')
+        ) {
+            $this->markTestSkipped('Testing fetchLatersVersion only works when TESTS_ZEND_VERSION_ONLINE_ENABLED is set.');
+            return;
+        }
+
         $actual = Zend_Version::getLatest();
         if ('not available' === $actual) {
             $this->markTestIncomplete('http://framework.zend.com/ may be down');

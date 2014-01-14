@@ -26,6 +26,9 @@ require_once "Zend/Test/PHPUnit/Db/Operation/DeleteAll.php";
 
 require_once "PHPUnit/Extensions/Database/DataSet/FlatXmlDataSet.php";
 
+require_once 'PHPUnit/Extensions/Database/DataSet/IDataSet.php';
+require_once 'PHPUnit/Extensions/Database/DB/IDatabaseConnection.php';
+
 /**
  * @category   Zend
  * @package    Zend_Test
