@@ -35,11 +35,6 @@ require_once 'Zend/Cloud/StorageService/Adapter/WindowsAzureTest.php';
 require_once 'Zend/Cloud/StorageService/Adapter/S3Test.php';
 
 /**
- * @see Zend_Cloud_StorageService_Adapter_NirvanixTest
- */
-require_once 'Zend/Cloud/StorageService/Adapter/NirvanixTest.php';
-
-/**
  * @see Zend_Cloud_StorageService_Adapter_RackspaceTest
  */
 require_once 'Zend/Cloud/StorageService/Adapter/RackspaceTest.php';
@@ -78,7 +73,6 @@ class Zend_Cloud_StorageService_Adapter_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Cloud');
 
         $suite->addTestSuite('Zend_Cloud_StorageService_Adapter_WindowsAzureTest');
-        $suite->addTestSuite('Zend_Cloud_StorageService_Adapter_NirvanixTest');
         $suite->addTestSuite('Zend_Cloud_StorageService_Adapter_RackspaceTest');
         $suite->addTestSuite('Zend_Cloud_StorageService_Adapter_FileSystemTest');
         $suite->addTestSuite('Zend_Cloud_StorageService_Adapter_S3Test');
