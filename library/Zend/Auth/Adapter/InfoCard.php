@@ -31,11 +31,6 @@ require_once 'Zend/Auth/Adapter/Interface.php';
 require_once 'Zend/Auth/Result.php';
 
 /**
- * @see Zend_InfoCard
- */
-require_once 'Zend/InfoCard.php';
-
-/**
  * A Zend_Auth Authentication Adapter allowing the use of Information Cards as an
  * authentication mechanism
  *
