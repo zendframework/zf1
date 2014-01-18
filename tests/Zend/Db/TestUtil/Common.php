@@ -421,12 +421,12 @@ abstract class Zend_Db_TestUtil_Common
     protected function _getDataCascadeRecursive()
     {
         return array(
-            array('item_id' => '1', 'item_parent' => NULL, 'item_data' => '1'),
+            array('item_id' => '1', 'item_parent' => new Zend_Db_Expr('NULL'), 'item_data' => '1'),
             array('item_id' => '2', 'item_parent' => '1', 'item_data' => '1.2'),
             array('item_id' => '3', 'item_parent' => '1', 'item_data' => '1.3'),
             array('item_id' => '4', 'item_parent' => '3', 'item_data' => '1.3.4'),
             array('item_id' => '5', 'item_parent' => '3', 'item_data' => '1.3.5'),
-            array('item_id' => '6', 'item_parent' => NULL, 'item_data' => '6')
+            array('item_id' => '6', 'item_parent' => new Zend_Db_Expr('NULL'), 'item_data' => '6')
         );
     }
 

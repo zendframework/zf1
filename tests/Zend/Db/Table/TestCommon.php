@@ -671,7 +671,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertEquals($insertResult, $lastInsertId);
         $this->assertEquals(5, $lastInsertId);
     }
-    
+
     /**
      * @group ZF-3837
      */
@@ -689,7 +689,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
             'verified_by'     => 'dduck'
         );
         $insertResult = $table->insert($row);
-        $lastInsertId = $this->_db->lastInsertId();
+        $lastInsertId = $this->_db->lastInsertId('zfbugs', 'bug_id');
         $this->assertEquals($insertResult, $lastInsertId);
         $this->assertEquals(5, $lastInsertId);
     }
@@ -832,7 +832,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         $mem_delta = $mem2-$mem1;
         $this->assertThat($mem_delta, $this->lessThan(513));
     }
-    
+
     /**
      * @group ZF-2953
      */
@@ -848,12 +848,12 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
             'assigned_to'     => 'goofy',
             'verified_by'     => 'dduck'
         );
-        
+
         // empty string
         $row['bug_id'] = '';
         $insertResult = $table->insert($row);
         $this->assertTrue(is_numeric($insertResult), 'Empty string did not return assigned primary key');
-        
+
         // false (bool)
         $row['bug_id'] = false;
         $insertResult = $table->insert($row);
@@ -863,16 +863,16 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         $row['bug_id'] = array();
         $insertResult = $table->insert($row);
         $this->assertTrue(is_numeric($insertResult), 'Empty array did not return assigned primary key');
-        
+
         // zero '0'
         $row['bug_id'] = '0';
         $table->delete('bug_id > 0'); // clear table
         $insertResult = $table->insert($row);
         $this->assertEquals('0', $insertResult, 'Zero string did not return assigned primary key');
-        
+
         // zero 0
         $row['bug_id'] = 0;
-        $table->delete('bug_id > 0'); // clear table
+        $table->delete('bug_id = 0'); // clear table
         $insertResult = $table->insert($row);
         $this->assertEquals('0', $insertResult, 'Zero int did not return assigned primary key');
     }

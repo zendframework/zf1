@@ -386,7 +386,7 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $this->assertTrue($row->isConnected());
         $this->assertTrue($row->getTable() instanceof Zend_Db_Table_Abstract);
     }
- 
+
     /**
       * @group GH-172
       */
@@ -415,7 +415,6 @@ abstract class Zend_Db_Table_Rowset_TestCommon extends Zend_Db_Table_TestSetup
         $tableClass = get_class($table);
 
         $select = $table->select(Zend_Db_Table::SELECT_WITH_FROM_PART)->setIntegrityCheck(false);
-        $select->from('zfbugs', array('bug_id'));
         $select->join('zfaccounts', 'zfaccounts.account_name = zfbugs.reported_by', 'account_name');
         $select->where('zfaccounts.account_name = ?', 'Bob');
 
