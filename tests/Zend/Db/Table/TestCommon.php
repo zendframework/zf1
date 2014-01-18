@@ -693,7 +693,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
             'verified_by'     => 'dduck'
         );
         $insertResult = $table->insert($row);
-        $lastInsertId = $this->_db->lastInsertId();
+        $lastInsertId = $this->_db->lastInsertId('zfbugs', 'bug_id');
         $this->assertEquals($insertResult, $lastInsertId);
         $this->assertEquals(5, $lastInsertId);
     }
