@@ -200,4 +200,21 @@ class Zend_Db_Adapter_Pdo_SqliteTest extends Zend_Db_Adapter_Pdo_TestCommon
         return 'Pdo_Sqlite';
     }
 
+    public function testAdapterOptionFetchMode()
+    {
+        $params = $this->_util->getParams();
+
+        $params['options'] = array(
+            Zend_Db::FETCH_MODE => 'obj'
+        );
+        $db = Zend_Db::factory($this->getDriver(), $params);
+
+        //two extra lines to make SQLite work
+        $db->query('CREATE TABLE zfproducts (id)');
+        $db->insert('zfproducts', array('id' => 1));
+
+        $select = $db->select()->from('zfproducts');
+        $row = $db->fetchRow($select);
+        $this->assertTrue($row instanceof stdClass);
+    }
 }
