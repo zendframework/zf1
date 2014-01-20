@@ -42,7 +42,7 @@ require_once 'Zend/Db.php';
 abstract class Zend_Db_TestSetup extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Zend_Db_TestUtil
+     * @var Zend_Db_TestUtil_Common
      */
     protected $_util = null;
 
