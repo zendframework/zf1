@@ -872,7 +872,7 @@ abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup
         
         // zero 0
         $row['bug_id'] = 0;
-        $table->delete('bug_id > 0'); // clear table
+        $table->delete('bug_id >= 0'); // clear table
         $insertResult = $table->insert($row);
         $this->assertEquals('0', $insertResult, 'Zero int did not return assigned primary key');
     }
