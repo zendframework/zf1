@@ -19,7 +19,7 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-// Call Zend_Cloud_StorageService_Adapter_NirvanixTest::main() if this source file is executed directly.
+// Call Zend_Cloud_StorageService_Adapter_RackspaceTest::main() if this source file is executed directly.
 if (!defined("PHPUnit_MAIN_METHOD")) {
     define("PHPUnit_MAIN_METHOD", "Zend_Cloud_StorageService_Adapter_RackspaceTest::main");
 }

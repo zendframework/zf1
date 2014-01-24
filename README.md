@@ -17,6 +17,8 @@ IMPORTANT FIXES FOR 1.12.4
   helper, as the TinySrc service no longer exists.
 - [#222](https://github.com/zendframework/zf1/pull/222) removes the InfoCard
   component, as the CardSpace service no longer exists.
+- [#271](https://github.com/zendframework/zf1/pull/271) removes the Nirvanix
+  component, as the Nirvanix service shut down in October 2013.
 
 IMPORTANT FIXES FOR 1.12.3
 --------------------------
