@@ -222,7 +222,6 @@ class Zend_Cache_Backend_TwoLevels extends Zend_Cache_Backend implements Zend_Ca
      * Test if a cache is available for the given id and (if yes) return it (false else)
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
-     * Note : only when an entry is not encountered in the fast cache, it will be auto-refreshed
      *
      * @param  string  $id                     Cache id
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
