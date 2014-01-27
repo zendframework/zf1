@@ -242,7 +242,8 @@ class Zend_Cache_Backend_TwoLevels extends Zend_Cache_Backend implements Zend_Ca
         
         //In case no cache entry was found in the FastCache and auto-filling is enabled, copy data to FastCache
         if ($resultFast === false && $this->_options['auto_fill_fast_cache']) {
-            $this->_fastBackend->save($array['data'], $id, array(), $array['lifetime']);
+            $preparedData = $this->_prepareData($array['data'], $array['lifetime'], $array['priority']);
+            $this->_fastBackend->save($preparedData, $id, array(), $array['lifetime']);
         }
         // maybe, we have to refresh the fast cache ?
         elseif ($this->_options['auto_refresh_fast_cache']) {
