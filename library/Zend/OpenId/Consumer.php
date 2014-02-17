@@ -54,6 +54,11 @@ class Zend_OpenId_Consumer
 {
 
     /**
+     * Parameters required for signature
+     */
+    protected $_signParams = array('op_endpoint', 'return_to', 'response_nonce', 'assoc_handle');
+
+    /**
      * Reference to an implementation of storage object
      *
      * @var Zend_OpenId_Consumer_Storage $_storage
@@ -259,7 +264,6 @@ class Zend_OpenId_Consumer
                 return false;
             }
         }
-
         if ($version >= 2.0) {
             if (empty($params['openid_response_nonce'])) {
                 $this->_setError("Missing openid.response_nonce");
@@ -274,7 +278,6 @@ class Zend_OpenId_Consumer
                 return false;
             }
         }
-
 
         if (!empty($params['openid_invalidate_handle'])) {
             if ($this->_storage->getAssociationByHandle(
@@ -293,7 +296,25 @@ class Zend_OpenId_Consumer
                 $macFunc,
                 $secret,
                 $expires)) {
+            // Security fix - check the association bewteen op_endpoint and assoc_handle
+            if (isset($params['openid_op_endpoint']) && $url !== $params['openid_op_endpoint']) {
+                $this->_setError("The op_endpoint URI is not the same of URI associated with the assoc_handle");
+                return false;
+            }       
             $signed = explode(',', $params['openid_signed']);
+            // Check the parameters for the signature
+            // @see https://openid.net/specs/openid-authentication-2_0.html#positive_assertions
+            $toCheck = $this->_signParams;
+            if (isset($params['openid_claimed_id']) && isset($params['openid_identity'])) {
+                $toCheck = array_merge($toCheck, array('claimed_id', 'identity'));
+            }
+            foreach ($toCheck as $param) {
+                if (!in_array($param, $signed, true)) {
+                    $this->_setError("The required parameter $param is missing in the signed");
+                    return false;
+                }
+            }
+            
             $data = '';
             foreach ($signed as $key) {
                 $data .= $key . ':' . $params['openid_' . strtr($key,'.','_')] . "\n";
@@ -712,7 +733,7 @@ class Zend_OpenId_Consumer
      * failure.
      *
      * @param string &$id OpenID identity URL
-     * @param string &$server OpenID server URL
+     ing &$server OpenID server URL
      * @param float &$version OpenID protocol version
      * @return bool
      * @todo OpenID 2.0 (7.3) XRI and Yadis discovery

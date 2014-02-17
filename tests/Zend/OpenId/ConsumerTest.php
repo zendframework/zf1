@@ -775,8 +775,9 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
-            "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
+            "openid_op_endpoint" => self::SERVER,
+            "openid_signed" => "op_endpoint,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_sig" => "4KFaoZApYmYq6aFdIGzzgbsIiaA="
         );
         $storage->delAssociation(self::SERVER);
         $storage->addAssociation(self::SERVER, self::HANDLE, "sha1", pack("H*", "8382aea922560ece833ba55fa53b7a975f597370"), $expiresIn);
@@ -797,8 +798,8 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
-            "openid_sig" => "rMiVhEmHVcIHoY2uzPNb7udWqa4lruvjnwZfujct0TE="
+            "openid_signed" => "op_endpoint,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_sig" => "O1ycNUA75AiVnoIcdBrx/nx462lLRv4f7xO9IPRiHqU="
         );
         $storage->delAssociation(self::SERVER);
         $storage->addAssociation(self::SERVER, self::HANDLE, "sha256", pack("H*", "ed901bc561c29fd7bb42862e5f09fa37e7944a7ee72142322f34a21bfe1384b8"), $expiresIn);
@@ -830,12 +831,13 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
         $consumer->clearAssociation();
         $params = array(
             "openid_return_to" => "http://www.zf-test.com/test.php",
+            "openid_op_endpoint" => self::SERVER,
             "openid_assoc_handle" => self::HANDLE,
             "openid_claimed_id" => self::ID,
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124fff",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_signed" => "op_endpoint,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
             "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
         );
         $storage->delAssociation(self::SERVER);
@@ -848,14 +850,15 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
         $consumer->clearAssociation();
         $params = array(
             "openid_return_to" => "http://www.zf-test.com/test.php",
+            "openid_op_endpoint" => self::SERVER,
             "openid_invalidate_handle" => self::HANDLE."1",
             "openid_assoc_handle" => self::HANDLE,
             "openid_claimed_id" => self::ID,
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
-            "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
+            "openid_signed" => "op_endpoint,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_sig" => "4KFaoZApYmYq6aFdIGzzgbsIiaA="
         );
         $storage->delAssociation(self::SERVER);
         $storage->addAssociation(self::SERVER, self::HANDLE, "sha1", pack("H*", "8382aea922560ece833ba55fa53b7a975f597370"), $expiresIn);
@@ -1017,6 +1020,41 @@ class Zend_OpenId_ConsumerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse( $consumer->verify($params) );
         $this->assertFalse( $storage->getAssociation(self::SERVER."1", $handle, $func, $secret, $expires) );
     }
+
+    /**
+     * Test the required parameters for the signature
+     * @see https://openid.net/specs/openid-authentication-2_0.html#positive_assertions 
+     */
+    public function testSignedParams()
+    {
+        $expiresIn = time() + 600;
+        $_SERVER['SCRIPT_URI'] = "http://www.zf-test.com/test.php";
+        $storage = new Zend_OpenId_Consumer_Storage_File(dirname(__FILE__)."/_files/consumer");
+        $consumer = new Zend_OpenId_ConsumerHelper($storage);
+
+        $storage->addDiscoveryInfo(self::ID, self::REAL_ID, self::SERVER, 1.1, $expiresIn);
+
+        // Wrong arguments
+        $this->assertFalse( $consumer->verify(array()) );
+        // HMAC-SHA1
+        $consumer->clearAssociation();
+        $params = array(
+            "openid_return_to" => "http://www.zf-test.com/test.php",
+            "openid_assoc_handle" => self::HANDLE,
+            "openid_claimed_id" => self::ID,
+            "openid_identity" => self::REAL_ID,
+            "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
+            "openid_mode" => "id_res",
+            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
+        );
+        $storage->delAssociation(self::SERVER);
+        $storage->addAssociation(self::SERVER, self::HANDLE, "sha1", pack("H*", "8382aea922560ece833ba55fa53b7a975f597370"), $expiresIn);
+        $storage->purgeNonces();
+        $this->assertFalse( $consumer->verify($params) );
+        $this->assertEquals( "The required parameter op_endpoint is missing in the signed", $consumer->getError());
+    }
+
 }
 
 class Zend_OpenId_ConsumerHelper extends Zend_OpenId_Consumer {
