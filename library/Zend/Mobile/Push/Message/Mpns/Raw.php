@@ -22,6 +22,9 @@
 /** Zend_Mobile_Push_Message_Mpns **/
 require_once 'Zend/Mobile/Push/Message/Mpns.php';
 
+/** Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * Mpns Raw Message
  *
@@ -94,7 +97,7 @@ class Zend_Mobile_Push_Message_Mpns_Raw extends Zend_Mobile_Push_Message_Mpns
         if (!is_string($msg)) {
             throw new Zend_Mobile_Push_Message_Exception('$msg is not a string');
         }
-        if (!simplexml_load_string($msg)) {
+        if (!Zend_Xml_Security::scan($msg)) {
             throw new Zend_Mobile_Push_Message_Exception('$msg is not valid xml');
         }
         $this->_msg = $msg;

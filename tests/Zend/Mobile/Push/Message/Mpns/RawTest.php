@@ -88,7 +88,7 @@ class Zend_Mobile_Push_Message_Mpns_RawTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException Zend_Mobile_Push_Message_Exception 
      */
     public function testSetMessageThrowsExceptionOnNonXml()
     {

@@ -46,6 +46,9 @@ require_once 'Zend/Gdata/App/MediaSource.php';
  */
 require_once 'Zend/Uri/Http.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * Provides Atom Publishing Protocol (APP) functionality.  This class and all
  * other components of Zend_Gdata_App are designed to work independently from
@@ -822,10 +825,10 @@ class Zend_Gdata_App
         // Load the feed as an XML DOMDocument object
         @ini_set('track_errors', 1);
         $doc = new DOMDocument();
-        $success = @$doc->loadXML($string);
+        $doc = @Zend_Xml_Security::scan($string, $doc);
         @ini_restore('track_errors');
 
-        if (!$success) {
+        if (!$doc) {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception(
                 "DOMDocument cannot parse XML: $php_errormsg");

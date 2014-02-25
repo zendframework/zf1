@@ -230,7 +230,7 @@ class Zend_Serializer_Adapter_WddxTest extends PHPUnit_Framework_TestCase
         $value = 'not a serialized string';
         $this->setExpectedException(
             'Zend_Serializer_Exception',
-            'DOMDocument::loadXML(): Start tag expected'
+            'Can\'t unserialize wddx string'
         );
         $this->_adapter->unserialize($value);
     }

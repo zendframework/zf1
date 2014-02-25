@@ -21,6 +21,8 @@
  * @version    $Id$
  */
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
 
 /**
  * Zend_Service_Technorati provides an easy, intuitive and object-oriented interface
@@ -961,7 +963,7 @@ class Zend_Service_Technorati
     protected function _convertResponseAndCheckContent(Zend_Http_Response $response)
     {
         $dom = new DOMDocument();
-        $dom->loadXML($response->getBody());
+        $dom = Zend_Xml_Security::scan($response->getBody(), $dom);
         self::_checkErrors($dom);
         return $dom;
     }

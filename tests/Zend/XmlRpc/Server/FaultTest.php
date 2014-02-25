@@ -28,6 +28,7 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 
 require_once 'Zend/XmlRpc/Server.php';
 require_once 'Zend/XmlRpc/Server/Fault.php';
+require_once 'Zend/XmlRpc/Server/Exception.php';
 
 /**
  * Test case for Zend_XmlRpc_Server_Fault

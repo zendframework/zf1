@@ -204,13 +204,13 @@ class Zend_Config_XmlTest extends PHPUnit_Framework_TestCase
             $config = new Zend_Config_Xml($this->_xmlFileInvalid);
             $this->fail('An expected Zend_Config_Exception has not been raised');
         } catch (Zend_Config_Exception $expected) {
-            $this->assertContains('parser error', $expected->getMessage());
+            $this->assertContains('failed to load', $expected->getMessage());
         }
         try {
             $config = new Zend_Config_Xml('I/dont/exist');
             $this->fail('An expected Zend_Config_Exception has not been raised');
         } catch (Zend_Config_Exception $expected) {
-            $this->assertContains('failed to load', $expected->getMessage());
+            $this->assertContains('doesn\'t exist', $expected->getMessage());
         }
     }
 

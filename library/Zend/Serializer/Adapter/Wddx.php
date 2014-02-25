@@ -23,6 +23,12 @@
 /** @see Zend_Serializer_Adapter_AdapterAbstract */
 require_once 'Zend/Serializer/Adapter/AdapterAbstract.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
+/** @see Zend_Xml_Exception */
+require_once 'Zend/Xml/Exception.php';
+
 /**
  * @link       http://www.infoloom.com/gcaconfs/WEB/chicago98/simeonov.HTM
  * @link       http://en.wikipedia.org/wiki/WDDX
@@ -100,24 +106,12 @@ class Zend_Serializer_Adapter_Wddx extends Zend_Serializer_Adapter_AdapterAbstra
             // check if the returned NULL is valid
             // or based on an invalid wddx string
             try {
-                $oldLibxmlDisableEntityLoader = libxml_disable_entity_loader(true);
-                $dom = new DOMDocument;
-                $dom->loadXML($wddx);
-                foreach ($dom->childNodes as $child) {
-                    if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
-                        require_once 'Zend/Serializer/Exception.php';
-                        throw new Zend_Serializer_Exception(
-                            'Invalid XML: Detected use of illegal DOCTYPE'
-                        );
-                    }
-                }
-                $simpleXml = simplexml_import_dom($dom);
-                libxml_disable_entity_loader($oldLibxmlDisableEntityLoader);
+                $simpleXml = Zend_Xml_Security::scan($wddx);
                 if (isset($simpleXml->data[0]->null[0])) {
                     return null; // valid null
                 }
                 $errMsg = 'Can\'t unserialize wddx string';
-            } catch (Exception $e) {
+            } catch (Zend_Xml_Exception $e) {
                 $errMsg = $e->getMessage();
             }
 

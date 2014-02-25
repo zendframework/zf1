@@ -34,6 +34,10 @@ require_once 'Zend/Service/WindowsAzure/Credentials/SharedKey.php';
  * @see Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract
  */
 require_once 'Zend/Service/WindowsAzure/RetryPolicy/RetryPolicyAbstract.php';
+
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
@@ -410,7 +414,7 @@ class Zend_Service_WindowsAzure_Storage
 			throw new Zend_Service_WindowsAzure_Exception('Response should not be null.');
 		}
 		
-        $xml = @simplexml_load_string($response->getBody());
+        $xml = Zend_Xml_Security::scan($response->getBody());
         
         if ($xml !== false) {
             // Fetch all namespaces 

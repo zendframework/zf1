@@ -71,6 +71,8 @@ require_once 'Zend/Gdata/YouTube/ActivityFeed.php';
  */
 require_once 'Zend/Gdata/YouTube/InboxFeed.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
 
 /**
  * Service class for interacting with the YouTube Data API.
@@ -652,10 +654,10 @@ class Zend_Gdata_YouTube extends Zend_Gdata_Media
         // Load the feed as an XML DOMDocument object
         @ini_set('track_errors', 1);
         $doc = new DOMDocument();
-        $success = @$doc->loadXML($response);
+        $doc = @Zend_Xml_Security::scan($response, $doc);
         @ini_restore('track_errors');
 
-        if (!$success) {
+        if (!$doc) {
             require_once 'Zend/Gdata/App/Exception.php';
             throw new Zend_Gdata_App_Exception(
                 "Zend_Gdata_YouTube::parseFormUploadTokenResponse - " .

@@ -35,6 +35,9 @@ require_once 'Zend/Cache.php';
  */
 require_once 'Zend/Service/SlideShare/SlideShow.php';
 
+/** Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * The Zend_Service_SlideShare component is used to interface with the
  * slideshare.net web server to retrieve slide shows hosted on the web site for
@@ -376,7 +379,7 @@ class Zend_Service_SlideShare
             );
         }
 
-        $sxe = simplexml_load_string($response->getBody());
+        $sxe = Zend_Xml_Security::scan($response->getBody());
 
         if ($sxe->getName() == "SlideShareServiceError") {
             $message = (string)$sxe->Message[0];
@@ -437,7 +440,7 @@ class Zend_Service_SlideShare
                 );
             }
 
-            $sxe = simplexml_load_string($response->getBody());
+            $sxe = Zend_Xml_Security::scan($response->getBody());
 
             if ($sxe->getName() == "SlideShareServiceError") {
                 $message = (string)$sxe->Message[0];
@@ -585,7 +588,7 @@ class Zend_Service_SlideShare
                 );
             }
 
-            $sxe = simplexml_load_string($response->getBody());
+            $sxe = Zend_Xml_Security::scan($response->getBody());
 
             if ($sxe->getName() == "SlideShareServiceError") {
                 $message = (string)$sxe->Message[0];
