@@ -733,7 +733,7 @@ class Zend_OpenId_Consumer
      * failure.
      *
      * @param string &$id OpenID identity URL
-     ing &$server OpenID server URL
+     * @param string &$server OpenID server URL
      * @param float &$version OpenID protocol version
      * @return bool
      * @todo OpenID 2.0 (7.3) XRI and Yadis discovery
