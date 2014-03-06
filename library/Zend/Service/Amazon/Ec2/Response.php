@@ -25,6 +25,9 @@
  */
 require_once 'Zend/Http/Response.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Service_Amazon
@@ -125,9 +128,7 @@ class Zend_Service_Amazon_Ec2_Response {
                 $errors = libxml_use_internal_errors();
 
                 $this->_document = new DOMDocument();
-                if (!$this->_document->loadXML($body)) {
-                    $this->_document = false;
-                }
+                $this->_document = Zend_Xml_Security::scan($body, $this->_document);
 
                 // reset libxml error handling
                 libxml_clear_errors();

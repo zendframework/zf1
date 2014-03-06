@@ -26,6 +26,11 @@ require_once 'Zend/Locale.php';
 /** Zend_Translate_Adapter */
 require_once 'Zend/Translate/Adapter.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
+/** @See Zend_Xml_Exception */
+require_once 'Zend/Xml/Exception.php';
 
 /**
  * @category   Zend
@@ -72,6 +77,15 @@ class Zend_Translate_Adapter_Qt extends Zend_Translate_Adapter {
         xml_parser_set_option($this->_file, XML_OPTION_CASE_FOLDING, 0);
         xml_set_element_handler($this->_file, "_startElement", "_endElement");
         xml_set_character_data_handler($this->_file, "_contentElement");
+        
+        try {
+            Zend_Xml_Security::scanFile($filename);
+        } catch (Zend_Xml_Exception $e) {
+            require_once 'Zend/Translate/Exception.php';
+            throw new Zend_Translate_Exception(
+                $e->getMessage()
+            );
+        }
 
         if (!xml_parse($this->_file, file_get_contents($filename))) {
             $ex = sprintf('XML error: %s at line %d of file %s',

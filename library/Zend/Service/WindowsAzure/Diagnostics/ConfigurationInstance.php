@@ -30,6 +30,9 @@ require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationObjectBaseAbstr
  */
 require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationDataSources.php';
 
+/** Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
@@ -60,7 +63,7 @@ class Zend_Service_WindowsAzure_Diagnostics_ConfigurationInstance
 	public function loadXml($configurationXml)
 	{
 		// Convert to SimpleXMLElement
-		$configurationXml = simplexml_load_string($configurationXml);
+		$configurationXml = Zend_Xml_Security::scan($configurationXml);
 	
 		// Assign general settings
 		$this->DataSources->OverallQuotaInMB = (int)$configurationXml->DataSources->OverallQuotaInMB;

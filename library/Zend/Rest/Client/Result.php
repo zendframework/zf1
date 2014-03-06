@@ -20,6 +20,8 @@
  * @version    $Id$
  */
 
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Rest
@@ -48,7 +50,7 @@ class Zend_Rest_Client_Result implements IteratorAggregate {
     public function __construct($data)
     {
         set_error_handler(array($this, 'handleXmlErrors'));
-        $this->_sxml = simplexml_load_string($data);
+        $this->_sxml = Zend_Xml_Security::scan($data); 
         restore_error_handler();
         if($this->_sxml === false) {
             if ($this->_errstr === null) {

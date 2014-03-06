@@ -26,6 +26,8 @@
  */
 require_once 'Zend/Feed/Entry/Abstract.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
 
 /**
  * Concrete class for working with Atom entries.
@@ -194,10 +196,10 @@ class Zend_Feed_Entry_Atom extends Zend_Feed_Entry_Abstract
         // Update internal properties using $client->responseBody;
         @ini_set('track_errors', 1);
         $newEntry = new DOMDocument;
-        $status = @$newEntry->loadXML($response->getBody());
+        $newEntry = @Zend_Xml_Security::scan($response->getBody(), $newEntry);
         @ini_restore('track_errors');
 
-        if (!$status) {
+        if (!$newEntry) {
             // prevent the class to generate an undefined variable notice (ZF-2590)
             if (!isset($php_errormsg)) {
                 if (function_exists('xdebug_is_enabled')) {

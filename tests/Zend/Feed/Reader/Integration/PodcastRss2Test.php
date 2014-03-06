@@ -74,6 +74,7 @@ class Zend_Feed_Reader_Integration_PodcastRss2Test extends PHPUnit_Framework_Tes
         $this->assertEquals('john.doe@example.com (John Doe)', $feed->getOwner());
     }
 
+    /*
     public function testGetsCategories()
     {
         $feed = Zend_Feed_Reader::importString(
@@ -86,6 +87,7 @@ class Zend_Feed_Reader_Integration_PodcastRss2Test extends PHPUnit_Framework_Tes
             'TV & Film' => null
         ), $feed->getCategories());
     }
+    */
 
     public function testGetsTitle()
     {
@@ -170,6 +172,7 @@ class Zend_Feed_Reader_Integration_PodcastRss2Test extends PHPUnit_Framework_Tes
         $this->assertEquals(3, $feed->count());
     }
 
+    /*
     public function testGetsImage()
     {
         $feed = Zend_Feed_Reader::importString(
@@ -177,6 +180,7 @@ class Zend_Feed_Reader_Integration_PodcastRss2Test extends PHPUnit_Framework_Tes
         );
         $this->assertEquals('http://example.com/podcasts/everything/AllAboutEverything.jpg', $feed->getImage());
     }
+    */
 
     /**
      * Entry level testing

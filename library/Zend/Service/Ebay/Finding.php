@@ -25,6 +25,9 @@
  */
 require_once 'Zend/Service/Ebay/Abstract.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Service
@@ -367,7 +370,7 @@ class Zend_Service_Ebay_Finding extends Zend_Service_Ebay_Abstract
 
         // first trying, loading XML
         $dom = new DOMDocument();
-        if (!@$dom->loadXML($response->getBody())) {
+        if (!$dom = @Zend_Xml_Security::scan($response->getBody(), $dom)) {
             $message = 'It was not possible to load XML returned.';
         }
 

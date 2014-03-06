@@ -26,6 +26,9 @@ require_once 'Zend/Feed/Writer/Renderer/RendererAbstract.php';
 
 require_once 'Zend/Feed/Writer/Renderer/Feed/Atom/Source.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * @category   Zend
  * @package    Zend_Feed_Writer
@@ -389,8 +392,9 @@ class Zend_Feed_Writer_Renderer_Entry_Atom
             "/(<[\/]?)([a-zA-Z]+)/"
         ), '$1xhtml:$2', $xhtml);
         $dom = new DOMDocument('1.0', $this->getEncoding());
-        $dom->loadXML('<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml">'
-            . $xhtml . '</xhtml:div>');
+
+        $dom = Zend_Xml_Security::scan('<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+            . $xhtml . '</xhtml:div>', $dom);
         return $dom->documentElement;
     }
 

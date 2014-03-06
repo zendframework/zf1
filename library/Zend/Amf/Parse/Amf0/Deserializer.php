@@ -23,6 +23,9 @@
 /** Zend_Amf_Constants */
 require_once 'Zend/Amf/Constants.php';
 
+/** Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /** @see Zend_Amf_Parse_Deserializer */
 require_once 'Zend/Amf/Parse/Deserializer.php';
 
@@ -248,7 +251,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
     public function readXmlString()
     {
         $string = $this->_stream->readLongUTF();
-        return simplexml_load_string($string);
+        return Zend_Xml_Security::scan($string); //simplexml_load_string($string);
     }
 
     /**

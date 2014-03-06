@@ -23,6 +23,9 @@
 /** Zend_Amf_Parse_Deserializer */
 require_once 'Zend/Amf/Parse/Deserializer.php';
 
+/** Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /** Zend_Amf_Parse_TypeLoader */
 require_once 'Zend/Amf/Parse/TypeLoader.php';
 
@@ -417,6 +420,6 @@ class Zend_Amf_Parse_Amf3_Deserializer extends Zend_Amf_Parse_Deserializer
         $xmlReference = $this->readInteger();
         $length = $xmlReference >> 1;
         $string = $this->_stream->readBytes($length);
-        return simplexml_load_string($string);
+        return Zend_Xml_Security::scan($string); 
     }
 }

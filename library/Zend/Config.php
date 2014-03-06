@@ -444,7 +444,7 @@ class Zend_Config implements Countable, Iterator
      * @param string $errfile
      * @param integer $errline
      */
-    protected function _loadFileErrorHandler($errno, $errstr, $errfile, $errline)
+    public function _loadFileErrorHandler($errno, $errstr, $errfile, $errline)
     {
         if ($this->_loadFileErrorStr === null) {
             $this->_loadFileErrorStr = $errstr;
