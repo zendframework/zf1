@@ -115,6 +115,27 @@ class Zend_Validate_File_ExtensionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('fileExtensionFalse', $validator->getMessages()));
     }
 
+    /**
+     * GitHub issue #287
+     *
+     * pathinfo() does not guarantee that the extension index will be set
+     * according to the PHP manual (http://se2.php.net/pathinfo#example-2422).
+     *
+     * @return void
+     */
+    public function testNoExtension()
+    {
+        $files = array(
+            'name'     => 'no_extension',
+            'type'     => 'text',
+            'size'     => 200,
+            'tmp_name' => dirname(__FILE__) . '/_files/no_extension',
+            'error'    => 0
+        );
+        $validator = new Zend_Validate_File_Extension('txt');
+        $this->assertEquals(false, $validator->isValid(dirname(__FILE__) . '/_files/no_extension'));
+    }
+
     public function testZF3891()
     {
         $files = array(

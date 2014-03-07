@@ -196,6 +196,12 @@ class Zend_Validate_File_Extension extends Zend_Validate_Abstract
             $info['extension'] = substr($file['name'], strrpos($file['name'], '.') + 1);
         } else {
             $info = pathinfo($value);
+            if (!array_key_exists('extension', $info)) {
+                // From the manual at http://php.net/pathinfo:
+                // "If the path does not have an extension, no extension element
+                // will be returned (see second example below)."
+                return false;
+            }
         }
 
         $extensions = $this->getExtension();
