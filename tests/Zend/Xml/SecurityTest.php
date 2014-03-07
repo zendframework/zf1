@@ -90,7 +90,7 @@ XML;
     {
         $result = Zend_Xml_Security::scan($this->_getXml());
         $this->assertTrue($result instanceof SimpleXMLElement);
-        $this->assertEquals($result->result, 'test');
+        $this->assertEquals((string) $result->result, 'test');
     }
 
     public function testScanDom()
@@ -130,7 +130,7 @@ XML;
 
         $result = Zend_Xml_Security::scanFile($file);
         $this->assertTrue($result instanceof SimpleXMLElement);
-        $this->assertEquals($result->result, 'test');
+        $this->assertEquals((string) $result->result, 'test');
         unlink($file);
     }
 
