@@ -45,6 +45,21 @@ class Zend_Xml_Security
     }
 
     /**
+     * @param integer $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param integer $errline
+     * @return bool
+     */
+    protected static function _loadXmlErrorHandler($errno, $errstr, $errfile, $errline)
+    {
+        if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Scan XML string for potential XXE and XEE attacks
      *
      * @param   string $xml
@@ -73,12 +88,8 @@ class Zend_Xml_Security
 
         // Load XML with network access disabled (LIBXML_NONET)
         // error disabled with @ for PHP-FPM scenario
-        set_error_handler(function ($errno, $errstr) {
-            if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
-                return true;
-            }
-            return false;
-        }, E_WARNING);
+        set_error_handler(array('Zend_Xml_Security', '_loadXmlErrorHandler'), E_WARNING);
+
         $result = $dom->loadXml($xml, LIBXML_NONET);
         restore_error_handler();
 
