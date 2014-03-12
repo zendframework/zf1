@@ -869,6 +869,49 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('2', Zend_Locale::getTranslation('DEFAULT', 'CurrencyFraction'));
     }
 
+    public function testEachDataFileShouldPresentAsLocaleData()
+    {
+        $dir = new DirectoryIterator(
+            dirname(__FILE__) . '/../../library/Zend/Locale/Data'
+        );
+        $skip = array(
+            'characters.xml',
+            'coverageLevels.xml',
+            'dayPeriods.xml',
+            'genderList.xml',
+            'languageInfo.xml',
+            'likelySubtags.xml',
+            'metaZones.xml',
+            'numberingSystems.xml',
+            'postalCodeData.xml',
+            'supplementalData.xml',
+            'supplementalMetadata.xml',
+            'telephoneCodeData.xml',
+            'Translation.php',
+            'windowsZones.xml',
+        );
+
+        $files = array('root');
+        /** @var SplFileInfo $fileinfo */
+        foreach ($dir as $fileinfo) {
+            if (!$fileinfo->isDot()
+                && !in_array($fileinfo->getBasename(), $skip)
+            ) {
+                $files[] = $fileinfo->getBasename('.xml');
+            }
+        }
+
+        $class    = new ReflectionClass('Zend_Locale');
+        $property = $class->getProperty('_localeData');
+        $property->setAccessible(true);
+
+        $locale     = new Zend_Locale();
+        $localeData = $property->getValue($locale);
+        $localeData = array_keys($localeData);
+
+        $this->assertEquals(array(), array_diff($files, $localeData));
+    }
+
     /**
      * Ignores a raised PHP error when in effect, but throws a flag to indicate an error occurred
      *
