@@ -1196,7 +1196,7 @@ class Zend_Locale_Format
 
     /**
      * Returns an array with 'hour', 'minute', and 'second' elements extracted from $time
-     * according to the order described in $format.  For a format of 'H:m:s', and
+     * according to the order described in $format.  For a format of 'H:i:s', and
      * an input of 11:20:55, getTime() would return:
      * array ('hour' => 11, 'minute' => 20, 'second' => 55)
      * The optional $locale parameter may be used to help extract times from strings
@@ -1234,7 +1234,7 @@ class Zend_Locale_Format
 
     /**
      * Returns an array with 'year', 'month', 'day', 'hour', 'minute', and 'second' elements
-     * extracted from $datetime according to the order described in $format.  For a format of 'd.M.y H:m:s',
+     * extracted from $datetime according to the order described in $format.  For a format of 'd.M.y H:i:s',
      * and an input of 10.05.1985 11:20:55, getDateTime() would return:
      * array ('year' => 1985, 'month' => 5, 'day' => 10, 'hour' => 11, 'minute' => 20, 'second' => 55)
      * The optional $locale parameter may be used to help extract times from strings
