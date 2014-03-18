@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Currency
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -31,7 +31,7 @@ require_once 'Zend/Currency.php';
  * @category   Zend
  * @package    Zend_Currency
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Currency
  */
@@ -282,8 +282,8 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
         $this->assertSame('$ ٥٣.٢٩٢,١٨', $USD->toCurrency(53292.18, array('script' => 'Arab', 'format' => 'de_AT')));
         $this->assertSame('$ 53.292,18', $USD->toCurrency(53292.18, array('format' => 'de_AT')));
 
-        $this->assertSame('53292٫18', $EGP->toCurrency(53292.18));
-        $this->assertSame('٥٣٢٩٢٫١٨', $EGP->toCurrency(53292.18, array('script' => 'Arab' )));
+        $this->assertSame('ج.م.‏ 53٬292٫18', $EGP->toCurrency(53292.18));
+        $this->assertSame('ج.م.‏ ٥٣٬٢٩٢٫١٨', $EGP->toCurrency(53292.18, array('script' => 'Arab')));
         $this->assertSame('ج.م.‏ ٥٣.٢٩٢,١٨', $EGP->toCurrency(53292.18, array('script' =>'Arab', 'format' => 'de_AT')));
         $this->assertSame('ج.م.‏ 53.292,18', $EGP->toCurrency(53292.18, array('format' => 'de_AT')));
 

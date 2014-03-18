@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -32,7 +32,7 @@ require_once 'Zend/Db/TestUtil/Db2.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Db_TestUtil_Pdo_Ibm extends Zend_Db_TestUtil_Db2

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id$
  */
@@ -24,13 +24,16 @@ require_once 'Zend/XmlRpc/Server.php';
 require_once 'Zend/XmlRpc/Request.php';
 require_once 'Zend/XmlRpc/Response.php';
 
+require_once 'Zend/Server/Method/Definition.php';
+require_once 'Zend/Server/Definition.php';
+
 /**
  * Test case for Zend_XmlRpc_Server
  *
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_XmlRpc
  */
@@ -166,7 +169,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
         $request = new Zend_XmlRpc_Request();
         $request->setMethod('test.test4');
         $response = $this->_server->handle($request);
-        $this->assertNotType('Zend_XmlRpc_Fault', $response);
+        $this->assertFalse($response instanceof Zend_XmlRpc_Fault);
         $this->assertSame(
             array('test1' => 'argv-argument',
                 'test2' => null,
@@ -184,7 +187,7 @@ class Zend_XmlRpc_ServerTest extends PHPUnit_Framework_TestCase
         $request->setMethod('test.test4');
         $request->setParams(array('foo'));
         $response = $this->_server->handle($request);
-        $this->assertNotType('Zend_XmlRpc_Fault', $response);
+        $this->assertFalse($response instanceof Zend_XmlRpc_Fault);
         $this->assertSame(array('test1' => 'a1', 'test2' => 'a2', 'arg' => array('foo')), $response->getReturnValue());
     }
 

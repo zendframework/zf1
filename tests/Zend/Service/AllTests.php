@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -32,7 +32,6 @@ require_once 'Zend/Service/DeveloperGarden/AllTests.php';
 require_once 'Zend/Service/Ebay/AllTests.php';
 require_once 'Zend/Service/Flickr/AllTests.php';
 require_once 'Zend/Service/LiveDocx/AllTests.php';
-require_once 'Zend/Service/Nirvanix/AllTests.php';
 require_once 'Zend/Service/ReCaptcha/AllTests.php';
 require_once 'Zend/Service/ShortUrl/AllTests.php';
 require_once 'Zend/Service/SlideShareTest.php';
@@ -46,7 +45,7 @@ require_once 'Zend/Service/Yahoo/AllTests.php';
  * @category   Zend
  * @package    Zend_Service
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Service
  */
@@ -79,7 +78,6 @@ class Zend_Service_AllTests
         $suite->addTest(Zend_Service_Ebay_AllTests::suite());
         $suite->addTest(Zend_Service_Flickr_AllTests::suite());
         $suite->addTest(Zend_Service_LiveDocx_AllTests::suite());
-        $suite->addTest(Zend_Service_Nirvanix_AllTests::suite());
         $suite->addTest(Zend_Service_ReCaptcha_AllTests::suite());
         $suite->addTest(Zend_Service_ShortUrl_AllTests::suite());
         $suite->addTestSuite('Zend_Service_SlideShareTest');

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Soap
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -36,7 +36,7 @@ require_once dirname(__FILE__) . '/TestAsset/commontypes.php';
  * @package    Zend_Soap
  * @subpackage UnitTests
  * @uses       Zend_Server_Interface
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Soap
  * @group      Zend_Soap_Server
@@ -982,9 +982,9 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
+     * Method commented out as causes segmentation fault on PHP 5.2.17 with PHPUnit 3.2.13 on Travis.
      */
+    /*
     public function testShouldThrowExceptionIfHandledRequestContainsDoctype()
     {
         $this->markTestSkipped('Cannot test for RuntimeException from Soap Server');
@@ -1011,6 +1011,7 @@ class Zend_Soap_ServerTest extends PHPUnit_Framework_TestCase
         $response = $server->handle($request);
         $this->assertContains('Invalid XML', $response->getMessage());
     }
+    */
 }
 
 

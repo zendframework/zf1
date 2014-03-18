@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Rest
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -32,7 +32,7 @@ require_once 'Zend/Http/Client/Adapter/Test.php';
  * @category   Zend
  * @package    Zend_Rest
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Rest
  * @group      Zend_Rest_Client
@@ -62,6 +62,12 @@ class Zend_Rest_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testCanPostFileInPresetHttpClient()
     {
+        if (!defined('TESTS_ZEND_REST_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_REST_ONLINE_ENABLED')
+        ) {
+            $this->markTestSkipped('Define TESTS_ZEND_REST_ONLINE_ENABLED to test Zend_Rest_ClientTest online.');
+        }
+
         $client = new Zend_Rest_Client('http://framework.zend.com');
         $httpClient = new Zend_Http_Client();
         $text = 'this is some plain text';
@@ -75,6 +81,12 @@ class Zend_Rest_ClientTest extends PHPUnit_Framework_TestCase
 
     public function testUri()
     {
+        if (!defined('TESTS_ZEND_REST_ONLINE_ENABLED')
+            || !constant('TESTS_ZEND_REST_ONLINE_ENABLED')
+        ) {
+            $this->markTestSkipped('Define TESTS_ZEND_REST_ONLINE_ENABLED to test Zend_Rest_ClientTest online.');
+        }
+
         $client = new Zend_Rest_Client('http://framework.zend.com/rest/');
         $uri = $client->getUri();
         $this->assertTrue($uri instanceof Zend_Uri_Http);

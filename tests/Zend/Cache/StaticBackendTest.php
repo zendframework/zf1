@@ -139,9 +139,9 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
         $this->assertEquals('content', $this->_instance->load(bin2hex('/0')));
     }
 
-    public function testDirectoryUmaskAsString()
+    public function testDirectoryPermAsString()
     {
-        $this->_instance->setOption('cache_directory_umask', '777');
+        $this->_instance->setOption('cache_directory_perm', '777');
 
         $res = $this->_instance->save('data to cache', bin2hex('/foo/bar'));
         $this->assertTrue($res);
@@ -151,6 +151,38 @@ class Zend_Cache_StaticBackendTest extends Zend_Cache_CommonBackendTest {
 
         unlink($this->_instance->getOption('public_dir') . '/foo/bar.html');
         rmdir($this->_instance->getOption('public_dir') . '/foo');
+    }
+
+    /**
+     * @group GH-91
+     */
+    public function testDirectoryUmaskTriggersError()
+    {
+        try {
+            $this->_instance->setOption('cache_directory_umask', '777');
+            $this->fail();
+        } catch (PHPUnit_Framework_Error $e) {
+            $this->assertEquals(
+                "'cache_directory_umask' is deprecated -> please use 'cache_directory_perm' instead",
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @group GH-91
+     */
+    public function testFileUmaskTriggersError()
+    {
+        try {
+            $this->_instance->setOption('cache_file_umask', '777');
+            $this->fail();
+        } catch (PHPUnit_Framework_Error $e) {
+            $this->assertEquals(
+                "'cache_file_umask' is deprecated -> please use 'cache_file_perm' instead",
+                $e->getMessage()
+            );
+        }
     }
 
     public function testSaveWithSpecificExtensionWithTag()

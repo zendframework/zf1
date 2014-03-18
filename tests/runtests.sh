@@ -25,7 +25,7 @@
 #
 # @category   Zend
 # @package    UnitTests
-# @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+# @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
 # @license    http://framework.zend.com/license/new-bsd     New BSD License
 # @version    $Id: AllTests.php 16225 2009-06-21 20:34:55Z thomas $
 
@@ -47,7 +47,7 @@ while [ -n "$1" ] ; do
      PHPUNIT_GROUPS="" 
      break ;;
 
-    Akismet|Amazon|Amazon_Ec2|Amazon_S3|Amazon_Sqs|Audioscrobbler|Delicious|Flickr|LiveDocx|Nirvanix|ReCaptcha|Simpy|SlideShare|StrikeIron|Technorati|Twitter|WindowsAzure|Yahoo)
+    Akismet|Amazon|Amazon_Ec2|Amazon_S3|Amazon_Sqs|Audioscrobbler|Delicious|Flickr|LiveDocx|ReCaptcha|Simpy|SlideShare|StrikeIron|Technorati|Twitter|WindowsAzure|Yahoo)
      PHPUNIT_GROUPS="${PHPUNIT_GROUPS:+"$PHPUNIT_GROUPS,"}Zend_Service_$1" 
      shift ;;
     Ec2|S3)

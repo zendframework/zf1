@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -27,52 +27,6 @@ require_once 'PHPUnit/Runner/Version.php';
 
 $phpunitVersion = PHPUnit_Runner_Version::id();
 if ($phpunitVersion == '@package_version@' || version_compare($phpunitVersion, '3.5.5', '>=')) {
-    if (version_compare($phpunitVersion, '3.6.0', '>=')) {
-        echo <<<EOT
-This version of PHPUnit is not supported in Zend Framework 1.x unit tests.
-
-To install PHPUnit 3.4:
-
-    sudo pear config-set auto_discover 1
-    sudo pear install --installroot /usr/local/phpunit34 pear.phpunit.de/PHPUnit-3.4.15
-
-    This will install PHPUnit-3.4.15 to /usr/local/phpunit34. 
-    
-
-    Now edit /usr/local/phpunit34/usr/bin/phpunit. Before the first 
-    require_once statement in that file, enter the following code:
-
-        set_include_path(implode(PATH_SEPARATOR, array(
-            __DIR__ . '/../share/php',
-            '/usr/share/php',
-            get_include_path()
-        )));
-
-    Note the actual directory (share/php in the code above) depends on your
-    particular installation. The correct path can be found by typing:
-
-        pear config-show|grep php_dir
-
-    (on Centos it is share/php, on Ubuntu/Debian it is share/pear and on
-     OS X it is lib/php/pear)
-
-
-    Lastly, we need a symlink:
-
-        sudo ln -s /some/path/phpunit34/usr/bin/phpunit /usr/bin/phpunit34
-
-    Now you can run the unit tests with:
-
-        phpunit34 --stderr -d memory_limit=-1 Zend/{Name}/AllTests.php 
-
-    (Based on information from Christer Edvartsen's article published at
-     http://tech.vg.no/2011/11/29/running-multiple-versions-of-phpunit/)
-
-
-EOT;
-
-        exit(1);
-    }
     require_once 'PHPUnit/Autoload.php'; // >= PHPUnit 3.5.5
 } else {
     require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5

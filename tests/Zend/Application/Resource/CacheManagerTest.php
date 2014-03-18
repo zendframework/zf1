@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -53,7 +53,7 @@ require_once 'Zend/Cache/Core.php';
  * @category   Zend
  * @package    Zend_Application
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Application
  */
@@ -236,6 +236,38 @@ class Zend_Application_Resource_CacheManagerTest extends PHPUnit_Framework_TestC
         $cache    = $manager->getCache('zf9737');
         $this->assertTrue($cache->getBackend() instanceof Zend_Cache_Backend_Custom_Naming);
         $this->assertTrue($cache instanceof Zend_Cache_Frontend_CustomNaming);
+    }
+
+    /**
+     * @group GH-103
+     */
+    public function testLoggerFactory()
+    {
+        $options = array(
+            'page' => array(
+                'frontend' => array(
+                    'options' => array(
+                        'logging' => true,
+                        'logger'  => array(
+                            new Zend_Log_Writer_Mock()
+                        )
+                    )
+                )
+            )
+        );
+
+        $resource = new Zend_Application_Resource_Cachemanager($options);
+        $resource->setBootstrap($this->bootstrap);
+        $resource->init();
+
+        $page = $resource->getCacheManager()->getCache('page');
+        $page->getBackend()->clean(Zend_Cache::CLEANING_MODE_OLD);
+
+        $event = current($options['page']['frontend']['options']['logger'][0]->events);
+
+        $this->assertTrue(is_array($event));
+        $this->assertTrue(array_key_exists('message', $event));
+        $this->assertContains('Zend_Cache_Backend_Static', $event['message']);
     }
 }
 

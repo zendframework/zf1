@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Format
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,7 +29,7 @@ require_once 'Zend/Locale/Format.php';
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Locale
  */
@@ -96,8 +96,8 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(          '0,1234567', Zend_Locale_Format::toNumber(       0.1234567,$options));
         $this->assertEquals( '-1.234.567,12345',   Zend_Locale_Format::toNumber(-1234567.12345,  $options));
         $this->assertEquals(  '1.234.567,12345',   Zend_Locale_Format::toNumber( 1234567.12345,  $options));
-        $this->assertEquals(    '1234567٫12345',   Zend_Locale_Format::toNumber( 1234567.12345,  array('locale' => 'ar_QA')));
-        $this->assertEquals(    '1234567٫12345-',  Zend_Locale_Format::toNumber(-1234567.12345,  array('locale' => 'ar_QA')));
+        $this->assertEquals(  '1٬234٬567٫12345',   Zend_Locale_Format::toNumber( 1234567.12345,  array('locale' => 'ar_QA')));
+        $this->assertEquals(  '‏-1٬234٬567٫12345',  Zend_Locale_Format::toNumber(-1234567.12345,  array('locale' => 'ar_QA')));
         $this->assertEquals(  '12,34,567.12345',   Zend_Locale_Format::toNumber( 1234567.12345,  array('locale' => 'dz_BT')));
         $this->assertEquals(  '-1.234.567,12345',  Zend_Locale_Format::toNumber(-1234567.12345,  array('locale' => 'mk_MK')));
         $this->assertEquals(        '452.25',      Zend_Locale_Format::toNumber(     452.25,     array('locale' => 'en_US')));
@@ -199,8 +199,8 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( '1.234.567,12345',   Zend_Locale_Format::toFloat( 1234567.12345,   $options));
 
         $options = array('locale' => 'ar_QA');
-        $this->assertEquals(    '1234567٫12345',  Zend_Locale_Format::toFloat( 1234567.12345, $options                  ));
-        $this->assertEquals(    '1234567٫12345-', Zend_Locale_Format::toFloat(-1234567.12345, $options                  ));
+        $this->assertEquals(  '1٬234٬567٫12345',  Zend_Locale_Format::toFloat( 1234567.12345, $options                  ));
+        $this->assertEquals(  '‏-1٬234٬567٫12345', Zend_Locale_Format::toFloat(-1234567.12345, $options                  ));
         $this->assertEquals(  '12,34,567.12345',  Zend_Locale_Format::toFloat( 1234567.12345, array('locale' => 'dz_BT')));
         $this->assertEquals(  '-1.234.567,12345', Zend_Locale_Format::toFloat(-1234567.12345, array('locale' => 'mk_MK')));
 
@@ -286,8 +286,8 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(          '0',  Zend_Locale_Format::toInteger(       0.1234567, $options));
         $this->assertEquals( '-1.234.567',  Zend_Locale_Format::toInteger(-1234567.12345,   $options));
         $this->assertEquals(  '1.234.567',  Zend_Locale_Format::toInteger( 1234567.12345,   $options));
-        $this->assertEquals(    '1234567',  Zend_Locale_Format::toInteger( 1234567.12345,   array('locale' => 'ar_QA')));
-        $this->assertEquals(    '1234567-', Zend_Locale_Format::toInteger(-1234567.12345,   array('locale' => 'ar_QA')));
+        $this->assertEquals(  '1٬234٬567',  Zend_Locale_Format::toInteger( 1234567.12345,   array('locale' => 'ar_QA')));
+        $this->assertEquals(  '‏-1٬234٬567', Zend_Locale_Format::toInteger(-1234567.12345,   array('locale' => 'ar_QA')));
         $this->assertEquals(  '12,34,567',  Zend_Locale_Format::toInteger( 1234567.12345,   array('locale' => 'dz_BT')));
         $this->assertEquals(  '-1.234.567', Zend_Locale_Format::toInteger(-1234567.12345,   array('locale' => 'mk_MK')));
 

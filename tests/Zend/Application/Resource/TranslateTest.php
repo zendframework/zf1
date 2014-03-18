@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -33,17 +33,37 @@ require_once 'Zend/Loader/Autoloader.php';
  * @category   Zend
  * @package    Zend_Application
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Application
  */
 class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
 {
-    private $_translationOptions = array('data' => array(
-        'message1' => 'message1',
-        'message2' => 'message2',
-        'message3' => 'message3'
-    ));
+    /**
+     * @var array
+     */
+    protected $_translationOptions = array(
+        'data' => array(
+            'message1' => 'message1',
+            'message2' => 'message2',
+            'message3' => 'message3'
+        )
+    );
+
+    /**
+     * @var Zend_Loader_Autoloader
+     */
+    protected $autoloader;
+
+    /**
+     * @var Zend_Application
+     */
+    protected $application;
+
+    /**
+     * @var Zend_Application_Bootstrap_Bootstrap
+     */
+    protected $bootstrap;
 
     public static function main()
     {
@@ -217,6 +237,30 @@ class Zend_Application_Resource_TranslateTest extends PHPUnit_Framework_TestCase
 
         $resource = new Zend_Application_Resource_Translate($options);
         $translator = $resource->init();
+    }
+
+    /**
+     * @group GH-103
+     */
+    public function testLogFactory()
+    {
+        $options                    = $this->_translationOptions;
+        $options['log'][0]          = new Zend_Log_Writer_Mock();
+        $options['logUntranslated'] = true;
+        $options['locale']          = 'en';
+
+        $resource = new Zend_Application_Resource_Translate($options);
+        $resource->setBootstrap($this->bootstrap);
+
+        $resource->init()->translate('untranslated');
+        $event = current($options['log'][0]->events);
+
+        $this->assertTrue(is_array($event));
+        $this->assertTrue(array_key_exists('message', $event));
+        $this->assertEquals(
+            "Untranslated message within 'en': untranslated",
+            $event['message']
+        );
     }
 }
 

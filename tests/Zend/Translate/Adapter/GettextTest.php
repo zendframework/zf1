@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Translate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,7 +29,7 @@ require_once 'Zend/Translate/Adapter/Gettext.php';
  * @category   Zend
  * @package    Zend_Translate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Translate
  */
@@ -252,6 +252,52 @@ class Zend_Translate_Adapter_GettextTest extends PHPUnit_Framework_TestCase
     {
         $adapter = new Zend_Translate_Adapter_Gettext(dirname(__FILE__) . '/_files/failed3.mo', 'en');
         $this->assertContains('No adapter information available', current($adapter->getAdapterInfo()));
+    }
+
+    /**
+     * @group GH-66
+     */
+    public function testPluralToPlural()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(
+            dirname(__FILE__) . '/_files/translation_plural_fr.mo', 'fr'
+        );
+
+        $this->assertEquals(
+            'Il ya %d message',
+            $adapter->plural('There is %d message', 'There are %d messages', 0)
+        );
+        $this->assertEquals(
+            'Il ya %d message',
+            $adapter->plural('There is %d message', 'There are %d messages', 1)
+        );
+        $this->assertEquals(
+            'Il ya %d messages',
+            $adapter->plural('There is %d message', 'There are %d messages', 2)
+        );
+    }
+
+    /**
+     * @group GH-66
+     */
+    public function testPluralToSingular()
+    {
+        $adapter = new Zend_Translate_Adapter_Gettext(
+            dirname(__FILE__) . '/_files/translation_plural_tr.mo', 'tr'
+        );
+
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 0)
+        );
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 1)
+        );
+        $this->assertEquals(
+            '%d mesaj var',
+            $adapter->plural('There is %d message', 'There are %d messages', 2)
+        );
     }
 
     /**

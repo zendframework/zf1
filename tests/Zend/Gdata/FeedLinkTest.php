@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -27,7 +27,7 @@ require_once 'Zend/Gdata.php';
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Gdata
  */
@@ -67,12 +67,12 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->feedLink->href = "http://www.google.com/calendar/feeds/default/private/full";
         $this->feedLink->rel = "via";
         $this->feedLink->countHint = "5";
-        $this->feedLink->readOnly = "false";
+        $this->feedLink->readOnly = false;
 
         $this->assertEquals("http://www.google.com/calendar/feeds/default/private/full", $this->feedLink->href);
         $this->assertEquals("via", $this->feedLink->rel);
         $this->assertEquals("5", $this->feedLink->countHint);
-        $this->assertEquals("false", $this->feedLink->readOnly);
+        $this->assertEquals(false, $this->feedLink->readOnly);
 
         $this->assertEquals(0, count($this->feedLink->extensionElements));
         $newFeedLink = new Zend_Gdata_Extension_FeedLink();
@@ -84,7 +84,7 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("http://www.google.com/calendar/feeds/default/private/full", $newFeedLink->href);
         $this->assertEquals("via", $newFeedLink->rel);
         $this->assertEquals("5", $newFeedLink->countHint);
-        $this->assertEquals("false", $newFeedLink->readOnly);
+        $this->assertEquals(false, $newFeedLink->readOnly);
 
         /* try constructing using magic factory */
         $gdata = new Zend_Gdata();
@@ -94,7 +94,7 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("http://www.google.com/calendar/feeds/default/private/full", $newFeedLink2->href);
         $this->assertEquals("via", $newFeedLink2->rel);
         $this->assertEquals("5", $newFeedLink2->countHint);
-        $this->assertEquals("false", $newFeedLink2->readOnly);
+        $this->assertEquals(false, $newFeedLink2->readOnly);
     }
 
     public function testEmptyFeedLinkToAndFromStringShouldMatch() {
@@ -109,7 +109,7 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->feedLink->href = "http://www.google.com/calendar/feeds/default/private/full";
         $this->feedLink->rel = "via";
         $this->feedLink->countHint = "5";
-        $this->feedLink->readOnly = "false";
+        $this->feedLink->readOnly = false;
         $feedLinkXml = $this->feedLink->saveXML();
         $newFeedLink = new Zend_Gdata_Extension_FeedLink();
         $newFeedLink->transferFromXML($feedLinkXml);
@@ -118,7 +118,7 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("http://www.google.com/calendar/feeds/default/private/full", $this->feedLink->href);
         $this->assertEquals("via", $this->feedLink->rel);
         $this->assertEquals("5", $this->feedLink->countHint);
-        $this->assertEquals("false", $this->feedLink->readOnly);
+        $this->assertEquals(false, $this->feedLink->readOnly);
     }
 
     public function testExtensionAttributes() {
@@ -140,7 +140,7 @@ class Zend_Gdata_FeedLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("http://www.google.com/calendar/feeds/default/private/full/3tsi3ag1q40bnsik88k25sgpss/comments", $this->feedLink->href);
         $this->assertEquals("http://schemas.google.com/g/2005#feed", $this->feedLink->rel);
         $this->assertEquals("0", $this->feedLink->countHint);
-        $this->assertEquals("true", $this->feedLink->readOnly);
+        $this->assertEquals(true, $this->feedLink->readOnly);
         $this->assertTrue($this->feedLink->feed instanceof Zend_Gdata_App_Feed);
         $this->assertEquals("Comments for: Sample Event", $this->feedLink->feed->title->text);
     }

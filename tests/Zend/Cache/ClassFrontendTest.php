@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -33,12 +33,12 @@ require_once 'Zend/Cache/Backend/Test.php';
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
-class test {
-
+class test
+{
     private $_string = 'hello !';
 
     public static function foobar($param1, $param2)
@@ -54,24 +54,32 @@ class test {
         return "foobar2_return($param1, $param2)";
     }
 
+    public function foobar3($param1, $param2)
+    {
+        echo $this->dummyMethod($param1, $param2);
+    }
+
+    private function dummyMethod($param1, $param2) {
+        return "foobar_output($param1,$param2)";
+    }
+
     public function throwException()
     {
         echo 'throw exception';
         throw new Exception('test exception');
     }
-
 }
 
 /**
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
-class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
-
+class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase
+{
     private $_instance1;
     private $_instance2;
 
@@ -220,6 +228,24 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foobar_output(param1, param2)', $data);
     }
 
+    /**
+     * @group GH-125
+     */
+    public function testCallCorrectCall8()
+    {
+        $this->_instance2->setOption('cache_by_default', true);
+        $this->_instance2->setOption('cached_methods', array('foobar3'));
+        ob_start();
+        ob_implicit_flush(false);
+        $return = $this->_instance2->foobar3('param1', 'param2');
+        $data = ob_get_clean();
+        ob_implicit_flush(true);
+
+        $this->assertNull($return);
+        $this->assertEquals('foobar_output(param1,param2)', $data);
+      
+    }
+
     public function testConstructorWithABadCachedEntity()
     {
         try {
@@ -272,6 +298,4 @@ class Zend_Cache_ClassFrontendTest extends PHPUnit_Framework_TestCase {
         $this->setExpectedException('Zend_Cache_Exception');
         $this->_instance2->unknownMethod();
     }
-
 }
-

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -25,6 +25,7 @@
  */
 require_once 'Zend/Cache.php';
 require_once 'Zend/Cache/Backend/TwoLevels.php';
+require_once 'Zend/Cache/Backend/Apc.php';
 
 /**
  * Common tests for backends
@@ -35,7 +36,7 @@ require_once 'CommonExtendedBackendTest.php';
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */

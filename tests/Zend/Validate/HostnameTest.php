@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,7 +30,7 @@ require_once 'Zend/Validate/Hostname.php';
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  */
@@ -228,7 +228,7 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
 
         // Check TLD matching
         $valuesExpected = array(
-            array(true, array('domain.co.uk', 'domain.uk.com', 'domain.tl', 'domain.zw')),
+            array(true, array('domain.co.uk', 'domain.uk.com', 'domain.tl', 'domain.zw', 'domain.menu')),
             array(false, array('domain.xx', 'domain.zz', 'domain.madeup'))
             );
         foreach ($valuesExpected as $element) {
@@ -476,4 +476,26 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($validator->isValid('رات.ca'));
     }
 
+    /**
+     * @group ZF-12413
+     */
+    public function testIDNUA()
+    {
+        $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+
+        $this->assertTrue($validator->isValid('самобраноч.com.ua'));
+        $this->assertTrue($validator->isValid('hostmaster.ua'));
+    }
+
+    /**
+     * Test for IDN serbia .rs
+     *
+     * @group GH-115
+     */
+    public function testIDNRS()
+    {
+        $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+
+        $this->assertTrue($validator->isValid('test.rs'));
+    }
 }

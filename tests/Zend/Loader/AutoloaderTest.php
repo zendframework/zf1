@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -38,7 +38,7 @@ require_once 'Zend/Loader/Autoloader/Interface.php';
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Loader
  */
@@ -373,7 +373,7 @@ class Zend_Loader_AutoloaderTest extends PHPUnit_Framework_TestCase
     {
         $this->autoloader->setDefaultAutoloader(array($this, 'autoload'));
         $class = $this->autoloader->autoload('Zend_ThisClass_WilNever_Exist');
-        $this->assertEquals('Zend_ThisClass_WilNever_Exist', $class);
+        $this->assertTrue($class);
         $this->assertFalse(class_exists($class, false));
     }
 

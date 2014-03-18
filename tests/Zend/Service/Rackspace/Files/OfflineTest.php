@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend\Service\Rackspace
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -30,7 +30,7 @@ require_once 'Zend/Http/Client/Adapter/Test.php';
  * @category   Zend
  * @package    Zend_Service_Rackspace_Files
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Service_Rackspace_Files
  */
@@ -222,6 +222,24 @@ class Zend_Service_Rackspace_Files_OfflineTest
 
         $this->assertEquals($objects[0]->getName(), 'zf-object-test');
         $this->assertEquals($objects[1]->getName(), 'zf-object-test' . '-copy');
+    }
+
+    /**
+     * @group GH-68
+     */
+    public function testGetObjectsPseudoDirs()
+    {
+        $objects = $this->rackspace->getObjects(
+            'zf-unit-test',
+            array(
+                'delimiter' => '/',
+                'prefix'    => 'dir/',
+            )
+        );
+        $this->assertTrue($objects !== false);
+
+        $this->assertEquals($objects[0]->getName(), 'dir/subdir1/');
+        $this->assertEquals($objects[1]->getName(), 'dir/subdir2/');
     }
 
     public function testGetSizeContainers()

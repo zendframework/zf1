@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -42,6 +42,12 @@ class Zend_Service_ShortUrl_TinyUrlComTest extends PHPUnit_Framework_TestCase
      */
     public function setUp ()
     {
+        if (!defined('TESTS_ZEND_SERVICE_SHORTURL_TINYURL_ENABLED')
+            || !constant('TESTS_ZEND_SERVICE_SHORTURL_TINYURL_ENABLED')
+        ) {
+            $this->markTestSkipped('Testing Zend_Service_ShortUrl_TinyUrlComTest only works when TESTS_ZEND_SERVICE_SHORTURL_TINYURL_ENABLED is set.');
+        }
+        
         Zend_Service_Abstract::setHttpClient(new Zend_Http_Client());
 
         $this->_s = new Zend_Service_ShortUrl_TinyUrlCom();

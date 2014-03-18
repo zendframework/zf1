@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Select
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -38,7 +38,7 @@ require_once 'Zend/Db/Expr.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Select
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Db_Select
@@ -654,7 +654,7 @@ class Zend_Db_Select
     }
 
     /**
-     * Get part of the structured information for the currect query.
+     * Get part of the structured information for the current query.
      *
      * @param string $part
      * @return mixed

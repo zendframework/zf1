@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Cloud
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -36,8 +36,6 @@ require_once 'Zend/Cloud/StorageService/Factory.php';
 
 require_once 'Zend/Cloud/StorageService/Adapter/FileSystem.php';
 
-require_once 'Zend/Cloud/StorageService/Adapter/Nirvanix.php';
-
 require_once 'Zend/Cloud/StorageService/Adapter/S3.php';
 
 require_once 'Zend/Cloud/StorageService/Adapter/WindowsAzure.php';
@@ -50,7 +48,7 @@ require_once 'Zend/Http/Client/Adapter/Test.php';
  * @category   Zend
  * @package    Zend_Cloud
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cloud
  */
@@ -75,27 +73,6 @@ class Zend_Cloud_StorageService_FactoryTest extends PHPUnit_Framework_TestCase
     public function testGetAdapterWithConfig()
     {
         $httptest = new Zend_Http_Client_Adapter_Test();
-
-        // Nirvanix adapter
-        $nirvanixConfig = new Zend_Config_Ini(realpath(dirname(__FILE__) . '/_files/config/nirvanix.ini'));
-        $nirvanixConfig = $nirvanixConfig->toArray();
-        $nirvanixConfig[Zend_Cloud_StorageService_Adapter_Nirvanix::HTTP_ADAPTER] = $httptest;
-
-        $doc = new DOMDocument('1.0', 'utf-8');
-        $root = $doc->createElement('Response');
-        $responseCode = $doc->createElement('ResponseCode', 0);
-        $sessionTok   = $doc->createElement('SessionToken', '54592180-7060-4D4B-BC74-2566F4B2F943');
-        $root->appendChild($responseCode);
-        $root->appendChild($sessionTok);
-        $doc->appendChild($root);
-        $body = $doc->saveXML();
-
-        $resp = new Zend_Http_Response(200, array('Date' => 0), $body);
-        $httptest->setResponse($resp);
-        $nirvanixAdapter = Zend_Cloud_StorageService_Factory::getAdapter(
-                                    $nirvanixConfig
-        );
-        $this->assertEquals('Zend_Cloud_StorageService_Adapter_Nirvanix', get_class($nirvanixAdapter));
 
         // S3 adapter
         $s3Config = new Zend_Config_Ini(realpath(dirname(__FILE__) . '/_files/config/s3.ini'));

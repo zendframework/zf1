@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -36,6 +36,10 @@ require_once 'Zend/Registry.php';
  */
 require_once 'Zend/Db/Table.php';
 
+/**
+ * @see Zend_Cache_Backend_BlackHole
+ */
+require_once 'Zend/Cache/Backend/BlackHole.php';
 
 
 
@@ -44,7 +48,7 @@ require_once 'Zend/Db/Table.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Db_Table_TestCommon extends Zend_Db_Table_TestSetup

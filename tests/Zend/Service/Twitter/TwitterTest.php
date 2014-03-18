@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Twitter
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: TwitterTest.php 22318 2010-05-29 18:24:27Z padraic $
  */
@@ -33,6 +33,13 @@ require_once 'Zend/Http/Client.php';
 
 /** Zend_Http_Client_Adapter_Test */
 require_once 'Zend/Http/Client/Adapter/Test.php';
+
+require_once 'Zend/Oauth/Client.php';
+require_once 'Zend/Http/Response.php';
+require_once 'Zend/Oauth/Token/Access.php';
+require_once 'Zend/Oauth/Token/Access.php';
+require_once 'Zend/Oauth/Client.php';
+require_once 'Zend/Oauth/Consumer.php';
 
 /**
  * @category   Zend

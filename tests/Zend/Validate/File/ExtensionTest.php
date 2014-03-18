@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate_File
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -36,7 +36,7 @@ require_once 'Zend/Validate/File/Extension.php';
  * @category   Zend
  * @package    Zend_Validate_File
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  */
@@ -113,6 +113,27 @@ class Zend_Validate_File_ExtensionTest extends PHPUnit_Framework_TestCase
         $validator = new Zend_Validate_File_Extension('gif');
         $this->assertEquals(false, $validator->isValid(dirname(__FILE__) . '/_files/testsize.mo', $files));
         $this->assertTrue(array_key_exists('fileExtensionFalse', $validator->getMessages()));
+    }
+
+    /**
+     * GitHub issue #287
+     *
+     * pathinfo() does not guarantee that the extension index will be set
+     * according to the PHP manual (http://se2.php.net/pathinfo#example-2422).
+     *
+     * @return void
+     */
+    public function testNoExtension()
+    {
+        $files = array(
+            'name'     => 'no_extension',
+            'type'     => 'text',
+            'size'     => 200,
+            'tmp_name' => dirname(__FILE__) . '/_files/no_extension',
+            'error'    => 0
+        );
+        $validator = new Zend_Validate_File_Extension('txt');
+        $this->assertEquals(false, $validator->isValid(dirname(__FILE__) . '/_files/no_extension'));
     }
 
     public function testZF3891()

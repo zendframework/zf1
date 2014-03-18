@@ -14,7 +14,7 @@
  *
  * @category   Zend
  * @package    Zend_Json
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -26,6 +26,8 @@
  */
 require_once 'Zend/Json/Expr.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
 
 /**
  * Class for encoding to and decoding from JSON.
@@ -33,7 +35,7 @@ require_once 'Zend/Json/Expr.php';
  * @category   Zend
  * @package    Zend_Json
  * @uses       Zend_Json_Expr
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Json
@@ -343,7 +345,7 @@ class Zend_Json
     public static function fromXml($xmlStringContents, $ignoreXmlAttributes=true)
     {
         // Load the XML formatted string into a Simple XML Element object.
-        $simpleXmlElementObject = simplexml_load_string($xmlStringContents);
+        $simpleXmlElementObject = Zend_Xml_Security::scan($xmlStringContents);
 
         // If it is not a valid XML content, throw an exception.
         if ($simpleXmlElementObject == null) {

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_CodeGenerator
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -28,7 +28,7 @@ require_once 'Zend/Reflection/File.php';
  * @category   Zend
  * @package    Zend_CodeGenerator
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  *
  * @group Zend_CodeGenerator
@@ -126,7 +126,6 @@ EOS;
  * File header here
  *
  * @author Ralph Schindler <ralph.schindler@zend.com>
- *
  */
 
 
@@ -136,7 +135,6 @@ EOS;
  * class docblock
  *
  * @package Zend_Reflection_TestSampleSingleClass
- *
  */
 class Zend_Reflection_TestSampleSingleClass
 {
@@ -145,7 +143,6 @@ class Zend_Reflection_TestSampleSingleClass
      * Enter description here...
      *
      * @return bool
-     *
      */
     public function someMethod()
     {
@@ -234,7 +231,6 @@ EOS;
  * File header here
  *
  * @author Ralph Schindler <ralph.schindler@zend.com>
- *
  */
 
 
@@ -244,7 +240,6 @@ EOS;
  * class docblock
  *
  * @package Zend_Reflection_TestClassWithCodeInMethod
- *
  */
 class Zend_Reflection_TestClassWithCodeInMethod
 {
@@ -253,7 +248,6 @@ class Zend_Reflection_TestClassWithCodeInMethod
      * Enter description here...
      *
      * @return bool
-     *
      */
     public function someMethod()
     {
@@ -305,7 +299,6 @@ EOS;
 <?php
 /**
  * For manipulating files.
- *
  */
 
 class Foo
@@ -344,13 +337,11 @@ EOS;
 <?php
 /**
  * For manipulating files.
- *
  */
 
 
 /**
  * Class Foo1
- *
  */
 class Foo1
 {
