@@ -190,6 +190,10 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
     {
         return $this->_errorAction;
     }
+	
+	public function dispatchLoopShutdown() {
+		$this->_isInsideErrorHandlerLoop = false;
+    }
 
     /**
      * Route shutdown hook -- Ccheck for router exceptions
