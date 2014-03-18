@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Serializer
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,7 +29,7 @@ require_once 'Zend/Serializer/Adapter/Wddx.php';
  * @category   Zend
  * @package    Zend_Serializer
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Serializer_Adapter_WddxTest extends PHPUnit_Framework_TestCase
@@ -230,7 +230,7 @@ class Zend_Serializer_Adapter_WddxTest extends PHPUnit_Framework_TestCase
         $value = 'not a serialized string';
         $this->setExpectedException(
             'Zend_Serializer_Exception',
-            'DOMDocument::loadXML(): Start tag expected'
+            'Can\'t unserialize wddx string'
         );
         $this->_adapter->unserialize($value);
     }
@@ -250,7 +250,7 @@ class Zend_Serializer_Adapter_WddxTest extends PHPUnit_Framework_TestCase
  * @category   Zend
  * @package    Zend_Serializer
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Serializer_Adapter_WddxSkipTest extends PHPUnit_Framework_TestCase

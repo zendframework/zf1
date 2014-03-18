@@ -13,24 +13,24 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Nirvanix
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @package    Zend_Xml
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
+
 /**
- * @see Zend_Service_Exception
+ * @see Zend_Exception
  */
-require_once 'Zend/Service/Exception.php';
+require_once 'Zend/Exception.php';
+
 
 /**
  * @category   Zend
- * @package    Zend_Service
- * @subpackage Nirvanix
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @package    Zend_Xml
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Nirvanix_Exception extends Zend_Service_Exception
+class Zend_Xml_Exception extends Zend_Exception
 {}

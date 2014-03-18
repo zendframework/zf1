@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -33,7 +33,7 @@ require_once 'Zend/Ldap/Node.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Ldap
  * @group      Zend_Ldap_Node
@@ -273,6 +273,9 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
 
     public function testGetSetAndDeleteMethods()
     {
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('GMT');
+
         $node=$this->_createTestNode();
 
         $node->setAttribute('key', 'value1');
@@ -311,6 +314,8 @@ class Zend_Ldap_Node_OfflineTest extends Zend_Ldap_TestCase
         $this->assertEquals(0, count($node->getAttribute('userPassword')));
         $this->assertTrue($node->existsAttribute('userPassword', true));
         $this->assertFalse($node->existsAttribute('userPassword', false));
+
+        date_default_timezone_set($timezone);
     }
 
     public function testOverloading()

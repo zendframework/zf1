@@ -14,7 +14,7 @@
  *
  * @category   Zend
  * @package    Zend_Service_Ebay
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: AllTests.php 22783 2010-08-03 16:01:28Z ramon $
  */
@@ -37,7 +37,7 @@ require_once 'Zend/Service/Ebay/Finding/OnlineTest.php';
  * @category   Zend
  * @package    Zend_Service_Ebay
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Service
  */

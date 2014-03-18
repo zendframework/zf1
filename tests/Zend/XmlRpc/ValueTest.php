@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version $Id$
  */
@@ -41,7 +41,7 @@ require_once 'Zend/Date.php';
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_XmlRpc
  */
@@ -611,6 +611,11 @@ class Zend_XmlRpc_ValueTest extends PHPUnit_Framework_TestCase
 
     public function testMarshalDateTimeFromInvalidString()
     {
+        $phpunitVersion = PHPUnit_Runner_Version::id();
+        if (version_compare($phpunitVersion, '3.7.0', '<=')) {
+            $this->markTestSkipped('Cannot expect generic exceptions prior to PHPUnit 3.7.');
+        }
+
         $this->setExpectedException('Exception', "foobarbaz");
         Zend_XmlRpc_Value::getXmlRpcValue('foobarbaz', Zend_XmlRpc_Value::XMLRPC_TYPE_DATETIME);
     }

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage Data
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -25,13 +25,16 @@
  */
 require_once 'Zend/Locale.php';
 
+/** @see Zend_Xml_Security */
+require_once 'Zend/Xml/Security.php';
+
 /**
  * Locale data reader, handles the CLDR
  *
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage Data
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Locale_Data
@@ -158,7 +161,7 @@ class Zend_Locale_Data
                 throw new Zend_Locale_Exception("Missing locale file '$filename' for '$locale' locale.");
             }
 
-            self::$_ldml[(string) $locale] = simplexml_load_file($filename);
+            self::$_ldml[(string) $locale] = Zend_Xml_Security::scanFile($filename);
         }
 
         // search for 'alias' tag in the search path for redirection

@@ -7,16 +7,61 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.4dev Release ([INSERT REV NUM HERE]).
-Released on <Month> <Day>, <Year>.
+Zend Framework 1.12.4 Release.
+Released on March 06, 2014.
+
+SECURITY FIXES FOR 1.12.4
+-------------------------
+
+- **ZF2014-01:** Potential XXE/XEE attacks using PHP functions:
+  `simplexml_load_*`, `DOMDocument::loadXML`, and `xml_parse`. A new component,
+  `Zend_Xml`, was introduced to mitigate XML eXternal Entity and XML Entity
+  Expansion vectors that are present in older versions of libxml2 and/or PHP.
+  Components that could contain these vectors include:
+
+    - `Zend_Amf`
+    - `Zend_Config`
+    - `Zend_Dom`
+    - `Zend_Feed`
+    - `Zend_Gdata`
+    - `Zend_Json`
+    - `Zend_Locale`
+    - `Zend_Mobile_Push`
+    - `Zend_Rest_Client`
+    - `Zend_Search_Lucene`
+    - `Zend_Serializer_Adapter_Wddx`
+    - `Zend_Service_Amazon`
+    - `Zend_Service_AudioScrobbler`
+    - `Zend_Service_Delicious`
+    - `Zend_Service_Ebay`
+    - `Zend_Service_Flickr`
+    - `Zend_Service_SlideShare`
+    - `Zend_Service_SqlAzure`
+    - `Zend_Service_Technorati`
+    - `Zend_Service_WindowsAzure`
+    - `Zend_Service_Yahoo`
+    - `Zend_Soap`
+    - `Zend_Translate`
+
+  If you use one or more of these components, we strongly urge that you upgrade
+  immediately.
+
+- **ZF2014-02:** Potential security issue in login mechanism of `Zend_OpenId`
+  consumer. Using the Consumer component in conjunction with a malicious OpenID
+  provider, one could login to a service using an arbitrary OpenID Identity
+  without requiring credentials, allowing impersonation of an OpenID Identity.
+  If you use this component, we strongly urge that you upgrade immediately.
 
 IMPORTANT FIXES FOR 1.12.4
 --------------------------
+
 
 - [#221](https://github.com/zendframework/zf1/pull/221) removes the TinySrc view
   helper, as the TinySrc service no longer exists.
 - [#222](https://github.com/zendframework/zf1/pull/222) removes the InfoCard
   component, as the CardSpace service no longer exists.
+- [#271](https://github.com/zendframework/zf1/pull/271) removes the Nirvanix
+  component, as the Nirvanix service shut down in October 2013.
 
 IMPORTANT FIXES FOR 1.12.3
 --------------------------

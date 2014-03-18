@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -27,7 +27,7 @@ require_once 'Zend/Gdata.php';
  * @category   Zend
  * @package    Zend_Gdata
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Gdata
  */
@@ -66,11 +66,11 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
     public function testNormalEntryLinkShouldHaveNoExtensionElements() {
         $this->entryLink->href = "http://gmail.com/jo/contacts/Bob";
         $this->entryLink->rel = "self";
-        $this->entryLink->readOnly = "false";
+        $this->entryLink->readOnly = false;
 
         $this->assertEquals("http://gmail.com/jo/contacts/Bob", $this->entryLink->href);
         $this->assertEquals("self", $this->entryLink->rel);
-        $this->assertEquals("false", $this->entryLink->readOnly);
+        $this->assertEquals(false, $this->entryLink->readOnly);
 
         $this->assertEquals(0, count($this->entryLink->extensionElements));
         $newEntryLink = new Zend_Gdata_Extension_EntryLink();
@@ -81,7 +81,7 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($newEntryLink->extensionElements));
         $this->assertEquals("http://gmail.com/jo/contacts/Bob", $newEntryLink->href);
         $this->assertEquals("self", $newEntryLink->rel);
-        $this->assertEquals("false", $newEntryLink->readOnly);
+        $this->assertEquals(false, $newEntryLink->readOnly);
 
         /* try constructing using magic factory */
         $gdata = new Zend_Gdata();
@@ -90,7 +90,7 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($newEntryLink2->extensionElements));
         $this->assertEquals("http://gmail.com/jo/contacts/Bob", $newEntryLink2->href);
         $this->assertEquals("self", $newEntryLink2->rel);
-        $this->assertEquals("false", $newEntryLink2->readOnly);
+        $this->assertEquals(false, $newEntryLink2->readOnly);
     }
 
     public function testEmptyEntryLinkToAndFromStringShouldMatch() {
@@ -104,7 +104,7 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
     public function testEntryLinkWithValueToAndFromStringShouldMatch() {
         $this->entryLink->href = "http://gmail.com/jo/contacts/Bob";
         $this->entryLink->rel = "self";
-        $this->entryLink->readOnly = "false";
+        $this->entryLink->readOnly = false;
         $entryLinkXml = $this->entryLink->saveXML();
         $newEntryLink = new Zend_Gdata_Extension_EntryLink();
         $newEntryLink->transferFromXML($entryLinkXml);
@@ -112,7 +112,7 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($entryLinkXml == $newEntryLinkXml);
         $this->assertEquals("http://gmail.com/jo/contacts/Bob", $this->entryLink->href);
         $this->assertEquals("self", $this->entryLink->rel);
-        $this->assertEquals("false", $this->entryLink->readOnly);
+        $this->assertEquals(false, $this->entryLink->readOnly);
     }
 
     public function testExtensionAttributes() {
@@ -133,7 +133,7 @@ class Zend_Gdata_EntryLinkTest extends PHPUnit_Framework_TestCase
         $this->entryLink->transferFromXML($this->entryLinkText);
         $this->assertEquals("http://gmail.com/jo/contacts/Jo", $this->entryLink->href);
         $this->assertEquals("via", $this->entryLink->rel);
-        $this->assertEquals("true", $this->entryLink->readOnly);
+        $this->assertEquals(true, $this->entryLink->readOnly);
         $this->assertTrue($this->entryLink->entry instanceof Zend_Gdata_App_Entry);
         $this->assertEquals("Jo March", $this->entryLink->entry->title->text);
     }

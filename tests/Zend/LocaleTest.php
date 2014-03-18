@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -36,7 +36,7 @@ require_once 'Zend/Cache.php';
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Locale
  */
@@ -121,7 +121,7 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
         // compatibility tests
         set_error_handler(array($this, 'errorHandlerIgnore'));
         Zend_LocaleTestHelper::$compatibilityMode = true;
-        $this->assertEquals('de', Zend_LocaleTestHelper::isLocale('de'));
+        $this->assertEquals('de', Zend_LocaleTestHelper::isLocale('de_ABC'));
         restore_error_handler();
     }
 
@@ -657,9 +657,9 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
 
         set_error_handler(array($this, 'errorHandlerIgnore'));
         Zend_LocaleTestHelper::$compatibilityMode = true;
-        $this->assertEquals('ar', Zend_LocaleTestHelper::isLocale($locale));
-        $this->assertEquals('de', Zend_LocaleTestHelper::isLocale('de'));
-        $this->assertEquals('de_AT', Zend_LocaleTestHelper::isLocale('de_AT'));
+        $this->assertTrue(Zend_LocaleTestHelper::isLocale($locale)); // compatibilty makes no odds when testing a Zend_Locale instance
+        $this->assertTrue(Zend_LocaleTestHelper::isLocale('de')); // compatibilty makes no odds when testing a known valid locale
+        $this->assertTrue(Zend_LocaleTestHelper::isLocale('de_AT'));// compatibilty makes no odds when testing a known valid locale
         $this->assertEquals('de', Zend_LocaleTestHelper::isLocale('de_xx'));
         $this->assertFalse(Zend_LocaleTestHelper::isLocale('yy'));
         $this->assertFalse(Zend_LocaleTestHelper::isLocale(1234));

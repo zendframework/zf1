@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Text
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,6 +29,7 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
  * Zend_Text_Figlet
  */
 require_once 'Zend/Text/Figlet.php';
+require_once 'Zend/Text/Figlet/Exception.php';
 
 /**
  * Zend_Config
@@ -39,7 +40,7 @@ require_once 'Zend/Config.php';
  * @category   Zend
  * @package    Zend_Text
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Text
  */

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Amazon_Authentication
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: AllTests.php 11973 2008-10-15 16:00:56Z matthew $
  */
@@ -38,7 +38,7 @@ require_once 'Zend/Service/Amazon/SimpleDb/OnlineTest.php';
  * @category   Zend
  * @package    Zend_Service_Amazon_SimpleDb
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Amazon_Authentication_AllTests
