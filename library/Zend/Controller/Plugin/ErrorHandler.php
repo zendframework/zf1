@@ -190,9 +190,14 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
     {
         return $this->_errorAction;
     }
-	
-	public function dispatchLoopShutdown() {
-		$this->_isInsideErrorHandlerLoop = false;
+
+    /**
+     * Shutdown dispatch hook -- Reinitialize class members
+     */
+    public function dispatchLoopShutdown()
+    {
+        $this->_isInsideErrorHandlerLoop = false;
+        $this->_exceptionCountAtFirstEncounter = 0;
     }
 
     /**
