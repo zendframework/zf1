@@ -88,6 +88,28 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that locale names that have been dropped from CLDR continue to
+     * work.
+     */
+    public function testAliases()
+    {
+        $locale = new Zend_Locale('zh_CN');
+        $this->assertEquals(true, $locale->isLocale('zh_CN'));
+        $this->assertEquals('zh', $locale->getLanguage());
+        $this->assertEquals('CN', $locale->getRegion());
+        $this->assertEquals(true, Zend_Locale::isAlias($locale));
+        $this->assertEquals(true, Zend_Locale::isAlias('zh_CN'));
+        $this->assertEquals('zh_Hans_CN', Zend_Locale::getAlias('zh_CN'));
+
+        $locale = new Zend_Locale('zh_Hans_CN');
+        $this->assertEquals(true, $locale->isLocale('zh_Hans_CN'));
+        $this->assertEquals('zh', $locale->getLanguage());
+        $this->assertEquals('CN', $locale->getRegion());
+        $this->assertEquals(false, Zend_Locale::isAlias('zh_Hans_CN'));
+        $this->assertEquals('zh_Hans_CN', Zend_Locale::getAlias('zh_Hans_CN'));
+    }
+
+    /**
      * test for object creation
      * expected object instance
      */

@@ -30,6 +30,43 @@
 class Zend_Locale
 {
     /**
+     * List of locales that are no longer part of CLDR along with a
+     * mapping to an appropriate alternative.
+     *
+     * @var array
+     */
+    private static $_localeAliases = array(
+        'az_AZ'  => 'az_Latn_AZ',
+        'bs_BA'  => 'bs_Latn_BA',
+        'ha_GH'  => 'ha_Latn_GH',
+        'ha_NE'  => 'ha_Latn_NE',
+        'ha_NG'  => 'ha_Latn_NG',
+        'kk_KZ'  => 'kk_Cyrl_KZ',
+        'ks_IN'  => 'ks_Arab_IN',
+        'mn_MN'  => 'mn_Cyrl_MN',
+        'ms_BN'  => 'ms_Latn_BN',
+        'ms_MY'  => 'ms_Latn_MY',
+        'ms_SG'  => 'ms_Latn_SG',
+        'pa_IN'  => 'pa_Guru_IN',
+        'pa_PK'  => 'pa_Arab_PK',
+        'shi_MA' => 'shi_Latn_MA',
+        'sr_BA'  => 'sr_Latn_BA',
+        'sr_ME'  => 'sr_Latn_ME',
+        'sr_RS'  => 'sr_Latn_RS',
+        'sr_XK'  => 'sr_Latn_XK',
+        'tg_TJ'  => 'tg_Cyrl_TJ',
+        'tzm_MA' => 'tzm_Latn_MA',
+        'uz_AF'  => 'uz_Arab_AF',
+        'uz_UZ'  => 'uz_Latn_UZ',
+        'vai_LR' => 'vai_Latn_LR',
+        'zh_CN' => 'zh_Hans_CN',
+        'zh_HK' => 'zh_Hans_HK',
+        'zh_MO' => 'zh_Hans_MO',
+        'zh_SG' => 'zh_Hans_SG',
+        'zh_TW' => 'zh_Hant_TW',
+    );
+
+    /**
      * Class wide Locale Constants
      *
      * @var array $_localeData
@@ -1266,6 +1303,12 @@ class Zend_Locale
         $locale = self::_prepareLocale($locale);
 
         if (isset(self::$_localeData[(string) $locale]) === false) {
+            // Is it an alias? If so, we can use this locale
+            if (isset(self::$_localeAliases[$locale]) === true) {
+                $this->_locale = $locale;
+                return;
+            }
+
             $region = substr((string) $locale, 0, 3);
             if (isset($region[2]) === true) {
                 if (($region[2] === '_') or ($region[2] === '-')) {
@@ -1877,5 +1920,39 @@ class Zend_Locale
         }
 
         return $languages;
+    }
+
+    /**
+     * Is the given locale in the list of aliases?
+     *
+     * @param  string|Zend_Locale $locale Locale to work on
+     * @return boolean
+     */
+    public static function isAlias($locale)
+    {
+        if ($locale instanceof Zend_Locale) {
+            $locale = $locale->toString();
+        }
+
+        return isset(self::$_localeAliases[$locale]);
+    }
+
+    /**
+     * Return an alias' actual locale.
+     *
+     * @param  string|Zend_Locale $locale Locale to work on
+     * @return string
+     */
+    public static function getAlias($locale)
+    {
+        if ($locale instanceof Zend_Locale) {
+            $locale = $locale->toString();
+        }
+
+        if (isset(self::$_localeAliases[$locale]) === true) {
+            return self::$_localeAliases[$locale];
+        }
+
+        return (string) $locale;
     }
 }
