@@ -78,10 +78,10 @@ sudo make install
 
 echo "Installing PHPUnit"
 export PATH=/usr/local/php/${VERSION}/bin:/usr/local/bin:/usr/bin:/bin:/vagrant/puppet/scripts
-sudo pear update-channels
-sudo pear upgrade-all
-sudo pear config-set auto_discover 1
-sudo pear install pear.phpunit.de/PHPUnit-3.4.15
+pear update-channels
+pear upgrade-all
+pear config-set auto_discover 1
+pear install pear.phpunit.de/PHPUnit-3.4.15
 
 
 echo ""
