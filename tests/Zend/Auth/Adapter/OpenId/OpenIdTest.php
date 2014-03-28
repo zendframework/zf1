@@ -352,8 +352,9 @@ class Zend_Auth_Adapter_OpenIdTest extends PHPUnit_Framework_TestCase
             "openid_assoc_handle" => self::HANDLE,
             "openid_claimed_id" => self::ID,
             "openid_identity" => self::REAL_ID,
+            "openid_op_endpoint" => self::SERVER,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124fff",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
+            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed,op_endpoint",
             "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
         );
         $adapter = new Zend_Auth_Adapter_OpenId(null, new Zend_OpenId_Consumer_Storage_File(dirname(__FILE__)."/_files"));
@@ -387,8 +388,9 @@ class Zend_Auth_Adapter_OpenIdTest extends PHPUnit_Framework_TestCase
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
-            "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
+            "openid_op_endpoint" => self::SERVER,
+            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed,op_endpoint",
+            "openid_sig" => '7DZUB+y05wJqpYSdFs5cX5FyNMY='
         );
         $adapter = new Zend_Auth_Adapter_OpenId(null, $storage);
         $ret = $adapter->authenticate();
@@ -415,8 +417,9 @@ class Zend_Auth_Adapter_OpenIdTest extends PHPUnit_Framework_TestCase
             "openid_identity" => self::REAL_ID,
             "openid_response_nonce" => "2007-08-14T12:52:33Z46c1a59124ffe",
             "openid_mode" => "id_res",
-            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed",
-            "openid_sig" => "h/5AFD25NpzSok5tzHEGCVUkQSw="
+            "openid_op_endpoint" => self::SERVER,
+            "openid_signed" => "assoc_handle,return_to,claimed_id,identity,response_nonce,mode,signed,op_endpoint",
+            "openid_sig" => "7DZUB+y05wJqpYSdFs5cX5FyNMY="
         );
         $adapter = new Zend_Auth_Adapter_OpenId(null, $storage);
         $ret = $adapter->authenticate();
@@ -446,8 +449,8 @@ class Zend_Auth_Adapter_OpenIdTest extends PHPUnit_Framework_TestCase
             "openid_mode" => "id_res",
             "openid_ns_sreg" => "http://openid.net/extensions/sreg/1.1",
             "openid_sreg_nickname" => "test",
-            "openid_signed" => "ns,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,ns.sreg,sreg.nickname,signed",
-            "openid_sig" => "jcV5K517GrjOxjRzi0QNLX2D+1s="
+            "openid_signed" => "ns,assoc_handle,return_to,claimed_id,identity,response_nonce,mode,ns.sreg,sreg.nickname,signed,op_endpoint",
+            "openid_sig" => 'CIJabsMLZWjhJh+rHMnV+brQ7xE='
         );
         $_POST = array();
         $adapter = new Zend_Auth_Adapter_OpenId(null, $storage);
