@@ -5698,6 +5698,24 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $out  = $date->toString('Y-MM-dd');
         $this->assertEquals('2012-01-01', $out);
     }
+
+    /**
+     * @group GH-2
+     */
+    public function testGetTimezoneFromStringForTimezonesWithUnderscore()
+    {
+        $date = new Zend_Date();
+
+        $this->assertEquals(
+            'America/Los_Angeles',
+            $date->getTimezoneFromString('America/Los_Angeles')
+        );
+
+        $this->assertEquals(
+            'America/New_York',
+            $date->getTimezoneFromString('America/New_York')
+        );
+    }
 }
 
 class Zend_Date_TestHelper extends Zend_Date
