@@ -14,6 +14,16 @@ install:
  - sh ./tests/install_dependencies.sh
  - phpenv rehash
 
+services:
+  - memcached
+
+before_script:
+  - mysql -e 'create database zftest;'
+  - psql -c 'create database zftest;' -U postgres
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
+
 script:
  - cd tests/
  - php runalltests.php

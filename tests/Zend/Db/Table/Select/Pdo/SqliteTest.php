@@ -61,6 +61,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectGroupBy()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectGroupBy();
+        }
         $select = $this->_selectGroupBy();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
@@ -78,6 +82,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectGroupByQualified()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectGroupByQualified();
+        }
         $select = $this->_selectGroupByQualified();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
@@ -95,6 +103,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectHaving()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectHaving();
+        }
         $select = $this->_selectHaving();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
@@ -108,6 +120,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectHavingWithParameter()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectHavingWithParameter();
+        }
         $select = $this->_selectHavingWithParameter();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
@@ -121,6 +137,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectHavingOr()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectHavingOr();
+        }
         $select = $this->_selectHavingOr();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
@@ -136,6 +156,10 @@ class Zend_Db_Table_Select_Pdo_SqliteTest extends Zend_Db_Table_Select_TestCommo
 
     public function testSelectHavingOrWithParameter()
     {
+        //SQLite doesn't need different test from 5.3
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            return parent::testSelectHavingOrWithParameter();
+        }
         $select = $this->_selectHavingOrWithParameter();
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll();
