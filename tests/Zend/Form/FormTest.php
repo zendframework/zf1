@@ -4815,6 +4815,50 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group GH-319
+     */
+    public function testHasErrorsMethodShouldCheckAlsoElements()
+    {
+        // Init form
+        $form    = new Zend_Form();
+        $element = new Zend_Form_Element_Text('foo');
+        $form->addElement($element);
+
+        $element->markAsError();
+
+        // Test form
+        $this->assertTrue($form->hasErrors());
+        $this->assertFalse($form->isValid(array('foo' => 1)));
+
+        // Test element
+        $this->assertTrue($element->hasErrors());
+        $this->assertFalse($element->isValid(1));
+    }
+
+    /**
+     * @group GH-319
+     */
+    public function testHasErrorsMethodShouldCheckAlsoSubForms()
+    {
+        // Init form
+        $form    = new Zend_Form();
+        $subForm = new Zend_Form_SubForm();
+        $element = new Zend_Form_Element_Text('foo');
+        $subForm->addElement($element);
+        $form->addSubForm($subForm, 'subForm');
+
+        $element->markAsError();
+
+        // Test form
+        $this->assertTrue($form->hasErrors());
+        $this->assertFalse($form->isValid(array('foo' => 1)));
+
+        // Test element
+        $this->assertTrue($element->hasErrors());
+        $this->assertFalse($element->isValid(1));
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup
