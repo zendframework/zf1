@@ -554,7 +554,7 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
     }
 
     /**
-     * Implement PHP's magic to retrieve a ressource
+     * Implement PHP's magic to retrieve a resource
      * in the bootstrap
      *
      * @param string $prop
@@ -567,7 +567,7 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
 
     /**
      * Implement PHP's magic to ask for the
-     * existence of a ressource in the bootstrap
+     * existence of a resource in the bootstrap
      *
      * @param string $prop
      * @return bool
