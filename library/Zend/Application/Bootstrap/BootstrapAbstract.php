@@ -13,8 +13,7 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Application
- * @subpackage Bootstrap
+ * @package    Zend_Applicationressou
  * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
@@ -554,7 +553,7 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
     }
 
     /**
-     * Implement PHP's magic to retrieve a ressource
+     * Implement PHP's magic to retrieve a resource
      * in the bootstrap
      *
      * @param string $prop
@@ -567,7 +566,7 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
 
     /**
      * Implement PHP's magic to ask for the
-     * existence of a ressource in the bootstrap
+     * existence of a resource in the bootstrap
      *
      * @param string $prop
      * @return bool
