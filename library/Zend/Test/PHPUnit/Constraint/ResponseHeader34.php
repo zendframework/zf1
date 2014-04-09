@@ -20,8 +20,10 @@
  * @version    $Id$
  */
 
-/** @see PHPUnit_Framework_Constraint */
-require_once 'PHPUnit/Framework/Constraint.php';
+if (version_compare(PHPUnit_Runner_Version::id(), '4.0.0', '<')) {
+    /** @see PHPUnit_Framework_Constraint */
+    require_once 'PHPUnit/Framework/Constraint.php';
+}
 
 /**
  * Response header PHPUnit Constraint
