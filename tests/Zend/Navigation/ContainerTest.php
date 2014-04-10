@@ -1260,4 +1260,28 @@ class Zend_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(null, $container->getChildren());
     }
+
+    public function testRemovePageRecursively()
+    {
+        $container = new Zend_Navigation(array(
+            array(
+                'route' => 'foo',
+                'pages' => array(
+                    array(
+                        'route' => 'bar',
+                        'pages' => array(
+                            array(
+                                'route' => 'baz',
+                            ),
+                        ),
+                    )
+                )
+            ),
+        ));
+
+        $container->removePage($container->findOneBy('route', 'baz'), true);
+        $this->assertNull($container->findOneBy('route', 'baz'));
+        $container->removePage($container->findOneBy('route', 'bar'), true);
+        $this->assertNull($container->findOneBy('route', 'bar'));
+    }
 }
