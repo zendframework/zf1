@@ -5716,6 +5716,11 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
             $date->getTimezoneFromString('America/New_York')
         );
     }
+    
+    public function testIsDateShouldReturnFalseForNotMatchingFormat()
+    {
+        $this->assertFalse(Zend_Date::isDate('2009 - some text', 'dd.MM.yyyy'));
+    }
 }
 
 class Zend_Date_TestHelper extends Zend_Date
