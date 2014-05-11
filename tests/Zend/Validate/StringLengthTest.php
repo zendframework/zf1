@@ -59,7 +59,11 @@ class Zend_Validate_StringLengthTest extends PHPUnit_Framework_TestCase
      */
     public function testBasic()
     {
-        iconv_set_encoding('internal_encoding', 'UTF-8');
+        if (PHP_VERSION_ID < 50600) {
+            iconv_set_encoding('internal_encoding', 'UTF-8');
+        } else {
+            ini_set('default_charset', 'UTF-8');
+        }
         /**
          * The elements of each array are, in order:
          *      - minimum length
@@ -161,7 +165,11 @@ class Zend_Validate_StringLengthTest extends PHPUnit_Framework_TestCase
      */
     public function testDifferentEncodingWithValidator()
     {
-        iconv_set_encoding('internal_encoding', 'UTF-8');
+        if (PHP_VERSION_ID < 50600) {
+            iconv_set_encoding('internal_encoding', 'UTF-8');
+        } else {
+            ini_set('default_charset', 'UTF-8');
+        }
         $validator = new Zend_Validate_StringLength(2, 2, 'UTF-8');
         $this->assertEquals(true, $validator->isValid('ab'));
 
