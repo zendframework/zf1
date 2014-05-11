@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-if (version_compare(PHPUnit_Runner_Version::id(), '4.0.0', '<')) {
-    /** @see PHPUnit_Framework_Constraint */
-    require_once 'PHPUnit/Framework/Constraint.php';
-}
-
 /** @see Zend_Dom_Query */
 require_once 'Zend/Dom/Query.php';
 

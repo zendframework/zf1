@@ -20,11 +20,6 @@
  * @version    $Id$
  */
 
-if (version_compare(PHPUnit_Runner_Version::id(), '4.0.0', '<')) {
-    /** @see PHPUnit_Framework_ExpectationFailedException */
-    require_once 'PHPUnit/Framework/ExpectationFailedException.php';
-}
-
 /**
  * Zend_Test_PHPUnit_Constraint_Exception
  *
