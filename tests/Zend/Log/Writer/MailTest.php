@@ -43,9 +43,6 @@ require_once 'Zend/Mail/Transport/Exception.php';
 /** Zend_View_Exception */
 require_once 'Zend/View/Exception.php';
 
-/** For some reason these classed have to be manually loaded, because PHPUnit fails to autoload them */
-require_once 'PHPUnit/Framework/MockObject/Stub/Exception.php';
-
 /** Zend_Mail_Transport_Abstract */
 require_once 'Zend/Mail/Transport/Abstract.php';
 

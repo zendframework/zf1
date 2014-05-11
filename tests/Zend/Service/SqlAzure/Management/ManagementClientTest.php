@@ -31,7 +31,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 require_once dirname(__FILE__) . '/../../../../TestHelper.php';
 require_once dirname(__FILE__) . '/../../../../TestConfiguration.php.dist';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /** Zend_Service_SqlAzure_Management_Client */
 require_once 'Zend/Service/SqlAzure/Management/Client.php';
