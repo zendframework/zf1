@@ -1148,6 +1148,12 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     // Check each hostname part
                     $check = 0;
                     foreach ($domainParts as $domainPart) {
+                        // If some domain part is empty (i.e. zend..com), it's invalid
+                        if (empty($domainPart)) {
+                            $this->_error(self::INVALID_HOSTNAME);
+                            return false;
+                        }
+
                         // Decode Punycode domainnames to IDN
                         if (strpos($domainPart, 'xn--') === 0) {
                             $domainPart = $this->decodePunycode(substr($domainPart, 4));
