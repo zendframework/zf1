@@ -81,8 +81,11 @@ class Zend_Mail_MessageTest extends PHPUnit_Framework_TestCase
     {
         $message = new Zend_Mail_Message(array('file' => $this->_file));
 
-        $this->assertEquals($message->from, iconv('UTF-8', iconv_get_encoding('internal_encoding'),
-                                                                   '"Peter Müller" <peter-mueller@example.com>'));
+        $enc = PHP_VERSION_ID < 50600
+            ? iconv_get_encoding('internal_encoding')
+            : ini_get('default_charset');
+
+        $this->assertEquals($message->from, iconv('UTF-8', $enc, '"Peter Müller" <peter-mueller@example.com>'));
     }
 
     public function testGetHeaderAsArray()

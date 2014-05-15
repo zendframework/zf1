@@ -1105,7 +1105,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         if ((count($domainParts) > 1) && (strlen($value) >= 4) && (strlen($value) <= 254)) {
             $status = false;
 
-            $origenc = iconv_get_encoding('internal_encoding');
+            $origenc = PHP_VERSION_ID < 50600
+                        ? iconv_get_encoding('internal_encoding')
+                        : ini_get('default_charset');
             if (PHP_VERSION_ID < 50600) {
                 iconv_set_encoding('internal_encoding', 'UTF-8');
             } else {
