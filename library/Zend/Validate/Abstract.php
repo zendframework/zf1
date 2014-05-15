@@ -230,7 +230,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
                 $value = $value->__toString();
             }
         } else {
-            $value = implode((array) $value);
+            $value = json_encode($value);
         }
 
         if ($this->getObscureValue()) {
