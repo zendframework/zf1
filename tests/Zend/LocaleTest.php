@@ -500,8 +500,8 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('015 011 017 014 018', Zend_LocaleTestHelper::getTranslation('002', 'regiontoterritory', 'en'));
         $this->assertFalse(Zend_LocaleTestHelper::getTranslation('xxx', 'regiontoterritory'));
 
-        $this->assertEquals('AT BE CH DE LI LU NA', Zend_LocaleTestHelper::getTranslation('de', 'territorytolanguage', 'de_DE'));
-        $this->assertEquals('AT BE CH DE LI LU NA', Zend_LocaleTestHelper::getTranslation('de', 'territorytolanguage', 'en'));
+        $this->assertEquals('AT BE CH DE LI LU', Zend_LocaleTestHelper::getTranslation('de', 'territorytolanguage', 'de_DE'));
+        $this->assertEquals('AT BE CH DE LI LU', Zend_LocaleTestHelper::getTranslation('de', 'territorytolanguage', 'en'));
         $this->assertFalse(Zend_LocaleTestHelper::getTranslation('xxx', 'territorytolanguage'));
     }
 
