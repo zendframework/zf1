@@ -75,6 +75,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
       'HTML'=>'text/html',
       'HTM'=>'text/html',
       'DOC'=>'application/msword',
+      'DOCX'=>'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'ODS'=>'application/vnd.oasis.opendocument.spreadsheet',
       'ODT'=>'application/vnd.oasis.opendocument.text',
       'RTF'=>'application/rtf',
