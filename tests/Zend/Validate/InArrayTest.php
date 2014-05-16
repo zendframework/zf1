@@ -195,4 +195,17 @@ class Zend_Validate_InArrayTest extends PHPUnit_Framework_TestCase
         $validator->setRecursive(true);
         $this->assertTrue($validator->isValid('A'));
     }
+
+    /**
+     * Test to demonstrate purpose of commit 52b8ba5.
+     */
+    public function testMultidimensionalArrayNotFound()
+    {
+        $input = array(
+            array('x'),
+            array('y'),
+        );
+        $validator = new Zend_Validate_InArray(array('a'));
+        $this->assertFalse($validator->isValid($input));
+    }
 }
