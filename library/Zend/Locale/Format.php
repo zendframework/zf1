@@ -524,7 +524,7 @@ class Zend_Locale_Format
             $input = 0 . $input;
         }
         foreach ($regexs as $regex) {
-            preg_match($regex, $input, $found);
+            @preg_match($regex, $input, $found);
             if (isset($found[0])) {
                 return true;
             }
