@@ -524,6 +524,15 @@ class Zend_Locale_Format
             $input = 0 . $input;
         }
         foreach ($regexs as $regex) {
+            /**
+             * The following locales generate an error and I have therefore suppressed the error
+             * with the @ symbol. Hopefully someone can fix this. It seems to have to do with a
+             * unicode non printable control char related to the minus sign. The consequence of
+             * this bug is that certain locales will incorrectly have a false returned by this
+             * function.
+             *
+             * 'ar','fa', 'he', 'ks', 'uz_Arab','ur','root'
+             */
             @preg_match($regex, $input, $found);
             if (isset($found[0])) {
                 return true;
