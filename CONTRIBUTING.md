@@ -2,7 +2,7 @@
 
 > **To submit code, patches, and proposals to Zend Framework, contributors must
 agree to the New BSD License and also submit a signed
-[Contributor License Agreement (CLA)](https://github.com/zendframework/zf1/wiki/Contributor-Licence-Agreement-%28CLA%29).**
+[Contributor License Agreement (CLA)](https://github.com/zendframework/zf1/wiki/Contributor-License-Agreement-%28CLA%29).**
 
 ## RESOURCES
 
