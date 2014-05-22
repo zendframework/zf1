@@ -766,22 +766,29 @@ class Zend_Locale_Format
         $converted = array();
         foreach (str_split($format) as $char) {
             if (!$escaped && $char == '\\') {
+                // Next char will be escaped: let's remember it
                 $escaped = true;
             } elseif ($escaped) {
                 if (!$inEscapedString) {
+                    // First escaped string: start the quoted chunk
                     $converted[] = "'";
                     $inEscapedString = true;
                 }
+                // Since the previous char was a \ and we are in the quoted
+                // chunk, let's simply add $char as it is
                 $converted[] = $char;
                 $escaped = false;
             } elseif ($char == "'") {
+                // Single quotes need to be escaped like this
                 $converted[] = "''";
             } else {
                 if ($inEscapedString) {
+                    // Close the single-quoted chunk
                     $converted[] = "'";
                     $inEscapedString = false;
                 }
-                if (isset($convert[$char]) === true) {
+                // Convert the unescaped char if needed
+                if (isset($convert[$char])) {
                     $converted[] = $convert[$char];
                 } else {
                     $converted[] = $char;
