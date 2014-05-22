@@ -767,28 +767,24 @@ class Zend_Locale_Format
         foreach (str_split($format) as $char) {
             if (!$escaped && $char == '\\') {
                 $escaped = true;
-                continue;
-            }
-            if ($escaped) {
+            } elseif ($escaped) {
                 if (!$lastescaped) {
                     $converted[] = "'";
                     $lastescaped = true;
                 }
                 $converted[] = $char;
                 $escaped = false;
+            } elseif ($char == "'") {
+                $converted[] = "''";
             } else {
-                if ($char == "'") {
-                    $converted[] = "''";
+                if ($lastescaped) {
+                    $converted[] = "'";
+                    $lastescaped = false;
+                }
+                if (isset($convert[$char]) === true) {
+                    $converted[] = $convert[$char];
                 } else {
-                    if ($lastescaped) {
-                        $converted[] = "'";
-                        $lastescaped = false;
-                    }
-                    if (isset($convert[$char]) === true) {
-                        $converted[] = $convert[$char];
-                    } else {
-                        $converted[] = $char;
-                    }
+                    $converted[] = $char;
                 }
             }
         }
