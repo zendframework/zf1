@@ -763,7 +763,7 @@ class Zend_Locale_Format
         );
         $escaped = false;
         $lastescaped = false;
-        $temp = array();
+        $converted = array();
         foreach (str_split($format) as $char) {
             if (!$escaped && $char == '\\') {
                 $escaped = true;
@@ -771,29 +771,29 @@ class Zend_Locale_Format
             }
             if ($escaped) {
                 if (!$lastescaped) {
-                    $temp[] = "'";
+                    $converted[] = "'";
                     $lastescaped = true;
                 }
-                $temp[] = $char;
+                $converted[] = $char;
                 $escaped = false;
             } else {
                 if ($char == "'") {
-                    $temp[] = "''";
+                    $converted[] = "''";
                 } else {
                     if ($lastescaped) {
-                        $temp[] = "'";
+                        $converted[] = "'";
                         $lastescaped = false;
                     }
                     if (isset($convert[$char]) === true) {
-                        $temp[] = $convert[$char];
+                        $converted[] = $convert[$char];
                     } else {
-                        $temp[] = $char;
+                        $converted[] = $char;
                     }
                 }
             }
         }
 
-        return implode($temp);
+        return implode($converted);
     }
 
     /**
