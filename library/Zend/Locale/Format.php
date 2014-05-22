@@ -756,12 +756,11 @@ class Zend_Locale_Format
                          'H' => 'HH'  , 'i' => 'mm'  , 's' => 'ss'  , 'e' => 'zzzz', 'I' => 'I'   , 'O' => 'Z'   ,
                          'P' => 'ZZZZ', 'T' => 'z'   , 'Z' => 'X'   , 'c' => 'yyyy-MM-ddTHH:mm:ssZZZZ',
                          'r' => 'r'   , 'U' => 'U');
-        $values = str_split($format);
         $escaped = false;
         $lastescaped = false;
         $temp = array();
-        foreach ($values as $key => $value) {
-            if (!$escaped && $value == '\\') {
+        foreach (str_split($format) as $char) {
+            if (!$escaped && $char == '\\') {
                 $escaped = true;
                 continue;
             }
@@ -770,20 +769,20 @@ class Zend_Locale_Format
                     $temp[] = "'";
                     $lastescaped = true;
                 }
-                $temp[] = $value;
+                $temp[] = $char;
                 $escaped = false;
             } else {
-                if ($value == "'") {
+                if ($char == "'") {
                     $temp[] = "''";
                 } else {
                     if ($lastescaped) {
                         $temp[] = "'";
                         $lastescaped = false;
                     }
-                    if (isset($convert[$value]) === true) {
-                        $temp[] = $convert[$value];
+                    if (isset($convert[$char]) === true) {
+                        $temp[] = $convert[$char];
                     } else {
-                        $temp[] = $value;
+                        $temp[] = $char;
                     }
                 }
             }
