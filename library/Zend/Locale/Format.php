@@ -789,7 +789,7 @@ class Zend_Locale_Format
             }
         }
 
-        return join($temp);
+        return implode($temp);
     }
 
     /**
