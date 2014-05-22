@@ -762,24 +762,24 @@ class Zend_Locale_Format
             'U' => 'U',
         );
         $escaped = false;
-        $lastescaped = false;
+        $inEscapedString = false;
         $converted = array();
         foreach (str_split($format) as $char) {
             if (!$escaped && $char == '\\') {
                 $escaped = true;
             } elseif ($escaped) {
-                if (!$lastescaped) {
+                if (!$inEscapedString) {
                     $converted[] = "'";
-                    $lastescaped = true;
+                    $inEscapedString = true;
                 }
                 $converted[] = $char;
                 $escaped = false;
             } elseif ($char == "'") {
                 $converted[] = "''";
             } else {
-                if ($lastescaped) {
+                if ($inEscapedString) {
                     $converted[] = "'";
-                    $lastescaped = false;
+                    $inEscapedString = false;
                 }
                 if (isset($convert[$char]) === true) {
                     $converted[] = $convert[$char];
