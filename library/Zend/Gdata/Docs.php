@@ -58,7 +58,6 @@ require_once 'Zend/Gdata/App/Extension/Title.php';
  */
 class Zend_Gdata_Docs extends Zend_Gdata
 {
-
     const DOCUMENTS_LIST_FEED_URI = 'https://docs.google.com/feeds/documents/private/full';
     const DOCUMENTS_FOLDER_FEED_URI = 'https://docs.google.com/feeds/folders/private/full';
     const DOCUMENTS_CATEGORY_SCHEMA = 'http://schemas.google.com/g/2005#kind';
@@ -74,22 +73,23 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @var array
      */
     protected static $SUPPORTED_FILETYPES = array(
-      'TXT'=>'text/plain',
-      'CSV'=>'text/csv',
-      'TSV'=>'text/tab-separated-values',
-      'TAB'=>'text/tab-separated-values',
-      'HTML'=>'text/html',
-      'HTM'=>'text/html',
-      'DOC'=>'application/msword',
-      'DOCX'=>'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'ODS'=>'application/vnd.oasis.opendocument.spreadsheet',
-      'ODT'=>'application/vnd.oasis.opendocument.text',
-      'RTF'=>'application/rtf',
-      'SXW'=>'application/vnd.sun.xml.writer',
-      'XLS'=>'application/vnd.ms-excel',
-      'XLSX'=>'application/vnd.ms-excel',
-      'PPT'=>'application/vnd.ms-powerpoint',
-      'PPS'=>'application/vnd.ms-powerpoint');
+        'TXT'  => 'text/plain',
+        'CSV'  => 'text/csv',
+        'TSV'  => 'text/tab-separated-values',
+        'TAB'  => 'text/tab-separated-values',
+        'HTML' => 'text/html',
+        'HTM'  => 'text/html',
+        'DOC'  => 'application/msword',
+        'DOCX' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'ODS'  => 'application/vnd.oasis.opendocument.spreadsheet',
+        'ODT'  => 'application/vnd.oasis.opendocument.text',
+        'RTF'  => 'application/rtf',
+        'SXW'  => 'application/vnd.sun.xml.writer',
+        'XLS'  => 'application/vnd.ms-excel',
+        'XLSX' => 'application/vnd.ms-excel',
+        'PPT'  => 'application/vnd.ms-powerpoint',
+        'PPS'  => 'application/vnd.ms-powerpoint'
+    );
 
     /**
      * Create Gdata_Docs object
@@ -115,8 +115,9 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @return string The mime type to be sent to the server to tell it how the
      *          multipart mime data should be interpreted.
      */
-    public static function lookupMimeType($fileExtension) {
-      return self::$SUPPORTED_FILETYPES[strtoupper($fileExtension)];
+    public static function lookupMimeType($fileExtension)
+    {
+        return self::$SUPPORTED_FILETYPES[strtoupper($fileExtension)];
     }
 
     /**
@@ -149,7 +150,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
         if ($location === null) {
             require_once 'Zend/Gdata/App/InvalidArgumentException.php';
             throw new Zend_Gdata_App_InvalidArgumentException(
-                    'Location must not be null');
+                    'Location must not be null'
+            );
         } else if ($location instanceof Zend_Gdata_Query) {
             $uri = $location->getQueryUrl();
         } else {
@@ -169,9 +171,11 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *     Document List URLs. Examples: document, spreadsheet, presentation
      * @return Zend_Gdata_Docs_DocumentListEntry
      */
-    public function getDoc($docId, $docType) {
+    public function getDoc($docId, $docType)
+    {
         $location = 'https://docs.google.com/feeds/documents/private/full/' .
             $docType . '%3A' . $docId;
+
         return $this->getDocumentListEntry($location);
     }
 
@@ -181,8 +185,9 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @param string $id The URL id for the document. Example: dcmg89gw_62hfjj8m
      * @return Zend_Gdata_Docs_DocumentListEntry
      */
-    public function getDocument($id) {
-      return $this->getDoc($id, 'document');
+    public function getDocument($id)
+    {
+        return $this->getDoc($id, 'document');
     }
 
     /**
@@ -191,8 +196,9 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @param string $id The URL id for the document. Example: pKq0CzjiF3YmGd0AIlHKqeg
      * @return Zend_Gdata_Docs_DocumentListEntry
      */
-    public function getSpreadsheet($id) {
-      return $this->getDoc($id, 'spreadsheet');
+    public function getSpreadsheet($id)
+    {
+        return $this->getDoc($id, 'spreadsheet');
     }
 
     /**
@@ -201,8 +207,9 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @param string $id The URL id for the document. Example: dcmg89gw_21gtrjcn
      * @return Zend_Gdata_Docs_DocumentListEntry
      */
-    public function getPresentation($id) {
-      return $this->getDoc($id, 'presentation');
+    public function getPresentation($id)
+    {
+        return $this->getDoc($id, 'presentation');
     }
 
     /**
@@ -227,8 +234,9 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @return Zend_Gdata_Docs_DocumentListEntry The entry for the newly
      *         created Google Document.
      */
-    public function uploadFile($fileLocation, $title=null, $mimeType=null,
-                               $uri=null)
+    public function uploadFile($fileLocation, $title = null, $mimeType = null,
+        $uri = null
+    )
     {
         // Set the URI to which the file will be uploaded.
         if ($uri === null) {
@@ -272,11 +280,14 @@ class Zend_Gdata_Docs extends Zend_Gdata
      * @todo ZF-8732: This should return a *subclass* of Zend_Gdata_Entry, but
      *       the appropriate type doesn't exist yet.
      */
-    public function createFolder($folderName, $folderResourceId=null) {
-        $category = new Zend_Gdata_App_Extension_Category(self::DOCUMENTS_CATEGORY_TERM,
-                                                          self::DOCUMENTS_CATEGORY_SCHEMA);
-        $title = new Zend_Gdata_App_Extension_Title($folderName);
-        $entry = new Zend_Gdata_Entry();
+    public function createFolder($folderName, $folderResourceId = null)
+    {
+        $category = new Zend_Gdata_App_Extension_Category(
+            self::DOCUMENTS_CATEGORY_TERM,
+            self::DOCUMENTS_CATEGORY_SCHEMA
+        );
+        $title    = new Zend_Gdata_App_Extension_Title($folderName);
+        $entry    = new Zend_Gdata_Entry();
 
         $entry->setCategory(array($category));
         $entry->setTitle($title);
@@ -303,9 +314,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *     service after insertion.
      */
     public function insertDocument($data, $uri,
-        $className='Zend_Gdata_Docs_DocumentListEntry')
+        $className = 'Zend_Gdata_Docs_DocumentListEntry')
     {
         return $this->insertEntry($data, $uri, $className);
     }
-
 }
