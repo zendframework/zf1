@@ -65,8 +65,14 @@ class Zend_Gdata_Docs extends Zend_Gdata
     const DOCUMENTS_CATEGORY_TERM = 'http://schemas.google.com/docs/2007#folder';
     const AUTH_SERVICE_NAME = 'writely';
 
+    /**
+     * @var string
+     */
     protected $_defaultPostUri = self::DOCUMENTS_LIST_FEED_URI;
 
+    /**
+     * @var array
+     */
     protected static $SUPPORTED_FILETYPES = array(
       'TXT'=>'text/plain',
       'CSV'=>'text/csv',
@@ -136,6 +142,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *
      * @param mixed $location The location for the entry, as a URL or Query
      * @return Zend_Gdata_Docs_DocumentListEntry
+     * @throws Zend_Gdata_App_InvalidArgumentException
      */
     public function getDocumentListEntry($location = null)
     {
@@ -171,8 +178,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
     /**
      * Retreive entry object for the desired word processing document.
      *
-     * @param string $id The URL id for the document. Example:
-     *     dcmg89gw_62hfjj8m
+     * @param string $id The URL id for the document. Example: dcmg89gw_62hfjj8m
+     * @return Zend_Gdata_Docs_DocumentListEntry
      */
     public function getDocument($id) {
       return $this->getDoc($id, 'document');
@@ -181,8 +188,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
     /**
      * Retreive entry object for the desired spreadsheet.
      *
-     * @param string $id The URL id for the document. Example:
-     *     pKq0CzjiF3YmGd0AIlHKqeg
+     * @param string $id The URL id for the document. Example: pKq0CzjiF3YmGd0AIlHKqeg
+     * @return Zend_Gdata_Docs_DocumentListEntry
      */
     public function getSpreadsheet($id) {
       return $this->getDoc($id, 'spreadsheet');
@@ -191,8 +198,8 @@ class Zend_Gdata_Docs extends Zend_Gdata
     /**
      * Retreive entry object for the desired presentation.
      *
-     * @param string $id The URL id for the document. Example:
-     *     dcmg89gw_21gtrjcn
+     * @param string $id The URL id for the document. Example: dcmg89gw_21gtrjcn
+     * @return Zend_Gdata_Docs_DocumentListEntry
      */
     public function getPresentation($id) {
       return $this->getDoc($id, 'presentation');
