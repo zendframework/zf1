@@ -67,7 +67,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
 
     protected $_defaultPostUri = self::DOCUMENTS_LIST_FEED_URI;
 
-    private static $SUPPORTED_FILETYPES = array(
+    protected static $SUPPORTED_FILETYPES = array(
       'TXT'=>'text/plain',
       'CSV'=>'text/csv',
       'TSV'=>'text/tab-separated-values',
@@ -75,6 +75,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
       'HTML'=>'text/html',
       'HTM'=>'text/html',
       'DOC'=>'application/msword',
+      'DOCX'=>'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'ODS'=>'application/vnd.oasis.opendocument.spreadsheet',
       'ODT'=>'application/vnd.oasis.opendocument.text',
       'RTF'=>'application/rtf',
