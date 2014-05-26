@@ -299,7 +299,7 @@ class Zend_Pdf
      *
      * If $source is a string and $load is true, then it loads document
      * from a file.
-
+     *
      * $revision used to roll back document to specified version
      * (0 - current version, 1 - previous version, 2 - ...)
      *
