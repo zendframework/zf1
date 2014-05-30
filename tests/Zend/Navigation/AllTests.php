@@ -20,8 +20,6 @@
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework/Constraint/TraversableContainsOnly.php';
-
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Navigation_AllTests::main');
 }

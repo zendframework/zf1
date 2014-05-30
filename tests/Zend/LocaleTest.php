@@ -110,6 +110,24 @@ class Zend_LocaleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group GH-337
+     */
+    public function testIsLocaleMethodWithAliases()
+    {
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_CN'));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_CN', false, false));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_CN', true, true));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_CN', false, true));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_CN', true, false));
+
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_Hans_CN'));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_Hans_CN', false, false));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_Hans_CN', true, true));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_Hans_CN', false, true));
+        $this->assertEquals(true, Zend_Locale::isLocale('zh_Hans_CN', true, false));
+    }
+
+    /**
      * test for object creation
      * expected object instance
      */
