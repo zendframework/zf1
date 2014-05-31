@@ -4859,6 +4859,20 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($element->hasErrors());
         $this->assertFalse($element->isValid(1));
     }
+
+    public function testSetDefaultsAllowOverridingWithNonArrayParameter()
+    {
+        //this would throw a strict warning if the setDefaults() method requires param to be array
+        $form = new Zend_Form_FormTest_SetDefaults();
+    }
+}
+
+class Zend_Form_FormTest_SetDefaults extends Zend_Form
+{
+    public function setDefaults($defaults)
+    {
+        return parent::setDefaults($defaults);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup

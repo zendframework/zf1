@@ -1271,7 +1271,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      * @param  array $defaults
      * @return Zend_Form
      */
-    public function setDefaults(array $defaults)
+    public function setDefaults($defaults)
     {
         $eBelongTo = null;
 
