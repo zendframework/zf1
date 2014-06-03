@@ -4865,6 +4865,32 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
         //this would throw a strict warning if the setDefaults() method requires param to be array
         $form = new Zend_Form_FormTest_SetDefaults();
     }
+
+    public function testCanSetElementDefaultValuesFromTraversable()
+    {
+        $this->testCanAddAndRetrieveMultipleElements();
+        $values = array(
+            'foo' => 'foovalue',
+            'bar' => 'barvalue',
+            'baz' => 'bazvalue',
+            'bat' => 'batvalue',
+        );
+        $traversable = new ArrayIterator($values);
+        $this->form->setDefaults($traversable);
+        $elements = $this->form->getElements();
+        foreach (array_keys($values) as $name) {
+            $this->assertEquals($name . 'value', $elements[$name]->getValue());
+        }
+    }
+
+    /**
+     * @expectedException Zend_Form_Exception
+     * @expectedExceptionMessage Argument passed to setDefaults() must be of type array or Traversable.
+     */
+    public function testSetDefaultsWithInvalidTypeThrowsException()
+    {
+        $this->form->setDefaults(new stdClass());
+    }
 }
 
 class Zend_Form_FormTest_SetDefaults extends Zend_Form

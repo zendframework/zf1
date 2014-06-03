@@ -1268,11 +1268,16 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      *
      * Sets values for all elements specified in the array of $defaults.
      *
-     * @param  array $defaults
+     * @param  array|Traversable $defaults
+     * @throws Zend_Form_Exception When invalid type is passed
      * @return Zend_Form
      */
     public function setDefaults($defaults)
     {
+        if (!is_array($defaults) && !$defaults instanceof Traversable) {
+            throw new Zend_Form_Exception('Argument passed to setDefaults() must be of type array or Traversable.');
+        }
+
         $eBelongTo = null;
 
         if ($this->isArray()) {
