@@ -4815,6 +4815,90 @@ class Zend_Form_FormTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @group GH-319
+     */
+    public function testHasErrorsMethodShouldCheckAlsoElements()
+    {
+        // Init form
+        $form    = new Zend_Form();
+        $element = new Zend_Form_Element_Text('foo');
+        $form->addElement($element);
+
+        $element->markAsError();
+
+        // Test form
+        $this->assertTrue($form->hasErrors());
+        $this->assertFalse($form->isValid(array('foo' => 1)));
+
+        // Test element
+        $this->assertTrue($element->hasErrors());
+        $this->assertFalse($element->isValid(1));
+    }
+
+    /**
+     * @group GH-319
+     */
+    public function testHasErrorsMethodShouldCheckAlsoSubForms()
+    {
+        // Init form
+        $form    = new Zend_Form();
+        $subForm = new Zend_Form_SubForm();
+        $element = new Zend_Form_Element_Text('foo');
+        $subForm->addElement($element);
+        $form->addSubForm($subForm, 'subForm');
+
+        $element->markAsError();
+
+        // Test form
+        $this->assertTrue($form->hasErrors());
+        $this->assertFalse($form->isValid(array('foo' => 1)));
+
+        // Test element
+        $this->assertTrue($element->hasErrors());
+        $this->assertFalse($element->isValid(1));
+    }
+
+    public function testSetDefaultsAllowOverridingWithNonArrayParameter()
+    {
+        //this would throw a strict warning if the setDefaults() method requires param to be array
+        $form = new Zend_Form_FormTest_SetDefaults();
+    }
+
+    public function testCanSetElementDefaultValuesFromTraversable()
+    {
+        $this->testCanAddAndRetrieveMultipleElements();
+        $values = array(
+            'foo' => 'foovalue',
+            'bar' => 'barvalue',
+            'baz' => 'bazvalue',
+            'bat' => 'batvalue',
+        );
+        $traversable = new ArrayIterator($values);
+        $this->form->setDefaults($traversable);
+        $elements = $this->form->getElements();
+        foreach (array_keys($values) as $name) {
+            $this->assertEquals($name . 'value', $elements[$name]->getValue());
+        }
+    }
+
+    /**
+     * @expectedException Zend_Form_Exception
+     * @expectedExceptionMessage Argument passed to setDefaults() must be of type array or Traversable.
+     */
+    public function testSetDefaultsWithInvalidTypeThrowsException()
+    {
+        $this->form->setDefaults(new stdClass());
+    }
+}
+
+class Zend_Form_FormTest_SetDefaults extends Zend_Form
+{
+    public function setDefaults($defaults)
+    {
+        return parent::setDefaults($defaults);
+    }
 }
 
 class Zend_Form_FormTest_DisplayGroup extends Zend_Form_DisplayGroup

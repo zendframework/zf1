@@ -7,8 +7,18 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.4 Release.
-Released on March 06, 2014.
+Zend Framework 1.12.7dev Release.
+Released on MMMMM DD, YYYY.
+
+IMPORTANT FIXES FOR 1.12.6
+--------------------------
+
+- [#307](https://github.com/zendframework/zf1/pull/307) fixes a backwards
+  compatibility break in the `Zend_Locale` component. 1.12.4 updated the
+  [CLDR](http://cldr.unicode.org) version used by Zend Framework 1, which
+  resulted in the removal of several locales we previously supported. The patch
+  in #307 adds locale aliases for these to the new locales supported in recent
+  versions of the CLDR, ensuring backwards compatibility for ZF1 users.
 
 SECURITY FIXES FOR 1.12.4
 -------------------------
@@ -245,9 +255,9 @@ We’d like to particularly thank Adam Lundrigan, Frank Brückner and
 Martin Hujer for their efforts in making this happen. Thanks also to the
 many people who ran the ZF1 unit tests and reported their results!
 
-For a complete list, visit:
+For a complete list of closed issues beginning with 1.12.3, visit:
 
- * http://framework.zend.com/issues/secure/IssueNavigator.jspa?requestId=12877
+ * https://github.com/zendframework/zf1/issues?labels=&milestone=&page=1&state=closed
  * http://framework.zend.com/changelog/
 
 MIGRATION NOTES

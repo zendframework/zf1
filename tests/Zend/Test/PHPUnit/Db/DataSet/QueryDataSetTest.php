@@ -22,8 +22,6 @@
 
 require_once "Zend/Test/DbAdapter.php";
 
-require_once "PHPUnit/Extensions/Database/DB/IDatabaseConnection.php";
-
 /**
  * @see Zend_Test_PHPUnit_Db_DataSet_DataSetTestCase
  */

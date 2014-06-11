@@ -23,13 +23,15 @@
 /**
  * Include PHPUnit dependencies
  */
-require_once 'PHPUnit/Runner/Version.php';
+if (version_compare(PHPUnit_Runner_Version::id(), '4.0.0', '<')) {
+    require_once 'PHPUnit/Runner/Version.php';
 
-$phpunitVersion = PHPUnit_Runner_Version::id();
-if ($phpunitVersion == '@package_version@' || version_compare($phpunitVersion, '3.5.5', '>=')) {
-    require_once 'PHPUnit/Autoload.php'; // >= PHPUnit 3.5.5
-} else {
-    require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
+    $phpunitVersion = PHPUnit_Runner_Version::id();
+    if ($phpunitVersion == '@package_version@' || version_compare($phpunitVersion, '3.5.5', '>=')) {
+        require_once 'PHPUnit/Autoload.php'; // >= PHPUnit 3.5.5
+    } else {
+        require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
+    }
 }
 
 /*

@@ -51,6 +51,11 @@ require_once 'Zend/View.php';
 class Zend_Dojo_View_Helper_DojoTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Zend_Dojo_View_Helper_Dojo_Container
+     */
+    protected $helper;
+
+    /**
      * Runs the test methods of this class.
      *
      * @return void
@@ -907,6 +912,34 @@ function() {
                       ));
         $output = $this->helper->dijitsToJson();
         $this->assertRegexp('#(function\\(\\){alert\\(\'foo\'\\);})#', $output);
+    }
+
+    /**
+     * @group GH-340
+     */
+    public function testRenderStylesheetsOrder()
+    {
+        $helper = $this->helper;
+        $options = array(
+            'localPath'              => '',
+            'stylesheetmodules'      => 'test.stylesheet.module',
+            'registerdojostylesheet' => true,
+            'enable'                 => true,
+        );
+        $helper->setOptions($options);
+
+        $expected = '<style type="text/css">' . "\n"
+                  . '<!--' . "\n"
+                  . '    @import "/dojo/resources/dojo.css";' . "\n"
+                  . '    @import "/test/stylesheet/module/module.css";' . "\n"
+                  . '-->' . "\n"
+                  . '</style>';
+
+        $actual = (string) $helper;
+        $end    = '</style>';
+        $actual = substr($actual, 0, strpos($actual, $end) + strlen($end));
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function setupDojo()

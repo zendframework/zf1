@@ -29,7 +29,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 require_once dirname(__FILE__) . '/../../../../TestHelper.php';
 require_once dirname(__FILE__) . '/../../../../TestConfiguration.php.dist';
-require_once 'PHPUnit/Framework/TestCase.php';
 
 /** Zend_Service_WindowsAzure_Credentials_SharedKey */
 require_once 'Zend/Service/WindowsAzure/Credentials/SharedKey.php';

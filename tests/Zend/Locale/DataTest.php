@@ -55,6 +55,15 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test for reading the scriptlist from a locale that is an alias
+     */
+    public function testAliases()
+    {
+        $data = Zend_Locale_Data::getList('zh_CN', 'script');
+        $this->assertEquals('阿拉伯文', $data['Arab']);
+    }
+
+    /**
      * test for reading with standard locale
      * expected array
      */

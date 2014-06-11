@@ -125,17 +125,7 @@ class Zend_RegistryTest extends PHPUnit_Framework_TestCase
 
     public function testRegistryArrayObject()
     {
-        $registry = Zend_Registry::getInstance();
-        $registry['emptyArray'] = array();
-        $registry['null'] = null;
-
-        $this->assertTrue(isset($registry['emptyArray']));
-        $this->assertTrue(isset($registry['null']));
-        $this->assertFalse(isset($registry['noIndex']));
-
-        $this->assertTrue(Zend_Registry::isRegistered('emptyArray'));
-        $this->assertTrue(Zend_Registry::isRegistered('null'));
-        $this->assertFalse(Zend_Registry::isRegistered('noIndex'));
+        $this->assertTrue(Zend_Registry::getInstance() instanceof ArrayObject);
     }
 
     public function testRegistryArrayAsProps()
