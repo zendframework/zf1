@@ -1759,12 +1759,12 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
 
     public function testSqlInjectionWithOrder()
     {
-    	$select = $this->_db->select();
-    	$select->from(array('p' => 'products'))->order('MD5(1);select');
-    	$this->assertEquals($select, 'SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);select" ASC');
-    	
-    	$select = $this->_db->select();
-    	$select->from(array('p' => 'products'))->order('name;select;MD5(1)');
-    	$this->assertEquals($select, 'SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC');
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('MD5(1);select');
+        $this->assertEquals($select, 'SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);select" ASC');
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('name;select;MD5(1)');
+        $this->assertEquals($select, 'SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC');
     }
 }
