@@ -7,8 +7,8 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.7 Release.
-Released on June 12, 2014.
+Zend Framework 1.12.8dev Release.
+Released on MMMMM DD, YYYY.
 
 SECURITY FIXES FOR 1.12.7
 -------------------------
