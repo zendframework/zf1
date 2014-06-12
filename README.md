@@ -7,8 +7,39 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.7dev Release.
-Released on MMMMM DD, YYYY.
+Zend Framework 1.12.7 Release.
+Released on June 12, 2014.
+
+SECURITY FIXES FOR 1.12.7
+-------------------------
+
+- **ZF2014-04:** Potential SQL Injection (SQLi) attack via ORDER expessions:
+  `Zend\Db\Select`'s `order()` method allwed passing function calls, but
+  did not provide checks to prevent SQLi vectors. As an example:
+
+  ```php
+  $select = $db->select()->order('MD5(1); select...');
+  ```
+
+  could be entered.
+
+  If you use `Zend\Db\Select` with ORDER clauses, we strongly urge that you
+  upgrade immediately.
+
+IMPORTANT FIXES FOR 1.12.7
+--------------------------
+
+- [#331](https://github.com/zendframework/zf1/pull/331) and
+  [#376](https://github.com/zendframework/zf1/pull/376) provide support
+  for PHPUnit 4 and 4.1, respectively, both within the Zend Framework test suite
+  and inside the `Zend_Test_PHPUnit` component.
+- [#333](https://github.com/zendframework/zf1/pull/333) backports recursive
+  page removal within `Zend_Navigation` from Zend Framework 2.
+- [#343](https://github.com/zendframework/zf1/pull/343) updates the `Hostname`
+  validator to support the new IANA top level domains.
+- Forward-compatibility changes were made to ensure Zend Framework 1 will run on
+  the upcoming PHP 5.6.
+
 
 IMPORTANT FIXES FOR 1.12.6
 --------------------------
