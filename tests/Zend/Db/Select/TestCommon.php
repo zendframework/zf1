@@ -1767,4 +1767,23 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $select->from(array('p' => 'products'))->order('name;select;MD5(1)');
         $this->assertEquals($select, 'SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC');
     }
+
+    /**
+     * @group ZF-378
+     */
+    public function testOrderingWithDirectionShouldWork()
+    {
+        $db = new Zend_Db_Table();
+        $select = new Zend_Db_Select($db->getAdapter());
+        $select->from(array ('p' => 'product'))
+            ->order('productId ASC');
+        $expected = 'SELECT `p`.* FROM `product` AS `p` ORDER BY `productId` ASC';
+        $this->assertEquals($expected, $select->assemble());
+
+        $select = new Zend_Db_Select($db->getAdapter());
+        $select->from(array ('p' => 'product'))
+            ->order(array ('productId ASC', 'userId DESC'));
+        $expected = 'SELECT `p`.* FROM `product` AS `p` ORDER BY `productId` ASC, `userId` DESC';
+        $this->assertEquals($expected, $select->assemble());
+    }
 }
