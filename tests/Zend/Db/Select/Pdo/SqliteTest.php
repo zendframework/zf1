@@ -174,4 +174,15 @@ class Zend_Db_Select_Pdo_SqliteTest extends Zend_Db_Select_TestCommon
         return 'Pdo_Sqlite';
     }
 
+    public function testSqlInjectionWithOrder()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('MD5(1);select');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);select" ASC', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('name;select;MD5(1)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC', $select->assemble());
+    }
+
 }
