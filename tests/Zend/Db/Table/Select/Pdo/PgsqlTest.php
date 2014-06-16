@@ -130,4 +130,15 @@ class Zend_Db_Table_Select_Pdo_PgsqlTest extends Zend_Db_Table_Select_TestCommon
                             ->where($product_name . ' = ?', "as'as:x");
         return $select;
     }
+
+    public function testSqlInjectionWithOrder()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('MD5(1);select');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);select" ASC', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('name;select;MD5(1)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC', $select->assemble());
+    }
  }
