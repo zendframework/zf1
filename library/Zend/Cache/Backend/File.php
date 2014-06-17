@@ -675,14 +675,17 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             // On some systems it is impossible to distinguish between empty match and an error.
             return true;
         }
+        $metadataFiles = array();
         foreach ($glob as $file)  {
             if (is_file($file)) {
                 $fileName = basename($file);
                 if ($this->_isMetadatasFile($fileName)) {
-                    // in CLEANING_MODE_ALL, we drop anything, even remainings old metadatas files
-                    if ($mode != Zend_Cache::CLEANING_MODE_ALL) {
-                        continue;
+                    // In CLEANING_MODE_ALL, we drop anything, even remainings old metadatas files.
+                    // To do that, we need to save the list of the metadata files first.
+                    if ($mode == Zend_Cache::CLEANING_MODE_ALL) {
+                        $metadataFiles[] = $file;
                     }
+                    continue;
                 }
                 $id = $this->_fileNameToId($fileName);
                 $metadatas = $this->_getMetadatas($id);
@@ -691,12 +694,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
                 }
                 switch ($mode) {
                     case Zend_Cache::CLEANING_MODE_ALL:
-                        $res = $this->remove($id);
-                        if (!$res) {
-                            // in this case only, we accept a problem with the metadatas file drop
-                            $res = $this->_remove($file);
-                        }
-                        $result = $result && $res;
+                        $result = $result && $this->remove($id);
                         break;
                     case Zend_Cache::CLEANING_MODE_OLD:
                         if (time() > $metadatas['expire']) {
@@ -753,6 +751,14 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
                 }
             }
         }
+
+        // cycle through metadataFiles and delete orphaned ones
+        foreach ($metadataFiles as $file) {
+            if (file_exists($file)) {
+                $result = $this->_remove($file) && $result;
+            }
+        }
+
         return $result;
     }
 
