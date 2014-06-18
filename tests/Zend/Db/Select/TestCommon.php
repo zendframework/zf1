@@ -1814,7 +1814,7 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
      * @group ZF-378
      * @group ZF-381
      */
-    public function testOrderOfConditionalFieldWithDirection($adapter)
+    public function testOrderOfConditionalFieldWithDirection()
     {
         $select = $this->_db->select();
         $select->from(array ('p' => 'product'))
