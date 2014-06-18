@@ -754,7 +754,7 @@ class Zend_Db_Table_Select_StaticTest extends Zend_Db_Select_TestCommon
      * @group ZF-378
      * @group ZF-381
      */
-    public function testOrderOfConditionalFieldWithDirection($adapter)
+    public function testOrderOfConditionalFieldWithDirection()
     {
         $select = $this->_db->select();
         $select->from(array ('p' => 'product'))
