@@ -1295,14 +1295,15 @@ class Zend_Locale_Format
      * Internal method to set the encoding via the ini setting
      * default_charset for PHP >= 5.6 or iconv_set_encoding otherwise.
      *
+     * @param string $encoding
      * @return void
      */
-    protected static function _setEncoding($enc)
+    protected static function _setEncoding($encoding)
     {
         if (PHP_VERSION_ID < 50600) {
-            iconv_set_encoding('internal_encoding', $enc);
+            iconv_set_encoding('internal_encoding', $encoding);
         } else {
-            ini_set('default_charset', $enc);
+            ini_set('default_charset', $encoding);
         }
     }
 }
