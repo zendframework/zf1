@@ -1288,6 +1288,7 @@ class Zend_Locale_Format
             ? iconv_get_encoding('internal_encoding')
             : ini_get('default_charset');
 
+        return $oenc;
     }
 
     /**
