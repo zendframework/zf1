@@ -51,11 +51,11 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
     {
         // getting JavaScript after setting it returns array
         $pdf = new Zend_Pdf();
-        $pdf->setJavascript('print();');
+        $pdf->setJavaScript('print();');
         $this->assertTrue(is_array($pdf->getJavaScript()));
     }
 
-    public function testSetJavascriptString()
+    public function testSetJavaScriptString()
     {
         // setting string value is possible
         $pdf = new Zend_Pdf();
@@ -65,7 +65,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($javaScriptString, $javaScript[0]);
     }
 
-    public function testSetJavascriptArray()
+    public function testSetJavaScriptArray()
     {
         // setting string value is possible
         $pdf = new Zend_Pdf();
@@ -74,7 +74,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($javaScriptArray, $pdf->getJavaScript());
     }
 
-    public function testResetJavascript()
+    public function testResetJavaScript()
     {
         // reset removes the added JavaScript
         $pdf = new Zend_Pdf();
@@ -83,7 +83,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertNull($pdf->getJavaScript());
     }
 
-    public function testAddJavascript()
+    public function testAddJavaScript()
     {
         // adding JavaScript appends previously added JavaScript
         $pdf = new Zend_Pdf();
@@ -93,7 +93,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($javaScriptArray, $pdf->getJavaScript());
     }
 
-    public function testSetJavascriptEmptyString()
+    public function testSetJavaScriptEmptyString()
     {
         // setting empty JavaScript string throws exception
         $pdf = new Zend_Pdf();
@@ -105,7 +105,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSetJavascriptEmptyArray()
+    public function testSetJavaScriptEmptyArray()
     {
         // setting empty JavaScript string throws exception
         $pdf = new Zend_Pdf();
@@ -117,7 +117,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSetAndSaveLoadAndGetJavascript()
+    public function testSetAndSaveLoadAndGetJavaScript()
     {
         $tempFile = tempnam(sys_get_temp_dir(), 'PdfUnitFile');
         $javaScript = array('print();', 'alert();');
@@ -133,7 +133,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($javaScript, $pdf->getJavaScript());
     }
 
-    public function testSetAndSaveLoadAndResetAndSaveLoadAndGetJavascript()
+    public function testSetAndSaveLoadAndResetAndSaveLoadAndGetJavaScript()
     {
         $tempFile = tempnam(sys_get_temp_dir(), 'PdfUnitFile');
         $javaScript = array('print();', 'alert();');
