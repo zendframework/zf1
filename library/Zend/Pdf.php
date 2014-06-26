@@ -577,18 +577,23 @@ class Zend_Pdf
 
     /**
      * Load JavaScript
+     *
      * Populates the _javaScript string, for later use of getJavaScript method.
      *
      * @param Zend_Pdf_Element_Reference $root Document catalog entry
      */
     protected function _loadJavaScript(Zend_Pdf_Element_Reference $root)
     {
-        if ($root->Names === null || $root->Names->JavaScript === null || $root->Names->JavaScript->Names === null) {
+        if (null === $root->Names || null === $root->Names->JavaScript
+            || null === $root->Names->JavaScript->Names
+        ) {
             return;
         }
 
         foreach ($root->Names->JavaScript->Names->items as $item) {
-            if ($item instanceof Zend_Pdf_Element_Reference && $item->S->value === 'JavaScript') {
+            if ($item instanceof Zend_Pdf_Element_Reference
+                && $item->S->value === 'JavaScript'
+            ) {
                 $this->_javaScript[] = $item->JS->value;
             }
         }
@@ -1410,13 +1415,15 @@ class Zend_Pdf
     /**
      * Sets the document-level JavaScript
      *
-     * @param string|array $javascript
+     * Resets and appends
+     *
+     * @param string|array $javaScript
      */
-    public function setJavaScript($javascript)
+    public function setJavaScript($javaScript)
     {
         $this->resetJavaScript();
 
-        $this->addJavaScript($javascript);
+        $this->addJavaScript($javaScript);
     }
 
     /**
@@ -1424,48 +1431,60 @@ class Zend_Pdf
      */
     public function resetJavaScript()
     {
-        $this->_javaScript = NULL;
-        $root = $this->_trailer->Root;
+        $this->_javaScript = null;
 
-        if ($root->Names === null || $root->Names->JavaScript === null) {
+        $root = $this->_trailer->Root;
+        if (null === $root->Names || null === $root->Names->JavaScript) {
             return;
         }
-        $root->Names->JavaScript = NULL;
+        $root->Names->JavaScript = null;
     }
 
     /**
      * Appends JavaScript to the document-level JavaScript
      *
-     * @param string|array $javascript
+     * @param string|array $javaScript
+     * @throws Zend_Pdf_Exception
      */
-    public function addJavaScript($javascript)
+    public function addJavaScript($javaScript)
     {
-        if (empty($javascript)) {
-            throw new Zend_Pdf_Exception('JavaScript must be a non empty string or array of strings');
-        } else if (!is_array($javascript)) {
-            $javascript = array($javascript);
+        if (empty($javaScript)) {
+            throw new Zend_Pdf_Exception(
+                'JavaScript must be a non empty string or array of strings'
+            );
         }
 
-        if (NULL === $this->_javaScript) {
-            $this->_javaScript = $javascript;
+        if (!is_array($javaScript)) {
+            $javaScript = array($javaScript);
+        }
+
+        if (null === $this->_javaScript) {
+            $this->_javaScript = $javaScript;
         } else {
-            $this->_javaScript = array_merge($this->_javaScript, $javascript);
+            $this->_javaScript = array_merge($this->_javaScript, $javaScript);
         }
 
         if (!empty($this->_javaScript)) {
             $items = array();
 
-            foreach ($this->_javaScript as $javascript) {
+            foreach ($this->_javaScript as $javaScript) {
                 $jsCode = array(
-                    'S' => new Zend_Pdf_Element_Name('JavaScript'),
-                    'JS' => new Zend_Pdf_Element_String($javascript)
+                    'S'  => new Zend_Pdf_Element_Name('JavaScript'),
+                    'JS' => new Zend_Pdf_Element_String($javaScript)
                 );
                 $items[] = new Zend_Pdf_Element_String('EmbeddedJS');
-                $items[] = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary($jsCode));
+                $items[] = $this->_objFactory->newObject(
+                    new Zend_Pdf_Element_Dictionary($jsCode)
+                );
             }
 
-            $jsRef = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary(array('Names' => new Zend_Pdf_Element_Array($items))));
-            if (NULL === $this->_trailer->Root->Names) {
+            $jsRef = $this->_objFactory->newObject(
+                new Zend_Pdf_Element_Dictionary(
+                    array('Names' => new Zend_Pdf_Element_Array($items))
+                )
+            );
+
+            if (null === $this->_trailer->Root->Names) {
                 $this->_trailer->Root->Names = new Zend_Pdf_Element_Dictionary();
             }
             $this->_trailer->Root->Names->JavaScript = $jsRef;
