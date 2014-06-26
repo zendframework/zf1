@@ -10,6 +10,14 @@ RELEASE INFORMATION
 Zend Framework 1.12.8dev Release.
 Released on MMMMM DD, YYYY.
 
+IMPORTANT FIXES FOR 1.12.8dev
+-----------------------------
+
+- [#375](https://github.com/zendframework/zf1/pull/375) Implement
+  Zend_Pdf::setJavascript(), Zend_Pdf::addJavascript() and
+  Zend_Pdf::resetJavaScript()
+- ...
+
 SECURITY FIXES FOR 1.12.7
 -------------------------
 
