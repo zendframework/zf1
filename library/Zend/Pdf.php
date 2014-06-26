@@ -328,6 +328,7 @@ class Zend_Pdf
 
             $this->_loadNamedDestinations($this->_trailer->Root, $this->_parser->getPDFVersion());
             $this->_loadOutlines($this->_trailer->Root);
+            $this->_loadJavaScript($this->_trailer->Root);
 
             if ($this->_trailer->Info !== null) {
                 $this->properties = $this->_trailer->Info->toPhp();
@@ -571,6 +572,25 @@ class Zend_Pdf
 
         if ($root->Outlines->Count !== null) {
             $this->_originalOpenOutlinesCount = $root->Outlines->Count->value;
+        }
+    }
+
+    /**
+     * Load JavaScript
+     * Populates the _javaScript string, for later use of getJavaScript method.
+     *
+     * @param Zend_Pdf_Element_Reference $root Document catalog entry
+     */
+    protected function _loadJavaScript(Zend_Pdf_Element_Reference $root)
+    {
+        if ($root->Names === null || $root->Names->JavaScript === null || $root->Names->JavaScript->Names === null) {
+            return;
+        }
+
+        foreach ($root->Names->JavaScript->Names->items as $item) {
+            if ($item instanceof Zend_Pdf_Element_Reference && $item->S->value === 'JavaScript') {
+                $this->_javaScript[] = $item->JS->value;
+            }
         }
     }
 
@@ -1387,17 +1407,70 @@ class Zend_Pdf
         }
     }
 
-
     /**
-     * Set the document-level JavaScript
+     * Sets the document-level JavaScript
      *
-     * @param string $javascript
+     * @param string|array $javascript
      */
     public function setJavaScript($javascript)
     {
-        $this->_javaScript = $javascript;
+        $this->resetJavaScript();
+
+        $this->addJavaScript($javascript);
     }
 
+    /**
+     * Resets the document-level JavaScript
+     */
+    public function resetJavaScript()
+    {
+        $this->_javaScript = NULL;
+        $root = $this->_trailer->Root;
+
+        if ($root->Names === null || $root->Names->JavaScript === null) {
+            return;
+        }
+        $root->Names->JavaScript = NULL;
+    }
+
+    /**
+     * Appends JavaScript to the document-level JavaScript
+     *
+     * @param string|array $javascript
+     */
+    public function addJavaScript($javascript)
+    {
+        if (empty($javascript)) {
+            throw new Zend_Pdf_Exception('JavaScript must be a non empty string or array of strings');
+        } else if (!is_array($javascript)) {
+            $javascript = array($javascript);
+        }
+
+        if (NULL === $this->_javaScript) {
+            $this->_javaScript = $javascript;
+        } else {
+            $this->_javaScript = array_merge($this->_javaScript, $javascript);
+        }
+
+        if (!empty($this->_javaScript)) {
+            $items = array();
+
+            foreach ($this->_javaScript as $javascript) {
+                $jsCode = array(
+                    'S' => new Zend_Pdf_Element_Name('JavaScript'),
+                    'JS' => new Zend_Pdf_Element_String($javascript)
+                );
+                $items[] = new Zend_Pdf_Element_String('EmbeddedJS');
+                $items[] = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary($jsCode));
+            }
+
+            $jsRef = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary(array('Names' => new Zend_Pdf_Element_Array($items))));
+            if (NULL === $this->_trailer->Root->Names) {
+                $this->_trailer->Root->Names = new Zend_Pdf_Element_Dictionary();
+            }
+            $this->_trailer->Root->Names->JavaScript = $jsRef;
+        }
+    }
 
     /**
      * Convert date to PDF format (it's close to ASN.1 (Abstract Syntax Notation
