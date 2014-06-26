@@ -47,7 +47,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_pdf = Zend_Pdf::load(__DIR__ . '/Pdf/_files/PdfWithFields.pdf');
+        $this->_pdf = Zend_Pdf::load(dirname(__FILE__) . '/Pdf/_files/PdfWithFields.pdf');
     }
 
     public function testGetTextFieldNames()
