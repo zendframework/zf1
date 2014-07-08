@@ -13,6 +13,8 @@ Released on MMMMM DD, YYYY.
 IMPORTANT FIXES FOR 1.12.8dev
 -----------------------------
 
+- [#360](https://github.com/zendframework/zf1/pull/360) Zend_Locale:
+  [CLDR](http://cldr.unicode.org) updated to version 25
 - [#375](https://github.com/zendframework/zf1/pull/375) Implement
   Zend_Pdf::setJavascript(), Zend_Pdf::addJavascript() and
   Zend_Pdf::resetJavaScript()
