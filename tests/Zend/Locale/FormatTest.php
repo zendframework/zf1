@@ -916,6 +916,7 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertSame('r',    Zend_Locale_Format::convertPhpToIsoFormat('r'));
         $this->assertSame('U',    Zend_Locale_Format::convertPhpToIsoFormat('U'));
         $this->assertSame('HHmmss', Zend_Locale_Format::convertPhpToIsoFormat('His'));
+        $this->assertSame("dd MMMM yyyy 'alle' H:mm:ss", Zend_Locale_Format::convertPhpToIsoFormat('d F Y \a\l\l\e G:i:s'));
     }
 
 
