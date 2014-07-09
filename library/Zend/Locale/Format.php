@@ -256,10 +256,8 @@ class Zend_Locale_Format
         // Get correct signs for this locale
         $symbols = Zend_Locale_Data::getList($options['locale'],'symbols');
         // Change locale input to be default number
-        if ((strpos($input, $symbols['minus']) !== false) ||
-            (strpos($input, '-') !== false)) {
-            $input = strtr($input, array($symbols['minus'] => '', '-' => ''));
-            $input = '-' . $input;
+        if (($input[0] == $symbols['minus']) && ('-' != $input[0])) {
+            $input = '-' . substr($input, 1);
         }
 
         $input = str_replace($symbols['group'],'', $input);
