@@ -1264,22 +1264,19 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      */
     protected function decodePunycode($encoded)
     {
-        $found = preg_match('/([^a-z0-9\x2d]{1,10})$/i', $encoded);
-        if (empty($encoded) || ($found > 0)) {
-            // no punycode encoded string, return as is
+        if (!preg_match('/^[a-z0-9-]+$/i', $encoded)) {
+            // no punycode encoded string
             $this->_error(self::CANNOT_DECODE_PUNYCODE);
             return false;
         }
 
+        $decoded = array();
         $separator = strrpos($encoded, '-');
         if ($separator > 0) {
             for ($x = 0; $x < $separator; ++$x) {
                 // prepare decoding matrix
                 $decoded[] = ord($encoded[$x]);
             }
-        } else {
-            $this->_error(self::CANNOT_DECODE_PUNYCODE);
-            return false;
         }
 
         $lengthd = count($decoded);
