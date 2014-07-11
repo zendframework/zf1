@@ -1188,7 +1188,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             do {
                 // First check TLD
                 $matches = array();
-                if (preg_match('/([^.]{2,10})$/i', end($domainParts), $matches) ||
+                if (preg_match('/([^.]{2,63})$/i', end($domainParts), $matches) ||
                     (end($domainParts) == 'ایران') || (end($domainParts) == '中国') ||
                     (end($domainParts) == '公司') || (end($domainParts) == '网络')) {
 
