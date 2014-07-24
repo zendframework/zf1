@@ -159,6 +159,11 @@ class Zend_Uri_HttpTest extends PHPUnit_Framework_TestCase
         $this->_testInvalidUri('http://andi:pass%word@www.zend.com');
     }
 
+    public function testMissingDomainParts()
+    {
+        $this->_testInvalidUri('https://www.zend..com');
+    }
+
     public function testHostAsIP()
     {
         $this->_testValidUri('http://127.0.0.1');
