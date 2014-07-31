@@ -85,7 +85,7 @@ class Zend_Crypt_Hmac extends Zend_Crypt
      * @param string $hash
      * @param string $data
      * @param string $output
-     * @param boolean $internal
+     * @throws Zend_Crypt_Hmac_Exception
      * @return string
      */
     public static function compute($key, $hash, $data, $output = self::STRING)
@@ -108,6 +108,7 @@ class Zend_Crypt_Hmac extends Zend_Crypt
      * Setter for the hash method.
      *
      * @param string $hash
+     * @throws Zend_Crypt_Hmac_Exception
      * @return Zend_Crypt_Hmac
      */
     protected static function _setHashAlgorithm($hash)
