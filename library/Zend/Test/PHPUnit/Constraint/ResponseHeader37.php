@@ -30,7 +30,7 @@
  * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Test_PHPUnit_Constraint_ResponseHeader extends PHPUnit_Framework_Constraint
+class Zend_Test_PHPUnit_Constraint_ResponseHeader37 extends PHPUnit_Framework_Constraint
 {
     /**#@+
      * Assertion type constants
