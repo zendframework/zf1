@@ -138,7 +138,7 @@ class Zend_Controller_Action_Helper_Cache
                 && method_exists($backend, 'removeRecursively')
             ) {
                 $result = $backend->removeRecursively($encodedCacheId);
-                if (is_null($result) ) {
+                if ($result === null) {
                     $result = $backend->removeRecursively($relativeUrl);
                 }
                 return $result;
@@ -146,7 +146,7 @@ class Zend_Controller_Action_Helper_Cache
         }
 
         $result = $cache->remove($encodedCacheId);
-        if (is_null($result) ) {
+        if ($result === null) {
             $result = $cache->remove($relativeUrl);
         }
         return $result;

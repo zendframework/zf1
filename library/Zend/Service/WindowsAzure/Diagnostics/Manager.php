@@ -91,7 +91,7 @@ class Zend_Service_WindowsAzure_Diagnostics_Manager
 	 */
 	public function configurationForRoleInstanceExists($roleInstance = null)
 	{
-		if (is_null($roleInstance)) {
+		if ($roleInstance === null) {
 			require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
 			throw new Zend_Service_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');
 		}
@@ -186,7 +186,7 @@ class Zend_Service_WindowsAzure_Diagnostics_Manager
 	 */
 	public function getConfigurationForRoleInstance($roleInstance = null)
 	{
-		if (is_null($roleInstance)) {
+		if ($roleInstance === null) {
 			require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
 			throw new Zend_Service_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');
 		}
@@ -211,7 +211,7 @@ class Zend_Service_WindowsAzure_Diagnostics_Manager
 	 */
 	public function setConfigurationForRoleInstance($roleInstance = null, Zend_Service_WindowsAzure_Diagnostics_ConfigurationInstance $configuration)
 	{
-		if (is_null($roleInstance)) {
+		if ($roleInstance === null) {
 			require_once 'Zend/Service/WindowsAzure/Diagnostics/Exception.php';
 			throw new Zend_Service_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');
 		}

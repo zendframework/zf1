@@ -202,7 +202,7 @@ class Zend_View_Helper_HeadMeta extends Zend_View_Helper_Placeholder_Container_S
             return false;
         }
 
-        $isHtml5 = is_null($this->view) ? false : $this->view->doctype()->isHtml5();
+        $isHtml5 = $this->view === null ? false : $this->view->doctype()->isHtml5();
 
         if (!isset($item->content)
         && (! $isHtml5 || (! $isHtml5 && $item->type !== 'charset'))) {
@@ -210,7 +210,7 @@ class Zend_View_Helper_HeadMeta extends Zend_View_Helper_Placeholder_Container_S
         }
 
         // <meta property= ... /> is only supported with doctype RDFa
-        if ( !is_null($this->view) && !$this->view->doctype()->isRdfa()
+        if ( !$this->view === null && !$this->view->doctype()->isRdfa()
             && $item->type === 'property') {
             return false;
         }
@@ -342,7 +342,7 @@ class Zend_View_Helper_HeadMeta extends Zend_View_Helper_Placeholder_Container_S
 
         $modifiersString = '';
         foreach ($item->modifiers as $key => $value) {
-            if (!is_null($this->view) && $this->view->doctype()->isHtml5()
+            if (!$this->view === null && $this->view->doctype()->isHtml5()
             && $key == 'scheme') {
                 require_once 'Zend/View/Exception.php';
                 throw new Zend_View_Exception('Invalid modifier '

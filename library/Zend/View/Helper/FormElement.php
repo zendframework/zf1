@@ -148,7 +148,7 @@ abstract class Zend_View_Helper_FormElement extends Zend_View_Helper_HtmlElement
         }
         
         // Remove NULL name attribute override
-        if (array_key_exists('name', $attribs) && is_null($attribs['name'])) {
+        if (array_key_exists('name', $attribs) && $attribs['name'] === null) {
         	unset($attribs['name']);
         }
         

@@ -166,7 +166,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 		
 		$result = null;
 		
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$result = $client->getDeploymentBySlot($serviceName, $deploymentSlot);
@@ -199,7 +199,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 		
 		$result = null;
 		
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$result = $client->getDeploymentBySlot($serviceName, $deploymentSlot);
@@ -233,10 +233,10 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 		$stagingDeploymentName = null;
 		try { $stagingDeploymentName = $client->getDeploymentBySlot($serviceName, 'staging')->Name; } catch (Exception $ex) {}
 		
-		if (is_null($productionDeploymentName)) {
+		if ($productionDeploymentName === null) {
 			$productionDeploymentName = $stagingDeploymentName;
 		}
-		if (is_null($stagingDeploymentName)) {
+		if ($stagingDeploymentName === null) {
 			require_once 'Zend/Service/Console/Exception.php';
 			throw new Zend_Service_Console_Exception('Swapping deployment slots is only possible when both slots have an active deployment or when production slot is empty.');
 		}
@@ -268,7 +268,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->deleteDeploymentBySlot($serviceName, $deploymentSlot);
@@ -304,7 +304,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->configureDeploymentBySlot($serviceName, $deploymentSlot, $serviceConfigurationLocation);
@@ -340,7 +340,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->updateDeploymentStatusBySlot($serviceName, $deploymentSlot, $newStatus);
@@ -377,7 +377,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->setInstanceCountBySlot($serviceName, $deploymentSlot, $roleName, $newInstanceNumber);
@@ -413,7 +413,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->rebootRoleInstanceBySlot($serviceName, $deploymentSlot, $instanceName);
@@ -449,7 +449,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->reimageRoleInstanceBySlot($serviceName, $deploymentSlot, $instanceName);
@@ -485,7 +485,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{		
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->upgradeDeploymentBySlot($serviceName, $deploymentSlot, $label, $packageUrl, $serviceConfigurationLocation, $mode, $roleName);
@@ -527,7 +527,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 		$blobClient->putBlob('phpazuredeployments', basename($packageLocation), $packageLocation);
 		$package = $blobClient->getBlobInstance('phpazuredeployments', basename($packageLocation));
 		
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->upgradeDeploymentBySlot($serviceName, $deploymentSlot, $label, $package->Url, $serviceConfigurationLocation, $mode, $roleName);
@@ -562,7 +562,7 @@ class Zend_Service_WindowsAzure_CommandLine_Deployment
 	{
 		$client = new Zend_Service_WindowsAzure_Management_Client($subscriptionId, $certificate, $certificatePassphrase);
 		
-		if (!is_null($deploymentSlot) && $deploymentSlot != '') {
+		if (!$deploymentSlot === null && $deploymentSlot != '') {
 			$deploymentSlot = strtolower($deploymentSlot);
 			
 			$client->walkUpgradeDomainBySlot($serviceName, $deploymentSlot, $upgradeDomain);
