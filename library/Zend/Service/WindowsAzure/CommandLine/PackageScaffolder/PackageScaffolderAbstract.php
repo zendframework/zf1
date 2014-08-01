@@ -74,7 +74,7 @@ abstract class Zend_Service_WindowsAzure_CommandLine_PackageScaffolder_PackageSc
 	 */
 	protected function applyTransforms($rootPath, $values)
 	{
-        if (is_null($rootPath) || !is_string($rootPath) || empty($rootPath)) {
+        if ($rootPath === null || !is_string($rootPath) || empty($rootPath)) {
             throw new InvalidArgumentException("Undefined \"rootPath\"");
         }
                         
@@ -110,7 +110,7 @@ abstract class Zend_Service_WindowsAzure_CommandLine_PackageScaffolder_PackageSc
      * @return boolean
      */
     protected function createDirectory($path, $abortIfExists = true, $recursive = true) {
-        if (is_null($path) || !is_string($path) || empty($path)) {
+        if ($path === null || !is_string($path) || empty($path)) {
             throw new InvalidArgumentException ("Undefined \"path\"" );        
         }
                 
@@ -143,11 +143,11 @@ abstract class Zend_Service_WindowsAzure_CommandLine_PackageScaffolder_PackageSc
      * @return boolean
      */
     protected function copyDirectory($sourcePath, $destinationPath, $abortIfExists = true, $mode = '0777') {
-        if (is_null($sourcePath) || !is_string($sourcePath) || empty($sourcePath)) {
+        if ($sourcePath === null || !is_string($sourcePath) || empty($sourcePath)) {
             throw new InvalidArgumentException("Undefined \"sourcePath\"");
         }
         
-        if (is_null($destinationPath) || !is_string($destinationPath) || empty($destinationPath)) {
+        if ($destinationPath === null || !is_string($destinationPath) || empty($destinationPath)) {
         	throw new InvalidArgumentException("Undefined \"destinationPath\"");
         }
                     
@@ -206,7 +206,7 @@ abstract class Zend_Service_WindowsAzure_CommandLine_PackageScaffolder_PackageSc
      */
     protected function deleteDirectory($path) 
     {
-        if (is_null($path) || !is_string($path) || empty($path)) {
+        if ($path === null || !is_string($path) || empty($path)) {
             throw new InvalidArgumentException( "Undefined \"path\"" );        
         }
         

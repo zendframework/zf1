@@ -356,7 +356,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 		$headers = array();
 
 		// Acl specified?
-		if ($acl != self::ACL_PRIVATE && !is_null($acl) && $acl != '') {
+		if ($acl != self::ACL_PRIVATE && !$acl === null && $acl != '') {
 			$headers[Zend_Service_WindowsAzure_Storage::PREFIX_STORAGE_HEADER . 'blob-public-access'] = $acl;
 		}
 
@@ -540,16 +540,16 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 	{
 		// Build query string
 		$queryString = array('comp=list');
-		if (!is_null($prefix)) {
+		if (!$prefix === null) {
 			$queryString[] = 'prefix=' . $prefix;
 		}
-		if (!is_null($maxResults)) {
+		if (!$maxResults === null) {
 			$queryString[] = 'maxresults=' . $maxResults;
 		}
-		if (!is_null($marker)) {
+		if (!$marker === null) {
 			$queryString[] = 'marker=' . $marker;
 		}
-		if (!is_null($include)) {
+		if (!$include === null) {
 			$queryString[] = 'include=' . $include;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
@@ -561,7 +561,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 			$xmlMarker = (string)$this->_parseResponse($response)->NextMarker;
 
 			$containers = array();
-			if (!is_null($xmlContainers)) {
+			if (!$xmlContainers === null) {
 				for ($i = 0; $i < count($xmlContainers); $i++) {
 					
 					$containers[] = new Zend_Service_WindowsAzure_Storage_BlobContainer(
@@ -573,12 +573,12 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 				}
 			}
 			$currentResultCount = $currentResultCount + count($containers);
-			if (!is_null($maxResults) && $currentResultCount < $maxResults) {
-				if (!is_null($xmlMarker) && $xmlMarker != '') {
+			if (!$maxResults === null && $currentResultCount < $maxResults) {
+				if (!$xmlMarker === null && $xmlMarker != '') {
 					$containers = array_merge($containers, $this->listContainers($prefix, $maxResults, $xmlMarker, $include, $currentResultCount));
 				}
 			}
-			if (!is_null($maxResults) && count($containers) > $maxResults) {
+			if (!$maxResults === null && count($containers) > $maxResults) {
 				$containers = array_slice($containers, 0, $maxResults);
 			}
 			 
@@ -670,7 +670,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		$headers = array_merge($headers, $this->_generateMetadataHeaders($metadata));
@@ -831,7 +831,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 			
@@ -896,7 +896,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 			// Create metadata headers
 			$headers = array();
-			if (!is_null($leaseId)) {
+			if (!$leaseId === null) {
 				$headers['x-ms-lease-id'] = $leaseId;
 			}
 			$headers = array_merge($headers, $this->_generateMetadataHeaders($metadata));
@@ -958,13 +958,13 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 
 		// Build query string
 		$queryString = array('comp=blocklist', 'blocklisttype=' . $blockListType);
-		if (!is_null($snapshotId)) {
+		if (!$snapshotId === null) {
 			$queryString[] = 'snapshot=' . $snapshotId;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
@@ -1041,7 +1041,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		$headers = array_merge($headers, $this->_generateMetadataHeaders($metadata));
@@ -1132,7 +1132,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 
@@ -1198,7 +1198,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 
@@ -1289,7 +1289,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($destinationLeaseId)) {
+		if (!$destinationLeaseId === null) {
 			$headers['x-ms-lease-id'] = $destinationLeaseId;
 		}
 		$headers = array_merge($headers, $this->_generateMetadataHeaders($metadata));
@@ -1301,7 +1301,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Resource names
 		$sourceResourceName = self::createResourceName($sourceContainerName, $sourceBlobName);
-		if (!is_null($sourceSnapshotId)) {
+		if (!$sourceSnapshotId === null) {
 			$sourceResourceName .= '?snapshot=' . $sourceSnapshotId;
 		}
 		$destinationResourceName = self::createResourceName($destinationContainerName, $destinationBlobName);
@@ -1395,14 +1395,14 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Build query string
 		$queryString = array();
-		if (!is_null($snapshotId)) {
+		if (!$snapshotId === null) {
 			$queryString[] = 'snapshot=' . $snapshotId;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
 
 		// Additional headers?
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		foreach ($additionalHeaders as $key => $value) {
@@ -1454,14 +1454,14 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Build query string
 		$queryString = array();
-		if (!is_null($snapshotId)) {
+		if (!$snapshotId === null) {
 			$queryString[] = 'snapshot=' . $snapshotId;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
 		 
 		// Additional headers?
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		foreach ($additionalHeaders as $key => $value) {
@@ -1569,7 +1569,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Create metadata headers
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		$headers = array_merge($headers, $this->_generateMetadataHeaders($metadata));
@@ -1625,7 +1625,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 		$headers = array();
 
 		// Lease set?
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 
@@ -1705,14 +1705,14 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 
 		// Build query string
 		$queryString = array();
-		if (!is_null($snapshotId)) {
+		if (!$snapshotId === null) {
 			$queryString[] = 'snapshot=' . $snapshotId;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
 			
 		// Additional headers?
 		$headers = array();
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 		foreach ($additionalHeaders as $key => $value) {
@@ -1810,7 +1810,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 		// Additional headers?
 		$headers = array();
 		$headers['x-ms-lease-action'] = strtolower($leaseAction);
-		if (!is_null($leaseId)) {
+		if (!$leaseId === null) {
 			$headers['x-ms-lease-id'] = $leaseId;
 		}
 
@@ -1860,19 +1860,19 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 			
 		// Build query string
 		$queryString = array('restype=container', 'comp=list');
-		if (!is_null($prefix)) {
+		if (!$prefix === null) {
 			$queryString[] = 'prefix=' . $prefix;
 		}
 		if ($delimiter !== '') {
 			$queryString[] = 'delimiter=' . $delimiter;
 		}
-		if (!is_null($maxResults)) {
+		if (!$maxResults === null) {
 			$queryString[] = 'maxresults=' . $maxResults;
 		}
-		if (!is_null($marker)) {
+		if (!$marker === null) {
 			$queryString[] = 'marker=' . $marker;
 		}
-		if (!is_null($include)) {
+		if (!$include === null) {
 			$queryString[] = 'include=' . $include;
 		}
 		$queryString = self::createQueryStringFromArray($queryString);
@@ -1885,7 +1885,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 	
 			// Blobs
 			$xmlBlobs = $this->_parseResponse($response)->Blobs->Blob;
-			if (!is_null($xmlBlobs)) {
+			if (!$xmlBlobs === null) {
 				
 				for ($i = 0; $i < count($xmlBlobs); $i++) {
 					$properties = (array)$xmlBlobs[$i]->Properties;
@@ -1913,7 +1913,7 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 			// Blob prefixes (folders)
 			$xmlBlobs = $this->_parseResponse($response)->Blobs->BlobPrefix;
 				
-			if (!is_null($xmlBlobs)) {
+			if (!$xmlBlobs === null) {
 				
 				for ($i = 0; $i < count($xmlBlobs); $i++) {
 					$blobs[] = new Zend_Service_WindowsAzure_Storage_BlobInstance(
@@ -1939,12 +1939,12 @@ class Zend_Service_WindowsAzure_Storage_Blob extends Zend_Service_WindowsAzure_S
 			// More blobs?
 			$xmlMarker = (string)$this->_parseResponse($response)->NextMarker;
 			$currentResultCount = $currentResultCount + count($blobs);
-			if (!is_null($maxResults) && $currentResultCount < $maxResults) {
-				if (!is_null($xmlMarker) && $xmlMarker != '') {
+			if (!$maxResults === null && $currentResultCount < $maxResults) {
+				if (!$xmlMarker === null && $xmlMarker != '') {
 					$blobs = array_merge($blobs, $this->listBlobs($containerName, $prefix, $delimiter, $maxResults, $marker, $include, $currentResultCount));
 				}
 			}
-			if (!is_null($maxResults) && count($blobs) > $maxResults) {
+			if (!$maxResults === null && count($blobs) > $maxResults) {
 				$blobs = array_slice($blobs, 0, $maxResults);
 			}
 				

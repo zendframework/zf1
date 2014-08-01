@@ -149,10 +149,10 @@ class Zend_Mobile_Push_Message_Apns extends Zend_Mobile_Push_Message_Abstract
      */
     public function setBadge($badge)
     {
-        if (!is_null($badge) && !is_numeric($badge)) {
+        if (!$badge === null && !is_numeric($badge)) {
             throw new Zend_Mobile_Push_Message_Exception('$badge must be an integer');
         }
-        if (!is_null($badge) && $badge < 0) {
+        if (!$badge === null && $badge < 0) {
             throw new Zend_Mobile_Push_Message_Exception('$badge must be greater or equal to 0');
         }
         $this->_badge = $badge;

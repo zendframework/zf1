@@ -132,7 +132,7 @@ class Zend_Service_SqlAzure_Management_Client
 		$this->_certificatePassphrase = $certificatePassphrase;
 		
 		$this->_retryPolicy = $retryPolicy;
-		if (is_null($this->_retryPolicy)) {
+		if ($this->_retryPolicy === null) {
 		    $this->_retryPolicy = Zend_Service_WindowsAzure_RetryPolicy_RetryPolicyAbstract::noRetry();
 		}
 		
@@ -227,7 +227,7 @@ class Zend_Service_SqlAzure_Management_Client
 		}
 			
 		// Clean headers
-		if (is_null($headers)) {
+		if ($headers === null) {
 		    $headers = array();
 		}
 		
@@ -277,7 +277,7 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	protected function _parseResponse(Zend_Http_Response $response = null)
 	{
-		if (is_null($response)) {
+		if ($response === null) {
 			require_once 'Zend/Service/SqlAzure/Exception.php';
 			throw new Zend_Service_SqlAzure_Exception('Response should not be null.');
 		}
@@ -349,15 +349,15 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function createServer($administratorLogin, $administratorPassword, $location)
 	{
-		if ($administratorLogin == '' || is_null($administratorLogin)) {
+		if ($administratorLogin == '' || $administratorLogin === null) {
                     require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                     throw new Zend_Service_SqlAzure_Management_Exception('Administrator login should be specified.');
                 }
-		if ($administratorPassword == '' || is_null($administratorPassword)) {
+		if ($administratorPassword == '' || $administratorPassword === null) {
                     require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                     throw new Zend_Service_SqlAzure_Management_Exception('Administrator password should be specified.');
                 }
-                if (is_null($location) && is_null($affinityGroup)) {
+                if ($location === null && $affinityGroup === null) {
                     require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                     throw new Zend_Service_SqlAzure_Management_Exception('Please specify a location for the server.');
                 }
@@ -405,7 +405,7 @@ class Zend_Service_SqlAzure_Management_Client
     		}
     		
 		$services = array();
-		if (!is_null($xmlServices)) {				
+		if (!$xmlServices === null) {
 				
                     for ($i = 0; $i < count($xmlServices); $i++) {
                         $services[] = new Zend_Service_SqlAzure_Management_ServerInstance(
@@ -430,7 +430,7 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function dropServer($serverName)
 	{
-            if ($serverName == '' || is_null($serverName)) {
+            if ($serverName == '' || $serverName === null) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('Server name should be specified.');
             }
@@ -452,11 +452,11 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function setAdministratorPassword($serverName, $administratorPassword)
 	{
-            if ($serverName == '' || is_null($serverName)) {
+            if ($serverName == '' || $serverName === null) {
 		require_once 'Zend/Service/SqlAzure/Management/Exception.php';
     		throw new Zend_Service_SqlAzure_Management_Exception('Server name should be specified.');
             }
-            if ($administratorPassword == '' || is_null($administratorPassword)) {
+            if ($administratorPassword == '' || $administratorPassword === null) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
     		throw new Zend_Service_SqlAzure_Management_Exception('Administrator password should be specified.');
             }
@@ -484,19 +484,19 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function createFirewallRule($serverName, $ruleName, $startIpAddress, $endIpAddress)
 	{
-            if ($serverName == '' || is_null($serverName)) {
+            if ($serverName == '' || $serverName === null) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('Server name should be specified.');
             }
-            if ($ruleName == '' || is_null($ruleName)) {
+            if ($ruleName == '' || $ruleName === null) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('Rule name should be specified.');
             }
-            if ($startIpAddress == '' || is_null($startIpAddress) || !filter_var($startIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            if ($startIpAddress == '' || $startIpAddress === null || !filter_var($startIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('Start IP address should be specified.');
             }
-            if ($endIpAddress == '' || is_null($endIpAddress) || !filter_var($endIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            if ($endIpAddress == '' || $endIpAddress === null || !filter_var($endIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                 require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('End IP address should be specified.');
             }
@@ -528,7 +528,7 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function listFirewallRules($serverName)
 	{
-            if ($serverName == '' || is_null($serverName)) {
+            if ($serverName == '' || $serverName === null) {
 		require_once 'Zend/Service/SqlAzure/Management/Exception.php';
                 throw new Zend_Service_SqlAzure_Management_Exception('Server name should be specified.');
             }
@@ -549,7 +549,7 @@ class Zend_Service_SqlAzure_Management_Client
     		}
     		
 		$services = array();
-		if (!is_null($xmlServices)) {				
+		if (!$xmlServices === null) {
                     
                     for ($i = 0; $i < count($xmlServices); $i++) {
                         $services[] = new Zend_Service_SqlAzure_Management_FirewallRuleInstance(
@@ -575,11 +575,11 @@ class Zend_Service_SqlAzure_Management_Client
 	 */
 	public function deleteFirewallRule($serverName, $ruleName)
 	{
-		if ($serverName == '' || is_null($serverName)) {
+		if ($serverName == '' || $serverName === null) {
 			require_once 'Zend/Service/SqlAzure/Management/Exception.php';
     		throw new Zend_Service_SqlAzure_Management_Exception('Server name should be specified.');
     	}
-		if ($ruleName == '' || is_null($ruleName)) {
+		if ($ruleName == '' || $ruleName === null) {
 			require_once 'Zend/Service/SqlAzure/Management/Exception.php';
     		throw new Zend_Service_SqlAzure_Management_Exception('Rule name should be specified.');
     	}

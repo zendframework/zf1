@@ -174,7 +174,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		    }
 		    
 			// More tables?
-		    if (!is_null($response->getHeader('x-ms-continuation-NextTableName'))) {
+		    if (!$response->getHeader('x-ms-continuation-NextTableName') === null) {
 				require_once 'Zend/Service/WindowsAzure/Exception.php';
 		        $returnValue = array_merge($returnValue, $this->listTables($response->getHeader('x-ms-continuation-NextTableName')));
 		    }
@@ -304,7 +304,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if (is_null($entity)) {
+		if ($entity === null) {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
@@ -377,7 +377,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if (is_null($entity)) {
+		if ($entity === null) {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
@@ -421,19 +421,19 @@ class Zend_Service_WindowsAzure_Storage_Table
 	 */
 	public function retrieveEntityById($tableName, $partitionKey, $rowKey, $entityClass = 'Zend_Service_WindowsAzure_Storage_DynamicTableEntity')
 	{
-		if (is_null($tableName) || $tableName === '') {
+		if ($tableName === null || $tableName === '') {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if (is_null($partitionKey) || $partitionKey === '') {
+		if ($partitionKey === null || $partitionKey === '') {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Partition key is not specified.');
 		}
-		if (is_null($rowKey) || $rowKey === '') {
+		if ($rowKey === null || $rowKey === '') {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Row key is not specified.');
 		}
-		if (is_null($entityClass) || $entityClass === '') {
+		if ($entityClass === null || $entityClass === '') {
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Entity class is not specified.');
 		}
@@ -546,7 +546,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		}
 		
 		// Add continuation querystring parameters?
-		if (!is_null($nextPartitionKey) && !is_null($nextRowKey)) {
+		if (!$nextPartitionKey === null && !$nextRowKey === null) {
 		    if ($queryString !== '') {
 		        $queryString .= '&';
 		    } else {
@@ -627,7 +627,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 		    }
 
 			// More entities?
-		    if (!is_null($response->getHeader('x-ms-continuation-NextPartitionKey')) && !is_null($response->getHeader('x-ms-continuation-NextRowKey'))) {
+		    if (!($response->getHeader('x-ms-continuation-NextPartitionKey') === null) && !$response->getHeader('x-ms-continuation-NextRowKey') === null) {
 		        if (strpos($queryString, '$top') === false) {
 		            $returnValue = array_merge($returnValue, $this->retrieveEntities($tableName, $filter, $entityClass, $response->getHeader('x-ms-continuation-NextPartitionKey'), $response->getHeader('x-ms-continuation-NextRowKey')));
 		        }
@@ -720,7 +720,7 @@ class Zend_Service_WindowsAzure_Storage_Table
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Table name is not specified.');
 		}
-		if (is_null($entity)) {	
+		if ($entity === null) {	
 			require_once 'Zend/Service/WindowsAzure/Exception.php';
 			throw new Zend_Service_WindowsAzure_Exception('Entity is not specified.');
 		}
@@ -830,12 +830,12 @@ class Zend_Service_WindowsAzure_Storage_Table
 		    if ($azureValue->Type != '') {
 		        $value[] = ' m:type="' . $azureValue->Type . '"';
 		    }
-		    if (is_null($azureValue->Value)) {
+		    if ($azureValue->Value === null) {
 		        $value[] = ' m:null="true"'; 
 		    }
 		    $value[] = '>';
 		    
-		    if (!is_null($azureValue->Value)) {
+		    if (!$azureValue->Value === null) {
 		        if (strtolower($azureValue->Type) == 'edm.boolean') {
 		            $value[] = ($azureValue->Value == true ? '1' : '0');
 		        } else if (strtolower($azureValue->Type) == 'edm.datetime') {

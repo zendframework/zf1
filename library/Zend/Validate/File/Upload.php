@@ -137,7 +137,7 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
         }
 
         // see ZF-10738
-        if (is_null($this->_files)) {
+        if ($this->_files === null) {
             $this->_files = array();
         }
 
