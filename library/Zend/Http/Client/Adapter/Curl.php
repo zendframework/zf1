@@ -320,6 +320,11 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
                 }
                 break;
 
+            case Zend_Http_Client::PATCH:
+                $curlMethod = CURLOPT_CUSTOMREQUEST;
+                $curlValue = "PATCH";
+                break;
+
             case Zend_Http_Client::DELETE:
                 $curlMethod = CURLOPT_CUSTOMREQUEST;
                 $curlValue = "DELETE";
@@ -392,6 +397,9 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             unset($this->_config['curloptions'][CURLOPT_INFILESIZE]);
         } elseif ($method == Zend_Http_Client::PUT) {
             // This is a PUT by a setRawData string, not by file-handle
+            curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+        } elseif ($method == Zend_Http_Client::PATCH) {
+            // This is a PATCH by a setRawData string
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == Zend_Http_Client::DELETE) {
             // This is a DELETE by a setRawData string
