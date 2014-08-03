@@ -355,7 +355,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         $curlHttp = ($httpVersion == 1.1) ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
 
         // mark as HTTP request and set HTTP method
-        curl_setopt($this->_curl, $curlHttp, true);
+        curl_setopt($this->_curl, CURLOPT_HTTP_VERSION, $curlHttp);
         curl_setopt($this->_curl, $curlMethod, $curlValue);
 
         if($this->out_stream) {
