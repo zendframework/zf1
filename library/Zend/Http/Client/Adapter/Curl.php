@@ -222,7 +222,17 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         }
 
         // Set timeout
-        curl_setopt($this->_curl, CURLOPT_CONNECTTIMEOUT, $this->_config['timeout']);
+        if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
+            curl_setopt($this->_curl, CURLOPT_CONNECTTIMEOUT_MS, $this->_config['timeout'] * 1000);
+        } else {
+            curl_setopt($this->_curl, CURLOPT_CONNECTTIMEOUT, $this->_config['timeout']);
+        }
+
+        if (defined('CURLOPT_TIMEOUT_MS')) {
+            curl_setopt($this->_curl, CURLOPT_TIMEOUT_MS, $this->_config['timeout'] * 1000);
+        } else {
+            curl_setopt($this->_curl, CURLOPT_TIMEOUT, $this->_config['timeout']);
+        }
 
         // Set Max redirects
         curl_setopt($this->_curl, CURLOPT_MAXREDIRS, $this->_config['maxredirects']);
