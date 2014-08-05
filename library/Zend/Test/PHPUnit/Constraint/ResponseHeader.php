@@ -20,7 +20,9 @@
  * @version    $Id$
  */
 
-if (version_compare(PHPUnit_Runner_Version::id(), '3.5', '>=')) {
+if (version_compare(PHPUnit_Runner_Version::id(), '4.1', '>=')) {
+    include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ResponseHeader41.php');
+} elseif (version_compare(PHPUnit_Runner_Version::id(), '3.5', '>=')) {
     include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ResponseHeader37.php');
 } else {
     include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ResponseHeader34.php');

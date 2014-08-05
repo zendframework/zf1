@@ -152,6 +152,11 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(-1234567.12345,   Zend_Locale_Format::getFloat(-1234567.12345  ));
         $this->assertEquals( 1234567.12345,   Zend_Locale_Format::getFloat( 1234567.12345  ));
 
+        $this->assertEquals( 0.01, Zend_Locale_Format::getFloat(  1e-2 ));
+        $this->assertEquals( 0.01, Zend_Locale_Format::getFloat( '1e-2'));
+        $this->assertEquals(-0.01, Zend_Locale_Format::getFloat( -1e-2 ));
+        $this->assertEquals(-0.01, Zend_Locale_Format::getFloat('-1e-2'));
+
         $options = array('locale' => 'de');
         $this->assertEquals(       0,         Zend_Locale_Format::getFloat(         '0',         $options));
         $this->assertEquals(-1234567,         Zend_Locale_Format::getFloat(  '-1234567',         $options));
@@ -916,6 +921,7 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         $this->assertSame('r',    Zend_Locale_Format::convertPhpToIsoFormat('r'));
         $this->assertSame('U',    Zend_Locale_Format::convertPhpToIsoFormat('U'));
         $this->assertSame('HHmmss', Zend_Locale_Format::convertPhpToIsoFormat('His'));
+        $this->assertSame("dd MMMM yyyy 'alle' H:mm:ss", Zend_Locale_Format::convertPhpToIsoFormat('d F Y \a\l\l\e G:i:s'));
     }
 
 
