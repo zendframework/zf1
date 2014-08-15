@@ -142,7 +142,18 @@ class Zend_Cache_FileBackendTest extends Zend_Cache_CommonExtendedBackendTest {
 
     public function testCleanModeAllWithHashedDirectoryStructure()
     {
+        // clean files created in setUp (without hashed directory level) first
+        $this->assertTrue($this->_instance->clean('all'));
+
+        // set the hashed directory mode
         $this->_instance->setOption('hashed_directory_level', 2);
+
+        // save the data again
+        $this->_instance->save('bar : data to cache', 'bar');
+        $this->_instance->save('bar2 : data to cache', 'bar2');
+        $this->_instance->save('bar3 : data to cache', 'bar3');
+
+        // now delete them
         $this->assertTrue($this->_instance->clean('all'));
         $this->assertFalse($this->_instance->test('bar'));
         $this->assertFalse($this->_instance->test('bar2'));
@@ -155,4 +166,37 @@ class Zend_Cache_FileBackendTest extends Zend_Cache_CommonExtendedBackendTest {
         $this->assertFalse($res);
     }
 
+    public function testShouldProperlyCleanCacheNoMatterTheCacheId()
+    {
+        // the 'zzz' and 'ďťň' keys will be sorted after internal-metadatas file
+        $keys = array(
+            '9230de5449e0c818ed4804587ed422d5',
+            'zzz',
+            'Zend_LocaleC_cs_CZ_date_',
+            'ďťň'
+        );
+
+        foreach ($keys as $key) {
+            $this->_instance->save('data to cache', $key);
+        }
+
+        $this->assertTrue($this->_instance->clean(Zend_Cache::CLEANING_MODE_ALL));
+    }
+
+    /**
+     * The CLEANING_MODE_ALL should delete also old orphaned metadatafiles
+     */
+    public function testShouldDeleteOldMetadataFiles()
+    {
+        // simulate orphaned metadata file
+        $fn = $this->_cache_dir
+            . DIRECTORY_SEPARATOR
+            . 'zend_cache---internal-metadatas---7a38619e110f03740970cbcd5310f33f';
+        $file = fopen($fn, 'a+');
+        fclose($file);
+
+        $this->assertTrue(file_exists($fn));
+        $this->assertTrue($this->_instance->clean(Zend_Cache::CLEANING_MODE_ALL));
+        $this->assertFalse(file_exists($fn));
+    }
 }
