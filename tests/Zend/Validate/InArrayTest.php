@@ -195,4 +195,35 @@ class Zend_Validate_InArrayTest extends PHPUnit_Framework_TestCase
         $validator->setRecursive(true);
         $this->assertTrue($validator->isValid('A'));
     }
+
+    /**
+     * @group GH-365
+     */
+    public function testMultidimensionalArrayNotFound()
+    {
+        $input = array(
+            array('x'),
+            array('y'),
+        );
+        $validator = new Zend_Validate_InArray(array('a'));
+        $this->assertFalse($validator->isValid($input));
+    }
+
+    /**
+     * @group GH-365
+     */
+    public function testErrorMessageWithArrayValue()
+    {
+        $input = array(
+            array('x'),
+            array('y'),
+        );
+        $validator = new Zend_Validate_InArray(array('a'));
+        $validator->isValid($input);
+        $messages  = $validator->getMessages();
+        $this->assertEquals(
+            "'x, y' was not found in the haystack",
+            current($messages)
+        );
+    }
 }
