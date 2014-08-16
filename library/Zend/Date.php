@@ -4514,10 +4514,11 @@ class Zend_Date extends Zend_Date_DateObject
         }
 
         if ($precision === null) {
-            $precision = strlen($milli);
-            if ($milli < 0) {
-                --$precision;
-            }
+			// Use internal default precision
+			// Is not as logic as using the length of the input. But this would break tests and maybe other things
+			// as an input value of integer 10, which is used in tests, must be parsed as 10 milliseconds (real milliseconds, precision 3)
+			// but with auto-detect of precision, 100 milliseconds would be added.
+            $precision = $this->_precision;
         }
 
         if (!is_int($precision) || $precision < 1 || $precision > 9) {
@@ -4525,6 +4526,12 @@ class Zend_Date extends Zend_Date_DateObject
             throw new Zend_Date_Exception("precision ($precision) must be a positive integer less than 10", 0, null, $precision);
         }
 
+		if ($this->_precision > $precision) {
+			$milli = $milli * pow(10, $this->_precision - $precision);
+		} elseif ($this->_precision < $precision) {
+			$milli = round($milli / pow(10, $precision - $this->_precision));
+		}
+		
         $this->_fractional += $milli;
 
         // Add/sub milliseconds + add/sub seconds
