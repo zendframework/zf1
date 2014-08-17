@@ -91,119 +91,104 @@ class Custom_ModifiedIncludePathAutoloader implements Zend_Loader_SplAutoloader
     <sect2 id="zend.loader.spl-autoloader.methods">
         <title>Available Methods</title>
 
-        <refentry id="zend.loader.spl-autoloader.methods.constructor">
-            <refnamediv>
-                <refname>__construct</refname>
-                <refpurpose>Initialize and configure an autoloader</refpurpose>
-            </refnamediv>
+        <variablelist>
+            <varlistentry id="zend.loader.spl-autoloader.methods.constructor">
+                <term>
+                    <methodsynopsis>
+                        <methodname>__construct</methodname>
+                        <methodparam>
+                            <funcparams>$options = null</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
 
-            <refsynopsisdiv>
-                <methodsynopsis>
-                    <methodname>__construct</methodname>
-                    <methodparam>
-                        <funcparams>$options = null</funcparams>
-                    </methodparam>
-                </methodsynopsis>
-            </refsynopsisdiv>
+                <listitem>
+                    <para>
+                        Initialize and configure an autoloader
+                    </para>
+                    <para>
+                        Autoloader constructors should optionally receive configuration options.
+                        Typically, if received, these will be passed to the
+                        <methodname>setOptions()</methodname> method to process.
+                    </para>
+                </listitem>
+            </varlistentry>
 
-            <refsection>
-                <title>Constructor</title>
+            <varlistentry id="zend.loader.spl-autoloader.methods.set-options">
+                <term>
+                    <methodsynopsis>
+                        <methodname>setOptions</methodname>
+                        <methodparam>
+                            <funcparams>$options</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
 
-                <para>
-                    Autoloader constructors should optionally receive configuration options.
-                    Typically, if received, these will be passed to the
-                    <methodname>setOptions()</methodname> method to process.
-                </para>
-            </refsection>
-        </refentry>
+                <listitem>
+                    <para>
+                        Configure the autoloader state
+                    </para>
+                    <para>
+                        Used to configure the autoloader. Typically, it should expect either an array or
+                        a <interfacename>Traversable</interfacename> object, though validation of the
+                        options is left to implementation. Additionally, it is recommended that the
+                        method return the autoloader instance in order to implement a fluent interface.
+                    </para>
+                </listitem>
+            </varlistentry>
 
-        <refentry id="zend.loader.spl-autoloader.methods.set-options">
-            <refnamediv>
-                <refname>setOptions</refname>
-                <refpurpose>Configure the autoloader state</refpurpose>
-            </refnamediv>
+            <varlistentry id="zend.loader.spl-autoloader.methods.autoload">
+                <term>
+                    <methodsynopsis>
+                        <methodname>autoload</methodname>
+                        <methodparam>
+                            <funcparams>$classname</funcparams>
+                        </methodparam>
+                    </methodsynopsis>
+                </term>
 
-            <refsynopsisdiv>
-                <methodsynopsis>
-                    <methodname>setOptions</methodname>
-                    <methodparam>
-                        <funcparams>$options</funcparams>
-                    </methodparam>
-                </methodsynopsis>
-            </refsynopsisdiv>
+                <listitem>
+                    <para>
+                        Attempt to resolve a class name to the file defining it
+                    </para>
+                    <para>
+                        This method should be used to resolve a class name to the file defining it. When
+                        a positive match is found, return the class name; otherwise, return a boolean
+                        false.
+                    </para>
+                </listitem>
+            </varlistentry>
 
-            <refsection>
-                <title>setOptions()</title>
+            <varlistentry id="zend.loader.spl-autoloader.methods.register">
+                <term>
+                    <methodsynopsis>
+                        <methodname>register</methodname>
+                    </methodsynopsis>
+                </term>
 
-                <para>
-                    Used to configure the autoloader. Typically, it should expect either an array or
-                    a <interfacename>Traversable</interfacename> object, though validation of the
-                    options is left to implementation. Additionally, it is recommended that the
-                    method return the autoloader instance in order to implement a fluent interface.
-                </para>
-            </refsection>
-        </refentry>
+                <listitem>
+                    <para>
+                        Register the autoloader with the SPL autoloader
+                    </para>
+                    <para>
+                        Should be used to register the autoloader instance with
+                        <function>spl_autoload_register()</function>. Invariably, the method
+                        should look like the following:
+                    </para>
 
-        <refentry id="zend.loader.spl-autoloader.methods.autoload">
-            <refnamediv>
-                <refname>autoload</refname>
-                <refpurpose>Attempt to resolve a class name to the file defining it</refpurpose>
-            </refnamediv>
-
-            <refsynopsisdiv>
-                <methodsynopsis>
-                    <methodname>autoload</methodname>
-                    <methodparam>
-                        <funcparams>$classname</funcparams>
-                    </methodparam>
-                </methodsynopsis>
-            </refsynopsisdiv>
-
-            <refsection>
-                <title>autoload()</title>
-
-                <para>
-                    This method should be used to resolve a class name to the file defining it. When
-                    a positive match is found, return the class name; otherwise, return a boolean
-                    false.
-                </para>
-            </refsection>
-        </refentry>
-
-        <refentry id="zend.loader.spl-autoloader.methods.register">
-            <refnamediv>
-                <refname>register</refname>
-                <refpurpose>Register the autoloader with the SPL autoloader</refpurpose>
-            </refnamediv>
-
-            <refsynopsisdiv>
-                <methodsynopsis>
-                    <methodname>register</methodname>
-                </methodsynopsis>
-            </refsynopsisdiv>
-
-            <refsection>
-                <title>register()</title>
-
-                <para>
-                    Should be used to register the autoloader instance with
-                    <function>spl_autoload_register()</function>. Invariably, the method
-                    should look like the following:
-                </para>
-
-                <programlisting language="php"><![CDATA[
+                    <programlisting language="php"><![CDATA[
 public function register()
 {
     spl_autoload_register(array($this, 'autoload'));
 }
 ]]></programlisting>
-            </refsection>
-        </refentry>
+                </listitem>
+            </varlistentry>
+        </variablelist>
     </sect2>
 
     <sect2 id="zend.loader.spl-autoloader.examples">
         <title>Examples</title>
-        
 
         <para>
             Please see the <link linkend="zend.loader.spl-autoloader.quick-start">Quick Start</link>
