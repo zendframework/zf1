@@ -42,7 +42,7 @@ class Zend_Locale_Format
                                      'fix_date'      => false,
                                      'locale'        => null,
                                      'cache'         => null,
-                                     'disableCache'  => false,
+                                     'disableCache'  => null,
                                      'precision'     => null);
 
     /**
@@ -152,7 +152,9 @@ class Zend_Locale_Format
                     break;
 
                 case 'disablecache' :
-                    Zend_Locale_Data::disableCache($value);
+                    if (null !== $value) {
+                        Zend_Locale_Data::disableCache($value);
+                    }
                     break;
 
                 case 'precision' :
