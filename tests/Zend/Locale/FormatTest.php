@@ -50,6 +50,8 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         } else if (defined('TESTS_ZEND_LOCALE_FORMAT_SETLOCALE')) {
             setlocale(LC_ALL, TESTS_ZEND_LOCALE_FORMAT_SETLOCALE);
         }
+
+        Zend_Locale_Data::removeCache();
     }
 
     /**
@@ -1113,5 +1115,26 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
         } catch ( PHPUnit_Framework_Error_Notice $ex ) {
             $this->fail('Zend_Locale_Format::checkDateFormat emitted unexpected E_NOTICE');
         }
+    }
+
+    /**
+     * @group GH-363
+     */
+    public function testByDefaultCacheShouldBeUsed()
+    {
+        $value = Zend_Locale_Format::getDate('2014-01-01');
+
+        $this->assertTrue(Zend_Locale_Data::hasCache());
+    }
+
+    /**
+     * @group GH-363
+     */
+    public function testZendLocaleDisableCacheShouldNotOverwritten()
+    {
+        Zend_Locale::disableCache(true);
+        $value = Zend_Locale_Format::getDate('2014-01-01');
+
+        $this->assertFalse(Zend_Locale_Data::hasCache());
     }
 }
