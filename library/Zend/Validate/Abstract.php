@@ -23,6 +23,7 @@
  * @see Zend_Validate_Interface
  */
 require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Json.php';
 
 /**
  * @category   Zend
@@ -229,6 +230,8 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
             } else {
                 $value = $value->__toString();
             }
+        } elseif (is_array($value)) {
+            $value = Zend_Json::encode($value);
         } else {
             $value = implode((array) $value);
         }
