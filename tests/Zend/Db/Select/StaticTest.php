@@ -830,6 +830,28 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('p' => 'products'))->order('name;select;MD5(1)');
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "name;select;MD5(1)" ASC', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->order('MD5(1);drop table products; -- )');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);drop table products; -- )" ASC', $select->assemble());
+    }
+
+    public function testSqlInjectionWithGroup()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ABS("weight")');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ABS("weight")', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('MD5(1); drop table products; -- )');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY "MD5(1); drop table products; -- )"', $select->assemble());
+    }
+
+    public function testSqlInjectionInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'), array('MD5(1); drop table products; -- )'));
+        $this->assertEquals('SELECT "p"."MD5(1); drop table products; -- )" FROM "products" AS "p"', $select->assemble());
     }
 
     /**
