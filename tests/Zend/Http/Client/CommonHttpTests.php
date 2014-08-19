@@ -256,6 +256,36 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
     }
 
     /**
+     * Test we can properly send OPTIONS parameters with
+     * application/x-www-form-urlencoded content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataUrlEncoded($params)
+    {
+        $this->client->setUri($this->baseuri . 'testOptionsData.php');
+        $this->client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('OPTIONS');
+        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed");
+    }
+
+    /**
+     * Test we can properly send OPTIONS parameters without
+     * content type, relying on default content type (urlencoded)
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataDefault($params)
+    {
+        $this->client->setUri($this->baseuri . 'testOptionsData.php');
+        // note that no content type is set
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('OPTIONS');
+        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed for default content-type");
+    }
+
+    /**
      * Test we can properly send parameters with
      * application/x-www-form-urlencoded content type
      *
@@ -313,6 +343,23 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $this->client->setUri($this->baseuri . 'testRawPatchData.php');
         $this->client->setParameterPost($params);
         $this->client->setMethod(Zend_Http_Client::PATCH);
+        $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $response = $this->client->request();
+        $responseText = $response->getBody();
+        $this->_checkPresence($responseText, $params);
+    }
+
+    /**
+     * Test we can properly send OPTIONS parameters with
+     * multipart/form-data content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataMultipart($params)
+    {
+        $this->client->setUri($this->baseuri . 'testRawOptionsData.php');
+        $this->client->setParameterPost($params);
+        $this->client->setMethod(Zend_Http_Client::OPTIONS);
         $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
         $response = $this->client->request();
         $responseText = $response->getBody();
