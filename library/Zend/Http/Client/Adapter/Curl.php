@@ -382,6 +382,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         } else {
             // ensure headers are also returned
             curl_setopt($this->_curl, CURLOPT_HEADER, true);
+            curl_setopt($this->_curl, CURLINFO_HEADER_OUT, true);
 
             // ensure actual response is returned
             curl_setopt($this->_curl, CURLOPT_RETURNTRANSFER, true);
