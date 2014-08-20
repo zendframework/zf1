@@ -134,7 +134,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
      */
     public function testSimpleRequests()
     {
-        $methods = array('GET', 'POST', 'OPTIONS', 'PUT', 'DELETE');
+        $methods = array('GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE');
 
         foreach ($methods as $method) {
             $res = $this->client->request($method);
@@ -194,7 +194,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('POST');
         $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
     }
-    
+
     /**
      * Test we can properly send PUT parameters with
      * application/x-www-form-urlencoded content type
@@ -209,7 +209,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('PUT');
         $this->assertEquals(serialize($params), $res->getBody(), "PUT data integrity test failed");
     }
-    
+
     /**
      * Test we can properly send PUT parameters without
      * content type, relying on default content type (urlencoded)
@@ -224,7 +224,67 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('PUT');
         $this->assertEquals(serialize($params), $res->getBody(), "PUT data integrity test failed for default content-type");
     }
-    
+
+    /**
+     * Test we can properly send PATCH parameters with
+     * application/x-www-form-urlencoded content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPatchDataUrlEncoded($params)
+    {
+        $this->client->setUri($this->baseuri . 'testPatchData.php');
+        $this->client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('PATCH');
+        $this->assertEquals(serialize($params), $res->getBody(), "PATCH data integrity test failed");
+    }
+
+    /**
+     * Test we can properly send PATCH parameters without
+     * content type, relying on default content type (urlencoded)
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPatchDataDefault($params)
+    {
+        $this->client->setUri($this->baseuri . 'testPatchData.php');
+        // note that no content type is set
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('PATCH');
+        $this->assertEquals(serialize($params), $res->getBody(), "PATCH data integrity test failed for default content-type");
+    }
+
+    /**
+     * Test we can properly send OPTIONS parameters with
+     * application/x-www-form-urlencoded content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataUrlEncoded($params)
+    {
+        $this->client->setUri($this->baseuri . 'testOptionsData.php');
+        $this->client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('OPTIONS');
+        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed");
+    }
+
+    /**
+     * Test we can properly send OPTIONS parameters without
+     * content type, relying on default content type (urlencoded)
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataDefault($params)
+    {
+        $this->client->setUri($this->baseuri . 'testOptionsData.php');
+        // note that no content type is set
+        $this->client->setParameterPost($params);
+        $res = $this->client->request('OPTIONS');
+        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed for default content-type");
+    }
+
     /**
      * Test we can properly send parameters with
      * application/x-www-form-urlencoded content type
@@ -254,7 +314,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->request('POST');
         $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
     }
-    
+
     /**
      * Test we can properly send PUT parameters with
      * multipart/form-data content type
@@ -271,35 +331,69 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $responseText = $response->getBody();
         $this->_checkPresence($responseText, $params);
     }
-    
+
+    /**
+     * Test we can properly send PATCH parameters with
+     * multipart/form-data content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testPatchDataMultipart($params)
+    {
+        $this->client->setUri($this->baseuri . 'testRawPatchData.php');
+        $this->client->setParameterPost($params);
+        $this->client->setMethod(Zend_Http_Client::PATCH);
+        $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $response = $this->client->request();
+        $responseText = $response->getBody();
+        $this->_checkPresence($responseText, $params);
+    }
+
+    /**
+     * Test we can properly send OPTIONS parameters with
+     * multipart/form-data content type
+     *
+     * @dataProvider parameterArrayProvider
+     */
+    public function testOptionsDataMultipart($params)
+    {
+        $this->client->setUri($this->baseuri . 'testRawOptionsData.php');
+        $this->client->setParameterPost($params);
+        $this->client->setMethod(Zend_Http_Client::OPTIONS);
+        $this->client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $response = $this->client->request();
+        $responseText = $response->getBody();
+        $this->_checkPresence($responseText, $params);
+    }
+
     /**
      * Checks the presence of keys (non-numeric only) and values
      * in the raw form data reponse for a PUT or DELETE request recursively
-     * 
+     *
      * An example response (I do not know of a better way to check it):
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="quest"
-     * 
+     *
      * To seek the holy grail
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="YourMother"
-     * 
+     *
      * Was a hamster
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="specialChars"
-     * 
+     *
      * <>$+ &?=[]^%
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="array[]"
-     * 
+     *
      * firstItem
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="array[]"
-     * 
+     *
      * secondItem
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828
      * Content-Disposition: form-data; name="array[]"
-     * 
+     *
      * 3rdItem
      * -----ZENDHTTPCLIENT-c63973519a6bb3ec45495876f5e15828--
      * @param string $responseText
@@ -319,19 +413,19 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
                 if (!is_int($key)) {
                     $this->assertGreaterThan(
                         0,
-                        strpos($responseText, $key), 
+                        strpos($responseText, $key),
                         "key '$key' is missing from the reponse for raw multipart PUT or DELETE request"
                     );
                 }
                 $this->assertGreaterThan(
                     0,
-                    strpos($responseText, $value), 
+                    strpos($responseText, $value),
                     "value '$value' is missing from the reponse for raw multipart PUT or DELETE request"
                 );
             }
         }
     }
-    
+
     /**
      * Test we can properly send DELETE parameters with
      * multipart/form-data content type
@@ -360,12 +454,12 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $res = $this->client->setRawData($data, 'text/html')->request('POST');
         $this->assertEquals($data, $res->getBody(), 'Response body does not contain the expected data');
     }
-    
+
     /**
      * Test using raw HTTP PUT data
      *
      * @group ZF-11030
-     * 
+     *
      */
     public function testRawPutData()
     {
@@ -376,12 +470,12 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $response = $this->client->request();
         $this->assertEquals($data, $response->getBody(), 'Response body does not contain the expected data');
     }
-    
+
     /**
      * Test using raw HTTP DELETE data
      *
      * @group ZF-11030
-     * 
+     *
      */
     public function testRawDeleteData()
     {
@@ -1186,7 +1280,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $this->assertNotContains('Content-Type: text/plain', $request);
 
     }
-    
+
     /**
      * @group ZF-11598
      */
@@ -1196,7 +1290,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
         $adapter = $client->getAdapter();
         $this->assertTrue(!empty($adapter));
     }
-    
+
     /**
      * Internal helpder function to get the contents of test files
      *
@@ -1214,7 +1308,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
      *
      * @return array
      */
-    static public function parameterArrayProvider()
+    public static function parameterArrayProvider()
     {
         return array(
             array(
@@ -1255,7 +1349,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
      *
      * @return array
      */
-    static public function invalidConfigProvider()
+    public static function invalidConfigProvider()
     {
         return array(
             array(false),
