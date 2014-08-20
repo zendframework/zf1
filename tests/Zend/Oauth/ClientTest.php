@@ -22,6 +22,14 @@
 
 require_once 'Zend/Oauth.php';
 require_once 'Zend/Oauth/Config.php';
+require_once 'Zend/Oauth/Client.php';
+
+class Test_Oauth_Client extends Zend_Oauth_Client {
+    public function getSignableParametersAsQueryString()
+    {
+        return $this->_getSignableParametersAsQueryString();
+    }
+}
 
 /**
  * @category   Zend
@@ -45,5 +53,37 @@ class Zend_Oauth_ClientTest extends PHPUnit_Framework_TestCase
     {
         $this->client->setRequestMethod(Zend_Oauth_Client::OPTIONS);
         $this->assertEquals(Zend_Oauth_Client::OPTIONS, $this->client->getRequestMethod());
+    }
+
+    /**
+     * zendframework / zf1 # 244
+     */
+    public function testIncludesParametersForSignatureOnPostEncUrlEncoded()
+    {
+        $client = new Test_Oauth_Client(array());
+        $client->setEncType(Zend_Http_Client::ENC_URLENCODED);
+        $params = array(
+            'param1' => 'dummy1',
+            'param2' => 'dummy2',
+        );
+        $client->setParameterPost($params);
+        $client->setMethod(Zend_Http_Client::POST);
+        $this->assertEquals(2, count($client->getSignableParametersAsQueryString()));
+    }
+
+    /**
+     * zendframework / zf1 # 244
+     */
+    public function testExcludesParametersOnPostEncFormData()
+    {
+        $client = new Test_Oauth_Client(array());
+        $client->setEncType(Zend_Http_Client::ENC_FORMDATA);
+        $params = array(
+            'param1' => 'dummy1',
+            'param2' => 'dummy2',
+        );
+        $client->setParameterPost($params);
+        $client->setMethod(Zend_Http_Client::POST);
+        $this->assertEquals(0, count($client->getSignableParametersAsQueryString()));
     }
 }
