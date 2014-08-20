@@ -269,7 +269,7 @@ class Zend_Http_Client
      *
      * @var resource
      */
-    static protected $_fileInfoDb = null;
+    protected static $_fileInfoDb = null;
 
     /**
      * Constructor method. Will create a new HTTP client. Accepts the target
@@ -1460,7 +1460,8 @@ class Zend_Http_Client
      * @param array $headers Associative array of optional headers @example ("Content-Transfer-Encoding" => "binary")
      * @return string
      */
-    public static function encodeFormData($boundary, $name, $value, $filename = null, $headers = array()) {
+    public static function encodeFormData($boundary, $name, $value, $filename = null, $headers = array())
+    {
         $ret = "--{$boundary}\r\n" .
             'Content-Disposition: form-data; name="' . $name .'"';
 
@@ -1535,7 +1536,7 @@ class Zend_Http_Client
      * @param  string $prefix
      * @return array
      */
-    static protected function _flattenParametersArray($parray, $prefix = null)
+    protected static function _flattenParametersArray($parray, $prefix = null)
     {
         if (! is_array($parray)) {
             return $parray;

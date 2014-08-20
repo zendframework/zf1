@@ -1308,7 +1308,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
      *
      * @return array
      */
-    static public function parameterArrayProvider()
+    public static function parameterArrayProvider()
     {
         return array(
             array(
@@ -1349,7 +1349,7 @@ abstract class Zend_Http_Client_CommonHttpTests extends PHPUnit_Framework_TestCa
      *
      * @return array
      */
-    static public function invalidConfigProvider()
+    public static function invalidConfigProvider()
     {
         return array(
             array(false),
