@@ -40,28 +40,31 @@ require_once 'Zend/Pdf/Exception.php';
 class Zend_PdfTest extends PHPUnit_Framework_TestCase
 {
     /**
-     *
-     * @var NULL|Zend_Pdf
+     * @var Zend_Pdf = null
      */
-    private $_pdf = NULL;
+    private $_pdf;
 
     protected function setUp()
     {
         $this->_pdf = Zend_Pdf::load(dirname(__FILE__) . '/Pdf/_files/PdfWithFields.pdf');
     }
 
+    /**
+     * PDF with text fields must return array of text field names
+     */
     public function testGetTextFieldNames()
     {
         $fieldNames = $this->_pdf->getTextFieldNames();
-        //PDF with text fields must return array of text field names
         $this->assertEquals(array('Field1', 'Field2'), $fieldNames);
     }
 
+    /**
+     * PDF with no text fields must return empty array
+     */
     public function testGetTextFieldNamesNoFieldsEmptyArray()
     {
-        $pdf = new Zend_Pdf();
+        $pdf        = new Zend_Pdf();
         $fieldNames = $pdf->getTextFieldNames();
-        //PDF with no text fields must return empty array
         $this->assertEquals(array(), $fieldNames);
     }
 
@@ -69,7 +72,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
     {
         try {
             $this->_pdf->setTextField('Field1', 'Value1');
-            $this->assertTrue(TRUE);    //in case of --strict
+            $this->assertTrue(true); // in case of --strict
         } catch (\Exception $e) {
             $this->fail('Failed to set an existing text field');
         }
@@ -104,7 +107,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
                     | Zend_Pdf::PDF_FORM_FIELD_REQUIRED
                     | Zend_Pdf::PDF_FORM_FIELD_NOEXPORT
             );
-            $this->assertTrue(TRUE);    //in case of --strict
+            $this->assertTrue(true); // in case of --strict
         } catch (\Exception $e) {
             $this->fail('Failed to set property of an existing text field');
         }
@@ -119,7 +122,9 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testSetTextFieldPropertiesNonExistent()
     {
-        $this->_pdf->setTextFieldProperties('FieldNotExists', Zend_Pdf::PDF_FORM_FIELD_REQUIRED);
+        $this->_pdf->setTextFieldProperties(
+            'FieldNotExists', Zend_Pdf::PDF_FORM_FIELD_REQUIRED
+        );
     }
 
     public function testMarkTextFieldAsReadOnly()
@@ -127,7 +132,7 @@ class Zend_PdfTest extends PHPUnit_Framework_TestCase
         try {
             $this->_pdf->markTextFieldAsReadOnly('Field1');
             $this->_pdf->markTextFieldAsReadOnly('Field2');
-            $this->assertTrue(TRUE);    //in case of --strict
+            $this->assertTrue(true); // in case of --strict
         } catch (\Exception $e) {
             $this->fail('Failed to set an existing text field as read-only');
         }

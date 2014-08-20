@@ -206,7 +206,6 @@ class Zend_Pdf
      */
     protected $_parser;
 
-
     /**
      * List of inheritable attributesfor pages tree
      *
@@ -220,7 +219,7 @@ class Zend_Pdf
      * @var array - Associative array, key: name of form field, value: Zend_Pdf_Element
      */
     protected $_formFields = array();
-	
+
     /**
      * True if the object is a newly created PDF document (affects save() method behavior)
      * False otherwise
@@ -616,6 +615,7 @@ class Zend_Pdf
   
     /**
      * Load form fields
+     *
      * Populates the _formFields array, for later lookup of fields by name
      *
      * @param Zend_Pdf_Element_Reference $root Document catalog entry
@@ -625,24 +625,28 @@ class Zend_Pdf
         if ($root->AcroForm === null || $root->AcroForm->Fields === null) {
             return;
         }
-        
-        foreach ($root->AcroForm->Fields->items as $field)
-        {
+
+        foreach ($root->AcroForm->Fields->items as $field) {
             /* We only support fields that are textfields and have a name */
-            if ( $field->FT && $field->FT->value == 'Tx' && $field->T && $field->T !== null ) 
-            {
+            if ($field->FT && $field->FT->value == 'Tx' && $field->T
+                && $field->T !== null
+            ) {
                 $this->_formFields[$field->T->value] = $field;
             }
         }
-		
-        if ( !$root->AcroForm->NeedAppearances || !$root->AcroForm->NeedAppearances->value )
-        {
+
+        if (!$root->AcroForm->NeedAppearances
+            || !$root->AcroForm->NeedAppearances->value
+        ) {
             /* Ask the .pdf viewer to generate its own appearance data, so we do not have to */
-            $root->AcroForm->add(new Zend_Pdf_Element_Name('NeedAppearances'), new Zend_Pdf_Element_Boolean(true) );
+            $root->AcroForm->add(
+                new Zend_Pdf_Element_Name('NeedAppearances'),
+                new Zend_Pdf_Element_Boolean(true)
+            );
             $root->AcroForm->touch();
-        }    
+        }
     }
-	
+
     /**
      * Retrieves a list with the names of the AcroForm textfields in the PDF
      *
@@ -652,7 +656,7 @@ class Zend_Pdf
     {
         return array_keys($this->_formFields);
     }
-	
+
     /**
      * Sets the value of an AcroForm text field
      *
@@ -662,24 +666,48 @@ class Zend_Pdf
      */
     public function setTextField($name, $value)
     {
-        if ( !isset($this->_formFields[$name]))
-            throw new Zend_Pdf_Exception("Field '$name' does not exist or is not a textfield");
-		
-        $field = $this->_formFields[$name];
-        $field->add(new Zend_Pdf_Element_Name('V'), new Zend_Pdf_Element_String($value) );
-        $field->touch();      
-    }
-    
-    public function setTextFieldProperties($name, $bitmask)
-    {
-        if ( !isset($this->_formFields[$name]))
-            throw new Zend_Pdf_Exception("Field '$name' does not exist or is not a textfield");
+        if (!isset($this->_formFields[$name])) {
+            throw new Zend_Pdf_Exception(
+                "Field '$name' does not exist or is not a textfield"
+            );
+        }
 
+        /** @var Zend_Pdf_Element $field */
         $field = $this->_formFields[$name];
-        $field->add(new Zend_Pdf_Element_Name('Ff'), new Zend_Pdf_Element_Numeric($bitmask));
+        $field->add(
+            new Zend_Pdf_Element_Name('V'), new Zend_Pdf_Element_String($value)
+        );
         $field->touch();
     }
-    
+
+    /**
+     * Sets the properties for an AcroForm text field
+     *
+     * @param string $name
+     * @param mixed  $bitmask
+     * @throws Zend_Pdf_Exception
+     */
+    public function setTextFieldProperties($name, $bitmask)
+    {
+        if (!isset($this->_formFields[$name])) {
+            throw new Zend_Pdf_Exception(
+                "Field '$name' does not exist or is not a textfield"
+            );
+        }
+
+        $field = $this->_formFields[$name];
+        $field->add(
+            new Zend_Pdf_Element_Name('Ff'),
+            new Zend_Pdf_Element_Numeric($bitmask)
+        );
+        $field->touch();
+    }
+
+    /**
+     * Marks an AcroForm text field as read only
+     *
+     * @param string $name
+     */
     public function markTextFieldAsReadOnly($name)
     {
         $this->setTextFieldProperties($name, self::PDF_FORM_FIELD_READONLY);
