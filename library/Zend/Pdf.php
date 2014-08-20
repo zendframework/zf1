@@ -96,6 +96,13 @@ class Zend_Pdf
     const PDF_HEADER  = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
 
     /**
+     * Form field options
+     */
+    const PDF_FORM_FIELD_READONLY = 1;
+    const PDF_FORM_FIELD_REQUIRED = 2;
+    const PDF_FORM_FIELD_NOEXPORT = 4;
+
+    /**
      * Pages collection
      *
      * @todo implement it as a class, which supports ArrayAccess and Iterator interfaces,
@@ -207,6 +214,13 @@ class Zend_Pdf
      */
     protected static $_inheritableAttributes = array('Resources', 'MediaBox', 'CropBox', 'Rotate');
 
+    /**
+     * List of form fields
+     *
+     * @var array - Associative array, key: name of form field, value: Zend_Pdf_Element
+     */
+    protected $_formFields = array();
+	
     /**
      * True if the object is a newly created PDF document (affects save() method behavior)
      * False otherwise
@@ -329,6 +343,7 @@ class Zend_Pdf
             $this->_loadNamedDestinations($this->_trailer->Root, $this->_parser->getPDFVersion());
             $this->_loadOutlines($this->_trailer->Root);
             $this->_loadJavaScript($this->_trailer->Root);
+            $this->_loadFormFields($this->_trailer->Root);
 
             if ($this->_trailer->Info !== null) {
                 $this->properties = $this->_trailer->Info->toPhp();
@@ -597,6 +612,77 @@ class Zend_Pdf
                 $this->_javaScript[] = $item->JS->value;
             }
         }
+    }
+  
+    /**
+     * Load form fields
+     * Populates the _formFields array, for later lookup of fields by name
+     *
+     * @param Zend_Pdf_Element_Reference $root Document catalog entry
+     */
+    protected function _loadFormFields(Zend_Pdf_Element_Reference $root)
+    {
+        if ($root->AcroForm === null || $root->AcroForm->Fields === null) {
+            return;
+        }
+        
+        foreach ($root->AcroForm->Fields->items as $field)
+        {
+            /* We only support fields that are textfields and have a name */
+            if ( $field->FT && $field->FT->value == 'Tx' && $field->T && $field->T !== null ) 
+            {
+                $this->_formFields[$field->T->value] = $field;
+            }
+        }
+		
+        if ( !$root->AcroForm->NeedAppearances || !$root->AcroForm->NeedAppearances->value )
+        {
+            /* Ask the .pdf viewer to generate its own appearance data, so we do not have to */
+            $root->AcroForm->add(new Zend_Pdf_Element_Name('NeedAppearances'), new Zend_Pdf_Element_Boolean(true) );
+            $root->AcroForm->touch();
+        }    
+    }
+	
+    /**
+     * Retrieves a list with the names of the AcroForm textfields in the PDF
+     *
+     * @return array of strings
+     */
+    public function getTextFieldNames()
+    {
+        return array_keys($this->_formFields);
+    }
+	
+    /**
+     * Sets the value of an AcroForm text field
+     *
+     * @param string $name Name of textfield
+     * @param string $value Value
+     * @throws Zend_Pdf_Exception if the textfield does not exist in the pdf
+     */
+    public function setTextField($name, $value)
+    {
+        if ( !isset($this->_formFields[$name]))
+            throw new Zend_Pdf_Exception("Field '$name' does not exist or is not a textfield");
+		
+        $field = $this->_formFields[$name];
+        $field->add(new Zend_Pdf_Element_Name('V'), new Zend_Pdf_Element_String($value) );
+        $field->touch();      
+    }
+    
+    public function setTextFieldProperties($name, $bitmask)
+    {
+        if ( !isset($this->_formFields[$name]))
+            throw new Zend_Pdf_Exception("Field '$name' does not exist or is not a textfield");
+
+        $field = $this->_formFields[$name];
+        $field->add(new Zend_Pdf_Element_Name('Ff'), new Zend_Pdf_Element_Numeric($bitmask));
+        $field->touch();
+    }
+    
+    public function markTextFieldAsReadOnly($name)
+    {
+        $this->setTextFieldProperties($name, self::PDF_FORM_FIELD_READONLY);
     }
 
     /**
