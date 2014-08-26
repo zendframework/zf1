@@ -7,11 +7,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.8dev Release.
-Released on MMMMM DD, YYYY.
+Zend Framework 1.12.8 Release.
+Released on August 26, 2014.
 
-IMPORTANT FIXES FOR 1.12.8dev
------------------------------
+IMPORTANT FIXES FOR 1.12.8
+--------------------------
 
 - [#360](https://github.com/zendframework/zf1/pull/360) Zend_Locale:
   [CLDR](http://cldr.unicode.org) updated to version 25
@@ -20,198 +20,21 @@ IMPORTANT FIXES FOR 1.12.8dev
 - [#375](https://github.com/zendframework/zf1/pull/375) Implement
   Zend_Pdf::setJavascript(), Zend_Pdf::addJavascript() and
   Zend_Pdf::resetJavaScript()
+- [#414](https://github.com/zendframework/zf1/pull/414) Adds the
+  `Microsoft_Console` component from the Windows Azure SDK for PHP into
+  the `Zend_Service_Console` component, ensuring that WindowsAzure 
+  command line functionality included in the framework can now work.
+- [#385](https://github.com/zendframework/zf1/pull/385) Adds support for
+  DateTime fractional seconds under PHP 5.6+.
+- [#382](https://github.com/zendframework/zf1/pull/382) Ensures that
+  orphaned metadata cache files are removed when `Zend_Cache::CLEANING_MODE_ALL`
+  is used.
+- [#410](https://github.com/zendframework/zf1/pull/410) Ensures that calls
+  to reset the status of the libxml entity loader happen as soon as possible,
+  to prevent potential threading issues under php-fpm (since the settings
+  are per process, not per-request, in that environment).
 
-SECURITY FIXES FOR 1.12.7
--------------------------
-
-- **ZF2014-04:** Potential SQL Injection (SQLi) attack via ORDER expessions:
-  `Zend\Db\Select`'s `order()` method allwed passing function calls, but
-  did not provide checks to prevent SQLi vectors. As an example:
-
-  ```php
-  $select = $db->select()->order('MD5(1); select...');
-  ```
-
-  could be entered.
-
-  If you use `Zend\Db\Select` with ORDER clauses, we strongly urge that you
-  upgrade immediately.
-
-IMPORTANT FIXES FOR 1.12.7
---------------------------
-
-- [#331](https://github.com/zendframework/zf1/pull/331) and
-  [#376](https://github.com/zendframework/zf1/pull/376) provide support
-  for PHPUnit 4 and 4.1, respectively, both within the Zend Framework test suite
-  and inside the `Zend_Test_PHPUnit` component.
-- [#333](https://github.com/zendframework/zf1/pull/333) backports recursive
-  page removal within `Zend_Navigation` from Zend Framework 2.
-- [#343](https://github.com/zendframework/zf1/pull/343) updates the `Hostname`
-  validator to support the new IANA top level domains.
-- Forward-compatibility changes were made to ensure Zend Framework 1 will run on
-  the upcoming PHP 5.6.
-
-
-IMPORTANT FIXES FOR 1.12.6
---------------------------
-
-- [#307](https://github.com/zendframework/zf1/pull/307) fixes a backwards
-  compatibility break in the `Zend_Locale` component. 1.12.4 updated the
-  [CLDR](http://cldr.unicode.org) version used by Zend Framework 1, which
-  resulted in the removal of several locales we previously supported. The patch
-  in #307 adds locale aliases for these to the new locales supported in recent
-  versions of the CLDR, ensuring backwards compatibility for ZF1 users.
-
-SECURITY FIXES FOR 1.12.4
--------------------------
-
-- **ZF2014-01:** Potential XXE/XEE attacks using PHP functions:
-  `simplexml_load_*`, `DOMDocument::loadXML`, and `xml_parse`. A new component,
-  `Zend_Xml`, was introduced to mitigate XML eXternal Entity and XML Entity
-  Expansion vectors that are present in older versions of libxml2 and/or PHP.
-  Components that could contain these vectors include:
-
-    - `Zend_Amf`
-    - `Zend_Config`
-    - `Zend_Dom`
-    - `Zend_Feed`
-    - `Zend_Gdata`
-    - `Zend_Json`
-    - `Zend_Locale`
-    - `Zend_Mobile_Push`
-    - `Zend_Rest_Client`
-    - `Zend_Search_Lucene`
-    - `Zend_Serializer_Adapter_Wddx`
-    - `Zend_Service_Amazon`
-    - `Zend_Service_AudioScrobbler`
-    - `Zend_Service_Delicious`
-    - `Zend_Service_Ebay`
-    - `Zend_Service_Flickr`
-    - `Zend_Service_SlideShare`
-    - `Zend_Service_SqlAzure`
-    - `Zend_Service_Technorati`
-    - `Zend_Service_WindowsAzure`
-    - `Zend_Service_Yahoo`
-    - `Zend_Soap`
-    - `Zend_Translate`
-
-  If you use one or more of these components, we strongly urge that you upgrade
-  immediately.
-
-- **ZF2014-02:** Potential security issue in login mechanism of `Zend_OpenId`
-  consumer. Using the Consumer component in conjunction with a malicious OpenID
-  provider, one could login to a service using an arbitrary OpenID Identity
-  without requiring credentials, allowing impersonation of an OpenID Identity.
-  If you use this component, we strongly urge that you upgrade immediately.
-
-IMPORTANT FIXES FOR 1.12.4
---------------------------
-
-
-- [#221](https://github.com/zendframework/zf1/pull/221) removes the TinySrc view
-  helper, as the TinySrc service no longer exists.
-- [#222](https://github.com/zendframework/zf1/pull/222) removes the InfoCard
-  component, as the CardSpace service no longer exists.
-- [#271](https://github.com/zendframework/zf1/pull/271) removes the Nirvanix
-  component, as the Nirvanix service shut down in October 2013.
-
-IMPORTANT FIXES FOR 1.12.3
---------------------------
-
-This release incorporates is primarily aimed to update
-Zend_Service_Twitter to the Twitter v1.1 API:
-
- - http://framework.zend.com/issues/browse/ZF-12530
-
-Because the Twitter v1.1 API is not backwards compatible with v1.0, the
-API for Zend_Service_Twitter has been changed; if you have been using it
-previously, you will need to update your code accordingly. Both the
-end-user and API documentation have been updated to reflect the changes.
-
-IMPORTANT FIXES FOR 1.12.2
---------------------------
-
-This release incorporates over 40 bugfixes. In particular, the following
-issue has been resolved in Zend_Service_Twitter:
-
- - http://framework.zend.com/issues/browse/ZF-9253
-
-This fix ensures that Zend_Service_Twitter uses the new versioned API 
-endpoint required by Twitter.
-
-SECURITY FIXES FOR 1.12.1
--------------------------
-
-This release incorporates fixes for:
-
- - http://framework.zend.com/security/advisory/ZF2012-05
-
-Zend_Feed_Rss and Zend_Feed_Atom were found to contain XML eXternal
-Entity (XXE) Injection vectors due to insecure usage of the DOM
-extension.  External entities could be specified by adding a specific
-DOCTYPE element to XML-RPC requests; exploiting this vulnerability could
-coerce opening arbitrary files and/or TCP connections.
-
-A similar issue was fixed for 1.12.0, in the Zend_Feed::import() method;
-however, the reporter of the issue discovered that the individual
-classes contained similar functionality in their constructors which
-remained vulnerable.
-
-The patch applied removes the XXE vector by calling
-libxml_disable_entity_loader() before attempting to parse the feed via
-DOMDocument::loadXML().
-
-The above patches are also available in the 1.11 series of releases.
-
-Thanks goes to Yury Dyachenko at Positive Research Center for for
-reporting the XXE vulnerability and reviewing the patches created to fix
-the issue.
-
-SECURITY FIXES FOR 1.12.0
--------------------------
-
-This release incorporates fixes for each of:
-
- - http://framework.zend.com/security/advisory/ZF2012-01
- - http://framework.zend.com/security/advisory/ZF2012-02
-
-Several components were found to be vulnerable to XML eXternal Entity
-(XXE) Injection attacks due to insecure usage of the SimpleXMLElement
-class (SimpleXML PHP extension).  External entities could be specified
-by adding a specific DOCTYPE element to XML-RPC requests; exploiting
-this vulnerability could coerce opening arbitrary files and/or TCP
-connections.
-
-Additionally, these same components were found to be vulnerable to XML
-Entity Expansion (XEE) vectors. XEE attacks define custom entities
-within the DOCTYPE that refer to themselves, leading to recursion; the
-end result is excessive consumption of CPU and RAM, making Denial of
-Service (DoS) attacks easier to implement.
-
-Vulnerable components included:
-
- - Zend_Dom
- - Zend_Feed
- - Zend_Soap
- - Zend_XmlRpc
-
-The patches applied do the following:
-
- - To remove XXE vectors, libxml_disable_entity_loader() is called
-   before any SimpleXML calls are executed.
-
- - To remove XEE vectors, we loop through the DOMDocument child nodes,
-   ensuring none are of type XML_DOCUMENT_TYPE_NODE, and raising an
-   exception if any are. If SimpleXML is used, a DOMDocument is created
-   first, processed as above, and then passed to simplexml_import_dom.
-
-The above patches are also available in the 1.11 series of releases.
-
-Thanks goes to Johannes Greil and Kestutis Gudinavicius of SEC-Consult
-for reporting the original XXE vulnerability against Zend_XmlRpc and
-working with us to provide a working solution. Thanks goes to Pádraic
-Brady for helping us identify other XXE vectors, as well as identifying
-and patching the XEE vectors.
+See http://framework.zend.com/changelog/1.12.8 for full details.
 
 NEW FEATURES
 ============
