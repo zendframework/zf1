@@ -7,34 +7,13 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.8 Release.
-Released on August 26, 2014.
+Zend Framework 1.12.9dev Release.
+Released on MMMMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.8
+IMPORTANT FIXES FOR 1.12.9
 --------------------------
 
-- [#360](https://github.com/zendframework/zf1/pull/360) Zend_Locale:
-  [CLDR](http://cldr.unicode.org) updated to version 25
-- [#98](https://github.com/zendframework/zf1/pull/98) Allow editing and
-  flattening of text form fields within PDF documents
-- [#375](https://github.com/zendframework/zf1/pull/375) Implement
-  Zend_Pdf::setJavascript(), Zend_Pdf::addJavascript() and
-  Zend_Pdf::resetJavaScript()
-- [#414](https://github.com/zendframework/zf1/pull/414) Adds the
-  `Microsoft_Console` component from the Windows Azure SDK for PHP into
-  the `Zend_Service_Console` component, ensuring that WindowsAzure 
-  command line functionality included in the framework can now work.
-- [#385](https://github.com/zendframework/zf1/pull/385) Adds support for
-  DateTime fractional seconds under PHP 5.6+.
-- [#382](https://github.com/zendframework/zf1/pull/382) Ensures that
-  orphaned metadata cache files are removed when `Zend_Cache::CLEANING_MODE_ALL`
-  is used.
-- [#410](https://github.com/zendframework/zf1/pull/410) Ensures that calls
-  to reset the status of the libxml entity loader happen as soon as possible,
-  to prevent potential threading issues under php-fpm (since the settings
-  are per process, not per-request, in that environment).
-
-See http://framework.zend.com/changelog/1.12.8 for full details.
+See http://framework.zend.com/changelog for full details.
 
 NEW FEATURES
 ============
