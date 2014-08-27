@@ -847,6 +847,20 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY "MD5(1); drop table products; -- )"', $select->assemble());
     }
 
+    /**
+     * Testing nested SQL functions
+     */
+    public function testSqlNestedFunctions()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"))');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"))', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"), 2)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"), 2)', $select->assemble());
+    }
+
     public function testSqlInjectionInColumn()
     {
         $select = $this->_db->select();
