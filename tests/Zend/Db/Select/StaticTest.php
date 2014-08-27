@@ -863,6 +863,10 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"), 2)');
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"), 2)', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(SUM("weight") / COUNT("weight"), 2)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(SUM("weight") / COUNT("weight"), 2)', $select->assemble());
     }
 
     public function testSqlInjectionInColumn()
