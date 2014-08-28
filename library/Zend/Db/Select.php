@@ -509,7 +509,7 @@ class Zend_Db_Select
         }
 
         foreach ($spec as $val) {
-            if (preg_match('/^[0-9a-zA-Z]+\(([^()]*|(?R))[^\;]*\)$/', (string) $val)) {
+            if (preg_match('/^\w+\(([^()]*|(?R))[^\;]*\)$/', (string) $val)) {
                 $val = new Zend_Db_Expr($val);
             }
             $this->_parts[self::GROUP][] = $val;
@@ -601,7 +601,7 @@ class Zend_Db_Select
                     $val = trim($matches[1]);
                     $direction = $matches[2];
                 }
-                if (preg_match('/^[0-9a-zA-Z]+\(([^()]*|(?R))[^\;]*\)$/', $val)) {
+                if (preg_match('/^\w+\(([^()]*|(?R))[^\;]*\)$/', $val)) {
                     $val = new Zend_Db_Expr($val);
                 }
                 $this->_parts[self::ORDER][] = array($val, $direction);
@@ -943,7 +943,7 @@ class Zend_Db_Select
                     $alias = $m[2];
                 }
                 // Check for columns that look like functions and convert to Zend_Db_Expr
-                if (preg_match('/^[0-9a-zA-Z]+\(([^()]*|(?R))[^\;]*\)$/', $col)) {
+                if (preg_match('/^\w+\(([^()]*|(?R))[^\;]*\)$/', $col)) {
                     $col = new Zend_Db_Expr($col);
                 } elseif (preg_match('/(.+)\.(.+)/', $col, $m)) {
                     $currentCorrelationName = $m[1];
