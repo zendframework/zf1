@@ -877,6 +877,13 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(COUNT(p.sub1) - SUM(p.sub2), 2)', $select->assemble());
     }
 
+    public function testSqlSubQueries()
+    {
+        $select = $this->_db->select();
+        $select->from(array('d' => 'device'), array('*', 'company_name' => '(SELECT name FROM company WHERE company.company_id = d.company_id)'));
+        $this->assertEquals('SELECT "d".*, (SELECT name FROM company WHERE company.company_id = d.company_id) AS "company_name" FROM "device" AS "d"', $select->assemble());
+    }
+
     public function testSqlInjectionInColumn()
     {
         $select = $this->_db->select();
