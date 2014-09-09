@@ -887,7 +887,7 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
     public function testSqlCaseWhenThenElseEnd()
     {
         $select = $this->_db->select();
-        $select->from('product', array('*', 'product_category' => '(SELECT name FROM product_category WHERE product_category_id = product.product_category_id)', 'name' => 'CASE WHEN (SELECT COUNT(*) FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) > 0 THEN (SELECT name FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) ELSE product.name END');
+        $select->from('product', array('*', 'product_category' => '(SELECT name FROM product_category WHERE product_category_id = product.product_category_id)', 'name' => 'CASE WHEN (SELECT COUNT(*) FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) > 0 THEN (SELECT name FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) ELSE product.name END'));
         $this->assertEquals('SELECT "product".*, (SELECT name FROM product_category WHERE product_category_id = product.product_category_id) AS "product_category", CASE WHEN (SELECT COUNT(*) FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) > 0 THEN (SELECT name FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) ELSE product.name END AS "name" FROM "product"', $select->assemble());
     }
 
