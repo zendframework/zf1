@@ -1137,4 +1137,14 @@ class Zend_Locale_FormatTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse(Zend_Locale_Data::hasCache());
     }
+
+    /**
+     * @group GH-430
+     */
+    public function testIsIntegerForLocaleZhHK()
+    {
+        $this->assertTrue(
+            Zend_Locale_Format::isInteger('1', array('locale' => 'zh_HK'))
+        );
+    }
 }
