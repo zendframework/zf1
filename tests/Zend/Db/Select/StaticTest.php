@@ -847,6 +847,50 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY "MD5(1); drop table products; -- )"', $select->assemble());
     }
 
+    /**
+     * Testing nested SQL functions
+     */
+    public function testSqlNestedFunctions()
+    {
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"))');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"))', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"),1)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"),1)', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(ABS("weight"), 2)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(ABS("weight"), 2)', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(SUM("weight") / COUNT("weight"), 2)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(SUM("weight") / COUNT("weight"), 2)', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('SUBSTR("this;should;work", 1, 4)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY SUBSTR("this;should;work", 1, 4)', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from(array('p' => 'products'))->group('ROUND(COUNT(p.sub1) - SUM(p.sub2), 2)');
+        $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY ROUND(COUNT(p.sub1) - SUM(p.sub2), 2)', $select->assemble());
+    }
+
+    public function testSqlSubQueries()
+    {
+        $select = $this->_db->select();
+        $select->from(array('d' => 'device'), array('*', 'company_name' => '(SELECT name FROM company WHERE company.company_id = d.company_id)'));
+        $this->assertEquals('SELECT "d".*, (SELECT name FROM company WHERE company.company_id = d.company_id) AS "company_name" FROM "device" AS "d"', $select->assemble());
+    }
+
+    public function testSqlCaseWhenThenElseEnd()
+    {
+        $select = $this->_db->select();
+        $select->from('product', array('*', 'product_category' => '(SELECT name FROM product_category WHERE product_category_id = product.product_category_id)', 'name' => 'CASE WHEN (SELECT COUNT(*) FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) > 0 THEN (SELECT name FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) ELSE product.name END'));
+        $this->assertEquals('SELECT "product".*, (SELECT name FROM product_category WHERE product_category_id = product.product_category_id) AS "product_category", CASE WHEN (SELECT COUNT(*) FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) > 0 THEN (SELECT name FROM product_translation WHERE language_id = :language_id AND product_translation.product_id = product.product_id) ELSE product.name END AS "name" FROM "product"', $select->assemble());
+    }
+
     public function testSqlInjectionInColumn()
     {
         $select = $this->_db->select();
