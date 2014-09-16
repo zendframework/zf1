@@ -7,26 +7,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.9dev Release.
+Zend Framework 1.12.10dev Release.
 Released on MMMMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.9
---------------------------
-
-**This release contains security updates:**
-
-- **ZF2014-05:** Due to an issue that existed in PHP's LDAP extension, it is
-  possible to perform an unauthenticated simple bind against a LDAP server by
-  using a null byte for the password, regardless of whether or not the user
-  normally requires a password. We have provided a patch in order to protect
-  users of unpatched PHP versions (PHP 5.5 <= 5.5.11, PHP 5.4 <= 5.4.27, all
-  versions of PHP 5.3 and below). If you use `Zend_Ldap` and are on an affected
-  version of PHP, we recommend upgrading immediately.
-- **ZF2014-06** `Zend_Db_Adapter_Sqlsrv` had a potential SQL injection
-  vulnerability via improperly quoted null bytes. The code has been updated to
-  ensure proper quoting and thus remove the security vector. If you are using
-  `Zend_Db_Adapter_Sqlsrv` and manually quoting values via the adapter, we
-  encourage you to upgrade immediately.
+IMPORTANT FIXES FOR 1.12.10
+---------------------------
 
 See http://framework.zend.com/changelog for full details.
 
