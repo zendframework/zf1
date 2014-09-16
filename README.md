@@ -22,6 +22,11 @@ IMPORTANT FIXES FOR 1.12.9
   users of unpatched PHP versions (PHP 5.5 <= 5.5.11, PHP 5.4 <= 5.4.27, all
   versions of PHP 5.3 and below). If you use `Zend_Ldap` and are on an affected
   version of PHP, we recommend upgrading immediately.
+- **ZF2014-06** `Zend_Db_Adapter_Sqlsrv` had a potential SQL injection
+  vulnerability via improperly quoted null bytes. The code has been updated to
+  ensure proper quoting and thus remove the security vector. If you are using
+  `Zend_Db_Adapter_Sqlsrv` and manually quoting values via the adapter, we
+  encourage you to upgrade immediately.
 
 See http://framework.zend.com/changelog for full details.
 
