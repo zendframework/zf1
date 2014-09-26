@@ -36,6 +36,7 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_Abstract
 {
+
     /**
      * Default values for the route (ie. module, controller, action, params)
      *
@@ -62,6 +63,7 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
 
     /**#@+
      * Array keys to use for module, controller, and action. Should be taken out of request.
+     *
      * @var string
      */
     protected $_moduleKey     = 'module';
@@ -84,7 +86,8 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      *
      * @return int
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return 1;
     }
 
@@ -108,13 +111,15 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
     /**
      * Constructor
      *
-     * @param array $defaults Defaults for map variables with keys as variable names
+     * @param array                                $defaults   Defaults for map variables with keys as variable names
      * @param Zend_Controller_Dispatcher_Interface $dispatcher Dispatcher object
-     * @param Zend_Controller_Request_Abstract $request Request object
+     * @param Zend_Controller_Request_Abstract     $request    Request object
      */
-    public function __construct(array $defaults = array(),
-                Zend_Controller_Dispatcher_Interface $dispatcher = null,
-                Zend_Controller_Request_Abstract $request = null)
+    public function __construct(
+        array $defaults = array(),
+        Zend_Controller_Dispatcher_Interface $dispatcher = null,
+        Zend_Controller_Request_Abstract $request = null
+    )
     {
         $this->_defaults = $defaults;
 
@@ -181,7 +186,7 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
 
             if ($this->_dispatcher && $this->_dispatcher->isValidModule($path[0])) {
                 $values[$this->_moduleKey] = array_shift($path);
-                $this->_moduleValid = true;
+                $this->_moduleValid        = true;
             }
 
             if (count($path) && !empty($path[0])) {
@@ -194,9 +199,9 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
 
             if ($numSegs = count($path)) {
                 for ($i = 0; $i < $numSegs; $i = $i + 2) {
-                    $key = urldecode($path[$i]);
-                    $val = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
-                    $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))): $val);
+                    $key          = urldecode($path[$i]);
+                    $val          = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
+                    $params[$key] = (isset($params[$key]) ? (array_merge((array)$params[$key], array($val))) : $val);
                 }
             }
         }
@@ -261,24 +266,32 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
                     $url .= self::URI_DELIMITER . $arrayValue;
                 }
             } else {
-                if ($encode) $value = urlencode($value);
+                if ($encode) {
+                    $value = urlencode($value);
+                }
                 $url .= self::URI_DELIMITER . $key;
                 $url .= self::URI_DELIMITER . $value;
             }
         }
 
         if (!empty($url) || $action !== $this->_defaults[$this->_actionKey]) {
-            if ($encode) $action = urlencode($action);
+            if ($encode) {
+                $action = urlencode($action);
+            }
             $url = self::URI_DELIMITER . $action . $url;
         }
 
         if (!empty($url) || $controller !== $this->_defaults[$this->_controllerKey]) {
-            if ($encode) $controller = urlencode($controller);
+            if ($encode) {
+                $controller = urlencode($controller);
+            }
             $url = self::URI_DELIMITER . $controller . $url;
         }
 
         if (isset($module)) {
-            if ($encode) $module = urlencode($module);
+            if ($encode) {
+                $module = urlencode($module);
+            }
             $url = self::URI_DELIMITER . $module . $url;
         }
 
@@ -291,7 +304,8 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
@@ -302,8 +316,8 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults()
+    {
         return $this->_defaults;
     }
-
 }

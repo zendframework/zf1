@@ -35,6 +35,7 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_Abstract
 {
+
     /**
      * Route
      *
@@ -54,7 +55,8 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
      *
      * @return int
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return 1;
     }
 
@@ -67,18 +69,19 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
     public static function getInstance(Zend_Config $config)
     {
         $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->toArray() : array();
+
         return new self($config->route, $defs);
     }
 
     /**
      * Prepares the route for mapping.
      *
-     * @param string $route Map used to match with later submitted URL path
-     * @param array $defaults Defaults for map variables with keys as variable names
+     * @param string $route    Map used to match with later submitted URL path
+     * @param array  $defaults Defaults for map variables with keys as variable names
      */
     public function __construct($route, $defaults = array())
     {
-        $this->_route = trim($route, self::URI_DELIMITER);
+        $this->_route    = trim($route, self::URI_DELIMITER);
         $this->_defaults = (array) $defaults;
     }
 
@@ -96,6 +99,7 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
                 || (substr($path, 0, strlen($this->_route)) === $this->_route)
             ) {
                 $this->setMatchedPath($this->_route);
+
                 return $this->_defaults;
             }
         } else {
@@ -124,10 +128,12 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
      * @param string $name Array key of the parameter
      * @return string Previously set default
      */
-    public function getDefault($name) {
+    public function getDefault($name)
+    {
         if (isset($this->_defaults[$name])) {
             return $this->_defaults[$name];
         }
+
         return null;
     }
 
@@ -136,8 +142,8 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
      *
      * @return array Route defaults
      */
-    public function getDefaults() {
+    public function getDefaults()
+    {
         return $this->_defaults;
     }
-
 }

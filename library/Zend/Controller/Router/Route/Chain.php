@@ -33,6 +33,7 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Abstract
 {
+
     /**
      * Routes
      *
@@ -56,6 +57,7 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
     public static function getInstance(Zend_Config $config)
     {
         $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->toArray() : array();
+
         return new self($config->route, $defs);
     }
 
@@ -72,7 +74,6 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
         $this->_separators[] = $separator;
 
         return $this;
-
     }
 
     /**
@@ -122,8 +123,8 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
             $matchedPath = $route->getMatchedPath();
 
             if ($matchedPath !== null) {
-                $subPath     = substr($subPath, strlen($matchedPath));
-                $separator   = substr($subPath, 0, strlen($this->_separators[$key]));
+                $subPath   = substr($subPath, strlen($matchedPath));
+                $separator = substr($subPath, 0, strlen($this->_separators[$key]));
             }
 
             $values = $res + $values;
@@ -186,7 +187,7 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
             }
         }
     }
-    
+
     /**
      * Return a single parameter of route's defaults
      *

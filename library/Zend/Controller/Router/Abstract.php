@@ -20,7 +20,6 @@
  * @version    $Id$
  */
 
-
 /** Zend_Controller_Router_Interface */
 require_once 'Zend/Controller/Router/Interface.php';
 
@@ -40,9 +39,10 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * URI delimiter
      */
     const URI_DELIMITER = '/';
-    
+
     /**
      * Front controller instance
+     *
      * @var Zend_Controller_Front
      */
     protected $_frontController;
@@ -50,6 +50,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
     /**
      * Array of invocation parameters to use when instantiating action
      * controllers
+     *
      * @var array
      */
     protected $_invokeParams = array();
@@ -73,8 +74,9 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      */
     public function setParam($name, $value)
     {
-        $name = (string) $name;
+        $name                       = (string)$name;
         $this->_invokeParams[$name] = $value;
+
         return $this;
     }
 
@@ -87,6 +89,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
     public function setParams(array $params)
     {
         $this->_invokeParams = array_merge($this->_invokeParams, $params);
+
         return $this;
     }
 
@@ -98,7 +101,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      */
     public function getParam($name)
     {
-        if(isset($this->_invokeParams[$name])) {
+        if (isset($this->_invokeParams[$name])) {
             return $this->_invokeParams[$name];
         }
 
@@ -156,6 +159,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
 
         require_once 'Zend/Controller/Front.php';
         $this->_frontController = Zend_Controller_Front::getInstance();
+
         return $this->_frontController;
     }
 
@@ -168,7 +172,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
     public function setFrontController(Zend_Controller_Front $controller)
     {
         $this->_frontController = $controller;
+
         return $this;
     }
-
 }
