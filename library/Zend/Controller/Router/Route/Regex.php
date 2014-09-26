@@ -33,16 +33,46 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Regex extends Zend_Controller_Router_Route_Abstract
 {
+    /**
+     * Regex string
+     *
+     * @var string|null
+     */
     protected $_regex = null;
+
+    /**
+     * Default values for the route (ie. module, controller, action, params)
+     *
+     * @var array
+     */
     protected $_defaults = array();
+
+    /**
+     * Reverse
+     *
+     * @var string|null
+     */
     protected $_reverse = null;
+
+    /**
+     * Map
+     *
+     * @var array
+     */
     protected $_map = array();
+
+    /**
+     * Values
+     *
+     * @var array
+     */
     protected $_values = array();
 
     /**
      * Instantiates route based on passed Zend_Config structure
      *
      * @param Zend_Config $config Configuration object
+     * @return Zend_Controller_Router_Route_Regex
      */
     public static function getInstance(Zend_Config $config)
     {
@@ -52,6 +82,14 @@ class Zend_Controller_Router_Route_Regex extends Zend_Controller_Router_Route_Ab
         return new self($config->route, $defs, $map, $reverse);
     }
 
+    /**
+     * Constructor
+     *
+     * @param       $route
+     * @param array $defaults
+     * @param array $map
+     * @param null  $reverse
+     */
     public function __construct($route, $defaults = array(), $map = array(), $reverse = null)
     {
         $this->_regex    = $route;
@@ -60,6 +98,11 @@ class Zend_Controller_Router_Route_Regex extends Zend_Controller_Router_Route_Ab
         $this->_reverse  = $reverse;
     }
 
+    /**
+     * Get the version of the route
+     *
+     * @return int
+     */
     public function getVersion() {
         return 1;
     }
@@ -159,7 +202,11 @@ class Zend_Controller_Router_Route_Regex extends Zend_Controller_Router_Route_Ab
     /**
      * Assembles a URL path defined by this route
      *
-     * @param  array $data An array of name (or index) and value pairs used as parameters
+     * @param  array   $data An array of name (or index) and value pairs used as parameters
+     * @param  boolean $reset
+     * @param  boolean $encode
+     * @param  boolean $partial
+     * @throws Zend_Controller_Router_Exception
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false, $encode = false, $partial = false)

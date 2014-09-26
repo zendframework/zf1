@@ -35,10 +35,25 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_Abstract
 {
-
+    /**
+     * Route
+     *
+     * @var string|null
+     */
     protected $_route = null;
+
+    /**
+     * Default values for the route (ie. module, controller, action, params)
+     *
+     * @var array
+     */
     protected $_defaults = array();
 
+    /**
+     * Get the version of the route
+     *
+     * @return int
+     */
     public function getVersion() {
         return 1;
     }
@@ -47,6 +62,7 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
      * Instantiates route based on passed Zend_Config structure
      *
      * @param Zend_Config $config Configuration object
+     * @return Zend_Controller_Router_Route_Static
      */
     public static function getInstance(Zend_Config $config)
     {

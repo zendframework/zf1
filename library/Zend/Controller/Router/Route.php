@@ -137,6 +137,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
      * Instantiates route based on passed Zend_Config structure
      *
      * @param Zend_Config $config Configuration object
+     * @return Zend_Controller_Router_Route
      */
     public static function getInstance(Zend_Config $config)
     {
@@ -150,10 +151,11 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
      * to a corresponding atomic parts. These parts are assigned
      * a position which is later used for matching and preparing values.
      *
-     * @param string $route Map used to match with later submitted URL path
-     * @param array $defaults Defaults for map variables with keys as variable names
-     * @param array $reqs Regular expression requirements for variables (keys as variable names)
+     * @param string         $route      Map used to match with later submitted URL path
+     * @param array          $defaults   Defaults for map variables with keys as variable names
+     * @param array          $reqs       Regular expression requirements for variables (keys as variable names)
      * @param Zend_Translate $translator Translator to use for this instance
+     * @param mixed|null     $locale
      */
     public function __construct($route, $defaults = array(), $reqs = array(), Zend_Translate $translator = null, $locale = null)
     {
@@ -199,7 +201,9 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
      * Matches a user submitted path with parts defined by a map. Assigns and
      * returns an array of variables on a successful match.
      *
-     * @param string $path Path used to match against this routing map
+     * @param string  $path Path used to match against this routing map
+     * @param boolean $partial
+     * @throws Zend_Controller_Router_Exception
      * @return array|false An array of assigned values or a false on a mismatch
      */
     public function match($path, $partial = false)
@@ -311,8 +315,11 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
     /**
      * Assembles user submitted parameters forming a URL path defined by this route
      *
-     * @param  array $data An array of variable and value pairs used as parameters
+     * @param  array   $data  An array of variable and value pairs used as parameters
      * @param  boolean $reset Whether or not to set route defaults with those provided in $data
+     * @param  boolean $encode
+     * @param  boolean $partial
+     * @throws Zend_Controller_Router_Exception
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false, $encode = false, $partial = false)

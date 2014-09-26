@@ -55,7 +55,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
     /**
      * Currently matched route
      *
-     * @var Zend_Controller_Router_Route_Interface
+     * @var string
      */
     protected $_currentRoute = null;
 
@@ -283,7 +283,6 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
     /**
      * Remove all standard default routes
      *
-     * @param  Zend_Controller_Router_Route_Interface Route
      * @return Zend_Controller_Router_Rewrite
      */
     public function removeDefaultRoutes()
@@ -340,7 +339,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
      * Retrieve a name of currently matched route
      *
      * @throws Zend_Controller_Router_Exception
-     * @return Zend_Controller_Router_Route_Interface Route object
+     * @return string Route name
      */
     public function getCurrentRouteName()
     {
@@ -365,6 +364,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
      * Find a matching route to the current PATH_INFO and inject
      * returning values to the Request object.
      *
+     * @param Zend_Controller_Request_Abstract $request
      * @throws Zend_Controller_Router_Exception
      * @return Zend_Controller_Request_Abstract Request object
      */
@@ -419,6 +419,14 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
 
     }
 
+    /**
+     * Sets parameters for request object
+     *
+     * Module name, controller name and action name
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     * @param array                            $params
+     */
     protected function _setRequestParams($request, $params)
     {
         foreach ($params as $param => $value) {

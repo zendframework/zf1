@@ -38,13 +38,27 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
 {
     /**
      * Default values for the route (ie. module, controller, action, params)
+     *
      * @var array
      */
     protected $_defaults;
 
-    protected $_values      = array();
+    /**
+     * Default values for the route (ie. module, controller, action, params)
+     *
+     * @var array
+     */
+    protected $_values = array();
+
+    /**
+     * @var boolean
+     */
     protected $_moduleValid = false;
-    protected $_keysSet     = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_keysSet = false;
 
     /**#@+
      * Array keys to use for module, controller, and action. Should be taken out of request.
@@ -65,12 +79,20 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      */
     protected $_request;
 
+    /**
+     * Get the version of the route
+     *
+     * @return int
+     */
     public function getVersion() {
         return 1;
     }
 
     /**
      * Instantiates route based on passed Zend_Config structure
+     *
+     * @param Zend_Config $config
+     * @return Zend_Controller_Router_Route_Module
      */
     public static function getInstance(Zend_Config $config)
     {
@@ -137,7 +159,8 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      * setControllerName(), and setActionName() accessors to set those values.
      * Always returns the values as an array.
      *
-     * @param string $path Path used to match against this routing map
+     * @param string  $path Path used to match against this routing map
+     * @param boolean $partial
      * @return array An array of assigned values or a false on a mismatch
      */
     public function match($path, $partial = false)
@@ -190,8 +213,10 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
     /**
      * Assembles user submitted parameters forming a URL path defined by this route
      *
-     * @param array $data An array of variable and value pairs used as parameters
-     * @param bool $reset Weither to reset the current params
+     * @param array   $data  An array of variable and value pairs used as parameters
+     * @param boolean $reset Weither to reset the current params
+     * @param boolean $encode
+     * @param boolean $partial
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false, $encode = true, $partial = false)

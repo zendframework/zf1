@@ -33,7 +33,18 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Abstract
 {
+    /**
+     * Routes
+     *
+     * @var array
+     */
     protected $_routes = array();
+
+    /**
+     * Separators
+     *
+     * @var array
+     */
     protected $_separators = array();
 
     /**

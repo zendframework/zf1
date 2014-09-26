@@ -58,7 +58,6 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * Constructor
      *
      * @param array $params
-     * @return void
      */
     public function __construct(array $params = array())
     {
@@ -69,8 +68,8 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * Add or modify a parameter to use when instantiating an action controller
      *
      * @param string $name
-     * @param mixed $value
-     * @return Zend_Controller_Router
+     * @param mixed  $value
+     * @return Zend_Controller_Router_Abstract
      */
     public function setParam($name, $value)
     {
@@ -83,7 +82,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * Set parameters to pass to action controller constructors
      *
      * @param array $params
-     * @return Zend_Controller_Router
+     * @return Zend_Controller_Router_Abstract
      */
     public function setParams(array $params)
     {
@@ -124,7 +123,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * each.
      *
      * @param null|string|array single key or array of keys for params to clear
-     * @return Zend_Controller_Router
+     * @return Zend_Controller_Router_Abstract
      */
     public function clearParams($name = null)
     {

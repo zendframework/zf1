@@ -34,13 +34,30 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  */
 class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route_Abstract
 {
-
+    /**
+     * Host variable
+     *
+     * @var string
+     */
     protected $_hostVariable   = ':';
+
+    /**
+     * Regex delimiter
+     *
+     * @var string
+     */
     protected $_regexDelimiter = '#';
+
+    /**
+     * Default regex string
+     *
+     * @var string|null
+     */
     protected $_defaultRegex   = null;
 
     /**
      * Holds names of all route's pattern variable names. Array index holds a position in host.
+     *
      * @var array
      */
     protected $_variables = array();
@@ -48,12 +65,14 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
     /**
      * Holds Route patterns for all host parts. In case of a variable it stores it's regex
      * requirement or null. In case of a static part, it holds only it's direct value.
+     *
      * @var array
      */
     protected $_parts = array();
 
     /**
      * Holds user submitted default values for route's variables. Name and value pairs.
+     *
      * @var array
      */
     protected $_defaults = array();
@@ -61,12 +80,14 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
     /**
      * Holds user submitted regular expression patterns for route's variables' values.
      * Name and value pairs.
+     *
      * @var array
      */
     protected $_requirements = array();
 
     /**
      * Default scheme
+     *
      * @var string
      */
     protected $_scheme = null;
@@ -74,6 +95,7 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
     /**
      * Associative array filled on match() that holds matched path values
      * for given variable names.
+     *
      * @var array
      */
     protected $_values = array();
@@ -96,7 +118,6 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
      * Set the request object
      *
      * @param  Zend_Controller_Request_Abstract|null $request
-     * @return void
      */
     public function setRequest(Zend_Controller_Request_Abstract $request = null)
     {
@@ -122,6 +143,7 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
      * Instantiates route based on passed Zend_Config structure
      *
      * @param Zend_Config $config Configuration object
+     * @return Zend_Controller_Router_Route_Hostname
      */
     public static function getInstance(Zend_Config $config)
     {
@@ -245,8 +267,11 @@ class Zend_Controller_Router_Route_Hostname extends Zend_Controller_Router_Route
     /**
      * Assembles user submitted parameters forming a hostname defined by this route
      *
-     * @param  array $data An array of variable and value pairs used as parameters
+     * @param  array   $data  An array of variable and value pairs used as parameters
      * @param  boolean $reset Whether or not to set route defaults with those provided in $data
+     * @param  boolean $encode
+     * @param  boolean $partial
+     * @throws Zend_Controller_Router_Exception
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false, $encode = false, $partial = false)

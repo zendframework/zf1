@@ -81,7 +81,7 @@ interface Zend_Controller_Router_Interface
      * Add or modify a parameter with which to instantiate any helper objects
      *
      * @param string $name
-     * @param mixed $param
+     * @param mixed $value
      * @return Zend_Controller_Router_Interface
      */
     public function setParam($name, $value);
