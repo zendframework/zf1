@@ -166,7 +166,7 @@ class Zend_Mail_MaildirFolderTest extends PHPUnit_Framework_TestCase
         $this->fail('no exception raised while loading unknown dirname');
     }
 
-    public function testLoadUnkownFolder()
+    public function testLoadUnknownFolder()
     {
         $this->_params['folder'] = 'UnknownFolder';
         try {

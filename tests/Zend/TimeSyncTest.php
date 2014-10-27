@@ -192,7 +192,7 @@ class Zend_TimeSyncTest extends PHPUnit_Framework_TestCase
         $server = new Zend_TimeSync();
 
         try {
-            $server->setServer('unkown_alias');
+            $server->setServer('unknown_alias');
             $this->fail('Exception expected because there is no timeserver which we can mark as current');
         } catch (Zend_TimeSync_Exception $e) {
             // success
