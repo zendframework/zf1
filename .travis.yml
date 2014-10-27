@@ -11,17 +11,22 @@ php:
 env: TMPDIR=/tmp
 
 install:
- - sh ./tests/install_dependencies.sh
+ - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then sh ./tests/php52_install_dependencies.sh fi
  - phpenv rehash
 
 services:
   - memcached
 
 before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source --dev
+
   - mysql -e 'create database zftest;'
   - psql -c 'create database zftest;' -U postgres
+
   - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]]; then phpenv config-add tests/config.ini fi
-  - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then phpenv config-add tests/config_php52.ini fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then phpenv config-add tests/php52_config.ini fi
+
   - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
 
 script:
