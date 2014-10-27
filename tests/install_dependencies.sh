@@ -30,7 +30,10 @@ if [ "$TRAVIS_PHP_VERSION" = "5.2" ]; then
     # Install
     pear install -o pear.phpunit.de/PHPUnit
     pear install pear.phpunit.de/DbUnit
+
+    phpenv config-add tests/config_php52.ini
 else
+    phpenv config-add tests/config.ini
     composer install --no-interaction --prefer-source --dev
 fi
 
