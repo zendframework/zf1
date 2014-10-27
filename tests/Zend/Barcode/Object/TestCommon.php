@@ -83,7 +83,7 @@ abstract class Zend_Barcode_Object_TestCommon extends PHPUnit_Framework_TestCase
     {
         $object = $this->_getBarcodeObject(
                 array('barHeight' => 150 ,
-                        'unkownProperty' => 'aValue'));
+                        'unknownProperty' => 'aValue'));
         $this->assertEquals(150, $object->getBarHeight());
     }
 
@@ -91,7 +91,7 @@ abstract class Zend_Barcode_Object_TestCommon extends PHPUnit_Framework_TestCase
     {
         $config = new Zend_Config(
                 array('barHeight' => 150 ,
-                        'unkownProperty' => 'aValue'));
+                        'unknownProperty' => 'aValue'));
         $object = $this->_getBarcodeObject($config);
         $this->assertEquals(150, $object->getBarHeight());
     }
@@ -100,7 +100,7 @@ abstract class Zend_Barcode_Object_TestCommon extends PHPUnit_Framework_TestCase
     {
         $this->_object->setOptions(
                 array('barHeight' => 150 ,
-                        'unkownProperty' => 'aValue'));
+                        'unknownProperty' => 'aValue'));
         $this->assertEquals(150, $this->_object->getBarHeight());
     }
 
@@ -108,7 +108,7 @@ abstract class Zend_Barcode_Object_TestCommon extends PHPUnit_Framework_TestCase
     {
         $config = new Zend_Config(
                 array('barHeight' => 150 ,
-                        'unkownProperty' => 'aValue'));
+                        'unknownProperty' => 'aValue'));
         $this->_object->setConfig($config);
         $this->assertEquals(150, $this->_object->getBarHeight());
     }

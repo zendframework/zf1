@@ -386,7 +386,7 @@ class Zend_Mail_ImapTest extends PHPUnit_Framework_TestCase
         $this->fail('no exception raised while counting messages on closed connection');
     }
 
-    public function testLoadUnkownFolder()
+    public function testLoadUnknownFolder()
     {
         $this->_params['folder'] = 'UnknownFolder';
         try {

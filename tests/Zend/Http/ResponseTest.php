@@ -240,7 +240,7 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Bad Request', Zend_Http_Response::responseCodeAsText(400));
         $this->assertEquals('Internal Server Error', Zend_Http_Response::responseCodeAsText(500));
 
-        // Make sure that invalid codes return 'Unkown'
+        // Make sure that invalid codes return 'Unknown'
         $this->assertEquals('Unknown', Zend_Http_Response::responseCodeAsText(600));
 
         // Check HTTP/1.0 value for 302
