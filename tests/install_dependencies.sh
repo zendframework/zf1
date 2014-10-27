@@ -17,6 +17,16 @@ if [ "$TRAVIS_PHP_VERSION" = "5.2" ]; then
     pear uninstall -n pear.phpunit.de/PHP_Timer
     pear uninstall -n pear.symfony-project.com/YAML
 
+    # memcache 2.1.0 is the last version to support the php 5.2 branch
+    pecl download memcached-2.1.0
+    tar zxvf memcached*.tgz && cd memcached*
+    make clean
+    printf "\n" | phpize
+    ./configure --with-libmemcached-dir=/usr/local && make && make install
+
+    printf "\n" | pecl uninstall memcache
+    printf "\n" | pecl install memcache
+
     # Install
     pear install -o pear.phpunit.de/PHPUnit
     pear install pear.phpunit.de/DbUnit

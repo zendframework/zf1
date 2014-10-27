@@ -496,7 +496,7 @@ abstract class Zend_Barcode_Renderer_RendererAbstract
                      */
                     require_once 'Zend/Barcode/Renderer/Exception.php';
                     throw new Zend_Barcode_Renderer_Exception(
-                        'Unkown drawing command'
+                        'Unknown drawing command'
                     );
             }
         }

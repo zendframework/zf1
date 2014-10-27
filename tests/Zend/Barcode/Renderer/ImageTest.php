@@ -257,9 +257,9 @@ class Zend_Barcode_Renderer_ImageTest extends Zend_Barcode_Renderer_TestCommon
     /**
      * @expectedException Zend_Barcode_Renderer_Exception
      */
-    public function testRendererWithUnkownInstructionProvideByObject()
+    public function testRendererWithUnknownInstructionProvideByObject()
     {
-        parent::testRendererWithUnkownInstructionProvideByObject();
+        parent::testRendererWithUnknownInstructionProvideByObject();
     }
 
     public function testHorizontalPositionToLeft()
