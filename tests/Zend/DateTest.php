@@ -1955,6 +1955,15 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $date->set('20071020T20:10:30', Zend_Date::ISO_8601);
         $this->assertSame('2007-10-20T20:10:30+05:00', $date->get(Zend_Date::W3C));
         $date->set(1234567890);
+        $date->set('20071020T10:30', Zend_Date::ISO_8601);
+        $this->assertSame('2007-10-20T10:30:00+05:00', $date->get(Zend_Date::W3C));
+        $date->set(1234567890);
+        $date->set('20071020T103000', Zend_Date::ISO_8601);
+        $this->assertSame('2007-10-20T10:30:00+05:00', $date->get(Zend_Date::W3C));
+        $date->set(1234567890);
+        $date->set('20071020T1020', Zend_Date::ISO_8601);
+        $this->assertSame('2007-10-20T10:20:00+05:00', $date->get(Zend_Date::W3C));
+        $date->set(1234567890);
         $date->set('-00071020T20:10:30', Zend_Date::ISO_8601);
         $this->assertSame('-7-10-20T20:10:30+00:00', $date->get(Zend_Date::W3C));
         $date->setTimezone('Indian/Maldives');
