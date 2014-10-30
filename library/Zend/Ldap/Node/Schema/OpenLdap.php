@@ -81,7 +81,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
      *
      * @param  Zend_Ldap_Dn $dn
      * @param  Zend_Ldap    $ldap
-     * @return Zend_Ldap_Node_Schema Provides a fluid interface
+     * @return Zend_Ldap_Node_Schema Provides a fluent interface
      */
     protected function _parseSchema(Zend_Ldap_Dn $dn, Zend_Ldap $ldap)
     {

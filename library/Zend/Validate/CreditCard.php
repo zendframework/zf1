@@ -176,7 +176,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
      * Sets CCIs which are accepted by validation
      *
      * @param string|array $type Type to allow for validation
-     * @return Zend_Validate_CreditCard Provides a fluid interface
+     * @return Zend_Validate_CreditCard Provides a fluent interface
      */
     public function setType($type)
     {
@@ -188,7 +188,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
      * Adds a CCI to be accepted by validation
      *
      * @param string|array $type Type to allow for validation
-     * @return Zend_Validate_CreditCard Provides a fluid interface
+     * @return Zend_Validate_CreditCard Provides a fluent interface
      */
     public function addType($type)
     {
