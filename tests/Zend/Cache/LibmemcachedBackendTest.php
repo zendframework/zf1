@@ -50,6 +50,11 @@ class Zend_Cache_LibmemcachedBackendTest extends Zend_Cache_CommonExtendedBacken
 
     public function setUp($notag = true)
     {
+        if(!class_exists('Memcached')) {
+            $this->markTestSkipped('Memcached is not installed, skipping test');
+            return;
+        }
+
         $serverValid = array(
             'host'   => TESTS_ZEND_CACHE_LIBMEMCACHED_HOST,
             'port'   => TESTS_ZEND_CACHE_LIBMEMCACHED_PORT,

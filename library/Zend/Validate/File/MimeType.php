@@ -201,7 +201,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
      *
      * @param  string $file
      * @throws Zend_Validate_Exception When finfo can not read the magicfile
-     * @return Zend_Validate_File_MimeType Provides fluid interface
+     * @return Zend_Validate_File_MimeType Provides a fluent interface
      */
     public function setMagicFile($file)
     {
@@ -276,7 +276,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
      * Note that this is unsave and therefor the default value is false
      *
      * @param  boolean $checkHeader
-     * @return Zend_Validate_File_MimeType Provides fluid interface
+     * @return Zend_Validate_File_MimeType Provides a fluent interface
      */
     public function enableHeaderCheck($headerCheck = true)
     {

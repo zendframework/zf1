@@ -1206,7 +1206,7 @@ class Zend_Ldap
      *
      * @param  string|Zend_Ldap_Dn $dn
      * @param  array               $entry
-     * @return Zend_Ldap                  Provides a fluid interface
+     * @return Zend_Ldap                  Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function add($dn, array $entry)
@@ -1254,7 +1254,7 @@ class Zend_Ldap
      *
      * @param  string|Zend_Ldap_Dn $dn
      * @param  array               $entry
-     * @return Zend_Ldap                  Provides a fluid interface
+     * @return Zend_Ldap                  Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function update($dn, array $entry)
@@ -1301,7 +1301,7 @@ class Zend_Ldap
      *
      * @param  string|Zend_Ldap_Dn $dn
      * @param  array               $entry
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function save($dn, array $entry)
@@ -1319,7 +1319,7 @@ class Zend_Ldap
      *
      * @param  string|Zend_Ldap_Dn $dn
      * @param  boolean             $recursively
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function delete($dn, $recursively = false)
@@ -1386,7 +1386,7 @@ class Zend_Ldap
      * @param  string|Zend_Ldap_Dn $to
      * @param  boolean             $recursively
      * @param  boolean             $alwaysEmulate
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function moveToSubtree($from, $to, $recursively = false, $alwaysEmulate = false)
@@ -1417,7 +1417,7 @@ class Zend_Ldap
      * @param  string|Zend_Ldap_Dn $to
      * @param  boolean             $recursively
      * @param  boolean             $alwaysEmulate
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function move($from, $to, $recursively = false, $alwaysEmulate = false)
@@ -1434,7 +1434,7 @@ class Zend_Ldap
      * @param  string|Zend_Ldap_Dn $to
      * @param  boolean             $recursively
      * @param  boolean             $alwaysEmulate
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function rename($from, $to, $recursively = false, $alwaysEmulate = false)
@@ -1479,7 +1479,7 @@ class Zend_Ldap
      * @param  string|Zend_Ldap_Dn $from
      * @param  string|Zend_Ldap_Dn $to
      * @param  boolean             $recursively
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function copyToSubtree($from, $to, $recursively = false)
@@ -1507,7 +1507,7 @@ class Zend_Ldap
      * @param  string|Zend_Ldap_Dn $from
      * @param  string|Zend_Ldap_Dn $to
      * @param  boolean             $recursively
-     * @return Zend_Ldap Provides a fluid interface
+     * @return Zend_Ldap Provides a fluent interface
      * @throws Zend_Ldap_Exception
      */
     public function copy($from, $to, $recursively = false)

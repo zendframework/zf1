@@ -119,7 +119,7 @@ class Zend_Validate_PostCode extends Zend_Validate_Abstract
      * @param string|Zend_Locale $locale
      * @throws Zend_Validate_Exception On unrecognised region
      * @throws Zend_Validate_Exception On not detected format
-     * @return Zend_Validate_PostCode  Provides fluid interface
+     * @return Zend_Validate_PostCode  Provides a fluent interface
      */
     public function setLocale($locale = null)
     {
@@ -162,7 +162,7 @@ class Zend_Validate_PostCode extends Zend_Validate_Abstract
      *
      * @param string $format
      * @throws Zend_Validate_Exception On empty format
-     * @return Zend_Validate_PostCode  Provides fluid interface
+     * @return Zend_Validate_PostCode  Provides a fluent interface
      */
     public function setFormat($format)
     {
