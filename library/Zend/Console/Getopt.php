@@ -730,6 +730,33 @@ class Zend_Console_Getopt
         $this->_parsed = true;
         return $this;
     }
+    
+    public function checkRequiredArguments(){
+        
+        
+        foreach($this->_rules as $name=>$rule){
+            
+            if($rule['param'] === 'required'){
+                
+                $defined = false;
+                
+                foreach($rule['alias'] as $alias){
+                    
+                    $defined = $defined === true ? true : array_key_exists($alias, $this->_options);
+                    
+                }
+                if($defined === false){
+                    
+                    require_once 'Zend/Console/Getopt/Exception.php';
+                    throw new Zend_Console_Getopt_Exception(
+                        "Option \"$alias\" requires a parameter.",
+                            $this->getUsageMessage());
+                    
+                }
+            }            
+        }
+        
+    }
 
     /**
      * Parse command-line arguments for a single long option.
