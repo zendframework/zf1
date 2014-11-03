@@ -284,6 +284,10 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
             
             $this->assertEquals( 'Option "a" requires a parameter.' , $e->getMessage() );
         }        
+        
+        $opts->addArguments( array( "-a", "apple") );
+        $opts->parse();
+        $opts->checkRequiredArguments();//-> no Exception here
     }
     
     public function testEmptyRequiredOption(){
