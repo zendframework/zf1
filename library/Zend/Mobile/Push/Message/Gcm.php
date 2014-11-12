@@ -21,7 +21,7 @@
  */
 
 /** Zend_Mobile_Push_Message_Abstract **/
-require_once 'Zend/Mobile/Push/Message/Abstract.php';
+#require_once 'Zend/Mobile/Push/Message/Abstract.php';
 
 /**
  * Gcm Message
@@ -46,7 +46,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
 
     /**
      * Data key value pairs
-     * 
+     *
      * @var array
      */
     protected $_data = array();
@@ -60,7 +60,7 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
 
     /**
      * Time to live in seconds
-     * 
+     *
      * @var int
      */
     protected $_ttl = 2419200;

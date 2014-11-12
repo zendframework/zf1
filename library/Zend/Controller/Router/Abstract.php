@@ -22,7 +22,7 @@
 
 
 /** Zend_Controller_Router_Interface */
-require_once 'Zend/Controller/Router/Interface.php';
+#require_once 'Zend/Controller/Router/Interface.php';
 
 /**
  * Simple first implementation of a router, to be replaced
@@ -40,7 +40,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
      * URI delimiter
      */
     const URI_DELIMITER = '/';
-    
+
     /**
      * Front controller instance
      * @var Zend_Controller_Front
@@ -155,7 +155,7 @@ abstract class Zend_Controller_Router_Abstract implements Zend_Controller_Router
             return $this->_frontController;
         }
 
-        require_once 'Zend/Controller/Front.php';
+        #require_once 'Zend/Controller/Front.php';
         $this->_frontController = Zend_Controller_Front::getInstance();
         return $this->_frontController;
     }

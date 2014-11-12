@@ -23,7 +23,7 @@
 /**
  * @see Zend_Service_WindowsAzure_Management_ServiceEntityAbstract
  */
-require_once 'Zend/Service/WindowsAzure/Management/ServiceEntityAbstract.php';
+#require_once 'Zend/Service/WindowsAzure/Management/ServiceEntityAbstract.php';
 
 /**
  * @category   Zend
@@ -31,8 +31,8 @@ require_once 'Zend/Service/WindowsAzure/Management/ServiceEntityAbstract.php';
  * @subpackage Management
  * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * 
- * @property string $Name              The affinity group name. 
+ *
+ * @property string $Name              The affinity group name.
  * @property string $Label             A label for the affinity group.
  * @property string $Description       A description for the affinity group.
  * @property string $Location          The location of the affinity group.
@@ -41,19 +41,19 @@ require_once 'Zend/Service/WindowsAzure/Management/ServiceEntityAbstract.php';
  */
 class Zend_Service_WindowsAzure_Management_AffinityGroupInstance
 	extends Zend_Service_WindowsAzure_Management_ServiceEntityAbstract
-{    
+{
     /**
      * Constructor
-     * 
-     * @property string $name              The affinity group name. 
+     *
+     * @property string $name              The affinity group name.
      * @property string $label             A label for the affinity group.
      * @property string $description       A description for the affinity group.
      * @property string $location          The location of the affinity group.
      * @property array  $hostedServices    A list of hosted services in this affinity gtoup.
      * @property array  $storageServices   A list of storage services in this affinity gtoup.
 	 */
-    public function __construct($name, $label, $description, $location, $hostedServices = array(), $storageServices = array()) 
-    {	        
+    public function __construct($name, $label, $description, $location, $hostedServices = array(), $storageServices = array())
+    {
         $this->_data = array(
             'name'              => $name,
             'label'             => base64_decode($label),

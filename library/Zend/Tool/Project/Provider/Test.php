@@ -23,12 +23,12 @@
 /**
  * @see Zend_Tool_Project_Provider_Abstract
  */
-require_once 'Zend/Tool/Project/Provider/Abstract.php';
+#require_once 'Zend/Tool/Project/Provider/Abstract.php';
 
 /**
  * @see Zend_Tool_Project_Provider_Exception
  */
-require_once 'Zend/Tool/Project/Provider/Exception.php';
+#require_once 'Zend/Tool/Project/Provider/Exception.php';
 
 /**
  * @category   Zend
@@ -60,16 +60,16 @@ class Zend_Tool_Project_Provider_Test extends Zend_Tool_Project_Provider_Abstrac
         if (class_exists('PHPUnit_Runner_Version', false)) {
             return true;
         }
-        
+
         $included = @include 'PHPUnit/Runner/Version.php';
-        
+
         if ($included === false) {
             return false;
         } else {
             return true;
         }
     }
-    
+
     /**
      * createApplicationResource()
      *
@@ -100,11 +100,11 @@ class Zend_Tool_Project_Provider_Test extends Zend_Tool_Project_Provider_Abstrac
             if (($testAppModulesDirectoryResource = $testParentOfControllerDirectoryResource->search('testApplicationModulesDirectory')) === false) {
                 $testAppModulesDirectoryResource = $testParentOfControllerDirectoryResource->createResource('testApplicationModulesDirectory');
             }
-            
+
             if (($testAppModuleDirectoryResource = $testAppModulesDirectoryResource->search(array('testApplicationModuleDirectory' => array('forModuleName' => $moduleName)))) === false) {
                 $testAppModuleDirectoryResource = $testAppModulesDirectoryResource->createResource('testApplicationModuleDirectory', array('forModuleName' => $moduleName));
             }
-            
+
             $testParentOfControllerDirectoryResource = $testAppModuleDirectoryResource;
         }
 
@@ -115,7 +115,7 @@ class Zend_Tool_Project_Provider_Test extends Zend_Tool_Project_Provider_Abstrac
         if (($testAppControllerFileResource = $testAppControllerDirectoryResource->search(array('testApplicationControllerFile' => array('forControllerName' => $controllerName)))) === false) {
             $testAppControllerFileResource = $testAppControllerDirectoryResource->createResource('testApplicationControllerFile', array('forControllerName' => $controllerName));
         }
-        
+
         return $testAppControllerFileResource->createResource('testApplicationActionMethod', array('forActionName' => $actionName));
     }
 

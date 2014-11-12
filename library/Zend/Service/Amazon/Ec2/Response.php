@@ -23,10 +23,10 @@
 /**
  * @see Zend_Http_Response
  */
-require_once 'Zend/Http/Response.php';
+#require_once 'Zend/Http/Response.php';
 
 /** @see Zend_Xml_Security */
-require_once 'Zend/Xml/Security.php';
+#require_once 'Zend/Xml/Security.php';
 
 /**
  * @category   Zend
@@ -121,7 +121,7 @@ class Zend_Service_Amazon_Ec2_Response {
         } catch (Zend_Http_Exception $e) {
             $body = false;
         }
-        
+
         if ($this->_document === null) {
             if ($body !== false) {
                 // turn off libxml error handling

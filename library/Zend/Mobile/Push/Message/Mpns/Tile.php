@@ -20,7 +20,7 @@
  */
 
 /** Zend_Mobile_Push_Message_Mpns **/
-require_once 'Zend/Mobile/Push/Message/Mpns.php';
+#require_once 'Zend/Mobile/Push/Message/Mpns.php';
 
 /**
  * Mpns Tile Message
@@ -233,7 +233,7 @@ class Zend_Mobile_Push_Message_Mpns_Tile extends Zend_Mobile_Push_Message_Mpns
 
     /**
      * Set Back Content
-     * 
+     *
      * @param string $content
      * @return Zend_Mobile_Push_Message_Mpns_Tile
      * @throws Zend_Mobile_Push_Message_Exception

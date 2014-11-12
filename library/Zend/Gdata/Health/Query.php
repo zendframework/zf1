@@ -24,12 +24,12 @@
 /**
  * @see Zend_Exception
  */
-require_once 'Zend/Exception.php';
+#require_once 'Zend/Exception.php';
 
 /**
  * @see Zend_Gdata_Query
  */
-require_once('Zend/Gdata/Query.php');
+#require_once('Zend/Gdata/Query.php');
 
 /**
  * Assists in constructing queries for Google Health
@@ -60,7 +60,7 @@ class Zend_Gdata_Health_Query extends Zend_Gdata_Query
      * Namespace for an item category
      */
     const ITEM_CATEGORY_NS = 'http://schemas.google.com/health/item';
-    
+
     /**
      * Create Gdata_Query object
      */

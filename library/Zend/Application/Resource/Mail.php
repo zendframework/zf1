@@ -23,7 +23,7 @@
 /**
  * @see Zend_Application_Resource_ResourceAbstract
  */
-require_once 'Zend/Application/Resource/ResourceAbstract.php';
+#require_once 'Zend/Application/Resource/ResourceAbstract.php';
 
 /**
  * Resource for setting up Mail Transport and default From & ReplyTo addresses
@@ -105,7 +105,7 @@ class Zend_Application_Resource_Mail extends Zend_Application_Resource_ResourceA
         if(!isset($options['type'])) {
             $options['type'] = 'sendmail';
         }
-        
+
         $transportName = $options['type'];
         if(!Zend_Loader_Autoloader::autoload($transportName))
         {

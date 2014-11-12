@@ -21,7 +21,7 @@
  */
 
 /** Zend_Controller_Router_Route_Abstract */
-require_once 'Zend/Controller/Router/Route/Abstract.php';
+#require_once 'Zend/Controller/Router/Route/Abstract.php';
 
 /**
  * Chain route is used for managing route chaining.
@@ -175,7 +175,7 @@ class Zend_Controller_Router_Route_Chain extends Zend_Controller_Router_Route_Ab
             }
         }
     }
-    
+
     /**
      * Return a single parameter of route's defaults
      *

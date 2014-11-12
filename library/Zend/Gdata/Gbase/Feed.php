@@ -24,12 +24,12 @@
 /**
  * @see Zend_Exception
  */
-require_once 'Zend/Exception.php';
+#require_once 'Zend/Exception.php';
 
 /**
  * @see Zend_Gdata_Feed
  */
-require_once 'Zend/Gdata/Feed.php';
+#require_once 'Zend/Gdata/Feed.php';
 
 /**
  * Base class for the Google Base Feed
@@ -56,6 +56,6 @@ class Zend_Gdata_Gbase_Feed extends Zend_Gdata_Feed
             'Google Base API has been discontinued by Google and was removed'
             . ' from Zend Framework in 1.12.0.  For more information see: '
             . 'http://googlemerchantblog.blogspot.ca/2010/12/new-shopping-apis-and-deprecation-of.html'
-        );    
+        );
     }
 }

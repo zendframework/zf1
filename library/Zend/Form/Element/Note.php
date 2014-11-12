@@ -20,7 +20,7 @@
  */
 
 /** Zend_Form_Element_Xhtml */
-require_once 'Zend/Form/Element/Xhtml.php';
+#require_once 'Zend/Form/Element/Xhtml.php';
 
 /**
  * Element to show an HTML note
@@ -40,14 +40,14 @@ class Zend_Form_Element_Note extends Zend_Form_Element_Xhtml
      * @var string
      */
     public $helper = 'formNote';
-    
+
     /**
      * Ignore flag (used when retrieving values at form level)
      *
      * @var bool
      */
     protected $_ignore = true;
-    
+
     /**
      * Validate element value (pseudo)
      *

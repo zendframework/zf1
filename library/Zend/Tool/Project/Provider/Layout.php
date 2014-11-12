@@ -23,7 +23,7 @@
 /**
  * @see Zend_Tool_Project_Provider_Abstract
  */
-require_once 'Zend/Tool/Project/Provider/Abstract.php';
+#require_once 'Zend/Tool/Project/Provider/Abstract.php';
 
 /**
  * @category   Zend
@@ -86,7 +86,7 @@ class Zend_Tool_Project_Provider_Layout extends Zend_Tool_Project_Provider_Abstr
             $applicationConfigResource->create();
 
             $this->_registry->getResponse()->appendContent('A layout entry has been added to the application config file.');
-            
+
             $layoutScriptFile = self::createResource($profile);
             if (!$layoutScriptFile->exists()) {
                 $layoutScriptFile->create();

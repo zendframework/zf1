@@ -23,27 +23,27 @@
 /**
  * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationLogs
  */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationLogs.php';
+#require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationLogs.php';
 
 /**
  * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationDiagnosticInfrastructureLogs
  */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationDiagnosticInfrastructureLogs.php';
+#require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationDiagnosticInfrastructureLogs.php';
 
 /**
  * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationPerformanceCounters
  */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationPerformanceCounters.php';
+#require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationPerformanceCounters.php';
 
 /**
  * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationWindowsEventLog
  */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationWindowsEventLog.php';
+#require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationWindowsEventLog.php';
 
 /**
  * @see Zend_Service_WindowsAzure_Diagnostics_ConfigurationDirectories
  */
-require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationDirectories.php';
+#require_once 'Zend/Service/WindowsAzure/Diagnostics/ConfigurationDirectories.php';
 
 /**
  * @category   Zend
@@ -64,11 +64,11 @@ class Zend_Service_WindowsAzure_Diagnostics_ConfigurationDataSources
 {
     /**
      * Constructor
-     * 
+     *
 	 * @param	int	$overallQuotaInMB				Overall quota in MB
 	 */
-    public function __construct($overallQuotaInMB = 0) 
-    {	        
+    public function __construct($overallQuotaInMB = 0)
+    {
         $this->_data = array(
             'overallquotainmb'        		=> $overallQuotaInMB,
             'logs'             				=> new Zend_Service_WindowsAzure_Diagnostics_ConfigurationLogs(),

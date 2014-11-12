@@ -21,7 +21,7 @@
  */
 
 /** Zend_Log_Formatter_Abstract */
-require_once 'Zend/Log/Formatter/Abstract.php';
+#require_once 'Zend/Log/Formatter/Abstract.php';
 
 /**
  * @category   Zend
@@ -146,8 +146,8 @@ class Zend_Log_Formatter_Xml extends Zend_Log_Formatter_Abstract
         $elt = $dom->appendChild(new DOMElement($this->_rootElement));
 
         foreach ($dataToInsert as $key => $value) {
-            if (empty($value) 
-                || is_scalar($value) 
+            if (empty($value)
+                || is_scalar($value)
                 || (is_object($value) && method_exists($value,'__toString'))
             ) {
                 if($key == "message") {

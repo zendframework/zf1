@@ -24,7 +24,7 @@
 /**
  * Abstract class for extension
  */
-require_once 'Zend/View/Helper/FormElement.php';
+#require_once 'Zend/View/Helper/FormElement.php';
 
 
 /**
@@ -105,7 +105,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
             $optionClasses = $attribs['optionClasses'];
             unset($attribs['optionClasses']);
         }
-        
+
         // now start building the XHTML.
         $disabled = '';
         if (true === $disable) {

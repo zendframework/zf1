@@ -23,7 +23,7 @@
 /**
  * @see Zend_Gdata_App_Extension_Element
  */
-require_once 'Zend/Gdata/App/Extension/Element.php';
+#require_once 'Zend/Gdata/App/Extension/Element.php';
 
 /**
  * Concrete class for working with ItemType elements.
@@ -49,6 +49,6 @@ class Zend_Gdata_Gbase_Extension_BaseAttribute extends Zend_Gdata_App_Extension_
             'Google Base API has been discontinued by Google and was removed'
             . ' from Zend Framework in 1.12.0.  For more information see: '
             . 'http://googlemerchantblog.blogspot.ca/2010/12/new-shopping-apis-and-deprecation-of.html'
-        );    
+        );
     }
 }

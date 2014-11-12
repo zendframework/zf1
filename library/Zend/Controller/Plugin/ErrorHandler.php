@@ -20,7 +20,7 @@
  */
 
 /** Zend_Controller_Plugin_Abstract */
-require_once 'Zend/Controller/Plugin/Abstract.php';
+#require_once 'Zend/Controller/Plugin/Abstract.php';
 
 /**
  * Handle exceptions that bubble up based on missing controllers, actions, or
@@ -211,7 +211,7 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
     {
         $this->_handleError($request);
     }
-	
+
     /**
      * Post dispatch hook -- check for exceptions and dispatch error handler if
      * necessary

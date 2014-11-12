@@ -91,7 +91,7 @@ class Zend_Mobile_Push_Response_Gcm
     {
         if ($responseString) {
             if (!$response = json_decode($responseString, true)) {
-                require_once 'Zend/Mobile/Push/Exception/ServerUnavailable.php';
+                #require_once 'Zend/Mobile/Push/Exception/ServerUnavailable.php';
                 throw new Zend_Mobile_Push_Exception_ServerUnavailable('The server gave us an invalid response, try again later');
             }
             $this->setResponse($response);
@@ -194,7 +194,7 @@ class Zend_Mobile_Push_Response_Gcm
      *
      * @return array multi dimensional array of:
      *         NOTE: key is registration_id if the message is passed.
-     *         'registration_id' => array( 
+     *         'registration_id' => array(
      *             'message_id' => 'id',
      *             'error' => 'error',
      *             'registration_id' => 'id'

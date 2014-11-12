@@ -51,9 +51,9 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Constructor
-     * 
+     *
      * @param  string $event Event to which slot is subscribed
-     * @param  string|array|object $callback PHP callback 
+     * @param  string|array|object $callback PHP callback
      * @param  array $options Options used by the callback handler (e.g., priority)
      * @return void
      */
@@ -67,9 +67,9 @@ class Zend_Stdlib_CallbackHandler
      * Error handler
      *
      * Used by registerCallback() when calling is_callable() to capture engine warnings.
-     * 
-     * @param  int $errno 
-     * @param  string $errstr 
+     *
+     * @param  int $errno
+     * @param  string $errstr
      * @return void
      */
     public function errorHandler($errno, $errstr)
@@ -80,14 +80,14 @@ class Zend_Stdlib_CallbackHandler
     /**
      * Registers the callback provided in the constructor
      *
-     * If you have pecl/weakref {@see http://pecl.php.net/weakref} installed, 
+     * If you have pecl/weakref {@see http://pecl.php.net/weakref} installed,
      * this method provides additional behavior.
      *
-     * If a callback is a functor, or an array callback composing an object 
+     * If a callback is a functor, or an array callback composing an object
      * instance, this method will pass the object to a WeakRef instance prior
      * to registering the callback.
-     * 
-     * @param  Callable $callback 
+     *
+     * @param  Callable $callback
      * @return void
      */
     protected function registerCallback($callback)
@@ -96,7 +96,7 @@ class Zend_Stdlib_CallbackHandler
         $callable = is_callable($callback);
         restore_error_handler();
         if (!$callable || $this->error) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException('Invalid callback provided; not callable');
         }
 
@@ -123,7 +123,7 @@ class Zend_Stdlib_CallbackHandler
 
         list($target, $method) = $callback;
 
-        // If we have an array callback, and the first argument is not an 
+        // If we have an array callback, and the first argument is not an
         // object, register as-is
         if (!is_object($target)) {
             $this->callback = $callback;
@@ -138,7 +138,7 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Retrieve registered callback
-     * 
+     *
      * @return Callable
      */
     public function getCallback()
@@ -160,7 +160,7 @@ class Zend_Stdlib_CallbackHandler
             return $callback;
         }
 
-        // Array callback with WeakRef object -- retrieve the object first, and 
+        // Array callback with WeakRef object -- retrieve the object first, and
         // then return
         list($target, $method) = $callback;
         if ($target instanceof WeakRef) {
@@ -173,7 +173,7 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Invoke handler
-     * 
+     *
      * @param  array $args Arguments to pass to callback
      * @return mixed
      */
@@ -187,7 +187,7 @@ class Zend_Stdlib_CallbackHandler
             $this->validateStringCallbackFor54($callback);
         }
 
-        // Minor performance tweak; use call_user_func() until > 3 arguments 
+        // Minor performance tweak; use call_user_func() until > 3 arguments
         // reached
         switch (count($args)) {
             case 0:
@@ -222,7 +222,7 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Invoke as functor
-     * 
+     *
      * @return mixed
      */
     public function __invoke()
@@ -232,7 +232,7 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Get all callback metadata
-     * 
+     *
      * @return array
      */
     public function getMetadata()
@@ -242,8 +242,8 @@ class Zend_Stdlib_CallbackHandler
 
     /**
      * Retrieve a single metadatum
-     * 
-     * @param  string $name 
+     *
+     * @param  string $name
      * @return mixed
      */
     public function getMetadatum($name)
@@ -258,8 +258,8 @@ class Zend_Stdlib_CallbackHandler
      * Validate a static method call
      *
      * Validates that a static method call in PHP 5.4 will actually work
-     * 
-     * @param  string $callback 
+     *
+     * @param  string $callback
      * @return true
      * @throws Zend_Stdlib_Exception_InvalidCallbackException if invalid
      */
@@ -272,7 +272,7 @@ class Zend_Stdlib_CallbackHandler
         list($class, $method) = explode('::', $callback, 2);
 
         if (!class_exists($class)) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException(sprintf(
                 'Static method call "%s" refers to a class that does not exist',
                 $callback
@@ -281,7 +281,7 @@ class Zend_Stdlib_CallbackHandler
 
         $r = new ReflectionClass($class);
         if (!$r->hasMethod($method)) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException(sprintf(
                 'Static method call "%s" refers to a method that does not exist',
                 $callback
@@ -289,7 +289,7 @@ class Zend_Stdlib_CallbackHandler
         }
         $m = $r->getMethod($method);
         if (!$m->isStatic()) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException(sprintf(
                 'Static method call "%s" refers to a method that is not static',
                 $callback

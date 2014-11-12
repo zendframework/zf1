@@ -18,9 +18,9 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/EventManager/EventManager.php';
-require_once 'Zend/EventManager/SharedEventManager.php';
-require_once 'Zend/Stdlib/CallbackHandler.php';
+#require_once 'Zend/EventManager/EventManager.php';
+#require_once 'Zend/EventManager/SharedEventManager.php';
+#require_once 'Zend/Stdlib/CallbackHandler.php';
 
 /**
  * Static version of EventManager
@@ -39,7 +39,7 @@ class Zend_EventManager_StaticEventManager extends Zend_EventManager_SharedEvent
 
     /**
      * Singleton
-     * 
+     *
      * @return void
      */
     protected function __construct()
@@ -57,7 +57,7 @@ class Zend_EventManager_StaticEventManager extends Zend_EventManager_SharedEvent
 
     /**
      * Retrieve instance
-     * 
+     *
      * @return Zend_EventManager_StaticEventManager
      */
     public static function getInstance()
@@ -70,7 +70,7 @@ class Zend_EventManager_StaticEventManager extends Zend_EventManager_SharedEvent
 
     /**
      * Reset the singleton instance
-     * 
+     *
      * @return void
      */
     public static function resetInstance()

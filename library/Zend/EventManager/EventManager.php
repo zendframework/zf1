@@ -18,13 +18,13 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/EventManager/Event.php';
-require_once 'Zend/EventManager/EventCollection.php';
-require_once 'Zend/EventManager/ResponseCollection.php';
-require_once 'Zend/EventManager/SharedEventCollectionAware.php';
-require_once 'Zend/EventManager/StaticEventManager.php';
-require_once 'Zend/Stdlib/CallbackHandler.php';
-require_once 'Zend/Stdlib/PriorityQueue.php';
+#require_once 'Zend/EventManager/Event.php';
+#require_once 'Zend/EventManager/EventCollection.php';
+#require_once 'Zend/EventManager/ResponseCollection.php';
+#require_once 'Zend/EventManager/SharedEventCollectionAware.php';
+#require_once 'Zend/EventManager/StaticEventManager.php';
+#require_once 'Zend/Stdlib/CallbackHandler.php';
+#require_once 'Zend/Stdlib/PriorityQueue.php';
 
 /**
  * Event manager: notification system
@@ -105,7 +105,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      *
      * Sets {@link $sharedCollections} to boolean false to disable ability
      * to lazy-load static event manager instance.
-     * 
+     *
      * @return void
      */
     public function unsetSharedCollections()
@@ -201,7 +201,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
         }
 
         if ($callback && !is_callable($callback)) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException('Invalid callback provided');
         }
 
@@ -243,7 +243,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
         }
 
         if (!is_callable($callback)) {
-            require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
+            #require_once 'Zend/Stdlib/Exception/InvalidCallbackException.php';
             throw new Zend_Stdlib_Exception_InvalidCallbackException('Invalid callback provided');
         }
 
@@ -261,7 +261,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      * executed. By default, this value is 1; however, you may set it for any
      * integer value. Higher values have higher priority (i.e., execute first).
      *
-     * You can specify "*" for the event name. In such cases, the listener will 
+     * You can specify "*" for the event name. In such cases, the listener will
      * be triggered for every event.
      *
      * @param  string|array|Zend_EventManager_ListenerAggregate $event An event or array of event names. If a ListenerAggregate, proxies to {@link attachAggregate()}.
@@ -278,7 +278,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
 
         // Null callback is invalid
         if (null === $callback) {
-            require_once 'Zend/EventManager/Exception/InvalidArgumentException.php';
+            #require_once 'Zend/EventManager/Exception/InvalidArgumentException.php';
             throw new Zend_EventManager_Exception_InvalidArgumentException(sprintf(
                 '%s: expects a callback; none provided',
                 __METHOD__
@@ -337,7 +337,7 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
         }
 
         if (!$listener instanceof Zend_Stdlib_CallbackHandler) {
-            require_once 'Zend/EventManager/Exception/InvalidArgumentException.php';
+            #require_once 'Zend/EventManager/Exception/InvalidArgumentException.php';
             throw new Zend_EventManager_Exception_InvalidArgumentException(sprintf(
                 '%s: expected a Zend_EventManager_ListenerAggregate or Zend_Stdlib_CallbackHandler; received "%s"',
                 __METHOD__,
@@ -525,9 +525,9 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
      * Add listeners to the master queue of listeners
      *
      * Used to inject shared listeners and wildcard listeners.
-     * 
-     * @param  Zend_Stdlib_PriorityQueue $masterListeners 
-     * @param  Zend_Stdlib_PriorityQueue $listeners 
+     *
+     * @param  Zend_Stdlib_PriorityQueue $masterListeners
+     * @param  Zend_Stdlib_PriorityQueue $listeners
      * @return void
      */
     protected function insertListeners($masterListeners, $listeners)

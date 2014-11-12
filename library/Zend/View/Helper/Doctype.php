@@ -21,10 +21,10 @@
  */
 
 /** Zend_Registry */
-require_once 'Zend/Registry.php';
+#require_once 'Zend/Registry.php';
 
 /** Zend_View_Helper_Abstract.php */
-require_once 'Zend/View/Helper/Abstract.php';
+#require_once 'Zend/View/Helper/Abstract.php';
 
 /**
  * Helper for setting and retrieving the doctype
@@ -132,7 +132,7 @@ class Zend_View_Helper_Doctype extends Zend_View_Helper_Abstract
                     break;
                 default:
                     if (substr($doctype, 0, 9) != '<!DOCTYPE') {
-                        require_once 'Zend/View/Exception.php';
+                        #require_once 'Zend/View/Exception.php';
                         $e = new Zend_View_Exception('The specified doctype is malformed');
                         $e->setView($this->view);
                         throw $e;
@@ -206,11 +206,11 @@ class Zend_View_Helper_Doctype extends Zend_View_Helper_Abstract
             case self::XHTML11:
             case self::HTML4_STRICT:
                 return true;
-            default: 
+            default:
                 return false;
         }
     }
-    
+
     /**
      * Is doctype HTML5? (HeadMeta uses this for validation)
      *
@@ -219,7 +219,7 @@ class Zend_View_Helper_Doctype extends Zend_View_Helper_Abstract
     public function isHtml5() {
         return (stristr($this->doctype(), '<!DOCTYPE html>') ? true : false);
     }
-    
+
     /**
      * Is doctype RDFa?
      *

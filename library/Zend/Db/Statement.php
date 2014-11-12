@@ -23,12 +23,12 @@
 /**
  * @see Zend_Db
  */
-require_once 'Zend/Db.php';
+#require_once 'Zend/Db.php';
 
 /**
  * @see Zend_Db_Statement_Interface
  */
-require_once 'Zend/Db/Statement/Interface.php';
+#require_once 'Zend/Db/Statement/Interface.php';
 
 /**
  * Abstract class to emulate a PDOStatement for native database adapters.
@@ -148,7 +148,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
                     /**
                      * @see Zend_Db_Statement_Exception
                      */
-                    require_once 'Zend/Db/Statement/Exception.php';
+                    #require_once 'Zend/Db/Statement/Exception.php';
                     throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$val'");
                 }
             } else if ($val[0] == ':') {
@@ -156,7 +156,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
                     /**
                      * @see Zend_Db_Statement_Exception
                      */
-                    require_once 'Zend/Db/Statement/Exception.php';
+                    #require_once 'Zend/Db/Statement/Exception.php';
                     throw new Zend_Db_Statement_Exception("Invalid bind-variable name '$val'");
                 }
             }
@@ -180,7 +180,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
         // get the character for value quoting
         // this should be '
         $q = $this->_adapter->quote('a');
-        $q = $q[0];        
+        $q = $q[0];
         // get the value used as an escaped quote,
         // e.g. \' or ''
         $qe = $this->_adapter->quote($q);
@@ -193,7 +193,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
             // this segfaults only after 65,000 characters instead of 9,000
             $sql = preg_replace("/$q([^$q{$escapeChar}]*|($qe)*)*$q/s", '', $sql);
         }
-        
+
         // get a version of the SQL statement with all quoted
         // values and delimited identifiers stripped out
         // remove "foo\"bar"
@@ -244,7 +244,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
             /**
              * @see Zend_Db_Statement_Exception
              */
-            require_once 'Zend/Db/Statement/Exception.php';
+            #require_once 'Zend/Db/Statement/Exception.php';
             throw new Zend_Db_Statement_Exception('Invalid bind-variable position');
         }
 
@@ -266,7 +266,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
             /**
              * @see Zend_Db_Statement_Exception
              */
-            require_once 'Zend/Db/Statement/Exception.php';
+            #require_once 'Zend/Db/Statement/Exception.php';
             throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$parameter'");
         }
 
@@ -436,7 +436,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
                 /**
                  * @see Zend_Db_Statement_Exception
                  */
-                require_once 'Zend/Db/Statement/Exception.php';
+                #require_once 'Zend/Db/Statement/Exception.php';
                 throw new Zend_Db_Statement_Exception('invalid fetch mode');
                 break;
         }

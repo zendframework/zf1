@@ -20,7 +20,7 @@
  */
 
 /** @see Zend_Captcha_Word */
-require_once 'Zend/Captcha/Word.php';
+#require_once 'Zend/Captcha/Word.php';
 
 /**
  * Example dumb word-based captcha
@@ -41,7 +41,7 @@ class Zend_Captcha_Dumb extends Zend_Captcha_Word
      * @type string
      */
     protected $_label = 'Please type this word backwards';
-    
+
     /**
      * Set the label for the CAPTCHA
      * @param string $label
@@ -50,7 +50,7 @@ class Zend_Captcha_Dumb extends Zend_Captcha_Word
     {
         $this->_label = $label;
     }
-    
+
     /**
      * Retrieve the label for the CAPTCHA
      * @return string

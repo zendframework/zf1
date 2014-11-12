@@ -21,10 +21,10 @@
  */
 
 /** Zend_Mobile_Push_Interface **/
-require_once 'Zend/Mobile/Push/Interface.php';
+#require_once 'Zend/Mobile/Push/Interface.php';
 
 /** Zend_Mobile_Push_Exception **/
-require_once 'Zend/Mobile/Push/Exception.php';
+#require_once 'Zend/Mobile/Push/Exception.php';
 
 /**
  * Push Abstract
@@ -47,7 +47,7 @@ abstract class Zend_Mobile_Push_Abstract implements Zend_Mobile_Push_Interface
 
     /**
      * Connect to the Push Server
-     * 
+     *
      * @return Zend_Mobile_Push_Abstract
      */
     public function connect()
