@@ -2067,8 +2067,17 @@ class Zend_Date extends Zend_Date_DateObject
                 }
                 // (T)hh:mm:ss
                 preg_match('/[T,\s]{0,1}(\d{2}):(\d{2}):(\d{2})/', $tmpdate, $timematch);
+                // (T)hhmmss
                 if (empty($timematch)) {
                     preg_match('/[T,\s]{0,1}(\d{2})(\d{2})(\d{2})/', $tmpdate, $timematch);
+                }
+                // (T)hh:mm
+                if (empty($timematch)) {
+                    preg_match('/[T,\s]{0,1}(\d{2}):(\d{2})/', $tmpdate, $timematch);
+                }
+                // (T)hhmm
+                if (empty($timematch)) {
+                    preg_match('/[T,\s]{0,1}(\d{2})(\d{2})/', $tmpdate, $timematch);
                 }
                 if (empty($datematch) and empty($timematch)) {
                     require_once 'Zend/Date/Exception.php';
@@ -2091,6 +2100,9 @@ class Zend_Date extends Zend_Date_DateObject
                 if (empty($timematch)) {
                     $timematch[1] = 0;
                     $timematch[2] = 0;
+                    $timematch[3] = 0;
+                }
+                if (!isset($timematch[3])) {
                     $timematch[3] = 0;
                 }
 
