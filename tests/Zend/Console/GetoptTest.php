@@ -268,6 +268,43 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
         unset($opts->a);
         $this->assertFalse(isset($opts->a));
     }
+    
+    public function testVerifyRequiredArgument()
+    {
+        $opts = new Zend_Console_Getopt(array('apple|a=s' => "First required argument"));
+        try {   
+            $opts->parse();
+            $opts->checkRequiredArguments();
+            $this->fail('Expected to catch a Zend_Console_Getopt_Exception');
+        }
+        catch (Zend_Exception $e){
+            $this->assertTrue($e instanceof Zend_Console_Getopt_Exception,
+                'Expected Zend_Console_Getopt_Exception, got '. get_class($e));            
+            $this->assertEquals('Option "a" requires a parameter.' , $e->getMessage());
+        }        
+        
+        $opts->addArguments(array( "-a", "apple") );
+        $opts->parse();
+        $opts->checkRequiredArguments();//-> no Exception here
+    }
+    
+    public function testEmptyRequiredOption()
+    {       
+        $opts = new Zend_Console_Getopt(array(
+            'apple|a=s' =>"First required argument",
+            'banana|b=i'  =>"Second required argument"
+        ));        
+        $opts->addArguments(array("-a","-b","123"));
+        try {   
+            $opts->parse();
+            $opts->checkRequiredArguments();
+            $this->fail('Expected to catch a Zend_Console_Getopt_Exception');             
+         } catch (Zend_Exception $e) {                          
+            $this->assertTrue($e instanceof Zend_Console_Getopt_Exception,
+                'Expected Zend_Console_Getopt_Exception, got '. get_class($e));            
+            $this->assertEquals('Option "a" requires a parameter.' , $e->getMessage());
+         }
+    }
 
     /**
      * @group ZF-5948
