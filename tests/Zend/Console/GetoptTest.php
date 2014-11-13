@@ -331,7 +331,7 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
                 'Expected Zend_Console_Getopt_Exception, got ' . get_class($e)
             );
             $this->assertEquals(
-                'Option "a" requires a parameter.', $e->getMessage()
+                'Option "$alias" requires a parameter.', $e->getMessage()
             );
         }
     }
