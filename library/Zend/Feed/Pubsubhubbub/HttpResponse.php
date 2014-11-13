@@ -172,6 +172,7 @@ class Zend_Feed_Pubsubhubbub_HttpResponse
      * Set HTTP response code to use with headers
      *
      * @param  int $code
+     * @throws Zend_Feed_Pubsubhubbub_Exception
      * @return Zend_Feed_Pubsubhubbub_HttpResponse
      */
     public function setHttpResponseCode($code)

@@ -44,7 +44,9 @@ class Zend_Feed_Pubsubhubbub_Model_Subscription
     /**
      * Save subscription to RDMBS
      *
-     * @param array $data
+     * @param  array $data
+     * @throws Zend_Db_Table_Exception
+     * @throws Zend_Feed_Pubsubhubbub_Exception
      * @return bool
      */
     public function setSubscription(array $data)
@@ -78,6 +80,8 @@ class Zend_Feed_Pubsubhubbub_Model_Subscription
      * Get subscription by ID/key
      *
      * @param  string $key
+     * @throws Zend_Db_Table_Exception
+     * @throws Zend_Feed_Pubsubhubbub_Exception
      * @return array
      */
     public function getSubscription($key)
@@ -98,6 +102,8 @@ class Zend_Feed_Pubsubhubbub_Model_Subscription
      * Determine if a subscription matching the key exists
      *
      * @param  string $key
+     * @throws Zend_Db_Table_Exception
+     * @throws Zend_Feed_Pubsubhubbub_Exception
      * @return bool
      */
     public function hasSubscription($key)
@@ -117,7 +123,7 @@ class Zend_Feed_Pubsubhubbub_Model_Subscription
     /**
      * Delete a subscription
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function deleteSubscription($key)

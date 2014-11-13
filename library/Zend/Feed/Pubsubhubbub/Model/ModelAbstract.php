@@ -47,9 +47,7 @@ class Zend_Feed_Pubsubhubbub_Model_ModelAbstract
     /**
      * Constructor
      *
-     * @param  array $data
      * @param  Zend_Db_Table_Abstract $tableGateway
-     * @return void
      */
     public function __construct(Zend_Db_Table_Abstract $tableGateway = null)
     {
