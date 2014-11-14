@@ -305,7 +305,10 @@ class Zend_Mobile_Push_Apns extends Zend_Mobile_Push_Abstract
         if (!is_null($message->getBadge())) {
             $payload['aps']['badge'] = $message->getBadge();
         }
-        $payload['aps']['sound'] = $message->getSound();
+        $sound = $message->getSound();
+        if (!empty($sound)) {
+            $payload['aps']['sound'] = $sound;
+        }
 
         foreach($message->getCustomData() as $k => $v) {
             $payload[$k] = $v;
