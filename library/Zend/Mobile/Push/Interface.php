@@ -42,7 +42,7 @@ interface Zend_Mobile_Push_Interface
     /**
      * Send a Push Message
      *
-     * @param Zend_Mobile_Push_Message_Interface $message
+     * @param  Zend_Mobile_Push_Message_Abstract $message
      * @return boolean
      */
     public function send(Zend_Mobile_Push_Message_Abstract $message);

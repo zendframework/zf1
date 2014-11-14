@@ -50,14 +50,14 @@ interface Zend_Mobile_Push_Message_Interface
     /**
      * Get Id
      *
-     * @return scalar
+     * @return int|string|float|bool Scalar
      */
     public function getId();
 
     /**
      * Set Id
      *
-     * @param scalar $id
+     * @param int|string|float|bool $id Scalar
      * @return Zend_Mobile_Push_Message_Abstract
      */
     public function setId($id);

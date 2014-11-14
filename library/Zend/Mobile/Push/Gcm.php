@@ -53,7 +53,7 @@ class Zend_Mobile_Push_Gcm extends Zend_Mobile_Push_Abstract
     /**
      * Http Client
      *
-     * @var Client
+     * @var Zend_Http_Client
      */
     protected $_httpClient;
 
@@ -120,9 +120,13 @@ class Zend_Mobile_Push_Gcm extends Zend_Mobile_Push_Abstract
     /**
      * Send Message
      *
-     * @param Zend_Mobile_Push_Message_Gcm $message
-     * @return Zend_Mobile_Push_Response_Gcm
+     * @param  Zend_Mobile_Push_Message_Abstract $message
+     * @throws Zend_Http_Client_Exception
      * @throws Zend_Mobile_Push_Exception
+     * @throws Zend_Mobile_Push_Exception_InvalidAuthToken
+     * @throws Zend_Mobile_Push_Exception_InvalidPayload
+     * @throws Zend_Mobile_Push_Exception_ServerUnavailable
+     * @return Zend_Mobile_Push_Response_Gcm
      */
     public function send(Zend_Mobile_Push_Message_Abstract $message)
     {

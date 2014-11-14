@@ -83,11 +83,12 @@ class Zend_Mobile_Push_Message_Apns extends Zend_Mobile_Push_Message_Abstract
     /**
      * Set Alert
      *
-     * @param string $text
-     * @param string $actionLocKey
-     * @param string $locKey
-     * @param array $locArgs
-     * @param string $launchImage
+     * @param  string      $text
+     * @param  string|null $actionLocKey
+     * @param  string|null $locKey
+     * @param  array|null  $locArgs
+     * @param  string|null $launchImage
+     * @throws Zend_Mobile_Push_Message_Exception
      * @return Zend_Mobile_Push_Message_Apns
      */
     public function setAlert($text, $actionLocKey=null, $locKey=null, $locArgs=null, $launchImage=null)
@@ -243,9 +244,9 @@ class Zend_Mobile_Push_Message_Apns extends Zend_Mobile_Push_Message_Abstract
     /**
      * Set Custom Data
      *
-     * @param array $data
-     * @return Zend_Mobile_Push_Message_Apns
+     * @param  array $array
      * @throws Zend_Mobile_Push_Message_Exception
+     * @return Zend_Mobile_Push_Message_Apns
      */
     public function setCustomData($array)
     {

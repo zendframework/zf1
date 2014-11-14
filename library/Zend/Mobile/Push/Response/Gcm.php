@@ -138,7 +138,8 @@ class Zend_Mobile_Push_Response_Gcm
     /**
      * Set Response
      *
-     * @param array $response
+     * @param  array $response
+     * @throws Zend_Mobile_Push_Exception
      * @return Zend_Mobile_Push_Response_Gcm
      */
     public function setResponse(array $response)

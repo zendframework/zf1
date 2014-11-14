@@ -209,10 +209,10 @@ class Zend_Mobile_Push_Apns extends Zend_Mobile_Push_Abstract
     /**
      * Connect to the Push Server
      *
-     * @param string $env
-     * @return Zend_Mobile_Push_Abstract
+     * @param  int|string $env
      * @throws Zend_Mobile_Push_Exception
      * @throws Zend_Mobile_Push_Exception_ServerUnavailable
+     * @return Zend_Mobile_Push_Abstract
      */
     public function connect($env = self::SERVER_PRODUCTION_URI)
     {
@@ -271,13 +271,13 @@ class Zend_Mobile_Push_Apns extends Zend_Mobile_Push_Abstract
     /**
      * Send Message
      *
-     * @param Zend_Mobile_Push_Message_Apns $message
-     * @return boolean
+     * @param  Zend_Mobile_Push_Message_Abstract $message
      * @throws Zend_Mobile_Push_Exception
-     * @throws Zend_Mobile_Push_Exception_ServerUnavailable
+     * @throws Zend_Mobile_Push_Exception_InvalidPayload
      * @throws Zend_Mobile_Push_Exception_InvalidToken
      * @throws Zend_Mobile_Push_Exception_InvalidTopic
-     * @throws Zend_Mobile_Push_Exception_InvalidPayload
+     * @throws Zend_Mobile_Push_Exception_ServerUnavailable
+     * @return bool
      */
     public function send(Zend_Mobile_Push_Message_Abstract $message)
     {

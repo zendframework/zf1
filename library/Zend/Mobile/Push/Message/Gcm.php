@@ -201,7 +201,8 @@ class Zend_Mobile_Push_Message_Gcm extends Zend_Mobile_Push_Message_Abstract
     /**
      * Set time to live.
      *
-     * @param int $secs
+     * @param  int $secs
+     * @throws Zend_Mobile_Push_Message_Exception
      * @return Zend_Mobile_Push_Message_Gcm
      */
     public function setTtl($secs)

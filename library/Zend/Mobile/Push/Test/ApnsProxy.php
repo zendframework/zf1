@@ -51,7 +51,6 @@ class Zend_Mobile_Push_Test_ApnsProxy extends Zend_Mobile_Push_Apns
      * Set the Response
      *
      * @param string $str
-     * @return Zend_Mobile_Push_ApnsProxy
      */
     public function setReadResponse($str) {
         $this->_readResponse = $str;
