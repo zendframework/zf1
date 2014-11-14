@@ -34,19 +34,87 @@ require_once 'Zend/Mime.php';
  */
 class Zend_Mime_Part {
 
+    /**
+     * Type
+     *
+     * @var string
+     */
     public $type = Zend_Mime::TYPE_OCTETSTREAM;
-    public $encoding = Zend_Mime::ENCODING_8BIT;
-    public $id;
-    public $disposition;
-    public $filename;
-    public $description;
-    public $charset;
-    public $boundary;
-    public $location;
-    public $language;
-    protected $_content;
-    protected $_isStream = false;
 
+    /**
+     * Encoding
+     *
+     * @var string
+     */
+    public $encoding = Zend_Mime::ENCODING_8BIT;
+
+    /**
+     * ID
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
+     * Disposition
+     *
+     * @var string
+     */
+    public $disposition;
+
+    /**
+     * Filename
+     *
+     * @var string
+     */
+    public $filename;
+
+    /**
+     * Description
+     *
+     * @var string
+     */
+    public $description;
+
+    /**
+     * Character set
+     *
+     * @var string
+     */
+    public $charset;
+
+    /**
+     * Boundary
+     *
+     * @var string
+     */
+    public $boundary;
+
+    /**
+     * Location
+     *
+     * @var string
+     */
+    public $location;
+
+    /**
+     * Language
+     *
+     * @var string
+     */
+    public $language;
+
+    /**
+     * Content
+     *
+     * @var mixed
+     */
+    protected $_content;
+
+    /**
+     * @var bool
+     */
+    protected $_isStream = false;
 
     /**
      * create a new Mime Part.
@@ -86,7 +154,7 @@ class Zend_Mime_Part {
      * if this was created with a stream, return a filtered stream for
      * reading the content. very useful for large file attachments.
      *
-     * @return stream
+     * @return mixed Stream
      * @throws Zend_Mime_Exception if not a stream or unable to append filter
      */
     public function getEncodedStream()
@@ -136,7 +204,9 @@ class Zend_Mime_Part {
     /**
      * Get the Content of the current Mime Part in the given encoding.
      *
-     * @return String
+     * @param  string $EOL Line end; defaults to {@link Zend_Mime::LINEEND}
+     * @throws Zend_Mime_Exception
+     * @return string
      */
     public function getContent($EOL = Zend_Mime::LINEEND)
     {
@@ -149,6 +219,7 @@ class Zend_Mime_Part {
     
     /**
      * Get the RAW unencoded content from this part
+     *
      * @return string
      */
     public function getRawContent()
@@ -163,7 +234,7 @@ class Zend_Mime_Part {
     /**
      * Create and return the array of headers for this MIME part
      *
-     * @access public
+     * @param  string $EOL Line end; defaults to {@link Zend_Mime::LINEEND}
      * @return array
      */
     public function getHeadersArray($EOL = Zend_Mime::LINEEND)
@@ -216,7 +287,8 @@ class Zend_Mime_Part {
     /**
      * Return the headers for this part as a string
      *
-     * @return String
+     * @param  string $EOL Line end; defaults to {@link Zend_Mime::LINEEND}
+     * @return string
      */
     public function getHeaders($EOL = Zend_Mime::LINEEND)
     {

@@ -181,11 +181,11 @@ class Zend_Mime_Decode
     /**
      * split a header field like content type in its different parts
      *
-     * @param  string $type       header field
-     * @param  string $wantedPart the wanted part, else an array with all parts is returned
-     * @param  string $firstName  key name for the first part
-     * @return string|array wanted part or all parts as array($firstName => firstPart, partname => value)
+     * @param  string     $field
+     * @param  string     $wantedPart the wanted part, else an array with all parts is returned
+     * @param  int|string $firstName  key name for the first part
      * @throws Zend_Exception
+     * @return string|array wanted part or all parts as array($firstName => firstPart, partname => value)
      */
     public static function splitHeaderField($field, $wantedPart = null, $firstName = 0)
     {
@@ -234,8 +234,8 @@ class Zend_Mime_Decode
      *
      * The charset of the returned string depends on your iconv settings.
      *
-     * @param  string encoded string
-     * @return string decoded string
+     * @param  string $string Encoded string
+     * @return string         Decoded string
      */
     public static function decodeQuotedPrintable($string)
     {
