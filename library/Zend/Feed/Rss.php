@@ -433,7 +433,8 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
 
             if (isset($dataentry->category)) {
                 foreach ($dataentry->category as $category) {
-                    $node = $this->_element->createElement('category', $category['term']);
+                    $node = $this->_element->createElement('category');
+                    $node->appendChild($this->_element->createCDATASection($category['term']));
                     if (isset($category['scheme'])) {
                         $node->setAttribute('domain', $category['scheme']);
                     }
