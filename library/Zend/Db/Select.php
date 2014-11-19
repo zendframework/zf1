@@ -1096,7 +1096,7 @@ class Zend_Db_Select
             }
         }
 
-        return $sql .= ' ' . implode(', ', $columns);
+        return $sql . ' ' . implode(', ', $columns);
     }
 
     /**
