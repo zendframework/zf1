@@ -1190,7 +1190,7 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
     protected function _incrementAssertionCount()
     {
         $stack = debug_backtrace();
-        foreach (debug_backtrace() as $step) {
+        foreach ($stack as $step) {
             if (isset($step['object'])
                 && $step['object'] instanceof PHPUnit_Framework_TestCase
             ) {
