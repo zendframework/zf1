@@ -35,9 +35,10 @@ class Zend_Test_PHPUnit_Db_DataSet_QueryTable extends PHPUnit_Extensions_Databas
     /**
      * Creates a new database query table object.
      *
-     * @param string $table_name
-     * @param string $query
+     * @param string                                             $tableName
+     * @param string                                             $query
      * @param PHPUnit_Extensions_Database_DB_IDatabaseConnection $databaseConnection
+     * @throws Zend_Test_PHPUnit_Db_Exception
      */
     public function __construct($tableName, $query, PHPUnit_Extensions_Database_DB_IDatabaseConnection $databaseConnection)
     {
