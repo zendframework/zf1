@@ -508,4 +508,14 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($validator->isValid('test.rs'));
     }
+
+    /**
+     * @group GH-19
+     */
+    public function testRussianIdn()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('кц.рф'));
+        $this->assertTrue($validator->isValid('президент.рф'));
+    }
 }
