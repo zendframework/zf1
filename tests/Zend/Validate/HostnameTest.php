@@ -518,4 +518,13 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validator->isValid('кц.рф'));
         $this->assertTrue($validator->isValid('президент.рф'));
     }
+
+    /**
+     * @group GH-451
+     */
+    public function testVermögensberaterIdns()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('mysite.vermögensberater'));
+    }
 }
