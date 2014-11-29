@@ -110,7 +110,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
     /**
      * Array of valid top-level-domains
      *
-     * Version 2014102301, Last Updated Fri Oct 24 07:07:01 2014 UTC
+     * Version 2014112800, Last Updated Fri Nov 28 07:07:01 2014 UTC
      *
      * @see http://data.iana.org/TLD/tlds-alpha-by-domain.txt  List of all TLDs by domain
      * @see http://www.iana.org/domains/root/db/ Official list of supported TLDs
@@ -136,6 +136,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'alsace',
         'am',
         'an',
+        'android',
         'ao',
         'aq',
         'ar',
@@ -177,6 +178,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'bj',
         'black',
         'blackfriday',
+        'bloomberg',
         'blue',
         'bm',
         'bmw',
@@ -243,6 +245,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'cm',
         'cn',
         'co',
+        'coach',
         'codes',
         'coffee',
         'college',
@@ -262,6 +265,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'cr',
         'credit',
         'creditcard',
+        'cricket',
         'crs',
         'cruises',
         'cu',
@@ -279,6 +283,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'de',
         'deals',
         'degree',
+        'delivery',
         'democrat',
         'dental',
         'dentist',
@@ -306,6 +311,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'eg',
         'email',
         'emerck',
+        'energy',
         'engineer',
         'engineering',
         'enterprises',
@@ -318,6 +324,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'eu',
         'eus',
         'events',
+        'everbank',
         'exchange',
         'expert',
         'exposed',
@@ -327,6 +334,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'fi',
         'finance',
         'financial',
+        'firmdale',
         'fish',
         'fishing',
         'fitness',
@@ -465,7 +473,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'lawyer',
         'lb',
         'lc',
+        'lds',
         'lease',
+        'legal',
         'lgbt',
         'li',
         'life',
@@ -487,6 +497,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'lv',
         'ly',
         'ma',
+        'madrid',
         'maison',
         'management',
         'mango',
@@ -499,6 +510,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'meet',
         'melbourne',
         'meme',
+        'memorial',
         'menu',
         'mg',
         'mh',
@@ -514,6 +526,8 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'moda',
         'moe',
         'monash',
+        'money',
+        'mormon',
         'mortgage',
         'moscow',
         'motorcycles',
@@ -569,6 +583,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'paris',
         'partners',
         'parts',
+        'party',
         'pe',
         'pf',
         'pg',
@@ -615,6 +630,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'rehab',
         'reise',
         'reisen',
+        'reit',
         'ren',
         'rentals',
         'repair',
@@ -644,6 +660,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'scb',
         'schmidt',
         'schule',
+        'science',
         'scot',
         'sd',
         'se',
@@ -681,6 +698,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'sv',
         'sx',
         'sy',
+        'sydney',
         'systems',
         'sz',
         'taipei',
@@ -773,6 +791,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'xn--3ds443g',
         'xn--3e0b707e',
         'xn--45brj9c',
+        'xn--45q11c',
         'xn--4gbrim',
         'xn--55qw42g',
         'xn--55qx5d',
@@ -789,10 +808,12 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'xn--czr694b',
         'xn--czru2d',
         'xn--d1acj3b',
+        'xn--d1alf',
         'xn--fiq228c5hs',
         'xn--fiq64b',
         'xn--fiqs8s',
         'xn--fiqz9s',
+        'xn--flw351e',
         'xn--fpcrj9c3d',
         'xn--fzc2c9e2c',
         'xn--gecrj9c',
@@ -816,6 +837,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'xn--mgberp4a5d4ar',
         'xn--mgbx4cd0ab',
         'xn--ngbc5azd',
+        'xn--node',
         'xn--nqv7f',
         'xn--nqv7fs00ema',
         'xn--o3cw4h',
@@ -824,6 +846,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'xn--p1ai',
         'xn--pgbs0dh',
         'xn--q9jyb4c',
+        'xn--qcka1pmc',
         'xn--rhqv96g',
         'xn--s9brj9c',
         'xn--ses554g',
@@ -853,6 +876,99 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'zm',
         'zone',
         'zw',
+        '测试',
+        'परीक्षा',
+        '佛山',
+        '集团',
+        '在线',
+        '한국',
+        'ভারত',
+        '八卦',
+        'موقع',
+        'বাংলা',
+        '公益',
+        '公司',
+        '移动',
+        '我爱你',
+        'москва',
+        'испытание',
+        'қаз',
+        'онлайн',
+        'сайт',
+        'срб',
+        'бел',
+        '테스트',
+        'орг',
+        '삼성',
+        'சிங்கப்பூர்',
+        '商标',
+        '商城',
+        'дети',
+        'мкд',
+        'טעסט',
+        '中文网',
+        '中信',
+        '中国',
+        '中國',
+        '谷歌',
+        'భారత్',
+        'ලංකා',
+        '測試',
+        'ભારત',
+        'भारत',
+        'آزمایشی',
+        'பரிட்சை',
+        'संगठन',
+        '网络',
+        'укр',
+        '香港',
+        'δοκιμή',
+        'إختبار',
+        '台湾',
+        '台灣',
+        '手机',
+        'мон',
+        'الجزائر',
+        'عمان',
+        'ایران',
+        'امارات',
+        'بازار',
+        'پاکستان',
+        'الاردن',
+        'بھارت',
+        'المغرب',
+        'السعودية',
+        'سودان',
+        'عراق',
+        'مليسيا',
+        'شبكة',
+        'გე',
+        '机构',
+        '组织机构',
+        'ไทย',
+        'سورية',
+        'рус',
+        'рф',
+        'تونس',
+        'みんな',
+        'グーグル',
+        '世界',
+        'ਭਾਰਤ',
+        '网址',
+        '游戏',
+        'vermögensberater',
+        'vermögensberatung',
+        '企业',
+        'مصر',
+        'قطر',
+        '广东',
+        'இலங்கை',
+        'இந்தியா',
+        'հայ',
+        '新加坡',
+        'فلسطين',
+        'テスト',
+        '政务',
     );
 
     /**
@@ -935,11 +1051,13 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             3 => '/^[\x{002d}0-9a-zșț]{1,63}$/iu',
             4 => '/^[\x{002d}0-9a-zΐάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώ]{1,63}$/iu',
             5 => '/^[\x{002d}0-9a-zабвгдежзийклмнопрстуфхцчшщъыьэюя]{1,63}$/iu',
-            6 => '/^[\x{002d}0-9a-zἀ-ἇἐ-ἕἠ-ἧἰ-ἷὀ-ὅὐ-ὗὠ-ὧὰ-ώᾀ-ᾇᾐ-ᾗᾠ-ᾧᾰ-ᾴᾶᾷῂῃῄῆῇῐ-ΐῖῗῠ-ῧῲῳῴῶῷ]{1,63}$/iu'),
+            6 => '/^[\x{002d}0-9a-zἀ-ἇἐ-ἕἠ-ἧἰ-ἷὀ-ὅὐ-ὗὠ-ὧὰ-ὼώᾀ-ᾇᾐ-ᾗᾠ-ᾧᾰ-ᾴᾶᾷῂῃῄῆῇῐ-ῒΐῖῗῠ-ῧῲῳῴῶῷ]{1,63}$/iu'),
         'FI'  => array(1 => '/^[\x{002d}0-9a-zäåö]{1,63}$/iu'),
         'GR'  => array(1 => '/^[\x{002d}0-9a-zΆΈΉΊΌΎ-ΡΣ-ώἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼῂῃῄῆ-ῌῐ-ΐῖ-Ίῠ-Ῥῲῳῴῶ-ῼ]{1,63}$/iu'),
         'HK'  => 'Hostname/Cn.php',
         'HU'  => array(1 => '/^[\x{002d}0-9a-záéíóöúüőű]{1,63}$/iu'),
+        'IL'  => array(1 => '/^[\x{002d}0-9\x{05D0}-\x{05EA}]{1,63}$/iu',
+            2 => '/^[\x{002d}0-9a-z]{1,63}$/i'),
         'INFO'=> array(1 => '/^[\x{002d}0-9a-zäåæéöøü]{1,63}$/iu',
             2 => '/^[\x{002d}0-9a-záéíóöúüőű]{1,63}$/iu',
             3 => '/^[\x{002d}0-9a-záæéíðóöúýþ]{1,63}$/iu',
@@ -950,6 +1068,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             8 => '/^[\x{002d}0-9a-záéíñóúü]{1,63}$/iu'),
         'IO'  => array(1 => '/^[\x{002d}0-9a-zà-öø-ÿăąāćĉčċďđĕěėęēğĝġģĥħĭĩįīıĵķĺľļłńňņŋŏőōœĸŕřŗśŝšşťţŧŭůűũųūŵŷźžż]{1,63}$/iu'),
         'IS'  => array(1 => '/^[\x{002d}0-9a-záéýúíóþæöð]{1,63}$/iu'),
+        'IT'  => array(1 => '/^[\x{002d}0-9a-zàâäèéêëìîïòôöùûüæœçÿß-]{1,63}$/iu'),
         'JP'  => 'Hostname/Jp.php',
         'KR'  => array(1 => '/^[\x{AC00}-\x{D7A3}]{1,17}$/iu'),
         'LI'  => array(1 => '/^[\x{002d}0-9a-zà-öø-ÿœ]{1,63}$/iu'),
@@ -1019,10 +1138,26 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'UA'  => array(1 => '/^[\x{002d}0-9a-zабвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџґӂʼ]{1,63}$/iu'),
         'VE'  => array(1 => '/^[\x{002d}0-9a-záéíóúüñ]{1,63}$/iu'),
         'VN'  => array(1 => '/^[ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯư\x{1EA0}-\x{1EF9}]{1,63}$/iu'),
-        'ایران' => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'мон' => array(1 => '/^[\x{002d}0-9\x{0430}-\x{044F}]{1,63}$/iu'),
+        'срб' => array(1 => '/^[\x{002d}0-9а-ик-шђјљњћџ]{1,63}$/iu'),
+        'сайт' => array(1 => '/^[\x{002d}0-9а-яёіїѝйўґг]{1,63}$/iu'),
+        'онлайн' => array(1 => '/^[\x{002d}0-9а-яёіїѝйўґг]{1,63}$/iu'),
         '中国' => 'Hostname/Cn.php',
-        '公司' => 'Hostname/Cn.php',
-        '网络' => 'Hostname/Cn.php'
+        '中國' => 'Hostname/Cn.php',
+        'ලංකා' => array(1 => '/^[\x{0d80}-\x{0dff}]{1,63}$/iu'),
+        '香港' => 'Hostname/Cn.php',
+        '台湾' => 'Hostname/Cn.php',
+        '台灣' => 'Hostname/Cn.php',
+        'امارات'   => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'الاردن'    => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'السعودية' => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'ไทย' => array(1 => '/^[\x{002d}0-9a-z\x{0E01}-\x{0E3A}\x{0E40}-\x{0E4D}\x{0E50}-\x{0E59}]{1,63}$/iu'),
+        'рф' => array(1 => '/^[\x{002d}0-9а-яё]{1,63}$/iu'),
+        'تونس' => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'مصر' => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'இலங்கை' => array(1 => '/^[\x{0b80}-\x{0bff}]{1,63}$/iu'),
+        'فلسطين' => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
+        'شبكة'  => array(1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'),
     );
 
     protected $_idnLength = array(
@@ -1133,7 +1268,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 
     /**
      * @param Zend_Validate_Ip $ipValidator OPTIONAL
-     * @return void;
+     * @return Zend_Validate_Hostname
      */
     public function setIpValidator(Zend_Validate_Ip $ipValidator = null)
     {
@@ -1285,10 +1420,8 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             do {
                 // First check TLD
                 $matches = array();
-                if (preg_match('/([^.]{2,63})$/i', end($domainParts), $matches) ||
-                    (end($domainParts) == 'ایران') || (end($domainParts) == '中国') ||
-                    (end($domainParts) == '公司') || (end($domainParts) == '网络')) {
-
+                if (preg_match('/([^.]{2,63})$/iu', end($domainParts), $matches)
+                    || (array_key_exists(end($domainParts), $this->_validIdns))) {
                     reset($domainParts);
 
                     // Hostname characters are: *(label dot)(label dot label); max 254 chars
@@ -1297,13 +1430,17 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     // ldh: alpha / digit / dash
 
                     // Match TLD against known list
-                    $this->_tld = strtolower($matches[1]);
+                    $this->_tld = $matches[1];
                     if ($this->_options['tld']) {
-                        if (!in_array($this->_tld, $this->_validTlds)) {
+                        if (!in_array(strtolower($this->_tld), $this->_validTlds)
+                            && !in_array($this->_tld, $this->_validTlds)) {
                             $this->_error(self::UNKNOWN_TLD);
                             $status = false;
                             break;
                         }
+                        // We have already validated that the TLD is fine. We don't want it to go through the below
+                        // checks as new UTF-8 TLDs will incorrectly fail if there is no IDN regex for it.
+                        array_pop($domainParts);
                     }
 
                     /**
