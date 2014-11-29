@@ -527,4 +527,13 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $validator = new Zend_Validate_Hostname();
         $this->assertTrue($validator->isValid('mysite.vermögensberater'));
     }
+
+    /**
+     * @group GH-322
+     */
+    public function testCom()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('example.com'));
+    }
 }
