@@ -114,14 +114,19 @@ class Zend_Gdata_HttpAdapterStreamingProxy extends Zend_Http_Client_Adapter_Prox
                 'Error writing request to proxy server');
         }
 
-        //read from $body, write to socket
-        while ($body->hasData()) {
-            if (! @fwrite($this->socket, $body->read(self::CHUNK_SIZE))) {
+        // Read from $body, write to socket
+        $chunk = $body->read(self::CHUNK_SIZE);
+        while ($chunk !== false) {
+            if (!@fwrite($this->socket, $chunk)) {
                 require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception(
-                    'Error writing request to server');
+                    'Error writing request to server'
+                );
             }
+            $chunk = $body->read(self::CHUNK_SIZE);
         }
+        $body->closeFileHandle();
+
         return 'Large upload, request is not cached.';
     }
 }
