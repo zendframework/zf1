@@ -260,6 +260,42 @@ class Zend_Soap_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('compression', $options);
     }
 
+    /**
+     * @group GH-32
+     */
+    public function testGetAndSetExceptionsOption()
+    {
+        $client = new Zend_Soap_Client();
+        $this->assertNull($client->getExceptions());
+        $this->assertEquals(
+            array(
+                'encoding'     => 'UTF-8',
+                'soap_version' => 2,
+            ),
+            $client->getOptions()
+        );
+
+        $client->setExceptions(true);
+        $this->assertTrue($client->getExceptions());
+
+        $client->setExceptions(false);
+        $this->assertFalse($client->getExceptions());
+
+        $client->setOptions(array('exceptions' => true));
+        $this->assertTrue($client->getExceptions());
+
+        $client = new Zend_Soap_Client(null, array('exceptions' => false));
+        $this->assertFalse($client->getExceptions());
+        $this->assertEquals(
+            array(
+                'encoding'     => 'UTF-8',
+                'soap_version' => 2,
+                'exceptions'   => false,
+            ),
+            $client->getOptions()
+        );
+    }
+
     public function testGetFunctions()
     {
         $server = new Zend_Soap_Server(dirname(__FILE__) . '/_files/wsdl_example.wsdl');
