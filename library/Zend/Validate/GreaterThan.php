@@ -60,7 +60,7 @@ class Zend_Validate_GreaterThan extends Zend_Validate_Abstract
      * Sets validator options
      *
      * @param  mixed|Zend_Config $min
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($min)
     {

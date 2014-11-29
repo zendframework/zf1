@@ -65,8 +65,7 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
     /**
      * Sets default option values for this instance
      *
-     * @param  boolean|Zend_Config $allowWhiteSpace
-     * @return void
+     * @param boolean|Zend_Config $allowWhiteSpace
      */
     public function __construct($allowWhiteSpace = false)
     {

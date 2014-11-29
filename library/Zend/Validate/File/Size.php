@@ -99,6 +99,7 @@ class Zend_Validate_File_Size extends Zend_Validate_Abstract
      * 'bytestring': Use bytestring or real size for messages
      *
      * @param  integer|array $options Options for the adapter
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {

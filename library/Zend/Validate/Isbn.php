@@ -67,7 +67,6 @@ class Zend_Validate_Isbn extends Zend_Validate_Abstract
      *
      * @param  Zend_Config|array $options
      * @throws Zend_Validate_Exception When $options is not valid
-     * @return void
      */
     public function __construct($options = array())
     {

@@ -91,6 +91,7 @@ class Zend_Validate_Float extends Zend_Validate_Abstract
      * Sets the locale to use
      *
      * @param string|Zend_Locale $locale
+     * @return $this
      */
     public function setLocale($locale = null)
     {

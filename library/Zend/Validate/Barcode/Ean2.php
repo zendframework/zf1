@@ -48,8 +48,6 @@ class Zend_Validate_Barcode_Ean2 extends Zend_Validate_Barcode_AdapterAbstract
      * Constructor
      *
      * Sets check flag to false.
-     *
-     * @return void
      */
     public function __construct()
     {

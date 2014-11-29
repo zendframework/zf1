@@ -63,7 +63,8 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * $hash is the hash we accept for the file $file
      *
      * @param  string|array $options
-     * @return void
+     * @throws Zend_Validate_Exception
+     * @return Zend_Validate_File_Md5
      */
     public function __construct($options)
     {
@@ -93,7 +94,6 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * Sets the md5 hash for one or multiple files
      *
      * @param  string|array $options
-     * @param  string       $algorithm (Deprecated) Algorithm to use, fixed to md5
      * @return Zend_Validate_File_Hash Provides a fluent interface
      */
     public function setHash($options)
@@ -123,7 +123,6 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * Adds the md5 hash for one or multiple files
      *
      * @param  string|array $options
-     * @param  string       $algorithm (Deprecated) Algorithm to use, fixed to md5
      * @return Zend_Validate_File_Hash Provides a fluent interface
      */
     public function addHash($options)

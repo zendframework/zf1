@@ -63,7 +63,7 @@ class Zend_Validate_File_Exists extends Zend_Validate_Abstract
      * Sets validator options
      *
      * @param  string|array|Zend_Config $directory
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($directory = array())
     {
@@ -113,6 +113,7 @@ class Zend_Validate_File_Exists extends Zend_Validate_Abstract
      * Adds the file directory which will be checked
      *
      * @param  string|array $directory The directory to add for validation
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_File_Extension Provides a fluent interface
      */
     public function addDirectory($directory)

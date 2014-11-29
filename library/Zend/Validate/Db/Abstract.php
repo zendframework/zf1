@@ -97,6 +97,7 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
      * 'adapter' => An optional database adapter to use
      *
      * @param array|Zend_Config $options Options to use for this validator
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {
@@ -152,6 +153,7 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
     /**
      * Returns the set adapter
      *
+     * @throws Zend_Validate_Exception
      * @return Zend_Db_Adapter
      */
     public function getAdapter()
@@ -173,6 +175,7 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
      * Sets a new database adapter
      *
      * @param  Zend_Db_Adapter_Abstract $adapter
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_Db_Abstract
      */
     public function setAdapter($adapter)
@@ -278,6 +281,7 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
      * Sets the select object to be used by the validator
      *
      * @param Zend_Db_Select $select
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_Db_Abstract
      */
     public function setSelect($select)

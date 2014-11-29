@@ -48,8 +48,6 @@ class Zend_Validate_Barcode_IntelligentMail extends Zend_Validate_Barcode_Adapte
      * Constructor
      *
      * Sets check flag to false.
-     *
-     * @return void
      */
     public function __construct()
     {

@@ -64,7 +64,6 @@ class Zend_Validate_Regex extends Zend_Validate_Abstract
      *
      * @param  string|Zend_Config $pattern
      * @throws Zend_Validate_Exception On missing 'pattern' parameter
-     * @return void
      */
     public function __construct($pattern)
     {

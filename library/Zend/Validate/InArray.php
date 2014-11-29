@@ -65,8 +65,8 @@ class Zend_Validate_InArray extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  array|Zend_Config $haystack
-     * @return void
+     * @param array|Zend_Config $options Validator options
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {

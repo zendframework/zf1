@@ -71,8 +71,7 @@ class Zend_Validate_File_Extension extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  string|array|Zend_Config $options
-     * @return void
+     * @param string|array|Zend_Config $options
      */
     public function __construct($options)
     {

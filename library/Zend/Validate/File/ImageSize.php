@@ -120,7 +120,7 @@ class Zend_Validate_File_ImageSize extends Zend_Validate_Abstract
      * - maxwidth
      *
      * @param  Zend_Config|array $options
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {

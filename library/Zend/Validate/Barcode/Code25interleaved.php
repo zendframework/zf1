@@ -54,8 +54,6 @@ class Zend_Validate_Barcode_Code25interleaved extends Zend_Validate_Barcode_Adap
      * Constructor
      *
      * Sets check flag to false.
-     *
-     * @return void
      */
     public function __construct()
     {

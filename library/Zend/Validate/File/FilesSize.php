@@ -64,7 +64,7 @@ class Zend_Validate_File_FilesSize extends Zend_Validate_File_Size
      * It also accepts an array with the keys 'min' and 'max'
      *
      * @param  integer|array|Zend_Config $options Options for this validator
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {

@@ -71,8 +71,7 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  string|Zend_Config $options OPTIONAL
-     * @return void
+     * @param string|array|Zend_Config $options OPTIONAL
      */
     public function __construct($options = array())
     {

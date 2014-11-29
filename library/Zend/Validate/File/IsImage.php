@@ -53,8 +53,7 @@ class Zend_Validate_File_IsImage extends Zend_Validate_File_MimeType
     /**
      * Sets validator options
      *
-     * @param  string|array|Zend_Config $mimetype
-     * @return void
+     * @param string|array|Zend_Config $mimetype
      */
     public function __construct($mimetype = array())
     {

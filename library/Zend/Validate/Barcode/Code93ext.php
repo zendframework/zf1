@@ -48,8 +48,6 @@ class Zend_Validate_Barcode_Code93ext extends Zend_Validate_Barcode_AdapterAbstr
      * Constructor
      *
      * Sets check flag to false.
-     *
-     * @return void
      */
     public function __construct()
     {

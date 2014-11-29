@@ -101,7 +101,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
      * 'max': Maximum filecount
      *
      * @param  integer|array|Zend_Config $options Options for the adapter
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {
@@ -210,6 +210,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
      * Adds a file for validation
      *
      * @param string|array $file
+     * @return $this
      */
     public function addFile($file)
     {

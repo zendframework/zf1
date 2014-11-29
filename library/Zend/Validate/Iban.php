@@ -132,8 +132,7 @@ class Zend_Validate_Iban extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  string|Zend_Config|Zend_Locale $locale OPTIONAL
-     * @return void
+     * @param string|Zend_Config|Zend_Locale $locale OPTIONAL
      */
     public function __construct($locale = null)
     {
@@ -175,6 +174,8 @@ class Zend_Validate_Iban extends Zend_Validate_Abstract
      * Sets the locale option
      *
      * @param  string|Zend_Locale $locale
+     * @throws Zend_Locale_Exception
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_Date provides a fluent interface
      */
     public function setLocale($locale = null)

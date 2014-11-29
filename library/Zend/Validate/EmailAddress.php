@@ -132,8 +132,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
      * 'mx'       => If MX check should be enabled, boolean
      * 'deep'     => If a deep MX check should be done, boolean
      *
-     * @param array|Zend_Config $options OPTIONAL
-     * @return void
+     * @param array|string|Zend_Config $options OPTIONAL
      */
     public function __construct($options = array())
     {
@@ -242,7 +241,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
     /**
      * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
      * @param int                    $allow             OPTIONAL
-     * @return void
+     * @return $this
      */
     public function setHostnameValidator(Zend_Validate_Hostname $hostnameValidator = null, $allow = Zend_Validate_Hostname::ALLOW_DNS)
     {
@@ -283,6 +282,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
      * This only applies when DNS hostnames are validated
      *
      * @param boolean $mx Set allowed to true to validate for MX records, and false to not validate them
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_EmailAddress Provides a fluent inteface
      */
     public function setValidateMx($mx)

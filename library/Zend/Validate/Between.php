@@ -94,7 +94,7 @@ class Zend_Validate_Between extends Zend_Validate_Abstract
      *   'inclusive' => boolean, inclusive border values
      *
      * @param  array|Zend_Config $options
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {
