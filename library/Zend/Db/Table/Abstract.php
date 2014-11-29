@@ -1191,7 +1191,9 @@ abstract class Zend_Db_Table_Abstract
                      */
                     foreach ($depTables as $tableClass) {
                         $t = self::getTableFromString($tableClass, $this);
-                        $t->_cascadeDelete($tableClass, $row->getPrimaryKey());
+                        $t->_cascadeDelete(
+                            get_class($this), $row->getPrimaryKey()
+                        );
                     }
                 }
             }
