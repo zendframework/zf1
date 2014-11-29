@@ -237,6 +237,21 @@ class Zend_Http_Header_SetCookieTest extends PHPUnit_Framework_TestCase
         $response->setRawHeader($cookie);
         $this->assertContains((string)$cookie, $response->sendHeaders());
     }
+
+    /**
+     * @group GH-295
+     */
+    public function testMultipleCookies()
+    {
+        $setCookieHeader = new Zend_Http_Header_SetCookie('othername1', 'othervalue1');
+        $appendCookie    = new Zend_Http_Header_SetCookie('othername2', 'othervalue2');
+        $headerLine      = $setCookieHeader->toStringMultipleHeaders(array($appendCookie));
+
+        $response = new Zend_Controller_Response_HttpTestCase();
+        $response->setRawHeader($headerLine);
+
+        $this->assertEquals((array)$headerLine, $response->sendHeaders());
+    }
     
     /**
      * Provide valid cookie strings with information about them
