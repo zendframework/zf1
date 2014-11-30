@@ -35,18 +35,25 @@ require_once 'Zend/Service/Amazon/Exception.php';
  */
 class Zend_Service_Amazon_SimpleDb_Page
 {
-    /** @var string Page data */
+    /**
+     * Page data
+     *
+     * @var string
+     */
     protected $_data;
 
-    /** @var string|null Token identifying page */
+    /**
+     * Token identifying page
+     *
+     * @var string|null
+     */
     protected $_token;
 
     /**
      * Constructor
      *
-     * @param  string $data
-     * @param  string|null $token
-     * @return void
+     * @param string      $data
+     * @param string|null $token
      */
     public function __construct($data, $token = null)
     {
@@ -97,7 +104,7 @@ class Zend_Service_Amazon_SimpleDb_Page
     /**
      * Determine whether this is the last page of data
      *
-     * @return void
+     * @return bool
      */
     public function isLast()
     {
