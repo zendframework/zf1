@@ -532,17 +532,17 @@ class Zend_Service_Amazon_SimpleDb extends Zend_Service_Amazon_Abstract
      * @param array $parameters the parameters for which to get the signature.
      * @return string the signed data.
      */
-    protected function _signParameters(array $paramaters)
+    protected function _signParameters(array $parameters)
     {
         $data  = "POST\n";
         $data .= $this->getEndpoint()->getHost() . "\n";
         $data .= "/\n";
 
-        uksort($paramaters, 'strcmp');
-        unset($paramaters['Signature']);
+        uksort($parameters, 'strcmp');
+        unset($parameters['Signature']);
 
         $arrData = array();
-        foreach ($paramaters as $key => $value) {
+        foreach ($parameters as $key => $value) {
             $value = urlencode($value);
             $value = str_replace("%7E", "~", $value);
             $value = str_replace("+", "%20", $value);
