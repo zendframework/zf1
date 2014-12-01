@@ -80,6 +80,23 @@ class Zend_Service_Amazon_SimpleDb_PageTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->page->getToken());
     }
 
+    public function testIsLastShouldReturnTrueWhenNoTokenIsSet()
+    {
+        $this->assertTrue($this->page->isLast());
+    }
+
+    public function testIsLastShouldReturnFalseWhenTokenIsSet()
+    {
+        $this->page->setToken('token');
+        $this->assertFalse($this->page->isLast());
+    }
+
+    public function testIsLastShouldReturnTrueWhenTokenIsRemoved()
+    {
+        $this->page->setToken('');
+        $this->assertTrue($this->page->isLast());
+    }
+
     public function testToStringMethod()
     {
         $this->page->setData('data');
