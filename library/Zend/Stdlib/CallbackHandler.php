@@ -101,7 +101,10 @@ class Zend_Stdlib_CallbackHandler
         }
 
         // If pecl/weakref is not installed, simply store the callback and return
-        if (!class_exists('WeakRef')) {
+        set_error_handler(array($this, 'errorHandler'), E_WARNING);
+        $callable = class_exists('WeakRef');
+        restore_error_handler();
+        if (!$callable || $this->error) {
             $this->callback = $callback;
             return;
         }
