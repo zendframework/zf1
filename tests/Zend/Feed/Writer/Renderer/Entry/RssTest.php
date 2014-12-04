@@ -367,4 +367,17 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, (array) $entry->getCategories());
     }
 
+    /**
+     * @group GH-461
+     */
+    public function testCategoryHasCDataSection()
+    {
+        $this->_validEntry->addCategory(array(
+            'term' => 'This is a test category',
+        ));
+        $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
+        $xmlString = $renderer->render()->saveXml();
+        $this->assertContains('<category><![CDATA[This is a test category]]></category>', $xmlString);
+    }
+
 }
