@@ -550,7 +550,7 @@ class Zend_Json_Server extends Zend_Server_Abstract
                     $orderedParams[ $refParam->getName() ] = $refParam->getDefaultValue();
                 } else {
                     throw new Zend_Server_Exception(
-                        'Missing required parameter: ' . $refParam->getName()
+                        'Method ' . $request->getMethod() .  'is missing required parameter: ' . $refParam->getName()
                     );
                 }
             }
