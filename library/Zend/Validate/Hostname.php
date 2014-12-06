@@ -1484,7 +1484,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                         // Check each domain part
                         $checked = false;
                         foreach($regexChars as $regexKey => $regexChar) {
-                            $status = @preg_match($regexChar, $domainPart);
+                            $status = preg_match($regexChar, $domainPart);
                             if ($status > 0) {
                                 $length = 63;
                                 if (array_key_exists(strtoupper($this->_tld), $this->_idnLength)
