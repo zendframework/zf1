@@ -48,8 +48,9 @@ abstract class Zend_Log_Writer_Abstract implements Zend_Log_FactoryInterface
     /**
      * Add a filter specific to this writer.
      *
-     * @param  Zend_Log_Filter_Interface  $filter
+     * @param  Zend_Log_Filter_Interface|int $filter Filter class or filter priority
      * @return Zend_Log_Writer_Abstract
+     * @throws Zend_Log_Exception
      */
     public function addFilter($filter)
     {
