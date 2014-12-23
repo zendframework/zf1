@@ -37,8 +37,18 @@ require_once 'Zend/Mime/Part.php';
  */
 class Zend_Mime_Message
 {
+    /**
+     * The Zend_Mime_Parts of the message
+     *
+     * @var array
+     */
     protected $_parts = array();
 
+    /**
+     * The Zend_Mime object for the message
+     *
+     * @var Zend_Mime|null
+     */
     protected $_mime = null;
 
     /**
@@ -169,7 +179,8 @@ class Zend_Mime_Message
     /**
      * Get the headers of a given part as a string
      *
-     * @param int $partnum
+     * @param  int    $partnum
+     * @param  string $EOL
      * @return string
      */
     public function getPartHeaders($partnum, $EOL = Zend_Mime::LINEEND)
@@ -180,7 +191,8 @@ class Zend_Mime_Message
     /**
      * Get the (encoded) content of a given part as a string
      *
-     * @param int $partnum
+     * @param  int    $partnum
+     * @param  string $EOL
      * @return string
      */
     public function getPartContent($partnum, $EOL = Zend_Mime::LINEEND)
