@@ -32,7 +32,8 @@ require_once 'Zend/Mime.php';
  * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Mime_Part {
+class Zend_Mime_Part
+{
 
     /**
      * Type
@@ -121,7 +122,7 @@ class Zend_Mime_Part {
      * The (unencoded) content of the Part as passed
      * as a string or stream
      *
-     * @param mixed $content  String or Stream containing the content
+     * @param mixed $content String or Stream containing the content
      */
     public function __construct($content)
     {
@@ -147,7 +148,7 @@ class Zend_Mime_Part {
      */
     public function isStream()
     {
-      return $this->_isStream;
+        return $this->_isStream;
     }
 
     /**
@@ -161,7 +162,9 @@ class Zend_Mime_Part {
     {
         if (!$this->_isStream) {
             require_once 'Zend/Mime/Exception.php';
-            throw new Zend_Mime_Exception('Attempt to get a stream from a string part');
+            throw new Zend_Mime_Exception(
+                'Attempt to get a stream from a string part'
+            );
         }
 
         //stream_filter_remove(); // ??? is that right?
@@ -178,9 +181,12 @@ class Zend_Mime_Part {
                 );
                 if (!is_resource($filter)) {
                     require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append quoted-printable filter');
+                    throw new Zend_Mime_Exception(
+                        'Failed to append quoted-printable filter'
+                    );
                 }
                 break;
+
             case Zend_Mime::ENCODING_BASE64:
                 $filter = stream_filter_append(
                     $this->_content,
@@ -193,11 +199,15 @@ class Zend_Mime_Part {
                 );
                 if (!is_resource($filter)) {
                     require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append base64 filter');
+                    throw new Zend_Mime_Exception(
+                        'Failed to append base64 filter'
+                    );
                 }
                 break;
+
             default:
         }
+
         return $this->_content;
     }
 
@@ -216,7 +226,7 @@ class Zend_Mime_Part {
             return Zend_Mime::encode($this->_content, $this->encoding, $EOL);
         }
     }
-    
+
     /**
      * Get the RAW unencoded content from this part
      *
@@ -248,17 +258,26 @@ class Zend_Mime_Part {
 
         if ($this->boundary) {
             $contentType .= ';' . $EOL
-                          . " boundary=\"" . $this->boundary . '"';
+                            . " boundary=\"" . $this->boundary . '"';
         }
 
-        $headers[] = array('Content-Type', $contentType);
+        $headers[] = array(
+            'Content-Type',
+            $contentType
+        );
 
         if ($this->encoding) {
-            $headers[] = array('Content-Transfer-Encoding', $this->encoding);
+            $headers[] = array(
+                'Content-Transfer-Encoding',
+                $this->encoding
+            );
         }
 
         if ($this->id) {
-            $headers[]  = array('Content-ID', '<' . $this->id . '>');
+            $headers[] = array(
+                'Content-ID',
+                '<' . $this->id . '>'
+            );
         }
 
         if ($this->disposition) {
@@ -266,19 +285,31 @@ class Zend_Mime_Part {
             if ($this->filename) {
                 $disposition .= '; filename="' . $this->filename . '"';
             }
-            $headers[] = array('Content-Disposition', $disposition);
+            $headers[] = array(
+                'Content-Disposition',
+                $disposition
+            );
         }
 
         if ($this->description) {
-            $headers[] = array('Content-Description', $this->description);
+            $headers[] = array(
+                'Content-Description',
+                $this->description
+            );
         }
 
         if ($this->location) {
-            $headers[] = array('Content-Location', $this->location);
+            $headers[] = array(
+                'Content-Location',
+                $this->location
+            );
         }
 
-        if ($this->language){
-            $headers[] = array('Content-Language', $this->language);
+        if ($this->language) {
+            $headers[] = array(
+                'Content-Language',
+                $this->language
+            );
         }
 
         return $headers;
