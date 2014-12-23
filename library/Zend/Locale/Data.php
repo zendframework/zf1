@@ -327,7 +327,7 @@ class Zend_Locale_Data
         }
 
         $val = urlencode($val);
-        $id = strtr('Zend_LocaleL_' . $locale . '_' . $path . '_' . $val, array('-' => '_', '%' => '_', '+' => '_'));
+        $id  = self::_filterCacheId('Zend_LocaleL_' . $locale . '_' . $path . '_' . $val);
         if (!self::$_cacheDisabled && ($result = self::$_cache->load($id))) {
             return unserialize($result);
         }
@@ -976,7 +976,7 @@ class Zend_Locale_Data
             $val = implode('_' , $value);
         }
         $val = urlencode($val);
-        $id = strtr('Zend_LocaleC_' . $locale . '_' . $path . '_' . $val, array('-' => '_', '%' => '_', '+' => '_'));
+        $id  = self::_filterCacheId('Zend_LocaleC_' . $locale . '_' . $path . '_' . $val);
         if (!self::$_cacheDisabled && ($result = self::$_cache->load($id))) {
             return unserialize($result);
         }
@@ -1580,5 +1580,24 @@ class Zend_Locale_Data
         }
 
         return self::$_cacheTags;
+    }
+
+    /**
+     * Filter an ID to only allow valid variable characters
+     *
+     * @param  string $value
+     * @return string
+     */
+    protected static function _filterCacheId($value)
+    {
+        return strtr(
+            $value,
+            array(
+                '-' => '_',
+                '%' => '_',
+                '+' => '_',
+                '.' => '_',
+            )
+        );
     }
 }
