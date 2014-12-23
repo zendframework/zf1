@@ -624,6 +624,8 @@ class Zend_Service_SlideShare
      * Converts a SimpleXMLElement object representing a response from the service
      * into a Zend_Service_SlideShare_SlideShow object
      *
+     * @see http://www.slideshare.net/developers/documentation#get_slideshow
+     *
      * @param SimpleXMLElement $node The input XML from the slideshare.net service
      * @return Zend_Service_SlideShare_SlideShow The resulting object
      * @throws Zend_Service_SlideShare_Exception
@@ -636,9 +638,9 @@ class Zend_Service_SlideShare
 
             $ss->setId((string)$node->ID);
             $ss->setDescription((string)$node->Description);
-            $ss->setEmbedCode((string)$node->EmbedCode);
+            $ss->setEmbedCode((string)$node->Embed);
             $ss->setNumViews((string)$node->Views);
-            $ss->setPermaLink((string)$node->Permalink);
+            $ss->setUrl((string)$node->URL);
             $ss->setStatus((string)$node->Status);
             $ss->setStatusDescription((string)$node->StatusDescription);
 
@@ -648,7 +650,7 @@ class Zend_Service_SlideShare
                 }
             }
 
-            $ss->setThumbnailUrl((string)$node->Thumbnail);
+            $ss->setThumbnailUrl((string)$node->ThumbnailURL);
             $ss->setTitle((string)$node->Title);
             $ss->setLocation((string)$node->Location);
             $ss->setTranscript((string)$node->Transcript);
