@@ -31,10 +31,13 @@ cd php-invoker && git checkout 1.1.1 && cd ..
 cd php-text-template && git checkout 1.1.2 && cd ..
 cd php-timer && git checkout 1.0.3 && cd ..
 cd php-token-stream && git checkout 1.1.4 && cd ..
-cd phpunit && git checkout 3.6 && cd ..
+cd phpunit && git checkout 3.6.12 && cd ..
 cd phpunit-mock-objects && git checkout 1.1 && cd ..
 cd phpunit-selenium && git checkout 1.1 && cd ..
 cd phpunit-story && git checkout 1.0.0 && cd ..
+
+sed -i 's/@package_version@/3.6.12/g' phpunit/PHPUnit/Runner/Version.php
+cat phpunit/PHPUnit/Runner/Version.php
 
 cd phpunit
 
