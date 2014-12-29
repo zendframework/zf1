@@ -55,7 +55,7 @@ class Zend_Filter_Compress_TarTest extends PHPUnit_Framework_TestCase
         if (!class_exists('Archive_Tar')) {
             require_once 'Zend/Loader.php';
             try {
-                Zend_Loader::loadClass('Archive_Tar');
+                @Zend_Loader::loadClass('Archive_Tar');
             } catch (Zend_Exception $e) {
                 $this->markTestSkipped('This filter needs PEARs Archive_Tar');
             }
