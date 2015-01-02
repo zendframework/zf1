@@ -986,8 +986,10 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
         }
 
         // Try to get it from the $_SERVER array first
-        $temp = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
-        if (isset($_SERVER[$temp])) {
+        $temp = strtoupper(str_replace('-', '_', $header));
+        if (isset($_SERVER['HTTP_' . $temp])) {
+            return $_SERVER['HTTP_' . $temp];
+        } else if /* CGI env */ (isset($_SERVER[$temp]) && in_array($temp, array('CONTENT_TYPE', 'CONTENT_LENGTH'))) {
             return $_SERVER[$temp];
         }
 
