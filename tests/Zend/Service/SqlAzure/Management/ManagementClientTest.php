@@ -16,7 +16,7 @@
  * @package    Zend_Service_WindowsAzure
  * @subpackage UnitTests
  * @version    $Id$
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -40,7 +40,7 @@ require_once 'Zend/Service/SqlAzure/Management/Client.php';
  * @package    Zend_Service_SqlAzure
  * @subpackage UnitTests
  * @version    $Id$
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_SqlAzure_Management_ManagementClientTest extends PHPUnit_Framework_TestCase

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Exception
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,7 +30,7 @@ require_once 'Zend/Locale.php';
  * @package    Zend_resources
  * @subpackage UnitTests
  * @group      Zend_Exception
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class resources_languages_Zend_ValidateTest extends PHPUnit_Framework_TestCase

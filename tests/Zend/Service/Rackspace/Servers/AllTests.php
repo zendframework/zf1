@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Rackspace
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id $
  */
@@ -31,7 +31,7 @@ require_once 'Zend/Service/Rackspace/Servers/OnlineTest.php';
  * @category   Zend
  * @package    Zend_Service_Rackspace_Servers
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Rackspace_Servers_AllTests
