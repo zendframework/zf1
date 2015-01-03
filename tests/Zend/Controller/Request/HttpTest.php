@@ -660,6 +660,22 @@ class Zend_Controller_Request_HttpTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_request->getHeader('X-No-Such-Thing'));
     }
 
+    /**
+     * @see https://www.ietf.org/rfc/rfc3875 (4.1.2. and 4.1.3.)
+     */
+    public function testGetContentHeadersOnPostRequest()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['CONTENT_LENGTH'] = 100;
+        $_SERVER['CONTENT_TYPE']   = 'application/x-www-form-urlencoded';
+
+        $this->assertEquals(100, $this->_request->getHeader('Content-Length'));
+        $this->assertEquals(
+            'application/x-www-form-urlencoded',
+            $this->_request->getHeader('Content-Type')
+        );
+    }
+
     public function testGetHeaderThrowsExceptionWithNoInput()
     {
         try {
