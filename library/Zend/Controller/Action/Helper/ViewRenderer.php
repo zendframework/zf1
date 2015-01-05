@@ -842,7 +842,11 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         $request    = $this->getRequest();
         $dispatcher = $this->getFrontController()->getDispatcher();
         $module     = $dispatcher->formatModuleName($request->getModuleName());
-        $controller = $request->getControllerName();
+        $controller = substr(
+            $dispatcher->formatControllerName($request->getControllerName()),
+            0,
+            -10
+        );
         $action     = $dispatcher->formatActionName($request->getActionName());
 
         $params     = compact('module', 'controller', 'action');

@@ -904,6 +904,40 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         );
     }
 
+    /**
+     * @group GH-440
+     * @dataProvider providerControllerNameDoesNotIncludeDisallowedCharacters
+     */
+    public function testControllerNameDoesNotIncludeDisallowedCharacters($controllerName)
+    {
+        $this->request->setControllerName($controllerName)
+                      ->setActionName('index');
+
+        $this->helper->setActionController(
+            new Bar_IndexController(
+                $this->request, $this->response, array()
+            )
+        );
+
+        $this->assertEquals(
+            'index/index.phtml', $this->helper->getViewScript()
+        );
+    }
+
+    /**
+     * Data provider for testControllerNameDoesNotIncludeDisallowedCharacters
+     * @group GH-440
+     * @return array
+     */
+    public function providerControllerNameDoesNotIncludeDisallowedCharacters()
+    {
+        return array(
+            array('!index'),
+            array('@index'),
+            array('-index'),
+        );
+    }
+
     protected function _normalizePath($path)
     {
         return str_replace(array('/', '\\'), '/', $path);
