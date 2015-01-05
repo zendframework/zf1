@@ -541,7 +541,7 @@ class Zend_Rest_ServerTest extends PHPUnit_Framework_TestCase
      * @see ZF-1949
      * @group ZF-1949
      */
-    public function testMissingArgumentsWithDefaultsShouldNotResultInFaultResponse()
+    public function testMissingAnonymousArgumentsWithDefaultsShouldNotResultInFaultResponse()
     {
         $server = new Zend_Rest_Server();
         $server->setClass('Zend_Rest_Server_Test');
@@ -549,7 +549,7 @@ class Zend_Rest_ServerTest extends PHPUnit_Framework_TestCase
         $server->handle(array('method' => 'testFunc7', 'arg1' => "Davey"));
         $result = ob_get_clean();
         $this->assertContains('<status>success</status>', $result, var_export($result, 1));
-        $this->assertContains('<response>Hello today, How are you Davey</response>', $result, var_export($result, 1));
+        $this->assertContains('<response>Hello Davey, How are you today</response>', $result, var_export($result, 1));
     }
 
     /**
@@ -576,6 +576,34 @@ class Zend_Rest_ServerTest extends PHPUnit_Framework_TestCase
         $response = $server->handle();
         $this->assertContains('<status>failed</status>', $response);
         $this->assertNotContains('<message>An unknown error occured. Please try again.</message>', $response);
+    }
+
+    /**
+     * @group GH-187
+     */
+    public function testMissingZeroBasedAnonymousArgumentsWithDefaultsShouldNotResultInFaultResponse()
+    {
+        $server = new Zend_Rest_Server();
+        $server->setClass('Zend_Rest_Server_Test');
+        ob_start();
+        $server->handle(array('method' => 'testFunc7', 'arg0' => "Davey"));
+        $result = ob_get_clean();
+        $this->assertContains('<status>success</status>', $result, var_export($result, 1));
+        $this->assertContains('<response>Hello Davey, How are you today</response>', $result, var_export($result, 1));
+    }
+
+    /**
+     * @group GH-187
+     */
+    public function testMissingNamesArgumentsWithDefaultsShouldNotResultInFaultResponse()
+    {
+        $server = new Zend_Rest_Server();
+        $server->setClass('Zend_Rest_Server_Test');
+        ob_start();
+        $server->handle(array('method' => 'testFunc7', 'who' => "Davey"));
+        $result = ob_get_clean();
+        $this->assertContains('<status>success</status>', $result, var_export($result, 1));
+        $this->assertContains('<response>Hello Davey, How are you today</response>', $result, var_export($result, 1));
     }
 }
 

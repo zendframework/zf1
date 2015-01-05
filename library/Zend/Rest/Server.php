@@ -189,27 +189,34 @@ class Zend_Rest_Server implements Zend_Server_Interface
 
                     $func_args = $this->_functions[$this->_method]->getParameters();
 
+                    // calling_args will be a zero-based array of the parameters
                     $calling_args = array();
                     $missing_args = array();
-                    foreach ($func_args as $arg) {
+                    foreach ($func_args as $i => $arg) {
                         if (isset($request[strtolower($arg->getName())])) {
-                            $calling_args[] = $request[strtolower($arg->getName())];
+                            $calling_args[$i] = $request[strtolower($arg->getName())];
                         } elseif ($arg->isOptional()) {
-                            $calling_args[] = $arg->getDefaultValue();
+                            $calling_args[$i] = $arg->getDefaultValue();
                         } else {
                             $missing_args[] = $arg->getName();
                         }
                     }
 
+                    $anonymousArgs = array();
                     foreach ($request as $key => $value) {
                         if (substr($key, 0, 3) == 'arg') {
                             $key = str_replace('arg', '', $key);
-                            $calling_args[$key] = $value;
+                            $anonymousArgs[$key] = $value;
                             if (($index = array_search($key, $missing_args)) !== false) {
                                 unset($missing_args[$index]);
                             }
                         }
                     }
+
+                    // re-key the $anonymousArgs to be zero-based, and add in
+                    // any values already set in calling_args (optional defaults)
+                    ksort($anonymousArgs);
+                    $calling_args = array_values($anonymousArgs) + $calling_args;
 
                     // Sort arguments by key -- @see ZF-2279
                     ksort($calling_args);
