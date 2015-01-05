@@ -449,7 +449,14 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
     private function _validateMXRecords()
     {
         $mxHosts = array();
-        $result = getmxrr($this->_hostname, $mxHosts);
+        $hostname = $this->_hostname;
+
+        //decode IDN domain name if possible
+        if (function_exists('idn_to_ascii')) {
+            $hostname = idn_to_ascii($this->_hostname);
+        }
+
+        $result = getmxrr($hostname, $mxHosts);
         if (!$result) {
             $this->_error(self::INVALID_MX_RECORD);
         } else if ($this->_options['deep'] && function_exists('checkdnsrr')) {

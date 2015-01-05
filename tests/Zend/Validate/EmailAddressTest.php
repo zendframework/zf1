@@ -622,6 +622,19 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         $hostname = $this->_validator->getHostnameValidator();
         $this->assertTrue($hostname instanceof Zend_Validate_Hostname);
     }
+
+    /**
+     * @group GH-62
+     */
+    public function testIdnHostnameInEmaillAddress()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped('idn_to_ascii() is available in intl in PHP 5.3.0+');
+        }
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->setValidateMx(true);
+        $this->assertTrue($validator->isValid('testmail@detrèsbonsdomaines.com'));
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Validate_EmailAddressTest::main') {
