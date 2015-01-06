@@ -91,8 +91,8 @@ class Zend_EventManager_EventManager implements Zend_EventManager_EventCollectio
     /**
      * Set static collections container
      *
-     * @param  Zend_EventManager_StaticEventCollection $collections
-     * @return void
+     * @param  Zend_EventManager_SharedEventCollection $collections
+     * @return $this
      */
     public function setSharedCollections(Zend_EventManager_SharedEventCollection $collections)
     {

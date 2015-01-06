@@ -52,8 +52,8 @@ class Zend_EventManager_GlobalEventManager
 
     /**
      * Get event collection on which this operates
-     * 
-     * @return void
+     *
+     * @return Zend_EventManager_EventCollection
      */
     public static function getEventCollection()
     {

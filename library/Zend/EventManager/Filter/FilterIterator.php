@@ -90,11 +90,11 @@ class Zend_EventManager_Filter_FilterIterator extends Zend_Stdlib_SplPriorityQue
      * Iterate the next filter in the chain
      *
      * Iterates and calls the next filter in the chain.
-     * 
-     * @param  mixed $context 
-     * @param  array $params 
-     * @param  Zend_EventManager_Filter_FilterIterator $chain 
-     * @return void
+     *
+     * @param  mixed                                   $context
+     * @param  array                                   $params
+     * @param  Zend_EventManager_Filter_FilterIterator $chain
+     * @return mixed
      */
     public function next($context = null, array $params = array(), $chain = null)
     {
