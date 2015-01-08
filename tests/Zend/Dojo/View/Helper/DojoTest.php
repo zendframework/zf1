@@ -235,6 +235,24 @@ class Zend_Dojo_View_Helper_DojoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1.0', $this->helper->getCdnVersion());
     }
 
+    /**
+     * @group GH-488
+     */
+    public function testSetCdnVersionForHigherMinorReleases()
+    {
+        $this->helper->setCdnVersion('1.10');
+        $this->assertEquals('1.10', $this->helper->getCdnVersion());
+    }
+
+    /**
+     * @group GH-488
+     */
+    public function testSetCdnVersionForHigherMiniReleases()
+    {
+        $this->helper->setCdnVersion('1.10.29');
+        $this->assertEquals('1.10.29', $this->helper->getCdnVersion());
+    }
+
     public function testShouldUseAolCdnDojoPathByDefault()
     {
         $this->assertEquals(Zend_Dojo::CDN_DOJO_PATH_AOL, $this->helper->getCdnDojoPath());

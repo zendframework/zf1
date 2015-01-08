@@ -430,7 +430,7 @@ class Zend_Dojo_View_Helper_Dojo_Container
     public function setCdnVersion($version = null)
     {
         $this->enable();
-        if (preg_match('/^[1-9]\.[0-9](\.[0-9])?$/', $version)) {
+        if (preg_match('/^[1-9]\.[0-9]{1,2}(\.[0-9]{1,2})?$/', $version)) {
             $this->_cdnVersion = $version;
         }
         return $this;
