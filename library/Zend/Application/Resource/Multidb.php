@@ -114,7 +114,7 @@ class Zend_Application_Resource_Multidb extends Zend_Application_Resource_Resour
      */
     public function isDefault($db)
     {
-        if(!$db instanceof Zend_Db_Adapter_Abstract) {
+        if (!$db instanceof Zend_Db_Adapter_Abstract) {
             $db = $this->getDb($db);
         }
 
