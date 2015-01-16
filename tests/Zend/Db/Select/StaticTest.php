@@ -874,6 +874,26 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, 1, 2), 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
     }
 
+    public function testDeepNestedIfInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+            'table1.id = table2.id',
+            array('bar' => 'IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, SUM(1), 2), 0)'));
+        $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, SUM(1), 2), 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
+    }
+
+    public function testNestedUnbalancedParenthesesInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+            'table1.id = table2.id',
+            array('bar' => 'IF(SUM()'));
+        $this->assertEquals("SELECT \"table1\".*, \"table2\".\"IF(SUM()\" AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
+    }
+
     /**
      * @group ZF-378
      */
