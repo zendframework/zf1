@@ -48,7 +48,10 @@ class Zend_Db_TestUtil_Pdo_Mssql extends Zend_Db_TestUtil_Pdo_Common
             'port'     => 'TESTS_ZEND_DB_ADAPTER_PDO_MSSQL_PORT'
         );
 
-        return parent::getParams($constants);
+        $params = parent::getParams($constants);
+        $params['pdoType'] = 'dblib';
+
+        return $params;
     }
 
     public function getSqlType($type)
