@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -25,6 +25,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 require_once 'Zend/Loader/AutoloaderTest.php';
+require_once 'Zend/Loader/AutoloaderFactoryClassMapLoaderTest.php';
 require_once 'Zend/Loader/AutoloaderFactoryTest.php';
 require_once 'Zend/Loader/AutoloaderMultiVersionTest.php';
 require_once 'Zend/Loader/Autoloader/ResourceTest.php';
@@ -36,7 +37,7 @@ require_once 'Zend/Loader/StandardAutoloaderTest.php';
  * @category   Zend
  * @package    Zend_Loader
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Loader
  */
@@ -52,6 +53,7 @@ class Zend_Loader_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Loader');
 
         $suite->addTestSuite('Zend_Loader_AutoloaderTest');
+        $suite->addTestSuite('Zend_Loader_AutoloaderFactoryClassMapLoaderTest');
         $suite->addTestSuite('Zend_Loader_AutoloaderFactoryTest');
         $suite->addTestSuite('Zend_Loader_AutoloaderMultiVersionTest');
         $suite->addTestSuite('Zend_Loader_Autoloader_ResourceTest');

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -43,7 +43,10 @@ if (!is_executable($PHPUNIT)) {
     echo "PHPUnit is not executable ($PHPUNIT)";
 }
 
-if ($_SERVER['TRAVIS_PHP_VERSION'] != '5.2') {
+if ($_SERVER['TRAVIS_PHP_VERSION'] == '5.2') {
+    //PHPUnit from git clone
+    $PHPUNIT = 'php -d include_path=\'.:./phpunit/phpunit/:./phpunit/dbunit/:./phpunit/php-code-coverage/:./phpunit/php-file-iterator/:./phpunit/php-invoker/:./phpunit/php-text-template/:./phpunit/php-timer:./phpunit/php-token-stream:./phpunit/phpunit-mock-objects/:./phpunit/phpunit-selenium/:./phpunit/phpunit-story/:/usr/local/lib/php\' ./phpunit/phpunit/phpunit.php';
+} else {
     $PHPUNIT = '../bin/phpunit'; //PHPUnit from composer
 }
 

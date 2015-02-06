@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Stdlib
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -30,7 +30,7 @@ require_once 'Zend/Stdlib/PriorityQueue.php';
  * @package    Zend_Stdlib
  * @subpackage UnitTests
  * @group      Zend_Stdlib
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Stdlib_PriorityQueueTest extends PHPUnit_Framework_TestCase

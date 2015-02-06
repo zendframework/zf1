@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Soap
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -36,7 +36,7 @@ require_once 'Zend/Config.php';
  * @category   Zend
  * @package    Zend_Soap
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Soap
  */
@@ -258,6 +258,42 @@ class Zend_Soap_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertNull($client->getCompressionOptions());
         $options = $client->getOptions();
         $this->assertArrayNotHasKey('compression', $options);
+    }
+
+    /**
+     * @group GH-32
+     */
+    public function testGetAndSetExceptionsOption()
+    {
+        $client = new Zend_Soap_Client();
+        $this->assertNull($client->getExceptions());
+        $this->assertEquals(
+            array(
+                'encoding'     => 'UTF-8',
+                'soap_version' => 2,
+            ),
+            $client->getOptions()
+        );
+
+        $client->setExceptions(true);
+        $this->assertTrue($client->getExceptions());
+
+        $client->setExceptions(false);
+        $this->assertFalse($client->getExceptions());
+
+        $client->setOptions(array('exceptions' => true));
+        $this->assertTrue($client->getExceptions());
+
+        $client = new Zend_Soap_Client(null, array('exceptions' => false));
+        $this->assertFalse($client->getExceptions());
+        $this->assertEquals(
+            array(
+                'encoding'     => 'UTF-8',
+                'soap_version' => 2,
+                'exceptions'   => false,
+            ),
+            $client->getOptions()
+        );
     }
 
     public function testGetFunctions()

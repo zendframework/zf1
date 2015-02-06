@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Amazon_SimpleDb
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: OnlineTest.php 11973 2008-10-15 16:00:56Z matthew $
  */
@@ -49,7 +49,7 @@ require_once 'Zend/Config/Ini.php';
  * @category   Zend
  * @package    Zend_Service_Amazon_SimpleDb
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Amazon_SimpleDb_OnlineTest extends PHPUnit_Framework_TestCase

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Ebay
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: OfflineTest.php 22824 2010-08-09 18:59:54Z renanbr $
  */
@@ -39,7 +39,7 @@ require_once 'Zend/Service/Ebay/Finding/Response/Items.php';
  * @category   Zend
  * @package    Zend_Service_Ebay
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Ebay_OfflineTest extends PHPUnit_Framework_TestCase

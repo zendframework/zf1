@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,7 +30,7 @@ require_once 'Zend/Locale/Data.php';
  * @category   Zend
  * @package    Zend_Locale
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Locale
  */
@@ -7229,5 +7229,29 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
         $result = Zend_Locale_Data::getList('de_AT', 'type', '');
         $this->assertTrue(is_array($result));
         $this->assertTrue(count($result) > 0);
+    }
+
+    /**
+     * @group GH-465
+     */
+    public function testCreateValidCacheIdsInGetContentMethod()
+    {
+        try {
+            $content = Zend_Locale_Data::getContent('de_DE', 'language', 1234.56);
+        } catch (Zend_Cache_Exception $e) {
+            $this->fail($e->getMessage());
+        }
+    }
+
+    /**
+     * @group GH-465
+     */
+    public function testCreateValidCacheIdsInGetListMethod()
+    {
+        try {
+            $list = Zend_Locale_Data::getList('de_DE', 'language', 1234.56);
+        } catch (Zend_Cache_Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
 }
