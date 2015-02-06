@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Json_Server
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,6 +29,7 @@ require_once 'Zend/Json/Server.php';
 require_once 'Zend/Json/Server/Request.php';
 require_once 'Zend/Json/Server/Response.php';
 require_once 'Zend/Json.php';
+require_once 'Zend/Server/Exception.php';
 
 /**
  * Test class for Zend_Json_Server
@@ -36,7 +37,7 @@ require_once 'Zend/Json.php';
  * @category   Zend
  * @package    Zend_Json_Server
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Json
  * @group      Zend_Json_Server
@@ -308,6 +309,22 @@ class Zend_Json_ServerTest extends PHPUnit_Framework_TestCase
         $this->assertNull($result[2]);
     }
 
+    public function testHandleValidMethodWithMissingParamsShouldThrowException()
+    {
+        $this->server->setClass('Zend_Json_ServerTest_Foo')
+            ->setAutoEmitResponse(false);
+        $request = $this->server->getRequest();
+        $request->setMethod('bar')
+            ->setParams(array('one' => null))
+            ->setId('foo');
+        try {
+            $response = $this->server->handle();
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof Zend_Server_Exception);
+            $this->assertEquals('Method bar is missing required parameter: one', $e->getMessage());
+        }
+    }
+
     public function testHandleValidMethodWithTooManyParamsShouldWork()
     {
         $this->server->setClass('Zend_Json_ServerTest_Foo')
@@ -478,7 +495,7 @@ class Zend_Json_ServerTest_Foo
     public function bar($one, $two = 'two', $three = null)
     {
         return array($one, $two, $three);
-    }    
+    }
 
     /**
      * Baz

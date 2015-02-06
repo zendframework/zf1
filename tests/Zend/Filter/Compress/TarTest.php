@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Filter
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: $
  */
@@ -34,7 +34,7 @@ require_once 'Zend/Filter/Compress/Tar.php';
  * @package    Zend_Filter
  * @subpackage UnitTests
  * @group      Zend_Filter
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Filter_Compress_TarTest extends PHPUnit_Framework_TestCase
@@ -55,7 +55,7 @@ class Zend_Filter_Compress_TarTest extends PHPUnit_Framework_TestCase
         if (!class_exists('Archive_Tar')) {
             require_once 'Zend/Loader.php';
             try {
-                Zend_Loader::loadClass('Archive_Tar');
+                @Zend_Loader::loadClass('Archive_Tar');
             } catch (Zend_Exception $e) {
                 $this->markTestSkipped('This filter needs PEARs Archive_Tar');
             }

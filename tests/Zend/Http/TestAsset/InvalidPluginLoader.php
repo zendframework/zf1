@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Http_UserAgent
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: JsonTest.php 12081 2008-10-22 19:07:55Z norm2782 $
  */
@@ -24,7 +24,7 @@
  * @category   Zend
  * @package    Zend_Http_UserAgent
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Http_TestAsset_InvalidPluginLoader

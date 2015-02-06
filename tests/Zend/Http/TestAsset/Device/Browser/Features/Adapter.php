@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Http_UserAgent
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: JsonTest.php 12081 2008-10-22 19:07:55Z norm2782 $
  */
@@ -26,7 +26,7 @@ require_once 'Zend/Http/UserAgent/Features/Adapter.php';
  * @category   Zend
  * @package    Zend_Http_UserAgent
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Device_Browser_Features_Adapter implements Zend_Http_UserAgent_Features_Adapter

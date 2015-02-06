@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Http_Response
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -31,7 +31,7 @@ require_once 'Zend/Http/Response.php';
  * @category   Zend
  * @package    Zend_Http_Response
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Http
  * @group      Zend_Http_Response
@@ -240,7 +240,7 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Bad Request', Zend_Http_Response::responseCodeAsText(400));
         $this->assertEquals('Internal Server Error', Zend_Http_Response::responseCodeAsText(500));
 
-        // Make sure that invalid codes return 'Unkown'
+        // Make sure that invalid codes return 'Unknown'
         $this->assertEquals('Unknown', Zend_Http_Response::responseCodeAsText(600));
 
         // Check HTTP/1.0 value for 302

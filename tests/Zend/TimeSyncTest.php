@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_TimeSync
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,7 +29,7 @@ require_once 'Zend/TimeSync.php';
  * @category   Zend
  * @package    Zend_TimeSync
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_TimeSync
  */
@@ -192,7 +192,7 @@ class Zend_TimeSyncTest extends PHPUnit_Framework_TestCase
         $server = new Zend_TimeSync();
 
         try {
-            $server->setServer('unkown_alias');
+            $server->setServer('unknown_alias');
             $this->fail('Exception expected because there is no timeserver which we can mark as current');
         } catch (Zend_TimeSync_Exception $e) {
             // success

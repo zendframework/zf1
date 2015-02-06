@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -37,7 +37,7 @@ require_once 'Zend/Loader.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Db_Adapter_TestCommon extends Zend_Db_TestSetup
@@ -1265,6 +1265,16 @@ abstract class Zend_Db_Adapter_TestCommon extends Zend_Db_TestSetup
         $this->assertTrue(is_string($value));
         $this->assertEquals('foo = 1234 and bar = ?', $value,
             'Incorrect quoteInto() result for count');
+    }
+
+    public function testAdapterQuoteIntoCountAndQuestionMark()
+    {
+        $string = 'foo = ? OR moo = ? OR boo = ?';
+        $param = 'What?';
+        $value = $this->_db->quoteInto($string, $param, null, 2);
+        $this->assertTrue(is_string($value));
+        $this->assertEquals("foo = 'What?' OR moo = 'What?' OR boo = ?", $value,
+            'Incorrect quoteInto() result for count and question mark in value');
     }
 
     public function testAdapterQuoteTypeInt()

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Console_Getop
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -29,7 +29,7 @@ require_once 'Zend/Console/Getopt.php';
  * @category   Zend
  * @package    Zend_Console_Getopt
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Console_Getopt
  */
@@ -267,6 +267,73 @@ class Zend_Console_GetoptTest extends PHPUnit_Framework_TestCase
         $opts = new Zend_Console_Getopt('ab', array('-a'));
         unset($opts->a);
         $this->assertFalse(isset($opts->a));
+    }
+
+    /**
+     * @group GH-377
+     */
+    public function testVerifyRequiredArgument()
+    {
+        $opts = new Zend_Console_Getopt(
+            array('apple|a=s' => "First required argument")
+        );
+
+        try {
+            $opts->parse();
+            $opts->checkRequiredArguments();
+            $this->fail('Expected to catch a Zend_Console_Getopt_Exception');
+        } catch (Zend_Exception $e) {
+            $this->assertTrue(
+                $e instanceof Zend_Console_Getopt_Exception,
+                'Expected Zend_Console_Getopt_Exception, got ' . get_class($e)
+            );
+            $this->assertEquals(
+                'Option "$alias" requires a parameter.', $e->getMessage()
+            );
+        }
+
+        $opts->addArguments(
+            array(
+                "-a",
+                "apple"
+            )
+        );
+        $opts->parse();
+        $opts->checkRequiredArguments();//-> no Exception here
+    }
+
+    /**
+     * @group GH-377
+     */
+    public function testEmptyRequiredOption()
+    {
+        $opts = new Zend_Console_Getopt(
+            array(
+                'apple|a=s' => "First required argument",
+                'banana|b=i' => "Second required argument"
+            )
+        );
+        $opts->addArguments(
+            array(
+                "-a",
+                "-b",
+                "123"
+            )
+        );
+
+        try {
+            $opts->parse();
+            $opts->checkRequiredArguments();
+            $this->fail('Expected to catch a Zend_Console_Getopt_Exception');
+        } catch (Zend_Exception $e) {
+            $this->assertTrue(
+                $e instanceof Zend_Console_Getopt_Exception,
+                'Expected Zend_Console_Getopt_Exception, got ' . get_class($e)
+            );
+            $this->assertEquals(
+                'Option "a" requires a parameter.', $e->getMessage()
+            );
+        }
     }
 
     /**

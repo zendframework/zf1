@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -41,7 +41,7 @@ require_once dirname(__FILE__) . '/../../_files/modules/bar/controllers/IndexCon
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Controller
  * @group      Zend_Controller_Action
@@ -901,6 +901,40 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
             array('-MyBar-'),
             array('MyBar-'),
             array('-MyBar')
+        );
+    }
+
+    /**
+     * @group GH-440
+     * @dataProvider providerControllerNameDoesNotIncludeDisallowedCharacters
+     */
+    public function testControllerNameDoesNotIncludeDisallowedCharacters($controllerName)
+    {
+        $this->request->setControllerName($controllerName)
+                      ->setActionName('index');
+
+        $this->helper->setActionController(
+            new Bar_IndexController(
+                $this->request, $this->response, array()
+            )
+        );
+
+        $this->assertEquals(
+            'index/index.phtml', $this->helper->getViewScript()
+        );
+    }
+
+    /**
+     * Data provider for testControllerNameDoesNotIncludeDisallowedCharacters
+     * @group GH-440
+     * @return array
+     */
+    public function providerControllerNameDoesNotIncludeDisallowedCharacters()
+    {
+        return array(
+            array('!index'),
+            array('@index'),
+            array('-index'),
         );
     }
 

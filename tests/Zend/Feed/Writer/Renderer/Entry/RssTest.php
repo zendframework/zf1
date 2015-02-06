@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Feed
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,7 +30,7 @@ require_once 'Zend/Version.php';
  * @subpackage UnitTests
  * @group      Zend_Feed
  * @group      Zend_Feed_Writer
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
@@ -365,6 +365,19 @@ class Zend_Feed_Writer_Renderer_Entry_RssTest extends PHPUnit_Framework_TestCase
             array('term'=>'cat_dog2', 'label' => 'cat_dog2', 'scheme' => null)
         );
         $this->assertEquals($expected, (array) $entry->getCategories());
+    }
+
+    /**
+     * @group GH-461
+     */
+    public function testCategoryHasCDataSection()
+    {
+        $this->_validEntry->addCategory(array(
+            'term' => 'This is a test category',
+        ));
+        $renderer = new Zend_Feed_Writer_Renderer_Feed_Rss($this->_validWriter);
+        $xmlString = $renderer->render()->saveXml();
+        $this->assertContains('<category><![CDATA[This is a test category]]></category>', $xmlString);
     }
 
 }
