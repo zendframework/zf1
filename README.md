@@ -7,15 +7,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.11 Release.
-Released on February 11, 2015.
+Zend Framework 1.12.12dev Release.
+Released on MMMMMMMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.11
+IMPORTANT FIXES FOR 1.12.12
 ---------------------------
-
-- [#440](https://github.com/zendframework/zf1/issue/506) provides a patch that
-  fixes a bug introduced in 1.12.10 with regards to how the view renderer
-  controller helper resolves a controller's name.
 
 See http://framework.zend.com/changelog for full details.
 
