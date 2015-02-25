@@ -48,7 +48,10 @@ class Zend_Db_TestUtil_Pdo_Mssql extends Zend_Db_TestUtil_Pdo_Common
             'port'     => 'TESTS_ZEND_DB_ADAPTER_PDO_MSSQL_PORT'
         );
 
-        return parent::getParams($constants);
+        $params = parent::getParams($constants);
+        $params['pdoType'] = 'dblib';
+
+        return $params;
     }
 
     public function getSqlType($type)
@@ -85,24 +88,24 @@ class Zend_Db_TestUtil_Pdo_Mssql extends Zend_Db_TestUtil_Pdo_Common
 
     protected function _getSqlCreateTable($tableName)
     {
-        $sql = "exec sp_tables @table_name = " . $this->_db->quoteIdentifier($tableName, true);
-        $stmt = $this->_db->query($sql);
+        $sql = "exec sp_tables @table_name = " . $this->getAdapter()->quoteIdentifier($tableName, true);
+        $stmt = $this->getAdapter()->query($sql);
         $tableList = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         if (count($tableList) > 0 && $tableName == $tableList[0]['TABLE_NAME']) {
             return null;
         }
-        return 'CREATE TABLE ' . $this->_db->quoteIdentifier($tableName);
+        return 'CREATE TABLE ' . $this->getAdapter()->quoteIdentifier($tableName);
     }
 
     private function _getSqlDropElement($elementName, $typeElement = 'TABLE')
     {
-        $sql = "exec sp_tables @table_name = " . $this->_db->quoteIdentifier($elementName, true);
-        $stmt = $this->_db->query($sql);
+        $sql = "exec sp_tables @table_name = " . $this->getAdapter()->quoteIdentifier($elementName, true);
+        $stmt = $this->getAdapter()->query($sql);
         $elementList = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         if (count($elementList) > 0 && $elementName == $elementList[0]['TABLE_NAME']) {
-            return "DROP $typeElement " . $this->_db->quoteIdentifier($elementName);
+            return "DROP $typeElement " . $this->getAdapter()->quoteIdentifier($elementName);
         }
         return null;
     }

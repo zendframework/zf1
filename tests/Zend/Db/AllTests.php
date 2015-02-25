@@ -116,6 +116,9 @@ class Zend_Db_AllTests
 
             // check the PDO driver is available
             $pdo_driver = strtolower($matches[1]);
+            if ('mssql' == $pdo_driver) { // ZF-499
+                $pdo_driver = 'dblib';
+            }
             if (!in_array($pdo_driver, PDO::getAvailableDrivers())) {
                 self::_skipTestSuite($driver, "PDO driver '{$pdo_driver}' is not available");
                 return;

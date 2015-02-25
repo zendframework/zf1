@@ -65,7 +65,7 @@ OPTIONS="--with-gd --with-jpeg-dir=/usr --with-xpm-dir=/usr --with-freetype-dir=
     --enable-spl --enable-pdo --with-pdo-mysql --with-pdo-sqlite \
     --with-ctype --with-bz2 --enable-mbstring --with-mime-magic \
     --with-xmlrpc --with-zlib --disable-zend-memory-manager --with-esmtp \
-    --with-xsl --enable-exif --enable-soap --enable-ftp"
+    --with-xsl --enable-exif --enable-soap --enable-ftp --with-pdo-dblib"
 
 ./configure --prefix=/usr/local/php/${VERSION}${POSTFIX} ${EXTRA_FLAGS} ${OPTIONS}
 
