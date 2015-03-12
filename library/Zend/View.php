@@ -33,6 +33,18 @@ require_once 'Zend/View/Abstract.php';
  * @package    Zend_View
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @method \Zend_View_Helper_BaseUrl baseUrl()
+ * @method \Zend_View_Helper_Doctype doctype()
+ * @method \Zend_View_Helper_HeadLink headLink()
+ * @method \Zend_View_Helper_HeadMeta headMeta()
+ * @method \Zend_View_Helper_HeadScript headScript()
+ * @method \Zend_View_Helper_HeadStyle headStyle()
+ * @method \Zend_View_Helper_HeadTitle headTitle()
+ * @method \Zend_View_Helper_InlineScript inlineScript()
+ * @method \Zend_View_Helper_Json json($data, $keepLayouts = false, $encodeData = true)
+ * @method \Zend_View_Helper_Layout layout()
+ * @method \Zend_View_Helper_Navigation navigation()
+ * @method \Zend_View_Helper_FormRadio formRadio()
  */
 class Zend_View extends Zend_View_Abstract
 {
