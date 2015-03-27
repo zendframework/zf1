@@ -254,4 +254,44 @@ class Zend_Measure_NumberTest extends PHPUnit_Framework_TestCase
         $value = new Zend_Measure_Number('_X',Zend_Measure_Number::ROMAN, 'en');
         $this->assertEquals('10,000 ⑽', $value->convertTo(Zend_Measure_Number::DECIMAL));
     }
+
+    /**
+     * @dataProvider providerConvertingDecimalToRoman
+     * @group GH-536
+     */
+    public function testConvertingDecimalToRoman($decimal, $roman)
+    {
+        $number = new Zend_Measure_Number(
+            $decimal,
+            Zend_Measure_Number::DECIMAL,
+            null
+        );
+
+        $this->assertEquals(
+            $roman,
+            $number->convertTo(Zend_Measure_Number::ROMAN)
+        );
+    }
+
+    /**
+     * Data provider for testConvertingDecimalToRoman
+     * @group GH-536
+     * @return array
+     */
+    public function providerConvertingDecimalToRoman()
+    {
+        return array(
+            array(10, 'X'),
+            array(11, 'XI'),
+            array(12, 'XII'),
+            array(13, 'XIII'),
+            array(14, 'XIV'),
+            array(15, 'XV'),
+            array(16, 'XVI'),
+            array(17, 'XVII'),
+            array(18, 'XVIII'),
+            array(19, 'XIX'),
+            array(20, 'XX'),
+        );
+    }
 }
