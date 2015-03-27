@@ -938,6 +938,25 @@ class Zend_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_T
         );
     }
 
+    /**
+     * @group GH-440
+     */
+    public function testControllerNameFormattingShouldRespectWordCamelCaseToDash()
+    {
+       $this->request->setControllerName('MetadataValidation')
+                     ->setActionName('index');
+
+       $this->helper->setActionController(
+           new Bar_IndexController(
+               $this->request, $this->response, array()
+           )
+       );
+
+       $this->assertEquals(
+           'metadata-validation/index.phtml', $this->helper->getViewScript()
+       );
+    }
+
     protected function _normalizePath($path)
     {
         return str_replace(array('/', '\\'), '/', $path);

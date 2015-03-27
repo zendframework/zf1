@@ -841,14 +841,20 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         $inflector  = $this->getInflector();
         $request    = $this->getRequest();
         $dispatcher = $this->getFrontController()->getDispatcher();
-        $module     = $dispatcher->formatModuleName($request->getModuleName());
-        $controller = $dispatcher->formatControllerName(
-            $request->getControllerName()
-        );
+
+        // Format module name
+        $module = $dispatcher->formatModuleName($request->getModuleName());
+
+        // Format controller name
+        $filter     = new Zend_Filter_Word_CamelCaseToDash();
+        $controller = $filter->filter($request->getControllerName());
+        $controller = $dispatcher->formatControllerName($controller);
         if ('Controller' == substr($controller, -10)) {
             $controller = substr($controller, 0, -10);
         }
-        $action     = $dispatcher->formatActionName($request->getActionName());
+
+        // Format action name
+        $action = $dispatcher->formatActionName($request->getActionName());
 
         $params     = compact('module', 'controller', 'action');
         foreach ($vars as $key => $value) {
