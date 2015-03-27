@@ -846,6 +846,7 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         $module = $dispatcher->formatModuleName($request->getModuleName());
 
         // Format controller name
+        require_once 'Zend/Filter/Word/CamelCaseToDash.php';
         $filter     = new Zend_Filter_Word_CamelCaseToDash();
         $controller = $filter->filter($request->getControllerName());
         $controller = $dispatcher->formatControllerName($controller);
