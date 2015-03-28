@@ -5522,7 +5522,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         Zend_Date::setOptions(array('format_type' => 'php'));
 
         date_default_timezone_set('GMT');
-        $date = new Zend_Date(mktime(20,10,0,09,20,2009));
+        $date = new Zend_Date(mktime(20,10,0,9,20,2009));
         $this->assertSame(gmdate('w',$date->getTimestamp()), $date->toString(      'w'));
         $this->assertSame(gmdate('d',$date->getTimestamp()), $date->toString(      'd'));
         $this->assertSame(gmdate('D',$date->getTimestamp()), $date->toString('D', 'en'));
@@ -5561,7 +5561,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame(gmdate('U',$date->getTimestamp()), $date->toString(      'U'));
 
         date_default_timezone_set('Indian/Maldives');
-        $date = new Zend_Date(mktime(20,10,0,09,20,2009));
+        $date = new Zend_Date(mktime(20,10,0,9,20,2009));
         $this->assertSame(date('w',$date->getTimestamp()), $date->toString(      'w'));
         $this->assertSame(date('d',$date->getTimestamp()), $date->toString(      'd'));
         $this->assertSame(date('D',$date->getTimestamp()), $date->toString('D', 'en'));
