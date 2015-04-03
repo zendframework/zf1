@@ -31,16 +31,3 @@ cat phpunit/PHPUnit/Runner/Version.php
 cd phpunit
 
 php -d include_path='.:../phpunit/:../dbunit/:../php-code-coverage/:../php-file-iterator/:../php-invoker/:../php-text-template/:../php-timer:../php-token-stream:../phpunit-mock-objects/:../phpunit-selenium/:../phpunit-story/:/usr/local/lib/php' ../phpunit/phpunit.php --version
-
-cd ..
-cd ..
-
-# memcache 2.1.0 is the last version to support the php 5.2 branch
-pecl download memcached-2.1.0
-tar zxvf memcached*.tgz && cd memcached*
-make clean
-printf "\n" | phpize
-./configure --with-libmemcached-dir=/usr/local && make && make install
-
-printf "\n" | pecl uninstall memcache
-printf "\n" | pecl install memcache
