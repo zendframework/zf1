@@ -28,7 +28,7 @@ require_once 'Zend/Session/Exception.php';
 
 
 /**
- * Zend_Session_Exception
+ * Zend_Session_Validator_Exception
  *
  * @category   Zend
  * @package    Zend_Session
