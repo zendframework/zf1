@@ -371,5 +371,25 @@ class Zend_Http_Header_SetCookieTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
-}
 
+    public function invalidCookieComponentValues()
+    {
+        return array(
+            'setName'   => array('setName', "This\r\nis\nan\revil\r\n\r\nvalue"),
+            'setValue'  => array('setValue', "This\r\nis\nan\revil\r\n\r\nvalue"),
+            'setDomain' => array('setDomain', "This\r\nis\nan\revil\r\n\r\nvalue"),
+            'setPath'   => array('setPath', "This\r\nis\nan\revil\r\n\r\nvalue"),
+        );
+    }
+
+    /**
+     * @group ZF2015-04
+     * @dataProvider invalidCookieComponentValues
+     */
+    public function testDoesNotAllowCRLFAttackVectorsViaSetters($setter, $value)
+    {
+        $cookie = new Zend_Http_Header_SetCookie();
+        $this->setExpectedException('Zend_Http_Header_Exception_InvalidArgumentException');
+        $cookie->{$setter}($value);
+    }
+}
