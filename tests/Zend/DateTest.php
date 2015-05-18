@@ -5725,6 +5725,18 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
             $date->getTimezoneFromString('America/New_York')
         );
     }
+
+    /**
+     * @group GH-561
+     */
+    public function testGetYearAndMonthWithoutDot()
+    {
+        $date = new Zend_Date('2014.12.29');
+
+        $this->assertEquals('29.12.2014', $date->get(Zend_Date::DATE_MEDIUM));
+        $this->assertEquals('2014.12', $date->get('Y.M'));
+        $this->assertEquals('201412', $date->get('YM'));
+    }
 }
 
 class Zend_Date_TestHelper extends Zend_Date
