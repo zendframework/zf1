@@ -7282,4 +7282,13 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
         $result = Zend_Locale_Data::getContent('de_DE', 'parentlocale');
         $this->assertFalse($result);
     }
+
+    /**
+     * @group GH-516
+     */
+    public function testLocaleWhichHasParentLocale()
+    {
+        $result = Zend_Locale_Data::getContent('en_HK', 'nametocurrency', 'XAF');
+        $this->assertEquals('Central African CFA Franc', $result);
+    }
 }
