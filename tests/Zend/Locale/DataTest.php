@@ -7254,4 +7254,28 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
             $this->fail($e->getMessage());
         }
     }
+
+    /**
+     * @group GH-516
+     */
+    public function testGetParentLocale()
+    {
+        // Tests only with locale
+        $result = Zend_Locale_Data::getContent('pa_Arab', 'parentlocale');
+        $this->assertEquals('root', $result);
+        $result = Zend_Locale_Data::getContent('en_CK', 'parentlocale');
+        $this->assertEquals('en_001', $result);
+        $result = Zend_Locale_Data::getContent('en_JE', 'parentlocale');
+        $this->assertEquals('en_GB', $result);
+        $result = Zend_Locale_Data::getContent('es_AR', 'parentlocale');
+        $this->assertEquals('es_419', $result);
+        $result = Zend_Locale_Data::getContent('pt_CV', 'parentlocale');
+        $this->assertEquals('pt_PT', $result);
+        $result = Zend_Locale_Data::getContent('zh_Hant_MO', 'parentlocale');
+        $this->assertEquals('zh_Hant_HK', $result);
+
+        // Test with value
+        $result = Zend_Locale_Data::getContent('de_DE', 'parentlocale', 'zh_Hant_MO');
+        $this->assertEquals('zh_Hant_HK', $result);
+    }
 }

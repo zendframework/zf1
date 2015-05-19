@@ -1474,6 +1474,13 @@ class Zend_Locale_Data
                 $temp = self::_getFile($locale, '/ldml/units/unitLength/unit[@type=\'' . $value[0] . '\']/unitPattern[@count=\'' . $value[1] . '\']', '');
                 break;
 
+            case 'parentlocale':
+                if (false === $value) {
+                    $value = $locale;
+                }
+                $temp = self::_getFile('supplementalData', "/supplementalData/parentLocales/parentLocale[contains(@locales, '" . $value . "')]", 'parent', 'parent');
+                break;
+
             default :
                 require_once 'Zend/Locale/Exception.php';
                 throw new Zend_Locale_Exception("Unknown detail ($path) for parsing locale data.");
