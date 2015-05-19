@@ -108,6 +108,33 @@ class Zend_Application_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($options, $application->getOptions());
     }
 
+    /**
+     * @group GH-564
+     * @depends testConstructorInstantiatesAutoloader
+     */
+    public function testConstructorRespectsSuppressFileNotFoundWarningFlag()
+    {
+        $application = new Zend_Application('testing');
+        $this->assertFalse($application->getAutoloader()->suppressNotFoundWarnings()); //Default value
+
+        $application = new Zend_Application('testing', null, $suppressNotFoundWarnings = true);
+        $this->assertTrue($application->getAutoloader()->suppressNotFoundWarnings());
+
+        $application = new Zend_Application('testing', null, $suppressNotFoundWarnings = false);
+        $this->assertFalse($application->getAutoloader()->suppressNotFoundWarnings());
+
+        $options = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
+        );
+
+        $application = new Zend_Application('testing', $options, $suppressNotFoundWarnings = true);
+        $this->assertTrue($application->getAutoloader()->suppressNotFoundWarnings());
+
+        $application = new Zend_Application('testing', $options, $suppressNotFoundWarnings = false);
+        $this->assertFalse($application->getAutoloader()->suppressNotFoundWarnings());
+    }
+
     public function testHasOptionShouldReturnFalseWhenOptionNotPresent()
     {
         $this->assertFalse($this->application->hasOption('foo'));
