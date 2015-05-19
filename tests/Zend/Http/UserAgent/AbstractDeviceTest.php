@@ -10128,4 +10128,14 @@ audio/vnd.qcelp, application/xhtml+xml'
         $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
         $this->assertEquals('Opera', $capabilities['browser_name']);
     }
+
+    /**
+     * @group GH-550
+     */
+    public function testOnlyBrowserNameShouldNotResultInNotices()
+    {
+        $userAgent    = 'Mozilla';
+        $capabilities = Zend_Http_UserAgent_AbstractDevice::extractFromUserAgent($userAgent);
+        $this->assertEquals('Mozilla', $capabilities['browser_name']);
+    }
 }

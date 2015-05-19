@@ -307,6 +307,8 @@ class Zend_Controller_Request_HttpTestCaseTest extends PHPUnit_Framework_TestCas
         $this->assertTrue($this->request->isHead());
         $this->request->setMethod('DELETE');
         $this->assertTrue($this->request->isDelete());
+        $this->request->setMethod('PATCH');
+        $this->assertTrue($this->request->isPatch());
     }
 }
 
