@@ -7,15 +7,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.13 Release.
-Released on May 20, 2015.
+Zend Framework 1.12.14dev Release.
+Released on MMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.13
+IMPORTANT FIXES FOR 1.12.14
 ---------------------------
-
-- [#567](https://github.com/zendframework/zf1/pull/567) fixes an issue
-  introduced in 1.12.12 whereby header value assertions were too strict,
-  and did not allow integer or float values.
 
 See http://framework.zend.com/changelog for full details.
 
