@@ -1592,6 +1592,11 @@ class Zend_Http_Client
             return;
         }
 
+        // Cast integers and floats to strings for purposes of header representation.
+        if (is_int($value) || is_float($value)) {
+            $value = (string) $value;
+        }
+
         if (! is_string($value) && (! is_object($value) || ! method_exists($value, '__toString'))) {
             require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception('Invalid header value detected');

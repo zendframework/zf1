@@ -41,23 +41,34 @@ class Zend_Gdata_AppTest extends PHPUnit_Framework_TestCase
         $this->expectedEtag = 'W/"CkcHQH8_fCp7ImA9WxRTGEw."';
         $this->expectedMajorProtocolVersion = 1;
         $this->expectedMinorProtocolVersion = 2;
-        $this->httpEntrySample = file_get_contents(
-                'Zend/Gdata/_files/AppSample1.txt',
-                true);
-        $this->httpEntrySampleWithoutVersion = file_get_contents(
-                'Zend/Gdata/_files/AppSample2.txt',
-                true);
-        $this->httpFeedSample = file_get_contents(
-                'Zend/Gdata/_files/AppSample3.txt',
-                true);
-        $this->httpFeedSampleWithoutVersion = file_get_contents(
-                'Zend/Gdata/_files/AppSample4.txt',
-                true);
+        $this->httpEntrySample = $this->loadResponse(
+            dirname(__FILE__) . '/_files/AppSample1.txt'
+        );
+        $this->httpEntrySampleWithoutVersion = $this->loadResponse(
+            dirname(__FILE__) . '/_files/AppSample2.txt'
+        );
+        $this->httpFeedSample = $this->loadResponse(
+            dirname(__FILE__) . '/_files/AppSample3.txt'
+        );
+        $this->httpFeedSampleWithoutVersion = $this->loadResponse(
+            dirname(__FILE__) . '/_files/AppSample4.txt'
+        );
 
         $this->adapter = new Test_Zend_Gdata_MockHttpClient();
         $this->client = new Zend_Gdata_HttpClient();
         $this->client->setAdapter($this->adapter);
         $this->service = new Zend_Gdata_App($this->client);
+    }
+
+    public function loadResponse($filename)
+    {
+        $response = file_get_contents($filename);
+
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $response);
     }
 
     public function testImportFile()
