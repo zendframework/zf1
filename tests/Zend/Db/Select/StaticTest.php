@@ -874,6 +874,46 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, 1, 2), 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
     }
 
+    public function testDeepNestedIfInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+            'table1.id = table2.id',
+            array('bar' => 'IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, SUM(1), 2), 0)'));
+        $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, SUM(1), 2), 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
+    }
+
+    public function testNestedUnbalancedParenthesesInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+            'table1.id = table2.id',
+            array('bar' => 'IF(SUM()'));
+        $this->assertEquals("SELECT \"table1\".*, \"table2\".\"IF(SUM()\" AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
+    }
+
+    public function testNestedIfInGroup()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->group('IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0)');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" GROUP BY IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0)';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
+    public function testUnbalancedParenthesesInGroup()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->group('IF(SUM() ASC');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" GROUP BY "IF(SUM() ASC"';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
     /**
      * @group ZF-378
      */
@@ -930,4 +970,45 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals($expected, $select->assemble(),
             'Order direction of field failed');
     }
+
+    public function testOrderOfDeepConditionalField()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->order('IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0)');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" ORDER BY IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0) ASC';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
+    public function testOrderOfDeepUnbalancedConditionalField()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->order('IF(SUM()');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" ORDER BY "IF(SUM()" ASC';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
+    public function testOrderOfDeepConditionalFieldWithDirection()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->order('IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0) ASC');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" ORDER BY IF(p.id IS NOT NULL, IF(p.id2 IS NOT NULL, SUM(1), 2), 0) ASC';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
+    public function testOrderOfDeepUnbalancedConditionalFieldWithDirection()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->order('IF(SUM() ASC');
+
+        $expected = 'SELECT "p".* FROM "product" AS "p" ORDER BY "IF(SUM()" ASC';
+        $this->assertEquals($expected, $select->assemble());
+    }
+
 }
