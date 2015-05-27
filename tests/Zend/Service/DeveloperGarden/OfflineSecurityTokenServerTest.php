@@ -164,6 +164,10 @@ class Zend_Service_DeveloperGarden_OfflineSecurityTokenServerTest extends PHPUni
 
     public function testSetTokenToCache1stParamException()
     {
+        if (version_compare(phpversion(), '7', '>=')) {
+            $this->markTestSkipped('Invalid typehinting is PHP Fatal error in PHP7+');
+        }
+
         try {
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setTokenToCache(
                 'NotExisting',
@@ -176,6 +180,10 @@ class Zend_Service_DeveloperGarden_OfflineSecurityTokenServerTest extends PHPUni
 
     public function testSetTokenToCache2ndParamException()
     {
+        if (version_compare(phpversion(), '7', '>=')) {
+            $this->markTestSkipped('Invalid typehinting is PHP Fatal error in PHP7+');
+        }
+
         try {
             Zend_Service_DeveloperGarden_SecurityTokenServer_Cache::setTokenToCache(
                 'securityToken',

@@ -852,4 +852,13 @@ class Zend_CurrencyTest extends PHPUnit_Framework_TestCase
             array(Zend_Currency::USE_NAME, 'US Dollar100.00')
         );
     }
+
+    /**
+     * @group GH-516
+     */
+    public function testToCurrencyWithLocaleWhichHasParentLocale()
+    {
+        $currency = new Zend_Currency(null, 'es_AR');
+        $this->assertEquals('$10,00', $currency->toCurrency(10));
+    }
 }

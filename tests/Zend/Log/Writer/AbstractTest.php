@@ -37,6 +37,9 @@ require_once 'Zend/Log/Writer/Abstract.php';
  */
 class Zend_Log_Writer_AbstractTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Zend_Log_Writer_Abstract
+     */
     protected $_writer;
 
     public static function main()
@@ -55,6 +58,10 @@ class Zend_Log_Writer_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testSetFormatter()
     {
+        if (version_compare(phpversion(), '7', '>=')) {
+            $this->markTestSkipped('Invalid typehinting is PHP Fatal error in PHP7+');
+        }
+
         require_once 'Zend/Log/Formatter/Simple.php';
         $this->_writer->setFormatter(new Zend_Log_Formatter_Simple());
         $this->setExpectedException('PHPUnit_Framework_Error');

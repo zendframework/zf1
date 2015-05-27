@@ -456,6 +456,34 @@ a {
         $this->assertNotContains('<!--' . PHP_EOL, $value);
         $this->assertNotContains(PHP_EOL . '-->', $value);
     }
+
+    /**
+     * @group GH-515
+     */
+    public function testConditionalScriptNoIE()
+    {
+        $this->helper->appendStyle('
+a {
+    display: none;
+}', array('media' => 'screen,projection', 'conditional' => '!IE'));
+        $test = $this->helper->toString();
+        $this->assertContains('<!--[if !IE]><!--><', $test);
+        $this->assertContains('<!--<![endif]-->', $test);
+    }
+
+    /**
+     * @group GH-515
+     */
+    public function testConditionalScriptNoIEWidthSpace()
+    {
+        $this->helper->appendStyle('
+a {
+    display: none;
+}', array('media' => 'screen,projection', 'conditional' => '! IE'));
+        $test = $this->helper->toString();
+        $this->assertContains('<!--[if ! IE]><!--><', $test);
+        $this->assertContains('<!--<![endif]-->', $test);
+    }
 }
 
 // Call Zend_View_Helper_HeadStyleTest::main() if this source file is executed directly.
