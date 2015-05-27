@@ -1598,7 +1598,7 @@ class Zend_Http_Client
         }
 
         if (! is_string($value) && (! is_object($value) || ! method_exists($value, '__toString'))) {
-            require_once 'Zend/Http/Exception.php';
+            #require_once 'Zend/Http/Exception.php';
             throw new Zend_Http_Exception('Invalid header value detected');
         }
 

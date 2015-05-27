@@ -28,12 +28,12 @@
 /**
  * @see Zend_Mail_Header_HeaderName
  */
-require_once 'Zend/Mail/Header/HeaderName.php';
+#require_once 'Zend/Mail/Header/HeaderName.php';
 
 /**
  * @see Zend_Mail_Header_HeaderValue
  */
-require_once 'Zend/Mail/Header/HeaderValue.php';
+#require_once 'Zend/Mail/Header/HeaderValue.php';
 
 /**
  * @see Zend_Mail_Part_Interface
