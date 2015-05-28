@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -30,7 +30,7 @@ require_once 'Zend/Validate/Hostname.php';
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  */
@@ -507,5 +507,24 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $validator = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
 
         $this->assertTrue($validator->isValid('test.rs'));
+    }
+
+    /**
+     * @group GH-19
+     */
+    public function testRussianIdn()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('кц.рф'));
+        $this->assertTrue($validator->isValid('президент.рф'));
+    }
+
+    /**
+     * @group GH-451
+     */
+    public function testVermögensberaterIdns()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('mysite.vermögensberater'));
     }
 }

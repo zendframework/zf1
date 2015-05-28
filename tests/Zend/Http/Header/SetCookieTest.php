@@ -16,7 +16,7 @@
  * @package    Zend_Http_Header
  * @subpackage UnitTests
 
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -37,7 +37,7 @@ require_once 'Zend/Controller/Response/HttpTestCase.php';
  * @category   Zend
  * @package    Zend_Http_Cookie
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Http
  * @group      Zend_Http_Header
@@ -236,6 +236,21 @@ class Zend_Http_Header_SetCookieTest extends PHPUnit_Framework_TestCase
         $cookie = Zend_Http_Header_SetCookie::fromString($cStr);
         $response->setRawHeader($cookie);
         $this->assertContains((string)$cookie, $response->sendHeaders());
+    }
+
+    /**
+     * @group GH-295
+     */
+    public function testMultipleCookies()
+    {
+        $setCookieHeader = new Zend_Http_Header_SetCookie('othername1', 'othervalue1');
+        $appendCookie    = new Zend_Http_Header_SetCookie('othername2', 'othervalue2');
+        $headerLine      = $setCookieHeader->toStringMultipleHeaders(array($appendCookie));
+
+        $response = new Zend_Controller_Response_HttpTestCase();
+        $response->setRawHeader($headerLine);
+
+        $this->assertEquals((array)$headerLine, $response->sendHeaders());
     }
     
     /**

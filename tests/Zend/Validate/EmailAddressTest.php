@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -33,7 +33,7 @@ require_once 'Zend/Validate/EmailAddress.php';
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Validate
  */
@@ -621,6 +621,19 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
     {
         $hostname = $this->_validator->getHostnameValidator();
         $this->assertTrue($hostname instanceof Zend_Validate_Hostname);
+    }
+
+    /**
+     * @group GH-62
+     */
+    public function testIdnHostnameInEmaillAddress()
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $this->markTestSkipped('idn_to_ascii() is available in intl in PHP 5.3.0+');
+        }
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->setValidateMx(true);
+        $this->assertTrue($validator->isValid('testmail@detrèsbonsdomaines.com'));
     }
 }
 

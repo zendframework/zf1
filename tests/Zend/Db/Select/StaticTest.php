@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -31,7 +31,7 @@ require_once 'Zend/Db/Select/TestCommon.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Db
  * @group      Zend_Db_Select
@@ -852,6 +852,26 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('p' => 'products'), array('MD5(1); drop table products; -- )'));
         $this->assertEquals('SELECT "p"."MD5(1); drop table products; -- )" FROM "products" AS "p"', $select->assemble());
+    }
+
+    public function testIfInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+                      'table1.id = table2.id',
+                      array('bar' => 'IF(table2.id IS NOT NULL, 1, 0)'));
+        $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, 1, 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
+    }
+
+    public function testNestedIfInColumn()
+    {
+        $select = $this->_db->select();
+        $select->from('table1', '*');
+        $select->join(array('table2'),
+            'table1.id = table2.id',
+            array('bar' => 'IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, 1, 2), 0)'));
+        $this->assertEquals("SELECT \"table1\".*, IF(table2.id IS NOT NULL, IF(table2.id2 IS NOT NULL, 1, 2), 0) AS \"bar\" FROM \"table1\"\n INNER JOIN \"table2\" ON table1.id = table2.id", $select->assemble());
     }
 
     /**

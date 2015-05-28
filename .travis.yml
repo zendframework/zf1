@@ -11,17 +11,22 @@ php:
 env: TMPDIR=/tmp
 
 install:
- - sh ./tests/install_dependencies.sh
+ - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then sh ./tests/php52_install_dependencies.sh; fi
  - phpenv rehash
 
 services:
   - memcached
 
 before_script:
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]]; then travis_retry composer self-update; fi
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]]; then travis_retry composer install --no-interaction --prefer-source --dev; fi
+  
   - mysql -e 'create database zftest;'
   - psql -c 'create database zftest;' -U postgres
-  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]] && [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then phpenv config-add tests/config.ini; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then phpenv config-add tests/php52_config.ini; fi
+
   - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
 
 script:

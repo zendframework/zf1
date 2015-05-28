@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Amazon_SimpleDb
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
@@ -35,10 +35,15 @@ require_once 'Zend/Service/Amazon/SimpleDb/OfflineTest.php';
 require_once 'Zend/Service/Amazon/SimpleDb/OnlineTest.php';
 
 /**
+ * @see Zend_Service_Amazon_SimpleDb_PageTest
+ */
+require_once 'Zend/Service/Amazon/SimpleDb/PageTest.php';
+
+/**
  * @category   Zend
  * @package    Zend_Service_Amazon_SimpleDb
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Amazon_SimpleDb_AllTests
@@ -71,6 +76,8 @@ class Zend_Service_Amazon_SimpleDb_AllTests
         } else {
             $suite->addTestSuite('Zend_Service_Amazon_SimpleDb_OfflineTest');
         }
+
+        $suite->addTestSuite('Zend_Service_Amazon_SimpleDb_PageTest');
 
         return $suite;
     }
