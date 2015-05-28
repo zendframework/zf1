@@ -633,7 +633,7 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         }
         $validator = new Zend_Validate_EmailAddress();
         $validator->setValidateMx(true);
-        $this->assertTrue($validator->isValid('testmail@detrèsbonsdomaines.com'));
+        $this->assertTrue($validator->isValid('testmail@zürich.ch'));
     }
 }
 

@@ -221,11 +221,8 @@ class Zend_Gdata_AuthSubTest extends PHPUnit_Framework_TestCase
     public function testGetAuthSubTokenInfoReceivesSuccessfulResult()
     {
         $adapter = new Zend_Http_Client_Adapter_Test();
-        $adapter->setResponse("HTTP/1.1 200 OK
-
-Target=http://example.com
-Scope=http://example.com
-Secure=false");
+        $response = "HTTP/1.1 200 OK\r\n\r\nTarget=http://example.com\nScope=http://example.com\nSecure=false";
+        $adapter->setResponse($response);
         
         $client = new Zend_Gdata_HttpClient();
         $client->setUri('http://example.com/AuthSub');

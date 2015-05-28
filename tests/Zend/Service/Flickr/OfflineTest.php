@@ -534,7 +534,12 @@ class Zend_Service_Flickr_OfflineTest extends PHPUnit_Framework_TestCase
      */
     protected function _loadResponse($name)
     {
-        return file_get_contents("$this->_filesPath/$name.response");
+        $message = file_get_contents(sprintf('%s/%s.response', $this->_filesPath, $name));
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $message);
     }
 }
 

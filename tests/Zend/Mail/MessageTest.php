@@ -49,7 +49,17 @@ class Zend_Mail_MessageTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_file = dirname(__FILE__) . '/_files/mail.txt';
+        $this->_file = tempnam(sys_get_temp_dir(), 'zm_');
+        $mail = file_get_contents(dirname(__FILE__) . '/_files/mail.txt');
+        $mail = preg_replace("/(?<!\r)\n/", "\r\n", $mail);
+        file_put_contents($this->_file, $mail);
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->_file)) {
+            unlink($this->_file);
+        }
     }
 
     public function testInvalidFile()
@@ -510,7 +520,28 @@ class Zend_Mail_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('ZF3745_Mail_Part', get_class($part));
         }
     }
+
+    public function invalidHeaders()
+    {
+        return array(
+            'name'        => array("Fake\r\n\r\rnevilContent", 'value'),
+            'value'       => array('Fake', "foo-bar\r\n\r\nevilContent"),
+            'multi-value' => array('Fake', array('okay', "foo-bar\r\n\r\nevilContent")),
+        );
+    }
     
+    /**
+     * @dataProvider invalidHeaders
+     * @group ZF2015-04
+     */
+    public function testRaisesExceptionWhenProvidedWithHeaderContainingCRLFInjection($name, $value)
+    {
+        $headers = array($name => $value);
+        $this->setExpectedException('Zend_Mail_Exception', 'valid');
+        $message = new Zend_Mail_Message(array(
+            'headers' => $headers,
+        ));
+    }
 }
 
 /**
