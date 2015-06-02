@@ -25,6 +25,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
+ * @see Zend_Http_Header_HeaderValue
+ */
+require_once 'Zend/Http/Header/HeaderValueTest.php';
+
+/**
  * @see Zend_Http_Header_SetCookie
  */
 require_once 'Zend/Http/Header/SetCookieTest.php';
@@ -49,6 +54,7 @@ class Zend_Http_Header_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Http - Header');
 
+        $suite->addTestSuite('Zend_Http_Header_HeaderValueTest');
         $suite->addTestSuite('Zend_Http_Header_SetCookieTest');
 
         return $suite;

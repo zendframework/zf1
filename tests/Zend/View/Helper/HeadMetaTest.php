@@ -543,6 +543,26 @@ class Zend_View_Helper_HeadMetaTest extends PHPUnit_Framework_TestCase
         $result = (string)$helper->headMeta()->appendName('foo','bar');
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * @group GH-515
+     */
+    public function testConditionalNoIE()
+    {
+        $html = $this->helper->appendHttpEquiv('foo', 'bar', array('conditional' => '!IE'))->toString();
+        $this->assertContains('<!--[if !IE]><!--><', $html);
+        $this->assertContains('<!--<![endif]-->', $html);
+    }
+
+    /**
+     * @group GH-515
+     */
+    public function testConditionalNoIEWidthSpace()
+    {
+        $html = $this->helper->appendHttpEquiv('foo', 'bar', array('conditional' => '! IE'))->toString();
+        $this->assertContains('<!--[if ! IE]><!--><', $html);
+        $this->assertContains('<!--<![endif]-->', $html);
+    }
 }
 
 // Call Zend_View_Helper_HeadMetaTest::main() if this source file is executed directly.

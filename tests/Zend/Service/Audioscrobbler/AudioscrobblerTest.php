@@ -46,7 +46,7 @@ class Zend_Service_Audioscrobbler_AudioscrobblerTest extends Zend_Service_Audios
 
         try {
             $response = $as->userGetProfileInformation();
-            $this->fail('Expected Zend_Service_Technorati_Exception not thrown');
+            $this->fail('Expected Zend_Http_Client_Exception not thrown');
         } catch(Zend_Http_Client_Exception $e) {
             $this->assertContains("No user exists with this name", $e->getMessage());
         }
@@ -60,7 +60,7 @@ class Zend_Service_Audioscrobbler_AudioscrobblerTest extends Zend_Service_Audios
 
         try {
             $response = $as->userGetProfileInformation();
-            $this->fail('Expected Zend_Service_Technorati_Exception not thrown');
+            $this->fail('Expected Zend_Http_Client_Exception not thrown');
         } catch(Zend_Http_Client_Exception $e) {
             $this->assertContains("404", $e->getMessage());
         }
@@ -102,6 +102,11 @@ class Zend_Service_Audioscrobbler_AudioscrobblerTest extends Zend_Service_Audios
 
     public static function readTestResponse($file)
     {
-        return file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $file);
+        $message = file_get_contents(sprintf('%s/_files/%s', dirname(__FILE__), $file));
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $message);
     }
 }

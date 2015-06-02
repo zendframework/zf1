@@ -64,7 +64,7 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Make sure wer can handle non-RFC complient "deflate" responses.
+     * Make sure we can handle non-RFC complient "deflate" responses.
      *
      * Unlike stanrdard 'deflate' response, those do not contain the zlib header
      * and trailer. Unfortunately some buggy servers (read: IIS) send those and
@@ -75,6 +75,16 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
     public function testNonStandardDeflateResponseZF6040()
     {
         $response_text = file_get_contents(dirname(__FILE__) . '/_files/response_deflate_iis');
+
+        // Ensure headers are correctly formatted (i.e., separated with "\r\n" sequence)
+        //
+        // Line endings are an issue inside the canned response; the
+        // following uses a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n within the headers,
+        // ensuring that the message is well-formed.
+        list($headers, $message) = explode("\n\n", $response_text, 2);
+        $headers = preg_replace("#(?<!\r)\n#", "\r\n", $headers);
+        $response_text = $headers . "\r\n\r\n" . $message;
 
         $res = Zend_Http_Response::fromString($response_text);
 
@@ -103,19 +113,6 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('chunked', strtolower($res->getHeader('Transfer-encoding')));
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('c0cc9d44790fa2a58078059bab1902a9', md5($res->getRawBody()));
-    }
-
-
-    public function testLineBreaksCompatibility()
-    {
-        $response_text_lf = $this->readResponse('response_lfonly');
-        $res_lf = Zend_Http_Response::fromString($response_text_lf);
-
-        $response_text_crlf = $this->readResponse('response_crlf');
-        $res_crlf = Zend_Http_Response::fromString($response_text_crlf);
-
-        $this->assertEquals($res_lf->getHeadersAsString(true), $res_crlf->getHeadersAsString(true), 'Responses headers do not match');
-        $this->assertEquals($res_lf->getBody(), $res_crlf->getBody(), 'Response bodies do not match');
     }
 
     public function testExtractMessageCrlf()
@@ -209,8 +206,8 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
         $response_str = $this->readResponse('response_404');
         $response = Zend_Http_Response::fromString($response_str);
 
-        $this->assertEquals(strtolower($response_str), strtolower($response->asString()), 'Response convertion to string does not match original string');
-        $this->assertEquals(strtolower($response_str), strtolower((string)$response), 'Response convertion to string does not match original string');
+        $this->assertEquals(strtolower($response_str), strtolower($response->asString()), 'Response conversion to string does not match original string');
+        $this->assertEquals(strtolower($response_str), strtolower((string) $response), 'Response conversion to string does not match original string');
     }
 
     public function testGetHeaders()
@@ -307,7 +304,8 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadingWhitespaceBody()
     {
-        $body = Zend_Http_Response::extractBody($this->readResponse('response_leadingws'));
+        $message = file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'response_leadingws');
+        $body    = Zend_Http_Response::extractBody($message);
         $this->assertEquals($body, "\r\n\t  \n\r\tx", 'Extracted body is not identical to expected body');
     }
 
@@ -320,7 +318,7 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testMultibyteChunkedResponse()
     {
-        $md5 = 'ab952f1617d0e28724932401f2d3c6ae';
+        $md5 = 'f734924685f92b243c8580848cadc560';
 
         $response = Zend_Http_Response::fromString($this->readResponse('response_multibyte_body'));
         $this->assertEquals($md5, md5($response->getBody()));
@@ -385,6 +383,36 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
      */
     protected function readResponse($response)
     {
-        return file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $response);
+        $message = file_get_contents(
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $response
+        );
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $message);
+    }
+
+    public function invalidResponseHeaders()
+    {
+        return array(
+            'bad-status-line'            => array("HTTP/1.0a 200 OK\r\nHost: example.com\r\n\r\nMessage Body"),
+            'nl-in-header'               => array("HTTP/1.1 200 OK\r\nHost: example.\ncom\r\n\r\nMessage Body"),
+            'cr-in-header'               => array("HTTP/1.1 200 OK\r\nHost: example.\rcom\r\n\r\nMessage Body"),
+            'bad-continuation'           => array("HTTP/1.1 200 OK\r\nHost: example.\r\ncom\r\n\r\nMessage Body"),
+            'no-status-nl-in-header'     => array("Host: example.\ncom\r\n\r\nMessage Body"),
+            'no-status-cr-in-header'     => array("Host: example.\rcom\r\n\r\nMessage Body"),
+            'no-status-bad-continuation' => array("Host: example.\r\ncom\r\n\r\nMessage Body"),
+        );
+    }
+
+    /**
+     * @group ZF2015-04
+     * @dataProvider invalidResponseHeaders
+     */
+    public function testExtractHeadersRaisesExceptionWhenDetectingCRLFInjection($message)
+    {
+        $this->setExpectedException('Zend_Http_Exception', 'Invalid');
+        Zend_Http_Response::extractHeaders($message);
     }
 }

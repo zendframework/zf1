@@ -743,7 +743,7 @@ class Zend_Console_Getopt
                     $defined = $defined === true ? true : array_key_exists($alias, $this->_options);
                 }
                 if ($defined === false) {
-                    require_once 'Zend/Console/Getopt/Exception.php';
+                    #require_once 'Zend/Console/Getopt/Exception.php';
                     throw new Zend_Console_Getopt_Exception(
                         'Option "$alias" requires a parameter.',
                         $this->getUsageMessage()
