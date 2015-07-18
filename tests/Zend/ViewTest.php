@@ -637,6 +637,16 @@ class Zend_ViewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Me, Myself, &amp; I", $escaped);
     }
 
+    public function testEscapeEntFlag()
+    {
+        $view = new Zend_View();
+        $view->setEntFlag(ENT_QUOTES);
+        $original = "I'm testing apostrophe.";
+        $escaped  = $view->escape($original);
+        $this->assertNotEquals($original, $escaped);
+        $this->assertEquals("I&#039;m testing apostrophe.", $escaped);
+    }
+
     public function testCustomEscape()
     {
         $view = new Zend_View();
