@@ -795,7 +795,7 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
     {
         $date = Zend_Locale_Data::getList('de_AT', 'date');
         $result = array("full" => "EEEE, dd. MMMM y", "long" => "dd. MMMM y",
-                        "medium" => "dd.MM.y", "short" => "dd.MM.yy");
+                        "medium" => "dd.MM.y", "short" => "dd.MM.yyyy");
         $this->assertEquals($result, $date);
 
         $date = Zend_Locale_Data::getList('de_AT', 'date', 'islamic');
@@ -863,7 +863,7 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
             'full' => 'EEEE, dd. MMMM y HH:mm:ss zzzz',
             'long' => 'dd. MMMM y HH:mm:ss z',
             'medium' => 'dd.MM.y HH:mm:ss',
-            'short' => 'dd.MM.yy HH:mm'
+            'short' => 'dd.MM.yyyy HH:mm'
         );
         $this->assertEquals($result, $value);
 
@@ -872,7 +872,7 @@ class Zend_Locale_DataTest extends PHPUnit_Framework_TestCase
             'full' => 'EEEE, dd. MMMM y HH:mm:ss zzzz',
             'long' => 'dd. MMMM y HH:mm:ss z',
             'medium' => 'dd.MM.y HH:mm:ss',
-            'short' => 'dd.MM.yy HH:mm'
+            'short' => 'dd.MM.yyyy HH:mm'
         );
         $this->assertEquals($result, $value);
 
