@@ -60,6 +60,23 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
             'Απριλίου', 'Απρ');
     }
 
+    function testlocale_pl_PL()
+    {
+        $locale = 'pl_PL';
+        $myDate = $this->dateShortFormatInLocale($locale);
+
+        $this->assertEquals('05-04-2015', $myDate);
+        $this->_testDateFormatParsing($myDate, $locale);
+
+        $currency = new Zend_Currency($locale);
+        $this->assertSame('1 234,56 PLN', $currency->toCurrency(1234.56));
+
+        $date = $this->dateInLocale($locale);
+        $this->_testDaysAndMonthTranslations($date, 'niedziela', 'nie', 'n',
+            'kwietnia', 'kwi');
+
+    }
+
     function dateShortFormatInLocale($locale)
     {
         $date = $this->dateInLocale($locale);
