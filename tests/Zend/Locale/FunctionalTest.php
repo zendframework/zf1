@@ -23,7 +23,7 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
 ['en_IE', '05/04/2015', '€1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 ['ro_RO', '05.04.2015', '1.234,56 €', 'duminică', 'dum', 'D', 'aprilie', 'apr.'],
 ['it_IT', '05/04/2015', '€ 1.234,56', 'domenica', 'dom', 'd', 'aprile', 'apr'],
-// ['ru_RU', '05/04/2015', '1 234,56 руб', 'воскресенье', 'вос', 'в', 'апреля', 'апр.'],
+['ru_RU', '05/04/2015', '1 234,56 руб', 'воскресенье', 'вос', 'в', 'апреля', 'апр.'],
 // ['tr_TR', '05.04.2015', '1.234,56 TL', 'Pazar', 'Paz', 'P', 'Nisan', 'Nis'],
 // ['uk_UA', '05/04/2015', '1 234,56 грн', 'неділя', 'нед', 'Н', 'квітня', 'квіт.'],
 // ['sr_RS', '5.4.2015.', 'RSD 1.234,56', 'nedelja', 'ned', 'n', 'april', 'apr'],
@@ -86,7 +86,6 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
     function testlocale($locale, $shortDate, $amountText, $weekday,
         $weekdayShort, $weekDayNarrow, $monthName, $monthNameShort)
     {
-        $locale = $locale;
         $myDate = $this->dateShortFormatInLocale($locale);
 
         $this->assertEquals($shortDate, $myDate);
