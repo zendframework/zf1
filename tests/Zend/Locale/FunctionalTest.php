@@ -12,68 +12,34 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
         Zend_Locale::disableCache(false);
     }
 
-    function testlocale_fr_FR()
+    function localeFormats()
     {
-        $locale = 'fr_FR';
-        $myDate = $this->dateShortFormatInLocale($locale);
-
-        $this->assertEquals('05/04/2015', $myDate);
-        $this->_testDateFormatParsing($myDate, $locale);
-
-        $currency = new Zend_Currency($locale);
-        $this->assertSame('1 234,56 €', $currency->toCurrency(1234.56));
-
-        $date = $this->dateInLocale($locale);
-        $this->_testDaysAndMonthTranslations($date, 'dimanche', 'dim', 'd',
-            'avril', 'avr.');
+        return [
+['fr_FR', '05/04/2015', '1 234,56 €', 'dimanche', 'dim', 'd', 'avril', 'avr.'],
+['de_DE', '05.04.2015', '1.234,56 €', 'Sonntag', 'Son', 'S', 'April', 'Apr.'],
+['el_GR', '05/04/2015', '1.234,56 €', 'Κυριακή', 'Κυρ', 'Κ', 'Απριλίου', 'Απρ'],
+['pl_PL', '05-04-2015', '1 234,56 PLN', 'niedziela', 'nie', 'n', 'kwietnia', 'kwi']
+        ];
     }
 
-    function testlocale_de_DE()
+    /**
+     * @dataProvider localeFormats
+     */
+    function testlocale($locale, $shortDate, $amountText, $weekday,
+        $weekdayShort, $weekDayNarrow, $monthName, $monthNameShort)
     {
-        $locale = 'de_DE';
+        $locale = $locale;
         $myDate = $this->dateShortFormatInLocale($locale);
 
-        $this->assertEquals('05.04.2015', $myDate);
+        $this->assertEquals($shortDate, $myDate);
         $this->_testDateFormatParsing($myDate, $locale);
 
         $currency = new Zend_Currency($locale);
-        $this->assertSame('1.234,56 €', $currency->toCurrency(1234.56));
+        $this->assertSame($amountText, $currency->toCurrency(1234.56));
 
         $date = $this->dateInLocale($locale);
-        $this->_testDaysAndMonthTranslations($date, 'Sonntag', 'Son', 'S',
-            'April', 'Apr.');
-    }
-
-    function testlocale_el_GR()
-    {
-        $locale = 'el_GR';
-        $myDate = $this->dateShortFormatInLocale($locale);
-
-        $this->assertEquals('05/04/2015', $myDate);
-        $this->_testDateFormatParsing($myDate, $locale);
-
-        $currency = new Zend_Currency($locale);
-        $this->assertSame('1.234,56 €', $currency->toCurrency(1234.56));
-
-        $date = $this->dateInLocale($locale);
-        $this->_testDaysAndMonthTranslations($date, 'Κυριακή', 'Κυρ', 'Κ',
-            'Απριλίου', 'Απρ');
-    }
-
-    function testlocale_pl_PL()
-    {
-        $locale = 'pl_PL';
-        $myDate = $this->dateShortFormatInLocale($locale);
-
-        $this->assertEquals('05-04-2015', $myDate);
-        $this->_testDateFormatParsing($myDate, $locale);
-
-        $currency = new Zend_Currency($locale);
-        $this->assertSame('1 234,56 PLN', $currency->toCurrency(1234.56));
-
-        $date = $this->dateInLocale($locale);
-        $this->_testDaysAndMonthTranslations($date, 'niedziela', 'nie', 'n',
-            'kwietnia', 'kwi');
+        $this->_testDaysAndMonthTranslations($date, $weekday, $weekdayShort,
+            $weekDayNarrow, $monthName, $monthNameShort);
 
     }
 
