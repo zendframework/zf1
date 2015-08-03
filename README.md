@@ -13,6 +13,20 @@ Released on MMM DD, YYYY.
 IMPORTANT FIXES FOR 1.12.14
 ---------------------------
 
+This release contains a security fix:
+
+- **ZF2015-06**: `ZendXml` runs a heuristic detection for XML Entity Expansion
+  and XML eXternal Entity vectors when under php-fpm, due to issues with threading
+  in libxml preventing using that library's built-in mechanisms for disabling
+  them. However, the heuristic was determined to be faulty when multibyte
+  encodings are used for the XML. This release contains a patch to ensure that the
+  heuristic will work with multibyte encodings.
+
+  If you use Zend Framework components that utilize DOMDocument or SimpleXML
+  (which includes `Zend\XmlRpc`, `Zend\Soap`, `Zend\Feed`, and several others),
+  and deploy using php-fpm in production (or plan to), we recommend upgrading
+  immediately.
+
 See http://framework.zend.com/changelog for full details.
 
 NEW FEATURES
