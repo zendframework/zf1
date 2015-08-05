@@ -25,9 +25,12 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
+ * This is a class that overrides Zend_Xml_Security to mark the heuristicScan()
+ * method as public, allowing us to test it.
+ *
  * @see Zend_Xml_Security
  */
-require_once 'Zend/Xml/Security.php';
+require_once 'Zend/Xml/TestAsset/Security.php';
 
 require_once 'Zend/Xml/Exception.php';
 
@@ -80,9 +83,7 @@ XML;
      */
     public function invokeHeuristicScan($xml)
     {
-        $r = new ReflectionMethod('Zend_Xml_Security', 'heuristicScan');
-        $r->setAccessible(true);
-        return $r->invoke(null, $xml);
+        return Zend_Xml_TestAsset_Security::heuristicScan($xml);
     }
 
     /**
