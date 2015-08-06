@@ -96,7 +96,7 @@ class Zend_Db_Select_Pdo_MysqlTest extends Zend_Db_Select_TestCommon
         $bugs_products = $this->_db->quoteIdentifier('zfbugs_products');
 
         $select = $this->_db->select()
-            ->from('zfproducts')
+            ->from(array('p'=>'zfproducts'))
             ->forceIndex('p', 'IX_this_index_does_not_exist')
             ->join('zfbugs_products', "$products.$product_id = $bugs_products.$product_id", array())
             ->forceIndex('zfbugs_products', 'IX_this_index_does_not_exist_2');
