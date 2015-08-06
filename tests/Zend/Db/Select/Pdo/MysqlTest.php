@@ -101,8 +101,7 @@ class Zend_Db_Select_Pdo_MysqlTest extends Zend_Db_Select_TestCommon
             ->join('zfbugs_products', "$products.$product_id = $bugs_products.$product_id", array())
             ->forceIndex('zfbugs_products', 'IX_this_index_does_not_exist_2');
 
-
-        $expected = 'SELECT `zfproducts`.* FROM `zfproducts` FORCE INDEX(IX_this_index_does_not_exist)' .
+        $expected = 'SELECT `p`.* FROM `zfproducts` AS `p` FORCE INDEX(IX_this_index_does_not_exist)' .
             "\n" . ' INNER JOIN `zfbugs_products` FORCE INDEX(IX_this_index_does_not_exist_2) ON `zfproducts`.`product_id` = `zfbugs_products`.`product_id`';
         $this->assertEquals($expected, $select->assemble(),
             'Select with join and force index failed');
