@@ -189,10 +189,10 @@ class Zend_Xml_Security
     protected static function getEntityComparison($xml)
     {
         $encodingMap = self::getAsciiEncodingMap();
-        return array_map(function ($encoding) use ($encodingMap) {
-            $generator   = isset($encodingMap[$encoding]) ? $encodingMap[$encoding] : $encodingMap['UTF-8'];
-            return $generator('<!ENTITY');
-        }, self::detectXmlEncoding($xml, self::detectStringEncoding($xml)));
+        return array_map(
+            array(__CLASS__, 'generateEntityComparison'),
+            self::detectXmlEncoding($xml, self::detectStringEncoding($xml))
+        );
     }
 
     /**
@@ -206,7 +206,8 @@ class Zend_Xml_Security
      */
     protected static function detectStringEncoding($xml)
     {
-        return self::detectBom($xml) ?: self::detectXmlStringEncoding($xml);
+        $encoding = self::detectBom($xml);
+        return ($encoding) ? $encoding : self::detectXmlStringEncoding($xml);
     }
 
     /**
@@ -238,7 +239,7 @@ class Zend_Xml_Security
     protected static function detectXmlStringEncoding($xml)
     {
         foreach (self::getAsciiEncodingMap() as $encoding => $generator) {
-            $prefix = $generator('<' . '?xml');
+            $prefix = call_user_func($generator, '<' . '?xml');
             if (0 === strncmp($xml, $prefix, strlen($prefix))) {
                 return $encoding;
             }
@@ -266,9 +267,9 @@ class Zend_Xml_Security
     {
         $encodingMap = self::getAsciiEncodingMap();
         $generator   = $encodingMap[$fileEncoding];
-        $encAttr     = $generator('encoding="');
-        $quote       = $generator('"');
-        $close       = $generator('>');
+        $encAttr     = call_user_func($generator, 'encoding="');
+        $quote       = call_user_func($generator, '"');
+        $close       = call_user_func($generator, '>');
 
         $closePos    = strpos($xml, $close);
         if (false === $closePos) {
@@ -353,30 +354,14 @@ class Zend_Xml_Security
     protected static function getAsciiEncodingMap()
     {
         return array(
-            'UTF-32BE'   => function ($ascii) {
-                return preg_replace('/(.)/', "\0\0\0\\1", $ascii);
-            },
-            'UTF-32LE'   => function ($ascii) {
-                return preg_replace('/(.)/', "\\1\0\0\0", $ascii);
-            },
-            'UTF-32odd1' => function ($ascii) {
-                return preg_replace('/(.)/', "\0\\1\0\0", $ascii);
-            },
-            'UTF-32odd2' => function ($ascii) {
-                return preg_replace('/(.)/', "\0\0\\1\0", $ascii);
-            },
-            'UTF-16BE'   => function ($ascii) {
-                return preg_replace('/(.)/', "\0\\1", $ascii);
-            },
-            'UTF-16LE'   => function ($ascii) {
-                return preg_replace('/(.)/', "\\1\0", $ascii);
-            },
-            'UTF-8'      => function ($ascii) {
-                return $ascii;
-            },
-            'GB-18030'   => function ($ascii) {
-                return $ascii;
-            },
+            'UTF-32BE'   => array(__CLASS__, 'encodeToUTF32BE'),
+            'UTF-32LE'   => array(__CLASS__, 'encodeToUTF32LE'),
+            'UTF-32odd1' => array(__CLASS__, 'encodeToUTF32odd1'),
+            'UTF-32odd2' => array(__CLASS__, 'encodeToUTF32odd2'),
+            'UTF-16BE'   => array(__CLASS__, 'encodeToUTF16BE'),
+            'UTF-16LE'   => array(__CLASS__, 'encodeToUTF16LE'),
+            'UTF-8'      => array(__CLASS__, 'encodeToUTF8'),
+            'GB-18030'   => array(__CLASS__, 'encodeToUTF8'),
         );
     }
 
@@ -398,5 +383,106 @@ class Zend_Xml_Security
             $substr .= $string[$i];
         }
         return $substr;
+    }
+
+    /**
+     * Generate an entity comparison based on the given encoding.
+     *
+     * This patch is internal only, and public only so it can be used as a
+     * callable to pass to array_map.
+     *
+     * @internal
+     * @param string $encoding
+     * @return string
+     */
+    public static function generateEntityComparison($encoding)
+    {
+        $encodingMap = self::getAsciiEncodingMap();
+        $generator   = isset($encodingMap[$encoding]) ? $encodingMap[$encoding] : $encodingMap['UTF-8'];
+        return call_user_func($generator, '<!ENTITY');
+    }
+
+    /**
+     * Encode an ASCII string to UTF-32BE
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF32BE($ascii)
+    {
+        return preg_replace('/(.)/', "\0\0\0\\1", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-32LE
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF32LE($ascii)
+    {
+        return preg_replace('/(.)/', "\\1\0\0\0", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-32odd1
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF32odd1($ascii)
+    {
+        return preg_replace('/(.)/', "\0\\1\0\0", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-32odd2
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF32odd2($ascii)
+    {
+        return preg_replace('/(.)/', "\0\0\\1\0", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-16BE
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF16BE($ascii)
+    {
+        return preg_replace('/(.)/', "\0\\1", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-16LE
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF16LE($ascii)
+    {
+        return preg_replace('/(.)/', "\\1\0", $ascii);
+    }
+
+    /**
+     * Encode an ASCII string to UTF-8
+     *
+     * @internal
+     * @param string $ascii
+     * @return string
+     */
+    public static function encodeToUTF8($ascii)
+    {
+        return $ascii;
     }
 }
