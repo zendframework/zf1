@@ -415,4 +415,40 @@ class Zend_Http_ResponseTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend_Http_Exception', 'Invalid');
         Zend_Http_Response::extractHeaders($message);
     }
+
+    /**
+     * @group 587
+     */
+    public function testExtractHeadersShouldAllowAnyValidHttpHeaderToken()
+    {
+        $response = $this->readResponse('response_587');
+        $headers  = Zend_Http_Response::extractHeaders($response);
+
+        $this->assertArrayHasKey('zipi.step', $headers);
+        $this->assertEquals(0, $headers['zipi.step']);
+    }
+
+    /**
+     * @group 587
+     */
+    public function testExtractHeadersShouldAllowHeadersWithEmptyValues()
+    {
+        $response = $this->readResponse('response_587_empty');
+        $headers  = Zend_Http_Response::extractHeaders($response);
+
+        $this->assertArrayHasKey('imagetoolbar', $headers);
+        $this->assertEmpty($headers['imagetoolbar']);
+    }
+
+    /**
+     * @group 587
+     */
+    public function testExtractHeadersShouldAllowHeadersWithMissingValues()
+    {
+        $response = $this->readResponse('response_587_null');
+        $headers  = Zend_Http_Response::extractHeaders($response);
+
+        $this->assertArrayHasKey('imagetoolbar', $headers);
+        $this->assertEmpty($headers['imagetoolbar']);
+    }
 }
