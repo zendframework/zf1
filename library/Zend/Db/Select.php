@@ -124,7 +124,10 @@ class Zend_Db_Select
         self::ORDER        => array(),
         self::LIMIT_COUNT  => null,
         self::LIMIT_OFFSET => null,
-        self::FOR_UPDATE   => false
+        self::FOR_UPDATE   => false,
+        self::USE_INDEX => array(), 
+        self::FORCE_INDEX => array(), 
+        self::IGNORE_INDEX => array(),
     );
 
     /**
@@ -1142,17 +1145,14 @@ class Zend_Db_Select
             $tmp .= $this->_getQuotedTable($table['tableName'], $correlationName);
 
             // Add use index statement after FROM, before joins (if applicable)
-            if (!empty($this->_parts[self::USE_INDEX])) {
-                $tmp .= ' ' . self::SQL_USE_INDEX . '(' . implode(',', $this->_parts[self::USE_INDEX]) . ')';
-                unset($this->_parts[self::USE_INDEX]);
+            if (!empty($this->_parts[self::USE_INDEX][$correlationName])) {
+                $tmp .= ' ' . self::SQL_USE_INDEX . '(' . implode(',', $this->_parts[self::USE_INDEX][$correlationName]) . ')';
             }
-            if (!empty($this->_parts[self::FORCE_INDEX])) {
-                $tmp .= ' ' . self::SQL_FORCE_INDEX . '(' . implode(',', $this->_parts[self::FORCE_INDEX]) . ')';
-                unset($this->_parts[self::FORCE_INDEX]);
+            if (!empty($this->_parts[self::FORCE_INDEX][$correlationName])) {
+                $tmp .= ' ' . self::SQL_FORCE_INDEX . '(' . implode(',', $this->_parts[self::FORCE_INDEX][$correlationName]) . ')';
             }
-            if (!empty($this->_parts[self::IGNORE_INDEX])) {
-                $tmp .= ' ' . self::SQL_IGNORE_INDEX . '(' . implode(',', $this->_parts[self::IGNORE_INDEX]) . ')';
-                unset($this->_parts[self::IGNORE_INDEX]);
+            if (!empty($this->_parts[self::IGNORE_INDEX][$correlationName])) {
+                $tmp .= ' ' . self::SQL_IGNORE_INDEX . '(' . implode(',', $this->_parts[self::IGNORE_INDEX][$correlationName]) . ')';
             }
 
             // Add join conditions (if applicable)
@@ -1379,48 +1379,63 @@ class Zend_Db_Select
     }
 
     /**
-     * Specify index to use. Works only on mysql
+     * Specify index to use.
      *
+     * @param string $type
+     * @param string $correlationName
      * @param string $index
      * @return Zend_Db_Select
      */
-    public function useIndex($index)
+    private function _setIndex($type, $correlationName, $index)
     {
+        if (!array_key_exists($correlationName, $this->_parts[self::FROM])) {
+            /**
+             * @see Zend_Db_Select_Exception
+             */
+            require_once 'Zend/Db/Select/Exception.php';
+            throw new Zend_Db_Select_Exception("No table has been specified for the FROM clause");
+        }
         if (!is_array($index)) {
             $index = array($index);
         }
-        $this->_parts[self::USE_INDEX] = $index;
+        $this->_parts[$type][$correlationName] = $index;
         return $this;
+    }
+
+    /**
+     * Specify index to use. Works only on mysql
+     *
+     * @param string $index
+     * @param string|array $index index or array of indexes to use
+     * @return Zend_Db_Select
+     */
+    public function useIndex($correlationName, $index)
+    {
+        return $this->_setIndex(self::USE_INDEX, $correlationName, $index);
     }
 
     /**
      * Force index. Works only on mysql
      *
      * @param string $index
+     * @param string|array $index index or array of indexes to force
      * @return Zend_Db_Select
      */
-    public function forceIndex($index)
+    public function forceIndex($correlationName, $index)
     {
-        if (!is_array($index)) {
-            $index = array($index);
-        }
-        $this->_parts[self::FORCE_INDEX] = $index;
-        return $this;
+        return $this->_setIndex(self::FORCE_INDEX, $correlationName, $index);
     }
 
     /**
      * Ignore index. Works only on mysql
      *
      * @param string $index
+     * @param string|array $index index or array of indexes to ignore
      * @return Zend_Db_Select
      */
-    public function ignoreIndex($index)
+    public function ignoreIndex($correlationName, $index)
     {
-        if (!is_array($index)) {
-            $index = array($index);
-        }
-        $this->_parts[self::IGNORE_INDEX] = $index;
-        return $this;
+        return $this->_setIndex(self::IGNORE_INDEX, $correlationName, $index);
     }
 
 }
