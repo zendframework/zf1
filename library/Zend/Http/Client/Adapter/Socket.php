@@ -74,7 +74,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      */
     protected $config = array(
         'persistent'    => false,
-        'ssltransport'  => 'ssl',
+        'ssltransport'  => 'tls',
         'sslcert'       => null,
         'sslpassphrase' => null,
         'sslusecontext' => false
