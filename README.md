@@ -7,25 +7,26 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.14dev Release.
-Released on MMM DD, YYYY.
+Zend Framework 1.12.15 Release.
+Released on Aug 11, 2015.
 
-IMPORTANT FIXES FOR 1.12.14
+IMPORTANT FIXES FOR 1.12.15
 ---------------------------
 
-This release contains a security fix:
+This release contains several fixes that address backwards compatibility issues:
 
-- **ZF2015-06**: `ZendXml` runs a heuristic detection for XML Entity Expansion
-  and XML eXternal Entity vectors when under php-fpm, due to issues with threading
-  in libxml preventing using that library's built-in mechanisms for disabling
-  them. However, the heuristic was determined to be faulty when multibyte
-  encodings are used for the XML. This release contains a patch to ensure that the
-  heuristic will work with multibyte encodings.
-
-  If you use Zend Framework components that utilize DOMDocument or SimpleXML
-  (which includes `Zend\XmlRpc`, `Zend\Soap`, `Zend\Feed`, and several others),
-  and deploy using php-fpm in production (or plan to), we recommend upgrading
-  immediately.
+- [#591](https://github.com/zendframework/zf1/pull/591) adds PHP 5.2 support for
+  the [ZF2015-06](http://framework.zend.com/security/advisory/ZF2015-06)
+  security fix introduced in 1.12.14.
+- [#587](https://github.com/zendframework/zf1/pull/587) fixes the regular
+  expression used to match a header in `Zend_Http_Response::extractHeaders()`
+  to ensure it allows any valid header name (previously, it failed with header
+  names that included `.` characters), as well as empty header values.
+- [#597](https://github.com/zendframework/zf1/pull/597) updates
+  `Zend_Http_Client_Adapter_Curl` to properly distinguish between the `timeout`
+  configuration setting (which should map to `CURLOPT_CONNECTTIMEOUT` and/or
+  `CURLOPT_CONNECTTIMEOUT_MS`) and the `request_timeout` setting (which should
+  map to `CURLOPT_TIMEOUT` and/or `CURLOPT_TIMEOUT_MS`).
 
 See http://framework.zend.com/changelog for full details.
 
