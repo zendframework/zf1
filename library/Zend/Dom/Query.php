@@ -48,13 +48,14 @@ class Zend_Dom_Query
     /**#@+
      * Document types
      */
+    const DOC_DOM   = 'docDom';
     const DOC_XML   = 'docXml';
     const DOC_HTML  = 'docHtml';
     const DOC_XHTML = 'docXhtml';
     /**#@-*/
 
     /**
-     * @var string
+     * @var string|DOMDocument
      */
     protected $_document;
 
@@ -85,7 +86,7 @@ class Zend_Dom_Query
     /**
      * Constructor
      *
-     * @param null|string $document
+     * @param null|string|DOMDocument $document
      * @param null|string $encoding
      */
     public function __construct($document = null, $encoding = null)
@@ -119,12 +120,15 @@ class Zend_Dom_Query
     /**
      * Set document to query
      *
-     * @param  string $document
+     * @param  string|DOMDocument $document
      * @param  null|string $encoding Document encoding
      * @return Zend_Dom_Query
      */
     public function setDocument($document, $encoding = null)
     {
+        if ($document instanceof DOMDocument) {
+            return $this->setDocumentDom($document);
+        }
         if (0 === strlen($document)) {
             return $this;
         }
@@ -140,6 +144,17 @@ class Zend_Dom_Query
             return $this->setDocumentXhtml($document, $encoding);
         }
         return $this->setDocumentHtml($document, $encoding);
+    }
+
+    /**
+     * @param DOMDocument $document
+     * @param string $encoding
+     */
+    public function setDocumentDom(DOMDocument $document)
+    {
+        $this->_document = $document;
+        $this->_docType  = self::DOC_DOM;
+        return $this;
     }
 
     /**
@@ -259,6 +274,9 @@ class Zend_Dom_Query
         }
         $type   = $this->getDocumentType();
         switch ($type) {
+            case self::DOC_DOM:
+                $domDoc = $this->_document;
+                break;
             case self::DOC_XML:
                 try {
                     $domDoc = Zend_Xml_Security::scan($document, $domDoc);
