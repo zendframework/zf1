@@ -25,6 +25,15 @@
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
+ *
+ * @method emerg(string $message)
+ * @method alert(string $message)
+ * @method crit(string $message)
+ * @method err(string $message)
+ * @method warn(string $message)
+ * @method notice(string $message)
+ * @method info(string $message)
+ * @method debug(string $message)
  */
 class Zend_Log
 {
