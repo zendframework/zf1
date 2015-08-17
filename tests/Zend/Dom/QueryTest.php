@@ -233,14 +233,20 @@ class Zend_Dom_QueryTest extends PHPUnit_Framework_TestCase
 
     public function testQueryOnDomDocument()
     {
-        $document = new DOMDocument('1.0', 'utf-8');
-        $document->loadHTML($this->getHtml(), LIBXML_PARSEHUGE);
+        $xml = <<<EOF
+<?xml version="1.0" encoding="UTF-8" ?>
+<foo>
+    <bar class="baz"/>
+</foo>
+EOF;
+        $document = new DOMDocument();
+        $document->loadXML($xml, LIBXML_PARSEHUGE);
         $this->query->setDocument($document);
-        $test = $this->query->query('.foo');
+        $test = $this->query->query('.baz');
         $this->assertTrue($test instanceof Zend_Dom_Query_Result);
         $testDocument = $test->getDocument();
         $this->assertTrue($testDocument instanceof DOMDocument);
-        $this->assertEquals('utf-8', $testDocument->encoding);
+        $this->assertEquals('UTF-8', $testDocument->encoding);
     }
 
     /**
