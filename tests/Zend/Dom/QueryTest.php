@@ -143,6 +143,8 @@ class Zend_Dom_QueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Zend_Dom_Query::DOC_XML, $this->query->getDocumentType());
         $this->query->setDocument('<html><body></body></html>');
         $this->assertEquals(Zend_Dom_Query::DOC_HTML, $this->query->getDocumentType());
+        $this->query->setDocument(new DOMDocument());
+        $this->assertEquals(Zend_Dom_Query::DOC_DOM, $this->query->getDocumentType());
     }
 
     public function testQueryingWithoutRegisteringDocumentShouldThrowException()
@@ -227,6 +229,18 @@ class Zend_Dom_QueryTest extends PHPUnit_Framework_TestCase
         $this->loadHtml();
         $result = $this->query->queryXpath('//li[contains(@dojotype, "bar")]');
         $this->assertEquals(2, count($result), $result->getXpathQuery());
+    }
+
+    public function testQueryOnDomDocument()
+    {
+        $document = new DOMDocument('1.0', 'utf-8');
+        $document->loadHTML($this->getHtml(), LIBXML_PARSEHUGE);
+        $this->query->setDocument($document);
+        $test = $this->query->query('.foo');
+        $this->assertTrue($test instanceof Zend_Dom_Query_Result);
+        $testDocument = $test->getDocument();
+        $this->assertTrue($testDocument instanceof DOMDocument);
+        $this->assertEquals('utf-8', $testDocument->encoding);
     }
 
     /**

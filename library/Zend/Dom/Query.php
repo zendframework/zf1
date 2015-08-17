@@ -154,6 +154,9 @@ class Zend_Dom_Query
     {
         $this->_document = $document;
         $this->_docType  = self::DOC_DOM;
+        if (null !== $document->encoding) {
+            $this->setEncoding($document->encoding);
+        }
         return $this;
     }
 
@@ -211,7 +214,7 @@ class Zend_Dom_Query
     /**
      * Retrieve current document
      *
-     * @return string
+     * @return string|DOMDocument
      */
     public function getDocument()
     {
@@ -276,6 +279,7 @@ class Zend_Dom_Query
         switch ($type) {
             case self::DOC_DOM:
                 $domDoc = $this->_document;
+                $success = true;
                 break;
             case self::DOC_XML:
                 try {
