@@ -240,7 +240,7 @@ class Zend_Dom_QueryTest extends PHPUnit_Framework_TestCase
 </foo>
 EOF;
         $document = new DOMDocument();
-        $document->loadXML($xml, LIBXML_PARSEHUGE);
+        $document->loadXML($xml, 524288 /* LIBXML_PARSEHUGE */);
         $this->query->setDocument($document);
         $test = $this->query->query('.baz');
         $this->assertTrue($test instanceof Zend_Dom_Query_Result);
