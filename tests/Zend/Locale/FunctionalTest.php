@@ -33,7 +33,7 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
 ['he_IL', '05/04/2015', '1,234.56 ₪', 'יום ראשון', 'יום', 'י', 'אפריל', 'אפר׳'],
 ['sq_AL', '2015-04-05', '€1.234,56', 'e diel', 'e d', 'D', 'prill', 'Pri'],
 ['es_ES', '05/04/2015', '1.234,56 €', 'domingo', 'dom', 'd', 'abril', 'abr.'],
-// ['pt_PT', '05/04/2015', '1 234,56 €', 'domingo', 'dom', 'd', 'Abril', 'Abr'],
+['pt_PT', '05/04/2015', '1 234,56 €', 'domingo', 'dom', 'd', 'Abril', 'Abr'],
 // ['en_US', '04/05/2015', '$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 // ['en_NZ', '05/04/2015', 'NZ$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 // ['en_ZA', '05/04/2015', 'R1 234,56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
