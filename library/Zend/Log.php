@@ -115,7 +115,6 @@ class Zend_Log
      * Class constructor.  Create a new logger
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
-     * @return void
      */
     public function __construct(Zend_Log_Writer_Abstract $writer = null)
     {
@@ -184,7 +183,7 @@ class Zend_Log
     /**
      * Construct a writer object based on a configuration array
      *
-     * @param  array $spec config array with writer spec
+     * @param  array $config config array with writer spec
      * @return Zend_Log_Writer_Abstract
      * @throws Zend_Log_Exception
      */
@@ -466,8 +465,9 @@ class Zend_Log
     /**
      * Add a custom priority
      *
-     * @param  string   $name      Name of priority
-     * @param  integer  $priority  Numeric priority
+     * @param  string  $name     Name of priority
+     * @param  integer $priority Numeric priority
+     * @return $this
      * @throws Zend_Log_Exception
      */
     public function addPriority($name, $priority)
@@ -492,7 +492,7 @@ class Zend_Log
      * must be accepted by all filters added with this method.
      *
      * @param  int|Zend_Config|array|Zend_Log_Filter_Interface $filter
-     * @return Zend_Log
+     * @return $this
      * @throws Zend_Log_Exception
      */
     public function addFilter($filter)
@@ -521,6 +521,7 @@ class Zend_Log
      *
      * @param  mixed $writer Zend_Log_Writer_Abstract or Config array
      * @return Zend_Log
+     * @throws Zend_Log_Exception
      */
     public function addWriter($writer)
     {
