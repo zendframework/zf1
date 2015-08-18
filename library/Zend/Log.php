@@ -25,6 +25,17 @@
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
+ *
+ * Convenience methods for log [@see Zend_Log::__call()]:
+ *
+ * @method emerg(string $message, $extras = null)
+ * @method alert(string $message, $extras = null)
+ * @method crit(string $message, $extras = null)
+ * @method err(string $message, $extras = null)
+ * @method warn(string $message, $extras = null)
+ * @method notice(string $message, $extras = null)
+ * @method info(string $message, $extras = null)
+ * @method debug(string $message, $extras = null)
  */
 class Zend_Log
 {
