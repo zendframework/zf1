@@ -4481,7 +4481,7 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $date->setYear(2009, $locale)
              ->setMonth(5, $locale)
              ->setDay(31, $locale);
-        $this->assertSame('5/31/09', $date->get(Zend_Date::DATE_SHORT, $locale));
+        $this->assertSame('05/31/2009', $date->get(Zend_Date::DATE_SHORT, $locale));
     }
 
     /**
