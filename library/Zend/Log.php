@@ -361,6 +361,7 @@ class Zend_Log
      */
     public function __destruct()
     {
+        /** @var Zend_Log_Writer_Abstract $writer */
         foreach($this->_writers as $writer) {
             $writer->shutdown();
         }
@@ -450,6 +451,7 @@ class Zend_Log
         }
 
         // abort if rejected by the global filters
+        /** @var Zend_Log_Filter_Interface $filter */
         foreach ($this->_filters as $filter) {
             if (! $filter->accept($event)) {
                 return;
@@ -457,6 +459,7 @@ class Zend_Log
         }
 
         // send to each writer
+        /** @var Zend_Log_Writer_Abstract $writer */
         foreach ($this->_writers as $writer) {
             $writer->write($event);
         }
