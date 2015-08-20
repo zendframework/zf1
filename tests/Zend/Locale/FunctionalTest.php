@@ -67,9 +67,8 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
             ['it_IT', '05/04/2015', '€ 1.234,56', 'domenica', 'dom', 'd', 'aprile', 'apr'],
             ['id_ID', '05/04/2015', 'Rp1.234,56', 'Minggu', 'Min', 'M', 'April', 'Apr'],
 
-            //['ja_JP', '05/04/2015', 'JPY1,234', '日曜日', '日曜日', '日', '4月', '4月'],
-
-            //['ko_KR', '05/04/2015', 'KRW1,234', '일요일', '일요일', '일', '4월', '4월'],
+            ['ja_JP', '05/04/2015', ['JPY1,235', ['precision' => 0]], '日曜日', '日曜日', '日', '4月', '4月'],
+            ['ko_KR', '05/04/2015', ['KRW1,235', ['precision' => 0]], '일요일', '일요일', '일', '4월', '4월'],
 
             //['lt_LT', '05/04/2015', '€ 1.234,56', 'sekmadienis', 'sek', 's', 'balandis', 'bal.'],
             //['lv_LV', '05/04/2015', '€ 1.234,56', 'svētdiena', 'svē', 'S', 'aprīlis', 'apr.'],
@@ -104,7 +103,7 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider localeFormats
      */
-    function testlocale($locale, $shortDate, $amountText, $weekday,
+    function testlocale($locale, $shortDate, $amount, $weekday,
         $weekdayShort, $weekDayNarrow, $monthName, $monthNameShort)
     {
         $myDate = $this->dateShortFormatInLocale($locale);
@@ -112,8 +111,12 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($shortDate, $myDate);
         $this->_testDateFormatParsing($myDate, $locale);
 
+        $options = [];
+        if (is_array($amount)) {
+            list($amount, $options) = $amount;
+        }
         $currency = new Zend_Currency($locale);
-        $this->assertSame($amountText, $currency->toCurrency(1234.56));
+        $this->assertSame($amount, $currency->toCurrency(1234.56, $options));
 
         $date = $this->dateInLocale($locale);
         $this->_testDaysAndMonthTranslations($date, $weekday, $weekdayShort,
