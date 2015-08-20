@@ -37,6 +37,8 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
             ['en_HK', '05/04/2015', 'HKD1,234.56', '星期日', '星期日', '周', '四月', '4月'],
             ['en_SG', '05/04/2015', 'SGD1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
             ['en_PH', '05/04/2015', 'PHP1,234.56', 'Linggo', 'Lin', 'L', 'Abril', 'Abr'],
+            ['en_CA', '05/04/2015', '$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
+            ['en_AU', '05/04/2015', '$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
             // ['en_TP', '05/04/2015', '€1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 
             ['es_ES', '05/04/2015', '1.234,56 €', 'domingo', 'dom', 'd', 'abril', 'abr.'],
@@ -53,8 +55,6 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
             ['es_HN', '05/04/2015', '1,234.56 L', 'domingo', 'dom', 'd', 'abril', 'abr.'],
             ['es_NI', '05/04/2015', '1,234.56 C$', 'domingo', 'dom', 'd', 'abril', 'abr.'],
             ['es_PA', '05/04/2015', '1,234.56 $', 'domingo', 'dom', 'd', 'abril', 'abr.'],
-            // ['en_AU', '05/04/2015', '$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
-            // ['en_CA', '05/04/2015', '$1,234.56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 
             //['et_EE', '4/05/2015', '1 234,56 €', 'pühapäev', 'püh', 'P', 'aprill', 'apr'],
 
@@ -135,10 +135,10 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
     private function _testDateFormatParsing($otherDate, $locale)
     {
         $date = new Zend_Date($otherDate, null, $locale);
-        $this->assertEquals($date->get(Zend_Date::DATE_SHORT), $otherDate,
-            'format parsing');
-    }
+        $shortDate = $date->get(Zend_Date::DATE_SHORT);
 
+        $this->assertEquals($shortDate, $otherDate, 'Format Parsing is Incorrect');
+    }
 
     private function _testDaysAndMonthTranslations($date, $weekday, $weekdayShort,
         $weekDayNarrow, $monthName, $monthNameShort)
