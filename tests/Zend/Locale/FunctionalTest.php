@@ -76,12 +76,12 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
 
             //['ms_MY', '4/5/2015', 'RM1,234.56', 'Ahad', 'Aha', 'A', 'April', 'Apr'],
 
-            //['nb_NO', '05/04/2015', 'NOK 1 234,56', 'søndag', 'søn', 's', 'april', 'apr.'],
-            //['nl_NL', '05/04/2015', '€ 1.234,56', 'zondag', 'zon', 'z', 'april', 'apr.'],
+            ['nb_NO', '05/04/2015', 'NOK 1 234,56', 'søndag', 'søn', 's', 'april', 'apr.'],
+            ['nl_NL', '05/04/2015', '€ 1.234,56', 'zondag', 'zon', 'z', 'april', 'apr.'],
 
             ['pl_PL', '05-04-2015', '1 234,56 PLN', 'niedziela', 'nie', 'n', 'kwietnia', 'kwi'],
             ['pt_PT', '05/04/2015', '1 234,56 €', 'domingo', 'dom', 'd', 'Abril', 'Abr'],
-            //['pt_BR', '05/04/2015', 'R$1.234,56', 'domingo', 'dom', 'd', 'abril', 'abr'],
+            ['pt_BR', '05/04/2015', 'R$1.234,56', 'domingo', 'dom', 'd', 'abril', 'abr'],
 
             ['ro_RO', '05.04.2015', '1.234,56 €', 'duminică', 'dum', 'D', 'aprilie', 'apr.'],
             ['ru_RU', '05/04/2015', '1 234,56 руб', 'воскресенье', 'вос', 'в', 'апреля', 'апр.'],
