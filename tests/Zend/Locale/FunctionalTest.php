@@ -15,8 +15,8 @@ class Zend_Locale_FunctionalTest extends PHPUnit_Framework_TestCase
     function localeFormats()
     {
         return [
-            //['ar_AE', '05/04/2015', 'AED 1.234,56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
-            //['ar_QA', '05-Apr-2015', 'ر.ق. 1.234', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
+            ['ar_AE', '05/04/2015', 'AED‏ 1.234,56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
+            ['ar_QA', '05-Apr-2015', 'ر.ق.‏ 1.234,56', 'Sunday', 'Sun', 'S', 'April', 'Apr'],
 
             ['be_BY', '05/04/2015', '1 234,56 €', 'нядзеля', 'няд', 'н', 'красавіка', 'кра'],
             ['bg_BG', '05/04/2015', '1 234,56 €', 'неделя', 'нед', 'н', 'април', 'апр.'],
