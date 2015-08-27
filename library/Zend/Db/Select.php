@@ -81,6 +81,8 @@ class Zend_Db_Select
     const SQL_ASC        = 'ASC';
     const SQL_DESC       = 'DESC';
 
+    const REGEX_COLUMN_EXPR = '/^([\w]*\(([^\(\)]|(?1))*\))$/';
+
     /**
      * Bind variables for query
      *

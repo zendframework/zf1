@@ -635,6 +635,15 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         $validator->setValidateMx(true);
         $this->assertTrue($validator->isValid('testmail@zürich.ch'));
     }
+
+    /**
+     * @group GH-517
+     */
+    public function testNonReservedIp()
+    {
+        $validator = new Zend_Validate_EmailAddress(Zend_Validate_Hostname::ALLOW_IP);
+        $this->assertTrue($validator->isValid('bob@192.162.33.24'));
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Zend_Validate_EmailAddressTest::main') {
