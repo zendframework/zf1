@@ -815,6 +815,54 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $res['bar']);
     }
 
+    public function testMultipleChainsWithVersion2Routes()
+    {
+
+        $foo = new Zend_Controller_Router_Route_SubclassTest('foo');
+        $bar = new Zend_Controller_Router_Route_SubclassTest('bar', array('baz' => 'no'));
+
+
+        $chain = $foo->chain($bar);
+
+        $foo2 = new Zend_Controller_Router_Route_SubclassTest('foo');
+        $baz = new Zend_Controller_Router_Route_SubclassTest('baz', array('baz' => 'baz'));
+
+        $chain2 = $foo2->chain($baz);
+
+        $rewrite = new Zend_Controller_Router_Rewrite();
+        $rewrite->addRoute('chain2', $chain2); // First In Last Out, we want this to be matched against second
+        $rewrite->addRoute('chain1', $chain);
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/foo/baz');
+
+        $res = $rewrite->route($request);
+        $this->assertEquals('baz', $res->getParam('baz'), 'Route did not match');
+        $this->assertEquals('chain2', $rewrite->getCurrentRouteName(), 'Routing did not match expected route');
+    }
+
+    /**
+     * @throws Zend_Controller_Router_Exception
+     */
+    public function testMultipleChainsResettingPathInfoInSegmentBlock()
+    {
+        $foo = new Zend_Controller_Router_Route_SubclassTest('notfoo');
+        $bar = new Zend_Controller_Router_Route_SubclassTest('bar', array('baz' => 'no'));
+
+
+        $chain = $foo->chain($bar);
+
+        $static = new Zend_Controller_Router_Route_SimpleSubclassTest('/foo', array('foo' => 'foo'));
+
+        $rewrite = new Zend_Controller_Router_Rewrite();
+        $rewrite->addRoute('static', $static); // First In Last Out, we want this to be matched against second
+        $rewrite->addRoute('chain', $chain);
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/foo');
+
+        $res = $rewrite->route($request);
+        $this->assertEquals('foo', $res->getParam('foo'), 'Route did not match');
+        $this->assertEquals('static', $rewrite->getCurrentRouteName(), 'Routing did not match expected route');
+
+    }
+
     /**
      * @group ZF-11443
      */
@@ -932,6 +980,72 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
 
         return $router;
     }
+}
+
+class Zend_Controller_Router_Route_SimpleSubclassTest extends Zend_Controller_Router_Route_Abstract
+{
+    /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * @var array
+     */
+    protected $params = array();
+
+    public function __construct($path, $params)
+    {
+        $this->path = $path;
+        $this->params = $params;
+    }
+
+    public function match($path, $partial = false)
+    {
+        $path = $path->getPathInfo();
+        if ($path == $this->path) {
+            $this->setMatchedPath($this->path);
+            return $this->params;
+        }
+        return false;
+    }
+
+    public function getVersion()
+    {
+        return 2;
+    }
+
+    public function assemble($data = array(), $reset = false, $encode = false)
+    {}
+
+    public static function getInstance(Zend_Config $config)
+    {}
+
+}
+
+class Zend_Controller_Router_Route_SubclassTest extends Zend_Controller_Router_Route_Static
+{
+    public function match($path, $partial = false)
+    {
+        $path = $path->getPathInfo();
+        $match = parent::match($path, $partial);
+        if (is_array($match)) {
+            $this->setMatchedPath($this->_route);
+        }
+        return $match;
+    }
+
+    public function getVersion()
+    {
+        return 2;
+    }
+
+    public function assemble($data = array(), $reset = false, $encode = false)
+    {}
+
+    public static function getInstance(Zend_Config $config)
+    {}
+
 }
 
 /**

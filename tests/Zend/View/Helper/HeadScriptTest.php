@@ -520,6 +520,20 @@ document.write(bar.strlen());');
         $this->assertNotContains('//<!--', $test);
         $this->assertNotContains('//-->', $test);
     }
+
+    /**
+     * @group GH-515
+     */
+    public function testConditionalScriptNoIE()
+    {
+        $this->helper->setAllowArbitraryAttributes(true);
+        $this->helper->appendFile(
+            '/js/foo.js', 'text/javascript', array('conditional' => '!IE')
+        );
+        $test = $this->helper->toString();
+        $this->assertContains('<!--[if !IE]><!--><', $test);
+        $this->assertContains('<!--<![endif]-->', $test);
+    }
 }
 
 // Call Zend_View_Helper_HeadScriptTest::main() if this source file is executed directly.

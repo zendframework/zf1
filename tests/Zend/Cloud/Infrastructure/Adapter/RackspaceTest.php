@@ -74,8 +74,8 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
         
         if (file_exists($filename)) {
             // authentication (from file)
-            $content = file_get_contents(dirname(__FILE__) . '/_files/'.$shortClassName . '_testAuthenticate.response');
-            $this->httpClientAdapterTest->setResponse($content);
+            $content = dirname(__FILE__) . '/_files/'.$shortClassName . '_testAuthenticate.response';
+            $this->httpClientAdapterTest->setResponse($this->loadResponse($content));
             $this->assertTrue($this->infrastructure->getAdapter()->authenticate(),'Authentication failed');
             
             $this->httpClientAdapterTest->setResponse($this->loadResponse($filename)); 
@@ -91,7 +91,13 @@ class Zend_Cloud_Infrastructure_Adapter_RackspaceTest extends PHPUnit_Framework_
      */
     protected function loadResponse($name)
     {
-        return file_get_contents($name);
+        $response = file_get_contents($name);
+
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $response);
     }    
     /**
      * Get Config Array

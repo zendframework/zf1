@@ -24,6 +24,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zend_Xml_AllTests::main');
 }
 
+require_once 'Zend/Xml/MultibyteTest.php';
 require_once 'Zend/Xml/SecurityTest.php';
 
 /**
@@ -46,6 +47,7 @@ class Zend_Xml_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Xml');
 
         $suite->addTestSuite('Zend_Xml_SecurityTest');
+        $suite->addTestSuite('Zend_Xml_MultibyteTest');
 
         return $suite;
     }

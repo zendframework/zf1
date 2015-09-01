@@ -39,18 +39,29 @@ class Zend_Gdata_App_EntryTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->enryText = file_get_contents(
-                'Zend/Gdata/App/_files/EntrySample1.xml',
-                true);
-        $this->httpEntrySample = file_get_contents(
-                'Zend/Gdata/App/_files/EntrySampleHttp1.txt',
-                true);
+        $this->enryText = $this->loadResponse(
+            dirname(__FILE__) . '/../App/_files/EntrySample1.xml'
+        );
+        $this->httpEntrySample = $this->loadResponse(
+            dirname(__FILE__) . '/../App/_files/EntrySampleHttp1.txt'
+        );
         $this->enry = new Zend_Gdata_App_Entry();
 
         $this->adapter = new Test_Zend_Gdata_MockHttpClient();
         $this->client = new Zend_Gdata_HttpClient();
         $this->client->setAdapter($this->adapter);
         $this->service = new Zend_Gdata_App($this->client);
+    }
+
+    public function loadResponse($filename)
+    {
+        $response = file_get_contents($filename);
+
+        // Line endings are sometimes an issue inside the canned responses; the
+        // following is a negative lookbehind assertion, and replaces any \n
+        // not preceded by \r with the sequence \r\n, ensuring that the message
+        // is well-formed.
+        return preg_replace("#(?<!\r)\n#", "\r\n", $response);
     }
 
     public function testEmptyEntryShouldHaveEmptyExtensionsList()
