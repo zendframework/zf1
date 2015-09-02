@@ -536,4 +536,14 @@ class Zend_Validate_HostnameTest extends PHPUnit_Framework_TestCase
         $validator = new Zend_Validate_Hostname();
         $this->assertTrue($validator->isValid('straße.de'));
     }
+
+    /**
+     * @group GH-612
+     */
+    public function testZeroSubdomain()
+    {
+        $validator = new Zend_Validate_Hostname();
+        $this->assertTrue($validator->isValid('1.pool.ntp.org'));
+        $this->assertTrue($validator->isValid('0.pool.ntp.org'));
+    }
 }

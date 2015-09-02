@@ -1459,7 +1459,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                     $check = 0;
                     foreach ($domainParts as $domainPart) {
                         // If some domain part is empty (i.e. zend..com), it's invalid
-                        if (empty($domainPart)) {
+                        if (empty($domainPart) && $domainPart !== '0') {
                             $this->_error(self::INVALID_HOSTNAME);
                             return false;
                         }
