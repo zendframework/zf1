@@ -7,27 +7,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.16 Release.
-Released on Sep 15, 2015.
+Zend Framework 1.12.17dev Release.
+Released on MMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.16
+IMPORTANT FIXES FOR 1.12.17
 ---------------------------
-
-This release contains security fixes:
-
-- **ZF2015-07**: A number of components, including `Zend_Cloud`,
-  `Zend_Search_Lucene`, and `Zend_Service_WindowsAzure` were creating directories with
-  a liberal umask that could lead to local arbitrary code execution and/or
-  local privilege escalation. This release contains a patch that ensures the
-  directories are created using permissions of 0775 and files using 0664
-  (essentially umask 0002).
-
-- **ZF2015-08**: ZF2014-06 uncovered an issue in the sqlsrv adapter provided by
-  the framework whereby null bytes were not filtered correctly when generating
-  SQL. A reporter discovered the same vulnerability is present in our PDO implementation
-  when used with pdo_dblib, and could potentially be applied to other PDO adapters.
-  This release contains a patch to properly escape null bytes used in SQL queries
-  across all PDO adapters shipped with the framework.
 
 See http://framework.zend.com/changelog for full details.
 
