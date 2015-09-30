@@ -1571,7 +1571,7 @@ abstract class Zend_Db_Adapter_TestCommon extends Zend_Db_TestSetup
         // create a second connection to the same database
         $dbConnection2 = Zend_Db::factory($this->getDriver(), $this->_util->getParams());
         $dbConnection2->getConnection();
-
+              
         // notice the number of rows in connection 2
         $count = $dbConnection2->fetchOne("SELECT COUNT(*) FROM $bugs");
         $this->assertEquals(4, $count, 'Expecting to see 4 rows in bugs table (step 1)');
@@ -2030,11 +2030,10 @@ abstract class Zend_Db_Adapter_TestCommon extends Zend_Db_TestSetup
 
         // create test table using no identifier quoting
         $util->createTable('charsetutf8', array(
-            'id'    => 'IDENTITY',
+            'id'    => 'INTEGER NOT NULL',
             'stuff' => 'VARCHAR(32)'
         ));
         $tableName = $this->_util->getTableName('charsetutf8');
-
         // insert into the table
         $numRows = $db->insert($tableName, array(
             'id'    => 1,

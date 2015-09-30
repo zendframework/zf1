@@ -90,4 +90,14 @@ abstract class Zend_Db_Adapter_Pdo_TestCommon extends Zend_Db_Adapter_TestCommon
         $this->assertEquals(0, $affected,
             "Expected exec() to return zero affected rows; got $affected");
     }
+
+    /**
+     * Test for null byte injection
+     */
+    public function testAdapterQuoteNullByteCharacter()
+    {
+        $string = "1\0";
+        $value  = $this->_db->quote($string);
+        $this->assertEquals("'1\\000'", $value);
+    }
 }
