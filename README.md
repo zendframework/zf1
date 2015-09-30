@@ -1,11 +1,11 @@
 INFORMATION
 ===================
 
-This is a fork from Zend Framework 1.12.13 Release.
+This is a fork from Zend Framework 1.12.16 Release.
 
 PURPOSE
 ---------------------------
-Contains latest stable release of Zend Framework plus performance improvements and bug fixes.
+Contains Zend Framework 1 plus performance improvements and bug fixes.
 
 LICENSE
 =======
