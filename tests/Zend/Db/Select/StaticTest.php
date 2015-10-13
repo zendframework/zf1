@@ -1011,4 +1011,22 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $this->assertEquals($expected, $select->assemble());
     }
 
+    /**
+     * Test a problem with assembling subqueries with joins in SELECT block. That problem is caused by "new line" char which brakes regexp detection of "AS"-case
+     */
+    public function testAssembleQueryWithSubqueryInSelectBlock() {
+        $subSelect = $this->_db->select();
+        $subSelect->from(array('st1' => 'subTable1'), 'col1')
+                  ->join(array('st2' => 'subTable2'), 'st1.fk_id=st2.fk_id', 'col2');
+
+        $columns[] = '('.$subSelect->assemble() . ') as subInSelect';
+        $select = $this->_db->select();
+        $select->from(array('t' => 'table1'), $columns);
+
+        $expected = 'SELECT (SELECT "st1"."col1", "st2"."col2" FROM "subTable1" AS "st1" INNER JOIN "subTable2" AS "st2" ON st1.fk_id=st2.fk_id) AS "subInSelect" FROM "table1" AS "t"';
+
+        $this->assertEquals($expected, $select->assemble(),
+                            'Assembling query with subquery with join failed');
+    }
+
 }

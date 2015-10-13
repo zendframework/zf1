@@ -940,6 +940,7 @@ class Zend_Db_Select
             $currentCorrelationName = $correlationName;
             if (is_string($col)) {
                 // Check for a column matching "<column> AS <alias>" and extract the alias name
+                $col = str_replace("\n",'',$col);
                 if (preg_match('/^(.+)\s+' . self::SQL_AS . '\s+(.+)$/i', $col, $m)) {
                     $col = $m[1];
                     $alias = $m[2];
