@@ -1023,10 +1023,22 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('t' => 'table1'), $columns);
 
-        $expected = 'SELECT (SELECT "st1"."col1", "st2"."col2" FROM "subTable1" AS "st1" INNER JOIN "subTable2" AS "st2" ON st1.fk_id=st2.fk_id) AS "subInSelect" FROM "table1" AS "t"';
+        $expected = 'SELECT (SELECT "st1"."col1", "st2"."col2" FROM "subTable1" AS "st1"  INNER JOIN "subTable2" AS "st2" ON st1.fk_id=st2.fk_id) AS "subInSelect" FROM "table1" AS "t"';
 
         $this->assertEquals($expected, $select->assemble(),
                             'Assembling query with subquery with join failed');
+    }
+
+    public function testAssembleQueryWithRawSubqueryInSelectBlock() {
+        $columns[] = '(SELECT *
+FROM tb2) as subInSelect2';
+        $select = $this->_db->select();
+        $select->from(array('t' => 'table1'), $columns);
+
+        $expected = 'SELECT (SELECT * FROM tb2) AS "subInSelect2" FROM "table1" AS "t"';
+
+        $this->assertEquals($expected, $select->assemble(),
+                            'Assembling query with raw subquery with "new line" char failed');
     }
 
 }
