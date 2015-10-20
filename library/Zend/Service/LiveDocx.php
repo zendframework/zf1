@@ -221,9 +221,6 @@ class Zend_Service_LiveDocx
     /**
      * Log in to LiveDocx service
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Zend_Service_LiveDocx_Exception
      * @return boolean
      * @since  LiveDocx 1.2
