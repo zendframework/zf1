@@ -205,7 +205,8 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
             if (PHP_VERSION_ID < 50600) {
                 $result = iconv_set_encoding('internal_encoding', $encoding);
             } else {
-                $result = ini_set('default_charset', $encoding);
+                ini_set('default_charset', $encoding);
+                $result = ini_get('default_charset');
             }
             if (!$result) {
                 require_once 'Zend/Validate/Exception.php';
