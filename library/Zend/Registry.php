@@ -169,6 +169,23 @@ class Zend_Registry extends ArrayObject
     }
 
     /**
+     * remove method, basically same as offsetUnset().
+     *
+     * This method can be called from an object of type Zend_Registry, or it
+     * can be called statically.  In the latter case, it uses the default
+     * static instance stored in the class.
+     *
+     * @param string $index The location in the ArrayObject in which to store
+     *   the value.
+     * @return void
+     */
+    public static function remove($index)
+    {
+        $instance = self::getInstance();
+        $instance->offsetUnset($index);
+    }
+
+    /**
      * Returns TRUE if the $index is a named value in the registry,
      * or FALSE if $index was not found in the registry.
      *
