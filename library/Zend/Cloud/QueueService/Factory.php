@@ -51,7 +51,8 @@ class Zend_Cloud_QueueService_Factory extends Zend_Cloud_AbstractFactory
      * Retrieve QueueService adapter
      *
      * @param  array $options
-     * @return void
+     * @return Zend_Cloud_QueueService_Adapter
+     * @throws Zend_Cloud_QueueService_Exception
      */
     public static function getAdapter($options = array())
     {
