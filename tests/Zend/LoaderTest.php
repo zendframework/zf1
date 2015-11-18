@@ -132,6 +132,21 @@ class Zend_LoaderTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLoaderTraitViaLoadClass()
+    {
+        if (!function_exists('trait_exists')) {
+            $this->markTestSkipped('traits are only available in php >=5.4.0');
+        }
+
+        $dir = implode(array(dirname(__FILE__), '_files', '_testDir1'), DIRECTORY_SEPARATOR);
+
+        try {
+            Zend_Loader::loadClass('Trait1', $dir);
+        } catch (Zend_Exception $e) {
+            $this->fail('Loading traits should not fail');
+        }
+    }
+
     public function testLoaderLoadClassWithDotDir()
     {
         $dirs = array('.');
