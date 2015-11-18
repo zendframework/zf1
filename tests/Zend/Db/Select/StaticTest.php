@@ -1041,4 +1041,15 @@ FROM tb2) as subInSelect2';
                             'Assembling query with raw subquery with "new line" char failed');
     }
 
+    public function testAssembleQueryWithExpressionInSelectBlock() {
+        $columns[] = ' DISTINCT (*) as expr';
+        $select = $this->_db->select();
+        $select->from(array('t' => 'table1'), $columns);
+
+        $expected = 'SELECT DISTINCT (*) AS "expr" FROM "table1" AS "t"';
+
+        $this->assertEquals($expected, $select->assemble(),
+                            'Assembling query with raw subquery with "new line" char failed');
+    }
+
 }
