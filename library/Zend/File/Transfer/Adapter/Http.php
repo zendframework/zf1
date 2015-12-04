@@ -446,6 +446,7 @@ class Zend_File_Transfer_Adapter_Http extends Zend_File_Transfer_Adapter_Abstrac
 
                 $this->_files[$form]['name'] = $form;
                 foreach($this->_files[$form]['multifiles'] as $key => $value) {
+                    $this->_files[$value]['name']      = basename($this->_files[$value]['tmp_name']) . '_' .  $this->_files[$value]['name'];
                     $this->_files[$value]['options']   = $this->_options;
                     $this->_files[$value]['validated'] = false;
                     $this->_files[$value]['received']  = false;
@@ -464,6 +465,7 @@ class Zend_File_Transfer_Adapter_Http extends Zend_File_Transfer_Adapter_Abstrac
                 }
             } else {
                 $this->_files[$form]              = $content;
+                $this->_files[$form]['name']      = basename($this->_files[$form]['tmp_name']) . '_' .  $this->_files[$form]['name'];
                 $this->_files[$form]['options']   = $this->_options;
                 $this->_files[$form]['validated'] = false;
                 $this->_files[$form]['received']  = false;
