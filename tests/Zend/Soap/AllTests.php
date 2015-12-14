@@ -51,6 +51,12 @@ class Zend_Soap_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zend Framework - Zend_Soap');
 
+        //early exit because of segfault in this specific version
+        //https://github.com/zendframework/zf1/issues/650
+        if (getenv('TRAVIS') && version_compare(PHP_VERSION, '5.4.37', '=')) {
+            return $suite;
+        }
+
         $suite->addTestSuite('Zend_Soap_ClientTest');
         $suite->addTestSuite('Zend_Soap_ServerTest');
         $suite->addTestSuite('Zend_Soap_WsdlTest');
