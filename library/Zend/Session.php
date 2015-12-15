@@ -377,8 +377,8 @@ class Zend_Session extends Zend_Session_Abstract
             );
 
         // normally "rememberMe()" represents a security context change, so should use new session id
-        if(self::sessionExists()){
-        	self::regenerateId();
+        if (self::sessionExists()){
+            self::regenerateId();
         }
     }
 
