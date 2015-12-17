@@ -394,9 +394,6 @@ class Zend_Session_SaveHandler_DbTableTest extends PHPUnit_Framework_TestCase
 
         Zend_Session::rememberUntil ( 61 );
 
-        $arrCookieParams = session_get_cookie_params();
-        $this->assertSame(61, $arrCookieParams['lifetime']);
-
         session_write_close();
     }
 
