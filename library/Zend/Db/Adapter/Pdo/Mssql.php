@@ -82,13 +82,6 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
         // baseline of DSN parts
         $dsn = $this->_config;
 
-        // don't pass the username and password in the DSN
-        unset($dsn['username']);
-        unset($dsn['password']);
-        unset($dsn['options']);
-        unset($dsn['persistent']);
-        unset($dsn['driver_options']);
-
         if (isset($dsn['port'])) {
             $seperator = ':';
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -109,6 +102,17 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
                 case 'mssql':
                     $this->_pdoType = 'mssql';
                     break;
+                case 'odbc':
+                    $this->_pdoType = 'odbc';
+                    $dsn['DATABASE']    = $dsn['dbname'];
+                    unset($dsn['dbname']);
+                    $dsn['DRIVER']    = '{SQL Server}';
+                    $dsn['SERVER']    = $dsn['host'];
+                    if (!$dsn['username'] && !$dsn['password']) {
+                        $dsn['Trusted_Connection'] = "yes";
+                    }
+                    unset($dsn['host']);
+                    break;
                 case 'dblib':
                 default:
                     $this->_pdoType = 'dblib';
@@ -116,6 +120,13 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
             }
             unset($dsn['pdoType']);
         }
+
+        // don't pass the username and password in the DSN
+        unset($dsn['username']);
+        unset($dsn['password']);
+        unset($dsn['options']);
+        unset($dsn['persistent']);
+        unset($dsn['driver_options']);
 
         // use all remaining parts in the DSN
         foreach ($dsn as $key => $val) {
