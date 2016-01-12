@@ -21,7 +21,7 @@
  */
 
 require_once 'Zend/Crypt/Math.php';
-
+require_once 'Zend/Crypt/Exception.php';
 
 /**
  * @category   Zend
@@ -36,8 +36,7 @@ class Zend_Crypt_MathTest extends PHPUnit_Framework_TestCase
 
     public function testRand()
     {
-        if (!extension_loaded('bcmath'))
-        {
+        if (!extension_loaded('bcmath')) {
             $this->markTestSkipped('Extension bcmath not loaded');
         }
 
@@ -59,4 +58,74 @@ class Zend_Crypt_MathTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(bccomp($result, $lower) !== '-1');
     }
 
+    public function testRandBytes()
+    {
+        for ($length = 1; $length < 4096; $length++) {
+            $rand = Zend_Crypt_Math::randBytes($length);
+            $this->assertTrue(false !== $rand);
+            $this->assertEquals($length, strlen($rand));
+        }
+    }
+
+    public function testRandInteger()
+    {
+        for ($i = 0; $i < 1024; $i++) {
+            $min = rand(1, PHP_INT_MAX/2);
+            $max = $min + rand(1, PHP_INT_MAX/2 - 1);
+            $rand = Zend_Crypt_Math::randInteger($min, $max);
+            $this->assertGreaterThanOrEqual($min, $rand);
+            $this->assertLessThanOrEqual($max, $rand);
+        }
+    }
+
+    public static function provideRandInt()
+    {
+        return array(
+            array(2, 1, 10000, 100, 0.9, 1.1, false),
+            array(2, 1, 10000, 100, 0.8, 1.2, true)
+        );
+    }
+
+    /**
+     * A Monte Carlo test that generates $cycles numbers from 0 to $tot
+     * and test if the numbers are above or below the line y=x with a
+     * frequency range of [$min, $max]
+     *
+     * @dataProvider provideRandInt
+     */
+    public function testMontecarloRandInteger($num, $valid, $cycles, $tot, $min, $max, $strong)
+    {
+        try {
+            $test = Zend_Crypt_Math::randBytes(1, $strong);
+        } catch (Zend_Crypt_Exception $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
+
+        $i     = 0;
+        $count = 0;
+        do {
+            $up   = 0;
+            $down = 0;
+            for ($i = 0; $i < $cycles; $i++) {
+                $x = Zend_Crypt_Math::randInteger(0, $tot, $strong);
+                $y = Zend_Crypt_Math::randInteger(0, $tot, $strong);
+                if ($x > $y) {
+                    $up++;
+                } elseif ($x < $y) {
+                    $down++;
+                }
+            }
+            $this->assertGreaterThan(0, $up);
+            $this->assertGreaterThan(0, $down);
+            $ratio = $up / $down;
+            if ($ratio > $min && $ratio < $max) {
+                $count++;
+            }
+            $i++;
+        } while ($i < $num && $count < $valid);
+
+        if ($count < $valid) {
+            $this->fail('The random number generator failed the Monte Carlo test');
+        }
+    }
 }
