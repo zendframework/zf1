@@ -432,6 +432,11 @@ class Zend_Session extends Zend_Session_Abstract
         }
 
         if (self::$_sessionStarted) {
+            // Generate valid session id
+            if (self::$_regenerateIdState === -1) {
+                self::regenerateId();
+            }
+            
             return; // already started
         }
 
