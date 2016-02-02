@@ -422,8 +422,6 @@ class Zend_Session extends Zend_Session_Abstract
     {
         // Check to see if we've been passed an invalid session ID
         if ( self::getId() && !self::_checkId(self::getId()) ) {
-            // Generate a valid, temporary replacement
-            self::setId(md5(self::getId()));
             // Force a regenerate after session is started
             self::$_regenerateIdState = -1;
         }
@@ -664,7 +662,7 @@ class Zend_Session extends Zend_Session_Abstract
         if (!self::$_unitTestEnabled && defined('SID')) {
             /** @see Zend_Session_Exception */
             require_once 'Zend/Session/Exception.php';
-            throw new Zend_Session_Exception('The session has already been started.  The session id must be set first.');
+            throw new Zend_Session_Exception('The session has already been started. The session id must be set first.');
         }
 
         if (!self::$_unitTestEnabled && headers_sent($filename, $linenum)) {
