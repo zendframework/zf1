@@ -80,4 +80,13 @@ class Zend_Validate_IbanTest extends PHPUnit_Framework_TestCase
         $validator = new Zend_Validate_Iban('en_US');
         $this->assertFalse($validator->isValid('AT611904300234573201'));
     }
+
+    /**
+     * @group GH-641
+     */
+    public function testIbanOfMacedonia()
+    {
+        $validator = new Zend_Validate_Iban();
+        $this->assertTrue($validator->isValid('MK07250120000058984'));
+    }
 }
