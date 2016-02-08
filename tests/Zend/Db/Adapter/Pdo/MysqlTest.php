@@ -315,7 +315,17 @@ class Zend_Db_Adapter_Pdo_MysqlTest extends Zend_Db_Adapter_Pdo_TestCommon
         $adapter = new ZendTest_Db_Adapter_Pdo_Mysql(array('dbname' => 'foo', 'charset' => 'XYZ', 'username' => 'bar', 'password' => 'foo'));
         $this->assertEquals('mysql:dbname=foo;charset=XYZ', $adapter->_dsn());
     }
-    
+
+    /**
+     * Test that quote() does not alter binary data
+     */
+    public function testBinaryQuoteWithNulls()
+    {
+        $binary = pack("xxx");
+        $value  = $this->_db->quote($binary);
+        $this->assertEquals('\'\0\0\0\'', $value);
+    }
+
     public function getDriver()
     {
         return 'Pdo_Mysql';
@@ -330,4 +340,3 @@ class ZendTest_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         return parent::_dsn();
     }
 }
-

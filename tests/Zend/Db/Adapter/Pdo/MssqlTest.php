@@ -361,6 +361,17 @@ class Zend_Db_Adapter_Pdo_MssqlTest extends Zend_Db_Adapter_Pdo_TestCommon
         $this->assertArrayHasKey('product_name', $productsTableInfo);
     }
 
+    /**
+     * test that quote() escapes null byte character
+     * in a string.
+     */
+    public function testAdapterQuoteNullByteCharacter()
+    {
+        $string = "1\0";
+        $value  = $this->_db->quote($string);
+        $this->assertEquals("'1\\000'", $value);
+    }
+
     public function getDriver()
     {
         return 'Pdo_Mssql';
