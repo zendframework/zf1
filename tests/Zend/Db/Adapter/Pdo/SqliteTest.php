@@ -247,4 +247,15 @@ class Zend_Db_Adapter_Pdo_SqliteTest extends Zend_Db_Adapter_Pdo_TestCommon
         $this->assertTrue($stmt instanceof $stmtClass,
             'Expecting object of type ' . $stmtClass . ', got ' . get_class($stmt));
     }
+
+    /**
+     * test that quote() escapes null byte character
+     * in a string.
+     */
+    public function testAdapterQuoteNullByteCharacter()
+    {
+        $string = "1\0";
+        $value  = $this->_db->quote($string);
+        $this->assertEquals("'1\\000'", $value);
+    }
 }
