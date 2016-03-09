@@ -207,7 +207,7 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
             } else {
                 $result = ini_set('default_charset', $encoding);
             }
-            if (!$result) {
+            if ($result === false) {
                 require_once 'Zend/Validate/Exception.php';
                 throw new Zend_Validate_Exception('Given encoding not supported on this OS!');
             }
