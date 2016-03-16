@@ -922,6 +922,40 @@ EOB;
         $this->assertEquals('test', $object->_empty_);
     }
 
+    /**
+     * Decoding null should return null
+     */
+    public function testWillDecodeNullToNull()
+    {
+        $this->assertNull(Zend_Json::decode(null));
+    }
+
+    /**
+     * Decoding null should return null
+     */
+    public function testWillDecodeWithBuiltinNullToNull()
+    {
+        Zend_Json::$useBuiltinEncoderDecoder = true;
+        $this->assertNull(Zend_Json::decode(null));
+    }
+
+    /**
+     * Decoding empty string should return null
+     */
+    public function testWillDecodeEmptyStringToNull()
+    {
+        $this->assertNull(Zend_Json::decode(''));
+    }
+
+    /**
+     * Decoding empty string should return null
+     */
+    public function testWillDecodeWithBuiltinEmptyStringToNull()
+    {
+        Zend_Json::$useBuiltinEncoderDecoder = true;
+        $this->assertNull(Zend_Json::decode(''));
+    }
+
 }
 
 /**
