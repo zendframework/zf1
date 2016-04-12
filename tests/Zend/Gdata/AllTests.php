@@ -155,23 +155,6 @@ require_once 'Zend/Gdata/Gapps/UserEntryTest.php';
 require_once 'Zend/Gdata/Gapps/UserFeedTest.php';
 require_once 'Zend/Gdata/Gapps/UserQueryTest.php';
 
-require_once 'Zend/Gdata/YouTube/PlaylistListFeedTest.php';
-require_once 'Zend/Gdata/YouTube/PlaylistListEntryTest.php';
-require_once 'Zend/Gdata/YouTube/SubscriptionFeedTest.php';
-require_once 'Zend/Gdata/YouTube/SubscriptionEntryTest.php';
-require_once 'Zend/Gdata/YouTube/PlaylistVideoEntryTest.php';
-require_once 'Zend/Gdata/YouTube/VideoEntryTest.php';
-require_once 'Zend/Gdata/YouTube/PlaylistVideoFeedTest.php';
-require_once 'Zend/Gdata/YouTube/VideoFeedTest.php';
-require_once 'Zend/Gdata/YouTube/UserProfileEntryTest.php';
-require_once 'Zend/Gdata/YouTube/CommentFeedTest.php';
-require_once 'Zend/Gdata/YouTube/CommentEntryTest.php';
-require_once 'Zend/Gdata/YouTube/ContactFeedTest.php';
-require_once 'Zend/Gdata/YouTube/ContactEntryTest.php';
-require_once 'Zend/Gdata/YouTube/VideoQueryTest.php';
-require_once 'Zend/Gdata/YouTube/ActivityFeedTest.php';
-require_once 'Zend/Gdata/YouTube/ActivityEntryTest.php';
-
 require_once 'Zend/Gdata/Books/CollectionFeedTest.php';
 require_once 'Zend/Gdata/Books/CollectionEntryTest.php';
 require_once 'Zend/Gdata/Books/VolumeFeedTest.php';
@@ -187,7 +170,6 @@ require_once 'Zend/Gdata/SpreadsheetsOnlineTest.php';
 require_once 'Zend/Gdata/DocsOnlineTest.php';
 require_once 'Zend/Gdata/PhotosOnlineTest.php';
 require_once 'Zend/Gdata/GappsOnlineTest.php';
-require_once 'Zend/Gdata/YouTubeOnlineTest.php';
 require_once 'Zend/Gdata/BooksOnlineTest.php';
 require_once 'Zend/Gdata/SkipTests.php';
 
@@ -334,22 +316,6 @@ class Zend_Gdata_AllTests
         $suite->addTestSuite('Zend_Gdata_Gapps_UserFeedTest');
         $suite->addTestSuite('Zend_Gdata_Gapps_UserQueryTest');
 
-        $suite->addTestSuite('Zend_Gdata_YouTube_PlaylistListFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_PlaylistListEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_SubscriptionFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_SubscriptionEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_PlaylistVideoEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_VideoEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_PlaylistVideoFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_VideoFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_UserProfileEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_CommentFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_CommentEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_ContactFeedTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_ContactEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_ActivityEntryTest');
-        $suite->addTestSuite('Zend_Gdata_YouTube_ActivityFeedTest');
-
         $suite->addTestSuite('Zend_Gdata_Books_CollectionEntryTest');
         $suite->addTestSuite('Zend_Gdata_Books_CollectionFeedTest');
         $suite->addTestSuite('Zend_Gdata_Books_VolumeEntryTest');
@@ -405,10 +371,6 @@ class Zend_Gdata_AllTests
             if (defined('TESTS_ZEND_GDATA_GAPPS_ONLINE_ENABLED') &&
             constant('TESTS_ZEND_GDATA_GAPPS_ONLINE_ENABLED') == true) {
                 $suite->addTestSuite('Zend_Gdata_GappsOnlineTest');
-            }
-            if (defined('TESTS_ZEND_GDATA_YOUTUBE_ONLINE_ENABLED') &&
-            constant('TESTS_ZEND_GDATA_YOUTUBE_ONLINE_ENABLED') == true) {
-                $suite->addTestSuite('Zend_Gdata_YouTubeOnlineTest');
             }
         }
         if ($skippingOnlineTests) {
