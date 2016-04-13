@@ -394,7 +394,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
         $module = $request->getModuleName();
         if ($this->isValidModule($module)) {
             $this->_curModule    = $module;
-            $this->_curDirectory = $controllerDirs[$module];
+            $this->_curDirectory = $controllerDirs[strtolower($module)];
         } elseif ($this->isValidModule($this->_defaultModule)) {
             $request->setModuleName($this->_defaultModule);
             $this->_curModule    = $this->_defaultModule;
