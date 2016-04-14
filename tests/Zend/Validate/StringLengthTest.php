@@ -179,6 +179,15 @@ class Zend_Validate_StringLengthTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Zend_Validate_Exception
+     * @group GH-634
+     */
+    public function testWrongEncoding()
+    {
+        $this->_validator->setEncoding('');
+    }
+
+    /**
      * @ZF-4352
      */
     public function testNonStringValidation()

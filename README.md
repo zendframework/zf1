@@ -7,10 +7,10 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.18dev Release.
+Zend Framework 1.12.19dev Release.
 Released on MMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.18
+IMPORTANT FIXES FOR 1.12.19
 ---------------------------
 
 See http://framework.zend.com/changelog for full details.

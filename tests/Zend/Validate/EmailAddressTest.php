@@ -554,7 +554,7 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         $messages = $this->_validator->getMessageTemplates();
         $this->assertEquals('TestMessage', $messages[Zend_Validate_EmailAddress::INVALID]);
     }
-    
+
     /**
      * Testing setMessage for all messages
      *
@@ -613,7 +613,7 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
             $this->multipleOptionsDetected = true;
         }
     }
-    
+
     /**
      * @group ZF-11239
      */
@@ -633,7 +633,7 @@ class Zend_Validate_EmailAddressTest extends PHPUnit_Framework_TestCase
         }
         $validator = new Zend_Validate_EmailAddress();
         $validator->setValidateMx(true);
-        $this->assertTrue($validator->isValid('testmail@zürich.ch'));
+        $this->assertTrue($validator->isValid('testmail@faß.de'));
     }
 
     /**
