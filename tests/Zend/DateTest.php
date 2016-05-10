@@ -4380,6 +4380,17 @@ class Zend_DateTest extends PHPUnit_Framework_TestCase
         $this->assertSame('2019-12-01T04:00:00+05:00', $date->get(Zend_Date::W3C));
         $date->subMonth(12);
         $this->assertSame('2018-12-01T04:00:00+05:00', $date->get(Zend_Date::W3C));
+
+        $oldzone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+
+        // "2016-05-01T00:00:00+04:00"
+        $date = new Zend_Date(1462046400, $locale);
+        $date->setTimezone('Asia/Muscat');
+
+        $date->subMonth(1);
+        $this->assertSame('2016-04-01T00:00:00+04:00', $date->get(Zend_Date::W3C));
+        date_default_timezone_set($oldzone);
     }
 
     /**
