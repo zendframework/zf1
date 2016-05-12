@@ -324,7 +324,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
             if (!array_key_exists($var, $return)) {
                 return false;
             } elseif ($return[$var] == '' || $return[$var] === null) {
-                if (array_key_exists($var, $this->_defaults)) {
+                if (isset($this->_defaults[$var])) {
                     // Empty variable? Replace with the default value.
                     $return[$var] = $this->_defaults[$var];
                 }
