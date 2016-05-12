@@ -799,6 +799,19 @@ class Zend_Controller_Router_Route_ChainTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $res['bar']);
     }
 
+    public function testChainingStaticDynamicMatchToNoDefaults()
+    {
+        $foo = new Zend_Controller_Router_Route_Static('foo');
+        $bar = new Zend_Controller_Router_Route(':bar', array());
+        $chain = $foo->chain($bar);
+
+        $request = new Zend_Controller_Router_ChainTest_Request('http://www.zend.com/foo');
+        $res = $chain->match($request);
+
+        $this->assertTrue(is_array($res), 'Route did not match');
+        $this->assertEquals('', $res['bar']);
+    }
+
     /**
      * @group ZF-7368
      */
