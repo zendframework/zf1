@@ -1,5 +1,16 @@
 ![Logo](http://framework.zend.com/images/logos/ZendFramework-logo.png)
 
+> ## End-of-Life occurs 28 Sep 2016
+>
+> Between now and 28 Sep 2016, we will only be accepting security patches to
+> this repository; after that date, we will issue no more releases.
+>
+> For more information:
+>
+> - https://framework.zend.com/blog/2016-06-28-zf1-eol.html
+
+---
+
 Welcome to the Zend Framework 1.12 Release! 
 
 Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=master)](https://travis-ci.org/zendframework/zf1)
