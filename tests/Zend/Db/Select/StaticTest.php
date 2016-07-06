@@ -834,6 +834,10 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('p' => 'products'))->order('MD5(1);drop table products; -- )');
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" ORDER BY "MD5(1);drop table products; -- )" ASC', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from('p')->order("MD5(\";(\");DELETE FROM p2; SELECT 1 #)");
+        $this->assertEquals('SELECT "p".* FROM "p" ORDER BY "MD5("";("");DELETE FROM p2; SELECT 1 #)" ASC', $select->assemble());
     }
 
     public function testSqlInjectionWithGroup()
@@ -845,6 +849,10 @@ class Zend_Db_Select_StaticTest extends Zend_Db_Select_TestCommon
         $select = $this->_db->select();
         $select->from(array('p' => 'products'))->group('MD5(1); drop table products; -- )');
         $this->assertEquals('SELECT "p".* FROM "products" AS "p" GROUP BY "MD5(1); drop table products; -- )"', $select->assemble());
+
+        $select = $this->_db->select();
+        $select->from('p')->group("MD5(\";(\");DELETE FROM p2; SELECT 1 #)");
+        $this->assertEquals('SELECT "p".* FROM "p" GROUP BY "MD5("";("");DELETE FROM p2; SELECT 1 #)"', $select->assemble());
     }
 
     public function testSqlInjectionInColumn()
