@@ -95,6 +95,10 @@ class Zend_Filter_StringTrim implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        if (!is_string($value)) {
+            return $value;
+        }
+        
         if (null === $this->_charList) {
             return $this->_unicodeTrim((string) $value);
         } else {
