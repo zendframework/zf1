@@ -18,17 +18,11 @@ Master: [![Build Status](https://api.travis-ci.org/zendframework/zf1.png?branch=
 RELEASE INFORMATION
 ===================
 
-Zend Framework 1.12.19 Release.
-Released on July 13, 2016.
+Zend Framework 1.12.20-dev Release.
+Released on MMM DD, YYYY.
 
-IMPORTANT FIXES FOR 1.12.19
+IMPORTANT FIXES FOR 1.12.20
 ---------------------------
-
-This release contains security fixes:
-
-- **ZF2016-02**: The implementation of `ORDER BY` and `GROUP BY` in
-  `Zend_Db_Select` contained potential SQL injection vulnerabilities,
-  and have been patched.
 
 See http://framework.zend.com/changelog for full details.
 
