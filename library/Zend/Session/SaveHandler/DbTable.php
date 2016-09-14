@@ -365,17 +365,13 @@ class Zend_Session_SaveHandler_DbTable
      * Destroy session
      *
      * @param string $id
-     * @return boolean
+     * @return true
      */
     public function destroy($id)
     {
-        $return = false;
+        $this->delete($this->_getPrimary($id, self::PRIMARY_TYPE_WHERECLAUSE));
 
-        if ($this->delete($this->_getPrimary($id, self::PRIMARY_TYPE_WHERECLAUSE))) {
-            $return = true;
-        }
-
-        return $return;
+        return true;
     }
 
     /**
