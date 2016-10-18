@@ -47,8 +47,11 @@ class Zend_Tool_Framework_Client_Interactive_InputRequest
         return $this->_content;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->_content;
+        return strval($this->_content);
     }
 }
