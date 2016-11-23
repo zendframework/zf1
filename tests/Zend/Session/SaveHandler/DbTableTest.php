@@ -372,6 +372,31 @@ class Zend_Session_SaveHandler_DbTableTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /*
+     * Ensures that Zend_Session::rememberUntil behaves as expected
+     * This test failed on PHP7 since regenerateId() was called without a session
+     *
+     * @return void
+     */
+    public function testRememberUntil()
+    {
+        $this->_dropTable();
+
+        $config = $this->_saveHandlerTableConfig;
+        unset($config[Zend_Session_SaveHandler_DbTable::PRIMARY_ASSIGNMENT]);
+        $config['primary'] = array($config['primary'][0]);
+
+        $this->_setupDb($config['primary']);
+
+        $this->_usedSaveHandlers[] =
+        $saveHandler = new Zend_Session_SaveHandler_DbTable($config);
+        Zend_Session::setSaveHandler($saveHandler);       
+
+        Zend_Session::rememberUntil ( 61 );
+
+        session_write_close();
+    }
+
     public function testReadWrite()
     {
         $config = $this->_saveHandlerTableConfig;
