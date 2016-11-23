@@ -51,7 +51,7 @@ class Zend_Loader
      */
     public static function loadClass($class, $dirs = null)
     {
-        if (class_exists($class, false) || interface_exists($class, false)) {
+        if (self::_isLoaded($class)) {
             return;
         }
 
@@ -82,7 +82,7 @@ class Zend_Loader
             self::loadFile($file, null, true);
         }
 
-        if (!class_exists($class, false) && !interface_exists($class, false)) {
+        if (!self::_isLoaded($class)) {
             require_once 'Zend/Exception.php';
             throw new Zend_Exception("File \"$file\" does not exist or class \"$class\" was not found in the file");
         }
@@ -290,6 +290,23 @@ class Zend_Loader
             require_once 'Zend/Exception.php';
             throw new Zend_Exception('Security check: Illegal character in filename');
         }
+    }
+
+    /**
+     * Check if a given classname is loaded as either a class, an interface or
+     * (if supported) a trait.
+     *
+     * @param string $class
+     * @return boolean
+     */
+    protected static function _isLoaded($class)
+    {
+        $classLoaded = class_exists($class, false) || interface_exists($class, false);
+        if (function_exists('trait_exists'))
+        {
+            $classLoaded = $classLoaded || trait_exists($class, false);
+        }
+        return $classLoaded;
     }
 
     /**
