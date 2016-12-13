@@ -423,7 +423,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         $wordsToHighlightList = array();
         $analyzer = Zend_Search_Lucene_Analysis_Analyzer::getDefault();
         foreach ($words as $wordString) {
-            $wordsToHighlightList[] = $analyzer->tokenize($wordString);
+            $wordsToHighlightList[] = $analyzer->tokenize($wordString, 'UTF-8');
         }
         $wordsToHighlight = call_user_func_array('array_merge', $wordsToHighlightList);
 
