@@ -47,4 +47,66 @@ class Zend_Db_Select_Pdo_MysqlTest extends Zend_Db_Select_TestCommon
         return 'Pdo_Mysql';
     }
 
+    public function testSelectWithForceIndex()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->forceIndex('p', 'IX_this_index_does_not_exist');
+
+        $expected = 'SELECT `p`.* FROM `product` AS `p` FORCE INDEX(IX_this_index_does_not_exist)';
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with force index failed');
+        #Index should remain after first assemble
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with force index failed');
+    }
+
+    public function testSelectWithUseIndex()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->useIndex('p', 'IX_this_index_does_not_exist');
+
+        $expected = 'SELECT `p`.* FROM `product` AS `p` USE INDEX(IX_this_index_does_not_exist)';
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with use index failed');
+        #Index should remain after first assemble
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with force index failed');
+    }
+
+    public function testSelectWithIgnoreIndex()
+    {
+        $select = $this->_db->select();
+        $select->from(array ('p' => 'product'))
+            ->ignoreIndex('p', 'IX_this_index_does_not_exist');
+
+        $expected = 'SELECT `p`.* FROM `product` AS `p` IGNORE INDEX(IX_this_index_does_not_exist)';
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with ignore index failed');
+        #Index should remain after first assemble
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with force index failed');
+    }
+
+    public function testSelectWithJoinAndForceIndex()
+    {
+        $products = $this->_db->quoteIdentifier('zfproducts');
+        $product_id = $this->_db->quoteIdentifier('product_id');
+        $bugs_products = $this->_db->quoteIdentifier('zfbugs_products');
+
+        $select = $this->_db->select()
+            ->from(array('p'=>'zfproducts'))
+            ->forceIndex('p', 'IX_this_index_does_not_exist')
+            ->join('zfbugs_products', "$products.$product_id = $bugs_products.$product_id", array())
+            ->forceIndex('zfbugs_products', 'IX_this_index_does_not_exist_2');
+
+        $expected = 'SELECT `p`.* FROM `zfproducts` AS `p` FORCE INDEX(IX_this_index_does_not_exist)' .
+            "\n" . ' INNER JOIN `zfbugs_products` FORCE INDEX(IX_this_index_does_not_exist_2) ON `zfproducts`.`product_id` = `zfbugs_products`.`product_id`';
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with join and force index failed');
+        #Index should remain after first assemble
+        $this->assertEquals($expected, $select->assemble(),
+            'Select with force index failed');
+    }
 }
