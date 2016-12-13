@@ -433,8 +433,8 @@ class Zend_Session extends Zend_Session_Abstract
             throw new Zend_Session_Exception('The session was explicitly destroyed during this request, attempting to re-start is not allowed.');
         }
 
-        if (self::$_sessionStarted) {
-            return; // already started
+        if (self::$_sessionStarted && !self::$_writeClosed) {
+            return; // already started and session_write_close() was not performed
         }
 
         // make sure our default options (at the least) have been set
@@ -605,7 +605,7 @@ class Zend_Session extends Zend_Session_Abstract
                         unset($_SESSION['__ZF'][$namespace]['ENVGH']);
                     }
                 }
-                
+
                 if (isset($namespace) && empty($_SESSION['__ZF'][$namespace])) {
                     unset($_SESSION['__ZF'][$namespace]);
                 }
