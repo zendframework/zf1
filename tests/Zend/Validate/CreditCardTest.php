@@ -58,6 +58,53 @@ class Zend_Validate_CreditCardTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the BCMC provider
+     *
+     * @return void
+     */
+    public function testValidBCMC()
+    {
+        $validator = new Zend_Validate_CreditCard(
+            array(
+                'type'  => Zend_Validate_CreditCard::BCMC
+            )
+        );
+        $this->assertTrue($validator->isValid('67030000000000003'));
+    }
+
+    /**
+     * Test BCMC validation + check message
+     *
+     * @return void
+     */
+    public function testInvalidBCMC()
+    {
+        $validator = new Zend_Validate_CreditCard(
+            array(
+                'type'  => Zend_Validate_CreditCard::BCMC
+            )
+        );
+        $this->assertFalse($validator->isValid('string'));
+        $this->assertArrayHasKey('creditcardContent', $validator->getMessages());
+    }
+
+    /**
+     * Ensure invalid checksums are reported as expected
+     *
+     * @return void
+     */
+    public function testInvalidChecksumBCMC()
+    {
+        $validator = new Zend_Validate_CreditCard(
+            array(
+                'type'  => Zend_Validate_CreditCard::BCMC
+            )
+        );
+        $this->assertFalse($validator->isValid('67030000000000013'));
+        $this->assertArrayHasKey('creditcardChecksum', $validator->getMessages());
+    }
+
+    /**
      * Ensures that getMessages() returns expected default value
      *
      * @return void
@@ -76,7 +123,7 @@ class Zend_Validate_CreditCardTest extends PHPUnit_Framework_TestCase
     public function testGetSetType()
     {
         $validator = new Zend_Validate_CreditCard();
-        $this->assertEquals(11, count($validator->getType()));
+        $this->assertEquals(12, count($validator->getType()));
 
         $validator->setType(Zend_Validate_CreditCard::MAESTRO);
         $this->assertEquals(array(Zend_Validate_CreditCard::MAESTRO), $validator->getType());

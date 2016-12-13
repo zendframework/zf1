@@ -47,6 +47,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
     const LASER            = 'Laser';
     const MAESTRO          = 'Maestro';
     const MASTERCARD       = 'Mastercard';
+    const BCMC             = 'BCMC';
     const SOLO             = 'Solo';
     const VISA             = 'Visa';
 
@@ -86,6 +87,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
         self::JCB              => array(16),
         self::LASER            => array(16, 17, 18, 19),
         self::MAESTRO          => array(12, 13, 14, 15, 16, 17, 18, 19),
+        self::BCMC             => array(17),
         self::MASTERCARD       => array(16),
         self::SOLO             => array(16, 18, 19),
         self::UNIONPAY         => array(16, 17, 18, 19),
@@ -110,6 +112,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
         self::JCB              => array('3528', '3529', '353', '354', '355', '356', '357', '358'),
         self::LASER            => array('6304', '6706', '6771', '6709'),
         self::MAESTRO          => array('5018', '5020', '5038', '6304', '6759', '6761', '6763'),
+        self::BCMC             => array('6703'),
         self::MASTERCARD       => array('51', '52', '53', '54', '55'),
         self::SOLO             => array('6334', '6767'),
         self::UNIONPAY         => array('622126', '622127', '622128', '622129', '62213', '62214',
