@@ -152,7 +152,7 @@ class Zend_Reflection_Method extends ReflectionMethod
 
         // Strip off lines until we come to a closing bracket
         do {
-            if (count($lines) == 0) break;
+            if (count($lines) == 0) return "";
             $firstLine = array_shift($lines);
         } while (strpos($firstLine, ')') === false);
 
