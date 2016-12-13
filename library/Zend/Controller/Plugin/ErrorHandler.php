@@ -192,6 +192,15 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
     }
 
     /**
+     * Shutdown dispatch hook -- Reinitialize class members
+     */
+    public function dispatchLoopShutdown()
+    {
+        $this->_isInsideErrorHandlerLoop = false;
+        $this->_exceptionCountAtFirstEncounter = 0;
+    }
+
+    /**
      * Route shutdown hook -- Ccheck for router exceptions
      *
      * @param Zend_Controller_Request_Abstract $request
