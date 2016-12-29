@@ -125,8 +125,8 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
     public function initCsrfValidator()
     {
         $session = $this->getSession();
-        if (isset($session->hash)) {
-            $rightHash = $session->hash;
+        if (isset($session->hashes) && isset($session->hashes[$this->_salt])) {
+            $rightHash = $session->hashes[$this->_salt];
         } else {
             $rightHash = null;
         }
@@ -144,6 +144,13 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
     public function setSalt($salt)
     {
         $this->_salt = (string) $salt;
+        
+        if (isset($this->_hash)) {
+            $this->_hash = null;
+            $this->getHash();
+        }
+        $this->initCsrfValidator();
+                
         return $this;
     }
 
@@ -181,7 +188,7 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
      */
     public function getSessionName()
     {
-        return __CLASS__ . '_' . $this->getSalt() . '_' . $this->getName();
+        return __CLASS__ . '_' . $this->getName();
     }
 
     /**
@@ -226,7 +233,11 @@ class Zend_Form_Element_Hash extends Zend_Form_Element_Xhtml
         $session = $this->getSession();
         $session->setExpirationHops(1, null, true);
         $session->setExpirationSeconds($this->getTimeout());
-        $session->hash = $this->getHash();
+        
+        if (!isset($session->hashes)) {
+            $session->hashes = array();
+        }
+        $session->hashes[$this->_salt] = $this->getHash();
     }
 
     /**
