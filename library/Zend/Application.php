@@ -377,11 +377,11 @@ class Zend_Application
     /**
      * Run the application
      *
-     * @return void
+     * @return mixed
      */
     public function run()
     {
-        $this->getBootstrap()->run();
+        return $this->getBootstrap()->run();
     }
 
     /**
