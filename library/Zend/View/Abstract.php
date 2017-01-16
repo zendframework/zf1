@@ -109,6 +109,17 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
     private $_escape = 'htmlspecialchars';
 
     /**
+     * ENT flag used for htmlspecialchars and htmlentities.
+     * Default ENT_COMPAT, other supported values:
+     * ENT_COMPAT 	Will convert double-quotes and leave single-quotes alone.
+     * ENT_QUOTES 	Will convert both double and single quotes.
+     * ENT_NOQUOTES 	Will leave both double and single quotes unconverted.
+     *
+     * @var int
+     */
+    private $_entFlag = ENT_COMPAT;
+
+    /**
      * Encoding to use in escaping mechanisms; defaults to utf-8
      * @var string
      */
@@ -758,6 +769,22 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
     }
 
     /**
+     * Set Ent flag for escape() when _escape mechanism is htmlspecialchars or htmlentities.
+     *
+     * @param int $flag ENT Flag for htmlspecialchars and htmlentities.
+     * @return Zend_View_Abstract
+     */
+    public function setEntFlag($flag)
+    {
+        $allowedFlags = array(ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES);
+
+        if (in_array($flag, $allowedFlags, true)) {
+            $this->_entFlag = $flag;
+        }
+        return $this;
+    }
+
+    /**
      * Set LFI protection flag
      *
      * @param  bool $flag
@@ -894,7 +921,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
      * Escapes a value for output in a view script.
      *
      * If escaping mechanism is one of htmlspecialchars or htmlentities, uses
-     * {@link $_encoding} setting.
+     * {@link $_encoding} and {@link $_entFlag} settings.
      *
      * @param mixed $var The output to escape.
      * @return mixed The escaped value.
@@ -902,7 +929,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
     public function escape($var)
     {
         if (in_array($this->_escape, array('htmlspecialchars', 'htmlentities'))) {
-            return call_user_func($this->_escape, $var, ENT_COMPAT, $this->_encoding);
+            return call_user_func($this->_escape, $var, $this->_entFlag, $this->_encoding);
         }
 
         if (1 == func_num_args()) {
