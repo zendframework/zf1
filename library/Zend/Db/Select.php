@@ -1167,7 +1167,7 @@ class Zend_Db_Select
 
         // Add the list of all joins
         if (!empty($from)) {
-            $sql .= ' ' . self::SQL_FROM . ' ' . implode("\n", $from);
+            $sql .= ' ' . self::SQL_FROM . ' ' . implode(" ", $from);
         }
 
         return $sql;
