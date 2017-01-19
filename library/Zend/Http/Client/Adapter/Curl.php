@@ -401,7 +401,9 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == Zend_Http_Client::DELETE) {
             // This is a DELETE by a setRawData string
-            curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+            if(!empty(trim($body))) {
+                curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+            }
         } elseif ($method == Zend_Http_Client::OPTIONS) {
             // This is an OPTIONS by a setRawData string
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
