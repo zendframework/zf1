@@ -221,26 +221,6 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             curl_setopt($this->_curl, CURLOPT_PORT, intval($port));
         }
 
-        // Set connection timeout
-        $connectTimeout  = $this->_config['timeout'];
-        $constant        = CURLOPT_CONNECTTIMEOUT;
-        if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
-            $connectTimeout *= 1000;
-            $constant = constant('CURLOPT_CONNECTTIMEOUT_MS');
-        }
-        curl_setopt($this->_curl, $constant, $connectTimeout);
-
-        // Set request timeout (once connection is established)
-        if (array_key_exists('request_timeout', $this->_config)) {
-            $requestTimeout  = $this->_config['request_timeout'];
-            $constant        = CURLOPT_TIMEOUT;
-            if (defined('CURLOPT_TIMEOUT_MS')) {
-                $requestTimeout *= 1000;
-                $constant = constant('CURLOPT_TIMEOUT_MS');
-            }
-            curl_setopt($this->_curl, $constant, $requestTimeout);
-        }
-
         // Set Max redirects
         curl_setopt($this->_curl, CURLOPT_MAXREDIRS, $this->_config['maxredirects']);
 
@@ -421,7 +401,9 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == Zend_Http_Client::DELETE) {
             // This is a DELETE by a setRawData string
-            curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+            if(!empty(trim($body))) {
+                curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
+            }
         } elseif ($method == Zend_Http_Client::OPTIONS) {
             // This is an OPTIONS by a setRawData string
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $body);
@@ -438,6 +420,26 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
                 }
             }
         }
+
+		// Set connection timeout
+		$connectTimeout  = $this->_config['timeout'];
+		$constant        = CURLOPT_CONNECTTIMEOUT;
+		if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
+			$connectTimeout *= 1000;
+			$constant = constant('CURLOPT_CONNECTTIMEOUT_MS');
+		}
+		curl_setopt($this->_curl, $constant, $connectTimeout);
+
+		// Set request timeout (once connection is established)
+		if (array_key_exists('request_timeout', $this->_config)) {
+			$requestTimeout  = $this->_config['request_timeout'];
+			$constant        = CURLOPT_TIMEOUT;
+			if (defined('CURLOPT_TIMEOUT_MS')) {
+				$requestTimeout *= 1000;
+				$constant = constant('CURLOPT_TIMEOUT_MS');
+			}
+			curl_setopt($this->_curl, $constant, $requestTimeout);
+		}
 
         // send the request
         $response = curl_exec($this->_curl);

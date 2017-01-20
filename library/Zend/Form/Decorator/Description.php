@@ -106,7 +106,7 @@ class Zend_Form_Decorator_Description extends Zend_Form_Decorator_Abstract
     {
         $class = $this->getOption('class');
         if (null === $class) {
-            $class = 'hint';
+            $class = 'hint note';
             $this->setOption('class', $class);
         }
 
