@@ -173,6 +173,18 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
                 throw new Zend_Mail_Transport_Exception('Missing To addresses');
             }
         } else {
+            // Sanitize the From header
+            $from = $headers['From'];
+            if (empty($from) == false) {
+                foreach ($from as $key => $value) {
+                    if ($key != 'append') {
+                        if (preg_match('/\\\"/', $value)) {
+                            throw new Zend_Mail_Transport_Exception('Potential code injection in From header');
+                        }
+                    }
+                }
+            }
+            
             // All others, simply grab the recipients and unset the To: header
             if (!isset($headers['To'])) {
                 /**
