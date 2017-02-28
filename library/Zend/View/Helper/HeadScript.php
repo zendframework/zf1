@@ -484,8 +484,8 @@ class Zend_View_Helper_HeadScript extends Zend_View_Helper_Placeholder_Container
         } else {
             $useCdata = $this->useCdata ? true : false;
         }
-        $escapeStart = ($useCdata) ? '//<![CDATA[' : '//<!--';
-        $escapeEnd   = ($useCdata) ? '//]]>'       : '//-->';
+        $escapeStart = ($useCdata) ? '//<![CDATA[' : '';
+        $escapeEnd   = ($useCdata) ? '//]]>'       : '';
 
         $items = array();
         $this->getContainer()->ksort();
