@@ -217,6 +217,10 @@ abstract class Zend_Cache
      */
     protected static function _normalizeName($name)
     {
+        if (strtolower($name) == 'zendserver_shmem') {
+            return 'ZendServer_ShMem';
+        }
+        
         $name = ucfirst(strtolower($name));
         $name = str_replace(array('-', '_', '.'), ' ', $name);
         $name = ucwords($name);
