@@ -1824,4 +1824,23 @@ abstract class Zend_Db_Select_TestCommon extends Zend_Db_TestSetup
         $this->assertEquals($expected, $select->assemble(),
             'Order direction of field failed');
     }
+
+    /**
+     * @group ZF-378
+     */
+    public function testOrderingWithDirectionShouldWork()
+    {
+        $db = new Zend_Db_Table();
+        $select = new Zend_Db_Select($db->getAdapter());
+        $select->from(array ('p' => 'product'))
+            ->order('productId ASC');
+        $expected = 'SELECT `p`.* FROM `product` AS `p` ORDER BY `productId` ASC';
+        $this->assertEquals($expected, $select->assemble());
+
+        $select = new Zend_Db_Select($db->getAdapter());
+        $select->from(array ('p' => 'product'))
+            ->order(array ('productId ASC', 'userId DESC'));
+        $expected = 'SELECT `p`.* FROM `product` AS `p` ORDER BY `productId` ASC, `userId` DESC';
+        $this->assertEquals($expected, $select->assemble());
+    }
 }
