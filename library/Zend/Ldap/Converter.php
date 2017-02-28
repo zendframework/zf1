@@ -74,6 +74,10 @@ class Zend_Ldap_Converter
         return $string;
     }
 
+    private static function _charHex32ToAsc(array $matches) {
+        return chr(hexdec($matches[0]));
+    }
+
     /**
      * Convert a single slash-prefixed character from Hex32 to ASCII.
      * Used as a callback in @see hex32ToAsc()
