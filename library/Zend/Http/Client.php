@@ -1204,6 +1204,13 @@ class Zend_Http_Client
             }
         }
 
+        // Set the request id header if the unique id environment variable
+        // is set.
+        $uniqueId = getenv('UNIQUE_ID');
+        if ($uniqueId && !isset($this->headers['x-request-id'])) {
+            $headers[] = "x-request-id: {$uniqueId}";
+        }
+
         // Set the Accept-encoding header if not set - depending on whether
         // zlib is available or not.
         if (! isset($this->headers['accept-encoding'])) {
