@@ -766,19 +766,19 @@ abstract class Zend_Translate_Adapter {
             }
         } else if (strlen($locale) != 2) {
             // faster than creating a new locale and separate the leading part
-            $locale = substr($locale, 0, -strlen(strrchr($locale, '_')));
+            $_locale = substr($locale, 0, -strlen(strrchr($locale, '_')));
 
-            if ((is_string($messageId) || is_int($messageId)) && isset($this->_translate[$locale][$messageId])) {
+            if ((is_string($messageId) || is_int($messageId)) && isset($this->_translate[$_locale][$messageId])) {
                 // return regionless translation (en_US -> en)
                 if ($plural === null) {
                     $this->_routed = array();
-                    return $this->_translate[$locale][$messageId];
+                    return $this->_translate[$_locale][$messageId];
                 }
 
-                $rule = Zend_Translate_Plural::getPlural($number, $locale);
-                if (isset($this->_translate[$locale][$plural[0]][$rule])) {
+                $rule = Zend_Translate_Plural::getPlural($number, $_locale);
+                if (isset($this->_translate[$_locale][$plural[0]][$rule])) {
                     $this->_routed = array();
-                    return $this->_translate[$locale][$plural[0]][$rule];
+                    return $this->_translate[$_locale][$plural[0]][$rule];
                 }
             }
         }
