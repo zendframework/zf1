@@ -166,6 +166,31 @@ class Zend_Cache_AllTests
         }
 
         /*
+         * Check if Redis cluster tests are enabled, and if extension is available.
+         */
+        if (!defined('TESTS_ZEND_CACHE_REDISCLUSTER_ENABLED') ||
+            constant('TESTS_ZEND_CACHE_REDISCLUSTER_ENABLED') === false) {
+            $skipTest = new Zend_Cache_RedisclusterBackendTest_SkipTests();
+            $skipTest->message = 'Tests are not enabled in TestConfiguration.php';
+            $suite->addTest($skipTest);
+        } else if (!extension_loaded('redis')) {
+            $skipTest = new Zend_Cache_RedisclusterBackendTest_SkipTests();
+            $skipTest->message = "Extension 'phpredis' is not loaded";
+            $suite->addTest($skipTest);
+        } else {
+            if (!defined('TESTS_ZEND_CACHE_REDISCLUSTER_HOST')) {
+                define('TESTS_ZEND_CACHE_REDISCLUSTER_HOST', '127.0.0.1');
+            }
+            if (!defined('TESTS_ZEND_CACHE_REDISCLUSTER_PORT')) {
+                define('TESTS_ZEND_CACHE_REDISCLUSTER_PORT', 30001);
+            }
+            if (!defined('TESTS_ZEND_CACHE_REDISCLUSTER_PERSISTENT')) {
+                define('TESTS_ZEND_CACHE_REDISCLUSTER_PERSISTENT', false);
+            }
+            $suite->addTestSuite('Zend_Cache_RedisclusterBackendTest');
+        }
+
+        /*
          * Check if Memcached2 tests are enabled, and if extension is available.
          */
         if (!defined('TESTS_ZEND_CACHE_LIBMEMCACHED_ENABLED') ||
