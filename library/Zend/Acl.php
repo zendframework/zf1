@@ -481,11 +481,7 @@ class Zend_Acl
     public function removeAll()
     {
         foreach ($this->_resources as $resourceId => $resource) {
-            foreach ($this->_rules['byResourceId'] as $resourceIdCurrent => $rules) {
-                if ($resourceId === $resourceIdCurrent) {
-                    unset($this->_rules['byResourceId'][$resourceIdCurrent]);
-                }
-            }
+            unset($this->_rules['byResourceId'][$resourceId]);
         }
 
         $this->_resources = array();
