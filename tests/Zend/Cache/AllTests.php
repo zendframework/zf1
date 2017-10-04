@@ -45,6 +45,7 @@ require_once 'Zend/Cache/XcacheBackendTest.php';
 require_once 'Zend/Cache/ZendPlatformBackendTest.php';
 require_once 'Zend/Cache/ZendServerDiskTest.php';
 require_once 'Zend/Cache/ZendServerShMemTest.php';
+require_once 'Zend/Cache/CouchbaseBackendTest.php';
 
 /**
  * @category   Zend
