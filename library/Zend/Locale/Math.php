@@ -77,8 +77,11 @@ class Zend_Locale_Math
 
         $op1    = trim(self::normalize($op1));
         $length = strlen($op1);
-        if (($decPos = strpos($op1, '.')) === false) {
-            $op1 .= '.0';
+        $convert = localeconv();
+        $decimalPointSymbol = $convert['decimal_point'];
+
+        if (($decPos = strpos($op1, $decimalPointSymbol)) === false) {
+            $op1 .= $decimalPointSymbol . '0';
             $decPos = $length;
             $length += 2;
         }
@@ -114,7 +117,7 @@ class Zend_Locale_Math
             }
 
             $roundUp = str_pad('', $length, '0');
-            $roundUp[$decPos] = '.';
+            $roundUp[$decPos] = $decimalPointSymbol;
             $roundUp[$roundPos + $decPos] = '1';
 
             if ($op1 > 0) {
@@ -149,16 +152,19 @@ class Zend_Locale_Math
         }
 
         $number = substr($value, 0, strpos($value, 'E'));
-        if (strpos($number, '.') !== false) {
-            $post   = strlen(substr($number, strpos($number, '.') + 1));
+        $convert = localeconv();
+        $decimalPointSymbol = $convert['decimal_point'];
+
+        if (strpos($number, $decimalPointSymbol) !== false) {
+            $post   = strlen(substr($number, strpos($number, $decimalPointSymbol) + 1));
             $mantis = substr($value, strpos($value, 'E') + 1);
             if ($mantis < 0) {
                 $post += abs((int) $mantis);
             }
 
-            $value = number_format($value, $post, '.', '');
+            $value = number_format($value, $post, $decimalPointSymbol, '');
         } else {
-            $value = number_format($value, 0, '.', '');
+            $value = number_format($value, 0, $decimalPointSymbol, '');
         }
 
         return $value;
