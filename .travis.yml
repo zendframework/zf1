@@ -17,8 +17,11 @@ services:
   - memcached
 
 before_script:
+  - sudo apt-get update
+  - sudo pecl install pcs-1.3.3
   - mysql -e 'create database zftest;'
   - psql -c 'create database zftest;' -U postgres
+  - echo "extension = pcs.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
