@@ -255,8 +255,8 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
                         $part = substr($part, 1);
                     }
 
-                    if (($originalPathPart = array_search($pathPart, $translateMessages)) !== false) {
-                        $pathPart = $originalPathPart;
+                    if (array_key_exists($part, $translateMessages)) {
+                        $part = $translateMessages[$part];
                     }
                 }
 
@@ -406,8 +406,17 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
             }
         }
 
-        return trim($return, $this->_urlDelimiter);
+        $return = trim($return, $this->_urlDelimiter);
 
+        foreach (array_merge($this->getVariables(), array_keys($this->getDefaults())) as $variable) {
+            unset($data[$variable]);
+        }
+
+        if (!empty($data) && !$partial) {
+            $return = $return . '?'. http_build_query($data);
+        }
+
+        return $return;
     }
 
     /**
