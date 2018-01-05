@@ -212,7 +212,7 @@ abstract class Zend_Translate_Adapter {
         } else if (!is_array($options)) {
             $options = array('content' => $options);
         }
-        
+
         if (!isset($options['content']) || empty($options['content'])) {
             require_once 'Zend/Translate/Exception.php';
             throw new Zend_Translate_Exception("Required option 'content' is missing");
@@ -252,7 +252,7 @@ abstract class Zend_Translate_Adapter {
                 ),
                 RecursiveIteratorIterator::SELF_FIRST
             );
-            
+
             foreach ($iterator as $directory => $info) {
                 $file = $info->getFilename();
                 if (is_array($options['ignore'])) {
@@ -321,7 +321,7 @@ abstract class Zend_Translate_Adapter {
                     }
                 }
             }
-            
+
             unset($iterator);
         } else {
             $this->_addTranslationData($options);
@@ -763,21 +763,27 @@ abstract class Zend_Translate_Adapter {
                 return $this->_translate[$locale][$plural[0]][$rule];
             }
         } else if (strlen($locale) != 2) {
-            // faster than creating a new locale and separate the leading part
-            $locale = substr($locale, 0, -strlen(strrchr($locale, '_')));
 
-            if ((is_string($messageId) || is_int($messageId)) && isset($this->_translate[$locale][$messageId])) {
+            // faster than creating a new locale and separate the leading part
+            $regionlessLocale = substr($locale, 0, -strlen(strrchr($locale, '_')));
+
+            if ((is_string($messageId) || is_int($messageId)) && isset($this->_translate[$regionlessLocale][$messageId])) {
                 // return regionless translation (en_US -> en)
                 if ($plural === null) {
                     $this->_routed = array();
-                    return $this->_translate[$locale][$messageId];
+                    return $this->_translate[$regionlessLocale][$messageId];
                 }
 
-                $rule = Zend_Translate_Plural::getPlural($number, $locale);
-                if (isset($this->_translate[$locale][$plural[0]][$rule])) {
+                $rule = Zend_Translate_Plural::getPlural($number, $regionlessLocale);
+                if (isset($this->_translate[$regionlessLocale][$plural[0]][$rule])) {
                     $this->_routed = array();
-                    return $this->_translate[$locale][$plural[0]][$rule];
+                    return $this->_translate[$regionlessLocale][$plural[0]][$rule];
                 }
+
+				$rule = Zend_Translate_Plural::getPlural($number, $regionlessLocale);
+				if (isset($this->_translate[$regionlessLocale][$plural[0]][$rule])) {
+					return $this->_translate[$regionlessLocale][$plural[0]][$rule];
+				}
             }
         }
 
