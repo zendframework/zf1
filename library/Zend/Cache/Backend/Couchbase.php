@@ -44,14 +44,22 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 	 * Default Values
 	 */
 	const DEFAULT_HOST = '127.0.0.1';
-	const DEFAULT_BUCKET = 'tp24cache';
+	const DEFAULT_BUCKET = null;
+	const DEFAULT_PASSWORD = null;
 	const DEFAULT_PORT =  11211;
 	const DEFAULT_PERSISTENT = true;
 	const DEFAULT_WEIGHT  = 1;
 	const DEFAULT_TIMEOUT = 1;
+	const DEFAULT_TOTAL_TIMEOUT = 5;
+	const DEFAULT_DURABILITY_TIMEOUT = 5;
+	const DEFAULT_NODE_TIMEOUT = 2;
+	const DEFAULT_DURABILITY_INTERVAL = 0.0001;
+	const RANDOMIZE_NODES_CONNECTION = 1;
 	const DEFAULT_RETRY_INTERVAL = 15;
 	const DEFAULT_STATUS = true;
 	const DEFAULT_FAILURE_CALLBACK = null;
+	const SAVE_MAX_RETRIES = 5;
+	const SAVE_BASE_DELAY = 50000; // milliseconds
 
 	/**
 	 * Log message
@@ -62,17 +70,19 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 	protected $_options = array(
 		'servers' => array(array(
 			'host' => self::DEFAULT_HOST,
-			'persistent' => self::DEFAULT_PERSISTENT,
-			'weight'  => self::DEFAULT_WEIGHT,
-			'timeout' => self::DEFAULT_TIMEOUT,
-			'retry_interval' => self::DEFAULT_RETRY_INTERVAL,
-			'status' => self::DEFAULT_STATUS,
-			'failure_callback' => self::DEFAULT_FAILURE_CALLBACK
+			'operation_timeout' => self::DEFAULT_TIMEOUT,
+			'config_total_timeout' => self::DEFAULT_TOTAL_TIMEOUT,
+			'config_node_timeout' => self::DEFAULT_NODE_TIMEOUT,
+			'durabilty_timeout' => self::DEFAULT_DURABILITY_TIMEOUT,
+			'durabilty_interval' => self::DEFAULT_DURABILITY_INTERVAL,
+			'randomize_nodes' => self::RANDOMIZE_NODES_CONNECTION
 		)),
 		'port' => self::DEFAULT_PORT,
 		'bucket' => self::DEFAULT_BUCKET,
 		'compression' => false,
 		'compatibility' => false,
+		'write_control' => false,
+		'password' => self::DEFAULT_PASSWORD,
 	);
 
 	/**
@@ -88,7 +98,6 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 	 *
 	 * @param array $options associative array of options
 	 * @throws Zend_Cache_Exception
-	 * @return void
 	 */
 	public function __construct(array $options = [])
 	{
@@ -104,7 +113,18 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 		$connectionString = sprintf('couchbase://%s/', implode(',', $serverHosts));
 		$this->_couchbaseClient = new CouchbaseCluster($connectionString);
 
-		$this->_couchbaseBucket = $this->_couchbaseClient->openBucket($this->_options['bucket']);
+		$this->_couchbaseBucket = $this->_couchbaseClient->openBucket($this->_options['bucket'], $this->_options['password']);
+		$this->_couchbaseBucket->setTranscoder(
+			function ($bytes) {
+				$encoder_options = [
+					'sertype' => COUCHBASE_SERTYPE_PHP,
+					'cmprtype' => COUCHBASE_CMPRTYPE_FASTLZ,
+					'cmprthresh' => 2000,
+					'cmprfactor' => 1.2
+				];
+				return couchbase_basic_encoder_v1($bytes, $encoder_options);
+			}
+			, "couchbase_basic_decoder_v1");
 	}
 
 	/**
@@ -135,7 +155,7 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 	 * Test if a cache is available or not (for the given id)
 	 *
 	 * @param  string $id Cache id
-	 * @return mixed|false (a cache is not available)
+	 * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
 	 */
 	public function test($id)
 	{
@@ -168,10 +188,22 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 		}
 
 		$lifetime = $this->getLifetime($specificLifetime);
-		if ($lifetime == null) {
-			$lifetime = $this->getLifetime(false);
+		if ($lifetime != null) {
+			$options = ['expiry' => (int)$lifetime];
+		} else {
+			$options = [];
 		}
-		$result = @$this->_couchbaseBucket->upsert($id, $data, ['expiry' => $lifetime]);
+
+		$result = null;
+		$current_attempts = 1;
+		do {
+			try {
+				$result = $this->_couchbaseBucket->upsert($id, $data, $options);
+				break;
+			} catch (CouchbaseException $error) {
+				usleep(self::SAVE_BASE_DELAY * $current_attempts);
+			}
+		} while (++$current_attempts != self::SAVE_MAX_RETRIES);
 
 		if (count($tags) > 0) {
 			$this->_log(self::TAGS_UNSUPPORTED_BY);
@@ -182,7 +214,6 @@ class Zend_Cache_Backend_Couchbase extends Zend_Cache_Backend implements Zend_Ca
 		}
 		return true;
 	}
-
 
 	/**
 	 * Remove a cache record

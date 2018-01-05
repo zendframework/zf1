@@ -93,13 +93,6 @@ class Zend_Cache_Core
     );
 
     /**
-     * Array of options which have to be transfered to backend
-     *
-     * @var array $_directivesList
-     */
-    protected static $_directivesList = array('lifetime', 'logging', 'logger');
-
-    /**
      * Not used for the core, just a sort a hint to get a common setOption() method (for the core and for frontends)
      *
      * @var array $_specificOptions
@@ -174,13 +167,6 @@ class Zend_Cache_Core
     public function setBackend(Zend_Cache_Backend $backendObject)
     {
         $this->_backend= $backendObject;
-        // some options (listed in $_directivesList) have to be given
-        // to the backend too (even if they are not "backend specific")
-        $directives = array();
-        foreach (Zend_Cache_Core::$_directivesList as $directive) {
-            $directives[$directive] = $this->_options[$directive];
-        }
-        $this->_backend->setDirectives($directives);
         if (in_array('Zend_Cache_Backend_ExtendedInterface', class_implements($this->_backend))) {
             $this->_extendedBackend = true;
             $this->_backendCapabilities = $this->_backend->getCapabilities();
@@ -280,9 +266,6 @@ class Zend_Cache_Core
     public function setLifetime($newLifetime)
     {
         $this->_options['lifetime'] = $newLifetime;
-        $this->_backend->setDirectives(array(
-            'lifetime' => $newLifetime
-        ));
     }
 
     /**
@@ -384,10 +367,11 @@ class Zend_Cache_Core
         if ($this->_options['ignore_user_abort']) {
             $abort = ignore_user_abort(true);
         }
+        $lifetime = $specificLifetime === false ? $this->_options['lifetime'] : $specificLifetime;
         if (($this->_extendedBackend) && ($this->_backendCapabilities['priority'])) {
-            $result = $this->_backend->save($data, $id, $tags, $specificLifetime, $priority);
+            $result = $this->_backend->save($data, $id, $tags, $lifetime, $priority);
         } else {
-            $result = $this->_backend->save($data, $id, $tags, $specificLifetime);
+            $result = $this->_backend->save($data, $id, $tags, $lifetime);
         }
         if ($this->_options['ignore_user_abort']) {
             ignore_user_abort($abort);

@@ -154,6 +154,10 @@ class Zend_Cache_Backend_Libmemcached extends Zend_Cache_Backend implements Zend
         $this->_memcache->addServers($servers);
     }
 
+    public function closeConnection()
+    {
+        $this->_memcache->quit();
+    }
     /**
      * Test if a cache is available for the given id and (if yes) return it (false else)
      *
@@ -481,4 +485,55 @@ class Zend_Cache_Backend_Libmemcached extends Zend_Cache_Backend implements Zend
         );
     }
 
+	public function increment($id, $offset = 1, $initial = 0, $specificLifetime = false)
+	{
+		$result = $this->_memcache->increment($id, $offset);
+		if (!$result) {
+			$lifetime = $this->getLifetime($specificLifetime);
+			$this->_memcache->add($id, $initial, $lifetime);
+			$result = $this->_memcache->increment($id, $offset);
+		}
+		return $result;
+	}
+
+	public function getCounterKey($id)
+	{
+		$tmp = $this->_memcache->get($id);
+		return is_numeric($tmp) ? $tmp : false;
+	}
+
+	public function loadMulti($ids = [])
+	{
+		$data = [];
+		$result = $this->_memcache->getMulti($ids);
+		foreach($result as $key => &$value) {
+			$data[$key] = array_shift($value);
+		}
+		return $data;
+	}
+
+	public function saveMulti($data, $tags = array(), $specificLifetime = false)
+	{
+		$result = false;
+		if (is_array($data)) {
+			$lifetime = $this->getLifetime($specificLifetime);
+
+			$normalizedData = [];
+			foreach ($data as $key => &$value) {
+				$normalizedData[$key] = [&$value, time(), $lifetime];
+			}
+
+			$result = @$this->_memcache->setMulti($normalizedData, $lifetime);
+			if ($result === false) {
+				$rsCode = $this->_memcache->getResultCode();
+				$rsMsg  = $this->_memcache->getResultMessage();
+				$this->_log("Memcached::setMulti() failed: [{$rsCode}] {$rsMsg}");
+			}
+
+			if (count($tags) > 0) {
+				$this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_LIBMEMCACHED_BACKEND);
+			}
+		}
+		return $result;
+	}
 }

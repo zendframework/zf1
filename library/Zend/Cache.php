@@ -41,14 +41,14 @@ abstract class Zend_Cache
      * @var array
      */
     public static $standardBackends = array('File', 'Sqlite', 'Memcached', 'Libmemcached', 'Apc', 'ZendPlatform',
-                                            'Xcache', 'TwoLevels', 'WinCache', 'ZendServer_Disk', 'ZendServer_ShMem');
+                                            'Xcache', 'TwoLevels', 'WinCache', 'ZendServer_Disk', 'ZendServer_ShMem', 'Rediscluster', 'Redis', 'Couchbase');
 
     /**
      * Standard backends which implement the ExtendedInterface
      *
      * @var array
      */
-    public static $standardExtendedBackends = array('File', 'Apc', 'TwoLevels', 'Memcached', 'Libmemcached', 'Sqlite', 'WinCache');
+    public static $standardExtendedBackends = array('File', 'Apc', 'TwoLevels', 'Memcached', 'Libmemcached', 'Sqlite', 'WinCache', 'Rediscluster', 'Redis', 'Couchbase');
 
     /**
      * Only for backward compatibility (may be removed in next major release)
@@ -64,7 +64,7 @@ abstract class Zend_Cache
      * @var array
      * @deprecated
      */
-    public static $availableBackends = array('File', 'Sqlite', 'Memcached', 'Libmemcached', 'Apc', 'ZendPlatform', 'Xcache', 'WinCache', 'TwoLevels');
+    public static $availableBackends = array('File', 'Sqlite', 'Memcached', 'Libmemcached', 'Apc', 'ZendPlatform', 'Xcache', 'WinCache', 'TwoLevels', 'Rediscluster', 'Redis', 'Couchbase');
 
     /**
      * Consts for clean() method
