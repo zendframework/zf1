@@ -288,14 +288,14 @@ class Zend_XmlRpc_RequestTest extends PHPUnit_Framework_TestCase
 
         $result = $sx->xpath('//methodName');
         $count = 0;
-        while (list( , $node) = each($result)) {
+        foreach ($result as $node) {
             ++$count;
         }
         $this->assertEquals(1, $count, $xml);
 
         $result = $sx->xpath('//params');
         $count = 0;
-        while (list( , $node) = each($result)) {
+        foreach ($result as $node) {
             ++$count;
         }
         $this->assertEquals(1, $count, $xml);

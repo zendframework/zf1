@@ -3,7 +3,7 @@ require_once 'Zend/Mobile/Push/Apns.php';
 
 $apns = new Zend_Mobile_Push_Apns();
 $apns->setCertificate('/path/to/provisioning-certificate.pem');
- 
+
 try {
     $apns->connect(Zend_Mobile_Push_Apns::SERVER_FEEDBACK_SANDBOX_URI);
 } catch (Zend_Mobile_Push_Exception_ServerUnavailable $e) {
@@ -13,9 +13,9 @@ try {
     echo 'APNS Connection Error:' . $e->getMessage();
     exit(1);
 }
- 
+
 $tokens = $apns->feedback();
-while(list($token, $time) = each($tokens)) {
+foreach ($tokens as $token => $time) {
     echo $time . "\t" . $token . PHP_EOL;
 }
 $apns->close();
