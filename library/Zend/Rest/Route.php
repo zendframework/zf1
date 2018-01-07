@@ -236,12 +236,14 @@ class Zend_Rest_Route extends Zend_Controller_Router_Route_Module
     /**
      * Assembles user submitted parameters forming a URL path defined by this route
      *
-     * @param array $data An array of variable and value pairs used as parameters
-     * @param bool $reset Weither to reset the current params
-     * @param bool $encode Weither to return urlencoded string
+     * @param array $data   An array of variable and value pairs used as parameters
+     * @param bool  $reset  Weither to reset the current params
+     * @param bool  $encode Weither to return urlencoded string
+     * @param bool  $partial
+     *
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = true)
+    public function assemble($data = array(), $reset = false, $encode = true, $partial = false)
     {
         if (!$this->_keysSet) {
             if (null === $this->_request) {
