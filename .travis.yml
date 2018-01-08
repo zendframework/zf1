@@ -5,7 +5,6 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
 
 env: TMPDIR=/tmp
 
@@ -36,11 +35,9 @@ before_script:
   - pecl install couchbase-2.2.4
   - psql -c 'create database zftest;' -U postgres
   - cd $TRAVIS_BUILD_DIR
-  - echo "extension = pcs.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = couchbase.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
 
 script:
@@ -50,4 +47,3 @@ script:
 matrix:
   allow_failures:
    - php: 7.0
-   - php: hhvm
