@@ -57,7 +57,6 @@ class Zend_Db_Select
     const FOR_UPDATE     = 'forupdate';
     const USE_INDEX      = 'useIndex';
     const FORCE_INDEX    = 'forceIndex';
-    const IGNORE_INDEX   = 'ignoreIndex';
 
     const INNER_JOIN     = 'inner join';
     const LEFT_JOIN      = 'left join';
@@ -85,7 +84,6 @@ class Zend_Db_Select
     const SQL_DESC       = 'DESC';
     const SQL_USE_INDEX  = 'USE INDEX';
     const SQL_FORCE_INDEX = 'FORCE INDEX';
-    const SQL_IGNORE_INDEX = 'IGNORE INDEX';
 
     /**
      * Bind variables for query
@@ -115,7 +113,6 @@ class Zend_Db_Select
         self::FROM         => array(),
         self::USE_INDEX    => array(),
         self::FORCE_INDEX  => array(),
-        self::IGNORE_INDEX  => array(),
         self::WHERE        => array(),
         self::GROUP        => array(),
         self::HAVING       => array(),
@@ -1148,13 +1145,10 @@ class Zend_Db_Select
                 $tmp .= ' ' . self::SQL_FORCE_INDEX . '(' . implode(',', $this->_parts[self::FORCE_INDEX]) . ')';
                 unset($this->_parts[self::FORCE_INDEX]);
             }
-            if (!empty($this->_parts[self::IGNORE_INDEX])) {
-                $tmp .= ' ' . self::SQL_IGNORE_INDEX . '(' . implode(',', $this->_parts[self::IGNORE_INDEX]) . ')';
-                unset($this->_parts[self::IGNORE_INDEX]);
-            }
 
             // Add join conditions (if applicable)
             if (!empty($from) && ! empty($table['joinCondition'])) {
+
                 $tmp .= ' ' . self::SQL_ON . ' ' . $table['joinCondition'];
             }
 
@@ -1377,48 +1371,39 @@ class Zend_Db_Select
     }
 
     /**
-     * Specify index to use. Works only on mysql
+     * Specify index to use
      *
-     * @param string $index
      * @return Zend_Db_Select
      */
     public function useIndex($index)
     {
-        if (!is_array($index)) {
-            $index = array($index);
+        if(empty($this->_parts[self::FORCE_INDEX])) {
+            if(!is_array($index)) {
+                $index = array($index);
+            }
+            $this->_parts[self::USE_INDEX] = $index;
+            return $this;
+        } else {
+            throw new Zend_Db_Select_Exception("Cannot use 'USE INDEX' in the same query as 'FORCE INDEX'");
         }
-        $this->_parts[self::USE_INDEX] = $index;
-        return $this;
     }
 
     /**
-     * Force index. Works only on mysql
+     * Force index to use
      *
-     * @param string $index
      * @return Zend_Db_Select
      */
     public function forceIndex($index)
     {
-        if (!is_array($index)) {
-            $index = array($index);
+        if(empty($this->_parts[self::USE_INDEX])) {
+            if(!is_array($index)) {
+                $index = array($index);
+            }
+            $this->_parts[self::FORCE_INDEX] = $index;
+            return $this;
+        } else {
+            throw new Zend_Db_Select_Exception("Cannot use 'FORCE INDEX' in the same query as 'USE INDEX'");
         }
-        $this->_parts[self::FORCE_INDEX] = $index;
-        return $this;
-    }
-
-    /**
-     * Ignore index. Works only on mysql
-     *
-     * @param string $index
-     * @return Zend_Db_Select
-     */
-    public function ignoreIndex($index)
-    {
-        if (!is_array($index)) {
-            $index = array($index);
-        }
-        $this->_parts[self::IGNORE_INDEX] = $index;
-        return $this;
     }
 
 }
