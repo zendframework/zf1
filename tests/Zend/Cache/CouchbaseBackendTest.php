@@ -11,18 +11,18 @@ require_once 'Zend/Cache/Backend/Couchbase.php';
  */
 require_once 'CommonExtendedBackendTest.php';
 
-class TP24_Cache_Backend_CouchbaseBackendTest extends Zend_Cache_CommonExtendedBackendTest
+class Zend_Cache_Backend_CouchbaseBackendTest extends Zend_Cache_CommonExtendedBackendTest
 {
 	/**
 	 *
-	 * @var TP24_Cache_Backend_Couchbase
+	 * @var Zend_Cache_Backend_Couchbase
 	 */
 	protected $_backend;
 
 	function setUp()
 	{
 		parent::setUp();
-		$this->_backend = new TP24_Cache_Backend_Couchbase();
+		$this->_backend = new Zend_Cache_Backend_Couchbase();
 	}
 
 	function tearDown()
@@ -32,7 +32,7 @@ class TP24_Cache_Backend_CouchbaseBackendTest extends Zend_Cache_CommonExtendedB
 
 	function testExtendZendCacheBackendFile()
 	{
-		$this->assertInstanceOf('TP24_Cache_Backend_Couchbase', $this->_backend);
+		$this->assertInstanceOf('Zend_Cache_Backend_Couchbase', $this->_backend);
 	}
 
 	function testSaveCouchbase()
