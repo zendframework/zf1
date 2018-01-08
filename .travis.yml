@@ -5,7 +5,6 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
 
 env: TMPDIR=/tmp
 
@@ -17,8 +16,26 @@ services:
   - memcached
 
 before_script:
+  - set -e
+  - phpenv config-rm xdebug.ini
+  - pecl install pcs-1.3.3
+  - wget http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-2-amd64.deb
+  - sudo dpkg -i couchbase-release-1.0-2-amd64.deb
+  - sudo apt-get update
+  - sudo apt-get install libcouchbase-dev php5-dev
+  - wget http://packages.couchbase.com/releases/4.6.0-DP/couchbase-server-enterprise_4.6.0-DP-ubuntu12.04_amd64.deb
+  - sudo dpkg -i couchbase-server-enterprise_4.6.0-DP-ubuntu12.04_amd64.deb
+  - cd /opt/couchbase
+  - ./bin/couchbase-server -- -noinput -detached
+  - sleep 20
+  - ./bin/couchbase-cli cluster-init -c 127.0.0.1:8091  --cluster-username=Administrator --cluster-password=password --cluster-port=8091 --cluster-index-ramsize=512 --cluster-ramsize=512 --services=data,query,index
+  - ./bin/couchbase-cli bucket-create -c 127.0.0.1:8091 --bucket=testing --bucket-type=couchbase --bucket-port=11211 --bucket-ramsize=512  --bucket-replica=1 -u Administrator -p password
+  - sleep 10
+  - ./bin/cbq -e http://127.0.0.1:8091 --script "CREATE PRIMARY INDEX ON testing USING GSI;"
   - mysql -e 'create database zftest;'
+  - pecl install couchbase-2.2.4
   - psql -c 'create database zftest;' -U postgres
+  - cd $TRAVIS_BUILD_DIR
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = couchbase.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -32,4 +49,3 @@ script:
 matrix:
   allow_failures:
    - php: 7.0
-   - php: hhvm
