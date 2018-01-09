@@ -475,6 +475,23 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
         return false;
     }
 
+	public function increment($id, $offset = 1, $initial = 0, $specificLifetime = false)
+	{
+		$result = $this->_memcache->increment($id, $offset);
+		if (!$result) {
+			$lifetime = $this->getLifetime($specificLifetime);
+			$this->_memcache->add($id, $initial, false, $lifetime);
+			$result = $this->_memcache->increment($id, $offset);
+		}
+		return $result;
+	}
+
+	public function getCounterKey($id)
+	{
+		$tmp = $this->_memcache->get($id);
+		return is_numeric($tmp) ? $tmp : false;
+	}
+
     /**
      * Return an associative array of capabilities (booleans) of the backend
      *

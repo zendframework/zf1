@@ -99,7 +99,17 @@ class Zend_Controller_Router_Route_Static extends Zend_Controller_Router_Route_A
      */
     public function assemble($data = array(), $reset = false, $encode = false, $partial = false)
     {
-        return $this->_route;
+        $url = $this->_route;
+
+        foreach (array_keys($this->_defaults) as $default) {
+            unset($data[$default]);
+        }
+
+        if (!empty($data) && !$partial) {
+            $url = $url . '?' . http_build_query($data);
+        }
+
+        return $url;
     }
 
     /**
