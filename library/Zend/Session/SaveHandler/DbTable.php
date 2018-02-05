@@ -337,28 +337,29 @@ class Zend_Session_SaveHandler_DbTable
      */
     public function write($id, $data)
     {
-        $return = false;
+        try {
 
-        $data = array($this->_modifiedColumn => time(),
-                      $this->_dataColumn     => (string) $data);
+            $data = array($this->_modifiedColumn => time(),
+                          $this->_dataColumn     => (string) $data);
 
-        $rows = call_user_func_array(array(&$this, 'find'), $this->_getPrimary($id));
+            $rows = call_user_func_array(array(&$this, 'find'), $this->_getPrimary($id));
 
-        if (count($rows)) {
-            $data[$this->_lifetimeColumn] = $this->_getLifetime($rows->current());
+            if (count($rows)) {
+                $data[$this->_lifetimeColumn] = $this->_getLifetime($rows->current());
 
-            if ($this->update($data, $this->_getPrimary($id, self::PRIMARY_TYPE_WHERECLAUSE))) {
-                $return = true;
+                $this->update($data, $this->_getPrimary($id, self::PRIMARY_TYPE_WHERECLAUSE));
+            } else {
+                $data[$this->_lifetimeColumn] = $this->_lifetime;
+
+                $this->insert(array_merge($this->_getPrimary($id, self::PRIMARY_TYPE_ASSOC), $data));
             }
-        } else {
-            $data[$this->_lifetimeColumn] = $this->_lifetime;
-
-            if ($this->insert(array_merge($this->_getPrimary($id, self::PRIMARY_TYPE_ASSOC), $data))) {
-                $return = true;
-            }
+        } catch (Exception $e) {
+            throw new Zend_Session_SaveHandler_Exception(
+                "Unable to write session - unable to insert or update the session table"
+            );
         }
 
-        return $return;
+        return true;
     }
 
     /**
