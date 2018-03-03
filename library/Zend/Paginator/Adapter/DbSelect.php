@@ -207,6 +207,7 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
 
         $rowCount = clone $this->_select;
         $rowCount->__toString(); // Workaround for ZF-3719 and related
+        $rowCount->reset(Zend_Db_Select::LIMIT_COUNT);
 
         $db = $rowCount->getAdapter();
 
