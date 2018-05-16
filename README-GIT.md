@@ -1,5 +1,12 @@
 # USING THE GIT REPOSITORY
 
+> ## End-of-Life occurred 28 Sep 2016
+>
+> This project is no longer maintained, and reached its end of life on 28 Sep
+> 2016; the last public release was 1.12.20.
+>
+> At this time, the repository has been archived, and is read-only.
+
 ## Setup your own public repository
 
 Your first step is to establish a public repository from which we can

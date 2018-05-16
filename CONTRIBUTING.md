@@ -1,13 +1,9 @@
 # CONTRIBUTING
 
-> ## End-of-Life occurs 28 Sep 2016
+> ## End-of-Life occurred 28 Sep 2016
 >
-> Between now and 28 Sep 2016, we will only be accepting security patches to
-> this repository; after that date, we will issue no more releases.
->
-> For more information:
->
-> - https://framework.zend.com/blog/2016-06-28-zf1-eol.html
+> This project is no longer maintained, and reached its end of life on 28 Sep
+> 2016; the last public release was 1.12.20.
 
 ---
 

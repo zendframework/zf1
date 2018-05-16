@@ -1,5 +1,12 @@
 # Development using a virtual machine
 
+> ## End-of-Life occurred 28 Sep 2016
+>
+> This project is no longer maintained, and reached its end of life on 28 Sep
+> 2016; the last public release was 1.12.20.
+>
+> At this time, the repository has been archived, and is read-only.
+
 You can set up a development virtual machine for ZF1 unit testing and library 
 development following these simple instructions.
 
