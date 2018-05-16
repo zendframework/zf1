@@ -106,12 +106,14 @@ class Zend_Config_Xml extends Zend_Config
         } else {
             try {
                 if (!$config = Zend_Xml_Security::scanFile($xml)) {
+                    restore_error_handler();
                     require_once 'Zend/Config/Exception.php';
                     throw new Zend_Config_Exception(
                         "Error failed to load $xml file"
                     );
                 }
             } catch (Zend_Xml_Exception $e) {
+                restore_error_handler();
                 require_once 'Zend/Config/Exception.php';
                 throw new Zend_Config_Exception(
                     $e->getMessage()
