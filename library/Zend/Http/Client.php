@@ -1122,6 +1122,11 @@ class Zend_Http_Client
             // If we got redirected, look for the Location header
             if ($response->isRedirect() && ($location = $response->getHeader('location'))) {
 
+                // Location header can be returned as an array
+                if (is_array($location)) {
+                    $location = reset($location);
+                }
+
                 // Avoid problems with buggy servers that add whitespace at the
                 // end of some headers (See ZF-11283)
                 $location = trim($location);
