@@ -501,7 +501,7 @@ class Zend_Cache_Backend_TwoLevels extends Zend_Cache_Backend implements Zend_Ca
             $fastLifetime = (int) ceil($lifetime / (11 - $priority));
         }
 
-        if ($maxLifetime >= 0 && $fastLifetime > $maxLifetime) {
+        if ($maxLifetime > 0 && $fastLifetime > $maxLifetime) {
             return $maxLifetime;
         }
 
