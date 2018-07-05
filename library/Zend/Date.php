@@ -1274,6 +1274,20 @@ class Zend_Date extends Zend_Date_DateObject
         return $this->getUnixTimestamp();
     }
 
+    private function _getExtendMonthOffset($hour, $minute, $second, $month, $day, $year)
+    {
+        if (self::$_options['extend_month'] === false) {
+            $tempDate = new Zend_Date($this->mktime($hour, $minute, $second, $month, $day, $year, false));
+            $tempDate->setTimezone($this->getTimezone());
+            $mday = (int)$tempDate->get('d');
+
+            if ($mday != $day) {
+                return ($mday < $day) ? -$mday : ($mday - $day);
+            }
+        }
+
+        return 0;
+    }
 
     /**
      * Calculates the date or object
@@ -1635,21 +1649,11 @@ class Zend_Date extends Zend_Date_DateObject
                     if ($calc == 'add') {
                         $date += $found;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] == false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     } else if ($calc == 'sub') {
                         $date = $month - $found;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] == false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     }
                     return $this->_assign($calc, $this->mktime(0, 0, 0, $date,  $day + $fixday, $year, true),
                                                  $this->mktime(0, 0, 0, $month, $day, $year, true), $hour);
@@ -1666,21 +1670,11 @@ class Zend_Date extends Zend_Date_DateObject
                     if ($calc == 'add') {
                         $date += $month;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] == false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     } else if ($calc == 'sub') {
                         $date = $month - $date;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] == false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     }
                     return $this->_assign($calc, $this->mktime(0, 0, 0, $date, $day + $fixday, $year, true),
                                                  $this->mktime(0, 0, 0, $month, $day, $year, true), $hour);
@@ -1708,21 +1702,11 @@ class Zend_Date extends Zend_Date_DateObject
                     if ($calc == 'add') {
                         $date += $found;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     } else if ($calc == 'sub') {
                         $date = $month - $found;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     }
                     return $this->_assign($calc, $this->mktime(0, 0, 0, $date, $day + $fixday, $year, true),
                                                  $this->mktime(0, 0, 0, $month, $day, $year, true), $hour);
@@ -1739,21 +1723,11 @@ class Zend_Date extends Zend_Date_DateObject
                     if ($calc === 'add') {
                         $date += $month;
                         $calc  = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     } else if ($calc === 'sub') {
                         $date = $month - $date;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     }
 
                     return $this->_assign($calc, $this->mktime(0, 0, 0, $date,  $day + $fixday, $year, true),
@@ -1787,21 +1761,11 @@ class Zend_Date extends Zend_Date_DateObject
                     if ($calc === 'add') {
                         $date += $found;
                         $calc  = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     } else if ($calc === 'sub') {
                         $date = $month - $found;
                         $calc = 'set';
-                        if (self::$_options['extend_month'] === false) {
-                            $parts = $this->getDateParts($this->mktime($hour, $minute, $second, $date, $day, $year, false));
-                            if ($parts['mday'] != $day) {
-                                $fixday = ($parts['mday'] < $day) ? -$parts['mday'] : ($parts['mday'] - $day);
-                            }
-                        }
+                        $fixday = $this->_getExtendMonthOffset($hour, $minute, $second, $date, $day, $year);
                     }
                     return $this->_assign($calc, $this->mktime(0, 0, 0, $date,  $day + $fixday, $year, true),
                                                  $this->mktime(0, 0, 0, $month, $day,           $year, true), $hour);
