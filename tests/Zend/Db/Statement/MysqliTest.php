@@ -149,6 +149,22 @@ INPUT;
             $this->assertSame($out, $actual, $count . ' - unexpected output');
         }
     }
+
+    public function testStripQuotedForLongQuery()
+    {
+        $statementClass = 'Zend_Db_Statement_' . $this->getDriver();
+
+        $table = $this->_db->quoteIdentifier('zfproducts');
+        $column = $this->_db->quoteIdentifier('product_name');
+
+        $sql = 'SELECT * FROM `zfproducts` WHERE `product_name` = "%s"';
+
+        $columnContent = str_repeat('a', 15000) . '\\"' . str_repeat('b', 15000);
+        $sql = sprintf($sql, $columnContent);
+
+        $stmt = new $statementClass($this->_db, $sql);
+        $this->assertNotNull($stmt->getDriverStatement());
+    }
     
     public function testStatementRowCount()
     {
