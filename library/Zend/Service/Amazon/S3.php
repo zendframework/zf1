@@ -104,11 +104,10 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      *
      * @param string $accessKey
      * @param string $secretKey
-     * @param string $region
      */
-    public function __construct($accessKey=null, $secretKey=null, $region=null)
+    public function __construct($accessKey=null, $secretKey=null)
     {
-        parent::__construct($accessKey, $secretKey, $region);
+        parent::__construct($accessKey, $secretKey);
 
         $this->setEndpoint('http://'.self::S3_ENDPOINT);
     }
