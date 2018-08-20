@@ -461,7 +461,7 @@ class Zend_Db_Adapter_Sqlsrv extends Zend_Db_Adapter_Abstract
          * Discover primary key column(s) for this table.
          */
         $tableOwner = $result[0][$owner];
-        $sql        = "exec sp_pkeys @table_owner = " . $tableOwner
+        $sql        = "exec sp_pkeys @table_owner = " . $this->quoteIdentifier($tableOwner, true)
                     . ", @table_name = " . $this->quoteIdentifier($tableName, true);
         $stmt       = $this->query($sql);
 
