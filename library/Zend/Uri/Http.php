@@ -162,9 +162,8 @@ class Zend_Uri_Http extends Zend_Uri
      *
      * @param  string $uri String to create URI from, must start with
      *                     'http://' or 'https://'
-     * @throws InvalidArgumentException  When the given $uri is not a string or
+     * @throws Zend_Uri_Exception  When the given $uri is not a string or
      *                                   does not start with http:// or https://
-     * @throws Zend_Uri_Exception        When the given $uri is invalid
      * @return Zend_Uri_Http
      */
     public static function fromString($uri)
